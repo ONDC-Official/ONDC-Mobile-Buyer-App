@@ -1,0 +1,18 @@
+{
+  "authentication": {
+    "landing": {},
+    "login": {},
+    "signup": {},
+    "splash": {}
+  },
+  "main": {
+    "cart": {},
+    "dashboard": {},
+    "order": {},
+    "product": {}
+  },
+  "miscellaneous": {},
+  "user": {
+    "profile": {}
+  }
+}
