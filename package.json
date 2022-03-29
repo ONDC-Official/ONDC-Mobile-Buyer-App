@@ -1,0 +1,34 @@
+{
+  "name": "Buyer",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android:dev": "react-native run-android --variant=devDebug --appIdSuffix=dev",
+    "android:stg": "react-native run-android --variant=stgDebug --appIdSuffix=stg",
+    "android": "react-native run-android --variant=prdDebug",
+    "ios:dev": "react-native run-ios --configuration Development --scheme Buyer.dev",
+    "ios:stg": "react-native run-ios --configuration Staging --scheme Buyer.staging",
+    "ios": "react-native run-ios --configuration Production --scheme Buyer",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "react": "17.0.2",
+    "react-native": "0.67.4",
+    "react-native-config": "^1.4.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/runtime": "^7.17.8",
+    "@react-native-community/eslint-config": "^3.0.1",
+    "babel-jest": "^27.5.1",
+    "eslint": "^8.12.0",
+    "jest": "^27.5.1",
+    "metro-react-native-babel-preset": "^0.70.0",
+    "react-test-renderer": "17.0.2"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
