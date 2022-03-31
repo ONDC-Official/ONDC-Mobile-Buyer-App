@@ -28,7 +28,8 @@
     "and_label":" and ",
     "terms_of_services":"Terms of Services",
     "privacy_policy":"Privacy policy",
-    "user_agreement":"By continuing you to agree to the "
+    "user_agreement":"By continuing you to agree to the ",
+    "version_label":"Version 1"
 
   }
 }
