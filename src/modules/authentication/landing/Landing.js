@@ -33,6 +33,7 @@ const Landing = ({navigation}) => {
         <View style={styles.buttonContainer}>
           <ContainButton
             title={signUp}
+            type="outline"
             onPress={() => navigation.navigate('SignUp')}
           />
         </View>
