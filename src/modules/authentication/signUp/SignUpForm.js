@@ -1,11 +1,11 @@
 import React from 'react';
+import {View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import InputField from '../../../components/input/InputField';
-import ContainButton from '../../../components/button/ContainButton';
-import {StyleSheet, View} from 'react-native';
-import {appStyles} from '../../../styles/Styles';
 import {strings} from '../../../locales/i18n';
+import ContainButton from '../../../components/button/ContainButton';
+import InputField from '../../../components/input/InputField';
+import {appStyles} from '../../../styles/Styles';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
 const passwordPlaceholder = strings(
@@ -14,17 +14,25 @@ const passwordPlaceholder = strings(
 const requiredField = strings('errors.required');
 const shortPassword = strings('errors.short_password');
 const invalidEmail = strings('errors.invalid_email');
-const title = strings('authentication.login.button_title');
+const title = strings('authentication.signup.button_title');
+const unmatchPassowrd = strings('errors.unmatch_password');
+const confirmPassword = strings(
+  'authentication.signup.confirm_password_placeholder',
+);
 
 const validationSchema = Yup.object({
   email: Yup.string().email(invalidEmail).required(requiredField),
   password: Yup.string().trim().min(8, shortPassword).required(requiredField),
+  confirmPassword: Yup.string()
+    .required(requiredField)
+    .equals([Yup.ref('password'), null], unmatchPassowrd),
 });
 
-const LoginForm = () => {
+const SignUpFrom = () => {
   const userInfo = {
     email: '',
     password: '',
+    confirmPassword: '',
   };
 
   return (
@@ -52,6 +60,14 @@ const LoginForm = () => {
               errorMessage={touched.password ? errors.password : null}
               onChangeText={handleChange('password')}
             />
+            <InputField
+              value={values.confirmPassword}
+              onBlur={handleBlur('confirmPassword')}
+              placeholder={confirmPassword}
+              secureTextEntry
+              errorMessage={touched.password ? errors.confirmPassword : null}
+              onChangeText={handleChange('confirmPassword')}
+            />
             <View style={styles.buttonContainer}>
               <ContainButton title={title} onPress={handleSubmit} />
             </View>
@@ -61,7 +77,8 @@ const LoginForm = () => {
     </Formik>
   );
 };
-export default LoginForm;
+
+export default SignUpFrom;
 
 const styles = StyleSheet.create({
   container: {justifyContent: 'center', alignItems: 'center'},

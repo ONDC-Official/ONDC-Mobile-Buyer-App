@@ -2,11 +2,14 @@
   "authentication": {
     "landing": {},
     "login": {
-      "email_placeholder":"Enter email",
-      "password_placeholder":"Enter password",
+      "email_placeholder":"Email",
+      "password_placeholder":"Password",
       "button_title":"Login"
     },
-    "signup": {},
+    "signup": {
+      "button_title":"Sign Up",
+      "confirm_password_placeholder":"Confirm Password"
+    },
     "splash": {}
   },
   "main": {
@@ -22,7 +25,8 @@
   "errors":{
     "required":"This field is required",
     "invalid_email":"Invalid email",
-    "short_password":"Password is too short"
+    "short_password":"Password is too short",
+    "unmatch_password":"Password does not match"
   },
   "global":{
     "and_label":" and ",

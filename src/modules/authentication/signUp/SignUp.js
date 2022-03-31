@@ -1,13 +1,13 @@
 import React from 'react';
 import AuthContainer from '../AuthConatiner';
-import LoginForm from './LoginForm';
+import SignUpFrom from './SignUpForm';
 
-const Login = () => {
+const SignUp = () => {
   return (
     <AuthContainer>
-      <LoginForm />
+      <SignUpFrom />
     </AuthContainer>
   );
 };
 
-export default Login;
+export default SignUp;
