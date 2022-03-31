@@ -1,19 +1,19 @@
 {
   "authentication": {
     "landing": {
-      "login":"Login",
-      "sign_up":"Sign Up",
-      "continue_with_google":"Continue with google",
-      "continue_with_apple":"Continue with apple"
+      "login": "Login",
+      "sign_up": "Sign Up",
+      "continue_with_google": "Continue with google",
+      "continue_with_apple": "Continue with apple"
     },
     "login": {
-      "email_placeholder":"Email",
-      "password_placeholder":"Password",
-      "button_title":"Login"
+      "email_placeholder": "Email",
+      "password_placeholder": "Password",
+      "button_title": "Login"
     },
     "signup": {
-      "button_title":"Sign Up",
-      "confirm_password_placeholder":"Confirm Password"
+      "button_title": "Sign Up",
+      "confirm_password_placeholder": "Confirm Password"
     },
     "splash": {}
   },
@@ -27,18 +27,17 @@
   "user": {
     "profile": {}
   },
-  "errors":{
-    "required":"This field is required",
-    "invalid_email":"Invalid email",
-    "short_password":"Password is too short",
-    "unmatch_password":"Password does not match"
+  "errors": {
+    "required": "This field is required",
+    "invalid_email": "Invalid email",
+    "short_password": "Password is too short",
+    "unmatch_password": "Password does not match"
   },
-  "global":{
-    "and_label":" and ",
-    "terms_of_services":"Terms of Services",
-    "privacy_policy":"Privacy policy",
-    "user_agreement":"By continuing you to agree to the ",
-    "version_label":"Version 1"
-
+  "global": {
+    "and_label": " and ",
+    "terms_of_services": "Terms of Services",
+    "privacy_policy": "Privacy policy",
+    "user_agreement": "By continuing you to agree to the ",
+    "version_label": "Version 1"
   }
 }

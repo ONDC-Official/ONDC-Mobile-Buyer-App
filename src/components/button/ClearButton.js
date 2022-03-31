@@ -1,7 +1,9 @@
 import React from 'react';
+//TODO: Remove unused import
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Button} from 'react-native-elements';
 
+//TODO: Documentation is missing
 const ClearButton = props => {
   return (
     <Button

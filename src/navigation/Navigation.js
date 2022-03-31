@@ -8,6 +8,7 @@ import Landing from '../modules/authentication/landing/Landing';
 
 const Stack = createStackNavigator();
 
+//TODO: Documentation missing
 const Navigation = () => {
   return (
     <NavigationContainer>
