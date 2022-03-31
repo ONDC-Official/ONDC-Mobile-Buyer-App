@@ -1,6 +1,11 @@
 {
   "authentication": {
-    "landing": {},
+    "landing": {
+      "login":"Login",
+      "sign_up":"Sign Up",
+      "continue_with_google":"Continue with google",
+      "continue_with_apple":"Continue with apple"
+    },
     "login": {
       "email_placeholder":"Email",
       "password_placeholder":"Password",

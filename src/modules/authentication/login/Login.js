@@ -2,9 +2,9 @@ import React from 'react';
 import AuthContainer from '../AuthConatiner';
 import LoginForm from './LoginForm';
 
-const Login = () => {
+const Login = ({navigation}) => {
   return (
-    <AuthContainer>
+    <AuthContainer onBackPress={() => navigation.goBack()}>
       <LoginForm />
     </AuthContainer>
   );

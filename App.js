@@ -7,22 +7,16 @@
  */
 
 import React from 'react';
+import {ThemeProvider} from 'react-native-elements';
 
 import Navigation from './src/navigation/Navigation';
 
-
-
-
-
-
 const App = () => {
   return (
-   
-     <Navigation/>
-   
+    <ThemeProvider>
+      <Navigation />
+    </ThemeProvider>
   );
 };
-
-
 
 export default App;

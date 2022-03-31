@@ -2,9 +2,9 @@ import React from 'react';
 import AuthContainer from '../AuthConatiner';
 import SignUpFrom from './SignUpForm';
 
-const SignUp = () => {
+const SignUp = ({navigation}) => {
   return (
-    <AuthContainer>
+    <AuthContainer onBackPress={() => navigation.goBack()}>
       <SignUpFrom />
     </AuthContainer>
   );

@@ -11,10 +11,10 @@ const termsOfServices = strings('global.terms_of_services');
 const andLabel = strings('global.and_label');
 const privacyPolicy = strings('global.privacy_policy');
 
-const AuthContainer = ({children}) => {
+const AuthContainer = ({children, onBackPress}) => {
   return (
     <View style={[appStyles.container, styles.container]}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onBackPress}>
         <Icon name="angle-left" size={30} />
       </TouchableOpacity>
       <View style={appStyles.container}>{children}</View>
