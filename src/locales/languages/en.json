@@ -1,7 +1,11 @@
 {
   "authentication": {
     "landing": {},
-    "login": {},
+    "login": {
+      "email_placeholder":"Enter email",
+      "password_placeholder":"Enter password",
+      "button_title":"Login"
+    },
     "signup": {},
     "splash": {}
   },
@@ -14,5 +18,17 @@
   "miscellaneous": {},
   "user": {
     "profile": {}
+  },
+  "errors":{
+    "required":"This field is required",
+    "invalid_email":"Invalid email",
+    "short_password":"Password is too short"
+  },
+  "global":{
+    "and_label":" and ",
+    "terms_of_services":"Terms of Services",
+    "privacy_policy":"Privacy policy",
+    "user_agreement":"By continuing you to agree to the "
+
   }
 }

@@ -7,11 +7,9 @@
  */
 
 import React from 'react';
-import {
-  View
-} from 'react-native';
+
 import Navigation from './src/navigation/Navigation';
-import {ThemeProvider} from "react-native-elements"
+
 
 
 
@@ -19,9 +17,9 @@ import {ThemeProvider} from "react-native-elements"
 
 const App = () => {
   return (
-    <ThemeProvider>
+   
      <Navigation/>
-   </ThemeProvider>
+   
   );
 };
 

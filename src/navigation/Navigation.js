@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import LoginForm from "../modules/authentication/login/LoginForm";
+import Login from "../modules/authentication/login/Login";
 
 const Stack=createStackNavigator()
 
@@ -11,7 +11,7 @@ const Navigation=()=>{
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="Login" component={LoginForm} options={{headerShown:false}}/>
+                <Stack.Screen name="Login" component={Login} options={{headerShown:false}}/>
             </Stack.Navigator>
 
         </NavigationContainer>
