@@ -7,6 +7,8 @@ import {strings} from '../../../locales/i18n';
 const image = require('../../../assets/logo.png');
 const versionLabel = strings('global.version_label');
 
+//TODO: Documentation is missing
+//TODO: Version no should come from the config
 const Splash = () => {
   return (
     <View style={appStyles.container}>

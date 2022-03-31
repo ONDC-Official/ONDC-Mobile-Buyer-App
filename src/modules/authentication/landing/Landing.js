@@ -15,6 +15,7 @@ const continueWithGoogle = strings(
 const continueWithApple = strings('authentication.landing.continue_with_apple');
 const versionLabel = strings('global.version_label');
 
+//TODO: Documentation missing
 const Landing = ({navigation}) => {
   const {theme} = useTheme();
 
