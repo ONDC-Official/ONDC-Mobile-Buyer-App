@@ -6,7 +6,7 @@ GoogleSignin.configure({
   webClientId: Config.GOOGLE_CLIENT_ID,
 });
 
-export default () => {
+export default navigation => {
   const loginWithGoogle = async () => {
     try {
       // Get the users ID token
@@ -18,7 +18,9 @@ export default () => {
       // Sign-in the user with the credential
       const response = await auth().signInWithCredential(googleCredential);
 
-      console.log(response);
+      // if (response) {
+      //   navigation.navigate('Dashboard');
+      // }
     } catch (error) {
       console.log(error);
     }
