@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import ContainButton from '../../../components/button/ContainButton';
-import {appStyles} from '../../../styles/Styles';
+import {appStyles} from '../../../styles/styles';
 import {Text, useTheme} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
 
@@ -15,6 +15,11 @@ const continueWithGoogle = strings(
 const continueWithApple = strings('authentication.landing.continue_with_apple');
 const versionLabel = strings('global.version_label');
 
+/**
+ * Component is used to render landing screen
+ * @param theme
+ * @param navigation: application navigation object
+ */
 const Landing = ({navigation}) => {
   const {theme} = useTheme();
 

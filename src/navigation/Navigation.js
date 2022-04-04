@@ -8,7 +8,11 @@ import Landing from '../modules/authentication/landing/Landing';
 
 const Stack = createStackNavigator();
 
-//TODO: Documentation missing
+/**
+ * Component for stack navigation
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const Navigation = () => {
   return (
     <NavigationContainer>

@@ -1,13 +1,19 @@
 import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
-import {appStyles} from '../../../styles/Styles';
+import {appStyles} from '../../../styles/styles';
 import {Text} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
 
 const image = require('../../../assets/logo.png');
 const versionLabel = strings('global.version_label');
 
-const Splash = () => {
+/**
+ * Component to render splash screen
+ * @param navigation: required: to navigate to the respective screen based on token availability
+ * @constructor
+ * @returns {JSX.Element}
+ */
+const Splash = ({navigation}) => {
   return (
     <View style={appStyles.container}>
       <View style={[appStyles.container, styles.container]}>
