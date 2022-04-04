@@ -4,6 +4,8 @@ import ContainButton from '../../../components/button/ContainButton';
 import {appStyles} from '../../../styles/Styles';
 import {Text, useTheme} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
+import useLoginWithGoogle from './hooks/useLoginWithGoogle';
+import {isIOS} from '../../../utils/utils';
 
 const logo = require('../../../assets/logo.png');
 
@@ -18,6 +20,7 @@ const versionLabel = strings('global.version_label');
 //TODO: Documentation missing
 const Landing = ({navigation}) => {
   const {theme} = useTheme();
+  const {loginWithGoogle} = useLoginWithGoogle();
 
   return (
     <>
@@ -52,20 +55,23 @@ const Landing = ({navigation}) => {
                 size: 30,
                 color: theme.colors.primary,
               }}
+              onPress={loginWithGoogle}
             />
           </View>
-          <View style={styles.buttonContainer}>
-            <ContainButton
-              title={continueWithApple}
-              type="outline"
-              icon={{
-                name: 'apple',
-                type: 'font-awesome',
-                size: 30,
-                color: theme.colors.primary,
-              }}
-            />
-          </View>
+          {isIOS && (
+            <View style={styles.buttonContainer}>
+              <ContainButton
+                title={continueWithApple}
+                type="outline"
+                icon={{
+                  name: 'apple',
+                  type: 'font-awesome',
+                  size: 30,
+                  color: theme.colors.primary,
+                }}
+              />
+            </View>
+          )}
         </View>
         <Text>{versionLabel}</Text>
       </View>
