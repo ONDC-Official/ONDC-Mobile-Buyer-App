@@ -27,6 +27,7 @@ const validationSchema = Yup.object({
  * @param navigation: application navigation object
  */
 const LoginForm = () => {
+  //TODO: If its a initial value then why we are declaring it in the component?
   const userInfo = {
     email: '',
     password: '',

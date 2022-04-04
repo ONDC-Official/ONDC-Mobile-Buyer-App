@@ -15,6 +15,7 @@ const requiredField = strings('errors.required');
 const shortPassword = strings('errors.short_password');
 const invalidEmail = strings('errors.invalid_email');
 const title = strings('authentication.signup.button_title');
+//TODO: Typo: In word 'unmatch', unmatch is not a word
 const unmatchPassowrd = strings('errors.unmatch_password');
 const confirmPassword = strings(
   'authentication.signup.confirm_password_placeholder',
