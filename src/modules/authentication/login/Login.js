@@ -11,7 +11,7 @@ import LoginForm from './LoginForm';
 const Login = ({navigation}) => {
   return (
     <AuthContainer onBackPress={() => navigation.goBack()}>
-      <LoginForm />
+      <LoginForm navigation={navigation} />
     </AuthContainer>
   );
 };
