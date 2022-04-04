@@ -1,9 +1,15 @@
 import React from 'react';
-//TODO: Remove unused import
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {Button} from 'react-native-elements';
 
-//TODO: Documentation is missing
+/**
+ * Component to render clear button in the screens
+ * @param props
+ * textColor:color of title
+ * onPress:function which handles click event
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const ClearButton = props => {
   return (
     <Button
