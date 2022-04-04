@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import {strings} from '../../../locales/i18n';
 import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
-import {appStyles} from '../../../styles/Styles';
+import {appStyles} from '../../../styles/styles';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
 const passwordPlaceholder = strings(
@@ -29,8 +29,12 @@ const validationSchema = Yup.object({
     .equals([Yup.ref('password'), null], unmatchPassowrd),
 });
 
-//TODO: Documentation missing
-const SignUpFrom = () => {
+/**
+ * Component is used to render sign up form
+ * @param theme
+ * @param navigation: application navigation object
+ */
+const SignUpFrom = ({navigation}) => {
   const userInfo = {
     email: '',
     password: '',

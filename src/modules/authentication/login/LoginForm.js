@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import InputField from '../../../components/input/InputField';
 import ContainButton from '../../../components/button/ContainButton';
 import {StyleSheet, View} from 'react-native';
-import {appStyles} from '../../../styles/Styles';
+import {appStyles} from '../../../styles/styles';
 import {strings} from '../../../locales/i18n';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
@@ -21,7 +21,11 @@ const validationSchema = Yup.object({
   password: Yup.string().trim().min(8, shortPassword).required(requiredField),
 });
 
-//TODO: Documentation missing
+/**
+ * Component is used to render login form
+ * @param theme
+ * @param navigation: application navigation object
+ */
 const LoginForm = () => {
   //TODO: If its a initial value then why we are declaring it in the component?
   const userInfo = {
