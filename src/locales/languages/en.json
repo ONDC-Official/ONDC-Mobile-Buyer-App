@@ -21,7 +21,14 @@
     "cart": {},
     "dashboard": {},
     "order": {},
-    "product": {}
+    "product": {
+      "select_location_label":"Select a location",
+      "add_button_title":"Add",
+      "provider_label":"Provider",
+      "product_label":"Product",
+      "category_label":"Category",
+      "search_label":"Search"
+    }
   },
   "miscellaneous": {},
   "user": {

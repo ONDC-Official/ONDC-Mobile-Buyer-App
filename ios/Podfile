@@ -25,6 +25,8 @@ target 'Buyer' do
 
   pod 'RNGoogleSignin', :path => '../node_modules/@react-native-google-signin/google-signin'
 
+  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
   target 'BuyerTests' do
     inherit! :complete
     # Pods for testing

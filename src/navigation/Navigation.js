@@ -45,7 +45,7 @@ const Navigation = () => {
           component={Splash}
           options={{headerShown: false}}
         /> */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Landing"
           component={Landing}
           options={{headerShown: false}}
@@ -59,7 +59,7 @@ const Navigation = () => {
           name="Login"
           component={Login}
           options={{headerShown: false}}
-        />
+        /> */}
         <Stack.Screen
           name="Dashboard"
           component={Dashboard}
