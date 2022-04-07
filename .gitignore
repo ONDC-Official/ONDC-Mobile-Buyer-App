@@ -21,6 +21,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 google-services.json
+GoogleService-info.plist
 .env.development
 .env.staging
 .env.production

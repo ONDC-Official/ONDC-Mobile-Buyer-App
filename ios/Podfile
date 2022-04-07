@@ -19,6 +19,9 @@ target 'Buyer' do
     :hermes_enabled => false
   )
 
+
+  permissions_path = '../node_modules/react-native-permissions/ios'
+
   pod 'react-native-config', :path => '../node_modules/react-native-config'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
@@ -26,6 +29,12 @@ target 'Buyer' do
   pod 'RNGoogleSignin', :path => '../node_modules/@react-native-google-signin/google-signin'
 
   pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
+
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+  
+  pod 'Permission-LocationAlways', :path => "../node_modules/react-native-permissions/ios/LocationAlways"
+
+  pod 'Permission-LocationWhenInUse', :path => "../node_modules/react-native-permissions/ios/LocationWhenInUse"
 
   target 'BuyerTests' do
     inherit! :complete

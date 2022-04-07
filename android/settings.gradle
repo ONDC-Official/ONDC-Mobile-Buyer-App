@@ -1,4 +1,6 @@
 rootProject.name = 'Buyer'
+include ':react-native-permissions'
+project(':react-native-permissions').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-permissions/android')
 include ':react-native-android-location-enabler'
 project(':react-native-android-location-enabler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-android-location-enabler/android')
 include ':@react-native-community_geolocation'

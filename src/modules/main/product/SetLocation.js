@@ -14,11 +14,7 @@ const SetLocation = ({closeSheet, setLocation}) => {
         <View style={appStyles.container}>
           <Text>{selectLocationLabel}</Text>
         </View>
-        <Icon
-          type="material-community"
-          name="close-thick"
-          onPress={closeSheet}
-        />
+        <Icon type="material-community" name="close" onPress={closeSheet} />
       </View>
       <SearchBar setLocation={setLocation} closeSheet={closeSheet} />
     </View>
