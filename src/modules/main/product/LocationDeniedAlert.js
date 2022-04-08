@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Dialog, Divider, Icon, withTheme} from 'react-native-elements';
 
-const Alert = ({theme, isVisible, setIsVisible, openSheet}) => {
+const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
   const {colors} = theme;
 
   return (
@@ -39,7 +39,7 @@ const Alert = ({theme, isVisible, setIsVisible, openSheet}) => {
   );
 };
 
-export default withTheme(Alert);
+export default withTheme(LocationDeniedAlert);
 
 const styles = StyleSheet.create({
   iconContainer: {

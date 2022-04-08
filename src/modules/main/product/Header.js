@@ -3,14 +3,14 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {SearchBar, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {strings} from '../../../locales/i18n';
-import Card from './Card';
+import FilterButton from './FilterButton';
 
 const product = strings('main.product.product_label');
 const provider = strings('main.product.provider_label');
 const category = strings('main.product.category_label');
 const search = strings('main.product.search_label');
 
-const ProductHeader = ({theme, openSheet, onSearch, location}) => {
+const Header = ({theme, openSheet, onSearch, location}) => {
   const {colors} = theme;
   const [selectedCard, setSelectedCard] = useState(provider);
   const [item, setItem] = useState(null);
@@ -30,7 +30,7 @@ const ProductHeader = ({theme, openSheet, onSearch, location}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.cardContainer}>
-        <Card
+        <FilterButton
           name={provider}
           onPress={() => {
             onCardSelect(provider);
@@ -38,7 +38,7 @@ const ProductHeader = ({theme, openSheet, onSearch, location}) => {
           selectedCard={selectedCard}
         />
         <View style={styles.space} />
-        <Card
+        <FilterButton
           name={product}
           onPress={() => {
             onCardSelect(product);
@@ -46,7 +46,7 @@ const ProductHeader = ({theme, openSheet, onSearch, location}) => {
           selectedCard={selectedCard}
         />
         <View style={styles.space} />
-        <Card
+        <FilterButton
           name={category}
           onPress={() => {
             onCardSelect(category);
@@ -72,7 +72,7 @@ const ProductHeader = ({theme, openSheet, onSearch, location}) => {
   );
 };
 
-export default withTheme(ProductHeader);
+export default withTheme(Header);
 
 const styles = StyleSheet.create({
   container: {

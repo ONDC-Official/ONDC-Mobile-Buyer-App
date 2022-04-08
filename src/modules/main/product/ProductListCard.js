@@ -8,7 +8,7 @@ import {appStyles} from '../../../styles/styles';
 const image = require('../../../assets/demo.png');
 const addButton = strings('main.product.add_button_title');
 
-const ProductCard = ({theme}) => {
+const ProductListCard = ({theme}) => {
   const {colors} = theme;
   return (
     <View style={styles.container}>
@@ -20,17 +20,19 @@ const ProductCard = ({theme}) => {
           <Text>$400</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.button, {borderColor: colors.primary}]}>
-            <Text style={{color: colors.primary}}>{addButton}</Text>
-          </TouchableOpacity>
+          {
+            <TouchableOpacity
+              style={[styles.button, {borderColor: colors.primary}]}>
+              <Text style={{color: colors.primary}}>{addButton}</Text>
+            </TouchableOpacity>
+          }
         </View>
       </View>
     </View>
   );
 };
 
-export default withTheme(ProductCard);
+export default withTheme(ProductListCard);
 
 const styles = StyleSheet.create({
   container: {marginTop: 10, padding: 10},

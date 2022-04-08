@@ -4,7 +4,7 @@ import {Text, withTheme} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {appStyles} from '../../../styles/styles';
 
-const Card = ({theme, name, selectedCard, onPress}) => {
+const FilterButton = ({theme, name, selectedCard, onPress}) => {
   const {colors} = theme;
   return (
     <View style={appStyles.container}>
@@ -28,7 +28,7 @@ const Card = ({theme, name, selectedCard, onPress}) => {
   );
 };
 
-export default withTheme(Card);
+export default withTheme(FilterButton);
 
 const styles = StyleSheet.create({
   container: {

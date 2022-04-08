@@ -8,18 +8,18 @@ import {
 } from 'react-native';
 import {getData} from '../../../utils/api';
 import Geolocation from '@react-native-community/geolocation';
-import ProductHeader from './ProductHeader';
-import ProductCard from './ProductCard';
+import ProductCard from './ProductListCard';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import SetLocation from './SetLocation';
 import {colors, withTheme} from 'react-native-elements';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import {strings} from '../../../locales/i18n';
 import Config from 'react-native-config';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import Alert from './Alert';
 import {isIOS} from '../../../utils/utils';
+import AddressPicker from './AddressPicker';
+import Header from './Header';
+import LocationDeniedAlert from './LocationDeniedAlert';
 
 const list = [1, 2, 3, 4, 5, 8, 9, 0];
 
@@ -140,20 +140,20 @@ const Products = ({theme}) => {
   return (
     <SafeAreaView style={{backgroundColor: colors.white}}>
       <View style={[styles.container, {backgroundColor: colors.white}]}>
-        <ProductHeader
+        <Header
           location={location}
           setLocation={setLocation}
           openSheet={openSheet}
           onSearch={onSearch}
         />
         <RBSheet ref={refRBSheet} height={Dimensions.get('window').height / 2}>
-          <SetLocation
+          <AddressPicker
             closeSheet={closeSheet}
             location={location}
             setLocation={setLocation}
           />
         </RBSheet>
-        <Alert
+        <LocationDeniedAlert
           openSheet={openSheet}
           isVisible={isVisible}
           setIsVisible={setIsVisible}

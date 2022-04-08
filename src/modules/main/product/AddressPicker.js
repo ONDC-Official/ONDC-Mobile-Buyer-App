@@ -7,7 +7,7 @@ import SearchBar from './SearchBar';
 
 const selectLocationLabel = strings('main.product.select_location_label');
 
-const SetLocation = ({closeSheet, setLocation}) => {
+const AddressPicker = ({closeSheet, setLocation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -21,7 +21,7 @@ const SetLocation = ({closeSheet, setLocation}) => {
   );
 };
 
-export default SetLocation;
+export default AddressPicker;
 
 const styles = StyleSheet.create({
   container: {padding: 10},
