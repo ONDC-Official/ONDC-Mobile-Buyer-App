@@ -46,7 +46,7 @@ const SignUpFrom = ({navigation}) => {
       initialValues={userInfo}
       validationSchema={validationSchema}
       onSubmit={() => {
-        console.log('button pressed');
+        navigation.navigate('Login');
       }}>
       {({values, errors, handleChange, handleBlur, touched, handleSubmit}) => {
         return (

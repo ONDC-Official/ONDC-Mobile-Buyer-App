@@ -20,19 +20,47 @@ import {isIOS} from '../../../utils/utils';
 import AddressPicker from './AddressPicker';
 import Header from './Header';
 import LocationDeniedAlert from './LocationDeniedAlert';
-
-const list = [1, 2, 3, 4, 5, 8, 9, 0];
+import {appStyles} from '../../../styles/styles';
+import productList from './ProductsList';
 
 const Products = ({theme}) => {
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState('UnKnown');
   const [isVisible, setIsVisible] = useState(false);
+  const [list, setList] = useState(productList);
+
   const refRBSheet = useRef();
 
   const openSheet = () => refRBSheet.current.open();
   const closeSheet = () => refRBSheet.current.close();
 
-  const renderItem = () => {
-    return <ProductCard />;
+  const addItem = id => {
+    const newArray = list.slice();
+    const selectedItem = newArray.find(item => {
+      return item.id === id;
+    });
+    selectedItem.quantity = selectedItem.quantity + 1;
+    setList(newArray);
+  };
+
+  const removeItem = id => {
+    const newArray = list.slice();
+    const selectedItem = newArray.find(item => {
+      return item.id === id;
+    });
+    selectedItem.quantity = selectedItem.quantity - 1;
+    setList(newArray);
+  };
+
+  const renderItem = ({item}) => {
+    return (
+      <ProductCard
+        item={item}
+        list={list}
+        setList={setList}
+        addItem={addItem}
+        removeItem={removeItem}
+      />
+    );
   };
 
   const getLocation = async response => {
@@ -46,7 +74,7 @@ const Products = ({theme}) => {
       );
     } catch (error) {
       console.log(error);
-      setLocation('Unknown');
+      setLocation('UnKnown');
     }
   };
 
@@ -130,16 +158,22 @@ const Products = ({theme}) => {
   };
 
   useEffect(() => {
-    if (location === null) {
+    if (location === 'UnKnown') {
       requestPermission()
         .then(() => {})
         .catch(() => {});
     }
-  }, []);
+  }, [list]);
 
   return (
-    <SafeAreaView style={{backgroundColor: colors.white}}>
-      <View style={[styles.container, {backgroundColor: colors.white}]}>
+    <SafeAreaView
+      style={[appStyles.container, {backgroundColor: colors.white}]}>
+      <View
+        style={[
+          appStyles.container,
+          styles.container,
+          {backgroundColor: colors.white},
+        ]}>
         <Header
           location={location}
           setLocation={setLocation}

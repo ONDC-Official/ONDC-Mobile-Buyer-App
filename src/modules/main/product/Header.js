@@ -55,9 +55,13 @@ const Header = ({theme, openSheet, onSearch, location}) => {
         />
       </View>
       <SearchBar
+        round={true}
         lightTheme={true}
         placeholder={`${search} ${selectedCard}`}
-        containerStyle={styles.containerStyle}
+        containerStyle={[
+          styles.containerStyle,
+          {backgroundColor: colors.white},
+        ]}
         inputContainerStyle={[
           styles.inputContainerStyle,
           {backgroundColor: colors.white},
@@ -87,8 +91,8 @@ const styles = StyleSheet.create({
   subContainer: {flexDirection: 'row', alignItems: 'center'},
   locationContainer: {marginBottom: 10},
   textContainer: {marginLeft: 8, flexShrink: 1},
-  containerStyle: {paddingVertical: 0, paddingHorizontal: 2},
+  containerStyle: {padding: 0, borderRadius: 15},
   cardContainer: {flexDirection: 'row', marginBottom: 10},
   space: {marginHorizontal: 5},
-  inputContainerStyle: {elevation: 10},
+  inputContainerStyle: {elevation: 10, borderRadius: 15},
 });
