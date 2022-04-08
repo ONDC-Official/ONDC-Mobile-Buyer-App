@@ -78,11 +78,11 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Splash"
           component={Splash}
           options={{headerShown: false}}
-        /> */}
+        />
         <Stack.Screen
           name="Landing"
           component={Landing}

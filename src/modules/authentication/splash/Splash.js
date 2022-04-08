@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {appStyles} from '../../../styles/styles';
 import {Text} from 'react-native-elements';
@@ -14,6 +14,12 @@ const versionLabel = strings('global.version_label');
  * @returns {JSX.Element}
  */
 const Splash = ({navigation}) => {
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.navigate('Landing');
+    }, 3000);
+  }, []);
+
   return (
     <View style={appStyles.container}>
       <View style={[appStyles.container, styles.container]}>
