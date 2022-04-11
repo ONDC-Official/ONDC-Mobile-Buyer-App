@@ -9,7 +9,7 @@ import {appStyles} from '../../../styles/styles';
 const image = require('../../../assets/demo.png');
 const addButton = strings('main.product.add_button_title');
 
-const ProductListCard = ({theme, item, removeItem, addItem}) => {
+const ProductCard = ({theme, item, removeItem, addItem}) => {
   const {colors} = theme;
 
   return (
@@ -29,7 +29,7 @@ const ProductListCard = ({theme, item, removeItem, addItem}) => {
               <TouchableOpacity
                 style={[styles.button, {borderColor: colors.primary}]}
                 onPress={() => {
-                  addItem(item.id);
+                  addItem(item);
                 }}>
                 <Text style={{color: colors.primary}}>{addButton}</Text>
               </TouchableOpacity>
@@ -50,7 +50,7 @@ const ProductListCard = ({theme, item, removeItem, addItem}) => {
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => {
-                    addItem(item.id);
+                    addItem(item);
                   }}>
                   <Icon name="plus" color={colors.white} size={16} />
                 </TouchableOpacity>
@@ -63,7 +63,7 @@ const ProductListCard = ({theme, item, removeItem, addItem}) => {
   );
 };
 
-export default withTheme(ProductListCard);
+export default withTheme(ProductCard);
 
 const styles = StyleSheet.create({
   container: {marginTop: 10, padding: 10},

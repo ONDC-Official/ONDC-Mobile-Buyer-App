@@ -18,7 +18,11 @@
     "splash": {}
   },
   "main": {
-    "cart": {},
+    "cart": {
+      "sub_total_label":"Sub Total:",
+      "clear_cart_title":"Clear Cart",
+      "empty_cart_message":"You have no items in your shopping cart"
+    },
     "dashboard": {},
     "order": {},
     "product": {
@@ -28,6 +32,7 @@
       "product_label":"Product",
       "category_label":"Category",
       "search_label":"Search"
+      
     }
   },
   "miscellaneous": {},

@@ -8,13 +8,16 @@
 
 import React from 'react';
 import {ThemeProvider} from 'react-native-elements';
+import CartContextProvider from './src/context/Cart';
 
 import Navigation from './src/navigation/Navigation';
 
 const App = () => {
   return (
     <ThemeProvider>
-      <Navigation />
+      <CartContextProvider>
+        <Navigation />
+      </CartContextProvider>
     </ThemeProvider>
   );
 };

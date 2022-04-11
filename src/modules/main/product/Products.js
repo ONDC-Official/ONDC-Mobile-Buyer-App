@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   FlatList,
   PermissionsAndroid,
@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {getData} from '../../../utils/api';
 import Geolocation from '@react-native-community/geolocation';
-import ProductCard from './ProductListCard';
+import ProductCard from './ProductCard';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors, withTheme} from 'react-native-elements';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
@@ -21,34 +21,38 @@ import AddressPicker from './AddressPicker';
 import Header from './Header';
 import LocationDeniedAlert from './LocationDeniedAlert';
 import {appStyles} from '../../../styles/styles';
-import productList from './ProductsList';
+import {CartContext} from '../../../context/Cart';
 
 const Products = ({theme}) => {
   const [location, setLocation] = useState('UnKnown');
   const [isVisible, setIsVisible] = useState(false);
-  const [list, setList] = useState(productList);
+
+  const {storeItemInCart, storeList, list, removeItemFromCart} =
+    useContext(CartContext);
 
   const refRBSheet = useRef();
 
   const openSheet = () => refRBSheet.current.open();
   const closeSheet = () => refRBSheet.current.close();
 
-  const addItem = id => {
+  const addItem = addedItem => {
     const newArray = list.slice();
-    const selectedItem = newArray.find(item => {
-      return item.id === id;
+    let selectedItem = newArray.find(item => {
+      return item.id === addedItem.id;
     });
     selectedItem.quantity = selectedItem.quantity + 1;
-    setList(newArray);
+    storeItemInCart(addedItem);
+    storeList(newArray);
   };
 
   const removeItem = id => {
     const newArray = list.slice();
-    const selectedItem = newArray.find(item => {
+    let selectedItem = newArray.find(item => {
       return item.id === id;
     });
     selectedItem.quantity = selectedItem.quantity - 1;
-    setList(newArray);
+    removeItemFromCart();
+    storeList(newArray);
   };
 
   const renderItem = ({item}) => {
@@ -56,7 +60,6 @@ const Products = ({theme}) => {
       <ProductCard
         item={item}
         list={list}
-        setList={setList}
         addItem={addItem}
         removeItem={removeItem}
       />
@@ -158,7 +161,7 @@ const Products = ({theme}) => {
   };
 
   useEffect(() => {
-    if (location === 'UnKnown') {
+    if (location === 'UnKnownk') {
       requestPermission()
         .then(() => {})
         .catch(() => {});
