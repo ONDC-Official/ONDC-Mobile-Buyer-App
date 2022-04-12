@@ -9,15 +9,18 @@
 import React from 'react';
 import {ThemeProvider} from 'react-native-elements';
 import CartContextProvider from './src/context/Cart';
+import {Provider as AuthProvider} from './src/context/Auth';
 
 import Navigation from './src/navigation/Navigation';
 
 const App = () => {
   return (
     <ThemeProvider>
-      <CartContextProvider>
-        <Navigation />
-      </CartContextProvider>
+      <AuthProvider>
+        <CartContextProvider>
+          <Navigation />
+        </CartContextProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 };

@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {strings} from '../../../locales/i18n';
 import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
-import {appStyles} from '../../../styles/styles';
+import {Context as AuthContext} from '../../../context/Auth';
+import auth from '@react-native-firebase/auth';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
 const passwordPlaceholder = strings(
@@ -40,17 +41,35 @@ const SignUpFrom = ({navigation}) => {
     password: '',
     confirmPassword: '',
   };
+  const {storeToken} = useContext(AuthContext);
 
+  const createUser = async values => {
+    try {
+      const response = await auth().createUserWithEmailAndPassword(
+        values.email,
+        values.password,
+      );
+      console.log(response);
+
+      const idTokenResult = await auth().currentUser.getIdTokenResult();
+      await storeToken(idTokenResult);
+      navigation.navigate('Dashboard');
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Formik
       initialValues={userInfo}
       validationSchema={validationSchema}
-      onSubmit={() => {
-        navigation.navigate('Login');
+      onSubmit={values => {
+        createUser(values)
+          .then(() => {})
+          .catch(() => {});
       }}>
       {({values, errors, handleChange, handleBlur, touched, handleSubmit}) => {
         return (
-          <View style={[appStyles.container, styles.container]}>
+          <>
             <InputField
               value={values.email}
               onBlur={handleBlur('email')}
@@ -77,7 +96,7 @@ const SignUpFrom = ({navigation}) => {
             <View style={styles.buttonContainer}>
               <ContainButton title={title} onPress={handleSubmit} />
             </View>
-          </View>
+          </>
         );
       }}
     </Formik>
@@ -87,9 +106,8 @@ const SignUpFrom = ({navigation}) => {
 export default SignUpFrom;
 
 const styles = StyleSheet.create({
-  container: {justifyContent: 'center', alignItems: 'center'},
   buttonContainer: {
     width: 300,
-    marginVertical: 20,
+    marginTop: 20,
   },
 });

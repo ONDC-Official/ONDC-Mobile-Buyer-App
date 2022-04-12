@@ -12,7 +12,7 @@ const search = strings('main.product.search_label');
 
 const Header = ({theme, openSheet, onSearch, location}) => {
   const {colors} = theme;
-  const [selectedCard, setSelectedCard] = useState(provider);
+  const [selectedCard, setSelectedCard] = useState(product);
   const [item, setItem] = useState(null);
 
   const onCardSelect = card => setSelectedCard(card);
@@ -31,14 +31,6 @@ const Header = ({theme, openSheet, onSearch, location}) => {
       </View>
       <View style={styles.cardContainer}>
         <FilterButton
-          name={provider}
-          onPress={() => {
-            onCardSelect(provider);
-          }}
-          selectedCard={selectedCard}
-        />
-        <View style={styles.space} />
-        <FilterButton
           name={product}
           onPress={() => {
             onCardSelect(product);
@@ -46,6 +38,15 @@ const Header = ({theme, openSheet, onSearch, location}) => {
           selectedCard={selectedCard}
         />
         <View style={styles.space} />
+        <FilterButton
+          name={provider}
+          onPress={() => {
+            onCardSelect(provider);
+          }}
+          selectedCard={selectedCard}
+        />
+        <View style={styles.space} />
+
         <FilterButton
           name={category}
           onPress={() => {

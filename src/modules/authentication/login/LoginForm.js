@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import InputField from '../../../components/input/InputField';
 import ContainButton from '../../../components/button/ContainButton';
 import {StyleSheet, View} from 'react-native';
-import {appStyles} from '../../../styles/styles';
+import {Context as AuthContext} from '../../../context/Auth';
 import {strings} from '../../../locales/i18n';
+import auth from '@react-native-firebase/auth';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
 const passwordPlaceholder = strings(
@@ -27,22 +28,39 @@ const validationSchema = Yup.object({
  * @param navigation: application navigation object
  */
 const LoginForm = ({navigation}) => {
-  //TODO: If its a initial value then why we are declaring it in the component?
   const userInfo = {
     email: '',
     password: '',
+  };
+  const {storeToken} = useContext(AuthContext);
+
+  const login = async values => {
+    try {
+      const response = await auth().signInWithEmailAndPassword(
+        values.email,
+        values.password,
+      );
+      const idTokenResult = await auth().currentUser.getIdTokenResult();
+      await storeToken(idTokenResult);
+      navigation.navigate('Dashboard');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <Formik
       initialValues={userInfo}
       validationSchema={validationSchema}
-      onSubmit={() => {
-        navigation.navigate('Dashboard');
+      onSubmit={values => {
+        login(values)
+          .then(() => {})
+          .catch(() => {});
+        // navigation.navigate('Dashboard');
       }}>
       {({values, errors, handleChange, handleBlur, touched, handleSubmit}) => {
         return (
-          <View style={[appStyles.container, styles.container]}>
+          <>
             <InputField
               value={values.email}
               onBlur={handleBlur('email')}
@@ -61,7 +79,7 @@ const LoginForm = ({navigation}) => {
             <View style={styles.buttonContainer}>
               <ContainButton title={title} onPress={handleSubmit} />
             </View>
-          </View>
+          </>
         );
       }}
     </Formik>
@@ -73,6 +91,6 @@ const styles = StyleSheet.create({
   container: {justifyContent: 'center', alignItems: 'center'},
   buttonContainer: {
     width: 300,
-    marginVertical: 20,
+    marginTop: 20,
   },
 });

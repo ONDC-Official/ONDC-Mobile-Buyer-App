@@ -30,7 +30,7 @@ const SearchBar = ({theme, setLocation, closeSheet}) => {
           `${Config.GET_LOCATION}address=${value}&itemCount=5`,
           {
             headers: {
-              Authorization: 'Bearer' + ' ' + accessToken,
+              Authorization: `Bearer ${accessToken}`,
             },
           },
         );

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {getData} from '../../../utils/api';
+import {getData, postData} from '../../../utils/api';
 import Geolocation from '@react-native-community/geolocation';
 import ProductCard from './ProductCard';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -22,13 +22,27 @@ import Header from './Header';
 import LocationDeniedAlert from './LocationDeniedAlert';
 import {appStyles} from '../../../styles/styles';
 import {CartContext} from '../../../context/Cart';
+import {Context as AuthContext} from '../../../context/Auth';
+import {
+  BASE_URL,
+  GET_MESSAGE_ID,
+  GET_PRODUCTS,
+} from '../../../utils/apiUtilities';
+
+const product = strings('main.product.product_label');
+const provider = strings('main.product.provider_label');
+const category = strings('main.product.category_label');
 
 const Products = ({theme}) => {
   const [location, setLocation] = useState('UnKnown');
   const [isVisible, setIsVisible] = useState(false);
+  const [messageId, setMessageId] = useState(null);
 
   const {storeItemInCart, storeList, list, removeItemFromCart} =
     useContext(CartContext);
+  const {
+    state: {token},
+  } = useContext(AuthContext);
 
   const refRBSheet = useRef();
 
@@ -156,12 +170,89 @@ const Products = ({theme}) => {
     }
   };
 
-  const onSearch = (item, selectedCard) => {
-    console.log(item, selectedCard);
+  const onSearch = async (string, selectedCard) => {
+    const options = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      if (selectedCard === product) {
+        const {data} = await postData(
+          `${BASE_URL}${GET_MESSAGE_ID}`,
+          {
+            context: {},
+            message: {
+              criteria: {
+                delivery_location: '12.9063433,77.5856825',
+                search_string: string,
+              },
+            },
+          },
+          options,
+        );
+        setMessageId(data.context.message_id);
+      } else if (selectedCard === provider) {
+        const {data} = await postData(
+          `${BASE_URL}${GET_MESSAGE_ID}`,
+          {
+            context: {},
+            message: {
+              criteria: {
+                delivery_location: '12.9063433,77.5856825',
+                provider_id: string,
+              },
+            },
+          },
+          options,
+        );
+        setMessageId(data.context.message_id);
+      } else {
+        const {data} = await postData(
+          `${BASE_URL}${GET_MESSAGE_ID}`,
+          {
+            context: {bpp_id: 'https://mandi.succinct.in/bpp'},
+            message: {
+              criteria: {
+                search_string: string,
+                delivery_location: '12.903561,77.5939631',
+                category_id: 'grocerry',
+                category_name: 'grocerry',
+              },
+            },
+          },
+          options,
+        );
+        setMessageId(data.context.message_id);
+      }
+      if (messageId !== null) {
+        const {data} = await getData(`${BASE_URL}${GET_PRODUCTS}${messageId}`);
+        let items = [];
+        data.message.catalogs.forEach(catalog => {
+          if (catalog.bpp_id) {
+            if (catalog.bpp_providers && catalog.bpp_providers.length > 0) {
+              items.push(catalog.bpp_providers);
+            }
+          }
+        });
+        console.log(items);
+        let products = [];
+        items.forEach(obj => {
+          obj.forEach(element => {
+            element.items.forEach(item => {
+              products.push(item);
+            });
+          });
+        });
+        console.log(products);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    if (location === 'UnKnownk') {
+    if (location === 'UnKnown') {
       requestPermission()
         .then(() => {})
         .catch(() => {});

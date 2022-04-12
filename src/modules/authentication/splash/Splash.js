@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {appStyles} from '../../../styles/styles';
 import {Text} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
+import {Context as AuthContext} from '../../../context/Auth';
 
 const image = require('../../../assets/logo.png');
 const versionLabel = strings('global.version_label');
@@ -14,11 +15,43 @@ const versionLabel = strings('global.version_label');
  * @returns {JSX.Element}
  */
 const Splash = ({navigation}) => {
+  const {
+    state: {isLoading, token},
+    tryLocalSignIn,
+  } = useContext(AuthContext);
+
+  const checkIfUserIsLoggedIn = async () => {
+    try {
+      await tryLocalSignIn();
+    } catch (error) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Landing'}],
+      });
+    }
+  };
+
+  const checkUserStatus = () => {
+    if (token) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Dashboard'}],
+      });
+    } else {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Landing'}],
+      });
+    }
+  };
+
   useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate('Landing');
-    }, 3000);
-  }, []);
+    if (isLoading) {
+      checkIfUserIsLoggedIn().then(() => {});
+    } else {
+      checkUserStatus();
+    }
+  }, [isLoading]);
 
   return (
     <View style={appStyles.container}>

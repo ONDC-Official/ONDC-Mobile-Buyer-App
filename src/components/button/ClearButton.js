@@ -16,7 +16,7 @@ const ClearButton = props => {
       title={props.title}
       onPress={props.onPress}
       type="clear"
-      titleStyle={{color: props.textColor}}
+      titleStyle={[styles.titleStyle, {color: props.textColor}]}
       buttonStyle={styles.buttonStyle}
       loading={props.loading}
     />
@@ -29,4 +29,5 @@ const styles = StyleSheet.create({
   buttonStyle: {
     padding: 0,
   },
+  titleStyle: {fontSize: 14},
 });
