@@ -9,6 +9,7 @@ import EmptyComponent from './EmptyComponent';
 import Footer from './Footer';
 
 const subTotalLabel = strings('main.cart.sub_total_label');
+const message = strings('main.cart.empty_cart_message');
 
 const Cart = ({theme}) => {
   const {colors} = theme;
@@ -22,7 +23,7 @@ const Cart = ({theme}) => {
   } = useContext(CartContext);
 
   const subTotal = cart.reduce((total, item) => {
-    total += item.price * item.quantity;
+    total += item.price.value * item.quantity;
     return total;
   }, 0);
 
@@ -77,8 +78,14 @@ const Cart = ({theme}) => {
               </Text>
             ) : null;
           }}
-          ListEmptyComponent={EmptyComponent}
-          contentContainerStyle={cart.length === 0 ? appStyles.container : null}
+          ListEmptyComponent={() => {
+            return <EmptyComponent message={message} />;
+          }}
+          contentContainerStyle={
+            cart.length === 0
+              ? appStyles.container
+              : styles.contentContainerStyle
+          }
         />
         {cart.length !== 0 && <Footer onPress={onPressHandler} />}
       </View>
@@ -89,12 +96,13 @@ const Cart = ({theme}) => {
 export default withTheme(Cart);
 
 const styles = StyleSheet.create({
-  container: {padding: 10},
-  text: {fontSize: 20},
+  container: {paddingVertical: 10},
+  text: {fontSize: 20, paddingLeft: 15},
   clearCartButton: {
     padding: 10,
     borderRadius: 15,
     borderWidth: 1,
     alignSelf: 'center',
   },
+  contentContainerStyle: {paddingBottom: 10},
 });

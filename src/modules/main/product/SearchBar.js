@@ -26,15 +26,15 @@ const SearchBar = ({theme, setLocation, closeSheet}) => {
   const findLocation = async value => {
     if (value.length > 3) {
       try {
-        const locationResponse = await getData(
-          `${Config.GET_LOCATION}address=${value}&itemCount=5`,
+        const {data} = await getData(
+          `https://buyer-app.ondc.org/mmi/api/mmi_query?query=${value}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
           },
         );
-        setFilteredLocations(locationResponse.data.copResults);
+        setFilteredLocations(data);
       } catch (error) {
         console.log(error);
       }
@@ -61,11 +61,13 @@ const SearchBar = ({theme, setLocation, closeSheet}) => {
               <TouchableOpacity
                 onPress={() => {
                   setFilteredLocations(null);
-                  setLocation(item.formattedAddress);
+                  setLocation(`${item.placeName} ${item.placeAddress}`);
                   closeSheet();
                 }}
                 style={styles.itemContainer}>
-                <Text>{item.formattedAddress}</Text>
+                <Text>
+                  {item.placeName} {item.placeAddress}
+                </Text>
               </TouchableOpacity>
             );
           },

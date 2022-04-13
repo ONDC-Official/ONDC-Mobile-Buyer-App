@@ -10,7 +10,7 @@ const provider = strings('main.product.provider_label');
 const category = strings('main.product.category_label');
 const search = strings('main.product.search_label');
 
-const Header = ({theme, openSheet, onSearch, location}) => {
+const Header = ({theme, openSheet, apiInProgress, onSearch, location}) => {
   const {colors} = theme;
   const [selectedCard, setSelectedCard] = useState(product);
   const [item, setItem] = useState(null);
@@ -63,10 +63,12 @@ const Header = ({theme, openSheet, onSearch, location}) => {
           styles.containerStyle,
           {backgroundColor: colors.white},
         ]}
+        showLoading={apiInProgress}
         inputContainerStyle={[
           styles.inputContainerStyle,
           {backgroundColor: colors.white},
         ]}
+        cancelIcon={false}
         onSubmitEditing={() => {
           onSearch(item, selectedCard);
         }}

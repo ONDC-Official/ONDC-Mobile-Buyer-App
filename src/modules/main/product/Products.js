@@ -23,6 +23,7 @@ import LocationDeniedAlert from './LocationDeniedAlert';
 import {appStyles} from '../../../styles/styles';
 import {CartContext} from '../../../context/Cart';
 import {Context as AuthContext} from '../../../context/Auth';
+import EmptyComponent from '../cart/EmptyComponent';
 import {
   BASE_URL,
   GET_MESSAGE_ID,
@@ -34,9 +35,12 @@ const provider = strings('main.product.provider_label');
 const category = strings('main.product.category_label');
 
 const Products = ({theme}) => {
-  const [location, setLocation] = useState('UnKnown');
+  const [location, setLocation] = useState('Unknown');
   const [isVisible, setIsVisible] = useState(false);
   const [messageId, setMessageId] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [apiInProgress, setApiInProgress] = useState(false);
 
   const {storeItemInCart, storeList, list, removeItemFromCart} =
     useContext(CartContext);
@@ -51,9 +55,7 @@ const Products = ({theme}) => {
 
   const addItem = addedItem => {
     const newArray = list.slice();
-    let selectedItem = newArray.find(item => {
-      return item.id === addedItem.id;
-    });
+    let selectedItem = newArray.find(item => item.id === addedItem.id);
     selectedItem.quantity = selectedItem.quantity + 1;
     storeItemInCart(addedItem);
     storeList(newArray);
@@ -85,13 +87,14 @@ const Products = ({theme}) => {
       const {data} = await getData(
         `${Config.GET_ADDRESS}lng=${response.coords.longitude}&lat=${response.coords.latitude}`,
       );
-
+      setLatitude(response.coords.latitude);
+      setLongitude(response.coords.longitude);
       setLocation(
         `${data.results[0].city} ${data.results[0].state} ${data.results[0].area}`,
       );
     } catch (error) {
       console.log(error);
-      setLocation('UnKnown');
+      setLocation('Unknown');
     }
   };
 
@@ -170,89 +173,102 @@ const Products = ({theme}) => {
     }
   };
 
-  const onSearch = async (string, selectedCard) => {
-    const options = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    try {
-      if (selectedCard === product) {
-        const {data} = await postData(
-          `${BASE_URL}${GET_MESSAGE_ID}`,
-          {
-            context: {},
-            message: {
-              criteria: {
-                delivery_location: '12.9063433,77.5856825',
-                search_string: string,
-              },
-            },
-          },
-          options,
-        );
-        setMessageId(data.context.message_id);
-      } else if (selectedCard === provider) {
-        const {data} = await postData(
-          `${BASE_URL}${GET_MESSAGE_ID}`,
-          {
-            context: {},
-            message: {
-              criteria: {
-                delivery_location: '12.9063433,77.5856825',
-                provider_id: string,
-              },
-            },
-          },
-          options,
-        );
-        setMessageId(data.context.message_id);
-      } else {
-        const {data} = await postData(
-          `${BASE_URL}${GET_MESSAGE_ID}`,
-          {
-            context: {bpp_id: 'https://mandi.succinct.in/bpp'},
-            message: {
-              criteria: {
-                search_string: string,
-                delivery_location: '12.903561,77.5939631',
-                category_id: 'grocerry',
-                category_name: 'grocerry',
-              },
-            },
-          },
-          options,
-        );
-        setMessageId(data.context.message_id);
-      }
-      if (messageId !== null) {
-        const {data} = await getData(`${BASE_URL}${GET_PRODUCTS}${messageId}`);
+  const getProducts = id => {
+    let getList = setInterval(async () => {
+      try {
+        const {data} = await getData(`${BASE_URL}${GET_PRODUCTS}${id}`);
+        console.log(data);
         let items = [];
         data.message.catalogs.forEach(catalog => {
           if (catalog.bpp_id) {
             if (catalog.bpp_providers && catalog.bpp_providers.length > 0) {
-              items.push(catalog.bpp_providers);
+              catalog.bpp_providers.forEach(item => {
+                item.items.forEach(element => {
+                  element.quantity = 0;
+                  element.provider = item.descriptor.name;
+                  items.push(element);
+                });
+              });
             }
           }
         });
-        console.log(items);
-        let products = [];
-        items.forEach(obj => {
-          obj.forEach(element => {
-            element.items.forEach(item => {
-              products.push(item);
-            });
-          });
-        });
-        console.log(products);
+
+        storeList(items);
+        setApiInProgress(false);
+      } catch (error) {
+        console.log(error);
+        setApiInProgress(false);
       }
-    } catch (error) {
-      console.log(error);
+    }, 2000);
+
+    setTimeout(() => {
+      clearInterval(getList);
+    }, 10000);
+  };
+
+  const onSearch = async (searchQuery, selectedCard) => {
+    if (location !== 'Unknown') {
+      setApiInProgress(true);
+      const options = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      try {
+        if (selectedCard === product) {
+          const response = await postData(`${BASE_URL}${GET_MESSAGE_ID}`, {
+            context: {},
+            message: {
+              criteria: {
+                delivery_location: '12.9063433,77.5856825',
+                search_string: searchQuery,
+              },
+            },
+            options,
+          });
+          getProducts(response.data.context.message_id);
+        } else if (selectedCard === provider) {
+          const {data} = await postData(
+            `${BASE_URL}${GET_MESSAGE_ID}`,
+            {
+              context: {},
+              message: {
+                criteria: {
+                  delivery_location: '12.9063433,77.5856825',
+                  provider_id: searchQuery,
+                },
+              },
+            },
+            options,
+          );
+          getProducts(data.context.message_id);
+        } else {
+          const {data} = await postData(
+            `${BASE_URL}${GET_MESSAGE_ID}`,
+            {
+              context: {},
+              message: {
+                criteria: {
+                  delivery_location: '12.903561,77.5939631',
+                  category_id: searchQuery,
+                },
+              },
+            },
+            options,
+          );
+          getProducts(data.context.message_id);
+        }
+      } catch (error) {
+        console.log(error);
+        setApiInProgress(false);
+      }
+    } else {
+      alert('Please select location');
     }
   };
 
   useEffect(() => {
-    if (location === 'UnKnown') {
+    if (location === 'Unknown') {
       requestPermission()
         .then(() => {})
         .catch(() => {});
@@ -265,14 +281,14 @@ const Products = ({theme}) => {
       <View
         style={[
           appStyles.container,
-          styles.container,
-          {backgroundColor: colors.white},
+          {backgroundColor: colors.backgroundColor},
         ]}>
         <Header
           location={location}
           setLocation={setLocation}
           openSheet={openSheet}
           onSearch={onSearch}
+          apiInProgress={apiInProgress}
         />
         <RBSheet ref={refRBSheet} height={Dimensions.get('window').height / 2}>
           <AddressPicker
@@ -286,7 +302,22 @@ const Products = ({theme}) => {
           isVisible={isVisible}
           setIsVisible={setIsVisible}
         />
-        <FlatList data={list} renderItem={renderItem} />
+        {list === null ? (
+          <EmptyComponent message={'Please search an item'} />
+        ) : (
+          <FlatList
+            data={list}
+            renderItem={renderItem}
+            ListEmptyComponent={() => {
+              return <EmptyComponent message={'No results'} />;
+            }}
+            contentContainerStyle={
+              list.length > 0
+                ? styles.contentContainerStyle
+                : appStyles.container
+            }
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -295,7 +326,5 @@ const Products = ({theme}) => {
 export default withTheme(Products);
 
 const styles = StyleSheet.create({
-  cardContainer: {flexDirection: 'row', marginBottom: 10},
-  space: {marginHorizontal: 5},
-  containerStyle: {padding: 0},
+  contentContainerStyle: {paddingBottom: 10},
 });
