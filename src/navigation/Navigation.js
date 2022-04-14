@@ -10,6 +10,8 @@ import Products from '../modules/main/product/Products';
 import Cart from '../modules/main/cart/Cart';
 import Order from '../modules/main/order/Order';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import AddressPicker from '../modules/main/cart/addressPicker/AddressPicker';
+import AddAddress from '../modules/main/cart/addAddress/AddAddress';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -101,6 +103,16 @@ const Navigation = () => {
         <Stack.Screen
           name="Dashboard"
           component={Dashboard}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AddressPicker"
+          component={AddressPicker}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="AddAddress"
+          component={AddAddress}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

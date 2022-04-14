@@ -11,7 +11,7 @@ import Footer from './Footer';
 const subTotalLabel = strings('main.cart.sub_total_label');
 const message = strings('main.cart.empty_cart_message');
 
-const Cart = ({theme}) => {
+const Cart = ({navigation, theme}) => {
   const {colors} = theme;
   const {
     cart,
@@ -54,6 +54,10 @@ const Cart = ({theme}) => {
     clearCart();
   };
 
+  const onCheckout = () => {
+    navigation.navigate('AddressPicker');
+  };
+
   const renderItem = ({item}) => {
     return (
       <ProductCard item={item} removeItem={removeItem} addItem={addItem} />
@@ -87,7 +91,9 @@ const Cart = ({theme}) => {
               : styles.contentContainerStyle
           }
         />
-        {cart.length !== 0 && <Footer onPress={onPressHandler} />}
+        {cart.length !== 0 && (
+          <Footer onPress={onPressHandler} onCheckout={onCheckout} />
+        )}
       </View>
     </SafeAreaView>
   );

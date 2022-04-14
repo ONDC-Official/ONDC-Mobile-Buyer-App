@@ -21,7 +21,9 @@
     "cart": {
       "sub_total_label":"Sub Total:",
       "clear_cart_title":"Clear Cart",
+      "check_out_title":"Check Out",
       "empty_cart_message":"You have no items in your shopping cart"
+      
     },
     "dashboard": {},
     "order": {},

@@ -18,7 +18,7 @@ const invalidEmail = strings('errors.invalid_email');
 const title = strings('authentication.login.button_title');
 
 const validationSchema = Yup.object({
-  email: Yup.string().email(invalidEmail).required(requiredField),
+  email: Yup.string().trim().email(invalidEmail).required(requiredField),
   password: Yup.string().trim().min(8, shortPassword).required(requiredField),
 });
 
@@ -41,6 +41,7 @@ const LoginForm = ({navigation}) => {
         values.password,
       );
       const idTokenResult = await auth().currentUser.getIdTokenResult();
+
       await storeToken(idTokenResult);
       navigation.navigate('Dashboard');
     } catch (error) {

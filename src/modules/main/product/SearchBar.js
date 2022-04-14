@@ -5,10 +5,17 @@ import Config from 'react-native-config';
 import {withTheme, Text} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
 import {postData, getData} from '../../../utils/api';
+import {BASE_URL, GET_LATLONG, GET_LOCATION} from '../../../utils/apiUtilities';
 
 const search = strings('main.product.search_label');
 
-const SearchBar = ({theme, setLocation, closeSheet}) => {
+const SearchBar = ({
+  theme,
+  setLocation,
+  closeSheet,
+  setLatitude,
+  setLongitude,
+}) => {
   const {colors} = theme;
   const [filteredLocations, setFilteredLocations] = useState(null);
   const [selectedValue, setSelectedValue] = useState(null);
@@ -26,18 +33,25 @@ const SearchBar = ({theme, setLocation, closeSheet}) => {
   const findLocation = async value => {
     if (value.length > 3) {
       try {
-        const {data} = await getData(
-          `https://buyer-app.ondc.org/mmi/api/mmi_query?query=${value}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
+        const {data} = await getData(`${BASE_URL}${GET_LOCATION}${value}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
           },
-        );
+        });
         setFilteredLocations(data);
       } catch (error) {
         console.log(error);
       }
+    }
+  };
+
+  const getLatLong = async eLoc => {
+    try {
+      const {data} = await getData(`${BASE_URL}${GET_LATLONG}${eLoc}`);
+      setLatitude(data.latitude);
+      setLongitude(data.longitude);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -61,6 +75,10 @@ const SearchBar = ({theme, setLocation, closeSheet}) => {
               <TouchableOpacity
                 onPress={() => {
                   setFilteredLocations(null);
+                  getLatLong(item.eLoc)
+                    .then(() => {})
+                    .catch(() => {});
+
                   setLocation(`${item.placeName} ${item.placeAddress}`);
                   closeSheet();
                 }}

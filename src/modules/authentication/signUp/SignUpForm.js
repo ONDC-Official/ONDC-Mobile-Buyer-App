@@ -23,9 +23,10 @@ const confirmPassword = strings(
 );
 
 const validationSchema = Yup.object({
-  email: Yup.string().email(invalidEmail).required(requiredField),
+  email: Yup.string().trim().email(invalidEmail).required(requiredField),
   password: Yup.string().trim().min(8, shortPassword).required(requiredField),
   confirmPassword: Yup.string()
+    .trim()
     .required(requiredField)
     .equals([Yup.ref('password'), null], unmatchPassowrd),
 });

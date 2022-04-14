@@ -177,7 +177,6 @@ const Products = ({theme}) => {
     let getList = setInterval(async () => {
       try {
         const {data} = await getData(`${BASE_URL}${GET_PRODUCTS}${id}`);
-        console.log(data);
         let items = [];
         data.message.catalogs.forEach(catalog => {
           if (catalog.bpp_id) {
@@ -207,7 +206,8 @@ const Products = ({theme}) => {
   };
 
   const onSearch = async (searchQuery, selectedCard) => {
-    if (location !== 'Unknown') {
+    if (longitude !== null && latitude !== null) {
+      console.log(latitude, longitude);
       setApiInProgress(true);
       const options = {
         headers: {
@@ -234,7 +234,7 @@ const Products = ({theme}) => {
               context: {},
               message: {
                 criteria: {
-                  delivery_location: '12.9063433,77.5856825',
+                  delivery_location: `${latitude},${longitude}`,
                   provider_id: searchQuery,
                 },
               },
@@ -249,7 +249,7 @@ const Products = ({theme}) => {
               context: {},
               message: {
                 criteria: {
-                  delivery_location: '12.903561,77.5939631',
+                  delivery_location: `${latitude},${longitude}`,
                   category_id: searchQuery,
                 },
               },
@@ -295,6 +295,8 @@ const Products = ({theme}) => {
             closeSheet={closeSheet}
             location={location}
             setLocation={setLocation}
+            setLatitude={setLatitude}
+            setLongitude={setLongitude}
           />
         </RBSheet>
         <LocationDeniedAlert
