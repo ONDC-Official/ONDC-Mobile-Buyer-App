@@ -36,6 +36,8 @@ target 'Buyer' do
 
   pod 'Permission-LocationWhenInUse', :path => "../node_modules/react-native-permissions/ios/LocationWhenInUse"
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'BuyerTests' do
     inherit! :complete
     # Pods for testing

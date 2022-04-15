@@ -46,7 +46,7 @@ export default () => {
         if (setError !== null) {
           setError(error.response.data);
         } else {
-          showToastWithGravity(error.response.data.error);
+          showToastWithGravity(error.response.data.message);
         }
       }
     } else if (error.request) {
