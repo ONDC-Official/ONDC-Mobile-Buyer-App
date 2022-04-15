@@ -1,3 +1,4 @@
+import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {withTheme, Text} from 'react-native-elements';
@@ -14,6 +15,7 @@ const AddressPicker = ({navigation, theme}) => {
   const {colors} = theme;
   const [list, setList] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const isFocused = useIsFocused();
   const {
     state: {token},
   } = useContext(AuthContext);
@@ -21,11 +23,13 @@ const AddressPicker = ({navigation, theme}) => {
 
   const getAddressList = async () => {
     try {
+      console.log(token);
       const {data} = await getData(`${BASE_URL}${GET_ADDRESS}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(data);
       let newList = [];
       data.forEach(element => {
         element.id = Math.random().toString();
@@ -36,6 +40,8 @@ const AddressPicker = ({navigation, theme}) => {
       if (error.response) {
         if (error.response.status === 404) {
           setList([]);
+        } else {
+          handleApiError(error);
         }
       }
     }
@@ -56,10 +62,12 @@ const AddressPicker = ({navigation, theme}) => {
   };
 
   useEffect(() => {
-    getAddressList()
-      .then(() => {})
-      .catch(() => {});
-  }, []);
+    if (isFocused) {
+      getAddressList()
+        .then(() => {})
+        .catch(() => {});
+    }
+  }, [isFocused]);
 
   return (
     <View

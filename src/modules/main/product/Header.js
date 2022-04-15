@@ -3,6 +3,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {SearchBar, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {strings} from '../../../locales/i18n';
+import {SEARCH_QUERY} from '../../../utils/Constants';
 import FilterButton from './FilterButton';
 
 const product = strings('main.product.product_label');
@@ -33,7 +34,7 @@ const Header = ({theme, openSheet, apiInProgress, onSearch, location}) => {
         <FilterButton
           name={product}
           onPress={() => {
-            onCardSelect(product);
+            onCardSelect(SEARCH_QUERY.PRODUCT);
           }}
           selectedCard={selectedCard}
         />
@@ -41,7 +42,7 @@ const Header = ({theme, openSheet, apiInProgress, onSearch, location}) => {
         <FilterButton
           name={provider}
           onPress={() => {
-            onCardSelect(provider);
+            onCardSelect(SEARCH_QUERY.PROVIDER);
           }}
           selectedCard={selectedCard}
         />
@@ -50,7 +51,7 @@ const Header = ({theme, openSheet, apiInProgress, onSearch, location}) => {
         <FilterButton
           name={category}
           onPress={() => {
-            onCardSelect(category);
+            onCardSelect(SEARCH_QUERY.CATEGORY);
           }}
           selectedCard={selectedCard}
         />

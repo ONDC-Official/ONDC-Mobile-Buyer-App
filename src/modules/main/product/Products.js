@@ -226,9 +226,10 @@ const Products = ({theme}) => {
           Authorization: `Bearer ${token}`,
         },
       };
+      let requestParameters;
       try {
         if (selectedCard === SEARCH_QUERY.PRODUCT) {
-          const response = await postData(`${BASE_URL}${GET_MESSAGE_ID}`, {
+          requestParameters = {
             context: {},
             message: {
               criteria: {
@@ -236,40 +237,34 @@ const Products = ({theme}) => {
                 search_string: searchQuery,
               },
             },
-            options,
-          });
-          getProducts(response.data.context.message_id);
+          };
         } else if (selectedCard === SEARCH_QUERY.PROVIDER) {
-          const {data} = await postData(
-            `${BASE_URL}${GET_MESSAGE_ID}`,
-            {
-              context: {},
-              message: {
-                criteria: {
-                  delivery_location: '12.9063433,77.5856825',
-                  provider_id: searchQuery,
-                },
+          requestParameters = {
+            context: {},
+            message: {
+              criteria: {
+                delivery_location: `${latitude},${longitude}`,
+                provider_id: searchQuery,
               },
             },
-            options,
-          );
-          getProducts(data.context.message_id);
+          };
         } else {
-          const {data} = await postData(
-            `${BASE_URL}${GET_MESSAGE_ID}`,
-            {
-              context: {},
-              message: {
-                criteria: {
-                  delivery_location: `${latitude},${longitude}`,
-                  category_id: '12.9063433,77.5856825',
-                },
+          requestParameters = {
+            context: {},
+            message: {
+              criteria: {
+                delivery_location: `${latitude},${longitude}`,
+                category_id: searchQuery,
               },
             },
-            options,
-          );
-          getProducts(data.context.message_id);
+          };
         }
+        const response = await postData(
+          `${BASE_URL}${GET_MESSAGE_ID}`,
+          requestParameters,
+          options,
+        );
+        getProducts(response.data.context.message_id);
       } catch (error) {
         handleApiError(error);
         setApiInProgress(false);
