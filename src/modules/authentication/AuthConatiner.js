@@ -21,6 +21,7 @@ const image = require('../../assets/logo.png');
 
 /**
  * Component is used to render common page for authentication forms
+ * @param theme
  * @param onBackPress: function which handles click event of back button
  * @param children: form element to be rendered
  * @returns {JSX.Element}
