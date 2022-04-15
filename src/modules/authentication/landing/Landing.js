@@ -25,10 +25,10 @@ const versionLabel = strings('global.version_label');
  */
 const Landing = ({navigation}) => {
   const {theme} = useTheme();
-  const {loginWithGoogle} = useLoginWithGoogle();
+  const {loginWithGoogle} = useLoginWithGoogle(navigation);
 
   return (
-    <>
+    <View style={appStyles.container}>
       <View style={[appStyles.container, styles.container]}>
         <Image source={logo} style={styles.image} />
 
@@ -48,18 +48,31 @@ const Landing = ({navigation}) => {
         <View
           style={[styles.divider, {borderBottomColor: theme.colors.primary}]}
         />
-        <View style={appStyles.container}>
+
+        <View style={styles.buttonContainer}>
+          <ContainButton
+            title={continueWithGoogle}
+            type="outline"
+            icon={{
+              name: 'google',
+              type: 'font-awesome',
+              size: 30,
+              color: theme.colors.primary,
+            }}
+            onPress={loginWithGoogle}
+          />
+        </View>
+        {isIOS && (
           <View style={styles.buttonContainer}>
             <OutlineButton
               title={continueWithGoogle}
               type="outline"
               icon={{
-                name: 'google',
+                name: 'apple',
                 type: 'font-awesome',
                 size: 30,
                 color: theme.colors.primary,
               }}
-              onPress={loginWithGoogle}
             />
           </View>
           {isIOS && (
@@ -78,16 +91,19 @@ const Landing = ({navigation}) => {
         </View>
         <Text>{versionLabel}</Text>
       </View>
-    </>
+    </View>
   );
 };
 
 export default Landing;
 
 const styles = StyleSheet.create({
-  container: {alignItems: 'center', padding: 16},
-  subContainer: {justifyContent: 'center'},
+  container: {alignItems: 'center', padding: 16, justifyContent: 'center'},
   image: {height: 100, width: 200, marginVertical: 50},
   buttonContainer: {width: 300, marginBottom: 36},
   divider: {borderBottomWidth: 1, width: '100%', marginBottom: 36},
+  versionContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
 });

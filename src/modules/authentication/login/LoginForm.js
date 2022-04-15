@@ -25,8 +25,6 @@ const validationSchema = Yup.object({
 
 /**
  * Component is used to render login form
- * @param theme
- * @param navigation: application navigation object
  */
 const LoginForm = ({navigation}) => {
   const userInfo = {
@@ -37,14 +35,17 @@ const LoginForm = ({navigation}) => {
 
   const login = async values => {
     try {
-      const response = await auth().signInWithEmailAndPassword(
+      await auth().signInWithEmailAndPassword(
         values.email,
         values.password,
       );
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
       await storeToken(idTokenResult);
-      navigation.navigate('Dashboard');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Dashboard'}],
+      });
     } catch (error) {
       showToastWithGravity(error.message);
     }
