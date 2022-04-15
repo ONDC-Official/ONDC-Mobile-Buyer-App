@@ -15,8 +15,13 @@ export default navigation => {
       // Create a Google credential with the token
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
+      console.log(googleCredential);
+
       // Sign-in the user with the credential
       const response = await auth().signInWithCredential(googleCredential);
+
+      const idTokenResult = await auth().currentUser.getIdTokenResult();
+      console.log('User JWT: ', idTokenResult);
 
       // if (response) {
       //   navigation.navigate('Dashboard');
