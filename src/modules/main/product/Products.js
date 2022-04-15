@@ -16,7 +16,7 @@ import {strings} from '../../../locales/i18n';
 import Config from 'react-native-config';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {isIOS} from '../../../utils/utils';
+import {isIOS, skeletonList} from '../../../utils/utils';
 import AddressPicker from './AddressPicker';
 import Header from './Header';
 import LocationDeniedAlert from './LocationDeniedAlert';
@@ -26,20 +26,20 @@ import {Context as AuthContext} from '../../../context/Auth';
 import EmptyComponent from '../cart/EmptyComponent';
 import {
   BASE_URL,
+  GET_LATLONG,
   GET_MESSAGE_ID,
   GET_PRODUCTS,
 } from '../../../utils/apiUtilities';
-
-const product = strings('main.product.product_label');
-const provider = strings('main.product.provider_label');
-const category = strings('main.product.category_label');
+import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
+import ProductCardSkeleton from './ProductCardSkeleton';
+import {SEARCH_QUERY} from '../../../utils/Constants';
 
 const Products = ({theme}) => {
   const [location, setLocation] = useState('Unknown');
   const [isVisible, setIsVisible] = useState(false);
-  const [messageId, setMessageId] = useState(null);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [eloc, setEloc] = useState(null);
   const [apiInProgress, setApiInProgress] = useState(false);
 
   const {storeItemInCart, storeList, list, removeItemFromCart} =
@@ -47,6 +47,7 @@ const Products = ({theme}) => {
   const {
     state: {token},
   } = useContext(AuthContext);
+  const {handleApiError} = useNetworkErrorHandling();
 
   const refRBSheet = useRef();
 
@@ -72,7 +73,9 @@ const Products = ({theme}) => {
   };
 
   const renderItem = ({item}) => {
-    return (
+    return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
+      <ProductCardSkeleton item={item} />
+    ) : (
       <ProductCard
         item={item}
         list={list}
@@ -93,7 +96,6 @@ const Products = ({theme}) => {
         `${data.results[0].city} ${data.results[0].state} ${data.results[0].area}`,
       );
     } catch (error) {
-      console.log(error);
       setLocation('Unknown');
     }
   };
@@ -195,7 +197,7 @@ const Products = ({theme}) => {
         storeList(items);
         setApiInProgress(false);
       } catch (error) {
-        console.log(error);
+        handleApiError(error);
         setApiInProgress(false);
       }
     }, 2000);
@@ -205,61 +207,66 @@ const Products = ({theme}) => {
     }, 10000);
   };
 
+  const getPosition = async () => {
+    try {
+      const {data} = await getData(`${BASE_URL}${GET_LATLONG}${eloc}`);
+
+      setLatitude(data.latitude);
+      setLongitude(data.longitude);
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+
   const onSearch = async (searchQuery, selectedCard) => {
     if (longitude !== null && latitude !== null) {
-      console.log(latitude, longitude);
       setApiInProgress(true);
       const options = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
+      let requestParameters;
       try {
-        if (selectedCard === product) {
-          const response = await postData(`${BASE_URL}${GET_MESSAGE_ID}`, {
+        if (selectedCard === SEARCH_QUERY.PRODUCT) {
+          requestParameters = {
             context: {},
             message: {
               criteria: {
-                delivery_location: '12.9063433,77.5856825',
+                delivery_location: `${latitude},${longitude}`,
                 search_string: searchQuery,
               },
             },
-            options,
-          });
-          getProducts(response.data.context.message_id);
-        } else if (selectedCard === provider) {
-          const {data} = await postData(
-            `${BASE_URL}${GET_MESSAGE_ID}`,
-            {
-              context: {},
-              message: {
-                criteria: {
-                  delivery_location: `${latitude},${longitude}`,
-                  provider_id: searchQuery,
-                },
+          };
+        } else if (selectedCard === SEARCH_QUERY.PROVIDER) {
+          requestParameters = {
+            context: {},
+            message: {
+              criteria: {
+                delivery_location: `${latitude},${longitude}`,
+                provider_id: searchQuery,
               },
             },
-            options,
-          );
-          getProducts(data.context.message_id);
+          };
         } else {
-          const {data} = await postData(
-            `${BASE_URL}${GET_MESSAGE_ID}`,
-            {
-              context: {},
-              message: {
-                criteria: {
-                  delivery_location: `${latitude},${longitude}`,
-                  category_id: searchQuery,
-                },
+          requestParameters = {
+            context: {},
+            message: {
+              criteria: {
+                delivery_location: `${latitude},${longitude}`,
+                category_id: searchQuery,
               },
             },
-            options,
-          );
-          getProducts(data.context.message_id);
+          };
         }
+        const response = await postData(
+          `${BASE_URL}${GET_MESSAGE_ID}`,
+          requestParameters,
+          options,
+        );
+        getProducts(response.data.context.message_id);
       } catch (error) {
-        console.log(error);
+        handleApiError(error);
         setApiInProgress(false);
       }
     } else {
@@ -273,11 +280,19 @@ const Products = ({theme}) => {
         .then(() => {})
         .catch(() => {});
     }
-  }, [list]);
+  }, []);
+
+  useEffect(() => {
+    getPosition()
+      .then(() => {})
+      .catch(() => {});
+  }, [eloc]);
+
+  const listData = list === null ? skeletonList : list;
 
   return (
     <SafeAreaView
-      style={[appStyles.container, {backgroundColor: colors.white}]}>
+      style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
       <View
         style={[
           appStyles.container,
@@ -295,8 +310,7 @@ const Products = ({theme}) => {
             closeSheet={closeSheet}
             location={location}
             setLocation={setLocation}
-            setLatitude={setLatitude}
-            setLongitude={setLongitude}
+            setEloc={setEloc}
           />
         </RBSheet>
         <LocationDeniedAlert
@@ -304,17 +318,17 @@ const Products = ({theme}) => {
           isVisible={isVisible}
           setIsVisible={setIsVisible}
         />
-        {list === null ? (
+        {list === null && !apiInProgress ? (
           <EmptyComponent message={'Please search an item'} />
         ) : (
           <FlatList
-            data={list}
+            data={listData}
             renderItem={renderItem}
             ListEmptyComponent={() => {
               return <EmptyComponent message={'No results'} />;
             }}
             contentContainerStyle={
-              list.length > 0
+              listData.length > 0
                 ? styles.contentContainerStyle
                 : appStyles.container
             }

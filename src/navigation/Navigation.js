@@ -12,6 +12,7 @@ import Order from '../modules/main/order/Order';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AddressPicker from '../modules/main/cart/addressPicker/AddressPicker';
 import AddAddress from '../modules/main/cart/addAddress/AddAddress';
+import Payment from '../modules/main/cart/payment/Payment';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -113,6 +114,11 @@ const Navigation = () => {
         <Stack.Screen
           name="AddAddress"
           component={AddAddress}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Payment"
+          component={Payment}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -3,6 +3,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {SearchBar, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {strings} from '../../../locales/i18n';
+import {SEARCH_QUERY} from '../../../utils/Constants';
 import FilterButton from './FilterButton';
 
 const product = strings('main.product.product_label');
@@ -33,7 +34,7 @@ const Header = ({theme, openSheet, apiInProgress, onSearch, location}) => {
         <FilterButton
           name={product}
           onPress={() => {
-            onCardSelect(product);
+            onCardSelect(SEARCH_QUERY.PRODUCT);
           }}
           selectedCard={selectedCard}
         />
@@ -41,7 +42,7 @@ const Header = ({theme, openSheet, apiInProgress, onSearch, location}) => {
         <FilterButton
           name={provider}
           onPress={() => {
-            onCardSelect(provider);
+            onCardSelect(SEARCH_QUERY.PROVIDER);
           }}
           selectedCard={selectedCard}
         />
@@ -50,7 +51,7 @@ const Header = ({theme, openSheet, apiInProgress, onSearch, location}) => {
         <FilterButton
           name={category}
           onPress={() => {
-            onCardSelect(category);
+            onCardSelect(SEARCH_QUERY.CATEGORY);
           }}
           selectedCard={selectedCard}
         />
@@ -85,11 +86,11 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     marginBottom: 10,
-    elevation: 5,
+    elevation: 1,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.18,
-    shadowRadius: 1,
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
   },
   subContainer: {flexDirection: 'row', alignItems: 'center'},
   locationContainer: {marginBottom: 10},

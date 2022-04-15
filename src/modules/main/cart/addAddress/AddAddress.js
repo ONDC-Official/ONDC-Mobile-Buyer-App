@@ -12,6 +12,7 @@ import {appStyles} from '../../../../styles/styles';
 import {postData} from '../../../../utils/api';
 import {ADD_ADDRESS, BASE_URL} from '../../../../utils/apiUtilities';
 import {Context as AuthContext} from '../../../../context/Auth';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 
 const requiredField = strings('errors.required');
 const invalidEmail = strings('errors.invalid_email');
@@ -38,6 +39,8 @@ const AddAddress = ({navigation, theme}) => {
   const {
     state: {token},
   } = useContext(AuthContext);
+  const {handleApiError} = useNetworkErrorHandling();
+
   const userInfo = {
     email: '',
     name: '',
@@ -56,7 +59,6 @@ const AddAddress = ({navigation, theme}) => {
       },
     };
     try {
-      console.log(options);
       const {data} = await postData(
         `${BASE_URL}${ADD_ADDRESS}`,
         {
@@ -78,11 +80,12 @@ const AddAddress = ({navigation, theme}) => {
       );
       navigation.navigate('AddressPicker');
     } catch (error) {
-      console.log(error);
+      handleApiError(error);
     }
   };
   return (
-    <View style={[appStyles.container, {backgroundColor: colors.white}]}>
+    <View
+      style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
       <Header title={'Add Address'} navigation={navigation} />
       <KeyboardAwareScrollView>
         <Card containerStyle={styles.containerStyle}>

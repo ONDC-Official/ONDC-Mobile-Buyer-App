@@ -53,5 +53,14 @@
     "privacy_policy": "Privacy policy",
     "user_agreement": "By continuing you to agree to the ",
     "version_label": "Version 1"
+  },
+  "network_error": {
+    "network_connection_error": "Internet connection not available. Please check internet connection.",
+    "something_went_wrong": "Something went wrong, please try again after some time.",
+    "session_expired_title": "Session Expired",
+    "session_expired_message": "Session expired, please login again to continue",
+    "version_mismatch_title": "Version mismatch",
+    "version_mismatch_message": "Please upgrade your application to the latest version",
+    "session_expired_button_label": "Logout"
   }
 }

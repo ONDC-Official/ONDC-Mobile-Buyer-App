@@ -7,6 +7,7 @@ import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
 import {Context as AuthContext} from '../../../context/Auth';
 import auth from '@react-native-firebase/auth';
+import {showToastWithGravity} from '../../../utils/utils';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
 const passwordPlaceholder = strings(
@@ -50,13 +51,12 @@ const SignUpFrom = ({navigation}) => {
         values.email,
         values.password,
       );
-      console.log(response);
 
       const idTokenResult = await auth().currentUser.getIdTokenResult();
       await storeToken(idTokenResult);
       navigation.navigate('Dashboard');
     } catch (error) {
-      console.log(error);
+      showToastWithGravity(error);
     }
   };
   return (

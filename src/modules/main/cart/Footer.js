@@ -40,13 +40,13 @@ export default withTheme(Footer);
 
 const styles = StyleSheet.create({
   container: {
-    padding: 15,
+    padding: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   text: {fontSize: 20},
   clearCartButton: {
-    paddingVertical: 10,
+    paddingVertical: 8,
     borderRadius: 15,
     borderWidth: 1,
     alignItems: 'center',

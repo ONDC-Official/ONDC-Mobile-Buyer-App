@@ -1,63 +1,39 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
-import Config from 'react-native-config';
 import {withTheme, Text} from 'react-native-elements';
+import {Context as AuthContext} from '../../../context/Auth';
+import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../locales/i18n';
 import {postData, getData} from '../../../utils/api';
-import {BASE_URL, GET_LATLONG, GET_LOCATION} from '../../../utils/apiUtilities';
+import {BASE_URL, GET_LOCATION} from '../../../utils/apiUtilities';
 
 const search = strings('main.product.search_label');
 
-const SearchBar = ({
-  theme,
-  setLocation,
-  closeSheet,
-  setLatitude,
-  setLongitude,
-}) => {
+const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
   const {colors} = theme;
   const [filteredLocations, setFilteredLocations] = useState(null);
   const [selectedValue, setSelectedValue] = useState(null);
-  const [accessToken, setAccessToken] = useState(null);
 
-  const getToken = async () => {
-    try {
-      const {data} = await postData(Config.GET_TOKEN, {});
-      setAccessToken(data.access_token);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const {handleApiError} = useNetworkErrorHandling();
+  const {
+    state: {token},
+  } = useContext(AuthContext);
 
   const findLocation = async value => {
     if (value.length > 3) {
       try {
         const {data} = await getData(`${BASE_URL}${GET_LOCATION}${value}`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
         });
         setFilteredLocations(data);
       } catch (error) {
-        console.log(error);
+        handleApiError(error);
       }
     }
   };
-
-  const getLatLong = async eLoc => {
-    try {
-      const {data} = await getData(`${BASE_URL}${GET_LATLONG}${eLoc}`);
-      setLatitude(data.latitude);
-      setLongitude(data.longitude);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getToken();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -75,10 +51,7 @@ const SearchBar = ({
               <TouchableOpacity
                 onPress={() => {
                   setFilteredLocations(null);
-                  getLatLong(item.eLoc)
-                    .then(() => {})
-                    .catch(() => {});
-
+                  setEloc(item.eLoc);
                   setLocation(`${item.placeName} ${item.placeAddress}`);
                   closeSheet();
                 }}

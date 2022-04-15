@@ -5,30 +5,30 @@ import {Context as AuthContext} from '../../../../context/Auth';
 import {RadioButtonInput} from 'react-native-simple-radio-button';
 import {appStyles} from '../../../../styles/styles';
 
-const AddressCard = ({item, index, selectedAddress, setSelectedAddress}) => {
+const AddressCard = ({item, selectedAddress, setSelectedAddress}) => {
   const {
     state: {token},
   } = useContext(AuthContext);
-  const isSelected = index === selectedAddress;
+  const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
   return (
     <Card containerStyle={styles.card}>
       <View style={styles.container}>
         <View style={[appStyles.container, styles.textContainer]}>
           <Text>
-            {item.address.street} {item.address.building}, {item.address.city}-{' '}
-            {item.address.area_code}
+            {item.address.street} {item.address.building}, {item.address.city},{' '}
+            {item.address.state}- {item.address.area_code}
           </Text>
         </View>
         <View style={styles.radioButton}>
           <RadioButtonInput
             obj={item}
             borderWidth={1}
-            index={index}
+            index={item.id}
             buttonSize={10}
             buttonOuterSize={18}
             isSelected={isSelected}
             onPress={value => {
-              setSelectedAddress(index);
+              setSelectedAddress(item);
             }}
           />
         </View>

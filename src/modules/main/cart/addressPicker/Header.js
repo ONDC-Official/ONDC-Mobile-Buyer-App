@@ -13,7 +13,7 @@ const Header = ({theme, title, show, navigation}) => {
       <TouchableOpacity
         style={[styles.backButton, {backgroundColor: colors.primary}]}
         onPress={() => navigation.goBack()}>
-        <Icon name="arrow-left" size={20} color={colors.white} />
+        <Icon name="arrow-left" size={18} color={colors.white} />
       </TouchableOpacity>
       <View style={appStyles.container}>
         <Text style={styles.text}>{title}</Text>
@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     alignItems: 'center',
-    height: 40,
-    width: 40,
+    height: 35,
+    width: 35,
     borderRadius: 20,
     justifyContent: 'center',
     marginRight: 10,

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, withTheme} from 'react-native-elements';
+import {StyleSheet} from 'react-native';
 import {appStyles} from '../../styles/styles';
 
 /**
@@ -8,22 +9,20 @@ import {appStyles} from '../../styles/styles';
  * @returns {JSX.Element}
  * @constructor
  */
-const ContainButton = props => {
+const OutlineButton = props => {
   const {colors} = props.theme;
   return (
     <Button
       {...props}
-      titleStyle={[
-        appStyles.container,
-        {color: props.color ? props.color : colors.white},
-      ]}
-      buttonStyle={{
-        backgroundColor: props.backgroundColor
-          ? props.backgroundColor
-          : colors.primary,
-      }}
+      type={'outline'}
+      buttonStyle={styles.buttonStyle}
+      titleStyle={appStyles.container}
     />
   );
 };
 
-export default withTheme(ContainButton);
+export default withTheme(OutlineButton);
+
+const styles = StyleSheet.create({
+  buttonStyle: {borderWidth: 1},
+});
