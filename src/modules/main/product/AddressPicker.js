@@ -7,12 +7,7 @@ import SearchBar from './SearchBar';
 
 const selectLocationLabel = strings('main.product.select_location_label');
 
-const AddressPicker = ({
-  closeSheet,
-  setLocation,
-  setLatitude,
-  setLongitude,
-}) => {
+const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -36,8 +31,7 @@ const AddressPicker = ({
       <SearchBar
         setLocation={setLocation}
         closeSheet={closeSheet}
-        setLatitude={setLatitude}
-        setLongitude={setLongitude}
+        setEloc={setEloc}
       />
     </View>
   );

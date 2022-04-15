@@ -6,6 +6,7 @@ import {Text, useTheme} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
 import useLoginWithGoogle from './hooks/useLoginWithGoogle';
 import {isIOS} from '../../../utils/utils';
+import OutlineButton from '../../../components/button/OutlineButton';
 
 const logo = require('../../../assets/logo.png');
 
@@ -41,7 +42,6 @@ const Landing = ({navigation}) => {
         <View style={styles.buttonContainer}>
           <ContainButton
             title={signUp}
-            type="outline"
             onPress={() => navigation.navigate('SignUp')}
           />
         </View>
@@ -50,7 +50,7 @@ const Landing = ({navigation}) => {
         />
         <View style={appStyles.container}>
           <View style={styles.buttonContainer}>
-            <ContainButton
+            <OutlineButton
               title={continueWithGoogle}
               type="outline"
               icon={{
@@ -64,9 +64,8 @@ const Landing = ({navigation}) => {
           </View>
           {isIOS && (
             <View style={styles.buttonContainer}>
-              <ContainButton
+              <OutlineButton
                 title={continueWithApple}
-                type="outline"
                 icon={{
                   name: 'apple',
                   type: 'font-awesome',

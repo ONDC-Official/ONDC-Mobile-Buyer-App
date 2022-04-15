@@ -7,6 +7,7 @@ import {StyleSheet, View} from 'react-native';
 import {Context as AuthContext} from '../../../context/Auth';
 import {strings} from '../../../locales/i18n';
 import auth from '@react-native-firebase/auth';
+import {showToastWithGravity} from '../../../utils/utils';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
 const passwordPlaceholder = strings(
@@ -45,7 +46,7 @@ const LoginForm = ({navigation}) => {
       await storeToken(idTokenResult);
       navigation.navigate('Dashboard');
     } catch (error) {
-      console.log(error);
+      showToastWithGravity(error.message);
     }
   };
 
@@ -57,7 +58,6 @@ const LoginForm = ({navigation}) => {
         login(values)
           .then(() => {})
           .catch(() => {});
-        // navigation.navigate('Dashboard');
       }}>
       {({values, errors, handleChange, handleBlur, touched, handleSubmit}) => {
         return (

@@ -39,9 +39,11 @@ const Cart = ({navigation, theme}) => {
 
   const addItem = addedItem => {
     const newArray = list.slice();
+
     let selectedItem = newArray.find(item => {
       return item.id === addedItem.id;
     });
+    console.log(selectedItem);
     selectedItem.quantity = selectedItem.quantity + 1;
     storeItemInCart(addedItem);
     storeList(newArray);
@@ -65,23 +67,23 @@ const Cart = ({navigation, theme}) => {
   };
   return (
     <SafeAreaView
-      style={[appStyles.container, {backgroundColor: colors.white}]}>
+      style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
       <View
         style={[
           appStyles.container,
           styles.container,
-          {backgroundColor: colors.white},
+          {backgroundColor: colors.backgroundColor},
         ]}>
+        {cart.length !== 0 && (
+          <View style={[styles.header, {backgroundColor: colors.white}]}>
+            <Text style={styles.text}>
+              {subTotalLabel} {subTotal}
+            </Text>
+          </View>
+        )}
         <FlatList
           data={cart}
           renderItem={renderItem}
-          ListHeaderComponent={() => {
-            return cart.length !== 0 ? (
-              <Text style={styles.text}>
-                {subTotalLabel} {subTotal}
-              </Text>
-            ) : null;
-          }}
           ListEmptyComponent={() => {
             return <EmptyComponent message={message} />;
           }}
@@ -102,8 +104,8 @@ const Cart = ({navigation, theme}) => {
 export default withTheme(Cart);
 
 const styles = StyleSheet.create({
-  container: {paddingVertical: 10},
-  text: {fontSize: 20, paddingLeft: 15},
+  container: {paddingBottom: 10},
+  text: {fontSize: 20},
   clearCartButton: {
     padding: 10,
     borderRadius: 15,
@@ -111,4 +113,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   contentContainerStyle: {paddingBottom: 10},
+  header: {
+    padding: 15,
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+    marginBottom: 10,
+  },
 });
