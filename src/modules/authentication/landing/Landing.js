@@ -62,11 +62,23 @@ const Landing = ({navigation}) => {
             onPress={loginWithGoogle}
           />
         </View>
+
+        <View style={styles.buttonContainer}>
+          <OutlineButton
+            title={continueWithGoogle}
+            type="outline"
+            icon={{
+              name: 'apple',
+              type: 'font-awesome',
+              size: 30,
+              color: theme.colors.primary,
+            }}
+          />
+        </View>
         {isIOS && (
           <View style={styles.buttonContainer}>
             <OutlineButton
-              title={continueWithGoogle}
-              type="outline"
+              title={continueWithApple}
               icon={{
                 name: 'apple',
                 type: 'font-awesome',
@@ -75,20 +87,8 @@ const Landing = ({navigation}) => {
               }}
             />
           </View>
-          {isIOS && (
-            <View style={styles.buttonContainer}>
-              <OutlineButton
-                title={continueWithApple}
-                icon={{
-                  name: 'apple',
-                  type: 'font-awesome',
-                  size: 30,
-                  color: theme.colors.primary,
-                }}
-              />
-            </View>
-          )}
-        </View>
+        )}
+
         <Text>{versionLabel}</Text>
       </View>
     </View>
