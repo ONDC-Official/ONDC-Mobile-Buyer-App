@@ -6,7 +6,7 @@ GoogleSignin.configure({
   webClientId: Config.GOOGLE_CLIENT_ID,
 });
 
-export default () => {
+export default navigation => {
   const loginWithGoogle = async () => {
     try {
       // Get the users ID token
@@ -15,10 +15,17 @@ export default () => {
       // Create a Google credential with the token
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
+      console.log(googleCredential);
+
       // Sign-in the user with the credential
       const response = await auth().signInWithCredential(googleCredential);
 
-      console.log(response);
+      const idTokenResult = await auth().currentUser.getIdTokenResult();
+      console.log('User JWT: ', idTokenResult);
+
+      // if (response) {
+      //   navigation.navigate('Dashboard');
+      // }
     } catch (error) {
       console.log(error);
     }

@@ -24,8 +24,6 @@ const validationSchema = Yup.object({
 
 /**
  * Component is used to render login form
- * @param theme
- * @param navigation: application navigation object
  */
 const LoginForm = ({navigation}) => {
   const userInfo = {
