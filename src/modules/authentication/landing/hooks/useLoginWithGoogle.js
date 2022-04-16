@@ -1,8 +1,8 @@
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import Config from 'react-native-config';
-import {useContext} from "react";
-import {Context as AuthContext} from "../../../../context/Auth";
+import {useContext} from 'react';
+import {Context as AuthContext} from '../../../../context/Auth';
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_CLIENT_ID,
@@ -20,7 +20,7 @@ export default navigation => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
       // Sign-in the user with the credential
-      const response = await auth().signInWithCredential(googleCredential);
+      await auth().signInWithCredential(googleCredential);
 
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
@@ -29,7 +29,6 @@ export default navigation => {
         index: 0,
         routes: [{name: 'Dashboard'}],
       });
-
     } catch (error) {
       console.log(error);
     }

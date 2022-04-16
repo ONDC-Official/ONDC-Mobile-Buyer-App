@@ -5,7 +5,7 @@ import {withTheme, Text} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../locales/i18n';
-import {postData, getData} from '../../../utils/api';
+import {getData} from '../../../utils/api';
 import {BASE_URL, GET_LOCATION} from '../../../utils/apiUtilities';
 
 const search = strings('main.product.search_label');

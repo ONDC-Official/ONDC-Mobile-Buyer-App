@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Icon, Text} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';

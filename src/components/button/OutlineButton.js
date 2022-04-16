@@ -10,7 +10,6 @@ import {appStyles} from '../../styles/styles';
  * @constructor
  */
 const OutlineButton = props => {
-  const {colors} = props.theme;
   return (
     <Button
       {...props}

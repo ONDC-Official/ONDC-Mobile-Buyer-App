@@ -4,7 +4,6 @@ import Header from '../addressPicker/Header';
 import {Text, withTheme} from 'react-native-elements';
 import {appStyles} from '../../../../styles/styles';
 import ContainButton from '../../../../components/button/ContainButton';
-import OutlineButton from '../../../../components/button/OutlineButton';
 import RadioForm, {
   RadioButtonInput,
   RadioButton,

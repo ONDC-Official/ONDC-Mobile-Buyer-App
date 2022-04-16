@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 
-const image = require('../../../assets/demo.png');
 const addButton = strings('main.product.add_button_title');
 
 const ProductCard = ({theme, item, removeItem, addItem}) => {

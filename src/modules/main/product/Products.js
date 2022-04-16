@@ -12,7 +12,6 @@ import ProductCard from './ProductCard';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {colors, withTheme} from 'react-native-elements';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
-import {strings} from '../../../locales/i18n';
 import Config from 'react-native-config';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -58,7 +57,8 @@ const Products = ({theme}) => {
     const newArray = list.slice();
     let selectedItem = newArray.find(item => item.id === addedItem.id);
     selectedItem.quantity = selectedItem.quantity + 1;
-    storeItemInCart(addedItem);
+    console.log(selectedItem);
+    storeItemInCart(selectedItem);
     storeList(newArray);
   };
 
