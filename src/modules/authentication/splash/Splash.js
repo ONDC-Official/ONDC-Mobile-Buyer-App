@@ -20,6 +20,10 @@ const Splash = ({navigation}) => {
     tryLocalSignIn,
   } = useContext(AuthContext);
 
+  /**
+   * Function is used to check if the token is available
+   * @returns {Promise<void>}
+   */
   const checkIfUserIsLoggedIn = async () => {
     try {
       await tryLocalSignIn();
@@ -31,6 +35,10 @@ const Splash = ({navigation}) => {
     }
   };
 
+  /**
+   * Function is used to show screen depending on avaibility of token
+   * @returns {Promise<void>}
+   */
   const checkUserStatus = () => {
     if (token) {
       navigation.reset({

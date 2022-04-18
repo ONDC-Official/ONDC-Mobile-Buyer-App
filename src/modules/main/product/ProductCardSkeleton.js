@@ -4,6 +4,10 @@ import {Card} from 'react-native-elements';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {appStyles} from '../../../styles/styles';
 
+/**
+ * Component to show skeleton of product card
+ * @returns {JSX.Element}
+ */
 const ProductCardSkeleton = () => {
   return (
     <Card>

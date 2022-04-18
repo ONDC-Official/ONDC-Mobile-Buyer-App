@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import ClearButton from '../../components/button/ClearButton';
 import {strings} from '../../locales/i18n';
 import {Card, withTheme} from 'react-native-elements';
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const userAgreement = strings('global.user_agreement');
 const termsOfServices = strings('global.terms_of_services');
@@ -33,7 +33,8 @@ const AuthContainer = ({theme, children, onBackPress}) => {
   return (
     <SafeAreaView
       style={[appStyles.container, {backgroundColor: colors.white}]}>
-      <KeyboardAwareScrollView contentContainerStyle={[appStyles.container, styles.container]}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={[appStyles.container, styles.container]}>
         <TouchableOpacity onPress={onBackPress}>
           <Icon name="angle-left" size={30} color={colors.primary} />
         </TouchableOpacity>

@@ -1,5 +1,10 @@
 import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SearchBar, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {strings} from '../../../locales/i18n';
@@ -11,24 +16,50 @@ const provider = strings('main.product.provider_label');
 const category = strings('main.product.category_label');
 const search = strings('main.product.search_label');
 
-const Header = ({theme, openSheet, apiInProgress, onSearch, location}) => {
+/**
+ * Component to header on products screen
+ * @param openSheet: function to open rb sheet when user wants to select location
+ * @param location:location of user or location selected by user
+ * @param onSearch:function handles onEndEditing event of searchbar
+ * @constructor
+ * @returns {JSX.Element}
+ */
+const Header = ({
+  theme,
+  openSheet,
+  apiInProgress,
+  onSearch,
+  locationInProgress,
+  location,
+}) => {
   const {colors} = theme;
   const [selectedCard, setSelectedCard] = useState(product);
   const [item, setItem] = useState(null);
 
+  /**
+   * function handles click event of filter button
+   * @param card :filter button selected by user
+   */
   const onCardSelect = card => setSelectedCard(card);
 
   return (
     <View style={[styles.container, {backgroundColor: colors.white}]}>
       <View style={styles.locationContainer}>
-        <TouchableOpacity style={styles.subContainer} onPress={openSheet}>
-          <Icon name="map-marker" size={20} color={colors.primary} />
-          <View style={styles.textContainer}>
-            <Text style={{color: colors.primary}}>
-              {location} <Icon name="angle-down" size={14} />
-            </Text>
+        {locationInProgress ? (
+          <View style={styles.subContainer}>
+            <Text>Detecting location {'    '}</Text>
+            <ActivityIndicator showLoading={locationInProgress} size={14} />
           </View>
-        </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.subContainer} onPress={openSheet}>
+            <Icon name="map-marker" size={20} color={colors.primary} />
+            <View style={styles.textContainer}>
+              <Text style={{color: colors.primary}}>
+                {location} <Icon name="angle-down" size={14} />
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.cardContainer}>
         <FilterButton
@@ -71,7 +102,9 @@ const Header = ({theme, openSheet, apiInProgress, onSearch, location}) => {
         ]}
         cancelIcon={false}
         onSubmitEditing={() => {
-          onSearch(item, selectedCard);
+          if (item !== null && item.trim().length > 2) {
+            onSearch(item, selectedCard);
+          }
         }}
         onChangeText={setItem}
         value={item}

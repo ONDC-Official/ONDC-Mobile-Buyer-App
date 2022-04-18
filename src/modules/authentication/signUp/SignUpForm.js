@@ -8,6 +8,7 @@ import InputField from '../../../components/input/InputField';
 import {Context as AuthContext} from '../../../context/Auth';
 import auth from '@react-native-firebase/auth';
 import {showToastWithGravity} from '../../../utils/utils';
+import PasswordField from '../../../components/input/PasswordField';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
 const passwordPlaceholder = strings(
@@ -44,9 +45,13 @@ const SignUpFrom = ({navigation}) => {
   };
   const {storeToken} = useContext(AuthContext);
 
+  /**
+   * function create user with provided the email and password and create and store token in context
+   * @returns {Promise<void>}
+   */
   const createUser = async values => {
     try {
-      const response = await auth().createUserWithEmailAndPassword(
+      await auth().createUserWithEmailAndPassword(
         values.email,
         values.password,
       );
@@ -58,9 +63,10 @@ const SignUpFrom = ({navigation}) => {
         routes: [{name: 'Dashboard'}],
       });
     } catch (error) {
-      showToastWithGravity(error);
+      showToastWithGravity(error.message);
     }
   };
+
   return (
     <Formik
       initialValues={userInfo}
@@ -80,7 +86,7 @@ const SignUpFrom = ({navigation}) => {
               errorMessage={touched.email ? errors.email : null}
               onChangeText={handleChange('email')}
             />
-            <InputField
+            <PasswordField
               value={values.password}
               onBlur={handleBlur('password')}
               placeholder={passwordPlaceholder}
@@ -88,7 +94,7 @@ const SignUpFrom = ({navigation}) => {
               errorMessage={touched.password ? errors.password : null}
               onChangeText={handleChange('password')}
             />
-            <InputField
+            <PasswordField
               value={values.confirmPassword}
               onBlur={handleBlur('confirmPassword')}
               placeholder={confirmPassword}

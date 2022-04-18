@@ -1,7 +1,19 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Dialog, Divider, Icon, withTheme} from 'react-native-elements';
+import {strings} from '../../../locales/i18n';
 
+const locationDeniedMessage = strings('main.product.location_denied_message');
+const enterLocationMessage = strings('main.product.enter_location_message');
+
+/**
+ * Component to show dialog to select location
+ * @param openSheet:function which open the rb sheet
+ * @param setIsVisible:function to set vivibility of dialog
+ * @param isVisible:indicates vivibility of dialog
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
   const {colors} = theme;
 
@@ -17,7 +29,7 @@ const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
         />
       </View>
       <Dialog.Title
-        title="Location permission not enabled"
+        title={locationDeniedMessage}
         titleStyle={styles.titleStyle}
       />
       <Divider />
@@ -28,7 +40,7 @@ const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
           size: 14,
           color: theme.colors.primary,
         }}
-        title="Enter location manually"
+        title={enterLocationMessage}
         onPress={() => {
           setIsVisible(!isVisible);
           openSheet();

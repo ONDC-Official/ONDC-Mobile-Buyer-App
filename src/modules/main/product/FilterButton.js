@@ -4,6 +4,14 @@ import {Text, withTheme} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {appStyles} from '../../../styles/styles';
 
+/**
+ * Component to show filter buttons in the header of product screen
+ * @param name:name of the card
+ * @param selectedCard:filter button selected by user
+ * @param onPress:function handles click event of filter button
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const FilterButton = ({theme, name, selectedCard, onPress}) => {
   const {colors} = theme;
   return (

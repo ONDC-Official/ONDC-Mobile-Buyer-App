@@ -5,7 +5,15 @@ import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 
 const clearCartButton = strings('main.cart.clear_cart_title');
+const checkOutButton = strings('main.cart.checkout');
 
+/**
+ * Component to render footer in cart
+ * @param onCheckout:function handles click event of check out button
+ * @param onPress:function handles click event of clear cart button
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const Footer = ({theme, onCheckout, onPress}) => {
   const {colors} = theme;
 
@@ -30,7 +38,9 @@ const Footer = ({theme, onCheckout, onPress}) => {
           {borderColor: colors.primary},
         ]}
         onPress={onCheckout}>
-        <Text style={[styles.text, {color: colors.primary}]}>Checkout</Text>
+        <Text style={[styles.text, {color: colors.primary}]}>
+          {checkOutButton}
+        </Text>
       </TouchableOpacity>
     </View>
   );

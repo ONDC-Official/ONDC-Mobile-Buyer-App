@@ -37,7 +37,6 @@ const tryLocalSignIn = dispatch => {
       const data = await getData('token');
       if (data !== null) {
         payload.token = data;
-
         payload.isLoading = false;
         dispatch({type: 'save_token', payload});
       } else {

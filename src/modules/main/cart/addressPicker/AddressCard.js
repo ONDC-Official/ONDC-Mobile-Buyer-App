@@ -5,11 +5,21 @@ import {Context as AuthContext} from '../../../../context/Auth';
 import {RadioButtonInput} from 'react-native-simple-radio-button';
 import {appStyles} from '../../../../styles/styles';
 
+/**
+ * Component to render single address card in select address screen
+ * @param selectedAddress:address selected by user
+ * @param setSelectedAddress:function to set selected address
+ * @param item:object which contains address details
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const AddressCard = ({item, selectedAddress, setSelectedAddress}) => {
   const {
     state: {token},
   } = useContext(AuthContext);
+
   const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
+
   return (
     <Card containerStyle={styles.card}>
       <View style={styles.container}>

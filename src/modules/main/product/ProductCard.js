@@ -8,6 +8,14 @@ import {appStyles} from '../../../styles/styles';
 
 const addButton = strings('main.product.add_button_title');
 
+/**
+ * Component to render single product card on product screen
+ * @param addItem:function gets execute when user click on add and plus button
+ * @param removeItem:function gets execute when user clicks on minus button
+ * @param item:object which contains product details
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const ProductCard = ({theme, item, removeItem, addItem}) => {
   const {colors} = theme;
 
@@ -45,7 +53,7 @@ const ProductCard = ({theme, item, removeItem, addItem}) => {
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => {
-                    removeItem(item.id);
+                    removeItem(item);
                   }}>
                   <Icon name="minus" size={16} color={colors.white} />
                 </TouchableOpacity>

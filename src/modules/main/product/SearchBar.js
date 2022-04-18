@@ -10,6 +10,14 @@ import {BASE_URL, GET_LOCATION} from '../../../utils/apiUtilities';
 
 const search = strings('main.product.search_label');
 
+/**
+ * Component to show searchbar to select location in addresspicker
+ * @param closeSheet:function which close the rb sheet
+ * @param setLocation:function to set location selected by user
+ * @param setEloc:function set eloc of selected location
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
   const {colors} = theme;
   const [filteredLocations, setFilteredLocations] = useState(null);
@@ -20,6 +28,10 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
     state: {token},
   } = useContext(AuthContext);
 
+  /**
+   * Function is used to get list of location
+   * @returns {Promise<void>}
+   **/
   const findLocation = async value => {
     if (value.length > 3) {
       try {

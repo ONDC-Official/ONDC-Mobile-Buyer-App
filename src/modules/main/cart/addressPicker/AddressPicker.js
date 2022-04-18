@@ -5,12 +5,23 @@ import {withTheme, Text} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
 import {BASE_URL, GET_ADDRESS} from '../../../../utils/apiUtilities';
 import AddressCard from './AddressCard';
 import Header from './Header';
 
+const buttonTitle = strings('main.cart.next');
+const selectAddress = strings('main.cart.select_address_title');
+
+/**
+ * Component to render list of address
+ * @param navigation: required: to navigate to the respective screen
+ * @param theme:application theme
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const AddressPicker = ({navigation, theme}) => {
   const {colors} = theme;
   const [list, setList] = useState(null);
@@ -21,6 +32,10 @@ const AddressPicker = ({navigation, theme}) => {
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
 
+  /**
+   * function to get list of address from server
+   * @returns {Promise<void>}
+   */
   const getAddressList = async () => {
     try {
       const {data} = await getData(`${BASE_URL}${GET_ADDRESS}`, {
@@ -45,11 +60,19 @@ const AddressPicker = ({navigation, theme}) => {
     }
   };
 
+  /**
+   * function handles click event of next button
+   */
   const onPressHandler = () => {
     navigation.navigate('Payment', {selectedAddress});
   };
 
-  const renderItem = ({item, index}) => {
+  /**
+   * Function is used to render single address card in the list
+   * @param item: single object from address list
+   * @returns {JSX.Element}
+   */
+  const renderItem = ({item}) => {
     return (
       <AddressCard
         item={item}
@@ -70,7 +93,7 @@ const AddressPicker = ({navigation, theme}) => {
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title="Select delivery address" show navigation={navigation} />
+      <Header title={selectAddress} show navigation={navigation} />
       {list !== null && (
         <FlatList
           data={list}
@@ -87,7 +110,7 @@ const AddressPicker = ({navigation, theme}) => {
       )}
       {selectedAddress !== null && (
         <View style={styles.buttonContainer}>
-          <ContainButton title="Next" onPress={onPressHandler} />
+          <ContainButton title={buttonTitle} onPress={onPressHandler} />
         </View>
       )}
     </View>

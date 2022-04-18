@@ -2,18 +2,30 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {withTheme, Text} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 
+const addButton = strings('main.cart.add');
+
+/**
+ * Component to header on chckout screens
+ * @param navigation: required: to navigate to the respective screen
+ * @param theme:application theme
+ * @param show:indicates visibility of add button
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const Header = ({theme, title, show, navigation}) => {
   const {colors} = theme;
 
   const onPressHandler = () => navigation.navigate('AddAddress');
+
   return (
     <View style={[styles.container]}>
       <TouchableOpacity
         style={[styles.backButton, {backgroundColor: colors.primary}]}
         onPress={() => navigation.goBack()}>
-        <Icon name="arrow-left" size={18} color={colors.white} />
+        <Icon name="arrow-left" size={16} color={colors.white} />
       </TouchableOpacity>
       <View style={appStyles.container}>
         <Text style={styles.text}>{title}</Text>
@@ -22,7 +34,7 @@ const Header = ({theme, title, show, navigation}) => {
         <TouchableOpacity
           style={[styles.button, {borderColor: colors.primary}]}
           onPress={onPressHandler}>
-          <Text style={{color: colors.primary}}>ADD</Text>
+          <Text style={{color: colors.primary}}>{addButton}</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -41,13 +53,13 @@ const styles = StyleSheet.create({
   },
   backButton: {
     alignItems: 'center',
-    height: 35,
-    width: 35,
+    height: 24,
+    width: 24,
     borderRadius: 20,
     justifyContent: 'center',
     marginRight: 10,
   },
-  text: {fontSize: 24, fontWeight: '600'},
+  text: {fontSize: 22, fontWeight: '600'},
   button: {
     marginTop: 5,
     paddingVertical: 4,

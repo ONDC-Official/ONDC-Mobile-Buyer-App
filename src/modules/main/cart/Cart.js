@@ -11,6 +11,13 @@ import Footer from './Footer';
 const subTotalLabel = strings('main.cart.sub_total_label');
 const message = strings('main.cart.empty_cart_message');
 
+/**
+ * Component to render list of items added in cart
+ * @param navigation: required: to navigate to the respective screen
+ * @param theme:application theme
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const Cart = ({navigation, theme}) => {
   const {colors} = theme;
   const {
@@ -20,24 +27,38 @@ const Cart = ({navigation, theme}) => {
     storeItemInCart,
     storeList,
     clearCart,
+    updateItemInCart,
     updateCart,
   } = useContext(CartContext);
 
+  /**
+   * function  use to calculate total price of item added in cart
+   */
   const subTotal = cart.reduce((total, item) => {
     total += item.price.value * item.quantity;
     return total;
   }, 0);
 
-  const removeItem = id => {
+  /**
+   * function  use to remove item from cart
+   */
+  const removeItem = cartItem => {
     const newArray = list.slice();
     let selectedItem = newArray.find(item => {
-      return item.id === id;
+      return item.id === cartItem.id;
     });
-    selectedItem.quantity = selectedItem.quantity - 1;
-    removeItemFromCart();
-    storeList(newArray);
+    if (selectedItem) {
+      selectedItem.quantity = selectedItem.quantity - 1;
+      removeItemFromCart(selectedItem);
+      storeList(newArray);
+    } else {
+      updateItemInCart(cartItem);
+    }
   };
 
+  /**
+   * function  use to add item in cart
+   */
   const addItem = addedItem => {
     const newArray = list.slice();
     let selectedItem = newArray.find(item => {
@@ -52,6 +73,10 @@ const Cart = ({navigation, theme}) => {
     }
   };
 
+  /**
+   * function handles click event of clear cart button
+   * which cleares the cart list
+   */
   const onPressHandler = () => {
     let newList = list.slice();
     newList.forEach(item => (item.quantity = 0));
@@ -59,15 +84,24 @@ const Cart = ({navigation, theme}) => {
     clearCart();
   };
 
+  /**
+   * function handles click event of checkout button
+   */
   const onCheckout = () => {
     navigation.navigate('AddressPicker');
   };
 
+  /**
+   * Function is used to render single product card in the list
+   * @param item:single object from cart list
+   * @returns {JSX.Element}
+   */
   const renderItem = ({item}) => {
     return (
       <ProductCard item={item} removeItem={removeItem} addItem={addItem} />
     );
   };
+
   return (
     <SafeAreaView
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>

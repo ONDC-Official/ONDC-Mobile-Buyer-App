@@ -23,10 +23,30 @@ const CartContextProvider = ({children}) => {
     setCart(newArray);
   };
 
-  const removeItemFromCart = () => {
-    let newArray = cart.slice();
+  const updateItemInCart = cartItem => {
+    const newArray = cart.slice();
+    const selectedItem = newArray.find(item => {
+      return item.id === cartItem.id;
+    });
+    selectedItem.quantity -= 1;
     const filteredArray = newArray.filter(item => {
       return item.quantity !== 0;
+    });
+    setCart(filteredArray);
+  };
+
+  const removeItemFromCart = item => {
+    let newArray = cart.slice();
+    const index = newArray.findIndex(x => x.id === item.id);
+    if (index > -1) {
+      if (newArray[index].quantity !== item.quantity) {
+        newArray[index].quantity = item.quantity;
+      }
+    } else {
+      newArray.push(item);
+    }
+    const filteredArray = newArray.filter(cartItem => {
+      return cartItem.quantity !== 0;
     });
     setCart(filteredArray);
   };
@@ -54,6 +74,7 @@ const CartContextProvider = ({children}) => {
         clearCart,
         storeList,
         updateCart,
+        updateItemInCart,
       }}>
       {children}
     </CartContext.Provider>

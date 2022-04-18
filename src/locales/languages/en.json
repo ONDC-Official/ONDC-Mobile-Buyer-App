@@ -22,7 +22,22 @@
       "sub_total_label":"Sub Total:",
       "clear_cart_title":"Clear Cart",
       "check_out_title":"Check Out",
-      "empty_cart_message":"You have no items in your shopping cart"
+      "empty_cart_message":"You have no items in your shopping cart",
+      "add_address":"Add Address",
+      "email":"Email",
+      "number":"Number",
+      "pin":"Pin Code",
+      "landMark":"Landmark",
+      "city":"City",
+      "state":"State",
+      "street":"Street",
+      "name":"Name",
+      "add":"ADD",
+      "next":"Next",
+      "select_address_title":"Select Delivery Address",
+      "checkout":"Checkout",
+      "address":"Address",
+      "payment_options":"Payment Options"
       
     },
     "dashboard": {},
@@ -33,7 +48,18 @@
       "provider_label":"Provider",
       "product_label":"Product",
       "category_label":"Category",
-      "search_label":"Search"
+      "search_label":"Search",
+      "powered_by_label":"Powered by",
+      "location_denied_message":"Location permission not enabled",
+      "enter_location_message":"Enter location manually",
+      "permission_needed_message":"Storage permission needed",
+      "unknown":"Unknown",
+      "search_item_message":"Please search item",
+      "no_results":"No results",
+      "ok_label":"Ok",
+      "cancel_label":"Cancel",
+      "please_select_location":"Please select location"
+      
       
     }
   },
@@ -45,7 +71,9 @@
     "required": "This field is required",
     "invalid_email": "Invalid email",
     "short_password": "Password is too short",
-    "unmatch_password": "Password does not match"
+    "unmatch_password": "Password does not match",
+    "invalid_number":"Invalid number",
+    "invalid_pin":"Invalid pin code"
   },
   "global": {
     "and_label": " and ",

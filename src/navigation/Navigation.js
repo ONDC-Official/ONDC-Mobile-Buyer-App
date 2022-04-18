@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import AddressPicker from '../modules/main/cart/addressPicker/AddressPicker';
 import AddAddress from '../modules/main/cart/addAddress/AddAddress';
 import Payment from '../modules/main/cart/payment/Payment';
+import More from '../modules/main/more/More';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -61,6 +62,22 @@ const Dashboard = () => {
             return (
               <Icon
                 name="clipboard-edit"
+                size={24}
+                color={tabInfo.focused ? '#2089DC' : '#8e8e93'}
+              />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="More"
+        component={More}
+        options={{
+          headerShown: false,
+          tabBarIcon: tabInfo => {
+            return (
+              <Icon
+                name="dots-horizontal-circle"
                 size={24}
                 color={tabInfo.focused ? '#2089DC' : '#8e8e93'}
               />

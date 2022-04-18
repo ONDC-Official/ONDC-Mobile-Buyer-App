@@ -14,26 +14,45 @@ import {ADD_ADDRESS, BASE_URL} from '../../../../utils/apiUtilities';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 
+const invalidNumber = strings('errors.invalid_number');
+const invalidPin = strings('errors.invalid_pin');
 const requiredField = strings('errors.required');
 const invalidEmail = strings('errors.invalid_email');
+const addAddress = strings('main.cart.add_address');
+const emailPlaceholder = strings('main.cart.email');
+const namePlaceholder = strings('main.cart.name');
+const cityPlaceholder = strings('main.cart.city');
+const statePlaceholder = strings('main.cart.state');
+const numberPlaceholder = strings('main.cart.number');
+const pinPlaceholder = strings('main.cart.pin');
+const streetPlaceholder = strings('main.cart.street');
+const landMartPlaceholder = strings('main.cart.landMark');
+const buttonTitle = strings('main.cart.next');
 
 const validationSchema = Yup.object({
   name: Yup.string().trim().required(requiredField),
   email: Yup.string().trim().email(invalidEmail).required(requiredField),
   number: Yup.string()
     .trim()
-    .matches(/^[6-9]{1}[0-9]{9}$/, 'Invalid number')
+    .matches(/^[6-9]{1}[0-9]{9}$/, invalidNumber)
     .required(requiredField),
   city: Yup.string().trim().required(requiredField),
   state: Yup.string().trim().required(requiredField),
   pin: Yup.string()
     .trim()
-    .matches(/^[1-9]{1}[0-9]{5}$/, 'Invalid pin code ')
+    .matches(/^[1-9]{1}[0-9]{5}$/, invalidPin)
     .required(requiredField),
   landMark: Yup.string().trim().required(requiredField),
   street: Yup.string().trim().required(requiredField),
 });
 
+/**
+ * Component to render form in add new address screen
+ * @param navigation: required: to navigate to the respective screen
+ * @param theme:application theme
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const AddAddress = ({navigation, theme}) => {
   const {colors} = theme;
   const {
@@ -52,6 +71,10 @@ const AddAddress = ({navigation, theme}) => {
     street: '',
   };
 
+  /**
+   * Function is used to save new address
+   * @returns {Promise<void>}
+   **/
   const saveAddress = async values => {
     const options = {
       headers: {
@@ -59,7 +82,7 @@ const AddAddress = ({navigation, theme}) => {
       },
     };
     try {
-      const {data} = await postData(
+      await postData(
         `${BASE_URL}${ADD_ADDRESS}`,
         {
           descriptor: {
@@ -83,10 +106,11 @@ const AddAddress = ({navigation, theme}) => {
       handleApiError(error);
     }
   };
+
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title={'Add Address'} navigation={navigation} />
+      <Header title={addAddress} navigation={navigation} />
       <KeyboardAwareScrollView>
         <Card containerStyle={styles.containerStyle}>
           <Formik
@@ -112,14 +136,14 @@ const AddAddress = ({navigation, theme}) => {
                   <InputField
                     value={values.name}
                     onBlur={handleBlur('name')}
-                    placeholder={'Name'}
+                    placeholder={namePlaceholder}
                     errorMessage={touched.name ? errors.name : null}
                     onChangeText={handleChange('name')}
                   />
                   <InputField
                     value={values.email}
                     onBlur={handleBlur('email')}
-                    placeholder={'Email'}
+                    placeholder={emailPlaceholder}
                     errorMessage={touched.email ? errors.email : null}
                     onChangeText={handleChange('email')}
                   />
@@ -128,35 +152,35 @@ const AddAddress = ({navigation, theme}) => {
                     maxLength={10}
                     value={values.number}
                     onBlur={handleBlur('number')}
-                    placeholder={'Number'}
+                    placeholder={numberPlaceholder}
                     errorMessage={touched.number ? errors.number : null}
                     onChangeText={handleChange('number')}
                   />
                   <InputField
                     value={values.street}
                     onBlur={handleBlur('street')}
-                    placeholder={'Street'}
+                    placeholder={streetPlaceholder}
                     errorMessage={touched.street ? errors.street : null}
                     onChangeText={handleChange('street')}
                   />
                   <InputField
                     value={values.landMark}
                     onBlur={handleBlur('landMark')}
-                    placeholder={'Landmark'}
+                    placeholder={landMartPlaceholder}
                     errorMessage={touched.landMark ? errors.landMark : null}
                     onChangeText={handleChange('landMark')}
                   />
                   <InputField
                     value={values.city}
                     onBlur={handleBlur('city')}
-                    placeholder={'City'}
+                    placeholder={cityPlaceholder}
                     errorMessage={touched.city ? errors.city : null}
                     onChangeText={handleChange('city')}
                   />
                   <InputField
                     value={values.state}
                     onBlur={handleBlur('state')}
-                    placeholder={'State'}
+                    placeholder={statePlaceholder}
                     errorMessage={touched.state ? errors.state : null}
                     onChangeText={handleChange('state')}
                   />
@@ -165,13 +189,13 @@ const AddAddress = ({navigation, theme}) => {
                     keyboardType={'numeric'}
                     maxLength={6}
                     onBlur={handleBlur('pin')}
-                    placeholder={'Pin Code'}
+                    placeholder={pinPlaceholder}
                     errorMessage={touched.pin ? errors.pin : null}
                     onChangeText={handleChange('pin')}
                   />
 
                   <View style={styles.buttonContainer}>
-                    <ContainButton title={'Next'} onPress={handleSubmit} />
+                    <ContainButton title={buttonTitle} onPress={handleSubmit} />
                   </View>
                 </>
               );

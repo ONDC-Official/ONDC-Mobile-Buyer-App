@@ -9,12 +9,25 @@ import RadioForm, {
   RadioButton,
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
+import {strings} from '../../../../locales/i18n';
+
+const heading = strings('main.cart.checkout');
+const buttonTitle = strings('main.cart.next');
+const addressTitle = strings('main.cart.address');
+const paymentOptionsTitle = strings('main.cart.payment_options');
 
 const paymentOptions = [
   {value: 0, label: 'JusPay'},
   {value: 1, label: 'Cash on delivery'},
 ];
 
+/**
+ * Component to payment screen in application
+ * @param navigation: required: to navigate to the respective screen
+ * @param theme:application theme
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const Payment = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
   const {selectedAddress} = params;
@@ -23,9 +36,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title="Checkout" navigation={navigation} />
+      <Header title={heading} navigation={navigation} />
       <View style={styles.container}>
-        <Text style={styles.text}>Address</Text>
+        <Text style={styles.text}>{addressTitle}</Text>
         <View style={styles.addressContainer}>
           <Text>
             {selectedAddress.address.street}, {selectedAddress.address.locality}
@@ -34,7 +47,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           </Text>
         </View>
 
-        <Text style={styles.text}>Payment Options</Text>
+        <Text style={styles.text}>{paymentOptionsTitle}</Text>
         <View style={styles.addressContainer}>
           <RadioForm animation={true}>
             {paymentOptions.map((obj, i) => (
@@ -65,7 +78,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <ContainButton title="Next" />
+        <ContainButton title={buttonTitle} />
       </View>
     </View>
   );

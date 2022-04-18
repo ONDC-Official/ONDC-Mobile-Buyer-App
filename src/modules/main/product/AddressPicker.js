@@ -7,7 +7,16 @@ import SearchBar from './SearchBar';
 import Logo from '../../../assets/logo.svg';
 
 const selectLocationLabel = strings('main.product.select_location_label');
+const poweredByLabel = strings('main.product.powered_by_label');
 
+/**
+ * Component to show address picker screen when user wants to select location
+ * @param closeSheet:function which close the rb sheet
+ * @param setLocation:function to set location selected by user
+ * @param setEloc:function set eloc of selected location
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
   return (
     <View style={styles.container}>
@@ -22,7 +31,7 @@ const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
         />
       </View>
       <View style={styles.header}>
-        <Text>Powered by</Text>
+        <Text>{poweredByLabel}</Text>
         <Logo />
       </View>
       <SearchBar

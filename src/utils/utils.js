@@ -3,6 +3,10 @@ import Toast from 'react-native-toast-message';
 
 export const isIOS = Platform.OS === 'ios';
 
+/**
+ * Function is used to show toast on the screen
+ * @param message:message to show on tha toast
+ **/
 export const showToastWithGravity = message => {
   Toast.show({
     type: 'error',

@@ -8,6 +8,7 @@ import {Context as AuthContext} from '../../../context/Auth';
 import {strings} from '../../../locales/i18n';
 import auth from '@react-native-firebase/auth';
 import {showToastWithGravity} from '../../../utils/utils';
+import PasswordField from '../../../components/input/PasswordField';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
 const passwordPlaceholder = strings(
@@ -33,6 +34,10 @@ const LoginForm = ({navigation}) => {
   };
   const {storeToken} = useContext(AuthContext);
 
+  /**
+   * function checks whether the email and password is valid if it is valid it creates and store token in context
+   * @returns {Promise<void>}
+   */
   const login = async values => {
     try {
       await auth().signInWithEmailAndPassword(values.email, values.password);
@@ -67,7 +72,7 @@ const LoginForm = ({navigation}) => {
               errorMessage={touched.email ? errors.email : null}
               onChangeText={handleChange('email')}
             />
-            <InputField
+            <PasswordField
               value={values.password}
               onBlur={handleBlur('password')}
               placeholder={passwordPlaceholder}
