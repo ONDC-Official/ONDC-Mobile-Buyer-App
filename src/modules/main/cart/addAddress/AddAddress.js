@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Card, withTheme} from 'react-native-elements';
 import Header from '../addressPicker/Header';
 import * as Yup from 'yup';

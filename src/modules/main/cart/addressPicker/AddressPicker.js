@@ -23,13 +23,11 @@ const AddressPicker = ({navigation, theme}) => {
 
   const getAddressList = async () => {
     try {
-      console.log(token);
       const {data} = await getData(`${BASE_URL}${GET_ADDRESS}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(data);
       let newList = [];
       data.forEach(element => {
         element.id = Math.random().toString();

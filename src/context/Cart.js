@@ -13,7 +13,11 @@ const CartContextProvider = ({children}) => {
   const storeItemInCart = item => {
     let newArray = cart.slice();
     const index = newArray.findIndex(x => x.id === item.id);
-    if (index < 0) {
+    if (index > -1) {
+      if (newArray[index].quantity !== item.quantity) {
+        newArray[index].quantity = item.quantity;
+      }
+    } else {
       newArray.push(item);
     }
     setCart(newArray);
@@ -27,7 +31,18 @@ const CartContextProvider = ({children}) => {
     setCart(filteredArray);
   };
 
-  const clearCart = () => setCart([]);
+  const updateCart = addedItem => {
+    const newArray = cart.slice();
+    const selectedItem = newArray.find(item => {
+      return item.id === addedItem.id;
+    });
+    selectedItem.quantity += 1;
+    setCart(newArray);
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
 
   return (
     <CartContext.Provider
@@ -38,6 +53,7 @@ const CartContextProvider = ({children}) => {
         removeItemFromCart,
         clearCart,
         storeList,
+        updateCart,
       }}>
       {children}
     </CartContext.Provider>

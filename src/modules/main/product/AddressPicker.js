@@ -1,9 +1,10 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Icon, Text} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import SearchBar from './SearchBar';
+import Logo from '../../../assets/logo.svg';
 
 const selectLocationLabel = strings('main.product.select_location_label');
 
@@ -21,12 +22,8 @@ const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
         />
       </View>
       <View style={styles.header}>
-        <Text>Powered by </Text>
-        <Image
-          source={require('../../../assets/logo-m.png')}
-          style={styles.image}
-          resizeMode={'contain'}
-        />
+        <Text>Powered by</Text>
+        <Logo />
       </View>
       <SearchBar
         setLocation={setLocation}

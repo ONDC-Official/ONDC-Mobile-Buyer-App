@@ -20,6 +20,7 @@ const Cart = ({navigation, theme}) => {
     storeItemInCart,
     storeList,
     clearCart,
+    updateCart,
   } = useContext(CartContext);
 
   const subTotal = cart.reduce((total, item) => {
@@ -39,14 +40,16 @@ const Cart = ({navigation, theme}) => {
 
   const addItem = addedItem => {
     const newArray = list.slice();
-
     let selectedItem = newArray.find(item => {
       return item.id === addedItem.id;
     });
-    console.log(selectedItem);
-    selectedItem.quantity = selectedItem.quantity + 1;
-    storeItemInCart(addedItem);
-    storeList(newArray);
+    if (selectedItem) {
+      selectedItem.quantity = selectedItem.quantity + 1;
+      storeItemInCart(selectedItem);
+      storeList(newArray);
+    } else {
+      updateCart(addedItem);
+    }
   };
 
   const onPressHandler = () => {

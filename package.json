@@ -43,6 +43,8 @@
     "react-native-screens": "^3.13.1",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-skeleton-placeholder": "^5.0.0",
+    "react-native-svg": "^12.3.0",
+    "react-native-svg-transformer": "^1.0.0",
     "react-native-toast-message": "^2.1.5",
     "react-native-vector-icons": "^9.1.0",
     "yup": "^0.32.11"

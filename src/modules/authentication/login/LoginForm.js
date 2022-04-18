@@ -35,10 +35,7 @@ const LoginForm = ({navigation}) => {
 
   const login = async values => {
     try {
-      await auth().signInWithEmailAndPassword(
-        values.email,
-        values.password,
-      );
+      await auth().signInWithEmailAndPassword(values.email, values.password);
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
       await storeToken(idTokenResult);

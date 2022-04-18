@@ -2,7 +2,6 @@ import {getData, clearMultiple, setData} from '../utils/storage';
 import createDataContext from './createDataContext';
 
 const defaultValue = {
-  user: null,
   token: null,
   isLoading: true,
 };
@@ -23,7 +22,6 @@ const authReducer = (state, action) => {
     case 'logout_user':
       return Object.assign({}, state, {
         accessToken: null,
-        user: null,
       });
 
     default:
@@ -39,7 +37,7 @@ const tryLocalSignIn = dispatch => {
       const data = await getData('token');
       if (data !== null) {
         payload.token = data;
-        payload.user = null;
+
         payload.isLoading = false;
         dispatch({type: 'save_token', payload});
       } else {
