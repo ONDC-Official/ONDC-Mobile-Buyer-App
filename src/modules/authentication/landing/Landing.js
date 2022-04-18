@@ -50,25 +50,12 @@ const Landing = ({navigation}) => {
         />
 
         <View style={styles.buttonContainer}>
-          <ContainButton
+          <OutlineButton
             title={continueWithGoogle}
+            onPress={loginWithGoogle}
             type="outline"
             icon={{
               name: 'google',
-              type: 'font-awesome',
-              size: 30,
-              color: theme.colors.primary,
-            }}
-            onPress={loginWithGoogle}
-          />
-        </View>
-
-        <View style={styles.buttonContainer}>
-          <OutlineButton
-            title={continueWithGoogle}
-            type="outline"
-            icon={{
-              name: 'apple',
               type: 'font-awesome',
               size: 30,
               color: theme.colors.primary,

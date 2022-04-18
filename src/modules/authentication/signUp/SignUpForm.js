@@ -17,7 +17,6 @@ const requiredField = strings('errors.required');
 const shortPassword = strings('errors.short_password');
 const invalidEmail = strings('errors.invalid_email');
 const title = strings('authentication.signup.button_title');
-//TODO: Typo: In word 'unmatch', unmatch is not a word
 const unmatchPassowrd = strings('errors.unmatch_password');
 const confirmPassword = strings(
   'authentication.signup.confirm_password_placeholder',
@@ -54,7 +53,10 @@ const SignUpFrom = ({navigation}) => {
 
       const idTokenResult = await auth().currentUser.getIdTokenResult();
       await storeToken(idTokenResult);
-      navigation.navigate('Dashboard');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Dashboard'}],
+      });
     } catch (error) {
       showToastWithGravity(error);
     }

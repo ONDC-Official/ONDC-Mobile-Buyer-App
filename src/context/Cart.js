@@ -1,5 +1,4 @@
 import React, {createContext, useState} from 'react';
-import productList from '../modules/main/product/ProductsList';
 
 export const CartContext = createContext();
 
@@ -14,13 +13,10 @@ const CartContextProvider = ({children}) => {
   const storeItemInCart = item => {
     let newArray = cart.slice();
     const index = newArray.findIndex(x => x.id === item.id);
-    if (index > -1) {
-      console.log('exist');
-    } else {
+    if (index < 0) {
       newArray.push(item);
     }
     setCart(newArray);
-    console.log(cart);
   };
 
   const removeItemFromCart = () => {
@@ -31,9 +27,7 @@ const CartContextProvider = ({children}) => {
     setCart(filteredArray);
   };
 
-  const clearCart = () => {
-    setCart([]);
-  };
+  const clearCart = () => setCart([]);
 
   return (
     <CartContext.Provider
