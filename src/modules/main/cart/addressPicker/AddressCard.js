@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Card, Text} from 'react-native-elements';
+import {Card, Text, withTheme} from 'react-native-elements';
 import {Context as AuthContext} from '../../../../context/Auth';
 import {RadioButtonInput} from 'react-native-simple-radio-button';
 import {appStyles} from '../../../../styles/styles';
@@ -13,21 +13,33 @@ import {appStyles} from '../../../../styles/styles';
  * @constructor
  * @returns {JSX.Element}
  */
-const AddressCard = ({item, selectedAddress, setSelectedAddress}) => {
+const AddressCard = ({item, theme, selectedAddress, setSelectedAddress}) => {
   const {
     state: {token},
   } = useContext(AuthContext);
+  const {colors} = theme;
 
   const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
+  const separator = ',';
 
   return (
     <Card containerStyle={styles.card}>
       <View style={styles.container}>
-        <View style={[appStyles.container, styles.textContainer]}>
-          <Text>
-            {item.address.street} {item.address.building}, {item.address.city},{' '}
-            {item.address.state}- {item.address.area_code}
+        <View style={[appStyles.container]}>
+          {item.descriptor.name ? (
+            <Text style={styles.name}>{item.descriptor.name}</Text>
+          ) : null}
+          {item.descriptor.email ? (
+            <Text style={{color: colors.grey}}>
+              {item.descriptor.email} - {item.descriptor.phone}
+            </Text>
+          ) : null}
+          <Text style={styles.address}>
+            {item.address.building ? item.address.building : null}
+            {item.address.building ? separator : null} {item.address.street},{' '}
+            {item.address.city} {item.address.state}
           </Text>
+          <Text style={{color: colors.grey}}>{item.address.area_code}</Text>
         </View>
         <View style={styles.radioButton}>
           <RadioButtonInput
@@ -47,7 +59,7 @@ const AddressCard = ({item, selectedAddress, setSelectedAddress}) => {
   );
 };
 
-export default AddressCard;
+export default withTheme(AddressCard);
 
 const styles = StyleSheet.create({
   container: {
@@ -58,4 +70,6 @@ const styles = StyleSheet.create({
   card: {margin: 0, elevation: 4, marginTop: 15, borderRadius: 8},
   radioButton: {marginLeft: 10},
   textContainer: {flexShrink: 1, flexDirection: 'row'},
+  name: {textTransform: 'capitalize', fontSize: 16, fontWeight: 'bold'},
+  address: {textTransform: 'capitalize'},
 });

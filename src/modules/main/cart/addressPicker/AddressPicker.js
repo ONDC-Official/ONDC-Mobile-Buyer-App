@@ -43,6 +43,7 @@ const AddressPicker = ({navigation, theme}) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      console.log(JSON.stringify(data, undefined, 4));
       let newList = [];
       data.forEach(element => {
         element.id = Math.random().toString();

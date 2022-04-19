@@ -59,6 +59,7 @@ const AddAddress = ({navigation, theme}) => {
     state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
+  console.log(token);
 
   const userInfo = {
     email: '',
@@ -86,8 +87,9 @@ const AddAddress = ({navigation, theme}) => {
         `${BASE_URL}${ADD_ADDRESS}`,
         {
           descriptor: {
-            name: '',
-            short_desc: '',
+            name: values.name,
+            email: values.email,
+            phone: values.number,
           },
           gps: '',
           default: true,

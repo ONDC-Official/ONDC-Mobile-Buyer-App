@@ -26,6 +26,7 @@
     "@react-navigation/stack": "^6.1.1",
     "axios": "^0.26.1",
     "formik": "^2.2.9",
+    "moment": "^2.29.3",
     "react": "17.0.2",
     "react-native": "0.67.4",
     "react-native-android-location-enabler": "^1.2.2",
@@ -43,10 +44,12 @@
     "react-native-screens": "^3.13.1",
     "react-native-simple-radio-button": "^2.7.4",
     "react-native-skeleton-placeholder": "^5.0.0",
+    "react-native-step-indicator": "^1.0.3",
     "react-native-svg": "^12.3.0",
     "react-native-svg-transformer": "^1.0.0",
     "react-native-toast-message": "^2.1.5",
     "react-native-vector-icons": "^9.1.0",
+    "react-stepper-horizontal": "^1.0.11",
     "yup": "^0.32.11"
   },
   "devDependencies": {

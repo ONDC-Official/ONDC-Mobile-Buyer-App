@@ -8,3 +8,4 @@ export const GET_LOCATION_FROM_LAT_LONG = '/mmi/api/mmi_latlong_info?';
 export const GET_LATLONG = '/mmi/api/mmi_place_info?eloc=';
 export const GET_ADDRESS = '/client/v1/delivery_address';
 export const ADD_ADDRESS = '/client/v1/delivery_address';
+export const GET_ORDERS = '/client/v1/orders?';
