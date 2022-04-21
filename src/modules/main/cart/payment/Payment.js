@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import Header from '../addressPicker/Header';
 import {Text, withTheme} from 'react-native-elements';
@@ -10,6 +10,13 @@ import RadioForm, {
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
 import {strings} from '../../../../locales/i18n';
+import {postData, getData} from '../../../../utils/api';
+import {
+  BASE_URL,
+  INITIALIZE_ORDER,
+  ON_INITIALIZE_ORDER,
+} from '../../../../utils/apiUtilities';
+import {Context as AuthContext} from '../../../../context/Auth';
 
 const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
@@ -30,8 +37,127 @@ const paymentOptions = [
  */
 const Payment = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
-  const {selectedAddress} = params;
+  const {selectedAddress, confirmationList} = params;
+  const {
+    state: {token},
+  } = useContext(AuthContext);
   const [value, setValue] = useState(0);
+
+  const onInitializeOrder = messageId => {
+    const messageIds = messageId.toString();
+    let order = setInterval(async () => {
+      try {
+        const {data} = await getData(
+          `${BASE_URL}${ON_INITIALIZE_ORDER}messageIds=${messageIds}`,
+          {
+            headers: {Authorization: `Bearer ${token}`},
+          },
+        );
+        console.log(JSON.stringify(data, undefined, 4));
+      } catch (error) {
+        console.log(error);
+      }
+    }, 2000);
+    setTimeout(() => {
+      clearInterval(order);
+    }, 6000);
+  };
+
+  const initializeOrder = async () => {
+    try {
+      let payload = [];
+      let bppIdArray = [];
+      confirmationList.forEach(item => {
+        if (item.provider) {
+          const index = bppIdArray.findIndex(one => one === item.bpp_id);
+          if (index > -1) {
+            let itemObj = {
+              id: item.id,
+              quantity: {
+                count: item.quantity.selected.count,
+              },
+              bpp_id: item.bpp_id,
+              provider: {
+                id: item.provider,
+                locations: ['el'],
+                //   locations: location,
+              },
+            };
+            payload[index].message.items.push(itemObj);
+          } else {
+            let payloadObj = {
+              context: {},
+              message: {
+                items: [
+                  {
+                    id: item.id,
+                    quantity: {
+                      count: item.quantity.selected.count,
+                    },
+                    bpp_id: item.bpp_id,
+                    provider: {
+                      id: item.provider,
+                      locations: ['el'],
+                    },
+                  },
+                ],
+                billing_info: {
+                  address: {
+                    door: selectedAddress.address.door,
+                    country: selectedAddress.address.country,
+                    city: selectedAddress.address.city,
+                    street: selectedAddress.address.street,
+                    area_code: selectedAddress.address.area_code,
+                    state: selectedAddress.address.state,
+                    building: selectedAddress.address.building,
+                  },
+                  phone: selectedAddress.descriptor.phone,
+                  name: selectedAddress.descriptor.name,
+                  email: selectedAddress.descriptor.email,
+                },
+                delivery_info: {
+                  type: 'HOME-DELIVERY',
+                  name: selectedAddress.descriptor.name,
+                  phone: selectedAddress.descriptor.phone,
+                  email: selectedAddress.descriptor.email,
+                  location: {
+                    address: {
+                      door: selectedAddress.address.door,
+                      country: selectedAddress.address.country,
+                      city: selectedAddress.address.city,
+                      street: selectedAddress.address.street,
+                      area_code: selectedAddress.address.area_code,
+                      state: selectedAddress.address.state,
+                      building: selectedAddress.address.building,
+                    },
+                  },
+                },
+              },
+            };
+
+            payload.push(payloadObj);
+            bppIdArray.push(item.bpp_id);
+          }
+        }
+      });
+
+      const {data} = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
+        headers: {Authorization: `Bearer ${token}`},
+      });
+      let messageIds = [];
+      data.forEach(item => {
+        messageIds.push(item.context.message_id);
+      });
+
+      onInitializeOrder(messageIds);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    initializeOrder();
+  }, []);
 
   return (
     <View

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Divider, Icon, Text, withTheme} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {appStyles} from '../../../styles/styles';
+import {Context as AuthContext} from '../../../context/Auth';
+import OptionCard from './OptionCard';
 
 const list = [
   {id: 'gvjh', name: 'Profile', icon: 'user'},
@@ -13,21 +15,15 @@ const list = [
  * @constructor
  * @returns {JSX.Element}
  */
-const More = ({theme}) => {
+const More = ({theme, navigation}) => {
   const {colors} = theme;
+  const {
+    state: {token},
+    logoutUser,
+  } = useContext(AuthContext);
 
   const renderItem = ({item}) => {
-    return (
-      <>
-        <TouchableOpacity style={styles.container}>
-          <Icon type="font-awesome" name={item.icon} color={colors.primary} />
-          <Text style={[styles.text, {color: colors.primary}]}>
-            {item.name}
-          </Text>
-        </TouchableOpacity>
-        <Divider color={colors.primary} />
-      </>
-    );
+    return <OptionCard item={item} />;
   };
   return (
     <SafeAreaView style={appStyles.container}>

@@ -31,7 +31,6 @@ const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
         />
       </View>
       <View style={styles.header}>
-        <Text>{poweredByLabel}</Text>
         <Logo />
       </View>
       <SearchBar

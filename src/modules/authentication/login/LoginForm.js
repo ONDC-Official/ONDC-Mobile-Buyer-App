@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import InputField from '../../../components/input/InputField';
@@ -33,6 +33,7 @@ const LoginForm = ({navigation}) => {
     password: '',
   };
   const {storeToken} = useContext(AuthContext);
+  const [apiInProgress, setApiInProgress] = useState(false);
 
   /**
    * function checks whether the email and password is valid if it is valid it creates and store token in context
@@ -40,6 +41,7 @@ const LoginForm = ({navigation}) => {
    */
   const login = async values => {
     try {
+      setApiInProgress(true);
       await auth().signInWithEmailAndPassword(values.email, values.password);
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
@@ -48,8 +50,10 @@ const LoginForm = ({navigation}) => {
         index: 0,
         routes: [{name: 'Dashboard'}],
       });
+      setApiInProgress(false);
     } catch (error) {
       showToastWithGravity(error.message);
+      setApiInProgress(false);
     }
   };
 
@@ -81,7 +85,12 @@ const LoginForm = ({navigation}) => {
               onChangeText={handleChange('password')}
             />
             <View style={styles.buttonContainer}>
-              <ContainButton title={title} onPress={handleSubmit} />
+              <ContainButton
+                title={title}
+                onPress={handleSubmit}
+                loading={apiInProgress}
+                disabled={apiInProgress}
+              />
             </View>
           </>
         );

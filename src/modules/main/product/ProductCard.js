@@ -16,7 +16,7 @@ const addButton = strings('main.product.add_button_title');
  * @constructor
  * @returns {JSX.Element}
  */
-const ProductCard = ({theme, item, removeItem, addItem}) => {
+const ProductCard = ({theme, item, apiInProgress, removeItem, addItem}) => {
   const {colors} = theme;
 
   return (
@@ -41,7 +41,8 @@ const ProductCard = ({theme, item, removeItem, addItem}) => {
                 style={[styles.button, {borderColor: colors.primary}]}
                 onPress={() => {
                   addItem(item);
-                }}>
+                }}
+                disabled={apiInProgress}>
                 <Text style={{color: colors.primary}}>{addButton}</Text>
               </TouchableOpacity>
             ) : (

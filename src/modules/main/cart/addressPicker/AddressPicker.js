@@ -43,12 +43,12 @@ const AddressPicker = ({navigation, theme}) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(JSON.stringify(data, undefined, 4));
       let newList = [];
       data.forEach(element => {
         element.id = Math.random().toString();
         newList.push(element);
       });
+
       setList(newList);
     } catch (error) {
       if (error.response) {
@@ -65,7 +65,7 @@ const AddressPicker = ({navigation, theme}) => {
    * function handles click event of next button
    */
   const onPressHandler = () => {
-    navigation.navigate('Payment', {selectedAddress});
+    navigation.navigate('Confirmation', {selectedAddress});
   };
 
   /**

@@ -87,9 +87,7 @@ const Cart = ({navigation, theme}) => {
   /**
    * function handles click event of checkout button
    */
-  const onCheckout = () => {
-    navigation.navigate('AddressPicker');
-  };
+  const onCheckout = () => navigation.navigate('AddressPicker');
 
   /**
    * Function is used to render single product card in the list

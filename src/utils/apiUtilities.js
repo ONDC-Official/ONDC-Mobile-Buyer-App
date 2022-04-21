@@ -9,3 +9,7 @@ export const GET_LATLONG = '/mmi/api/mmi_place_info?eloc=';
 export const GET_ADDRESS = '/client/v1/delivery_address';
 export const ADD_ADDRESS = '/client/v1/delivery_address';
 export const GET_ORDERS = '/client/v1/orders?';
+export const GET_QUOTE = '/client/v2/get_quote';
+export const ON_GET_QUOTE = '/client/v2/on_get_quote?';
+export const INITIALIZE_ORDER = '/client/v2/initialize_order';
+export const ON_INITIALIZE_ORDER = '/client/v2/on_initialize_order?';

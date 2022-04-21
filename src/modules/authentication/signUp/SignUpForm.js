@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
@@ -44,6 +44,7 @@ const SignUpFrom = ({navigation}) => {
     confirmPassword: '',
   };
   const {storeToken} = useContext(AuthContext);
+  const [apiInProgress, setApiInProgress] = useState(false);
 
   /**
    * function create user with provided the email and password and create and store token in context
@@ -51,6 +52,7 @@ const SignUpFrom = ({navigation}) => {
    */
   const createUser = async values => {
     try {
+      setApiInProgress(true);
       await auth().createUserWithEmailAndPassword(
         values.email,
         values.password,
@@ -62,8 +64,10 @@ const SignUpFrom = ({navigation}) => {
         index: 0,
         routes: [{name: 'Dashboard'}],
       });
+      setApiInProgress(false);
     } catch (error) {
       showToastWithGravity(error.message);
+      setApiInProgress(false);
     }
   };
 
@@ -103,7 +107,12 @@ const SignUpFrom = ({navigation}) => {
               onChangeText={handleChange('confirmPassword')}
             />
             <View style={styles.buttonContainer}>
-              <ContainButton title={title} onPress={handleSubmit} />
+              <ContainButton
+                title={title}
+                onPress={handleSubmit}
+                loading={apiInProgress}
+                disabled={apiInProgress}
+              />
             </View>
           </>
         );

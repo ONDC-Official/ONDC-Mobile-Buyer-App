@@ -108,6 +108,7 @@ const Products = ({theme}) => {
         list={list}
         addItem={addItem}
         removeItem={removeItem}
+        apiInProgress={apiInProgress}
       />
     );
   };
@@ -249,8 +250,12 @@ const Products = ({theme}) => {
                     cartItem => cartItem.id === element.id,
                   );
                   element.quantity = index > -1 ? cart[index].quantity : 0;
-
+                  element.provider_id = item.id;
+                  element.locations = item.locations;
                   element.provider = item.descriptor.name;
+                  element.bpp_id = catalog.bpp_id;
+                  element.transaction_id = data.context.transaction_id;
+
                   items.push(element);
                 });
               });

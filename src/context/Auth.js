@@ -1,4 +1,4 @@
-import {getData, clearMultiple, setData} from '../utils/storage';
+import {getData, clearMultiple, setData, removeData} from '../utils/storage';
 import createDataContext from './createDataContext';
 
 const defaultValue = {
@@ -21,7 +21,7 @@ const authReducer = (state, action) => {
 
     case 'logout_user':
       return Object.assign({}, state, {
-        accessToken: null,
+        token: null,
       });
 
     default:
@@ -49,8 +49,8 @@ const tryLocalSignIn = dispatch => {
 };
 
 const logoutUser = dispatch => {
-  return () => {
-    clearMultiple(['user', 'token']).then(() => {
+  return async () => {
+    removeData('token').then(() => {
       dispatch({
         type: 'logout_user',
         payload: {},

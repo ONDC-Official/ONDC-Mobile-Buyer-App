@@ -14,6 +14,7 @@ import AddressPicker from '../modules/main/cart/addressPicker/AddressPicker';
 import AddAddress from '../modules/main/cart/addAddress/AddAddress';
 import Payment from '../modules/main/cart/payment/Payment';
 import More from '../modules/main/more/More';
+import Confirmation from '../modules/main/cart/Confirmation';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -131,6 +132,11 @@ const Navigation = () => {
         <Stack.Screen
           name="AddAddress"
           component={AddAddress}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Confirmation"
+          component={Confirmation}
           options={{headerShown: false}}
         />
         <Stack.Screen
