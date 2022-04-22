@@ -235,7 +235,7 @@ const Products = ({theme}) => {
    * Function used to get list of requested products
    * @returns {Promise<void>}
    **/
-  const getProducts = id => {
+  const getProducts = (id, transactionId) => {
     let getList = setInterval(async () => {
       try {
         const {data} = await getData(`${BASE_URL}${GET_PRODUCTS}${id}`);
@@ -253,7 +253,7 @@ const Products = ({theme}) => {
                   element.locations = item.locations;
                   element.provider = item.descriptor.name;
                   element.bpp_id = catalog.bpp_id;
-                  element.transaction_id = data.context.transaction_id;
+                  element.transaction_id = transactionId;
 
                   items.push(element);
                 });
@@ -340,7 +340,10 @@ const Products = ({theme}) => {
           requestParameters,
           options,
         );
-        getProducts(response.data.context.message_id);
+        getProducts(
+          response.data.context.message_id,
+          response.data.context.transaction_id,
+        );
       } catch (error) {
         handleApiError(error);
         setApiInProgress(false);
@@ -359,9 +362,11 @@ const Products = ({theme}) => {
   }, []);
 
   useEffect(() => {
-    getPosition()
-      .then(() => {})
-      .catch(() => {});
+    if (eloc) {
+      getPosition()
+        .then(() => {})
+        .catch(() => {});
+    }
   }, [eloc]);
 
   const listData = list === null ? skeletonList : list;

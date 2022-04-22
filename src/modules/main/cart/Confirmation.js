@@ -37,7 +37,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           if (item.context.bpp_id) {
             item.message.quote.items.forEach(element => {
               element.provider = item.message.quote.provider
-                ? item.message.quote.provider.id
+                ? item.message.quote.provider
                 : null;
               element.transaction_id = item.context.transaction_id;
               element.bpp_id = item.context.bpp_id;

@@ -15,6 +15,7 @@ import {
   BASE_URL,
   CONFIRM_ORDER,
   INITIALIZE_ORDER,
+  ON_CONFIRM_ORDER,
   ON_INITIALIZE_ORDER,
 } from '../../../../utils/apiUtilities';
 import {Context as AuthContext} from '../../../../context/Auth';
@@ -48,6 +49,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const [value, setValue] = useState(0);
   const [initializeOrderInProgrss, setInitializeOrderInprogress] =
     useState(false);
+  const [confirmOrderInProgrss, setConfirmOrderInprogress] = useState(false);
 
   const onInitializeOrder = messageId => {
     const messageIds = messageId.toString();
@@ -72,12 +74,36 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }, 10000);
   };
 
+  const onConfirmOrder = messageId => {
+    const messageIds = messageId.toString();
+    let order = setInterval(async () => {
+      try {
+        const {data} = await getData(
+          `${BASE_URL}${ON_CONFIRM_ORDER}messageIds=${messageIds}`,
+          {
+            headers: {Authorization: `Bearer ${token}`},
+          },
+        );
+
+        setConfirmOrderInprogress(false);
+      } catch (error) {
+        console.log(error);
+        setConfirmOrderInprogress(false);
+      }
+    }, 2000);
+    setTimeout(() => {
+      clearInterval(order);
+      alert('Order Placed');
+    }, 10000);
+  };
+
   const initializeOrder = async () => {
     try {
       setInitializeOrderInprogress(true);
       let payload = [];
       let bppIdArray = [];
       confirmationList.forEach(item => {
+        console.log(JSON.stringify(item, undefined, 4));
         if (item.provider) {
           const index = bppIdArray.findIndex(one => one === item.bpp_id);
           if (index > -1) {
@@ -86,9 +112,15 @@ const Payment = ({navigation, theme, route: {params}}) => {
               quantity: {
                 count: item.quantity.selected.count,
               },
+              product: {
+                id: item.id,
+                descriptor: item.provider.descriptor,
+                price: item.price,
+                provider_name: item.provider.descriptor.name,
+              },
               bpp_id: item.bpp_id,
               provider: {
-                id: item.provider,
+                id: item.provider.id,
                 locations: ['el'],
                 //   locations: location,
               },
@@ -104,22 +136,33 @@ const Payment = ({navigation, theme, route: {params}}) => {
                     quantity: {
                       count: item.quantity.selected.count,
                     },
+                    product: {
+                      id: item.id,
+                      descriptor: item.provider.descriptor,
+                      price: item.price,
+                      provider_name: item.provider.descriptor.name,
+                    },
                     bpp_id: item.bpp_id,
                     provider: {
-                      id: item.provider,
+                      id: item.provider.id,
                       locations: ['el'],
+                      //   locations: location,
                     },
                   },
                 ],
                 billing_info: {
                   address: {
-                    door: selectedAddress.address.door,
-                    country: selectedAddress.address.country,
+                    door: selectedAddress.address.door
+                      ? selectedAddress.address.door
+                      : selectedAddress.address.street,
+                    country: 'IND',
                     city: selectedAddress.address.city,
                     street: selectedAddress.address.street,
                     area_code: selectedAddress.address.area_code,
                     state: selectedAddress.address.state,
-                    building: selectedAddress.address.building,
+                    building: selectedAddress.address.building
+                      ? selectedAddress.address.building
+                      : selectedAddress.address.street,
                   },
                   phone: selectedAddress.descriptor.phone,
                   name: selectedAddress.descriptor.name,
@@ -132,13 +175,17 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   email: selectedAddress.descriptor.email,
                   location: {
                     address: {
-                      door: selectedAddress.address.door,
-                      country: selectedAddress.address.country,
+                      door: selectedAddress.address.door
+                        ? selectedAddress.address.door
+                        : selectedAddress.address.street,
+                      country: 'IND',
                       city: selectedAddress.address.city,
                       street: selectedAddress.address.street,
                       area_code: selectedAddress.address.area_code,
                       state: selectedAddress.address.state,
-                      building: selectedAddress.address.building,
+                      building: selectedAddress.address.building
+                        ? selectedAddress.address.building
+                        : selectedAddress.address.street,
                     },
                   },
                 },
@@ -167,11 +214,21 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
   const confirmOrder = async () => {
     try {
+      setConfirmOrderInprogress(true);
       const payload = [];
       orders.forEach(item => {
         const itemsArray = [];
         item.message.order.items.forEach(object => {
+          const element = cart.find(one => one.id === object.id);
+
+          object.id = element.id;
           object.bpp_id = item.context.bpp_id;
+          object.product = {
+            id: element.id,
+            descriptor: element.descriptor,
+            price: element.price,
+            provider_name: element.provider,
+          };
           object.provider = {
             id: item.message.order.provider.id,
             locations: [item.message.order.provider_location.id],
@@ -206,8 +263,15 @@ const Payment = ({navigation, theme, route: {params}}) => {
       const {data} = await postData(`${BASE_URL}${CONFIRM_ORDER}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
+      let messageIds = [];
+      data.forEach(item => {
+        messageIds.push(item.context.message_id);
+      });
+
+      onConfirmOrder(messageIds);
     } catch (error) {
       console.log(error);
+      setConfirmOrderInprogress(false);
     }
   };
 
@@ -264,6 +328,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           title={buttonTitle}
           onPress={confirmOrder}
           disabled={initializeOrderInProgrss}
+          loading={confirmOrderInProgrss}
         />
       </View>
     </View>

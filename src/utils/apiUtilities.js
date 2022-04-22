@@ -14,3 +14,4 @@ export const ON_GET_QUOTE = '/client/v2/on_get_quote?';
 export const INITIALIZE_ORDER = '/client/v2/initialize_order';
 export const ON_INITIALIZE_ORDER = '/client/v2/on_initialize_order?';
 export const CONFIRM_ORDER = '/client/v2/confirm_order';
+export const ON_CONFIRM_ORDER = '/client/v2/on_confirm_order?';
