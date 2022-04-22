@@ -239,7 +239,6 @@ const Products = ({theme}) => {
     let getList = setInterval(async () => {
       try {
         const {data} = await getData(`${BASE_URL}${GET_PRODUCTS}${id}`);
-        // console.log(JSON.stringify(data, undefined, 4));
         let items = [];
         data.message.catalogs.forEach(catalog => {
           if (catalog.bpp_id) {

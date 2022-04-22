@@ -95,7 +95,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
             };
             payload[index].message.items.push(itemObj);
           } else {
-            console.log(item.transaction_id);
             let payloadObj = {
               context: {transaction_id: item.transaction_id},
               message: {
@@ -151,7 +150,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
           }
         }
       });
-      console.log(payload);
       const {data} = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
@@ -208,7 +206,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
       const {data} = await postData(`${BASE_URL}${CONFIRM_ORDER}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
-      console.log(data);
     } catch (error) {
       console.log(error);
     }

@@ -59,7 +59,6 @@ const AddAddress = ({navigation, theme}) => {
     state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
-  console.log(token);
 
   const userInfo = {
     email: '',
