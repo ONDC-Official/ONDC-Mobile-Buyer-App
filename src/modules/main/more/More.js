@@ -17,13 +17,9 @@ const list = [
  */
 const More = ({theme, navigation}) => {
   const {colors} = theme;
-  const {
-    state: {token},
-    logoutUser,
-  } = useContext(AuthContext);
 
   const renderItem = ({item}) => {
-    return <OptionCard item={item} />;
+    return <OptionCard item={item} navigation={navigation} />;
   };
   return (
     <SafeAreaView style={appStyles.container}>

@@ -7,6 +7,7 @@ import {getData} from '../../../utils/api';
 import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';
 import {skeletonList} from '../../../utils/utils';
 import OrderCard from './OrderCard';
+import {Text} from 'react-native-elements';
 
 const Order = ({}) => {
   const {
@@ -24,7 +25,13 @@ const Order = ({}) => {
       });
       setOrders(data);
     } catch (error) {
-      handleApiError(error);
+      if (error.response) {
+        if (error.response.status === 404) {
+          setOrders([]);
+        } else {
+          handleApiError(error);
+        }
+      }
     }
   };
 
@@ -42,11 +49,20 @@ const Order = ({}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <FlatList
-          data={orders}
-          renderItem={renderItem}
-          contentContainerStyle={styles.contentContainerStyle}
-        />
+        {orders && (
+          <FlatList
+            data={orders}
+            renderItem={renderItem}
+            ListEmptyComponent={() => {
+              return <Text>No data found</Text>;
+            }}
+            contentContainerStyle={
+              orders.length > 0
+                ? styles.contentContainerStyle
+                : [appStyles.container, styles.emptyContainer]
+            }
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -56,4 +72,5 @@ export default Order;
 
 const styles = StyleSheet.create({
   contentContainerStyle: {paddingVertical: 10},
+  emptyContainer: {justifyContent: 'center', alignItems: 'center'},
 });

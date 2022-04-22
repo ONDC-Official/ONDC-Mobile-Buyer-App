@@ -98,6 +98,7 @@ const AddAddress = ({navigation, theme}) => {
             locality: values.landMark,
             state: values.state,
             street: values.street,
+            country: 'IND',
           },
         },
         options,

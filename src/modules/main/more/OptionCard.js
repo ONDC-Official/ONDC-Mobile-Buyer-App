@@ -1,15 +1,28 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {useContext} from 'react';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Card, Icon, Text, withTheme} from 'react-native-elements';
+import {Context as AuthContext} from '../../../context/Auth';
 
-const OptionCard = ({theme, item}) => {
+const OptionCard = ({theme, navigation, item}) => {
   const {colors} = theme;
+  const {
+    state: {token},
+    logoutUser,
+  } = useContext(AuthContext);
   return (
     <Card style={styles.card}>
-      <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => {
+          logoutUser();
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Login'}],
+          });
+        }}>
         <Icon type="font-awesome" name={item.icon} color={colors.primary} />
         <Text style={[styles.text, {color: colors.primary}]}>{item.name}</Text>
-      </View>
+      </TouchableOpacity>
     </Card>
   );
 };
