@@ -13,10 +13,12 @@ import {strings} from '../../../../locales/i18n';
 import {postData, getData} from '../../../../utils/api';
 import {
   BASE_URL,
+  CONFIRM_ORDER,
   INITIALIZE_ORDER,
   ON_INITIALIZE_ORDER,
 } from '../../../../utils/apiUtilities';
 import {Context as AuthContext} from '../../../../context/Auth';
+import {CartContext} from '../../../../context/Cart';
 
 const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
@@ -38,10 +40,14 @@ const paymentOptions = [
 const Payment = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
   const {selectedAddress, confirmationList} = params;
+  const {cart} = useContext(CartContext);
+  const [orders, setOrders] = useState(null);
   const {
     state: {token},
   } = useContext(AuthContext);
   const [value, setValue] = useState(0);
+  const [initializeOrderInProgrss, setInitializeOrderInprogress] =
+    useState(false);
 
   const onInitializeOrder = messageId => {
     const messageIds = messageId.toString();
@@ -53,18 +59,22 @@ const Payment = ({navigation, theme, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
-        console.log(JSON.stringify(data, undefined, 4));
+
+        setOrders(data);
+        setInitializeOrderInprogress(false);
       } catch (error) {
         console.log(error);
+        setInitializeOrderInprogress(false);
       }
     }, 2000);
     setTimeout(() => {
       clearInterval(order);
-    }, 6000);
+    }, 10000);
   };
 
   const initializeOrder = async () => {
     try {
+      setInitializeOrderInprogress(true);
       let payload = [];
       let bppIdArray = [];
       confirmationList.forEach(item => {
@@ -85,8 +95,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
             };
             payload[index].message.items.push(itemObj);
           } else {
+            console.log(item.transaction_id);
             let payloadObj = {
-              context: {},
+              context: {transaction_id: item.transaction_id},
               message: {
                 items: [
                   {
@@ -140,7 +151,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           }
         }
       });
-
+      console.log(payload);
       const {data} = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
@@ -150,6 +161,54 @@ const Payment = ({navigation, theme, route: {params}}) => {
       });
 
       onInitializeOrder(messageIds);
+    } catch (error) {
+      console.log(error);
+      setInitializeOrderInprogress(false);
+    }
+  };
+
+  const confirmOrder = async () => {
+    try {
+      const payload = [];
+      orders.forEach(item => {
+        const itemsArray = [];
+        item.message.order.items.forEach(object => {
+          object.bpp_id = item.context.bpp_id;
+          object.provider = {
+            id: item.message.order.provider.id,
+            locations: [item.message.order.provider_location.id],
+          };
+          itemsArray.push(object);
+        });
+
+        const payloadObj = {
+          context: {
+            transaction_id: item.context.transaction_id,
+          },
+          message: {
+            items: itemsArray,
+            billing_info: item.message.order.billing,
+            delivery_info: {
+              type: item.message.order.fulfillment.type,
+              phone: item.message.order.fulfillment.end.contact.phone,
+              email: item.message.order.fulfillment.end.contact.email,
+              name: item.message.order.billing.name,
+              location: item.message.order.fulfillment.end.location,
+            },
+            payment: {
+              paid_amount: item.message.order.payment.params.amount,
+              status: 'PAID',
+              transaction_id: item.context.transaction_id,
+            },
+          },
+        };
+        payload.push(payloadObj);
+      });
+
+      const {data} = await postData(`${BASE_URL}${CONFIRM_ORDER}`, payload, {
+        headers: {Authorization: `Bearer ${token}`},
+      });
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -204,7 +263,11 @@ const Payment = ({navigation, theme, route: {params}}) => {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <ContainButton title={buttonTitle} />
+        <ContainButton
+          title={buttonTitle}
+          onPress={confirmOrder}
+          disabled={initializeOrderInProgrss}
+        />
       </View>
     </View>
   );

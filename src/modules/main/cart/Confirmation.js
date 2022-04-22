@@ -34,18 +34,18 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         );
         let list = [];
         response.data.forEach(item => {
-          item.message.quote.items.forEach(element => {
-            element.provider = item.message.quote.provider
-              ? item.message.quote.provider.id
-              : null;
-            element.images = item.message.quote.provider
-              ? item.message.quote.provider.descriptor.images
-              : null;
-            element.transaction_id = item.context.transaction_id;
-            element.bpp_id = item.context.bpp_id;
-            list.push(element);
-          });
+          if (item.context.bpp_id) {
+            item.message.quote.items.forEach(element => {
+              element.provider = item.message.quote.provider
+                ? item.message.quote.provider.id
+                : null;
+              element.transaction_id = item.context.transaction_id;
+              element.bpp_id = item.context.bpp_id;
+              list.push(element);
+            });
+          }
         });
+
         setConfirmationList(list);
       } catch (error) {
         handleApiError(error);
@@ -65,31 +65,44 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         if (index > -1) {
           let itemObj = {
             id: item.id,
+            product: {
+              id: item.id,
+              descriptor: item.descriptor,
+              price: item.price,
+              provider_name: item.provider,
+            },
             quantity: {
               count: item.quantity,
             },
             bpp_id: item.bpp_id,
             provider: {
               id: item.provider_id,
-              //   locations: location,
+              locations: ['el'],
             },
           };
           payload[index].message.cart.items.push(itemObj);
         } else {
           let payloadObj = {
-            context: {},
+            context: {transaction_id: item.transaction_id},
             message: {
               cart: {
                 items: [
                   {
                     id: item.id,
+                    product: {
+                      id: item.id,
+                      descriptor: item.descriptor,
+                      price: item.price,
+                      provider_name: item.provider,
+                    },
                     quantity: {
                       count: item.quantity,
                     },
+
                     bpp_id: item.bpp_id,
                     provider: {
                       id: item.provider_id,
-                      //   locations: location,
+                      locations: ['el'],
                     },
                   },
                 ],
@@ -100,6 +113,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           bppIdArray.push(item.bpp_id);
         }
       });
+
       const {data} = await postData(`${BASE_URL}${GET_QUOTE}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
@@ -107,6 +121,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       data.forEach(item => {
         messageIds.push(item.context.message_id);
       });
+
       onGetQuote(messageIds);
     } catch (error) {
       handleApiError(error);
