@@ -7,6 +7,7 @@ import {appStyles} from '../../../../styles/styles';
 
 /**
  * Component to render single address card in select address screen
+ * @param theme
  * @param selectedAddress:address selected by user
  * @param setSelectedAddress:function to set selected address
  * @param item:object which contains address details

@@ -35,6 +35,7 @@ const paymentOptions = [
  * Component to payment screen in application
  * @param navigation: required: to navigate to the respective screen
  * @param theme:application theme
+ * @param params
  * @constructor
  * @returns {JSX.Element}
  */
@@ -46,11 +47,13 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const {
     state: {token},
   } = useContext(AuthContext);
+  //TODO: Cant we have meaning full name to the field, value does not defines which value
   const [value, setValue] = useState(0);
   const [initializeOrderInProgrss, setInitializeOrderInprogress] =
     useState(false);
   const [confirmOrderInProgrss, setConfirmOrderInprogress] = useState(false);
 
+  //TODO: Are passing single message to this function? If its multiple then name is incorrect
   const onInitializeOrder = messageId => {
     const messageIds = messageId.toString();
     let order = setInterval(async () => {
@@ -65,6 +68,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setOrders(data);
         setInitializeOrderInprogress(false);
       } catch (error) {
+        //TODO: What if server returns 401?
         console.log(error);
         setInitializeOrderInprogress(false);
       }
@@ -87,6 +91,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
         setConfirmOrderInprogress(false);
       } catch (error) {
+        //TODO: What if server returns 401?
         console.log(error);
         setConfirmOrderInprogress(false);
       }

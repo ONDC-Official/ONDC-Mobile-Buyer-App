@@ -8,9 +8,10 @@ import {appStyles} from '../../../../styles/styles';
 const addButton = strings('main.cart.add');
 
 /**
- * Component to header on chckout screens
+ * Component to header on checkout screens
  * @param navigation: required: to navigate to the respective screen
  * @param theme:application theme
+ * @param title
  * @param show:indicates visibility of add button
  * @constructor
  * @returns {JSX.Element}
