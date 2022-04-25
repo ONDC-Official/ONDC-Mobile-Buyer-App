@@ -8,6 +8,7 @@ import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';
 import {skeletonList} from '../../../utils/utils';
 import OrderCard from './OrderCard';
 import {Text} from 'react-native-elements';
+import OrderCardSkeleton from './OrderCardSkeleton';
 
 const Order = ({}) => {
   const {
@@ -42,27 +43,29 @@ const Order = ({}) => {
   }, []);
 
   const renderItem = ({item}) => {
-    return <OrderCard item={item} />;
+    return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
+      <OrderCardSkeleton item={item} />
+    ) : (
+      <OrderCard item={item} />
+    );
   };
 
   const listData = orders ? orders : skeletonList;
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        {orders && (
-          <FlatList
-            data={orders}
-            renderItem={renderItem}
-            ListEmptyComponent={() => {
-              return <Text>No data found</Text>;
-            }}
-            contentContainerStyle={
-              orders.length > 0
-                ? styles.contentContainerStyle
-                : [appStyles.container, styles.emptyContainer]
-            }
-          />
-        )}
+        <FlatList
+          data={listData}
+          renderItem={renderItem}
+          ListEmptyComponent={() => {
+            return <Text>No data found</Text>;
+          }}
+          contentContainerStyle={
+            listData.length > 0
+              ? styles.contentContainerStyle
+              : [appStyles.container, styles.emptyContainer]
+          }
+        />
       </View>
     </SafeAreaView>
   );

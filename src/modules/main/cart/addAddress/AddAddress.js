@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Card, withTheme} from 'react-native-elements';
 import Header from '../addressPicker/Header';
@@ -59,6 +59,7 @@ const AddAddress = ({navigation, theme}) => {
     state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
+  const [apiInProgress, setApiInProgress] = useState(false);
 
   const userInfo = {
     email: '',
@@ -82,6 +83,7 @@ const AddAddress = ({navigation, theme}) => {
       },
     };
     try {
+      setApiInProgress(true);
       await postData(
         `${BASE_URL}${ADD_ADDRESS}`,
         {
@@ -104,8 +106,10 @@ const AddAddress = ({navigation, theme}) => {
         options,
       );
       navigation.navigate('AddressPicker');
+      setApiInProgress(false);
     } catch (error) {
       handleApiError(error);
+      setApiInProgress(false);
     }
   };
 
@@ -197,7 +201,12 @@ const AddAddress = ({navigation, theme}) => {
                   />
 
                   <View style={styles.buttonContainer}>
-                    <ContainButton title={buttonTitle} onPress={handleSubmit} />
+                    <ContainButton
+                      title={buttonTitle}
+                      onPress={handleSubmit}
+                      loading={apiInProgress}
+                      disabled={apiInProgress}
+                    />
                   </View>
                 </>
               );

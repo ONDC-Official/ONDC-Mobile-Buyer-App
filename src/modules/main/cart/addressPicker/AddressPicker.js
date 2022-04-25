@@ -9,7 +9,9 @@ import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
 import {BASE_URL, GET_ADDRESS} from '../../../../utils/apiUtilities';
+import {skeletonList} from '../../../../utils/utils';
 import AddressCard from './AddressCard';
+import AddressCardSkeleton from './AddressCardSkeleton';
 import Header from './Header';
 
 const buttonTitle = strings('main.cart.next');
@@ -74,7 +76,9 @@ const AddressPicker = ({navigation, theme}) => {
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => {
-    return (
+    return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
+      <AddressCardSkeleton item={item} />
+    ) : (
       <AddressCard
         item={item}
         selectedAddress={selectedAddress}
@@ -91,24 +95,26 @@ const AddressPicker = ({navigation, theme}) => {
     }
   }, [isFocused]);
 
+  const listData = list ? list : skeletonList;
+
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
       <Header title={selectAddress} show navigation={navigation} />
-      {list !== null && (
-        <FlatList
-          data={list}
-          renderItem={renderItem}
-          ListEmptyComponent={() => {
-            return <Text>No address found. Please add the address</Text>;
-          }}
-          contentContainerStyle={
-            list.length > 0
-              ? styles.contentContainerStyle
-              : [appStyles.container, styles.emptyContainer]
-          }
-        />
-      )}
+
+      <FlatList
+        data={listData}
+        renderItem={renderItem}
+        ListEmptyComponent={() => {
+          return <Text>No address found. Please add the address</Text>;
+        }}
+        contentContainerStyle={
+          listData.length > 0
+            ? styles.contentContainerStyle
+            : [appStyles.container, styles.emptyContainer]
+        }
+      />
+
       {selectedAddress !== null && (
         <View style={styles.buttonContainer}>
           <ContainButton title={buttonTitle} onPress={onPressHandler} />

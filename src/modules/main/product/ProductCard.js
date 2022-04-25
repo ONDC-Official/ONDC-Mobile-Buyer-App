@@ -23,7 +23,9 @@ const ProductCard = ({theme, item, apiInProgress, removeItem, addItem}) => {
     <Card containerStyle={styles.card}>
       <View style={styles.subContainer}>
         <FastImage
-          source={{uri: item.descriptor.images[0]}}
+          source={{
+            uri: item.descriptor.image ? item.descriptor.images[0] : null,
+          }}
           style={styles.image}
           resizeMode={'contain'}
         />

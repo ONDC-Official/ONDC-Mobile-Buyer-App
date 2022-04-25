@@ -11,16 +11,16 @@ import {appStyles} from '../../../styles/styles';
 import Header from '../cart/addressPicker/Header';
 import ContainButton from '../../../components/button/ContainButton';
 import {skeletonList} from '../../../utils/utils';
-import ProductCardSkeleton from '../product/ProductCardSkeleton';
+import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
-  const {colors} = theme;
   const {cart} = useContext(CartContext);
   const {
     state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
   const [confirmationList, setConfirmationList] = useState(null);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   const onGetQuote = messageId => {
     const messageIds = messageId.toString();
@@ -32,9 +32,15 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
+        const subTotal = response.data.reduce((total, item) => {
+          return item.message.quote.provider
+            ? Number(item.message.quote.quote.price.value) + total
+            : total;
+        }, 0);
+        setTotalAmount(subTotal);
         let list = [];
         response.data.forEach(item => {
-          if (item.context.bpp_id) {
+          if (item.context.bpp_id && item.message.quote.provider) {
             item.message.quote.items.forEach(element => {
               element.provider = item.message.quote.provider
                 ? item.message.quote.provider
@@ -119,7 +125,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       });
       let messageIds = [];
       data.forEach(item => {
-        messageIds.push(item.context.message_id);
+        if (item.message.ack.status === 'ACK') {
+          messageIds.push(item.context.message_id);
+        }
       });
 
       onGetQuote(messageIds);
@@ -129,36 +137,46 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   };
 
   useEffect(() => {
-    getQuote();
+    getQuote()
+      .then(() => {})
+      .catch(() => {});
   }, []);
 
   const renderItem = ({item}) => {
     const element = cart.find(one => one.id === item.id);
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ProductCardSkeleton item={item} />
+      <ConfirmationCardSkeleton item={item} />
     ) : (
-      <Card containerStyle={styles.card}>
-        <View style={styles.subContainer}>
-          <FastImage
-            source={{uri: element ? element.descriptor.images[0] : null}}
-            style={styles.image}
-            resizeMode={'contain'}
-          />
-          <View style={appStyles.container}>
-            <Text style={styles.title} numberOfLines={1}>
-              {element.descriptor.name ? element.descriptor.name : null}
-            </Text>
-            <View style={styles.organizationNameContainer}>
-              <Text numberOfLines={1}>
-                {element.provider ? element.provider : null}
-              </Text>
+      <>
+        {element ? (
+          <Card containerStyle={styles.card}>
+            <View style={styles.subContainer}>
+              <FastImage
+                source={{
+                  uri: element.descriptor.image
+                    ? element.descriptor.images[0]
+                    : null,
+                }}
+                style={styles.image}
+                resizeMode={'contain'}
+              />
+              <View style={appStyles.container}>
+                <Text style={styles.title} numberOfLines={1}>
+                  {element.descriptor.name ? element.descriptor.name : null}
+                </Text>
+                <View style={styles.organizationNameContainer}>
+                  <Text numberOfLines={1}>
+                    {element.provider ? element.provider : null}
+                  </Text>
+                </View>
+                <View style={styles.priceContainer}>
+                  <Text>₹ {element.price.value * element.quantity}</Text>
+                </View>
+              </View>
             </View>
-            <View style={styles.priceContainer}>
-              <Text>₹ {item.price.value * item.quantity.selected.count}</Text>
-            </View>
-          </View>
-        </View>
-      </Card>
+          </Card>
+        ) : null}
+      </>
     );
   };
 
@@ -175,7 +193,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         renderItem={renderItem}
         contentContainerStyle={styles.contentContainerStyle}
       />
-
+      <View style={styles.totalContainer}>
+        <Text>Total Payable: {totalAmount}</Text>
+      </View>
       <View style={styles.buttonContainer}>
         <ContainButton
           title="Proceed"
@@ -207,4 +227,5 @@ const styles = StyleSheet.create({
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
   title: {fontSize: 18, fontWeight: '600'},
   buttonContainer: {width: 300, padding: 20, alignSelf: 'center'},
+  totalContainer: {paddingHorizontal: 10},
 });

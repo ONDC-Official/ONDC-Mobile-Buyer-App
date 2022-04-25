@@ -52,7 +52,7 @@ const OrderCard = ({item, theme}) => {
     setPosition();
   }, []);
 
-  return (
+  return item.quote ? (
     <Card containerStyle={styles.card}>
       <Text numberOfLines={1} style={styles.itemName}>
         {item.quote.breakup[0].title}
@@ -111,7 +111,7 @@ const OrderCard = ({item, theme}) => {
         </View>
       </View>
     </Card>
-  );
+  ) : null;
 };
 
 export default withTheme(OrderCard);

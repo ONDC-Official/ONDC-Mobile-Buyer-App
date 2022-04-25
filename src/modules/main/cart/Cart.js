@@ -95,6 +95,7 @@ const Cart = ({navigation, theme}) => {
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => {
+    console.log(item);
     return (
       <ProductCard item={item} removeItem={removeItem} addItem={addItem} />
     );

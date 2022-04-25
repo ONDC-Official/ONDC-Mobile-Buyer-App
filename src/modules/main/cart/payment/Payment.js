@@ -20,6 +20,7 @@ import {
 } from '../../../../utils/apiUtilities';
 import {Context as AuthContext} from '../../../../context/Auth';
 import {CartContext} from '../../../../context/Cart';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 
 const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
@@ -42,20 +43,20 @@ const paymentOptions = [
 const Payment = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
   const {selectedAddress, confirmationList} = params;
-  const {cart} = useContext(CartContext);
+  const {cart, clearCart} = useContext(CartContext);
   const [orders, setOrders] = useState(null);
+  const [error, setError] = useState(null);
   const {
     state: {token},
   } = useContext(AuthContext);
-  //TODO: Cant we have meaning full name to the field, value does not defines which value
-  const [value, setValue] = useState(0);
+  const [selectedPaymentOption, setSelectedPaymentOption] = useState(0);
   const [initializeOrderInProgrss, setInitializeOrderInprogress] =
     useState(false);
   const [confirmOrderInProgrss, setConfirmOrderInprogress] = useState(false);
+  const {handleApiError} = useNetworkErrorHandling();
 
-  //TODO: Are passing single message to this function? If its multiple then name is incorrect
-  const onInitializeOrder = messageId => {
-    const messageIds = messageId.toString();
+  const onInitializeOrder = messageIdArray => {
+    const messageIds = messageIdArray.toString();
     let order = setInterval(async () => {
       try {
         const {data} = await getData(
@@ -68,8 +69,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setOrders(data);
         setInitializeOrderInprogress(false);
       } catch (error) {
-        //TODO: What if server returns 401?
-        console.log(error);
+        handleApiError(error);
+
         setInitializeOrderInprogress(false);
       }
     }, 2000);
@@ -88,17 +89,21 @@ const Payment = ({navigation, theme, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
-
-        setConfirmOrderInprogress(false);
       } catch (error) {
-        //TODO: What if server returns 401?
-        console.log(error);
+        handleApiError(error);
+
+        setError(error);
         setConfirmOrderInprogress(false);
       }
     }, 2000);
     setTimeout(() => {
       clearInterval(order);
-      alert('Order Placed');
+      if (!error) {
+        setConfirmOrderInprogress(false);
+        alert('place order');
+        clearCart();
+        navigation.navigate('Dashboard');
+      }
     }, 10000);
   };
 
@@ -108,54 +113,75 @@ const Payment = ({navigation, theme, route: {params}}) => {
       let payload = [];
       let bppIdArray = [];
       confirmationList.forEach(item => {
-        console.log(JSON.stringify(item, undefined, 4));
-        if (item.provider) {
-          const index = bppIdArray.findIndex(one => one === item.bpp_id);
-          if (index > -1) {
-            let itemObj = {
+        const index = bppIdArray.findIndex(one => one === item.bpp_id);
+        if (index > -1) {
+          let itemObj = {
+            id: item.id,
+            quantity: {
+              count: item.quantity.selected.count,
+            },
+            product: {
               id: item.id,
-              quantity: {
-                count: item.quantity.selected.count,
-              },
-              product: {
-                id: item.id,
-                descriptor: item.provider.descriptor,
-                price: item.price,
-                provider_name: item.provider.descriptor.name,
-              },
-              bpp_id: item.bpp_id,
-              provider: {
-                id: item.provider.id,
-                locations: ['el'],
-                //   locations: location,
-              },
-            };
-            payload[index].message.items.push(itemObj);
-          } else {
-            let payloadObj = {
-              context: {transaction_id: item.transaction_id},
-              message: {
-                items: [
-                  {
-                    id: item.id,
-                    quantity: {
-                      count: item.quantity.selected.count,
-                    },
-                    product: {
-                      id: item.id,
-                      descriptor: item.provider.descriptor,
-                      price: item.price,
-                      provider_name: item.provider.descriptor.name,
-                    },
-                    bpp_id: item.bpp_id,
-                    provider: {
-                      id: item.provider.id,
-                      locations: ['el'],
-                      //   locations: location,
-                    },
+              descriptor: item.provider.descriptor,
+              price: item.price,
+              provider_name: item.provider.descriptor.name,
+            },
+            bpp_id: item.bpp_id,
+            provider: {
+              id: item.provider.id,
+              locations: ['el'],
+              //   locations: location,
+            },
+          };
+          payload[index].message.items.push(itemObj);
+        } else {
+          let payloadObj = {
+            context: {transaction_id: item.transaction_id},
+            message: {
+              items: [
+                {
+                  id: item.id,
+                  quantity: {
+                    count: item.quantity.selected.count,
                   },
-                ],
-                billing_info: {
+                  product: {
+                    id: item.id,
+                    descriptor: item.provider.descriptor,
+                    price: item.price,
+                    provider_name: item.provider.descriptor.name,
+                  },
+                  bpp_id: item.bpp_id,
+                  provider: {
+                    id: item.provider ? item.provider.id : item.id,
+                    locations: ['el'],
+                    //   locations: location,
+                  },
+                },
+              ],
+              billing_info: {
+                address: {
+                  door: selectedAddress.address.door
+                    ? selectedAddress.address.door
+                    : selectedAddress.address.street,
+                  country: 'IND',
+                  city: selectedAddress.address.city,
+                  street: selectedAddress.address.street,
+                  area_code: selectedAddress.address.area_code,
+                  state: selectedAddress.address.state,
+                  building: selectedAddress.address.building
+                    ? selectedAddress.address.building
+                    : selectedAddress.address.street,
+                },
+                phone: selectedAddress.descriptor.phone,
+                name: selectedAddress.descriptor.name,
+                email: selectedAddress.descriptor.email,
+              },
+              delivery_info: {
+                type: 'HOME-DELIVERY',
+                name: selectedAddress.descriptor.name,
+                phone: selectedAddress.descriptor.phone,
+                email: selectedAddress.descriptor.email,
+                location: {
                   address: {
                     door: selectedAddress.address.door
                       ? selectedAddress.address.door
@@ -169,37 +195,13 @@ const Payment = ({navigation, theme, route: {params}}) => {
                       ? selectedAddress.address.building
                       : selectedAddress.address.street,
                   },
-                  phone: selectedAddress.descriptor.phone,
-                  name: selectedAddress.descriptor.name,
-                  email: selectedAddress.descriptor.email,
-                },
-                delivery_info: {
-                  type: 'HOME-DELIVERY',
-                  name: selectedAddress.descriptor.name,
-                  phone: selectedAddress.descriptor.phone,
-                  email: selectedAddress.descriptor.email,
-                  location: {
-                    address: {
-                      door: selectedAddress.address.door
-                        ? selectedAddress.address.door
-                        : selectedAddress.address.street,
-                      country: 'IND',
-                      city: selectedAddress.address.city,
-                      street: selectedAddress.address.street,
-                      area_code: selectedAddress.address.area_code,
-                      state: selectedAddress.address.state,
-                      building: selectedAddress.address.building
-                        ? selectedAddress.address.building
-                        : selectedAddress.address.street,
-                    },
-                  },
                 },
               },
-            };
+            },
+          };
 
-            payload.push(payloadObj);
-            bppIdArray.push(item.bpp_id);
-          }
+          payload.push(payloadObj);
+          bppIdArray.push(item.bpp_id);
         }
       });
       const {data} = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
@@ -212,7 +214,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
       onInitializeOrder(messageIds);
     } catch (error) {
-      console.log(error);
+      handleApiError(error);
+
       setInitializeOrderInprogress(false);
     }
   };
@@ -232,7 +235,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             id: element.id,
             descriptor: element.descriptor,
             price: element.price,
-            provider_name: element.provider,
+            name: element.provider,
           };
           object.provider = {
             id: item.message.order.provider.id,
@@ -275,13 +278,15 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
       onConfirmOrder(messageIds);
     } catch (error) {
-      console.log(error);
+      handleApiError(error);
       setConfirmOrderInprogress(false);
     }
   };
 
   useEffect(() => {
-    initializeOrder();
+    initializeOrder()
+      .then(() => {})
+      .catch(() => {});
   }, []);
 
   return (
@@ -309,12 +314,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
                 <RadioButtonInput
                   obj={obj}
                   index={i}
-                  isSelected={i === value}
+                  isSelected={i === selectedPaymentOption}
                   borderWidth={1}
                   buttonSize={12}
                   buttonOuterSize={20}
                   onPress={index => {
-                    setValue(index);
+                    setSelectedPaymentOption(index);
                   }}
                 />
                 <RadioButtonLabel
