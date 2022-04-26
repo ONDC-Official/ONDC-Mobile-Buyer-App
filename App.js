@@ -10,15 +10,16 @@ import React from 'react';
 import {ThemeProvider} from 'react-native-elements';
 import CartContextProvider from './src/context/Cart';
 import {Provider as AuthProvider} from './src/context/Auth';
-import Toast, {ErrorToast} from 'react-native-toast-message';
+import Toast, {ErrorToast, InfoToast} from 'react-native-toast-message';
 import Navigation from './src/navigation/Navigation';
+import {theme} from './src/utils/theme';
 
 const App = () => {
   const toastConfig = {
     error: props => <ErrorToast {...props} text1NumberOfLines={2} />,
   };
   return (
-    <ThemeProvider>
+    <ThemeProvider theme={theme}>
       <AuthProvider>
         <CartContextProvider>
           <Navigation />

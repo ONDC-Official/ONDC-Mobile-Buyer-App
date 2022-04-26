@@ -3,3 +3,8 @@ export const SEARCH_QUERY = {
   PROVIDER: 'Provider',
   CATEGORY: 'Category',
 };
+
+export const OPTIONS = {
+  PROFILE: 'Profile',
+  LOG_OUT: 'Log Out',
+};

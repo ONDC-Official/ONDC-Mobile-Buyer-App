@@ -36,7 +36,7 @@ const AuthContainer = ({theme, children, onBackPress}) => {
       <KeyboardAwareScrollView
         contentContainerStyle={[appStyles.container, styles.container]}>
         <TouchableOpacity onPress={onBackPress}>
-          <Icon name="angle-left" size={30} color={colors.primary} />
+          <Icon name="angle-left" size={30} color={colors.accentColor} />
         </TouchableOpacity>
         <View style={styles.imageContainer}>
           <Image source={image} resizeMode={'contain'} style={styles.image} />

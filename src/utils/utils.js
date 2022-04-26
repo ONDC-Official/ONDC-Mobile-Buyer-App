@@ -15,6 +15,14 @@ export const showToastWithGravity = message => {
   });
 };
 
+export const showInfoToast = message => {
+  Toast.show({
+    type: 'info',
+    text1: message,
+    position: 'top',
+  });
+};
+
 export const skeletonList = [
   {isSkeleton: true, _id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb6d'},
   {isSkeleton: true, _id: '9b1deb4d-3b7d-4bad-9bed-2b0d7b4dcb6d'},

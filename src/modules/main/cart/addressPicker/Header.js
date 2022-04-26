@@ -24,7 +24,7 @@ const Header = ({theme, title, show, navigation}) => {
   return (
     <View style={[styles.container]}>
       <TouchableOpacity
-        style={[styles.backButton, {backgroundColor: colors.primary}]}
+        style={[styles.backButton, {backgroundColor: colors.accentColor}]}
         onPress={() => navigation.goBack()}>
         <Icon name="arrow-left" size={16} color={colors.white} />
       </TouchableOpacity>
@@ -33,9 +33,9 @@ const Header = ({theme, title, show, navigation}) => {
       </View>
       {show && (
         <TouchableOpacity
-          style={[styles.button, {borderColor: colors.primary}]}
+          style={[styles.button, {borderColor: colors.accentColor}]}
           onPress={onPressHandler}>
-          <Text style={{color: colors.primary}}>{addButton}</Text>
+          <Text style={{color: colors.accentColor}}>{addButton}</Text>
         </TouchableOpacity>
       )}
     </View>

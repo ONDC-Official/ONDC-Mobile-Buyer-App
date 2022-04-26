@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
+import {showInfoToast, showToastWithGravity} from '../../../utils/utils';
 
 const addButton = strings('main.product.add_button_title');
 
@@ -24,7 +25,7 @@ const ProductCard = ({theme, item, apiInProgress, removeItem, addItem}) => {
       <View style={styles.subContainer}>
         <FastImage
           source={{
-            uri: item.descriptor.image ? item.descriptor.images[0] : null,
+            uri: item.descriptor.images ? item.descriptor.images[0] : null,
           }}
           style={styles.image}
           resizeMode={'contain'}
@@ -40,18 +41,19 @@ const ProductCard = ({theme, item, apiInProgress, removeItem, addItem}) => {
             <Text>₹ {item.price.value}</Text>
             {item.quantity < 1 ? (
               <TouchableOpacity
-                style={[styles.button, {borderColor: colors.primary}]}
+                style={[styles.button, {borderColor: colors.accentColor}]}
                 onPress={() => {
+                  showInfoToast('Added to cart');
                   addItem(item);
                 }}
                 disabled={apiInProgress}>
-                <Text style={{color: colors.primary}}>{addButton}</Text>
+                <Text style={{color: colors.accentColor}}>{addButton}</Text>
               </TouchableOpacity>
             ) : (
               <View
                 style={[
                   styles.quantityDisplayButton,
-                  {backgroundColor: colors.primary},
+                  {backgroundColor: colors.accentColor},
                 ]}>
                 <TouchableOpacity
                   style={styles.actionButton}

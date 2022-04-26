@@ -105,8 +105,10 @@ const OrderCard = ({item, theme}) => {
           </TouchableOpacity>
           <View style={styles.space} />
           <TouchableOpacity
-            style={[styles.clearCartButton, {borderColor: colors.primary}]}>
-            <Text style={[styles.text, {color: colors.primary}]}>Cancel</Text>
+            style={[styles.clearCartButton, {borderColor: colors.accentColor}]}>
+            <Text style={[styles.text, {color: colors.accentColor}]}>
+              Cancel
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

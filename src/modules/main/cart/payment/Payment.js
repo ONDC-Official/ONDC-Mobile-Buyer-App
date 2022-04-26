@@ -21,6 +21,7 @@ import {
 import {Context as AuthContext} from '../../../../context/Auth';
 import {CartContext} from '../../../../context/Cart';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {showToastWithGravity} from '../../../../utils/utils';
 
 const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
@@ -43,7 +44,7 @@ const paymentOptions = [
 const Payment = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
   const {selectedAddress, confirmationList} = params;
-  const {cart, clearCart} = useContext(CartContext);
+  const {cart, storeList, clearCart} = useContext(CartContext);
   const [orders, setOrders] = useState(null);
   const [error, setError] = useState(null);
   const {
@@ -65,7 +66,11 @@ const Payment = ({navigation, theme, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
-
+        const errorObj = data.find(item => item.hasOwnProperty('error'));
+        if (errorObj) {
+          showToastWithGravity('Something went wrong.Please try again');
+          navigation.navigate('Dashboard');
+        }
         setOrders(data);
         setInitializeOrderInprogress(false);
       } catch (error) {
@@ -79,8 +84,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }, 10000);
   };
 
-  const onConfirmOrder = messageId => {
-    const messageIds = messageId.toString();
+  const onConfirmOrder = messageIdArray => {
+    const messageIds = messageIdArray.toString();
     let order = setInterval(async () => {
       try {
         const {data} = await getData(
@@ -89,6 +94,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
+        const errorObj = data.find(item => item.hasOwnProperty('error'));
+        if (errorObj) {
+          showToastWithGravity('Something went wrong.Please try again');
+          navigation.navigate('Dashboard');
+        }
+        setError(errorObj);
       } catch (error) {
         handleApiError(error);
 
@@ -102,6 +113,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setConfirmOrderInprogress(false);
         alert('place order');
         clearCart();
+        storeList(null);
         navigation.navigate('Dashboard');
       }
     }, 10000);
@@ -111,9 +123,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
     try {
       setInitializeOrderInprogress(true);
       let payload = [];
-      let bppIdArray = [];
+      let providerIdArray = [];
+      console.log(JSON.stringify(confirmationList, undefined, 4));
       confirmationList.forEach(item => {
-        const index = bppIdArray.findIndex(one => one === item.bpp_id);
+        const index = providerIdArray.findIndex(
+          one => one === item.provider.id,
+        );
         if (index > -1) {
           let itemObj = {
             id: item.id,
@@ -201,7 +216,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           };
 
           payload.push(payloadObj);
-          bppIdArray.push(item.bpp_id);
+          providerIdArray.push(item.provider.id);
         }
       });
       const {data} = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
@@ -209,7 +224,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
       });
       let messageIds = [];
       data.forEach(item => {
-        messageIds.push(item.context.message_id);
+        if (item.message.ack.status === 'ACK') {
+          messageIds.push(item.context.message_id);
+        }
       });
 
       onInitializeOrder(messageIds);
@@ -273,7 +290,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
       });
       let messageIds = [];
       data.forEach(item => {
-        messageIds.push(item.context.message_id);
+        if (item.message.ack.status === 'ACK') {
+          messageIds.push(item.context.message_id);
+        }
       });
 
       onConfirmOrder(messageIds);
@@ -317,6 +336,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   isSelected={i === selectedPaymentOption}
                   borderWidth={1}
                   buttonSize={12}
+                  buttonInnerColor={colors.accentColor}
+                  buttonOuterColor={colors.accentColor}
                   buttonOuterSize={20}
                   onPress={index => {
                     setSelectedPaymentOption(index);

@@ -52,11 +52,11 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
       <Autocomplete
         data={filteredLocations ? filteredLocations : []}
         icon="camera"
-        containerStyle={{borderColor: colors.primary}}
-        inputContainerStyle={{borderColor: colors.primary}}
+        containerStyle={{borderColor: colors.accentColor}}
+        inputContainerStyle={{borderColor: colors.accentColor}}
         flatListProps={{
           keyboardShouldPersistTaps: 'always',
-          style: {margin: 5, borderColor: colors.primary},
+          style: {margin: 5, borderColor: colors.accentColor},
           keyExtractor: (_, id) => id,
           renderItem: ({item}) => {
             return (

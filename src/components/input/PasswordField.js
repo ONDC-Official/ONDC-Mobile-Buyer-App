@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Icon, Input} from 'react-native-elements';
+import {Icon, Input, withTheme} from 'react-native-elements';
 
 /**
  * Component to render input in screens
@@ -10,6 +10,7 @@ import {Icon, Input} from 'react-native-elements';
  */
 const PasswordField = props => {
   const [hide, setHide] = useState(true);
+  const {colors} = props.theme;
 
   /**
    * Function is used to set visibility of password
@@ -26,6 +27,7 @@ const PasswordField = props => {
           type="font-awesome"
           name={hide ? 'eye' : 'eye-slash'}
           size={20}
+          color={colors.accentColor}
           onPress={onPressHandler}
         />
       }
@@ -33,4 +35,4 @@ const PasswordField = props => {
   );
 };
 
-export default PasswordField;
+export default withTheme(PasswordField);

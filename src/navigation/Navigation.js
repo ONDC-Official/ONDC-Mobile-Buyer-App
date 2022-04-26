@@ -32,7 +32,7 @@ const Dashboard = () => {
               <Icon
                 name="basket"
                 size={24}
-                color={tabInfo.focused ? '#2089DC' : '#8e8e93'}
+                color={tabInfo.focused ? '#1c75bc' : '#606161'}
               />
             );
           },
@@ -48,7 +48,7 @@ const Dashboard = () => {
               <Icon
                 name="cart"
                 size={24}
-                color={tabInfo.focused ? '#2089DC' : '#8e8e93'}
+                color={tabInfo.focused ? '#1c75bc' : '#606161'}
               />
             );
           },
@@ -64,7 +64,7 @@ const Dashboard = () => {
               <Icon
                 name="clipboard-edit"
                 size={24}
-                color={tabInfo.focused ? '#2089DC' : '#8e8e93'}
+                color={tabInfo.focused ? '#1c75bc' : '#606161'}
               />
             );
           },
@@ -80,7 +80,7 @@ const Dashboard = () => {
               <Icon
                 name="dots-horizontal-circle"
                 size={24}
-                color={tabInfo.focused ? '#2089DC' : '#8e8e93'}
+                color={tabInfo.focused ? '#1c75bc' : '#606161'}
               />
             );
           },

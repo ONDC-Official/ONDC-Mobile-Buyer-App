@@ -14,8 +14,8 @@ const OutlineButton = props => {
     <Button
       {...props}
       type={'outline'}
-      buttonStyle={styles.buttonStyle}
-      titleStyle={appStyles.container}
+      buttonStyle={[styles.buttonStyle, {borderColor: props.color}]}
+      titleStyle={[appStyles.container, {color: props.color}]}
     />
   );
 };

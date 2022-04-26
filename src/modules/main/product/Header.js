@@ -48,13 +48,17 @@ const Header = ({
         {locationInProgress ? (
           <View style={styles.subContainer}>
             <Text>Detecting location {'    '}</Text>
-            <ActivityIndicator showLoading={locationInProgress} size={14} />
+            <ActivityIndicator
+              showLoading={locationInProgress}
+              color={colors.accentColor}
+              size={14}
+            />
           </View>
         ) : (
           <TouchableOpacity style={styles.subContainer} onPress={openSheet}>
-            <Icon name="map-marker" size={20} color={colors.primary} />
+            <Icon name="map-marker" size={20} color={colors.accentColor} />
             <View style={styles.textContainer}>
-              <Text style={{color: colors.primary}}>
+              <Text style={{color: colors.accentColor}}>
                 {location} <Icon name="angle-down" size={14} />
               </Text>
             </View>

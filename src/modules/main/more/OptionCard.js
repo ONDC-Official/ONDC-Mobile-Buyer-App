@@ -2,6 +2,7 @@ import React, {useContext} from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import {Card, Icon, Text, withTheme} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
+import {OPTIONS} from '../../../utils/Constants';
 
 const OptionCard = ({theme, navigation, item}) => {
   const {colors} = theme;
@@ -9,19 +10,27 @@ const OptionCard = ({theme, navigation, item}) => {
     state: {token},
     logoutUser,
   } = useContext(AuthContext);
+
+  const onPressHandler = option => {
+    if (option === OPTIONS.LOG_OUT) {
+      logoutUser();
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Landing'}],
+      });
+    }
+  };
   return (
-    <Card style={styles.card}>
+    <Card containerStyle={styles.card}>
       <TouchableOpacity
         style={styles.container}
         onPress={() => {
-          logoutUser();
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'Login'}],
-          });
+          onPressHandler(item.name);
         }}>
-        <Icon type="font-awesome" name={item.icon} color={colors.primary} />
-        <Text style={[styles.text, {color: colors.primary}]}>{item.name}</Text>
+        <Icon type="font-awesome" name={item.icon} color={colors.accentColor} />
+        <Text style={[styles.text, {color: colors.accentColor}]}>
+          {item.string}
+        </Text>
       </TouchableOpacity>
     </Card>
   );
@@ -30,7 +39,7 @@ const OptionCard = ({theme, navigation, item}) => {
 export default withTheme(OptionCard);
 
 const styles = StyleSheet.create({
-  card: {elevation: 5},
+  card: {elevation: 5, borderRadius: 50, paddingHorizontal: 30},
   text: {fontSize: 18, marginLeft: 16},
   container: {flexDirection: 'row'},
 });

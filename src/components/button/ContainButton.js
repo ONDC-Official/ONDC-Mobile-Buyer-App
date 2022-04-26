@@ -20,7 +20,7 @@ const ContainButton = props => {
       buttonStyle={{
         backgroundColor: props.backgroundColor
           ? props.backgroundColor
-          : colors.primary,
+          : colors.accentColor,
       }}
     />
   );

@@ -61,6 +61,10 @@
       "please_select_location":"Please select location"
       
       
+    },
+    "more":{
+      "profile":"Profile",
+      "log_out":"Log Out"
     }
   },
   "miscellaneous": {},

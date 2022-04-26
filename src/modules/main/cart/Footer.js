@@ -23,10 +23,10 @@ const Footer = ({theme, onCheckout, onPress}) => {
         style={[
           appStyles.container,
           styles.clearCartButton,
-          {borderColor: colors.primary},
+          {borderColor: colors.accentColor},
         ]}
         onPress={onPress}>
-        <Text style={[styles.text, {color: colors.primary}]}>
+        <Text style={[styles.text, {color: colors.accentColor}]}>
           {clearCartButton}
         </Text>
       </TouchableOpacity>
@@ -35,10 +35,10 @@ const Footer = ({theme, onCheckout, onPress}) => {
         style={[
           appStyles.container,
           styles.clearCartButton,
-          {borderColor: colors.primary},
+          {borderColor: colors.accentColor},
         ]}
         onPress={onCheckout}>
-        <Text style={[styles.text, {color: colors.primary}]}>
+        <Text style={[styles.text, {color: colors.accentColor}]}>
           {checkOutButton}
         </Text>
       </TouchableOpacity>

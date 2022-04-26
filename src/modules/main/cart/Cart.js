@@ -95,7 +95,7 @@ const Cart = ({navigation, theme}) => {
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => {
-    console.log(item);
+    // console.log(JSON.stringify(item, undefined, 4));
     return (
       <ProductCard item={item} removeItem={removeItem} addItem={addItem} />
     );

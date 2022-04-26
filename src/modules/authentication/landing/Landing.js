@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import ContainButton from '../../../components/button/ContainButton';
 import {appStyles} from '../../../styles/styles';
-import {Text, useTheme} from 'react-native-elements';
+import {colors, Text, useTheme} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
 import useLoginWithGoogle from './hooks/useLoginWithGoogle';
 import {isIOS} from '../../../utils/utils';
@@ -46,7 +46,10 @@ const Landing = ({navigation}) => {
           />
         </View>
         <View
-          style={[styles.divider, {borderBottomColor: theme.colors.primary}]}
+          style={[
+            styles.divider,
+            {borderBottomColor: theme.colors.accentColor},
+          ]}
         />
 
         <View style={styles.buttonContainer}>
@@ -58,8 +61,9 @@ const Landing = ({navigation}) => {
               name: 'google',
               type: 'font-awesome',
               size: 30,
-              color: theme.colors.primary,
+              color: theme.colors.accentColor,
             }}
+            color={theme.colors.accentColor}
           />
         </View>
         {isIOS && (
@@ -70,8 +74,9 @@ const Landing = ({navigation}) => {
                 name: 'apple',
                 type: 'font-awesome',
                 size: 30,
-                color: theme.colors.primary,
+                color: theme.colors.accentColor,
               }}
+              color={theme.colors.accentColor}
             />
           </View>
         )}

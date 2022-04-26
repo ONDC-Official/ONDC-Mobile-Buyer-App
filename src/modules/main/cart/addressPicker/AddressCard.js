@@ -48,6 +48,8 @@ const AddressCard = ({item, theme, selectedAddress, setSelectedAddress}) => {
             borderWidth={1}
             index={item.id}
             buttonSize={10}
+            buttonInnerColor={colors.accentColor}
+            buttonOuterColor={colors.accentColor}
             buttonOuterSize={18}
             isSelected={isSelected}
             onPress={value => {

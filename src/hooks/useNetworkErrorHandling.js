@@ -4,23 +4,27 @@ import {Context as AuthContext} from '../context/Auth';
 import {useNavigation} from '@react-navigation/native';
 import {strings} from '../locales/i18n';
 import {showToastWithGravity} from '../utils/utils';
+import {CartContext} from '../context/Cart';
 
 let sessionExpiredMessageShown = false;
 
 export default () => {
   const {logoutUser} = useContext(AuthContext);
+  const {clearCart, storeList} = useContext(CartContext);
   const navigation = useNavigation();
 
   const clearDataAndLogout = () => {
     logoutUser();
+    clearCart();
+    storeList(null);
     navigation.reset({
       index: 0,
-      routes: [{name: 'Login'}],
+      routes: [{name: 'Landing'}],
     });
   };
 
   const handleApiError = (error, setError = null) => {
-    console.log(error);
+    console.log(JSON.stringify(error.response, undefined, 4));
     if (error.response) {
       if (error.response.status === 401) {
         if (!sessionExpiredMessageShown) {
@@ -46,7 +50,7 @@ export default () => {
         if (setError !== null) {
           setError(error.response.data);
         } else {
-          showToastWithGravity(error.response.data.message);
+          showToastWithGravity(error.response.data[0].error.message);
         }
       }
     } else if (error.request) {

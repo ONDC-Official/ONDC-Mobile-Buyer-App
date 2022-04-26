@@ -32,25 +32,32 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
-        const subTotal = response.data.reduce((total, item) => {
-          return item.message.quote.provider
-            ? Number(item.message.quote.quote.price.value) + total
-            : total;
-        }, 0);
-        setTotalAmount(subTotal);
+
         let list = [];
         response.data.forEach(item => {
-          if (item.context.bpp_id && item.message.quote.provider) {
-            item.message.quote.items.forEach(element => {
-              element.provider = item.message.quote.provider
-                ? item.message.quote.provider
-                : null;
-              element.transaction_id = item.context.transaction_id;
-              element.bpp_id = item.context.bpp_id;
-              list.push(element);
-            });
+          if (!item.error) {
+            if (item.context.bpp_id) {
+              item.message.quote.items.forEach(element => {
+                const object = cart.find(one => one.id === element.id);
+                element.provider = {
+                  id: object.provider_id,
+                  descriptor: object.descriptor,
+                  locations: object.locations,
+                };
+
+                element.transaction_id = item.context.transaction_id;
+                element.bpp_id = item.context.bpp_id;
+                list.push(element);
+              });
+            }
           }
         });
+        // const subTotal = list.reduce((total, item) => {
+        //   return item.message.quote.provider
+        //     ? Number(item.message.quote.quote.price.value) + total
+        //     : total;
+        // }, 0);
+        // setTotalAmount(subTotal);
 
         setConfirmationList(list);
       } catch (error) {
@@ -65,9 +72,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const getQuote = async () => {
     try {
       let payload = [];
-      let bppIdArray = [];
+      let providerIdArray = [];
       cart.forEach(item => {
-        const index = bppIdArray.findIndex(one => one === item.bpp_id);
+        const index = providerIdArray.findIndex(
+          one => one === item.provider_id,
+        );
         if (index > -1) {
           let itemObj = {
             id: item.id,
@@ -116,7 +125,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             },
           };
           payload.push(payloadObj);
-          bppIdArray.push(item.bpp_id);
+          providerIdArray.push(item.provider_id);
         }
       });
 
@@ -153,7 +162,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             <View style={styles.subContainer}>
               <FastImage
                 source={{
-                  uri: element.descriptor.image
+                  uri: element.descriptor.images
                     ? element.descriptor.images[0]
                     : null,
                 }}
@@ -193,9 +202,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         renderItem={renderItem}
         contentContainerStyle={styles.contentContainerStyle}
       />
-      <View style={styles.totalContainer}>
+      {/* <View style={styles.totalContainer}>
         <Text>Total Payable: {totalAmount}</Text>
-      </View>
+      </View> */}
       <View style={styles.buttonContainer}>
         <ContainButton
           title="Proceed"

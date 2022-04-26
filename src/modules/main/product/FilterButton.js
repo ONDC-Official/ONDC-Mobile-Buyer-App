@@ -21,14 +21,18 @@ const FilterButton = ({theme, name, selectedCard, onPress}) => {
           styles.container,
           {
             backgroundColor:
-              selectedCard === name ? colors.primary : colors.backgroundColor,
+              selectedCard === name
+                ? colors.accentColor
+                : colors.backgroundColor,
             borderColor:
-              selectedCard === name ? colors.primary : colors.borderColor,
+              selectedCard === name ? colors.accentColor : colors.borderColor,
           },
         ]}
         onPress={onPress}>
         <Text
-          style={{color: selectedCard === name ? colors.white : colors.black}}>
+          style={{
+            color: selectedCard === name ? colors.white : colors.black,
+          }}>
           {name}
         </Text>
       </TouchableOpacity>
