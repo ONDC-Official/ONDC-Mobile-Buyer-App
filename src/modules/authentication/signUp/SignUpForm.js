@@ -43,7 +43,7 @@ const SignUpFrom = ({navigation}) => {
     password: '',
     confirmPassword: '',
   };
-  const {storeToken} = useContext(AuthContext);
+  const {storeLoginDetails} = useContext(AuthContext);
   const [apiInProgress, setApiInProgress] = useState(false);
 
   /**
@@ -53,13 +53,18 @@ const SignUpFrom = ({navigation}) => {
   const createUser = async values => {
     try {
       setApiInProgress(true);
-      await auth().createUserWithEmailAndPassword(
+      const response = await auth().createUserWithEmailAndPassword(
         values.email,
         values.password,
       );
 
       const idTokenResult = await auth().currentUser.getIdTokenResult();
-      await storeToken(idTokenResult);
+      const loginDetails = {
+        token: idTokenResult.token,
+        uid: response.user.uid,
+        emailId: response.user.email,
+      };
+      await storeLoginDetails(loginDetails);
       navigation.reset({
         index: 0,
         routes: [{name: 'Dashboard'}],

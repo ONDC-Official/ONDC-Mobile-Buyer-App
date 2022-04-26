@@ -1,16 +1,27 @@
-import {getData, clearMultiple, setData, removeData} from '../utils/storage';
+import {
+  getData,
+  clearMultiple,
+  setData,
+  removeData,
+  saveMultipleData,
+  getMultipleData,
+} from '../utils/storage';
 import createDataContext from './createDataContext';
 
 const defaultValue = {
   token: null,
+  uid: null,
+  emailId: null,
   isLoading: true,
 };
 
 const authReducer = (state, action) => {
   switch (action.type) {
-    case 'set_token':
+    case 'set_login_details':
       return Object.assign({}, state, {
         token: action.payload.token,
+        emailId: action.payload.emailId,
+        uid: action.payload.uid,
       });
 
     case 'save_token':
@@ -20,9 +31,10 @@ const authReducer = (state, action) => {
       return {...state, isLoading: false};
 
     case 'logout_user':
-      return Object.assign({}, state, {
-        token: null,
-      });
+      return Object.assign({}, state, defaultValue);
+
+    case 'save_user':
+      return action.payload;
 
     default:
       return state;
@@ -34,11 +46,18 @@ const tryLocalSignIn = dispatch => {
     const payload = {};
 
     try {
-      const data = await getData('token');
-      if (data !== null) {
-        payload.token = data;
+      const data = await getMultipleData(['token', 'uid', 'emailId']);
+
+      if (data[0][1] !== null) {
+        data.forEach(item => {
+          try {
+            payload[item[0]] = JSON.parse(item[1]);
+          } catch (error) {
+            payload[item[0]] = item[1];
+          }
+        });
         payload.isLoading = false;
-        dispatch({type: 'save_token', payload});
+        dispatch({type: 'save_user', payload});
       } else {
         dispatch({type: 'hide_loader', payload});
       }
@@ -50,25 +69,29 @@ const tryLocalSignIn = dispatch => {
 
 const logoutUser = dispatch => {
   return async () => {
-    removeData('token').then(() => {
+    clearMultiple(['uid', 'emailId', 'token']).then(() => {
       dispatch({
         type: 'logout_user',
-        payload: {},
       });
     });
   };
 };
 
-const storeToken = dispatch => {
+const storeLoginDetails = dispatch => {
   return async data => {
     try {
-      const {token} = data;
-
-      await setData('token', token);
+      const {token, emailId, uid} = data;
+      await saveMultipleData([
+        ['token', token],
+        ['emailId', emailId],
+        ['uid', uid],
+      ]);
       const payload = {
         token: token,
+        emailId: emailId,
+        uid: uid,
       };
-      dispatch({type: 'set_token', payload});
+      dispatch({type: 'set_login_details', payload});
     } catch (error) {
       throw error;
     }
@@ -78,7 +101,7 @@ const storeToken = dispatch => {
 export const {Provider, Context} = createDataContext(
   authReducer,
   {
-    storeToken,
+    storeLoginDetails,
     tryLocalSignIn,
     logoutUser,
   },
