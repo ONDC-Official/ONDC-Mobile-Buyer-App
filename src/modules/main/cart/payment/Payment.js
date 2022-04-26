@@ -102,7 +102,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setError(errorObj);
       } catch (error) {
         handleApiError(error);
-
         setError(error);
         setConfirmOrderInprogress(false);
       }
