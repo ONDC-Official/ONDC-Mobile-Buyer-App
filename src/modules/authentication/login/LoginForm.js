@@ -32,13 +32,8 @@ const LoginForm = ({navigation}) => {
     email: '',
     password: '',
   };
-  const {
-    storeLoginDetails,
-    state: {token, emailId, uid},
-  } = useContext(AuthContext);
+  const {storeLoginDetails} = useContext(AuthContext);
   const [apiInProgress, setApiInProgress] = useState(false);
-
-  console.log(token, uid, emailId);
 
   /**
    * function checks whether the email and password is valid if it is valid it creates and store token in context
@@ -54,13 +49,12 @@ const LoginForm = ({navigation}) => {
 
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
-      const loginDetails = {
+      await storeLoginDetails({
         token: idTokenResult.token,
         uid: response.user.uid,
         emailId: response.user.email,
-      };
+      });
 
-      await storeLoginDetails(loginDetails);
       navigation.reset({
         index: 0,
         routes: [{name: 'Dashboard'}],

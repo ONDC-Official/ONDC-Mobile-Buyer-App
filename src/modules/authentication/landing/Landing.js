@@ -56,7 +56,6 @@ const Landing = ({navigation}) => {
           <OutlineButton
             title={continueWithGoogle}
             onPress={loginWithGoogle}
-            type="outline"
             icon={{
               name: 'google',
               type: 'font-awesome',

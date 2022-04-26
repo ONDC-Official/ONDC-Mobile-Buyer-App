@@ -9,7 +9,7 @@ GoogleSignin.configure({
 });
 
 export default navigation => {
-  const {storeToken} = useContext(AuthContext);
+  const {storeLoginDetails} = useContext(AuthContext);
 
   const loginWithGoogle = async () => {
     try {
@@ -24,7 +24,12 @@ export default navigation => {
 
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
-      await storeToken(idTokenResult);
+      await storeLoginDetails({
+        token: idTokenResult.token,
+        uid: idTokenResult.claims.user_id,
+        emailId: idTokenResult.claims.email,
+      });
+
       navigation.reset({
         index: 0,
         routes: [{name: 'Dashboard'}],
