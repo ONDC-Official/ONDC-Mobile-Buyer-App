@@ -8,6 +8,7 @@ buildscript {
         targetSdkVersion = 30
         ndkVersion = "21.4.7075529"
         googlePlayServicesAuthVersion = "19.2.0"
+        hyperSDKVersion = "2.0.4-rc.13"
     }
     repositories {
         google()
@@ -31,6 +32,7 @@ allprojects {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")
         }
+        maven { url "https://maven.juspay.in/jp-build-packages/hyper-sdk/"}
         mavenCentral {
             // We don't want to fetch react-native from Maven Central as there are
             // older versions over there.

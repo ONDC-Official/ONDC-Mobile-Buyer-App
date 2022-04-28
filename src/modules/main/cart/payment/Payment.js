@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useContext, useRef, useEffect, useState} from 'react';
+import {StyleSheet, View, DeviceEventEmitter} from 'react-native';
 import Header from '../addressPicker/Header';
 import {Text, withTheme} from 'react-native-elements';
 import {appStyles} from '../../../../styles/styles';
@@ -17,11 +17,14 @@ import {
   INITIALIZE_ORDER,
   ON_CONFIRM_ORDER,
   ON_INITIALIZE_ORDER,
+  SIGN_PAYLOAD,
 } from '../../../../utils/apiUtilities';
 import {Context as AuthContext} from '../../../../context/Auth';
 import {CartContext} from '../../../../context/Cart';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {showToastWithGravity} from '../../../../utils/utils';
+import {showInfoToast, showToastWithGravity} from '../../../../utils/utils';
+import {alertWithOneButton} from '../../../../utils/alerts';
+import HyperSdkReact from 'hyper-sdk-react';
 
 const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
@@ -55,6 +58,15 @@ const Payment = ({navigation, theme, route: {params}}) => {
     useState(false);
   const [confirmOrderInProgrss, setConfirmOrderInprogress] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
+  const orderRef = useRef();
+
+  console.log(HyperSdkReact);
+
+  const onOrderSuccessfull = () => {
+    clearCart();
+    storeList(null);
+    navigation.navigate('Dashboard');
+  };
 
   const onInitializeOrder = messageIdArray => {
     const messageIds = messageIdArray.toString();
@@ -66,22 +78,28 @@ const Payment = ({navigation, theme, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
-        const errorObj = data.find(item => item.hasOwnProperty('error'));
-        if (errorObj) {
-          showToastWithGravity('Something went wrong.Please try again');
-          navigation.navigate('Dashboard');
-        }
-        setOrders(data);
-        setInitializeOrderInprogress(false);
+        setOrders(orders);
+        orderRef.current = data;
       } catch (error) {
         handleApiError(error);
-
-        setInitializeOrderInprogress(false);
       }
     }, 2000);
     setTimeout(() => {
       clearInterval(order);
-    }, 10000);
+      setInitializeOrderInprogress(false);
+      const ordersArray = orderRef.current;
+      if (ordersArray) {
+        const errorObj = ordersArray.find(item => item.hasOwnProperty('error'));
+        if (errorObj) {
+          showToastWithGravity('Something went wrong.Please try again');
+        } else {
+          setConfirmOrderInprogress(false);
+          showInfoToast('Order Initialized!');
+        }
+      } else {
+        showToastWithGravity('Something went wrong.Please try again');
+      }
+    }, 11000);
   };
 
   const onConfirmOrder = messageIdArray => {
@@ -95,10 +113,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
           },
         );
         const errorObj = data.find(item => item.hasOwnProperty('error'));
-        if (errorObj) {
-          showToastWithGravity('Something went wrong.Please try again');
-          navigation.navigate('Dashboard');
-        }
         setError(errorObj);
       } catch (error) {
         handleApiError(error);
@@ -108,12 +122,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }, 2000);
     setTimeout(() => {
       clearInterval(order);
+
       if (!error) {
         setConfirmOrderInprogress(false);
-        alert('place order');
-        clearCart();
-        storeList(null);
-        navigation.navigate('Dashboard');
+        alertWithOneButton(null, 'Place Order', 'Ok', onOrderSuccessfull);
+      } else {
+        showToastWithGravity('Something went wrong.Please try again');
       }
     }, 10000);
   };
@@ -123,7 +137,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       setInitializeOrderInprogress(true);
       let payload = [];
       let providerIdArray = [];
-      console.log(JSON.stringify(confirmationList, undefined, 4));
+
       confirmationList.forEach(item => {
         const index = providerIdArray.findIndex(
           one => one === item.provider.id,
@@ -236,68 +250,174 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }
   };
 
+  const onHyperEvent = resp => {
+    var data = JSON.parse(resp);
+    var event = data.event || '';
+    switch (event) {
+      case 'show_loader':
+        // show some loader here
+        break;
+      case 'hide_loader':
+        // hide the loader
+        break;
+      case 'initiate_result':
+        var payload = data.payload || {};
+        console.log('initiate_result: ', payload);
+        // merchant code
+
+        break;
+      case 'process_result':
+        var payload = data.payload || {};
+        console.log('process_result: ', payload);
+        // merchant code
+
+        break;
+      default:
+        console.log('Unknown Event', data);
+    }
+  };
+
   const confirmOrder = async () => {
-    try {
-      setConfirmOrderInprogress(true);
-      const payload = [];
-      orders.forEach(item => {
-        const itemsArray = [];
-        item.message.order.items.forEach(object => {
-          const element = cart.find(one => one.id === object.id);
+    const options = {
+      headers: {Authorization: `Bearer ${token}`},
+    };
+    if (selectedPaymentOption === 1) {
+      try {
+        if (orderRef.current && orderRef.current.length > 0) {
+          const errorObj = orderRef.current.find(one =>
+            one.hasOwnProperty('error'),
+          );
+          if (!errorObj) {
+            setConfirmOrderInprogress(true);
+            const payload = [];
+            orderRef.current.forEach(item => {
+              const itemsArray = [];
+              item.message.order.items.forEach(object => {
+                const element = cart.find(one => one.id === object.id);
 
-          object.id = element.id;
-          object.bpp_id = item.context.bpp_id;
-          object.product = {
-            id: element.id,
-            descriptor: element.descriptor,
-            price: element.price,
-            name: element.provider,
-          };
-          object.provider = {
-            id: item.message.order.provider.id,
-            locations: [item.message.order.provider_location.id],
-          };
-          itemsArray.push(object);
-        });
+                object.id = element.id;
+                object.bpp_id = item.context.bpp_id;
+                object.product = {
+                  id: element.id,
+                  descriptor: element.descriptor,
+                  price: element.price,
+                  name: element.provider,
+                };
+                object.provider = {
+                  id: item.message.order.provider.id,
+                  locations: [item.message.order.provider_location.id],
+                };
+                itemsArray.push(object);
+              });
 
-        const payloadObj = {
-          context: {
-            transaction_id: item.context.transaction_id,
+              const payloadObj = {
+                context: {
+                  transaction_id: item.context.transaction_id,
+                },
+                message: {
+                  items: itemsArray,
+                  billing_info: item.message.order.billing,
+                  delivery_info: {
+                    type: item.message.order.fulfillment.type,
+                    phone: item.message.order.fulfillment.end.contact.phone,
+                    email: item.message.order.fulfillment.end.contact.email,
+                    name: item.message.order.billing.name,
+                    location: item.message.order.fulfillment.end.location,
+                  },
+                  payment: {
+                    paid_amount: item.message.order.payment.params.amount,
+                    status: 'PAID',
+                    transaction_id: item.context.transaction_id,
+                  },
+                },
+              };
+              payload.push(payloadObj);
+            });
+
+            const {data} = await postData(
+              `${BASE_URL}${CONFIRM_ORDER}`,
+              payload,
+              {
+                headers: {Authorization: `Bearer ${token}`},
+              },
+            );
+            let messageIds = [];
+            data.forEach(item => {
+              if (item.message.ack.status === 'ACK') {
+                messageIds.push(item.context.message_id);
+              }
+            });
+
+            onConfirmOrder(messageIds);
+          } else {
+            showToastWithGravity('Something went wrong.Please try again');
+          }
+        } else {
+          showToastWithGravity('Something went wrong.Please try again');
+        }
+      } catch (error) {
+        handleApiError(error);
+        setConfirmOrderInprogress(false);
+      }
+    } else {
+      try {
+        const {data} = await postData(
+          `${BASE_URL}${SIGN_PAYLOAD}`,
+          {
+            payload: {
+              customer_id: '1234567890',
+              mobile_number: 9234567890,
+              email_address: 'test@gmail.com',
+            },
           },
-          message: {
-            items: itemsArray,
-            billing_info: item.message.order.billing,
-            delivery_info: {
-              type: item.message.order.fulfillment.type,
-              phone: item.message.order.fulfillment.end.contact.phone,
-              email: item.message.order.fulfillment.end.contact.email,
-              name: item.message.order.billing.name,
-              location: item.message.order.fulfillment.end.location,
-            },
-            payment: {
-              paid_amount: item.message.order.payment.params.amount,
-              status: 'PAID',
-              transaction_id: item.context.transaction_id,
-            },
+          options,
+        );
+        console.log(data);
+        HyperSdkReact.createHyperServices();
+        const initiatePayload = {
+          service: 'in.juspay.hyperpay',
+          payload: {
+            action: 'initiate',
+            merchantId: 'ONDC',
+            clientId: 'ONDC',
+            environment: 'sandbox',
           },
         };
-        payload.push(payloadObj);
-      });
-
-      const {data} = await postData(`${BASE_URL}${CONFIRM_ORDER}`, payload, {
-        headers: {Authorization: `Bearer ${token}`},
-      });
-      let messageIds = [];
-      data.forEach(item => {
-        if (item.message.ack.status === 'ACK') {
-          messageIds.push(item.context.message_id);
+        HyperSdkReact.initiate(JSON.stringify(initiatePayload));
+        DeviceEventEmitter.addListener('HyperEvent', resp => {
+          onHyperEvent(resp);
+        });
+        const payload = {
+          requestId: '8cbc3fad-8b3f-40c0-ae93-2d7e75a8624a',
+          service: 'in.juspay.hyperpay',
+          payload: {
+            action: 'paymentPage',
+            merchantId: 'ONDC',
+            clientId: 'ONDC',
+            orderId: 'd9b10dfa-013d-4480-a30b-7dcd4d50d59c',
+            amount: '9',
+            customerId: '6YyrDeuLRkR8tJXFP1TsDHcj2BI2',
+            customerEmail: 'vrushali@mailinator.com',
+            customerMobile: '7745049011',
+            orderDetails:
+              '{"order_id":"d9b10dfa-013d-4480-a30b-7dcd4d50d59c","amount":"9","customer_id":"6YyrDeuLRkR8tJXFP1TsDHcj2BI2","merchant_id":"ONDC","customer_email":"vrushali@mailinator.com","customer_phone":"7745049011","return_url":"return_url":"https://buyer-app.ondc.org/application/checkout","timestamp":"1571922200845"}',
+            signature: data.signedPayload,
+            merchantKeyId: '5992',
+            language: 'english',
+            environment: 'sandbox',
+          },
+        };
+        if (HyperSdkReact.isInitialised()) {
+          HyperSdkReact.process(JSON.stringify(payload));
+          DeviceEventEmitter.addListener('HyperEvent', resp => {
+            onHyperEvent(resp);
+          });
+        } else {
+          //Intialise hyperInstance
         }
-      });
-
-      onConfirmOrder(messageIds);
-    } catch (error) {
-      handleApiError(error);
-      setConfirmOrderInprogress(false);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -353,11 +473,11 @@ const Payment = ({navigation, theme, route: {params}}) => {
           </RadioForm>
         </View>
       </View>
+
       <View style={styles.buttonContainer}>
         <ContainButton
           title={buttonTitle}
           onPress={confirmOrder}
-          disabled={initializeOrderInProgrss}
           loading={confirmOrderInProgrss}
         />
       </View>

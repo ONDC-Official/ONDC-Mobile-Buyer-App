@@ -62,11 +62,6 @@ const CartContextProvider = ({children}) => {
 
   const clearCart = () => {
     setCart([]);
-    let newArray = list.slice();
-    newArray.forEach(item => {
-      item.quantity = 0;
-    });
-    setList(newArray);
   };
 
   return (

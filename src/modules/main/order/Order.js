@@ -26,6 +26,7 @@ const Order = ({}) => {
       });
       setOrders(data);
     } catch (error) {
+      console.log(error);
       if (error.response) {
         if (error.response.status === 404) {
           setOrders([]);

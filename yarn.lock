@@ -3965,6 +3965,11 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
+hyper-sdk-react@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/hyper-sdk-react/-/hyper-sdk-react-2.1.1.tgz#8b5eaa73f56b83598435577e9e495a53a6555376"
+  integrity sha512-ZQpGC3GOJOV2stGhs+daGSwpr8oDFm1CqoRV2S089k70N+rQVY8fZmpuYjXlmuJH28kHzTnbXIFaVQMkLY1W+g==
+
 i18n-js@3.0.11:
   version "3.0.11"
   resolved "https://registry.yarnpkg.com/i18n-js/-/i18n-js-3.0.11.tgz#f9e96bdb641c5b9d6be12759d7c422089987ef02"

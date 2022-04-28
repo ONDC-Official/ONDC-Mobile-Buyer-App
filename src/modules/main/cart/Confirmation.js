@@ -52,13 +52,13 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             }
           }
         });
+
         // const subTotal = list.reduce((total, item) => {
         //   return item.message.quote.provider
         //     ? Number(item.message.quote.quote.price.value) + total
         //     : total;
         // }, 0);
         // setTotalAmount(subTotal);
-
         setConfirmationList(list);
       } catch (error) {
         handleApiError(error);
@@ -205,18 +205,19 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       {/* <View style={styles.totalContainer}>
         <Text>Total Payable: {totalAmount}</Text>
       </View> */}
-      <View style={styles.buttonContainer}>
-        <ContainButton
-          title="Proceed"
-          onPress={() =>
-            navigation.navigate('Payment', {
-              selectedAddress: params.selectedAddress,
-              confirmationList: confirmationList,
-            })
-          }
-          disabled={!confirmationList}
-        />
-      </View>
+      {confirmationList && confirmationList.length > 0 && (
+        <View style={styles.buttonContainer}>
+          <ContainButton
+            title="Proceed"
+            onPress={() =>
+              navigation.navigate('Payment', {
+                selectedAddress: params.selectedAddress,
+                confirmationList: confirmationList,
+              })
+            }
+          />
+        </View>
+      )}
     </View>
   );
 };
