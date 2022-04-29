@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
 
+
 project.ext.envConfigFiles = [
         dev: ".env.development",
         stg: ".env.staging",
