@@ -1,5 +1,5 @@
 import React, {useContext, useRef, useEffect, useState} from 'react';
-import {StyleSheet, View, DeviceEventEmitter} from 'react-native';
+import {StyleSheet, View, DeviceEventEmitter, BackHandler} from 'react-native';
 import Header from '../addressPicker/Header';
 import {Text, withTheme} from 'react-native-elements';
 import {appStyles} from '../../../../styles/styles';
@@ -25,6 +25,7 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {showInfoToast, showToastWithGravity} from '../../../../utils/utils';
 import {alertWithOneButton} from '../../../../utils/alerts';
 import HyperSdkReact from 'hyper-sdk-react';
+import Config from 'react-native-config';
 
 const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
@@ -51,16 +52,15 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const [orders, setOrders] = useState(null);
   const [error, setError] = useState(null);
   const {
-    state: {token},
+    state: {token, uid},
   } = useContext(AuthContext);
   const [selectedPaymentOption, setSelectedPaymentOption] = useState(0);
   const [initializeOrderInProgrss, setInitializeOrderInprogress] =
     useState(false);
   const [confirmOrderInProgrss, setConfirmOrderInprogress] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
+  const [transactionId, setTransactionId] = useState(null);
   const orderRef = useRef();
-
-  console.log(HyperSdkReact);
 
   const onOrderSuccessfull = () => {
     clearCart();
@@ -163,6 +163,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           };
           payload[index].message.items.push(itemObj);
         } else {
+          setTransactionId(item.transaction_id);
           let payloadObj = {
             context: {transaction_id: item.transaction_id},
             message: {
@@ -255,10 +256,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
     var event = data.event || '';
     switch (event) {
       case 'show_loader':
-        // show some loader here
+        setInitializeOrderInprogress(true);
         break;
       case 'hide_loader':
-        // hide the loader
+        setInitializeOrderInprogress(false);
         break;
       case 'initiate_result':
         var payload = data.payload || {};
@@ -365,48 +366,57 @@ const Payment = ({navigation, theme, route: {params}}) => {
           `${BASE_URL}${SIGN_PAYLOAD}`,
           {
             payload: {
-              customer_id: '1234567890',
-              mobile_number: 9234567890,
-              email_address: 'test@gmail.com',
+              customer_id: uid,
+              mobile_number: selectedAddress.descriptor.phone,
+              email_address: selectedAddress.descriptor.email,
+              merchant_id: Config.MERCHANT_ID.toUpperCase(),
+              order_id: transactionId,
+              amount: 9,
+              timestamp: new Date().getTime().toString(),
+              return_url: 'https://buyer-app.ondc.org/application/checkout',
             },
           },
           options,
         );
-        console.log(data);
-        HyperSdkReact.createHyperServices();
-        const initiatePayload = {
-          service: 'in.juspay.hyperpay',
-          payload: {
-            action: 'initiate',
-            merchantId: 'ONDC',
-            clientId: 'ONDC',
-            environment: 'sandbox',
-          },
+
+        const orderDetails = {
+          order_id: transactionId,
+          amount: '9',
+          customer_id: uid,
+          merchant_id: Config.MERCHANT_ID.toUpperCase(),
+          customer_email: selectedAddress.descriptor.email,
+          customer_phone: selectedAddress.descriptor.phone,
+          return_url: 'https://buyer-app.ondc.org/application/checkout',
+          timestamp: new Date().getTime().toString(),
         };
-        HyperSdkReact.initiate(JSON.stringify(initiatePayload));
-        DeviceEventEmitter.addListener('HyperEvent', resp => {
-          onHyperEvent(resp);
-        });
+        const signaturePayload = {
+          customer_id: uid,
+          merchant_id: Config.MERCHANT_ID.toUpperCase(),
+          customer_email: selectedAddress.descriptor.email,
+          customer_phone: selectedAddress.descriptor.phone,
+          timestamp: new Date().getTime().toString(),
+        };
         const payload = {
-          requestId: '8cbc3fad-8b3f-40c0-ae93-2d7e75a8624a',
+          requestId: transactionId,
           service: 'in.juspay.hyperpay',
           payload: {
-            action: 'paymentPage',
-            merchantId: 'ONDC',
-            clientId: 'ONDC',
-            orderId: 'd9b10dfa-013d-4480-a30b-7dcd4d50d59c',
+            action: 'quickPay',
+            merchantId: Config.MERCHANT_ID.toUpperCase(),
+            clientId: Config.CLIENT_ID.toUpperCase(),
+            orderId: transactionId,
             amount: '9',
-            customerId: '6YyrDeuLRkR8tJXFP1TsDHcj2BI2',
-            customerEmail: 'vrushali@mailinator.com',
-            customerMobile: '7745049011',
-            orderDetails:
-              '{"order_id":"d9b10dfa-013d-4480-a30b-7dcd4d50d59c","amount":"9","customer_id":"6YyrDeuLRkR8tJXFP1TsDHcj2BI2","merchant_id":"ONDC","customer_email":"vrushali@mailinator.com","customer_phone":"7745049011","return_url":"return_url":"https://buyer-app.ondc.org/application/checkout","timestamp":"1571922200845"}',
+            customerId: uid,
+            customerEmail: selectedAddress.descriptor.email,
+            customerMobile: selectedAddress.descriptor.phone,
+            orderDetails: JSON.stringify(orderDetails),
+            signaturePayload: JSON.stringify(signaturePayload),
             signature: data.signedPayload,
-            merchantKeyId: '5992',
+            merchantKeyId: Config.MERCHANT_KEY_ID,
             language: 'english',
             environment: 'sandbox',
           },
         };
+        console.log(payload);
         if (HyperSdkReact.isInitialised()) {
           HyperSdkReact.process(JSON.stringify(payload));
           DeviceEventEmitter.addListener('HyperEvent', resp => {
@@ -425,6 +435,26 @@ const Payment = ({navigation, theme, route: {params}}) => {
     initializeOrder()
       .then(() => {})
       .catch(() => {});
+
+    HyperSdkReact.createHyperServices();
+    const initiatePayload = {
+      requestId: transactionId,
+      service: 'in.juspay.hyperpay',
+      payload: {
+        action: 'initiate',
+        merchantId: Config.MERCHANT_ID.toUpperCase(),
+        clientId: Config.CLIENT_ID.toUpperCase(),
+        environment: 'sandbox',
+      },
+    };
+    HyperSdkReact.initiate(JSON.stringify(initiatePayload));
+    DeviceEventEmitter.addListener('HyperEvent', resp => {
+      onHyperEvent(resp);
+    });
+
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      return !HyperSdkReact.isNull() && HyperSdkReact.onBackPressed();
+    });
   }, []);
 
   return (
@@ -478,7 +508,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         <ContainButton
           title={buttonTitle}
           onPress={confirmOrder}
-          loading={confirmOrderInProgrss}
+          loading={initializeOrderInProgrss}
         />
       </View>
     </View>
