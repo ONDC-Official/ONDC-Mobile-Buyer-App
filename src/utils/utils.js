@@ -15,6 +15,19 @@ export const showToastWithGravity = message => {
   });
 };
 
+/**
+ * Function is used to get the initials of the name for avatar
+ * @param name: string
+ * @returns {string}
+ */
+export const getUserInitials = name => {
+  return name
+    .split(' ')
+    .map((n, i, a) => (i === 0 || i + 1 === a.length ? n[0] : null))
+    .join('')
+    .toUpperCase();
+};
+
 export const showInfoToast = message => {
   Toast.show({
     type: 'info',

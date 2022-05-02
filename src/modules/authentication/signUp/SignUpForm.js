@@ -6,7 +6,7 @@ import {strings} from '../../../locales/i18n';
 import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
 import {Context as AuthContext} from '../../../context/Auth';
-import auth from '@react-native-firebase/auth';
+import auth, {firebase} from '@react-native-firebase/auth';
 import {showToastWithGravity} from '../../../utils/utils';
 import PasswordField from '../../../components/input/PasswordField';
 
@@ -19,17 +19,19 @@ const shortPassword = strings('errors.short_password');
 const invalidEmail = strings('errors.invalid_email');
 const title = strings('authentication.signup.button_title');
 const unmatchPassowrd = strings('errors.unmatch_password');
-const confirmPassword = strings(
-  'authentication.signup.confirm_password_placeholder',
-);
+// const confirmPassword = strings(
+//   'authentication.signup.confirm_password_placeholder',
+// );
+const namePlaceholder = strings('authentication.signup.name_placeholder');
 
 const validationSchema = Yup.object({
   email: Yup.string().trim().email(invalidEmail).required(requiredField),
   password: Yup.string().trim().min(8, shortPassword).required(requiredField),
-  confirmPassword: Yup.string()
-    .trim()
-    .required(requiredField)
-    .equals([Yup.ref('password'), null], unmatchPassowrd),
+  name: Yup.string().trim().required(requiredField),
+  // confirmPassword: Yup.string()
+  //   .trim()
+  //   .required(requiredField)
+  //   .equals([Yup.ref('password'), null], unmatchPassowrd),
 });
 
 /**
@@ -41,7 +43,8 @@ const SignUpFrom = ({navigation}) => {
   const userInfo = {
     email: '',
     password: '',
-    confirmPassword: '',
+    // confirmPassword: '',
+    name: '',
   };
   const {storeLoginDetails} = useContext(AuthContext);
   const [apiInProgress, setApiInProgress] = useState(false);
@@ -57,12 +60,17 @@ const SignUpFrom = ({navigation}) => {
         values.email,
         values.password,
       );
-
+      await firebase
+        .auth()
+        .currentUser.updateProfile({displayName: values.name});
       const idTokenResult = await auth().currentUser.getIdTokenResult();
+
       const loginDetails = {
         token: idTokenResult.token,
         uid: response.user.uid,
         emailId: response.user.email,
+        name: values.name,
+        photoURL: 'Unknown',
       };
       await storeLoginDetails(loginDetails);
       navigation.reset({
@@ -89,6 +97,13 @@ const SignUpFrom = ({navigation}) => {
         return (
           <>
             <InputField
+              value={values.name}
+              onBlur={handleBlur('name')}
+              placeholder={namePlaceholder}
+              errorMessage={touched.name ? errors.name : null}
+              onChangeText={handleChange('name')}
+            />
+            <InputField
               value={values.email}
               onBlur={handleBlur('email')}
               placeholder={emailPlaceholder}
@@ -103,14 +118,14 @@ const SignUpFrom = ({navigation}) => {
               errorMessage={touched.password ? errors.password : null}
               onChangeText={handleChange('password')}
             />
-            <PasswordField
+            {/* <PasswordField
               value={values.confirmPassword}
               onBlur={handleBlur('confirmPassword')}
               placeholder={confirmPassword}
               secureTextEntry
               errorMessage={touched.password ? errors.confirmPassword : null}
               onChangeText={handleChange('confirmPassword')}
-            />
+            /> */}
             <View style={styles.buttonContainer}>
               <ContainButton
                 title={title}

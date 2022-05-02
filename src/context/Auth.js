@@ -1,3 +1,4 @@
+import {isSearchBarAvailableForCurrentPlatform} from 'react-native-screens';
 import {
   getData,
   clearMultiple,
@@ -12,6 +13,8 @@ const defaultValue = {
   token: null,
   uid: null,
   emailId: null,
+  name: null,
+  photoURL: null,
   isLoading: true,
 };
 
@@ -22,6 +25,8 @@ const authReducer = (state, action) => {
         token: action.payload.token,
         emailId: action.payload.emailId,
         uid: action.payload.uid,
+        name: action.payload.name,
+        photoURL: action.payload.photoURL,
       });
 
     case 'save_token':
@@ -46,7 +51,7 @@ const tryLocalSignIn = dispatch => {
     const payload = {};
 
     try {
-      const data = await getMultipleData(['token', 'uid', 'emailId']);
+      const data = await getMultipleData(['token', 'uid', 'emailId', 'name']);
 
       if (data[0][1] !== null) {
         data.forEach(item => {
@@ -69,7 +74,7 @@ const tryLocalSignIn = dispatch => {
 
 const logoutUser = dispatch => {
   return async () => {
-    clearMultiple(['uid', 'emailId', 'token']).then(() => {
+    clearMultiple(['uid', 'emailId', 'token', 'name']).then(() => {
       dispatch({
         type: 'logout_user',
       });
@@ -80,16 +85,20 @@ const logoutUser = dispatch => {
 const storeLoginDetails = dispatch => {
   return async data => {
     try {
-      const {token, emailId, uid} = data;
+      const {token, emailId, uid, name, photoURL} = data;
       await saveMultipleData([
         ['token', token],
         ['emailId', emailId],
         ['uid', uid],
+        ['name', name],
+        ['photoURL', photoURL],
       ]);
       const payload = {
         token: token,
         emailId: emailId,
         uid: uid,
+        name: name,
+        photoURL: photoURL,
       };
       dispatch({type: 'set_login_details', payload});
     } catch (error) {

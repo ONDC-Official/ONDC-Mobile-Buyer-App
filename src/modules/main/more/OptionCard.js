@@ -18,6 +18,8 @@ const OptionCard = ({theme, navigation, item}) => {
         index: 0,
         routes: [{name: 'Landing'}],
       });
+    } else if (option === OPTIONS.PROFILE) {
+      navigation.navigate('Profile');
     }
   };
   return (

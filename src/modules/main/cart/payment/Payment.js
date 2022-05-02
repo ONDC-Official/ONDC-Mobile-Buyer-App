@@ -432,10 +432,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
   };
 
   useEffect(() => {
-    initializeOrder()
-      .then(() => {})
-      .catch(() => {});
-
     HyperSdkReact.createHyperServices();
     const initiatePayload = {
       requestId: transactionId,
@@ -455,6 +451,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
     BackHandler.addEventListener('hardwareBackPress', () => {
       return !HyperSdkReact.isNull() && HyperSdkReact.onBackPressed();
     });
+    initializeOrder()
+      .then(() => {})
+      .catch(() => {});
   }, []);
 
   return (

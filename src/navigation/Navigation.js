@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from '../modules/authentication/login/Login';
@@ -15,11 +15,23 @@ import AddAddress from '../modules/main/cart/addAddress/AddAddress';
 import Payment from '../modules/main/cart/payment/Payment';
 import More from '../modules/main/more/More';
 import Confirmation from '../modules/main/cart/Confirmation';
+import Profile from '../modules/main/more/Profile';
+import {useTheme, withBadge} from 'react-native-elements';
+import {CartContext} from '../context/Cart';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Dashboard = () => {
+  const {cart} = useContext(CartContext);
+  const {theme} = useTheme();
+  const badgeStyles = {
+    backgroundColor: theme.colors.accentColor,
+    paddingHorizontal: 4,
+  };
+
+  const BadgedIcon = withBadge(cart.length, {badgeStyle: badgeStyles})(Icon);
+
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -32,7 +44,7 @@ const Dashboard = () => {
               <Icon
                 name="basket"
                 size={24}
-                color={tabInfo.focused ? '#1c75bc' : '#606161'}
+                color={tabInfo.focused ? theme.colors.accentColor : '#606161'}
               />
             );
           },
@@ -44,11 +56,18 @@ const Dashboard = () => {
         options={{
           headerShown: false,
           tabBarIcon: tabInfo => {
-            return (
+            return cart.length > 0 ? (
+              <BadgedIcon
+                type="ionicon"
+                name="cart"
+                size={24}
+                color={tabInfo.focused ? theme.colors.accentColor : '#606161'}
+              />
+            ) : (
               <Icon
                 name="cart"
                 size={24}
-                color={tabInfo.focused ? '#1c75bc' : '#606161'}
+                color={tabInfo.focused ? theme.colors.accentColor : '#606161'}
               />
             );
           },
@@ -64,7 +83,7 @@ const Dashboard = () => {
               <Icon
                 name="clipboard-edit"
                 size={24}
-                color={tabInfo.focused ? '#1c75bc' : '#606161'}
+                color={tabInfo.focused ? theme.colors.accentColor : '#606161'}
               />
             );
           },
@@ -80,7 +99,7 @@ const Dashboard = () => {
               <Icon
                 name="dots-horizontal-circle"
                 size={24}
-                color={tabInfo.focused ? '#1c75bc' : '#606161'}
+                color={tabInfo.focused ? theme.colors.accentColor : '#606161'}
               />
             );
           },
@@ -142,6 +161,11 @@ const Navigation = () => {
         <Stack.Screen
           name="Payment"
           component={Payment}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

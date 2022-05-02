@@ -53,6 +53,8 @@ const LoginForm = ({navigation}) => {
         token: idTokenResult.token,
         uid: response.user.uid,
         emailId: response.user.email,
+        name: response.user.displayName ? response.user.displayName : 'Unknown',
+        photoURL: response.user.photoURL ? response.user.photoURL : 'Unknown',
       });
 
       navigation.reset({

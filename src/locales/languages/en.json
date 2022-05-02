@@ -13,7 +13,8 @@
     },
     "signup": {
       "button_title": "Sign Up",
-      "confirm_password_placeholder": "Confirm Password"
+      "confirm_password_placeholder": "Confirm Password",
+      "name_placeholder":"Full Name"
     },
     "splash": {}
   },

@@ -28,6 +28,8 @@ export default navigation => {
         token: idTokenResult.token,
         uid: idTokenResult.claims.user_id,
         emailId: idTokenResult.claims.email,
+        name: 'Unknown',
+        photoURL: 'Unknown',
       });
 
       navigation.reset({

@@ -61,7 +61,7 @@ const Products = ({theme}) => {
   const {storeItemInCart, cart, storeList, list, removeItemFromCart} =
     useContext(CartContext);
   const {
-    state: {token, emailId, uid},
+    state: {token, emailId, uid, name},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
 
