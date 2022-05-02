@@ -1,18 +1,11 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  Image,
-} from 'react-native';
-import {appStyles} from '../../styles/styles';
+import {Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
+import {Card, withTheme} from 'react-native-elements';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ClearButton from '../../components/button/ClearButton';
 import {strings} from '../../locales/i18n';
-import {Card, withTheme} from 'react-native-elements';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {appStyles} from '../../styles/styles';
 
 const userAgreement = strings('global.user_agreement');
 const termsOfServices = strings('global.terms_of_services');
@@ -36,10 +29,10 @@ const AuthContainer = ({theme, children, onBackPress}) => {
       <KeyboardAwareScrollView
         contentContainerStyle={[appStyles.container, styles.container]}>
         <TouchableOpacity onPress={onBackPress}>
-          <Icon name="angle-left" size={30} color={colors.accentColor} />
+          <Icon name="angle-left" size={30} color={colors.accentColor}/>
         </TouchableOpacity>
         <View style={styles.imageContainer}>
-          <Image source={image} resizeMode={'contain'} style={styles.image} />
+          <Image source={image} resizeMode={'contain'} style={styles.image}/>
         </View>
 
         <View style={[appStyles.container, styles.mainContainer]}>
@@ -47,9 +40,9 @@ const AuthContainer = ({theme, children, onBackPress}) => {
             {children}
             <View style={styles.footerContainer}>
               <Text>{userAgreement}</Text>
-              <ClearButton title={termsOfServices} />
+              <ClearButton title={termsOfServices}/>
               <Text> {andLabel} </Text>
-              <ClearButton title={privacyPolicy} />
+              <ClearButton title={privacyPolicy}/>
             </View>
           </Card>
         </View>

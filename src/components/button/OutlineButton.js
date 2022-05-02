@@ -1,6 +1,6 @@
 import React from 'react';
-import {Button, withTheme} from 'react-native-elements';
 import {StyleSheet} from 'react-native';
+import {Button, withTheme} from 'react-native-elements';
 import {appStyles} from '../../styles/styles';
 
 /**

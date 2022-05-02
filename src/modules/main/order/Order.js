@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Text} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
@@ -7,7 +8,6 @@ import {getData} from '../../../utils/api';
 import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';
 import {skeletonList} from '../../../utils/utils';
 import OrderCard from './OrderCard';
-import {Text} from 'react-native-elements';
 import OrderCardSkeleton from './OrderCardSkeleton';
 
 const Order = ({}) => {
@@ -45,9 +45,9 @@ const Order = ({}) => {
 
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <OrderCardSkeleton item={item} />
+      <OrderCardSkeleton item={item}/>
     ) : (
-      <OrderCard item={item} />
+      <OrderCard item={item}/>
     );
   };
 

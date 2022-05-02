@@ -1,16 +1,19 @@
-import React, {useContext, useRef, useEffect, useState} from 'react';
-import {StyleSheet, View, DeviceEventEmitter, BackHandler} from 'react-native';
-import Header from '../addressPicker/Header';
+import HyperSdkReact from 'hyper-sdk-react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
+import {BackHandler, DeviceEventEmitter, StyleSheet, View} from 'react-native';
+import Config from 'react-native-config';
 import {Text, withTheme} from 'react-native-elements';
-import {appStyles} from '../../../../styles/styles';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel,} from 'react-native-simple-radio-button';
+import {useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
-import RadioForm, {
-  RadioButtonInput,
-  RadioButton,
-  RadioButtonLabel,
-} from 'react-native-simple-radio-button';
+import {Context as AuthContext} from '../../../../context/Auth';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
-import {postData, getData} from '../../../../utils/api';
+import {clearAllData} from '../../../../redux/actions';
+import {appStyles} from '../../../../styles/styles';
+import {alertWithOneButton} from '../../../../utils/alerts';
+import {getData, postData} from '../../../../utils/api';
 import {
   BASE_URL,
   CONFIRM_ORDER,
@@ -19,13 +22,8 @@ import {
   ON_INITIALIZE_ORDER,
   SIGN_PAYLOAD,
 } from '../../../../utils/apiUtilities';
-import {Context as AuthContext} from '../../../../context/Auth';
-import {CartContext} from '../../../../context/Cart';
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {showInfoToast, showToastWithGravity} from '../../../../utils/utils';
-import {alertWithOneButton} from '../../../../utils/alerts';
-import HyperSdkReact from 'hyper-sdk-react';
-import Config from 'react-native-config';
+import {showToastWithGravity} from '../../../../utils/utils';
+import Header from '../addressPicker/Header';
 
 const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
@@ -47,24 +45,24 @@ const paymentOptions = [
  */
 const Payment = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
+  const dispatch = useDispatch();
   const {selectedAddress, confirmationList} = params;
-  const {cart, storeList, clearCart} = useContext(CartContext);
+  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const [orders, setOrders] = useState(null);
   const [error, setError] = useState(null);
   const {
     state: {token, uid},
   } = useContext(AuthContext);
   const [selectedPaymentOption, setSelectedPaymentOption] = useState(0);
-  const [initializeOrderInProgrss, setInitializeOrderInprogress] =
+  const [initializeOrderRequested, setInitializeOrderRequested] =
     useState(false);
-  const [confirmOrderInProgrss, setConfirmOrderInprogress] = useState(false);
+  const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
   const [transactionId, setTransactionId] = useState(null);
   const orderRef = useRef();
 
-  const onOrderSuccessfull = () => {
-    clearCart();
-    storeList(null);
+  const onOrderSuccess = () => {
+    dispatch(clearCart());
     navigation.navigate('Dashboard');
   };
 
@@ -84,17 +82,17 @@ const Payment = ({navigation, theme, route: {params}}) => {
         handleApiError(error);
       }
     }, 2000);
+
     setTimeout(() => {
       clearInterval(order);
-      setInitializeOrderInprogress(false);
+      setInitializeOrderRequested(false);
       const ordersArray = orderRef.current;
       if (ordersArray) {
         const errorObj = ordersArray.find(item => item.hasOwnProperty('error'));
         if (errorObj) {
           showToastWithGravity('Something went wrong.Please try again');
         } else {
-          setConfirmOrderInprogress(false);
-          showInfoToast('Order Initialized!');
+          setConfirmOrderRequested(false);
         }
       } else {
         showToastWithGravity('Something went wrong.Please try again');
@@ -117,24 +115,24 @@ const Payment = ({navigation, theme, route: {params}}) => {
       } catch (error) {
         handleApiError(error);
         setError(error);
-        setConfirmOrderInprogress(false);
+        setConfirmOrderRequested(false);
       }
     }, 2000);
     setTimeout(() => {
       clearInterval(order);
 
       if (!error) {
-        setConfirmOrderInprogress(false);
-        alertWithOneButton(null, 'Place Order', 'Ok', onOrderSuccessfull);
+        setConfirmOrderRequested(false);
+        alertWithOneButton(null, 'Place Order', 'Ok', onOrderSuccess);
       } else {
-        showToastWithGravity('Something went wrong.Please try again');
+        showToastWithGravity('Something went wrong. Please try again');
       }
     }, 10000);
   };
 
   const initializeOrder = async () => {
     try {
-      setInitializeOrderInprogress(true);
+      setInitializeOrderRequested(true);
       let payload = [];
       let providerIdArray = [];
 
@@ -247,7 +245,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
     } catch (error) {
       handleApiError(error);
 
-      setInitializeOrderInprogress(false);
+      setInitializeOrderRequested(false);
     }
   };
 
@@ -256,19 +254,19 @@ const Payment = ({navigation, theme, route: {params}}) => {
     var event = data.event || '';
     switch (event) {
       case 'show_loader':
-        setInitializeOrderInprogress(true);
+        setInitializeOrderRequested(true);
         break;
       case 'hide_loader':
-        setInitializeOrderInprogress(false);
+        setInitializeOrderRequested(false);
         break;
       case 'initiate_result':
-        var payload = data.payload || {};
+        let payload = data.payload || {};
         console.log('initiate_result: ', payload);
         // merchant code
 
         break;
       case 'process_result':
-        var payload = data.payload || {};
+        payload = data.payload || {};
         console.log('process_result: ', payload);
         // merchant code
 
@@ -279,6 +277,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   };
 
   const confirmOrder = async () => {
+    setConfirmOrderRequested(true);
     const options = {
       headers: {Authorization: `Bearer ${token}`},
     };
@@ -289,12 +288,11 @@ const Payment = ({navigation, theme, route: {params}}) => {
             one.hasOwnProperty('error'),
           );
           if (!errorObj) {
-            setConfirmOrderInprogress(true);
             const payload = [];
             orderRef.current.forEach(item => {
               const itemsArray = [];
               item.message.order.items.forEach(object => {
-                const element = cart.find(one => one.id === object.id);
+                const element = cartItems.find(one => one.id === object.id);
 
                 object.id = element.id;
                 object.bpp_id = item.context.bpp_id;
@@ -358,7 +356,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         }
       } catch (error) {
         handleApiError(error);
-        setConfirmOrderInprogress(false);
+        setConfirmOrderRequested(false);
       }
     } else {
       try {
@@ -369,7 +367,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
               customer_id: uid,
               mobile_number: selectedAddress.descriptor.phone,
               email_address: selectedAddress.descriptor.email,
-              merchant_id: Config.MERCHANT_ID.toUpperCase(),
+              merchant_id: Config.MERCHANT_ID,
               order_id: transactionId,
               amount: 9,
               timestamp: new Date().getTime().toString(),
@@ -383,7 +381,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           order_id: transactionId,
           amount: '9',
           customer_id: uid,
-          merchant_id: Config.MERCHANT_ID.toUpperCase(),
+          merchant_id: Config.MERCHANT_ID,
           customer_email: selectedAddress.descriptor.email,
           customer_phone: selectedAddress.descriptor.phone,
           return_url: 'https://buyer-app.ondc.org/application/checkout',
@@ -391,7 +389,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         };
         const signaturePayload = {
           customer_id: uid,
-          merchant_id: Config.MERCHANT_ID.toUpperCase(),
+          merchant_id: Config.MERCHANT_ID,
           customer_email: selectedAddress.descriptor.email,
           customer_phone: selectedAddress.descriptor.phone,
           timestamp: new Date().getTime().toString(),
@@ -401,8 +399,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
           service: 'in.juspay.hyperpay',
           payload: {
             action: 'quickPay',
-            merchantId: Config.MERCHANT_ID.toUpperCase(),
-            clientId: Config.CLIENT_ID.toUpperCase(),
+            merchantId: Config.MERCHANT_ID,
+            clientId: Config.CLIENT_ID,
             orderId: transactionId,
             amount: '9',
             customerId: uid,
@@ -438,8 +436,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
       service: 'in.juspay.hyperpay',
       payload: {
         action: 'initiate',
-        merchantId: Config.MERCHANT_ID.toUpperCase(),
-        clientId: Config.CLIENT_ID.toUpperCase(),
+        merchantId: Config.MERCHANT_ID,
+        clientId: Config.CLIENT_ID,
         environment: 'sandbox',
       },
     };
@@ -459,7 +457,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title={heading} navigation={navigation} />
+      <Header title={heading} navigation={navigation}/>
       <View style={styles.container}>
         <Text style={styles.text}>{addressTitle}</Text>
         <View style={styles.addressContainer}>
@@ -507,7 +505,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         <ContainButton
           title={buttonTitle}
           onPress={confirmOrder}
-          loading={initializeOrderInProgrss}
+          loading={initializeOrderRequested}
         />
       </View>
     </View>

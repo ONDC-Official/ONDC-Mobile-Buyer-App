@@ -1,22 +1,22 @@
-import {alertWithOneButton} from '../utils/alerts';
-import {useContext} from 'react';
-import {Context as AuthContext} from '../context/Auth';
 import {useNavigation} from '@react-navigation/native';
+import {useContext} from 'react';
+import {useDispatch} from 'react-redux';
+import {Context as AuthContext} from '../context/Auth';
 import {strings} from '../locales/i18n';
+import {clearAllData} from '../redux/actions';
+import {alertWithOneButton} from '../utils/alerts';
 import {showToastWithGravity} from '../utils/utils';
-import {CartContext} from '../context/Cart';
 
 let sessionExpiredMessageShown = false;
 
 export default () => {
+  const dispatch = useDispatch();
   const {logoutUser} = useContext(AuthContext);
-  const {clearCart, storeList} = useContext(CartContext);
   const navigation = useNavigation();
 
   const clearDataAndLogout = () => {
     logoutUser();
-    clearCart();
-    storeList(null);
+    dispatch(clearAllData());
     navigation.reset({
       index: 0,
       routes: [{name: 'Landing'}],
@@ -24,7 +24,6 @@ export default () => {
   };
 
   const handleApiError = (error, setError = null) => {
-    console.log(JSON.stringify(error.response, undefined, 4));
     if (error.response) {
       if (error.response.status === 401) {
         if (!sessionExpiredMessageShown) {

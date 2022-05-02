@@ -1,26 +1,25 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {CartContext} from '../../../context/Cart';
-import {getData, postData} from '../../../utils/api';
-import {Context as AuthContext} from '../../../context/Auth';
-import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../utils/apiUtilities';
-import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
-import {appStyles} from '../../../styles/styles';
-import Header from '../cart/addressPicker/Header';
+import {useSelector} from 'react-redux';
 import ContainButton from '../../../components/button/ContainButton';
+import {Context as AuthContext} from '../../../context/Auth';
+import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
+import {appStyles} from '../../../styles/styles';
+import {getData, postData} from '../../../utils/api';
+import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../utils/apiUtilities';
 import {skeletonList} from '../../../utils/utils';
+import Header from '../cart/addressPicker/Header';
 import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
-  const {cart} = useContext(CartContext);
   const {
     state: {token},
   } = useContext(AuthContext);
+  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const {handleApiError} = useNetworkErrorHandling();
   const [confirmationList, setConfirmationList] = useState(null);
-  const [totalAmount, setTotalAmount] = useState(0);
 
   const onGetQuote = messageId => {
     const messageIds = messageId.toString();
@@ -38,7 +37,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           if (!item.error) {
             if (item.context.bpp_id) {
               item.message.quote.items.forEach(element => {
-                const object = cart.find(one => one.id === element.id);
+                const object = cartItems.find(one => one.id === element.id);
                 element.provider = {
                   id: object.provider_id,
                   descriptor: object.descriptor,
@@ -53,12 +52,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           }
         });
 
-        // const subTotal = list.reduce((total, item) => {
-        //   return item.message.quote.provider
-        //     ? Number(item.message.quote.quote.price.value) + total
-        //     : total;
-        // }, 0);
-        // setTotalAmount(subTotal);
         setConfirmationList(list);
       } catch (error) {
         handleApiError(error);
@@ -73,7 +66,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     try {
       let payload = [];
       let providerIdArray = [];
-      cart.forEach(item => {
+      cartItems.forEach(item => {
         const index = providerIdArray.findIndex(
           one => one === item.provider_id,
         );
@@ -154,7 +147,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const renderItem = ({item}) => {
     const element = cart.find(one => one.id === item.id);
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ConfirmationCardSkeleton item={item} />
+      <ConfirmationCardSkeleton item={item}/>
     ) : (
       <>
         {element ? (
@@ -192,7 +185,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const listData = confirmationList ? confirmationList : skeletonList;
   return (
     <View style={appStyles.container}>
-      <Header title="Order Confirmation" navigation={navigation} />
+      <Header title="Order Confirmation" navigation={navigation}/>
 
       <FlatList
         keyExtractor={(item, index) => {

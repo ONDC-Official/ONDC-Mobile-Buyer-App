@@ -1,8 +1,8 @@
 import React, {useContext} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
-import {Context as AuthContext} from '../../../../context/Auth';
 import {RadioButtonInput} from 'react-native-simple-radio-button';
+import {Context as AuthContext} from '../../../../context/Auth';
 import {appStyles} from '../../../../styles/styles';
 
 /**

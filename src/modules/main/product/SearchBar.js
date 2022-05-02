@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
-import {withTheme, Text} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../locales/i18n';

@@ -1,11 +1,7 @@
-import {isSearchBarAvailableForCurrentPlatform} from 'react-native-screens';
 import {
-  getData,
   clearMultiple,
-  setData,
-  removeData,
-  saveMultipleData,
   getMultipleData,
+  saveMultipleData,
 } from '../utils/storage';
 import createDataContext from './createDataContext';
 

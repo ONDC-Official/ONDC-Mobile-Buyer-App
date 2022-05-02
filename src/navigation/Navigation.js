@@ -1,23 +1,28 @@
+<<<<<<< HEAD
 import React, {useContext} from 'react';
+=======
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+>>>>>>> d147ff75f1f170ef0bad4d0b3920ab4c7b8a34e1
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import Login from '../modules/authentication/login/Login';
-import Splash from '../modules/authentication/splash/Splash';
-import SignUp from '../modules/authentication/signUp/SignUp';
-import Landing from '../modules/authentication/landing/Landing';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Products from '../modules/main/product/Products';
-import Cart from '../modules/main/cart/Cart';
-import Order from '../modules/main/order/Order';
+import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AddressPicker from '../modules/main/cart/addressPicker/AddressPicker';
+import Landing from '../modules/authentication/landing/Landing';
+import Login from '../modules/authentication/login/Login';
+import SignUp from '../modules/authentication/signUp/SignUp';
+import Splash from '../modules/authentication/splash/Splash';
 import AddAddress from '../modules/main/cart/addAddress/AddAddress';
+import AddressPicker from '../modules/main/cart/addressPicker/AddressPicker';
+import Cart from '../modules/main/cart/Cart';
+import Confirmation from '../modules/main/cart/Confirmation';
 import Payment from '../modules/main/cart/payment/Payment';
 import More from '../modules/main/more/More';
 import Confirmation from '../modules/main/cart/Confirmation';
 import Profile from '../modules/main/more/Profile';
 import {useTheme, withBadge} from 'react-native-elements';
 import {CartContext} from '../context/Cart';
+import Order from '../modules/main/order/Order';
+import Products from '../modules/main/product/Products';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();

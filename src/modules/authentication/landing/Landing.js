@@ -1,12 +1,12 @@
 import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
+import {Text, useTheme} from 'react-native-elements';
 import ContainButton from '../../../components/button/ContainButton';
-import {appStyles} from '../../../styles/styles';
-import {colors, Text, useTheme} from 'react-native-elements';
-import {strings} from '../../../locales/i18n';
-import useLoginWithGoogle from './hooks/useLoginWithGoogle';
-import {isIOS} from '../../../utils/utils';
 import OutlineButton from '../../../components/button/OutlineButton';
+import {strings} from '../../../locales/i18n';
+import {appStyles} from '../../../styles/styles';
+import {isIOS} from '../../../utils/utils';
+import useLoginWithGoogle from './hooks/useLoginWithGoogle';
 
 const logo = require('../../../assets/logo.png');
 
@@ -30,7 +30,7 @@ const Landing = ({navigation}) => {
   return (
     <View style={appStyles.container}>
       <View style={[appStyles.container, styles.container]}>
-        <Image source={logo} style={styles.image} />
+        <Image source={logo} style={styles.image}/>
 
         <View style={styles.buttonContainer}>
           <ContainButton

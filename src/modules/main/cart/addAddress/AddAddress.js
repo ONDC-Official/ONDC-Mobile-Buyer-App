@@ -1,18 +1,18 @@
+import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Card, withTheme} from 'react-native-elements';
-import Header from '../addressPicker/Header';
-import * as Yup from 'yup';
-import {strings} from '../../../../locales/i18n';
-import {Formik} from 'formik';
-import InputField from '../../../../components/input/InputField';
-import ContainButton from '../../../../components/button/ContainButton';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import * as Yup from 'yup';
+import ContainButton from '../../../../components/button/ContainButton';
+import InputField from '../../../../components/input/InputField';
+import {Context as AuthContext} from '../../../../context/Auth';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {postData} from '../../../../utils/api';
 import {ADD_ADDRESS, BASE_URL} from '../../../../utils/apiUtilities';
-import {Context as AuthContext} from '../../../../context/Auth';
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import Header from '../addressPicker/Header';
 
 const invalidNumber = strings('errors.invalid_number');
 const invalidPin = strings('errors.invalid_pin');
@@ -116,7 +116,7 @@ const AddAddress = ({navigation, theme}) => {
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title={addAddress} navigation={navigation} />
+      <Header title={addAddress} navigation={navigation}/>
       <KeyboardAwareScrollView>
         <Card containerStyle={styles.containerStyle}>
           <Formik
@@ -130,13 +130,13 @@ const AddAddress = ({navigation, theme}) => {
                 });
             }}>
             {({
-              values,
-              errors,
-              handleChange,
-              handleBlur,
-              touched,
-              handleSubmit,
-            }) => {
+                values,
+                errors,
+                handleChange,
+                handleBlur,
+                touched,
+                handleSubmit,
+              }) => {
               return (
                 <>
                   <InputField

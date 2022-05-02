@@ -1,9 +1,9 @@
 import React, {useContext, useEffect} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
-import {appStyles} from '../../../styles/styles';
 import {Text} from 'react-native-elements';
-import {strings} from '../../../locales/i18n';
 import {Context as AuthContext} from '../../../context/Auth';
+import {strings} from '../../../locales/i18n';
+import {appStyles} from '../../../styles/styles';
 
 const image = require('../../../assets/logo.png');
 const versionLabel = strings('global.version_label');
@@ -64,7 +64,7 @@ const Splash = ({navigation}) => {
   return (
     <View style={appStyles.container}>
       <View style={[appStyles.container, styles.container]}>
-        <Image source={image} style={styles.image} />
+        <Image source={image} style={styles.image}/>
       </View>
       <View style={styles.footer}>
         <Text>{versionLabel}</Text>

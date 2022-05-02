@@ -7,22 +7,22 @@ const OrderCardSkeleton = () => {
   return (
     <Card containerStyle={styles.card}>
       <SkeletonPlaceholder>
-        <View style={styles.name} />
-        <View style={styles.date} />
-        <View style={styles.price} />
-        <View style={styles.address} />
-        <View styles={styles.street} />
-        <View style={styles.pin} />
+        <View style={styles.name}/>
+        <View style={styles.date}/>
+        <View style={styles.price}/>
+        <View style={styles.address}/>
+        <View styles={styles.street}/>
+        <View style={styles.pin}/>
         <View style={styles.status}>
-          <View style={styles.radioButton} />
-          <View style={styles.progressBar} />
-          <View style={styles.radioButton} />
-          <View style={styles.progressBar} />
-          <View style={styles.radioButton} />
+          <View style={styles.radioButton}/>
+          <View style={styles.progressBar}/>
+          <View style={styles.radioButton}/>
+          <View style={styles.progressBar}/>
+          <View style={styles.radioButton}/>
         </View>
         <View style={styles.buttonContainer}>
-          <View style={styles.button} />
-          <View style={styles.button} />
+          <View style={styles.button}/>
+          <View style={styles.button}/>
         </View>
       </SkeletonPlaceholder>
     </Card>

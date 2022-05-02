@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {withTheme, Text} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
@@ -26,7 +26,7 @@ const Header = ({theme, title, show, navigation}) => {
       <TouchableOpacity
         style={[styles.backButton, {backgroundColor: colors.accentColor}]}
         onPress={() => navigation.goBack()}>
-        <Icon name="arrow-left" size={16} color={colors.white} />
+        <Icon name="arrow-left" size={16} color={colors.white}/>
       </TouchableOpacity>
       <View style={appStyles.container}>
         <Text style={styles.text}>{title}</Text>

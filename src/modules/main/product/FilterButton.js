@@ -6,6 +6,7 @@ import {appStyles} from '../../../styles/styles';
 
 /**
  * Component to show filter buttons in the header of product screen
+ * @param theme
  * @param name:name of the card
  * @param selectedCard:filter button selected by user
  * @param onPress:function handles click event of filter button

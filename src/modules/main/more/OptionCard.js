@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Card, Icon, Text, withTheme} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
 import {OPTIONS} from '../../../utils/Constants';
@@ -29,7 +29,7 @@ const OptionCard = ({theme, navigation, item}) => {
         onPress={() => {
           onPressHandler(item.name);
         }}>
-        <Icon type="font-awesome" name={item.icon} color={colors.accentColor} />
+        <Icon type="font-awesome" name={item.icon} color={colors.accentColor}/>
         <Text style={[styles.text, {color: colors.accentColor}]}>
           {item.string}
         </Text>

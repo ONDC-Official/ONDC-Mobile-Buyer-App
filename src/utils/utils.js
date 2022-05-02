@@ -44,3 +44,20 @@ export const skeletonList = [
   {isSkeleton: true, _id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb9d'},
   {isSkeleton: true, _id: '9b1deb4d-3b7d-4bad-9bde-2b0d7b4dcb6d'},
 ];
+
+/**
+ * Function to convert any number to currency
+ * @param value: amount in number format
+ * @returns {string}
+ */
+export const maskAmount = value => {
+  if (value) {
+    return value.toLocaleString('en-IN', {
+      maximumFractionDigits: 2,
+      style: 'currency',
+      currency: 'INR',
+    });
+  } else {
+    return '';
+  }
+};
