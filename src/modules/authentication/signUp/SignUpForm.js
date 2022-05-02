@@ -1,14 +1,14 @@
-import React, {useContext, useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import auth from '@react-native-firebase/auth';
 import {Formik} from 'formik';
+import React, {useContext, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import * as Yup from 'yup';
-import {strings} from '../../../locales/i18n';
 import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
-import {Context as AuthContext} from '../../../context/Auth';
-import auth from '@react-native-firebase/auth';
-import {showToastWithGravity} from '../../../utils/utils';
 import PasswordField from '../../../components/input/PasswordField';
+import {Context as AuthContext} from '../../../context/Auth';
+import {strings} from '../../../locales/i18n';
+import {showToastWithGravity} from '../../../utils/utils';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
 const passwordPlaceholder = strings(

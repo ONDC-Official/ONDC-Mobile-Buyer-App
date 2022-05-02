@@ -1,8 +1,10 @@
-import React, {useContext} from 'react';
-import {View, SafeAreaView, FlatList, StyleSheet} from 'react-native';
-import {withTheme, Text} from 'react-native-elements';
-import {CartContext} from '../../../context/Cart';
+import React from 'react';
+import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {Text, withTheme} from 'react-native-elements';
+import {useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {strings} from '../../../locales/i18n';
+import {clearCart} from '../../../redux/actions';
 import {appStyles} from '../../../styles/styles';
 import ProductCard from '../product/ProductCard';
 import EmptyComponent from './EmptyComponent';
@@ -19,87 +21,36 @@ const message = strings('main.cart.empty_cart_message');
  * @returns {JSX.Element}
  */
 const Cart = ({navigation, theme}) => {
+  const dispatch = useDispatch();
   const {colors} = theme;
-  const {
-    cart,
-    list,
-    removeItemFromCart,
-    storeItemInCart,
-    storeList,
-    clearCart,
-    updateItemInCart,
-    updateCart,
-  } = useContext(CartContext);
+
+  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
   /**
    * function  use to calculate total price of item added in cart
    */
-  const subTotal = cart.reduce((total, item) => {
+  const subTotal = cartItems.reduce((total, item) => {
     total += item.price.value * item.quantity;
     return total;
   }, 0);
 
   /**
-   * function  use to remove item from cart
-   */
-  const removeItem = cartItem => {
-    const newArray = list.slice();
-    let selectedItem = newArray.find(item => {
-      return item.id === cartItem.id;
-    });
-    if (selectedItem) {
-      selectedItem.quantity = selectedItem.quantity - 1;
-      removeItemFromCart(selectedItem);
-      storeList(newArray);
-    } else {
-      updateItemInCart(cartItem);
-    }
-  };
-
-  /**
-   * function  use to add item in cart
-   */
-  const addItem = addedItem => {
-    const newArray = list.slice();
-    let selectedItem = newArray.find(item => {
-      return item.id === addedItem.id;
-    });
-    if (selectedItem) {
-      selectedItem.quantity = selectedItem.quantity + 1;
-      storeItemInCart(selectedItem);
-      storeList(newArray);
-    } else {
-      updateCart(addedItem);
-    }
-  };
-
-  /**
    * function handles click event of clear cart button
-   * which cleares the cart list
+   * which clears the cart list
    */
-  const onPressHandler = () => {
-    let newList = list.slice();
-    newList.forEach(item => (item.quantity = 0));
-    storeList(newList);
-    clearCart();
-  };
+  const onClearCart = () => dispatch(clearCart());
 
   /**
    * function handles click event of checkout button
    */
-  const onCheckout = () => navigation.navigate('AddressPicker');
+  const onCheckout = () => navigation.navigate('AddressPicker', {total: subTotal});
 
   /**
    * Function is used to render single product card in the list
    * @param item:single object from cart list
    * @returns {JSX.Element}
    */
-  const renderItem = ({item}) => {
-    console.log(item.descriptor, '////', item.bpp_id);
-    return (
-      <ProductCard item={item} removeItem={removeItem} addItem={addItem} />
-    );
-  };
+  const renderItem = ({item}) => <ProductCard item={item}/>;
 
   return (
     <SafeAreaView
@@ -110,7 +61,7 @@ const Cart = ({navigation, theme}) => {
           styles.container,
           {backgroundColor: colors.backgroundColor},
         ]}>
-        {cart.length !== 0 && (
+        {cartItems.length !== 0 && (
           <View style={[styles.header, {backgroundColor: colors.white}]}>
             <Text style={styles.text}>
               {subTotalLabel} {subTotal}
@@ -118,19 +69,19 @@ const Cart = ({navigation, theme}) => {
           </View>
         )}
         <FlatList
-          data={cart}
+          data={cartItems}
           renderItem={renderItem}
           ListEmptyComponent={() => {
-            return <EmptyComponent message={message} />;
+            return <EmptyComponent message={message}/>;
           }}
           contentContainerStyle={
-            cart.length === 0
+            cartItems.length === 0
               ? appStyles.container
               : styles.contentContainerStyle
           }
         />
-        {cart.length !== 0 && (
-          <Footer onPress={onPressHandler} onCheckout={onCheckout} />
+        {cartItems.length !== 0 && (
+          <Footer onClearCart={onClearCart} onCheckout={onCheckout}/>
         )}
       </View>
     </SafeAreaView>

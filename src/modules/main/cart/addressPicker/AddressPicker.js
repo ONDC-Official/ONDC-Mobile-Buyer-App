@@ -1,7 +1,7 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {withTheme, Text} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -45,10 +45,10 @@ const AddressPicker = ({navigation, theme}) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      let newList = [];
-      data.forEach(element => {
+
+      let newList = data.map(element => {
         element.id = Math.random().toString();
-        newList.push(element);
+        return element;
       });
 
       setList(newList);
@@ -77,7 +77,7 @@ const AddressPicker = ({navigation, theme}) => {
    */
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item} />
+      <AddressCardSkeleton item={item}/>
     ) : (
       <AddressCard
         item={item}
@@ -100,7 +100,7 @@ const AddressPicker = ({navigation, theme}) => {
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title={selectAddress} show navigation={navigation} />
+      <Header title={selectAddress} show navigation={navigation}/>
 
       <FlatList
         data={listData}
@@ -117,7 +117,7 @@ const AddressPicker = ({navigation, theme}) => {
 
       {selectedAddress !== null && (
         <View style={styles.buttonContainer}>
-          <ContainButton title={buttonTitle} onPress={onPressHandler} />
+          <ContainButton title={buttonTitle} onPress={onPressHandler}/>
         </View>
       )}
     </View>

@@ -1,27 +1,19 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {
-  FlatList,
-  PermissionsAndroid,
-  Dimensions,
-  StyleSheet,
-  View,
-} from 'react-native';
-import {getData, postData} from '../../../utils/api';
 import Geolocation from '@react-native-community/geolocation';
-import ProductCard from './ProductCard';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import {colors, withTheme} from 'react-native-elements';
+import React, {useContext, useEffect, useRef, useState} from 'react';
+import {Dimensions, FlatList, PermissionsAndroid, StyleSheet, View,} from 'react-native';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+import {colors, withTheme} from 'react-native-elements';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {isIOS, skeletonList} from '../../../utils/utils';
-import AddressPicker from './AddressPicker';
-import Header from './Header';
-import LocationDeniedAlert from './LocationDeniedAlert';
-import {appStyles} from '../../../styles/styles';
-import {CartContext} from '../../../context/Cart';
+import {useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {Context as AuthContext} from '../../../context/Auth';
-import EmptyComponent from '../cart/EmptyComponent';
+import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
+import {strings} from '../../../locales/i18n';
+import {saveProducts} from '../../../redux/product/actions';
+import {appStyles} from '../../../styles/styles';
+import {getData, postData} from '../../../utils/api';
 import {
   BASE_URL,
   GET_LATLONG,
@@ -29,10 +21,14 @@ import {
   GET_MESSAGE_ID,
   GET_PRODUCTS,
 } from '../../../utils/apiUtilities';
-import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import ProductCardSkeleton from './ProductCardSkeleton';
 import {SEARCH_QUERY} from '../../../utils/Constants';
-import {strings} from '../../../locales/i18n';
+import {isIOS, skeletonList} from '../../../utils/utils';
+import EmptyComponent from '../cart/EmptyComponent';
+import AddressPicker from './AddressPicker';
+import Header from './Header';
+import LocationDeniedAlert from './LocationDeniedAlert';
+import ProductCard from './ProductCard';
+import ProductCardSkeleton from './ProductCardSkeleton';
 
 const permissionNeededdMessage = strings(
   'main.product.permission_needed_message',
@@ -50,6 +46,7 @@ const selectLocation = strings('main.product.please_select_location');
  * @returns {JSX.Element}
  */
 const Products = ({theme}) => {
+  const dispatch = useDispatch();
   const [location, setLocation] = useState(unKnownLabel);
   const [isVisible, setIsVisible] = useState(false);
   const [latitude, setLatitude] = useState(null);
@@ -58,10 +55,11 @@ const Products = ({theme}) => {
   const [apiInProgress, setApiInProgress] = useState(false);
   const [locationInProgress, setLocationInProgress] = useState(false);
 
-  const {storeItemInCart, cart, storeList, list, removeItemFromCart} =
-    useContext(CartContext);
+  const {products} = useSelector(({productReducer}) => productReducer);
+  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+
   const {
-    state: {token, emailId, uid},
+    state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -71,43 +69,16 @@ const Products = ({theme}) => {
   const closeSheet = () => refRBSheet.current.close();
 
   /**
-   * function  use to add item in cart
-   */
-  const addItem = addedItem => {
-    const newArray = list.slice();
-    let selectedItem = newArray.find(item => item.id === addedItem.id);
-    selectedItem.quantity = selectedItem.quantity + 1;
-    storeItemInCart(selectedItem);
-    storeList(newArray);
-  };
-
-  /**
-   * function  use to remove item from cart
-   */
-  const removeItem = cartItem => {
-    const newArray = list.slice();
-    let selectedItem = newArray.find(item => {
-      return item.id === cartItem.id;
-    });
-    selectedItem.quantity = selectedItem.quantity - 1;
-    removeItemFromCart(selectedItem);
-    storeList(newArray);
-  };
-
-  /**
    * Function is used to render single product card in the list
    * @param item:single object from products list
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ProductCardSkeleton item={item} />
+      <ProductCardSkeleton item={item}/>
     ) : (
       <ProductCard
         item={item}
-        list={list}
-        addItem={addItem}
-        removeItem={removeItem}
         apiInProgress={apiInProgress}
       />
     );
@@ -205,10 +176,10 @@ const Products = ({theme}) => {
           }
         }
       } else {
-        let isPermited = await PermissionsAndroid.check(
+        let isPermitted = await PermissionsAndroid.check(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         );
-        if (!isPermited) {
+        if (!isPermitted) {
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             {
@@ -245,16 +216,15 @@ const Products = ({theme}) => {
             if (catalog.bpp_providers && catalog.bpp_providers.length > 0) {
               catalog.bpp_providers.forEach(item => {
                 item.items.forEach(element => {
-                  const index = cart.findIndex(
+                  const index = cartItems.findIndex(
                     cartItem => cartItem.id === element.id,
                   );
-                  element.quantity = index > -1 ? cart[index].quantity : 0;
+                  element.quantity = index > -1 ? cartItems[index].quantity : 0;
                   element.provider_id = item.id;
                   element.locations = item.locations;
                   element.provider = item.descriptor.name;
                   element.bpp_id = catalog.bpp_id;
                   element.transaction_id = transactionId;
-
                   items.push(element);
                 });
               });
@@ -262,7 +232,7 @@ const Products = ({theme}) => {
           }
         });
 
-        storeList(items);
+        dispatch(saveProducts(items));
       } catch (error) {
         handleApiError(error);
         setApiInProgress(false);
@@ -369,7 +339,7 @@ const Products = ({theme}) => {
     }
   }, [eloc]);
 
-  const listData = list === null ? skeletonList : list;
+  const listData = products === null ? skeletonList : products;
 
   return (
     <SafeAreaView
@@ -400,22 +370,18 @@ const Products = ({theme}) => {
           isVisible={isVisible}
           setIsVisible={setIsVisible}
         />
-        {list === null && !apiInProgress ? (
-          <EmptyComponent message={searchItemMessage} />
-        ) : (
-          <FlatList
-            data={listData}
-            renderItem={renderItem}
-            ListEmptyComponent={() => {
-              return <EmptyComponent message={noResults} />;
-            }}
-            contentContainerStyle={
-              listData.length > 0
-                ? styles.contentContainerStyle
-                : appStyles.container
-            }
-          />
-        )}
+        <FlatList
+          data={listData}
+          renderItem={renderItem}
+          ListEmptyComponent={() => {
+            return <EmptyComponent message={!apiInProgress ? searchItemMessage : noResults}/>;
+          }}
+          contentContainerStyle={
+            listData.length > 0
+              ? styles.contentContainerStyle
+              : appStyles.container
+          }
+        />
       </View>
     </SafeAreaView>
   );

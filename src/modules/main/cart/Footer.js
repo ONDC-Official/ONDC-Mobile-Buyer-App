@@ -1,6 +1,6 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, View} from 'react-native';
-import {withTheme, Text} from 'react-native-elements';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text, withTheme} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 
@@ -9,12 +9,13 @@ const checkOutButton = strings('main.cart.checkout');
 
 /**
  * Component to render footer in cart
+ * @param theme
  * @param onCheckout:function handles click event of check out button
- * @param onPress:function handles click event of clear cart button
+ * @param onClearCart:function handles click event of clear cart button
  * @constructor
  * @returns {JSX.Element}
  */
-const Footer = ({theme, onCheckout, onPress}) => {
+const Footer = ({theme, onCheckout, onClearCart}) => {
   const {colors} = theme;
 
   return (
@@ -25,12 +26,12 @@ const Footer = ({theme, onCheckout, onPress}) => {
           styles.clearCartButton,
           {borderColor: colors.accentColor},
         ]}
-        onPress={onPress}>
+        onPress={onClearCart}>
         <Text style={[styles.text, {color: colors.accentColor}]}>
           {clearCartButton}
         </Text>
       </TouchableOpacity>
-      <View style={styles.space} />
+      <View style={styles.space}/>
       <TouchableOpacity
         style={[
           appStyles.container,

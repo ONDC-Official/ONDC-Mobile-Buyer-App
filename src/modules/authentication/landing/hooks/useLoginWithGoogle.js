@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import Config from 'react-native-config';
 import {useContext} from 'react';
+import Config from 'react-native-config';
 import {Context as AuthContext} from '../../../../context/Auth';
 
 GoogleSignin.configure({

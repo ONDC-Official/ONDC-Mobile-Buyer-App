@@ -1,11 +1,4 @@
-import {
-  getData,
-  clearMultiple,
-  setData,
-  removeData,
-  saveMultipleData,
-  getMultipleData,
-} from '../utils/storage';
+import {clearMultiple, getMultipleData, saveMultipleData,} from '../utils/storage';
 import createDataContext from './createDataContext';
 
 const defaultValue = {

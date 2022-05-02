@@ -1,12 +1,10 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Divider, Icon, Text, withTheme} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {appStyles} from '../../../styles/styles';
-import {Context as AuthContext} from '../../../context/Auth';
-import OptionCard from './OptionCard';
+import {withTheme} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
+import {appStyles} from '../../../styles/styles';
 import {OPTIONS} from '../../../utils/Constants';
+import OptionCard from './OptionCard';
 
 const list = [
   {
@@ -31,7 +29,7 @@ const More = ({theme, navigation}) => {
   const {colors} = theme;
 
   const renderItem = ({item}) => {
-    return <OptionCard item={item} navigation={navigation} />;
+    return <OptionCard item={item} navigation={navigation}/>;
   };
   return (
     <SafeAreaView style={appStyles.container}>

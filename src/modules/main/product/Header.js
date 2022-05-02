@@ -1,10 +1,5 @@
 import React, {useState} from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {SearchBar, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {strings} from '../../../locales/i18n';
@@ -25,13 +20,13 @@ const search = strings('main.product.search_label');
  * @returns {JSX.Element}
  */
 const Header = ({
-  theme,
-  openSheet,
-  apiInProgress,
-  onSearch,
-  locationInProgress,
-  location,
-}) => {
+                  theme,
+                  openSheet,
+                  apiInProgress,
+                  onSearch,
+                  locationInProgress,
+                  location,
+                }) => {
   const {colors} = theme;
   const [selectedCard, setSelectedCard] = useState(product);
   const [item, setItem] = useState(null);
@@ -56,10 +51,10 @@ const Header = ({
           </View>
         ) : (
           <TouchableOpacity style={styles.subContainer} onPress={openSheet}>
-            <Icon name="map-marker" size={20} color={colors.accentColor} />
+            <Icon name="map-marker" size={20} color={colors.accentColor}/>
             <View style={styles.textContainer}>
               <Text style={{color: colors.accentColor}}>
-                {location} <Icon name="angle-down" size={14} />
+                {location} <Icon name="angle-down" size={14}/>
               </Text>
             </View>
           </TouchableOpacity>
@@ -73,7 +68,7 @@ const Header = ({
           }}
           selectedCard={selectedCard}
         />
-        <View style={styles.space} />
+        <View style={styles.space}/>
         <FilterButton
           name={provider}
           onPress={() => {
@@ -81,7 +76,7 @@ const Header = ({
           }}
           selectedCard={selectedCard}
         />
-        <View style={styles.space} />
+        <View style={styles.space}/>
 
         <FilterButton
           name={category}

@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 import StepIndicator from 'react-native-step-indicator';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 const labels = ['Ordered', 'Shipped', 'Delivered'];
 const customStyles = {
@@ -103,7 +102,7 @@ const OrderCard = ({item, theme}) => {
             style={[styles.clearCartButton, {borderColor: colors.grey}]}>
             <Text style={[styles.text, {color: colors.grey}]}>Return</Text>
           </TouchableOpacity>
-          <View style={styles.space} />
+          <View style={styles.space}/>
           <TouchableOpacity
             style={[styles.clearCartButton, {borderColor: colors.accentColor}]}>
             <Text style={[styles.text, {color: colors.accentColor}]}>

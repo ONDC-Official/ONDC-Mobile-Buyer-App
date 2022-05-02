@@ -3,22 +3,48 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useDispatch} from 'react-redux';
 import {strings} from '../../../locales/i18n';
+import {removeItemFromCart} from '../../../redux/actions';
+import {updateItemInCart} from '../../../redux/actions';
+import {addItemToCart} from '../../../redux/actions';
 import {appStyles} from '../../../styles/styles';
-import {showInfoToast, showToastWithGravity} from '../../../utils/utils';
+import {maskAmount} from '../../../utils/utils';
+import {showInfoToast} from '../../../utils/utils';
 
 const addButton = strings('main.product.add_button_title');
 
 /**
  * Component to render single product card on product screen
- * @param addItem:function gets execute when user click on add and plus button
- * @param removeItem:function gets execute when user clicks on minus button
- * @param item:object which contains product details
+ * @param theme
+ * @param item: object which contains product details
+ * @param apiInProgress
  * @constructor
  * @returns {JSX.Element}
  */
-const ProductCard = ({theme, item, apiInProgress, removeItem, addItem}) => {
+const ProductCard = ({theme, item, apiInProgress}) => {
   const {colors} = theme;
+  const dispatch = useDispatch();
+
+  const addItem = () => {
+    const product = Object.assign({}, item, {quantity: 1});
+    dispatch(addItemToCart(product));
+  };
+
+  const updateQuantity = (increase = true) => {
+    let product = null;
+    if (increase) {
+      product = Object.assign({}, item, {quantity: item.quantity + 1});
+      dispatch(updateItemInCart(product));
+    } else {
+      product = Object.assign({}, item, {quantity: item.quantity - 1});
+      if (product.quantity === 0) {
+        dispatch(removeItemFromCart(product));
+      } else {
+        dispatch(updateItemInCart(product));
+      }
+    }
+  };
 
   return (
     <Card containerStyle={styles.card}>
@@ -38,7 +64,7 @@ const ProductCard = ({theme, item, apiInProgress, removeItem, addItem}) => {
             <Text numberOfLines={1}>{item.provider}</Text>
           </View>
           <View style={styles.priceContainer}>
-            <Text>₹ {item.price.value}</Text>
+            <Text>{maskAmount(item.price.value)}</Text>
             {item.quantity < 1 ? (
               <TouchableOpacity
                 style={[styles.button, {borderColor: colors.accentColor}]}
@@ -57,18 +83,14 @@ const ProductCard = ({theme, item, apiInProgress, removeItem, addItem}) => {
                 ]}>
                 <TouchableOpacity
                   style={styles.actionButton}
-                  onPress={() => {
-                    removeItem(item);
-                  }}>
-                  <Icon name="minus" size={16} color={colors.white} />
+                  onPress={() => updateQuantity(false)}>
+                  <Icon name="minus" size={16} color={colors.white}/>
                 </TouchableOpacity>
                 <Text style={{color: colors.white}}>{item.quantity}</Text>
                 <TouchableOpacity
                   style={styles.actionButton}
-                  onPress={() => {
-                    addItem(item);
-                  }}>
-                  <Icon name="plus" color={colors.white} size={16} />
+                  onPress={() => updateQuantity(true)}>
+                  <Icon name="plus" color={colors.white} size={16}/>
                 </TouchableOpacity>
               </View>
             )}
