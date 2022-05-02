@@ -43,14 +43,15 @@ const Cart = ({navigation, theme}) => {
   /**
    * function handles click event of checkout button
    */
-  const onCheckout = () => navigation.navigate('AddressPicker', {total: subTotal});
+  const onCheckout = () =>
+    navigation.navigate('AddressPicker', {total: subTotal});
 
   /**
    * Function is used to render single product card in the list
    * @param item:single object from cart list
    * @returns {JSX.Element}
    */
-  const renderItem = ({item}) => <ProductCard item={item}/>;
+  const renderItem = ({item}) => <ProductCard item={item} />;
 
   return (
     <SafeAreaView
@@ -72,7 +73,7 @@ const Cart = ({navigation, theme}) => {
           data={cartItems}
           renderItem={renderItem}
           ListEmptyComponent={() => {
-            return <EmptyComponent message={message}/>;
+            return <EmptyComponent message={message} />;
           }}
           contentContainerStyle={
             cartItems.length === 0
@@ -81,7 +82,7 @@ const Cart = ({navigation, theme}) => {
           }
         />
         {cartItems.length !== 0 && (
-          <Footer onClearCart={onClearCart} onCheckout={onCheckout}/>
+          <Footer onClearCart={onClearCart} onCheckout={onCheckout} />
         )}
       </View>
     </SafeAreaView>

@@ -14,26 +14,34 @@ const cartReducer = (state = initialState, action) => {
   console.log(type, payload);
   switch (type) {
     case ADD_PRODUCT_CART:
-      const addIndex = state.cartItems.findIndex(product => product.id === payload.id);
+      const addIndex = state.cartItems.findIndex(
+        product => product.id === payload.id,
+      );
       if (addIndex > -1) {
         const list = state.cartItems.slice();
         list[addIndex] = payload;
         return Object.assign({}, state, {cartItems: list});
       } else {
-        return  Object.assign({}, state, {cartItems: [payload]});
+        return Object.assign({}, state, {cartItems: [payload]});
       }
 
     case REMOVE_PRODUCT_CART:
-      const removeIndex = state.cartItems.findIndex(product => product.id === payload.id);
+      const removeIndex = state.cartItems.findIndex(
+        product => product.id === payload.id,
+      );
       if (removeIndex > -1) {
-        const list = state.cartItems.filter(product => product.id !== payload.id);
+        const list = state.cartItems.filter(
+          product => product.id !== payload.id,
+        );
         return Object.assign({}, state, {cartItems: list});
       } else {
         return state;
       }
 
     case UPDATE_PRODUCT_CART:
-      const updateIndex = state.cartItems.findIndex(product => product.id === payload.id);
+      const updateIndex = state.cartItems.findIndex(
+        product => product.id === payload.id,
+      );
       if (updateIndex > -1) {
         const list = state.cartItems.slice();
         list[updateIndex] = payload;

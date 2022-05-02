@@ -15,12 +15,10 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <CartContextProvider>
         <StoreProvider store={store}>
           <Navigation />
           <Toast config={toastConfig} />
         </StoreProvider>
-        </CartContextProvider>
       </AuthProvider>
     </ThemeProvider>
   );

@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 import React, {useContext} from 'react';
-=======
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
->>>>>>> d147ff75f1f170ef0bad4d0b3920ab4c7b8a34e1
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Landing from '../modules/authentication/landing/Landing';
 import Login from '../modules/authentication/login/Login';
@@ -17,25 +13,26 @@ import Cart from '../modules/main/cart/Cart';
 import Confirmation from '../modules/main/cart/Confirmation';
 import Payment from '../modules/main/cart/payment/Payment';
 import More from '../modules/main/more/More';
-import Confirmation from '../modules/main/cart/Confirmation';
 import Profile from '../modules/main/more/Profile';
 import {useTheme, withBadge} from 'react-native-elements';
-import {CartContext} from '../context/Cart';
 import Order from '../modules/main/order/Order';
 import Products from '../modules/main/product/Products';
+import {useSelector} from 'react-redux';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const Dashboard = () => {
-  const {cart} = useContext(CartContext);
+  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const {theme} = useTheme();
   const badgeStyles = {
     backgroundColor: theme.colors.accentColor,
     paddingHorizontal: 4,
   };
 
-  const BadgedIcon = withBadge(cart.length, {badgeStyle: badgeStyles})(Icon);
+  const BadgedIcon = withBadge(cartItems.length, {badgeStyle: badgeStyles})(
+    Icon,
+  );
 
   return (
     <Tab.Navigator>
@@ -61,7 +58,7 @@ const Dashboard = () => {
         options={{
           headerShown: false,
           tabBarIcon: tabInfo => {
-            return cart.length > 0 ? (
+            return cartItems.length > 0 ? (
               <BadgedIcon
                 type="ionicon"
                 name="cart"

@@ -17,7 +17,9 @@ const productReducer = (state = initialState, action) => {
       return Object.assign({}, state, {products: payload});
 
     case ADD_PRODUCT_CART:
-      const addIndex = state.products.findIndex(product => product.id === payload.id);
+      const addIndex = state.products.findIndex(
+        product => product.id === payload.id,
+      );
       if (addIndex > -1) {
         const list = state.products.slice();
         list[addIndex] = payload;
@@ -27,7 +29,9 @@ const productReducer = (state = initialState, action) => {
       }
 
     case REMOVE_PRODUCT_CART:
-      const removeIndex = state.products.findIndex(product => product.id === payload.id);
+      const removeIndex = state.products.findIndex(
+        product => product.id === payload.id,
+      );
       if (removeIndex > -1) {
         const list = state.products.slice();
         list[removeIndex] = payload;
@@ -37,7 +41,9 @@ const productReducer = (state = initialState, action) => {
       }
 
     case UPDATE_PRODUCT_CART:
-      const updateIndex = state.products.findIndex(product => product.id === payload.id);
+      const updateIndex = state.products.findIndex(
+        product => product.id === payload.id,
+      );
       if (updateIndex > -1) {
         const list = state.products.slice();
         list[updateIndex] = payload;
@@ -51,7 +57,7 @@ const productReducer = (state = initialState, action) => {
         products: state.products.map(product => {
           product.quantity = 0;
           return product;
-        })
+        }),
       });
 
     case CLEAR_DATA:
