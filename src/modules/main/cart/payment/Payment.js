@@ -3,17 +3,21 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 import {BackHandler, DeviceEventEmitter, StyleSheet, View} from 'react-native';
 import Config from 'react-native-config';
 import {Text, withTheme} from 'react-native-elements';
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel,} from 'react-native-simple-radio-button';
+import RadioForm, {
+  RadioButton,
+  RadioButtonInput,
+  RadioButtonLabel,
+} from 'react-native-simple-radio-button';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
-import {clearAllData} from '../../../../redux/actions';
 import {appStyles} from '../../../../styles/styles';
 import {alertWithOneButton} from '../../../../utils/alerts';
 import {getData, postData} from '../../../../utils/api';
+import {clearCart} from '../../../../redux/actions';
 import {
   BASE_URL,
   CONFIRM_ORDER,
@@ -24,6 +28,7 @@ import {
 } from '../../../../utils/apiUtilities';
 import {showToastWithGravity} from '../../../../utils/utils';
 import Header from '../addressPicker/Header';
+import PaymentSkeleton from './PaymentSkeleton';
 
 const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
@@ -48,14 +53,13 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const dispatch = useDispatch();
   const {selectedAddress, confirmationList} = params;
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
-  const [orders, setOrders] = useState(null);
   const [error, setError] = useState(null);
   const {
     state: {token, uid},
   } = useContext(AuthContext);
   const [selectedPaymentOption, setSelectedPaymentOption] = useState(0);
   const [initializeOrderRequested, setInitializeOrderRequested] =
-    useState(false);
+    useState(true);
   const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
   const [transactionId, setTransactionId] = useState(null);
@@ -76,7 +80,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
-        setOrders(orders);
+
         orderRef.current = data;
       } catch (error) {
         handleApiError(error);
@@ -240,8 +244,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
           messageIds.push(item.context.message_id);
         }
       });
-
-      onInitializeOrder(messageIds);
+      if (messageIds.length > 0) {
+        onInitializeOrder(messageIds);
+      } else {
+        showToastWithGravity('Something went wrong. Please try again');
+      }
+      setInitializeOrderRequested(false);
     } catch (error) {
       handleApiError(error);
 
@@ -457,57 +465,60 @@ const Payment = ({navigation, theme, route: {params}}) => {
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title={heading} navigation={navigation}/>
-      <View style={styles.container}>
-        <Text style={styles.text}>{addressTitle}</Text>
-        <View style={styles.addressContainer}>
-          <Text>
-            {selectedAddress.address.street}, {selectedAddress.address.locality}
-            , {selectedAddress.address.city}, {selectedAddress.address.state} -{' '}
-            {selectedAddress.address.area_code}
-          </Text>
-        </View>
+      <Header title={heading} navigation={navigation} />
+      {initializeOrderRequested ? (
+        <PaymentSkeleton />
+      ) : (
+        <>
+          <View style={styles.container}>
+            <Text style={styles.text}>{addressTitle}</Text>
+            <View style={styles.addressContainer}>
+              <Text>
+                {selectedAddress.address.street},{' '}
+                {selectedAddress.address.locality},{' '}
+                {selectedAddress.address.city}, {selectedAddress.address.state}{' '}
+                - {selectedAddress.address.area_code}
+              </Text>
+            </View>
 
-        <Text style={styles.text}>{paymentOptionsTitle}</Text>
-        <View style={styles.addressContainer}>
-          <RadioForm animation={true}>
-            {paymentOptions.map((obj, i) => (
-              <RadioButton
-                labelHorizontal={true}
-                key={i}
-                style={styles.buttonStyle}>
-                <RadioButtonInput
-                  obj={obj}
-                  index={i}
-                  isSelected={i === selectedPaymentOption}
-                  borderWidth={1}
-                  buttonSize={12}
-                  buttonInnerColor={colors.accentColor}
-                  buttonOuterColor={colors.accentColor}
-                  buttonOuterSize={20}
-                  onPress={index => {
-                    setSelectedPaymentOption(index);
-                  }}
-                />
-                <RadioButtonLabel
-                  obj={obj}
-                  index={i}
-                  labelHorizontal={true}
-                  labelStyle={[styles.labelStyle, {color: colors.black}]}
-                />
-              </RadioButton>
-            ))}
-          </RadioForm>
-        </View>
-      </View>
+            <Text style={styles.text}>{paymentOptionsTitle}</Text>
+            <View style={styles.addressContainer}>
+              <RadioForm animation={true}>
+                {paymentOptions.map((obj, i) => (
+                  <RadioButton
+                    labelHorizontal={true}
+                    key={i}
+                    style={styles.buttonStyle}>
+                    <RadioButtonInput
+                      obj={obj}
+                      index={i}
+                      isSelected={i === selectedPaymentOption}
+                      borderWidth={1}
+                      buttonSize={12}
+                      buttonInnerColor={colors.accentColor}
+                      buttonOuterColor={colors.accentColor}
+                      buttonOuterSize={20}
+                      onPress={index => {
+                        setSelectedPaymentOption(index);
+                      }}
+                    />
+                    <RadioButtonLabel
+                      obj={obj}
+                      index={i}
+                      labelHorizontal={true}
+                      labelStyle={[styles.labelStyle, {color: colors.black}]}
+                    />
+                  </RadioButton>
+                ))}
+              </RadioForm>
+            </View>
+          </View>
 
-      <View style={styles.buttonContainer}>
-        <ContainButton
-          title={buttonTitle}
-          onPress={confirmOrder}
-          loading={initializeOrderRequested}
-        />
-      </View>
+          <View style={styles.buttonContainer}>
+            <ContainButton title={buttonTitle} onPress={confirmOrder} />
+          </View>
+        </>
+      )}
     </View>
   );
 };
