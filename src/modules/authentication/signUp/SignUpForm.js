@@ -60,9 +60,7 @@ const SignUpFrom = ({navigation}) => {
         values.email,
         values.password,
       );
-      await firebase
-        .auth()
-        .currentUser.updateProfile({displayName: values.name});
+      await auth().currentUser.updateProfile({displayName: values.name});
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
       const loginDetails = {
