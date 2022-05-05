@@ -147,7 +147,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const renderItem = ({item}) => {
     const element = cartItems.find(one => one.id === item.id);
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ConfirmationCardSkeleton item={item}/>
+      <ConfirmationCardSkeleton item={item} />
     ) : (
       <>
         {element ? (
@@ -185,7 +185,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const listData = confirmationList ? confirmationList : skeletonList;
   return (
     <View style={appStyles.container}>
-      <Header title="Order Confirmation" navigation={navigation}/>
+      <Header title="Order Confirmation" navigation={navigation} />
 
       <FlatList
         keyExtractor={(item, index) => {

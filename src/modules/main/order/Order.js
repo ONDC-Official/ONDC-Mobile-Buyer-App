@@ -24,7 +24,7 @@ const Order = ({}) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setOrders(data);
+      setOrders(data.orders);
     } catch (error) {
       console.log(error);
       if (error.response) {
@@ -45,9 +45,9 @@ const Order = ({}) => {
 
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <OrderCardSkeleton item={item}/>
+      <OrderCardSkeleton item={item} />
     ) : (
-      <OrderCard item={item}/>
+      <OrderCard item={item} />
     );
   };
 

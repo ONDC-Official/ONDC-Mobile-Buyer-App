@@ -11,19 +11,12 @@ const initialState = {
 const cartReducer = (state = initialState, action) => {
   const {type, payload} = action;
 
-  console.log(type, payload);
+  console.log('type', type, 'Payload', payload);
   switch (type) {
     case ADD_PRODUCT_CART:
-      const addIndex = state.cartItems.findIndex(
-        product => product.id === payload.id,
-      );
-      if (addIndex > -1) {
-        const list = state.cartItems.slice();
-        list[addIndex] = payload;
-        return Object.assign({}, state, {cartItems: list});
-      } else {
-        return Object.assign({}, state, {cartItems: [payload]});
-      }
+      const list = state.cartItems.slice();
+      list.push(payload);
+      return Object.assign({}, state, {cartItems: list});
 
     case REMOVE_PRODUCT_CART:
       const removeIndex = state.cartItems.findIndex(
