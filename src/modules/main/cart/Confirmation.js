@@ -145,7 +145,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   }, []);
 
   const renderItem = ({item}) => {
-    const element = cart.find(one => one.id === item.id);
+    const element = cartItems.find(one => one.id === item.id);
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <ConfirmationCardSkeleton item={item}/>
     ) : (
