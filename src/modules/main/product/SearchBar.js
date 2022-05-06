@@ -48,15 +48,17 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {borderColor: colors.accentColor}]}>
       <Autocomplete
         data={filteredLocations ? filteredLocations : []}
         icon="camera"
-        containerStyle={{borderColor: colors.accentColor}}
-        inputContainerStyle={{borderColor: colors.accentColor}}
+        inputContainerStyle={styles.inputContainerStyle}
         flatListProps={{
           keyboardShouldPersistTaps: 'always',
-          style: {margin: 5, borderColor: colors.accentColor},
+          style: {
+            margin: 5,
+            borderColor: colors.accentColor,
+          },
           keyExtractor: (_, id) => id,
           renderItem: ({item}) => {
             return (
@@ -95,11 +97,17 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   container: {
-    padding: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
     left: 0,
     position: 'absolute',
     right: 0,
     top: 80,
     zIndex: 1,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: 'red',
+    marginHorizontal: 10,
   },
+  inputContainerStyle: {borderWidth: 0},
 });

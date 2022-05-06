@@ -62,7 +62,17 @@
     },
     "more": {
       "profile": "Profile",
-      "log_out": "Log Out"
+      "log_out": "Log Out",
+      "support":"Support",
+      "our_policy":"Our Policy",
+      "our_policy_message":"Read Abc's condition of Use & Sale, privacy policy and other applicable user's policy",
+      "faqs":"FAQs",
+      "faqs_message":"Browse through the questions frequently asked by users",
+      "ondc_policy":"ONDC Policy",
+      "ondc_policy_message":"Read the policy and confitions of the ONDC network",
+      "contact_us":"Contact Us",
+      "contact_us_message":"Not Satisfied? You can reach out to Customer Care"
+
     }
   },
   "miscellaneous": {},

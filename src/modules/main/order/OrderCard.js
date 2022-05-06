@@ -40,6 +40,7 @@ const OrderCard = ({item, theme}) => {
     } else if (item.state === 'shipped') {
       setCurrentPosition(1);
     } else {
+      console.log(item.state);
       setCurrentPosition(2);
     }
   };
@@ -102,7 +103,7 @@ const OrderCard = ({item, theme}) => {
             style={[styles.clearCartButton, {borderColor: colors.grey}]}>
             <Text style={[styles.text, {color: colors.grey}]}>Return</Text>
           </TouchableOpacity>
-          <View style={styles.space}/>
+          <View style={styles.space} />
           <TouchableOpacity
             style={[styles.clearCartButton, {borderColor: colors.accentColor}]}>
             <Text style={[styles.text, {color: colors.accentColor}]}>

@@ -61,3 +61,9 @@ export const maskAmount = value => {
     return '';
   }
 };
+
+/**
+ * Common function used to assign ids to flat list item
+ * @param item
+ */
+export const keyExtractor = item => item._id;

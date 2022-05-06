@@ -18,6 +18,7 @@ import {useTheme, withBadge} from 'react-native-elements';
 import Order from '../modules/main/order/Order';
 import Products from '../modules/main/product/Products';
 import {useSelector} from 'react-redux';
+import Support from '../modules/main/more/support/Support';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -168,6 +169,11 @@ const Navigation = () => {
         <Stack.Screen
           name="Profile"
           component={Profile}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Support"
+          component={Support}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

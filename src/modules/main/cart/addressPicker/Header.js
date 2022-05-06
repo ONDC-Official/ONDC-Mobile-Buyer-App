@@ -22,11 +22,11 @@ const Header = ({theme, title, show, navigation}) => {
   const onPressHandler = () => navigation.navigate('AddAddress');
 
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, {backgroundColor: colors.white}]}>
       <TouchableOpacity
         style={[styles.backButton, {backgroundColor: colors.accentColor}]}
         onPress={() => navigation.goBack()}>
-        <Icon name="arrow-left" size={16} color={colors.white}/>
+        <Icon name="arrow-left" size={16} color={colors.white} />
       </TouchableOpacity>
       <View style={appStyles.container}>
         <Text style={styles.text}>{title}</Text>
@@ -47,10 +47,10 @@ export default withTheme(Header);
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    marginBottom: 5,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    elevation: 1,
   },
   backButton: {
     alignItems: 'center',

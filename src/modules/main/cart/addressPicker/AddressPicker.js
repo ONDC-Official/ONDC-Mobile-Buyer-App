@@ -77,7 +77,7 @@ const AddressPicker = ({navigation, theme}) => {
    */
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item}/>
+      <AddressCardSkeleton item={item} />
     ) : (
       <AddressCard
         item={item}
@@ -100,7 +100,7 @@ const AddressPicker = ({navigation, theme}) => {
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title={selectAddress} show navigation={navigation}/>
+      <Header title={selectAddress} show navigation={navigation} />
 
       <FlatList
         data={listData}
@@ -117,7 +117,7 @@ const AddressPicker = ({navigation, theme}) => {
 
       {selectedAddress !== null && (
         <View style={styles.buttonContainer}>
-          <ContainButton title={buttonTitle} onPress={onPressHandler}/>
+          <ContainButton title={buttonTitle} onPress={onPressHandler} />
         </View>
       )}
     </View>
@@ -132,6 +132,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: 'red',
   },
-  contentContainerStyle: {padding: 10},
+  contentContainerStyle: {paddingHorizontal: 10, paddingBottom: 10},
   emptyContainer: {justifyContent: 'center', alignItems: 'center'},
 });

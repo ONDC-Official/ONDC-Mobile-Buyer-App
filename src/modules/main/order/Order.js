@@ -6,7 +6,8 @@ import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
 import {getData} from '../../../utils/api';
 import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';
-import {skeletonList} from '../../../utils/utils';
+import {keyExtractor, skeletonList} from '../../../utils/utils';
+import ListFooter from './ListFooter';
 import OrderCard from './OrderCard';
 import OrderCardSkeleton from './OrderCardSkeleton';
 
@@ -16,17 +17,25 @@ const Order = ({}) => {
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
   const [orders, setOrders] = useState(null);
+  const [totalOrders, setTotalOrders] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [moreListRequested, setMoreListRequested] = useState(false);
 
-  const getOrderList = async () => {
+  const getOrderList = async number => {
     try {
-      const {data} = await getData(`${BASE_URL}${GET_ORDERS}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const {data} = await getData(
+        `${BASE_URL}${GET_ORDERS}?pageNumber=${number}&limit=5`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
-      setOrders(data.orders);
+      );
+      setTotalOrders(data.totalCount);
+
+      setOrders(number === 1 ? data.orders : [...orders, ...data.orders]);
+      setPageNumber(pageNumber + 1);
     } catch (error) {
-      console.log(error);
       if (error.response) {
         if (error.response.status === 404) {
           setOrders([]);
@@ -37,8 +46,23 @@ const Order = ({}) => {
     }
   };
 
+  const loadMoreList = () => {
+    if (orders) {
+      if (totalOrders > orders.length) {
+        setMoreListRequested(true);
+        getOrderList(pageNumber)
+          .then(() => {
+            setMoreListRequested(false);
+          })
+          .catch(() => {
+            setMoreListRequested(false);
+          });
+      }
+    }
+  };
+
   useEffect(() => {
-    getOrderList()
+    getOrderList(pageNumber)
       .then(() => {})
       .catch(() => {});
   }, []);
@@ -61,11 +85,15 @@ const Order = ({}) => {
           ListEmptyComponent={() => {
             return <Text>No data found</Text>;
           }}
+          keyExtractor={keyExtractor}
+          onEndReachedThreshold={0.2}
+          onEndReached={loadMoreList}
           contentContainerStyle={
             listData.length > 0
               ? styles.contentContainerStyle
               : [appStyles.container, styles.emptyContainer]
           }
+          ListFooterComponent={<ListFooter moreRequested={moreListRequested} />}
         />
       </View>
     </SafeAreaView>

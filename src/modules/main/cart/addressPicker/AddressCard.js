@@ -1,8 +1,7 @@
-import React, {useContext} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React from 'react';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 import {RadioButtonInput} from 'react-native-simple-radio-button';
-import {Context as AuthContext} from '../../../../context/Auth';
 import {appStyles} from '../../../../styles/styles';
 
 /**
@@ -15,49 +14,48 @@ import {appStyles} from '../../../../styles/styles';
  * @returns {JSX.Element}
  */
 const AddressCard = ({item, theme, selectedAddress, setSelectedAddress}) => {
-  const {
-    state: {token},
-  } = useContext(AuthContext);
   const {colors} = theme;
 
   const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
   const separator = ',';
 
+  const onPressHandler = () => setSelectedAddress(item);
+
   return (
     <Card containerStyle={styles.card}>
-      <View style={styles.container}>
-        <View style={[appStyles.container]}>
-          {item.descriptor.name ? (
-            <Text style={styles.name}>{item.descriptor.name}</Text>
-          ) : null}
-          {item.descriptor.email ? (
-            <Text style={{color: colors.grey}}>
-              {item.descriptor.email} - {item.descriptor.phone}
+      <TouchableOpacity activeOpacity={0.8} onPress={onPressHandler}>
+        <View style={styles.container}>
+          <View style={[appStyles.container]}>
+            {item.descriptor.name ? (
+              <Text style={styles.name}>{item.descriptor.name}</Text>
+            ) : null}
+            {item.descriptor.email ? (
+              <Text style={{color: colors.grey}}>
+                {item.descriptor.email} - {item.descriptor.phone}
+              </Text>
+            ) : null}
+            <Text style={styles.address}>
+              {item.address.building ? item.address.building : null}
+              {item.address.building ? separator : null} {item.address.street},{' '}
+              {item.address.city} {item.address.state}
             </Text>
-          ) : null}
-          <Text style={styles.address}>
-            {item.address.building ? item.address.building : null}
-            {item.address.building ? separator : null} {item.address.street},{' '}
-            {item.address.city} {item.address.state}
-          </Text>
-          <Text style={{color: colors.grey}}>{item.address.area_code}</Text>
+            <Text style={{color: colors.grey}}>{item.address.area_code}</Text>
+          </View>
+          <View style={styles.radioButton}>
+            <RadioButtonInput
+              obj={item}
+              borderWidth={1}
+              index={item.id}
+              buttonSize={10}
+              buttonInnerColor={colors.accentColor}
+              buttonOuterColor={colors.accentColor}
+              buttonOuterSize={18}
+              isSelected={isSelected}
+              onPress={onPressHandler}
+            />
+          </View>
         </View>
-        <View style={styles.radioButton}>
-          <RadioButtonInput
-            obj={item}
-            borderWidth={1}
-            index={item.id}
-            buttonSize={10}
-            buttonInnerColor={colors.accentColor}
-            buttonOuterColor={colors.accentColor}
-            buttonOuterSize={18}
-            isSelected={isSelected}
-            onPress={value => {
-              setSelectedAddress(item);
-            }}
-          />
-        </View>
-      </View>
+      </TouchableOpacity>
     </Card>
   );
 };
