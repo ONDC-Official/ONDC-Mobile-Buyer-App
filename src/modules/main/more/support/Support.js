@@ -1,7 +1,5 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, StyleSheet, View} from 'react-native';
-import {Card, Text} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {SafeAreaView, ScrollView, View} from 'react-native';
 import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {

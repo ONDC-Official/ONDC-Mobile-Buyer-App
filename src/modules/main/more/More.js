@@ -32,8 +32,6 @@ const list = [
  * @returns {JSX.Element}
  */
 const More = ({theme, navigation}) => {
-  const {colors} = theme;
-
   const renderItem = ({item}) => {
     return <OptionCard item={item} navigation={navigation} />;
   };

@@ -6,10 +6,11 @@ import {useSelector} from 'react-redux';
 import ContainButton from '../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
+import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../utils/apiUtilities';
-import {skeletonList} from '../../../utils/utils';
+import {showToastWithGravity, skeletonList} from '../../../utils/utils';
 import Header from '../cart/addressPicker/Header';
 import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
 
@@ -131,8 +132,12 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           messageIds.push(item.context.message_id);
         }
       });
-
-      onGetQuote(messageIds);
+      if (messageIds.length > 0) {
+        onGetQuote(messageIds);
+      } else {
+        showToastWithGravity(strings('network_error.something_went_wrong'));
+        setConfirmationList([]);
+      }
     } catch (error) {
       handleApiError(error);
     }
@@ -194,10 +199,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         data={listData}
         renderItem={renderItem}
         contentContainerStyle={styles.contentContainerStyle}
+        ListEmptyComponent={() => {
+          return <Text>No data found</Text>;
+        }}
       />
-      {/* <View style={styles.totalContainer}>
-        <Text>Total Payable: {totalAmount}</Text>
-      </View> */}
+
       {confirmationList && confirmationList.length > 0 && (
         <View style={styles.buttonContainer}>
           <ContainButton

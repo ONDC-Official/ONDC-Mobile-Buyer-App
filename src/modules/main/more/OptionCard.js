@@ -6,10 +6,7 @@ import {OPTIONS} from '../../../utils/Constants';
 
 const OptionCard = ({theme, navigation, item}) => {
   const {colors} = theme;
-  const {
-    state: {token},
-    logoutUser,
-  } = useContext(AuthContext);
+  const {logoutUser} = useContext(AuthContext);
 
   const onPressHandler = option => {
     if (option === OPTIONS.LOG_OUT) {
