@@ -2,12 +2,8 @@ import HyperSdkReact from 'hyper-sdk-react';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {BackHandler, DeviceEventEmitter, StyleSheet, View} from 'react-native';
 import Config from 'react-native-config';
+import {CheckBox} from 'react-native-elements';
 import {Text, withTheme} from 'react-native-elements';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from 'react-native-simple-radio-button';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
@@ -17,7 +13,7 @@ import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {alertWithOneButton} from '../../../../utils/alerts';
 import {getData, postData} from '../../../../utils/api';
-import {clearAllData, clearCart} from '../../../../redux/actions';
+import {clearAllData} from '../../../../redux/actions';
 import {
   BASE_URL,
   CONFIRM_ORDER,
@@ -26,6 +22,7 @@ import {
   ON_INITIALIZE_ORDER,
   SIGN_PAYLOAD,
 } from '../../../../utils/apiUtilities';
+import {PAYMENT_OPTIONS} from '../../../../utils/Constants';
 import {showToastWithGravity} from '../../../../utils/utils';
 import Header from '../addressPicker/Header';
 import PaymentSkeleton from './PaymentSkeleton';
@@ -34,11 +31,6 @@ const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
 const addressTitle = strings('main.cart.address');
 const paymentOptionsTitle = strings('main.cart.payment_options');
-
-const paymentOptions = [
-  {value: 0, label: 'JusPay'},
-  {value: 1, label: 'Cash on delivery'},
-];
 
 /**
  * Component to payment screen in application
@@ -57,13 +49,14 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const {
     state: {token, uid},
   } = useContext(AuthContext);
-  const [selectedPaymentOption, setSelectedPaymentOption] = useState(0);
+  const [selectedPaymentOption, setSelectedPaymentOption] = useState(null);
   const [initializeOrderRequested, setInitializeOrderRequested] =
     useState(true);
   const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
   const orderRef = useRef();
   const signedPayload = useRef(null);
+  const timeStamp = useRef(null);
 
   const onOrderSuccess = () => {
     dispatch(clearAllData());
@@ -269,9 +262,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
       order_id: confirmationList[0].transaction_id,
       customer_phone: selectedAddress.descriptor.phone,
       customer_email: selectedAddress.descriptor.email,
-      amount: 9,
-      timestamp: String(new Date().getTime()),
-      // return_url: 'https://buyer-app.ondc.org/application/checkout',
+      amount: String(9),
+      timestamp: timeStamp.current,
+      return_url: 'https://sandbox.juspay.in/end'
     };
     console.log('------------orderDetails payload---------');
     console.log(JSON.stringify(orderDetails, undefined, 4));
@@ -282,9 +275,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
       payload: {
         action: 'paymentPage',
         merchantId: Config.MERCHANT_ID.toUpperCase(),
-        clientId: Config.CLIENT_ID.toUpperCase(),
+        clientId: Config.CLIENT_ID.toLowerCase(),
         orderId: confirmationList[0].transaction_id,
-        amount: 9,
+        amount: String(9),
         customerId: uid,
         customerEmail: selectedAddress.descriptor.email,
         customerMobile: selectedAddress.descriptor.phone,
@@ -297,7 +290,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       },
     };
     console.log('--------process payload-----------');
-    console.log(JSON.stringify(processPayload, undefined, 4));
+    console.log(JSON.stringify(processPayload));
 
     const initialised = await HyperSdkReact.isInitialised();
     if (initialised) {
@@ -325,6 +318,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         break;
 
       case 'process_result':
+        alert(JSON.stringify(data));
         console.log('process_result: ', data);
         break;
 
@@ -338,7 +332,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
     const options = {
       headers: {Authorization: `Bearer ${token}`},
     };
-    if (selectedPaymentOption === 1) {
+    if (selectedPaymentOption === 'COD') {
       try {
         if (orderRef.current && orderRef.current.length > 0) {
           const errorObj = orderRef.current.find(one =>
@@ -417,13 +411,19 @@ const Payment = ({navigation, theme, route: {params}}) => {
       }
     } else {
       try {
+        timeStamp.current = String(new Date().getTime());
+
         const payload = JSON.stringify({
           merchant_id: Config.MERCHANT_ID.toUpperCase(),
           customer_id: uid,
-          mobile_number: selectedAddress.descriptor.phone,
-          email_address: selectedAddress.descriptor.email,
-          timestamp: String(new Date().getTime()),
+          order_id: confirmationList[0].transaction_id,
+          customer_phone: selectedAddress.descriptor.phone,
+          customer_email: selectedAddress.descriptor.email,
+          amount: String(9),
+          timestamp: timeStamp.current,
+          return_url: 'https://sandbox.juspay.in/end'
         });
+
         console.log('----------sign payload---------', payload);
 
         const {data} = await postData(
@@ -447,7 +447,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       service: 'in.juspay.hyperpay',
       payload: {
         action: 'initiate',
-        clientId: Config.CLIENT_ID.toUpperCase(),
+        clientId: Config.CLIENT_ID.toLowerCase(),
         merchantId: Config.MERCHANT_ID.toUpperCase(),
         merchantKeyId: Config.MERCHANT_KEY_ID,
         signature: signedPayload.current,
@@ -456,7 +456,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       },
     };
     console.log('-----------initiate payload----------');
-    console.log(JSON.stringify(initiatePayload, undefined, 4));
+    console.log(JSON.stringify(initiatePayload));
     HyperSdkReact.initiate(JSON.stringify(initiatePayload));
   };
 
@@ -499,34 +499,16 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
             <Text style={styles.text}>{paymentOptionsTitle}</Text>
             <View style={styles.paymentOptions}>
-              <RadioForm animation={true}>
-                {paymentOptions.map((obj, i) => (
-                  <RadioButton
-                    labelHorizontal={true}
-                    key={i}
-                    style={styles.buttonStyle}>
-                    <RadioButtonInput
-                      obj={obj}
-                      index={i}
-                      isSelected={i === selectedPaymentOption}
-                      borderWidth={1}
-                      buttonSize={12}
-                      buttonInnerColor={colors.accentColor}
-                      buttonOuterColor={colors.accentColor}
-                      buttonOuterSize={20}
-                      onPress={index => {
-                        setSelectedPaymentOption(index);
-                      }}
-                    />
-                    <RadioButtonLabel
-                      obj={obj}
-                      index={i}
-                      labelHorizontal={true}
-                      labelStyle={[styles.labelStyle, {color: colors.black}]}
-                    />
-                  </RadioButton>
-                ))}
-              </RadioForm>
+              {PAYMENT_OPTIONS.map((option, index) => (
+                <CheckBox
+                  key={option.value}
+                  title={option.label}
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  checked={option.value === selectedPaymentOption}
+                  onPress={() => setSelectedPaymentOption(option.value)}
+                />
+              ))}
             </View>
           </View>
 

@@ -1,1 +1,1 @@
-clientId = ONDC
+clientId=ondc

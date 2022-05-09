@@ -9,7 +9,7 @@ buildscript {
         ndkVersion = "21.4.7075529"
         googlePlayServicesAuthVersion = "19.2.0"
         hyperSDKVersion = "2.0.4-rc.34"
-        DynamicAssets = true
+        useDynamicAssets = true
     }
     repositories {
         google()
