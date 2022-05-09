@@ -35,7 +35,7 @@
       "name": "Name",
       "add": "ADD",
       "next": "Next",
-      "select_address_title": "Select Delivery Address",
+      "select_address_title": "Delivery Address",
       "checkout": "Checkout",
       "address": "Address",
       "payment_options": "Payment Options"

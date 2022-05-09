@@ -241,5 +241,5 @@ const styles = StyleSheet.create({
   title: {fontSize: 18, fontWeight: '600'},
   buttonContainer: {width: 300, padding: 20, alignSelf: 'center'},
   totalContainer: {paddingHorizontal: 10},
-  emptyListComponent: {alignItems: 'center'},
+  emptyListComponent: {alignItems: 'center', justifyContent: 'center'},
 });

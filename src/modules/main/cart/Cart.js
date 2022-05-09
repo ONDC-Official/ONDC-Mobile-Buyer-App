@@ -89,7 +89,7 @@ const Cart = ({navigation, theme}) => {
               </Text>
             </View>
             <TouchableOpacity onPress={onClearCart}>
-              <Icon name="delete" size={30} color={colors.accentColor} />
+              <Icon name="delete" size={30} color={colors.error} />
             </TouchableOpacity>
           </View>
         )}
