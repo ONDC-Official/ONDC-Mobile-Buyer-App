@@ -20,7 +20,7 @@ const Footer = ({theme, onCheckout, onClearCart}) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={[
           appStyles.container,
           styles.clearCartButton,
@@ -30,8 +30,8 @@ const Footer = ({theme, onCheckout, onClearCart}) => {
         <Text style={[styles.text, {color: colors.accentColor}]}>
           {clearCartButton}
         </Text>
-      </TouchableOpacity>
-      <View style={styles.space}/>
+      </TouchableOpacity> */}
+      {/* <View style={styles.space} /> */}
       <TouchableOpacity
         style={[
           appStyles.container,

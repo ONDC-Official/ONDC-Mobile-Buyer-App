@@ -1,11 +1,19 @@
 import React from 'react';
-import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import {strings} from '../../../locales/i18n';
 import {clearCart} from '../../../redux/actions';
 import {appStyles} from '../../../styles/styles';
+import {alertWithTwoButtons} from '../../../utils/alerts';
 import ProductCard from '../product/ProductCard';
 import EmptyComponent from './EmptyComponent';
 import Footer from './Footer';
@@ -34,11 +42,22 @@ const Cart = ({navigation, theme}) => {
     return total;
   }, 0);
 
+  const emptyCart = () => dispatch(clearCart());
+
   /**
    * function handles click event of clear cart button
    * which clears the cart list
    */
-  const onClearCart = () => dispatch(clearCart());
+  const onClearCart = () => {
+    alertWithTwoButtons(
+      null,
+      'Are you sure you want to clear cart?',
+      'Ok',
+      emptyCart,
+      'Cancel',
+      () => console.log('Cancelled'),
+    );
+  };
 
   /**
    * function handles click event of checkout button
@@ -64,9 +83,14 @@ const Cart = ({navigation, theme}) => {
         ]}>
         {cartItems.length !== 0 && (
           <View style={[styles.header, {backgroundColor: colors.white}]}>
-            <Text style={styles.text}>
-              {subTotalLabel} {subTotal}
-            </Text>
+            <View style={appStyles.container}>
+              <Text style={styles.text}>
+                {subTotalLabel} {subTotal}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={onClearCart}>
+              <Icon name="delete" size={30} color={colors.accentColor} />
+            </TouchableOpacity>
           </View>
         )}
         <FlatList
@@ -81,9 +105,7 @@ const Cart = ({navigation, theme}) => {
               : styles.contentContainerStyle
           }
         />
-        {cartItems.length !== 0 && (
-          <Footer onClearCart={onClearCart} onCheckout={onCheckout} />
-        )}
+        {cartItems.length !== 0 && <Footer onCheckout={onCheckout} />}
       </View>
     </SafeAreaView>
   );
@@ -102,12 +124,13 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {paddingBottom: 10},
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 15,
     elevation: 1,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.4,
     shadowRadius: 3,
-    marginBottom: 10,
   },
 });

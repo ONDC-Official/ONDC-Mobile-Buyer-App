@@ -14,6 +14,12 @@ const list = [
     icon: 'user',
   },
   {
+    id: 'jnhbgv',
+    name: OPTIONS.SUPPORT,
+    string: strings('main.more.support'),
+    icon: 'question',
+  },
+  {
     id: 'nmnvh',
     name: OPTIONS.LOG_OUT,
     string: strings('main.more.log_out'),
@@ -26,10 +32,8 @@ const list = [
  * @returns {JSX.Element}
  */
 const More = ({theme, navigation}) => {
-  const {colors} = theme;
-
   const renderItem = ({item}) => {
-    return <OptionCard item={item} navigation={navigation}/>;
+    return <OptionCard item={item} navigation={navigation} />;
   };
   return (
     <SafeAreaView style={appStyles.container}>
