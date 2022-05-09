@@ -62,8 +62,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
     useState(true);
   const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
-  const [transactionId, setTransactionId] = useState(null);
   const orderRef = useRef();
+  const signedPayload = useRef(null);
 
   const onOrderSuccess = () => {
     dispatch(clearCart());
@@ -135,7 +135,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
   };
 
   const initializeOrder = async () => {
-    setTransactionId(confirmationList[0].transaction_id);
     try {
       setInitializeOrderRequested(true);
       let payload = [];
@@ -257,29 +256,72 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }
   };
 
+  const processPayment = async () => {
+    const orderDetails = {
+      merchant_id: Config.MERCHANT_ID.toUpperCase(),
+      customer_id: uid,
+      order_id: confirmationList[0].transaction_id,
+      customer_phone: selectedAddress.descriptor.phone,
+      customer_email: selectedAddress.descriptor.email,
+      amount: 9,
+      timestamp: String(new Date().getTime()),
+      // return_url: 'https://buyer-app.ondc.org/application/checkout',
+    };
+    console.log('------------orderDetails payload---------');
+    console.log(JSON.stringify(orderDetails, undefined, 4));
+
+    const processPayload = {
+      requestId: confirmationList[0].transaction_id,
+      service: 'in.juspay.hyperpay',
+      payload: {
+        action: 'paymentPage',
+        merchantId: Config.MERCHANT_ID.toUpperCase(),
+        clientId: Config.CLIENT_ID.toUpperCase(),
+        orderId: confirmationList[0].transaction_id,
+        amount: 9,
+        customerId: uid,
+        customerEmail: selectedAddress.descriptor.email,
+        customerMobile: selectedAddress.descriptor.phone,
+        orderDetails: JSON.stringify(orderDetails),
+        // signaturePayload: JSON.stringify(signaturePayload),
+        signature: signedPayload.current,
+        merchantKeyId: Config.MERCHANT_KEY_ID,
+        language: 'english',
+        environment: 'sandbox',
+      },
+    };
+    console.log('--------process payload-----------');
+    console.log(JSON.stringify(processPayload, undefined, 4));
+
+    const initialised = await HyperSdkReact.isInitialised();
+    if (initialised) {
+      HyperSdkReact.process(JSON.stringify(processPayload));
+    } else {
+      console.log('Sdk is not initialised');
+    }
+  };
+
   const onHyperEvent = resp => {
-    var data = JSON.parse(resp);
-    var event = data.event || '';
+    const data = JSON.parse(resp);
+    const event = data.event || '';
     switch (event) {
       case 'show_loader':
         setInitializeOrderRequested(true);
         break;
+
       case 'hide_loader':
         setInitializeOrderRequested(false);
         break;
+
       case 'initiate_result':
-        let payload = data.payload || {};
-        console.log('initiate_result: ', payload);
-
-        // merchant code
-
+        console.log('initiate_result: ', data);
+        processPayment().then(() => {}).catch(() => {});
         break;
+
       case 'process_result':
-        payload = data.payload || {};
-        console.log('process_result: ', payload);
-        // merchant code
-
+        console.log('process_result: ', data);
         break;
+
       default:
         console.log('Unknown Event', data);
     }
@@ -369,76 +411,23 @@ const Payment = ({navigation, theme, route: {params}}) => {
       }
     } else {
       try {
-        const signedPayload = {
+        const payload = JSON.stringify({
+          merchant_id: Config.MERCHANT_ID.toUpperCase(),
           customer_id: uid,
           mobile_number: selectedAddress.descriptor.phone,
           email_address: selectedAddress.descriptor.email,
-          merchant_id: Config.MERCHANT_ID.toUpperCase(),
-          timestamp: new Date().getTime().toString(),
-        };
-        console.log('----------sign payload---------');
-        console.log(JSON.stringify(signedPayload, undefined, 4));
+          timestamp: String(new Date().getTime()),
+        });
+        console.log('----------sign payload---------', payload);
 
         const {data} = await postData(
           `${BASE_URL}${SIGN_PAYLOAD}`,
-          {payload: JSON.stringify(signedPayload)},
+          {payload: payload},
           options,
         );
-        console.log('--------signature---------');
-        console.log(data);
 
-        const orderDetails = {
-          order_id: transactionId,
-          amount: '9.00',
-          customer_id: uid,
-          merchant_id: Config.MERCHANT_ID.toUpperCase(),
-          customer_email: selectedAddress.descriptor.email,
-          customer_phone: selectedAddress.descriptor.phone,
-          return_url: 'https://buyer-app.ondc.org/application/checkout',
-          timestamp: new Date().getTime().toString(),
-        };
-        console.log('------------orderDetails payload---------');
-        console.log(JSON.stringify(orderDetails, undefined, 4));
-        const signaturePayload = {
-          customer_id: uid,
-          merchant_id: Config.MERCHANT_ID.toUpperCase(),
-          customer_email: selectedAddress.descriptor.email,
-          customer_phone: selectedAddress.descriptor.phone,
-          timestamp: new Date().getTime().toString(),
-        };
-        console.log('------------signature payload---------');
-        console.log(JSON.stringify(signaturePayload, undefined, 4));
-        const processPayload = {
-          requestId: transactionId,
-          service: 'in.juspay.hyperpay',
-          payload: {
-            action: 'quickPay',
-            merchantId: Config.MERCHANT_ID.toUpperCase(),
-            clientId: Config.CLIENT_ID.toUpperCase(),
-            orderId: transactionId,
-            amount: '9.00',
-            customerId: uid,
-            customerEmail: selectedAddress.descriptor.email,
-            customerMobile: selectedAddress.descriptor.phone,
-            orderDetails: JSON.stringify(orderDetails),
-            // signaturePayload: JSON.stringify(signaturePayload),
-            signature: data.signedPayload,
-            merchantKeyId: Config.MERCHANT_KEY_ID,
-            language: 'english',
-            environment: 'sandbox',
-          },
-        };
-        console.log('--------process payload-----------');
-        console.log(JSON.stringify(processPayload, undefined, 4));
-
-        if (await HyperSdkReact.isInitialised()) {
-          HyperSdkReact.process(JSON.stringify(processPayload));
-          DeviceEventEmitter.addListener('HyperEvent', resp => {
-            onHyperEvent(resp);
-          });
-        } else {
-          //Intialise hyperInstance
-        }
+        signedPayload.current = data.signedPayload;
+        initializeJusPaySdk(payload);
       } catch (error) {
         console.log(error);
         handleApiError(error);
@@ -446,33 +435,41 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }
   };
 
-  useEffect(() => {
-    initializeOrder()
-      .then(() => {})
-      .catch(() => {});
-
-    HyperSdkReact.createHyperServices();
-
+  const initializeJusPaySdk = (signaturePayload) => {
     const initiatePayload = {
       requestId: confirmationList[0].transaction_id,
       service: 'in.juspay.hyperpay',
       payload: {
         action: 'initiate',
-        merchantId: Config.MERCHANT_ID.toUpperCase(),
         clientId: Config.CLIENT_ID.toUpperCase(),
+        merchantId: Config.MERCHANT_ID.toUpperCase(),
+        merchantKeyId: Config.MERCHANT_KEY_ID,
+        signature: signedPayload.current,
+        signaturePayload,
         environment: 'sandbox',
       },
     };
     console.log('-----------initiate payload----------');
     console.log(JSON.stringify(initiatePayload, undefined, 4));
     HyperSdkReact.initiate(JSON.stringify(initiatePayload));
-    DeviceEventEmitter.addListener('HyperEvent', resp => {
-      onHyperEvent(resp);
-    });
+  };
+
+  useEffect(() => {
+    initializeOrder()
+      .then(() => {
+        HyperSdkReact.createHyperServices();
+      })
+      .catch(() => {});
+
+    const hyperEventSubscription = DeviceEventEmitter.addListener('HyperEvent', onHyperEvent);
 
     BackHandler.addEventListener('hardwareBackPress', () => {
       return !HyperSdkReact.isNull() && HyperSdkReact.onBackPressed();
     });
+
+    return () => {
+      hyperEventSubscription.remove();
+    }
   }, []);
 
   return (

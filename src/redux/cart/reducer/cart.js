@@ -11,7 +11,6 @@ const initialState = {
 const cartReducer = (state = initialState, action) => {
   const {type, payload} = action;
 
-  console.log('type', type, 'Payload', payload);
   switch (type) {
     case ADD_PRODUCT_CART:
       const list = state.cartItems.slice();
