@@ -200,7 +200,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         renderItem={renderItem}
         contentContainerStyle={styles.contentContainerStyle}
         ListEmptyComponent={() => {
-          return <Text>No data found</Text>;
+          return (
+            <View style={styles.emptyListComponent}>
+              <Text>No data found</Text>
+            </View>
+          );
         }}
       />
 
@@ -237,4 +241,5 @@ const styles = StyleSheet.create({
   title: {fontSize: 18, fontWeight: '600'},
   buttonContainer: {width: 300, padding: 20, alignSelf: 'center'},
   totalContainer: {paddingHorizontal: 10},
+  emptyListComponent: {alignItems: 'center'},
 });

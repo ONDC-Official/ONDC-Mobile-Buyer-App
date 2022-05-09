@@ -3,18 +3,32 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Card, Icon, Text, withTheme} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
 import {OPTIONS} from '../../../utils/Constants';
+import {useDispatch} from 'react-redux';
+import {clearAllData} from '../../../redux/actions';
+import {alertWithTwoButtons} from '../../../utils/alerts';
 
 const OptionCard = ({theme, navigation, item}) => {
   const {colors} = theme;
   const {logoutUser} = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const onPressHandler = option => {
     if (option === OPTIONS.LOG_OUT) {
-      logoutUser();
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Landing'}],
-      });
+      alertWithTwoButtons(
+        null,
+        'Are you sure you want to log out?',
+        'Ok',
+        () => {
+          logoutUser();
+          dispatch(clearAllData());
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Landing'}],
+          });
+        },
+        'Cancel',
+        () => console.log('cancelled'),
+      );
     } else if (option === OPTIONS.PROFILE) {
       navigation.navigate('Profile');
     } else if (option === OPTIONS.SUPPORT) {

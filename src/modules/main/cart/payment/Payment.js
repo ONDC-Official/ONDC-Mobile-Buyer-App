@@ -127,9 +127,15 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
       if (!error) {
         setConfirmOrderRequested(false);
-        alertWithOneButton(null, 'Place Order', 'Ok', onOrderSuccess);
+        alertWithOneButton(
+          null,
+          'Your order has been placed!',
+          'Ok',
+          onOrderSuccess,
+        );
       } else {
         showToastWithGravity('Something went wrong. Please try again');
+        setConfirmOrderRequested(false);
       }
     }, 10000);
   };
@@ -528,7 +534,11 @@ const Payment = ({navigation, theme, route: {params}}) => {
           </View>
 
           <View style={styles.buttonContainer}>
-            <ContainButton title={buttonTitle} onPress={confirmOrder} />
+            <ContainButton
+              title={buttonTitle}
+              onPress={confirmOrder}
+              loading={confirmOrderRequested}
+            />
           </View>
         </>
       )}
