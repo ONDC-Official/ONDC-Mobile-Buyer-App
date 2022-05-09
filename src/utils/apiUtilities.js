@@ -16,3 +16,5 @@ export const ON_INITIALIZE_ORDER = '/clientApis/v2/on_initialize_order?';
 export const CONFIRM_ORDER = '/clientApis/v2/confirm_order';
 export const ON_CONFIRM_ORDER = '/clientApis/v2/on_confirm_order?';
 export const SIGN_PAYLOAD = '/clientApis/payment/signPayload';
+export const CANCEL_ORDER = '/clientApis/v1/cancel_order';
+export const ON_CANCEL_ORDER = '/clientApis/v1/on_cancel_order?';

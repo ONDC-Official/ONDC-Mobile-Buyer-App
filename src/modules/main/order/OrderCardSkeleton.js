@@ -2,27 +2,16 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Card} from 'react-native-elements';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {appStyles} from '../../../styles/styles';
 
 const OrderCardSkeleton = () => {
   return (
     <Card containerStyle={styles.card}>
       <SkeletonPlaceholder>
         <View style={styles.name} />
-        <View style={styles.date} />
-        <View style={styles.price} />
-        <View style={styles.address} />
-        <View styles={styles.street} />
-        <View style={styles.pin} />
         <View style={styles.status}>
-          <View style={styles.radioButton} />
-          <View style={styles.progressBar} />
-          <View style={styles.radioButton} />
-          <View style={styles.progressBar} />
-          <View style={styles.radioButton} />
-        </View>
-        <View style={styles.buttonContainer}>
-          <View style={styles.button} />
-          <View style={styles.button} />
+          <View style={styles.date} />
+          <View style={styles.price} />
         </View>
       </SkeletonPlaceholder>
     </Card>
@@ -33,17 +22,16 @@ export default OrderCardSkeleton;
 
 const styles = StyleSheet.create({
   name: {height: 15, marginBottom: 5, width: '100%'},
-  date: {height: 15, marginBottom: 5, width: '80%'},
-  price: {height: 15, marginBottom: 25, width: '30%'},
+  date: {height: 15, width: 180},
+  price: {height: 15, width: 90},
   address: {height: 15, marginBottom: 5, width: '40%'},
   street: {height: 15, marginBottom: 5, width: '90%'},
   pin: {height: 15, marginBottom: 25, width: 100},
   status: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    marginBottom: 15,
+    justifyContent: 'space-between',
+    marginTop: 25,
   },
   radioButton: {height: 20, width: 20, borderRadius: 20},
   progressBar: {height: 10, width: 100, marginHorizontal: 10, borderRadius: 5},

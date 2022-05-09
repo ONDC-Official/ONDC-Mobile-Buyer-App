@@ -8,10 +8,10 @@ import {getData} from '../../../utils/api';
 import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';
 import {keyExtractor, skeletonList} from '../../../utils/utils';
 import ListFooter from './ListFooter';
-import OrderCard from './OrderCard';
+import OrderAccordion from './OrderAccordion';
 import OrderCardSkeleton from './OrderCardSkeleton';
 
-const Order = ({}) => {
+const Order = () => {
   const {
     state: {token},
   } = useContext(AuthContext);
@@ -24,7 +24,7 @@ const Order = ({}) => {
   const getOrderList = async number => {
     try {
       const {data} = await getData(
-        `${BASE_URL}${GET_ORDERS}?pageNumber=${number}&limit=5`,
+        `${BASE_URL}${GET_ORDERS}?pageNumber=${number}&limit=10`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -71,7 +71,7 @@ const Order = ({}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <OrderCardSkeleton item={item} />
     ) : (
-      <OrderCard item={item} />
+      <OrderAccordion item={item} />
     );
   };
 

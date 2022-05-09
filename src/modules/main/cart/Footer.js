@@ -4,7 +4,6 @@ import {Text, withTheme} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 
-const clearCartButton = strings('main.cart.clear_cart_title');
 const checkOutButton = strings('main.cart.checkout');
 
 /**
@@ -49,7 +48,7 @@ const styles = StyleSheet.create({
   text: {fontSize: 20},
   clearCartButton: {
     paddingVertical: 8,
-    borderRadius: 15,
+    borderRadius: 4,
     borderWidth: 1,
     alignItems: 'center',
   },
