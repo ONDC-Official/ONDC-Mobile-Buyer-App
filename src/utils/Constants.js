@@ -15,6 +15,11 @@ export const AVATAR_SIZES = {
   LARGE: 64,
 };
 
+export const PAYMENT_OPTIONS = [
+  {value: 'JUSPAY', label: 'JusPay'},
+  {value: 'COD', label: 'Cash on delivery'},
+];
+
 export const POLICY_URL =
   'https://github.com/Open-network-for-digital-commerce';
 
