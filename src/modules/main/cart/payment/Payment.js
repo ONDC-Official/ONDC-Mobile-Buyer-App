@@ -17,7 +17,7 @@ import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {alertWithOneButton} from '../../../../utils/alerts';
 import {getData, postData} from '../../../../utils/api';
-import {clearCart} from '../../../../redux/actions';
+import {clearAllData, clearCart} from '../../../../redux/actions';
 import {
   BASE_URL,
   CONFIRM_ORDER,
@@ -66,7 +66,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const signedPayload = useRef(null);
 
   const onOrderSuccess = () => {
-    dispatch(clearCart());
+    dispatch(clearAllData());
     navigation.navigate('Dashboard');
   };
 
@@ -498,7 +498,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             </View>
 
             <Text style={styles.text}>{paymentOptionsTitle}</Text>
-            <View style={styles.addressContainer}>
+            <View style={styles.paymentOptions}>
               <RadioForm animation={true}>
                 {paymentOptions.map((obj, i) => (
                   <RadioButton
@@ -549,7 +549,8 @@ const styles = StyleSheet.create({
   container: {padding: 15},
   text: {fontSize: 18, fontWeight: '600'},
   buttonContainer: {width: 300, alignSelf: 'center'},
-  addressContainer: {marginVertical: 15},
+  addressContainer: {marginBottom: 15},
+  paymentOptions: {marginVertical: 10},
   labelStyle: {fontSize: 16, fontWeight: '400'},
   buttonStyle: {marginBottom: 10},
 });

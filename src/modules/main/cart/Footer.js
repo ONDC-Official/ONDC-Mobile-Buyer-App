@@ -20,26 +20,17 @@ const Footer = ({theme, onCheckout, onClearCart}) => {
 
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity
-        style={[
-          appStyles.container,
-          styles.clearCartButton,
-          {borderColor: colors.accentColor},
-        ]}
-        onPress={onClearCart}>
-        <Text style={[styles.text, {color: colors.accentColor}]}>
-          {clearCartButton}
-        </Text>
-      </TouchableOpacity> */}
-      {/* <View style={styles.space} /> */}
       <TouchableOpacity
         style={[
           appStyles.container,
           styles.clearCartButton,
-          {borderColor: colors.accentColor},
+          {
+            borderColor: colors.accentColor,
+            backgroundColor: colors.accentColor,
+          },
         ]}
         onPress={onCheckout}>
-        <Text style={[styles.text, {color: colors.accentColor}]}>
+        <Text style={[styles.text, {color: colors.white}]}>
           {checkOutButton}
         </Text>
       </TouchableOpacity>

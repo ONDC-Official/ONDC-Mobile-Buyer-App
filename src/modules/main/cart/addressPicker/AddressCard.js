@@ -19,6 +19,9 @@ const AddressCard = ({item, theme, selectedAddress, setSelectedAddress}) => {
   const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
   const separator = ',';
 
+  const {building, street, city, state} = item.address;
+  const bldg = building ? building : '';
+
   const onPressHandler = () => setSelectedAddress(item);
 
   return (
@@ -34,10 +37,8 @@ const AddressCard = ({item, theme, selectedAddress, setSelectedAddress}) => {
                 {item.descriptor.email} - {item.descriptor.phone}
               </Text>
             ) : null}
-            <Text style={styles.address}>
-              {item.address.building ? item.address.building : null}
-              {item.address.building ? separator : null} {item.address.street},{' '}
-              {item.address.city} {item.address.state}
+            <Text style={[styles.address, {color: colors.grey}]}>
+              {street} {city} {state}
             </Text>
             <Text style={{color: colors.grey}}>{item.address.area_code}</Text>
           </View>
@@ -71,6 +72,11 @@ const styles = StyleSheet.create({
   card: {margin: 0, elevation: 4, marginTop: 15, borderRadius: 8},
   radioButton: {marginLeft: 10},
   textContainer: {flexShrink: 1, flexDirection: 'row'},
-  name: {textTransform: 'capitalize', fontSize: 16, fontWeight: 'bold'},
-  address: {textTransform: 'capitalize'},
+  name: {
+    textTransform: 'capitalize',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  address: {textTransform: 'capitalize', marginVertical: 4},
 });
