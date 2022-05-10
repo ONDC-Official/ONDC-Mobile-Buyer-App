@@ -1,8 +1,14 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import StepIndicator from 'react-native-step-indicator';
 import {Context as AuthContext} from '../../../context/Auth';
+import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../locales/i18n';
 import {getData, postData} from '../../../utils/api';
 import {
@@ -49,7 +55,10 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
   const {
     state: {token},
   } = useContext(AuthContext);
+  const {handleApiError} = useNetworkErrorHandling();
+
   const [currentPosition, setCurrentPosition] = useState(0);
+  const [cancelInProgress, setCancelInProgress] = useState(false);
 
   const setPosition = () => {
     if (item.state === 'PENDING-CONFIRMATION') {
@@ -64,6 +73,7 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
 
   const cancelOrder = async () => {
     try {
+      setCancelInProgress(true);
       const payload = {
         context: {
           bpp_id: item.bppId,
@@ -92,8 +102,10 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
       } else {
         showToastWithGravity('Something went wrong!');
       }
+      setCancelInProgress(false);
     } catch (e) {
-      console.log(e);
+      handleApiError(e);
+      setCancelInProgress(false);
     }
   };
 
@@ -168,6 +180,13 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
                     <Text style={[styles.text, {color: colors.accentColor}]}>
                       {cancel}
                     </Text>
+                    {cancelInProgress && (
+                      <ActivityIndicator
+                        showLoading={cancelInProgress}
+                        color={colors.accentColor}
+                        size={14}
+                      />
+                    )}
                   </TouchableOpacity>
                 </View>
               </View>
@@ -197,7 +216,7 @@ export default withTheme(ShippingDetails);
 
 const styles = StyleSheet.create({
   addressContainer: {marginVertical: 20},
-  text: {fontSize: 16},
+  text: {fontSize: 16, marginRight: 5},
   container: {
     marginTop: 20,
     padding: 10,
@@ -210,6 +229,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 1,
     alignItems: 'center',
+    flexDirection: 'row',
   },
   space: {margin: 10},
   stepIndicator: {width: 20, height: 20, borderRadius: 50},
