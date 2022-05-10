@@ -319,7 +319,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       case 'process_result':
         console.log(JSON.stringify(data.payload, undefined, 4));
         if (data.payload.hasOwnProperty('status')) {
-          switch (status.toUpperCase()) {
+          switch (data.payload.status.toUpperCase()) {
             case 'CHARGED':
               confirmOrder(PAYMENT_METHODS.JUSPAY).then(() => {}).catch(() => {});
               break;
