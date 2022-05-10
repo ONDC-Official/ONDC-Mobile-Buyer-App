@@ -13,6 +13,7 @@ import {maskAmount} from '../../../utils/utils';
 import {showInfoToast} from '../../../utils/utils';
 
 const addButton = strings('main.product.add_button_title');
+const addToCart = strings('main.product.add_to_cart');
 
 /**
  * Component to render single product card on product screen
@@ -69,7 +70,7 @@ const ProductCard = ({theme, item, apiInProgress}) => {
               <TouchableOpacity
                 style={[styles.button, {borderColor: colors.accentColor}]}
                 onPress={() => {
-                  showInfoToast('Added to cart');
+                  showInfoToast(addToCart);
                   addItem(item);
                 }}
                 disabled={apiInProgress}>
@@ -84,13 +85,13 @@ const ProductCard = ({theme, item, apiInProgress}) => {
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => updateQuantity(false)}>
-                  <Icon name="minus" size={16} color={colors.white}/>
+                  <Icon name="minus" size={16} color={colors.white} />
                 </TouchableOpacity>
                 <Text style={{color: colors.white}}>{item.quantity}</Text>
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => updateQuantity(true)}>
-                  <Icon name="plus" color={colors.white} size={16}/>
+                  <Icon name="plus" color={colors.white} size={16} />
                 </TouchableOpacity>
               </View>
             )}

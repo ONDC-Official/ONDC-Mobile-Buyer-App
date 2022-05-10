@@ -16,6 +16,7 @@ import Header from './Header';
 
 const buttonTitle = strings('main.cart.next');
 const selectAddress = strings('main.cart.select_address_title');
+const emptyListMessage = strings('main.order.list_empty_message');
 
 /**
  * Component to render list of address
@@ -106,7 +107,7 @@ const AddressPicker = ({navigation, theme}) => {
         data={listData}
         renderItem={renderItem}
         ListEmptyComponent={() => {
-          return <Text>No address found. Please add the address</Text>;
+          return <Text>{emptyListMessage}</Text>;
         }}
         contentContainerStyle={
           listData.length > 0

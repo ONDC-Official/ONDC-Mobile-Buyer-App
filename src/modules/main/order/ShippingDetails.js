@@ -3,14 +3,22 @@ import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import StepIndicator from 'react-native-step-indicator';
 import {Context as AuthContext} from '../../../context/Auth';
+import {strings} from '../../../locales/i18n';
 import {getData, postData} from '../../../utils/api';
 import {
   BASE_URL,
   CANCEL_ORDER,
   ON_CANCEL_ORDER,
 } from '../../../utils/apiUtilities';
+import {showToastWithGravity} from '../../../utils/utils';
+
+const deliveryTo = strings('main.order.delivery_to_label');
+const statusLabel = strings('main.order.status_label');
+const returnLabel = strings('main.order.return');
+const cancel = strings('main.order.cancel');
 
 const labels = ['Ordered', 'Shipped', 'Delivered'];
+
 const customStyles = {
   stepIndicatorSize: 40,
   currentStepIndicatorSize: 60,
@@ -35,7 +43,7 @@ const customStyles = {
   currentStepLabelColor: '#30B086',
 };
 
-const ShippingDetails = ({item, theme}) => {
+const ShippingDetails = ({item, getOrderList, theme}) => {
   const {colors} = theme;
   const separator = ',';
   const {
@@ -61,7 +69,7 @@ const ShippingDetails = ({item, theme}) => {
           bpp_id: item.bppId,
           transaction_id: item.transactionId,
         },
-        message: {order_id: item._id, cancellation_reason_id: 'item'},
+        message: {order_id: item.id, cancellation_reason_id: 'item'},
       };
       const {data} = await postData(`${BASE_URL}${CANCEL_ORDER}`, payload, {
         headers: {
@@ -77,7 +85,13 @@ const ShippingDetails = ({item, theme}) => {
           },
         },
       );
-      console.log(response.data);
+      if (response.data.hasOwnProperty('message')) {
+        getOrderList(1)
+          .then(() => {})
+          .catch(() => {});
+      } else {
+        showToastWithGravity('Something went wrong!');
+      }
     } catch (e) {
       console.log(e);
     }
@@ -93,7 +107,7 @@ const ShippingDetails = ({item, theme}) => {
   return (
     <>
       <View style={styles.addressContainer}>
-        <Text style={{color: colors.grey}}>Delivery to:</Text>
+        <Text style={{color: colors.grey}}>{deliveryTo}</Text>
 
         <Text>
           {item.billing.address.building ? item.billing.address.building : null}
@@ -106,43 +120,74 @@ const ShippingDetails = ({item, theme}) => {
           {item.billing.address.area_code}
         </Text>
       </View>
+
       <View>
-        <Text style={{color: colors.grey}}>Status:</Text>
-        <StepIndicator
-          currentPosition={currentPosition}
-          stepCount={labels.length}
-          customStyles={customStyles}
-          renderStepIndicator={({position}) => {
-            return (
-              <View
-                style={[
-                  styles.stepIndicator,
-                  {backgroundColor: setColor(position)},
-                ]}
+        <>
+          <Text style={{color: colors.grey}}>{statusLabel}</Text>
+          {item.state !== 'CANCELLED' ? (
+            <>
+              <StepIndicator
+                currentPosition={currentPosition}
+                stepCount={labels.length}
+                customStyles={customStyles}
+                renderStepIndicator={({position}) => {
+                  return (
+                    <View
+                      style={[
+                        styles.stepIndicator,
+                        {backgroundColor: setColor(position)},
+                      ]}
+                    />
+                  );
+                }}
+                labels={labels}
+                renderLabel={({position, label}) => {
+                  return (
+                    <Text style={{color: setColor(position)}}>{label}</Text>
+                  );
+                }}
               />
-            );
-          }}
-          labels={labels}
-          renderLabel={({position, label}) => {
-            return <Text style={{color: setColor(position)}}>{label}</Text>;
-          }}
-        />
-      </View>
-      <View>
-        <View style={styles.container}>
-          <TouchableOpacity
-            style={[styles.clearCartButton, {borderColor: colors.grey}]}>
-            <Text style={[styles.text, {color: colors.grey}]}>Return</Text>
-          </TouchableOpacity>
-          <View style={styles.space} />
-          <TouchableOpacity
-            style={[styles.clearCartButton, {borderColor: colors.accentColor}]}
-            onPress={cancelOrder}>
-            <Text style={[styles.text, {color: colors.accentColor}]}>
-              Cancel
-            </Text>
-          </TouchableOpacity>
-        </View>
+              <View>
+                <View style={styles.container}>
+                  <TouchableOpacity
+                    style={[
+                      styles.clearCartButton,
+                      {borderColor: colors.grey},
+                    ]}>
+                    <Text style={[styles.text, {color: colors.grey}]}>
+                      {returnLabel}
+                    </Text>
+                  </TouchableOpacity>
+                  <View style={styles.space} />
+                  <TouchableOpacity
+                    style={[
+                      styles.clearCartButton,
+                      {borderColor: colors.accentColor},
+                    ]}
+                    onPress={cancelOrder}>
+                    <Text style={[styles.text, {color: colors.accentColor}]}>
+                      {cancel}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </>
+          ) : (
+            <View
+              style={[
+                styles.cancelledButton,
+                {
+                  borderColor: colors.error,
+                  backgroundColor: colors.cancelledBackground,
+                },
+              ]}
+              onPress={cancelOrder}>
+              <Text style={[styles.text, {color: colors.error}]}>
+                Cancelled
+              </Text>
+            </View>
+          )}
+        </>
       </View>
     </>
   );
@@ -168,4 +213,13 @@ const styles = StyleSheet.create({
   },
   space: {margin: 10},
   stepIndicator: {width: 20, height: 20, borderRadius: 50},
+  cancelledButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 50,
+    borderWidth: 1,
+    alignItems: 'center',
+    marginTop: 20,
+    alignSelf: 'flex-start',
+  },
 });

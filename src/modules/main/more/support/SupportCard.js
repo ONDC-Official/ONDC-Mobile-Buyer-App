@@ -18,13 +18,6 @@ const SupportCard = ({theme, url, icon, title, onPress, message, source}) => {
   };
   return (
     <Card>
-      {/* <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => {
-          onPressHandler()
-            .then(() => {})
-            .catch(() => {});
-        }}> */}
       <View style={styles.container}>
         <View style={[styles.icon]}>
           {icon ? (
@@ -48,12 +41,7 @@ const SupportCard = ({theme, url, icon, title, onPress, message, source}) => {
           <Icon name="chevron-right" color={colors.accentColor} size={24} />
         </TouchableOpacity>
       </View>
-
-      {/* </TouchableOpacity> */}
     </Card>
-    //   <View style={styles.textContainer}>
-    //     <Text>{message}</Text>
-    //   </View>
   );
 };
 

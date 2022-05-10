@@ -31,6 +31,8 @@ const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
 const addressTitle = strings('main.cart.address');
 const paymentOptionsTitle = strings('main.cart.payment_options');
+const ok = strings('main.product.ok_label');
+const message = strings('main.cart.order_placed_message');
 
 /**
  * Component to payment screen in application
@@ -86,12 +88,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
       if (ordersArray) {
         const errorObj = ordersArray.find(item => item.hasOwnProperty('error'));
         if (errorObj) {
-          showToastWithGravity('Something went wrong.Please try again');
+          showToastWithGravity(strings('network_error.something_went_wrong'));
         } else {
           setConfirmOrderRequested(false);
         }
       } else {
-        showToastWithGravity('Something went wrong.Please try again');
+        showToastWithGravity(strings('network_error.something_went_wrong'));
       }
       setInitializeOrderRequested(false);
     }, 11000);
@@ -120,14 +122,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
       if (!error) {
         setConfirmOrderRequested(false);
-        alertWithOneButton(
-          null,
-          'Your order has been placed!',
-          'Ok',
-          onOrderSuccess,
-        );
+        alertWithOneButton(null, message, ok, onOrderSuccess);
       } else {
-        showToastWithGravity('Something went wrong. Please try again');
+        showToastWithGravity(strings('network_error.something_went_wrong'));
         setConfirmOrderRequested(false);
       }
     }, 10000);
@@ -245,12 +242,11 @@ const Payment = ({navigation, theme, route: {params}}) => {
       if (messageIds.length > 0) {
         onInitializeOrder(messageIds);
       } else {
-        showToastWithGravity('Something went wrong. Please try again');
+        showToastWithGravity(strings('network_error.something_went_wrong'));
         setInitializeOrderRequested(false);
       }
     } catch (error) {
       handleApiError(error);
-
       setInitializeOrderRequested(false);
     }
   };
@@ -264,7 +260,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       customer_email: selectedAddress.descriptor.email,
       amount: String(9),
       timestamp: timeStamp.current,
-      return_url: 'https://sandbox.juspay.in/end'
+      return_url: 'https://sandbox.juspay.in/end',
     };
     console.log('------------orderDetails payload---------');
     console.log(JSON.stringify(orderDetails, undefined, 4));
@@ -314,7 +310,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
       case 'initiate_result':
         console.log('initiate_result: ', data);
-        processPayment().then(() => {}).catch(() => {});
+        processPayment()
+          .then(() => {})
+          .catch(() => {});
         break;
 
       case 'process_result':
@@ -400,10 +398,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
             onConfirmOrder(messageIds);
           } else {
-            showToastWithGravity('Something went wrong.Please try again');
+            showToastWithGravity(strings('network_error.something_went_wrong'));
           }
         } else {
-          showToastWithGravity('Something went wrong.Please try again');
+          showToastWithGravity(strings('network_error.something_went_wrong'));
         }
       } catch (error) {
         handleApiError(error);
@@ -421,7 +419,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           customer_email: selectedAddress.descriptor.email,
           amount: String(9),
           timestamp: timeStamp.current,
-          return_url: 'https://sandbox.juspay.in/end'
+          return_url: 'https://sandbox.juspay.in/end',
         });
 
         console.log('----------sign payload---------', payload);
@@ -441,7 +439,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }
   };
 
-  const initializeJusPaySdk = (signaturePayload) => {
+  const initializeJusPaySdk = signaturePayload => {
     const initiatePayload = {
       requestId: confirmationList[0].transaction_id,
       service: 'in.juspay.hyperpay',
@@ -467,7 +465,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
       })
       .catch(() => {});
 
-    const hyperEventSubscription = DeviceEventEmitter.addListener('HyperEvent', onHyperEvent);
+    const hyperEventSubscription = DeviceEventEmitter.addListener(
+      'HyperEvent',
+      onHyperEvent,
+    );
 
     BackHandler.addEventListener('hardwareBackPress', () => {
       return !HyperSdkReact.isNull() && HyperSdkReact.onBackPressed();
@@ -475,7 +476,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
     return () => {
       hyperEventSubscription.remove();
-    }
+    };
   }, []);
 
   return (

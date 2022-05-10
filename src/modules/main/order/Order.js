@@ -3,6 +3,7 @@ import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
+import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {getData} from '../../../utils/api';
 import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';
@@ -10,6 +11,8 @@ import {keyExtractor, skeletonList} from '../../../utils/utils';
 import ListFooter from './ListFooter';
 import OrderAccordion from './OrderAccordion';
 import OrderCardSkeleton from './OrderCardSkeleton';
+
+const emptyListMessage = strings('main.order.list_empty_message');
 
 const Order = () => {
   const {
@@ -32,7 +35,6 @@ const Order = () => {
         },
       );
       setTotalOrders(data.totalCount);
-
       setOrders(number === 1 ? data.orders : [...orders, ...data.orders]);
       setPageNumber(pageNumber + 1);
     } catch (error) {
@@ -71,11 +73,12 @@ const Order = () => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <OrderCardSkeleton item={item} />
     ) : (
-      <OrderAccordion item={item} />
+      <OrderAccordion item={item} getOrderList={getOrderList} />
     );
   };
 
   const listData = orders ? orders : skeletonList;
+
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
@@ -83,7 +86,7 @@ const Order = () => {
           data={listData}
           renderItem={renderItem}
           ListEmptyComponent={() => {
-            return <Text>No data found</Text>;
+            return <Text>{emptyListMessage}</Text>;
           }}
           keyExtractor={keyExtractor}
           onEndReachedThreshold={0.2}
