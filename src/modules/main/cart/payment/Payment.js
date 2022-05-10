@@ -22,6 +22,7 @@ import {
   ON_INITIALIZE_ORDER,
   SIGN_PAYLOAD,
 } from '../../../../utils/apiUtilities';
+import {PAYMENT_METHODS} from '../../../../utils/Constants';
 import {PAYMENT_OPTIONS} from '../../../../utils/Constants';
 import {showToastWithGravity} from '../../../../utils/utils';
 import Header from '../addressPicker/Header';
@@ -318,8 +319,41 @@ const Payment = ({navigation, theme, route: {params}}) => {
         break;
 
       case 'process_result':
-        alert(JSON.stringify(data));
-        console.log('process_result: ', data);
+        console.log(JSON.stringify(data.payload, undefined, 4));
+        if (data.payload.hasOwnProperty('status')) {
+          switch (status.toUpperCase()) {
+            case 'CHARGED':
+              confirmOrder(PAYMENT_METHODS.JUSPAY).then(() => {}).catch(() => {});
+              break;
+
+            case 'AUTHENTICATION_FAILED':
+              showToastWithGravity('Please verify the details and try again');
+              setInitializeOrderRequested(false);
+              break;
+
+            case 'AUTHORIZATION_FAILED':
+              showToastWithGravity('Bank is unable to process your request at the moment');
+              setInitializeOrderRequested(false);
+              break;
+
+            case 'JUSPAY_DECLINED':
+              showToastWithGravity('Unable to process your request at the moment please try again');
+              setInitializeOrderRequested(false);
+              break;
+
+            case 'AUTHORIZING':
+              showToastWithGravity('Waiting for the bank to confirm');
+              setInitializeOrderRequested(false);
+              break;
+
+            case 'PENDING_VBV':
+              showToastWithGravity('Transaction pending');
+              setInitializeOrderRequested(false);
+              break;
+          }
+        } else {
+          showToastWithGravity('Something went wrong.Please try again');
+        }
         break;
 
       default:
@@ -327,88 +361,64 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }
   };
 
-  const confirmOrder = async () => {
+  const confirmOrder = async (method) => {
+    try {
+      if (orderRef.current && orderRef.current.length > 0) {
+        const errorObj = orderRef.current.find(one =>
+          one.hasOwnProperty('error'),
+        );
+        if (!errorObj) {
+          const payload = orderRef.current.map(item => {
+            return {
+              context: {
+                transaction_id: item.context.transaction_id,
+              },
+              message: {
+                payment: {
+                  ...{
+                    paid_amount: item.message.order.payment.params.amount,
+                    transaction_id: item.context.transaction_id,
+                  },
+                  ...method,
+                },
+              }
+            }
+          });
+
+          const {data} = await postData(
+            `${BASE_URL}${CONFIRM_ORDER}`,
+            payload,
+            {
+              headers: {Authorization: `Bearer ${token}`},
+            },
+          );
+          let messageIds = [];
+          data.forEach(item => {
+            if (item.message.ack.status === 'ACK') {
+              messageIds.push(item.context.message_id);
+            }
+          });
+
+          onConfirmOrder(messageIds);
+        } else {
+          showToastWithGravity('Something went wrong.Please try again');
+        }
+      } else {
+        showToastWithGravity('Something went wrong.Please try again');
+      }
+    } catch (error) {
+      handleApiError(error);
+      setConfirmOrderRequested(false);
+    }
+  };
+
+  const placeOrder = async () => {
     setConfirmOrderRequested(true);
     const options = {
       headers: {Authorization: `Bearer ${token}`},
     };
-    if (selectedPaymentOption === 'COD') {
-      try {
-        if (orderRef.current && orderRef.current.length > 0) {
-          const errorObj = orderRef.current.find(one =>
-            one.hasOwnProperty('error'),
-          );
-          if (!errorObj) {
-            const payload = [];
-            orderRef.current.forEach(item => {
-              const itemsArray = [];
-              item.message.order.items.forEach(object => {
-                const element = cartItems.find(one => one.id === object.id);
-
-                object.id = element.id;
-                object.bpp_id = item.context.bpp_id;
-                object.product = {
-                  id: element.id,
-                  descriptor: element.descriptor,
-                  price: element.price,
-                  name: element.provider,
-                };
-                object.provider = {
-                  id: item.message.order.provider.id,
-                  locations: [item.message.order.provider_location.id],
-                };
-                itemsArray.push(object);
-              });
-
-              const payloadObj = {
-                context: {
-                  transaction_id: item.context.transaction_id,
-                },
-                message: {
-                  items: itemsArray,
-                  billing_info: item.message.order.billing,
-                  delivery_info: {
-                    type: item.message.order.fulfillment.type,
-                    phone: item.message.order.fulfillment.end.contact.phone,
-                    email: item.message.order.fulfillment.end.contact.email,
-                    name: item.message.order.billing.name,
-                    location: item.message.order.fulfillment.end.location,
-                  },
-                  payment: {
-                    paid_amount: item.message.order.payment.params.amount,
-                    status: 'PAID',
-                    transaction_id: item.context.transaction_id,
-                  },
-                },
-              };
-              payload.push(payloadObj);
-            });
-
-            const {data} = await postData(
-              `${BASE_URL}${CONFIRM_ORDER}`,
-              payload,
-              {
-                headers: {Authorization: `Bearer ${token}`},
-              },
-            );
-            let messageIds = [];
-            data.forEach(item => {
-              if (item.message.ack.status === 'ACK') {
-                messageIds.push(item.context.message_id);
-              }
-            });
-
-            onConfirmOrder(messageIds);
-          } else {
-            showToastWithGravity('Something went wrong.Please try again');
-          }
-        } else {
-          showToastWithGravity('Something went wrong.Please try again');
-        }
-      } catch (error) {
-        handleApiError(error);
-        setConfirmOrderRequested(false);
-      }
+    if (selectedPaymentOption === PAYMENT_METHODS.COD.name) {
+      await confirmOrder(PAYMENT_METHODS.COD);
     } else {
       try {
         timeStamp.current = String(new Date().getTime());
@@ -515,7 +525,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           <View style={styles.buttonContainer}>
             <ContainButton
               title={buttonTitle}
-              onPress={confirmOrder}
+              onPress={placeOrder}
               loading={confirmOrderRequested}
             />
           </View>

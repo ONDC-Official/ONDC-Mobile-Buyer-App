@@ -20,6 +20,19 @@ export const PAYMENT_OPTIONS = [
   {value: 'COD', label: 'Cash on delivery'},
 ];
 
+export const PAYMENT_METHODS = {
+  JUSPAY: {
+    name: 'JUSPAY',
+    orderType: 'ON-ORDER',
+    status: 'PAID'
+  },
+  COD: {
+    name: 'COD',
+    orderType: 'ON-FULFILLMENT',
+    status: 'NOT-PAID'
+  }
+};
+
 export const POLICY_URL =
   'https://github.com/Open-network-for-digital-commerce';
 
