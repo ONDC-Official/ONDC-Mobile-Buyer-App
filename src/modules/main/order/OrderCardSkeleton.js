@@ -2,7 +2,6 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Card} from 'react-native-elements';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {appStyles} from '../../../styles/styles';
 
 const OrderCardSkeleton = () => {
   return (

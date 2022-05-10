@@ -38,10 +38,20 @@
       "select_address_title": "Delivery Address",
       "checkout": "Checkout",
       "address": "Address",
-      "payment_options": "Payment Options"
+      "payment_options": "Payment Options",
+      "clear_cart_message":"Are you sure you want to clear cart?",
+      "order_placed_message":"Your order has been placed!"
     },
     "dashboard": {},
-    "order": {},
+    "order": {
+      "delivery_to_label":"Delivery to",
+      "ordered_on_label":"Ordered on ",
+      "status_label":"Status :",
+      "return":"Return",
+      "cancel":"Cancel",
+      "list_empty_message":"No data found"
+      
+    },
     "product": {
       "select_location_label": "Select a location",
       "add_button_title": "Add",
@@ -58,7 +68,8 @@
       "no_results": "No results",
       "ok_label": "Ok",
       "cancel_label": "Cancel",
-      "please_select_location": "Please select location"
+      "please_select_location": "Please select location",
+      "add_to_cart":"Added to cart"
     },
     "more": {
       "profile": "Profile",
@@ -71,7 +82,8 @@
       "ondc_policy":"ONDC Policy",
       "ondc_policy_message":"Read the policy and confitions of the ONDC network",
       "contact_us":"Contact Us",
-      "contact_us_message":"Not Satisfied? You can reach out to Customer Care"
+      "contact_us_message":"Not Satisfied? You can reach out to Customer Care",
+      "log_out_message":"Are you sure you want to log out?"
 
     }
   },

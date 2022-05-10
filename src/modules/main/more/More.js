@@ -31,7 +31,7 @@ const list = [
  * @constructor
  * @returns {JSX.Element}
  */
-const More = ({theme, navigation}) => {
+const More = ({navigation}) => {
   const renderItem = ({item}) => {
     return <OptionCard item={item} navigation={navigation} />;
   };

@@ -6,6 +6,11 @@ import {OPTIONS} from '../../../utils/Constants';
 import {useDispatch} from 'react-redux';
 import {clearAllData} from '../../../redux/actions';
 import {alertWithTwoButtons} from '../../../utils/alerts';
+import {strings} from '../../../locales/i18n';
+
+const logOutMessage = strings('main.more.log_out_message');
+const okLabel = strings('main.product.ok_label');
+const cancelLabel = strings('main.product.cancel_label');
 
 const OptionCard = ({theme, navigation, item}) => {
   const {colors} = theme;
@@ -16,8 +21,8 @@ const OptionCard = ({theme, navigation, item}) => {
     if (option === OPTIONS.LOG_OUT) {
       alertWithTwoButtons(
         null,
-        'Are you sure you want to log out?',
-        'Ok',
+        logOutMessage,
+        okLabel,
         () => {
           logoutUser();
           dispatch(clearAllData());
@@ -26,7 +31,7 @@ const OptionCard = ({theme, navigation, item}) => {
             routes: [{name: 'Landing'}],
           });
         },
-        'Cancel',
+        cancelLabel,
         () => console.log('cancelled'),
       );
     } else if (option === OPTIONS.PROFILE) {

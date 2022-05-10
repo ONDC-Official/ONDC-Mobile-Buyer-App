@@ -7,5 +7,6 @@ export const theme = {
     error: '#FF5959',
     success: '#2EB086',
     white: '#ffffff',
+    cancelledBackground: '#FFE8E7',
   },
 };

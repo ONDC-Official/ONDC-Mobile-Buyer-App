@@ -20,6 +20,9 @@ import Footer from './Footer';
 
 const subTotalLabel = strings('main.cart.sub_total_label');
 const message = strings('main.cart.empty_cart_message');
+const ok = strings('main.product.ok_label');
+const clearCartMessage = strings('main.cart.clear_cart_message');
+const cancelLabel = strings('main.product.cancel_label');
 
 /**
  * Component to render list of items added in cart
@@ -51,10 +54,10 @@ const Cart = ({navigation, theme}) => {
   const onClearCart = () => {
     alertWithTwoButtons(
       null,
-      'Are you sure you want to clear cart?',
-      'Ok',
+      clearCartMessage,
+      ok,
       emptyCart,
-      'Cancel',
+      cancelLabel,
       () => console.log('Cancelled'),
     );
   };

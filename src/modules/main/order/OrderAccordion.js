@@ -1,17 +1,19 @@
 import React, {useState} from 'react';
 import Accordion from 'react-native-collapsible/Accordion';
 import OrderCard from './OrderCard';
-import {Card, Text, withTheme} from 'react-native-elements';
+import {Card, withTheme} from 'react-native-elements';
 import {StyleSheet} from 'react-native';
 import ShippingDetails from './ShippingDetails';
 
-const OrderAccordion = ({item, theme}) => {
+const OrderAccordion = ({item, theme, getOrderList}) => {
   const {colors} = theme;
   const [activeSections, setActiveSections] = useState([]);
 
   const _renderHeader = sections => <OrderCard item={sections} />;
 
-  const _renderContent = sections => <ShippingDetails item={sections} />;
+  const _renderContent = sections => (
+    <ShippingDetails item={sections} getOrderList={getOrderList} />
+  );
 
   const _updateSections = activesections => setActiveSections(activesections);
 

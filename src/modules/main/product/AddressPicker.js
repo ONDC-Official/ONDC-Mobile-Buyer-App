@@ -7,7 +7,6 @@ import {appStyles} from '../../../styles/styles';
 import SearchBar from './SearchBar';
 
 const selectLocationLabel = strings('main.product.select_location_label');
-const poweredByLabel = strings('main.product.powered_by_label');
 
 /**
  * Component to show address picker screen when user wants to select location
@@ -31,7 +30,7 @@ const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
         />
       </View>
       <View style={styles.header}>
-        <Logo/>
+        <Logo />
       </View>
       <SearchBar
         setLocation={setLocation}

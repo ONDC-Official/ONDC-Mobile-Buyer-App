@@ -2,6 +2,9 @@ import moment from 'moment';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
+import {strings} from '../../../locales/i18n';
+
+const orderedOn = strings('main.order.ordered_on_label');
 
 const OrderCard = ({item, theme}) => {
   const {colors} = theme;
@@ -13,7 +16,7 @@ const OrderCard = ({item, theme}) => {
       </Text>
       <View style={styles.container}>
         <Text style={{color: colors.grey}}>
-          Ordered on {moment(item.updated_at).format('LL')}
+          {orderedOn} {moment(item.updatedAt).format('LL')}
         </Text>
         <Text style={styles.price}>₹ {item.quote.price.value}</Text>
       </View>
