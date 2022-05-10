@@ -16,7 +16,7 @@ export const AVATAR_SIZES = {
 };
 
 export const PAYMENT_OPTIONS = [
-  {value: 'JUSPAY', label: 'JusPay'},
+  {value: 'JUSPAY', label: 'Prepaid'},
   {value: 'COD', label: 'Cash on delivery'},
 ];
 
@@ -24,13 +24,13 @@ export const PAYMENT_METHODS = {
   JUSPAY: {
     name: 'JUSPAY',
     orderType: 'ON-ORDER',
-    status: 'PAID'
+    status: 'PAID',
   },
   COD: {
     name: 'COD',
     orderType: 'ON-FULFILLMENT',
-    status: 'NOT-PAID'
-  }
+    status: 'NOT-PAID',
+  },
 };
 
 export const POLICY_URL =

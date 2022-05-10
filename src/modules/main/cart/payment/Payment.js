@@ -1,6 +1,12 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {BackHandler, DeviceEventEmitter, StyleSheet, View} from 'react-native';
+import {
+  BackHandler,
+  DeviceEventEmitter,
+  Image,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Config from 'react-native-config';
 import {CheckBox} from 'react-native-elements';
 import {Text, withTheme} from 'react-native-elements';
@@ -27,6 +33,7 @@ import {PAYMENT_OPTIONS} from '../../../../utils/Constants';
 import {showToastWithGravity} from '../../../../utils/utils';
 import Header from '../addressPicker/Header';
 import PaymentSkeleton from './PaymentSkeleton';
+import FastImage from 'react-native-fast-image';
 
 const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
@@ -34,6 +41,7 @@ const addressTitle = strings('main.cart.address');
 const paymentOptionsTitle = strings('main.cart.payment_options');
 const ok = strings('main.product.ok_label');
 const message = strings('main.cart.order_placed_message');
+const poweredBy = strings('main.product.powered_by_label');
 
 /**
  * Component to payment screen in application
@@ -518,7 +526,23 @@ const Payment = ({navigation, theme, route: {params}}) => {
               {PAYMENT_OPTIONS.map((option, index) => (
                 <CheckBox
                   key={option.value}
-                  title={option.label}
+                  title={
+                    <View style={styles.titleStyle}>
+                      <Text style={styles.textStyle}>{option.label}</Text>
+                      {option.label === 'Prepaid' && (
+                        <View style={styles.juspayContainer}>
+                          <Text>{poweredBy}</Text>
+                          <FastImage
+                            source={{
+                              uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
+                            }}
+                            style={styles.image}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                      )}
+                    </View>
+                  }
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
                   checked={option.value === selectedPaymentOption}
@@ -551,4 +575,8 @@ const styles = StyleSheet.create({
   paymentOptions: {marginVertical: 10},
   labelStyle: {fontSize: 16, fontWeight: '400'},
   buttonStyle: {marginBottom: 10},
+  titleStyle: {marginLeft: 8},
+  textStyle: {fontSize: 16, fontWeight: '700'},
+  juspayContainer: {flexDirection: 'row', alignItems: 'center'},
+  image: {height: 15, width: 80},
 });

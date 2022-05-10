@@ -59,7 +59,7 @@
       "product_label": "Product",
       "category_label": "Category",
       "search_label": "Search",
-      "powered_by_label": "Powered by",
+      "powered_by_label": "powered by",
       "location_denied_message": "Location permission not enabled",
       "enter_location_message": "Enter location manually",
       "permission_needed_message": "Storage permission needed",
