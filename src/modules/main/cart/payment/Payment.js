@@ -279,7 +279,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         customerEmail: selectedAddress.descriptor.email,
         customerMobile: selectedAddress.descriptor.phone,
         orderDetails: JSON.stringify(orderDetails),
-        // signaturePayload: JSON.stringify(signaturePayload),
         signature: signedPayload.current,
         merchantKeyId: Config.MERCHANT_KEY_ID,
         language: 'english',
@@ -321,7 +320,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
         if (data.payload.hasOwnProperty('status')) {
           switch (data.payload.status.toUpperCase()) {
             case 'CHARGED':
-              confirmOrder(PAYMENT_METHODS.JUSPAY).then(() => {}).catch(() => {});
+              confirmOrder(PAYMENT_METHODS.JUSPAY)
+                .then(() => {})
+                .catch(() => {});
               break;
 
             case 'AUTHENTICATION_FAILED':
@@ -330,12 +331,16 @@ const Payment = ({navigation, theme, route: {params}}) => {
               break;
 
             case 'AUTHORIZATION_FAILED':
-              showToastWithGravity('Bank is unable to process your request at the moment');
+              showToastWithGravity(
+                'Bank is unable to process your request at the moment',
+              );
               setInitializeOrderRequested(false);
               break;
 
             case 'JUSPAY_DECLINED':
-              showToastWithGravity('Unable to process your request at the moment please try again');
+              showToastWithGravity(
+                'Unable to process your request at the moment please try again',
+              );
               setInitializeOrderRequested(false);
               break;
 
@@ -359,7 +364,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }
   };
 
-  const confirmOrder = async (method) => {
+  const confirmOrder = async method => {
     try {
       if (orderRef.current && orderRef.current.length > 0) {
         const errorObj = orderRef.current.find(one =>
@@ -379,8 +384,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   },
                   ...method,
                 },
-              }
-            }
+              },
+            };
           });
 
           const {data} = await postData(
@@ -399,10 +404,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
           onConfirmOrder(messageIds);
         } else {
-            showToastWithGravity(strings('network_error.something_went_wrong'));
+          showToastWithGravity(strings('network_error.something_went_wrong'));
         }
       } else {
-          showToastWithGravity(strings('network_error.something_went_wrong'));
+        showToastWithGravity(strings('network_error.something_went_wrong'));
       }
     } catch (error) {
       handleApiError(error);
