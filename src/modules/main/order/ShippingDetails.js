@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
+  Linking,
   ActivityIndicator,
 } from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
@@ -15,7 +16,10 @@ import {
   BASE_URL,
   CANCEL_ORDER,
   ON_CANCEL_ORDER,
+  ON_TRACK_ORDER,
+  TRACK_ORDER,
 } from '../../../utils/apiUtilities';
+import {FAQS, ORDER_STATUS} from '../../../utils/Constants';
 import {showToastWithGravity} from '../../../utils/utils';
 
 const deliveryTo = strings('main.order.delivery_to_label');
@@ -56,9 +60,15 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
     state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
+  const options = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   const [currentPosition, setCurrentPosition] = useState(0);
   const [cancelInProgress, setCancelInProgress] = useState(false);
+  const [trackInProgress, setTrackInProgress] = useState(false);
 
   const setPosition = () => {
     if (item.state === 'PENDING-CONFIRMATION') {
@@ -66,8 +76,43 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
     } else if (item.state === 'shipped') {
       setCurrentPosition(1);
     } else {
-      console.log(item.state);
       setCurrentPosition(2);
+    }
+  };
+
+  const trackOrder = async () => {
+    try {
+      setTrackInProgress(true);
+      const payload = [
+        {
+          context: {
+            transaction_id: item.transactionId,
+            bpp_id: item.bppId,
+          },
+          message: {order_id: item.id},
+        },
+      ];
+      const {data} = await postData(
+        `${BASE_URL}${TRACK_ORDER}`,
+        payload,
+        options,
+      );
+      if (data[0].message.ack.status === 'ACK') {
+        const response = await getData(
+          `${BASE_URL}${ON_TRACK_ORDER}messageIds=${data[0].context.message_id}`,
+          options,
+        );
+        if (response.data[0].message.tracking.status === 'active') {
+          const supported = await Linking.canOpenURL(FAQS);
+          if (supported) {
+            await Linking.openURL(FAQS);
+          }
+        }
+      }
+      setTrackInProgress(false);
+    } catch (e) {
+      handleApiError(e);
+      setTrackInProgress(false);
     }
   };
 
@@ -81,19 +126,15 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
         },
         message: {order_id: item.id, cancellation_reason_id: 'item'},
       };
-      const {data} = await postData(`${BASE_URL}${CANCEL_ORDER}`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const {data} = await postData(
+        `${BASE_URL}${CANCEL_ORDER}`,
+        payload,
+        options,
+      );
 
       const response = await getData(
         `${BASE_URL}${ON_CANCEL_ORDER}messageId=${data.context.message_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        options,
       );
       if (response.data.hasOwnProperty('message')) {
         getOrderList(1)
@@ -136,7 +177,7 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
       <View>
         <>
           <Text style={{color: colors.grey}}>{statusLabel}</Text>
-          {item.state !== 'CANCELLED' ? (
+          {item.state !== ORDER_STATUS.CANCELLED ? (
             <>
               <StepIndicator
                 currentPosition={currentPosition}
@@ -161,15 +202,39 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
               />
               <View>
                 <View style={styles.container}>
-                  <TouchableOpacity
-                    style={[
-                      styles.clearCartButton,
-                      {borderColor: colors.grey},
-                    ]}>
-                    <Text style={[styles.text, {color: colors.grey}]}>
-                      {returnLabel}
-                    </Text>
-                  </TouchableOpacity>
+                  {item.state === ORDER_STATUS.DELIVERED ? (
+                    <TouchableOpacity
+                      style={[
+                        styles.clearCartButton,
+                        {borderColor: colors.grey},
+                      ]}>
+                      <Text style={[styles.text, {color: colors.grey}]}>
+                        {returnLabel}
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      style={[
+                        styles.clearCartButton,
+                        {borderColor: colors.grey},
+                      ]}
+                      onPress={() => {
+                        trackOrder()
+                          .then(() => {})
+                          .catch(() => {});
+                      }}>
+                      <Text style={[styles.text, {color: colors.grey}]}>
+                        Track
+                      </Text>
+                      {trackInProgress && (
+                        <ActivityIndicator
+                          showLoading={trackInProgress}
+                          color={colors.black}
+                          size={14}
+                        />
+                      )}
+                    </TouchableOpacity>
+                  )}
                   <View style={styles.space} />
                   <TouchableOpacity
                     style={[

@@ -313,6 +313,7 @@ const Products = ({theme}) => {
           requestParameters,
           options,
         );
+
         getProducts(
           response.data.context.message_id,
           response.data.context.transaction_id,

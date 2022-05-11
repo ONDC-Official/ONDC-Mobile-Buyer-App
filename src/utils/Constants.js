@@ -33,6 +33,11 @@ export const PAYMENT_METHODS = {
   },
 };
 
+export const ORDER_STATUS = {
+  CANCELLED: 'CANCELLED',
+  DELIVERED: 'DELIVERED',
+};
+
 export const POLICY_URL =
   'https://github.com/Open-network-for-digital-commerce';
 
