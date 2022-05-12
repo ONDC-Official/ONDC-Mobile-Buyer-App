@@ -46,3 +46,12 @@ export const FAQS = 'https://ondc.org/Bring-buyers-on-the-network.html';
 export const ONDC_POLICY = 'https://ondc.org/index.html';
 
 export const CONTACT_US = 'https://ondc.org/contactus.html';
+
+export const SORT_BY_PRICE = {
+  HIGH_TO_LOW: 'High to low',
+  LOW_TO_HIGH: 'Low to high',
+};
+export const SORT_BY_RATING = {
+  HIGH_TO_LOW: 'High to low',
+  LOW_TO_HIGH: 'Low to high',
+};

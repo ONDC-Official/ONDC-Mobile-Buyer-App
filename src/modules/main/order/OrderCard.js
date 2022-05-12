@@ -9,16 +9,32 @@ const orderedOn = strings('main.order.ordered_on_label');
 const OrderCard = ({item, theme}) => {
   const {colors} = theme;
 
-  return item.quote ? (
+  return item.id ? (
     <>
-      <Text numberOfLines={1} style={styles.itemName}>
-        {item.quote.breakup[0].title}
-      </Text>
       <View style={styles.container}>
-        <Text style={{color: colors.grey}}>
-          {orderedOn} {moment(item.updatedAt).format('LL')}
-        </Text>
-        <Text style={styles.price}>₹ {item.quote.price.value}</Text>
+        <View>
+          <Text numberOfLines={1} style={styles.itemName}>
+            {item.id}
+          </Text>
+          <Text style={{color: colors.grey}}>
+            {orderedOn}
+            {moment(item.updatedAt).format('Do MMMM YYYY')}
+          </Text>
+        </View>
+
+        <View style={styles.statusContainer}>
+          <Text>Status:</Text>
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.accentColor,
+                backgroundColor: colors.statusBackground,
+              },
+            ]}>
+            <Text style={{color: colors.accentColor}}>Pending</Text>
+          </View>
+        </View>
       </View>
     </>
   ) : null;
@@ -28,8 +44,7 @@ export default withTheme(OrderCard);
 
 const styles = StyleSheet.create({
   itemName: {
-    textTransform: 'uppercase',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
   },
@@ -39,4 +54,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  orderStatus: {
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderRadius: 15,
+  },
+  statusContainer: {alignItems: 'center'},
 });

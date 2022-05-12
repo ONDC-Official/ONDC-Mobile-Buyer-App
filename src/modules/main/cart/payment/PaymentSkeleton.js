@@ -1,25 +1,64 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
+import {Card, Divider} from 'react-native-elements';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
 const PaymentSkeleton = () => {
   return (
-    <SkeletonPlaceholder>
-      <View style={styles.container}>
-        <View style={styles.heading} />
-        <View style={styles.address} />
-        <View style={styles.paymentOptionsHeading} />
-        <View style={styles.paymentOption}>
-          <View style={styles.radioButton} />
-          <View style={styles.label} />
-        </View>
-        <View style={styles.paymentOption}>
-          <View style={styles.radioButton} />
-          <View style={styles.label} />
-        </View>
+    <>
+      <Card>
+        <SkeletonPlaceholder>
+          <View style={styles.items}>
+            <View style={styles.title} />
+            <View style={styles.price} />
+          </View>
+        </SkeletonPlaceholder>
+        <Divider />
+        <SkeletonPlaceholder>
+          <View style={styles.items}>
+            <View style={styles.title} />
+            <View style={styles.price} />
+          </View>
+        </SkeletonPlaceholder>
+        <Divider />
+        <SkeletonPlaceholder>
+          <View style={styles.items}>
+            <View style={styles.title} />
+            <View style={styles.price} />
+          </View>
+        </SkeletonPlaceholder>
+      </Card>
+      <Card>
+        <SkeletonPlaceholder>
+          <View style={styles.heading} />
+          <View style={styles.address} />
+        </SkeletonPlaceholder>
+      </Card>
+      <Card>
+        <SkeletonPlaceholder>
+          <View style={styles.paymentOptionsHeading} />
+        </SkeletonPlaceholder>
+        <Card>
+          <SkeletonPlaceholder>
+            <View style={styles.paymentOption}>
+              <View style={styles.radioButton} />
+              <View style={styles.label} />
+            </View>
+          </SkeletonPlaceholder>
+        </Card>
+        <Card>
+          <SkeletonPlaceholder>
+            <View style={styles.paymentOption}>
+              <View style={styles.radioButton} />
+              <View style={styles.label} />
+            </View>
+          </SkeletonPlaceholder>
+        </Card>
+      </Card>
+      <SkeletonPlaceholder>
         <View style={styles.button} />
-      </View>
-    </SkeletonPlaceholder>
+      </SkeletonPlaceholder>
+    </>
   );
 };
 
@@ -38,4 +77,11 @@ const styles = StyleSheet.create({
   radioButton: {height: 20, width: 20, borderRadius: 20, marginRight: 20},
   label: {height: 15, width: 200},
   button: {height: 30, width: 300, marginVertical: 30, alignSelf: 'center'},
+  items: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+  },
+  title: {height: 15, width: 200},
+  price: {height: 15, width: 50},
 });

@@ -1,19 +1,19 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
   View,
 } from 'react-native';
 import {SearchBar, Text, withTheme} from 'react-native-elements';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {strings} from '../../../locales/i18n';
+import {appStyles} from '../../../styles/styles';
 import {SEARCH_QUERY} from '../../../utils/Constants';
-import FilterButton from './FilterButton';
+import Filters from './Filters';
 
-const product = strings('main.product.product_label');
-const provider = strings('main.product.provider_label');
-const category = strings('main.product.category_label');
 const search = strings('main.product.search_label');
 
 /**
@@ -33,14 +33,12 @@ const Header = ({
   location,
 }) => {
   const {colors} = theme;
-  const [selectedCard, setSelectedCard] = useState(product);
-  const [item, setItem] = useState(null);
 
-  /**
-   * function handles click event of filter button
-   * @param card :filter button selected by user
-   */
-  const onCardSelect = card => setSelectedCard(card);
+  const [item, setItem] = useState(null);
+  const refRBSheet = useRef();
+
+  const openRBSheet = () => refRBSheet.current.open();
+  const closeRBSheet = () => refRBSheet.current.close();
 
   return (
     <View style={[styles.container, {backgroundColor: colors.white}]}>
@@ -65,54 +63,45 @@ const Header = ({
           </TouchableOpacity>
         )}
       </View>
-      <View style={styles.cardContainer}>
-        <FilterButton
-          name={product}
-          onPress={() => {
-            onCardSelect(SEARCH_QUERY.PRODUCT);
-          }}
-          selectedCard={selectedCard}
-        />
-        <View style={styles.space} />
-        <FilterButton
-          name={provider}
-          onPress={() => {
-            onCardSelect(SEARCH_QUERY.PROVIDER);
-          }}
-          selectedCard={selectedCard}
-        />
-        <View style={styles.space} />
 
-        <FilterButton
-          name={category}
-          onPress={() => {
-            onCardSelect(SEARCH_QUERY.CATEGORY);
+      <View style={styles.subContainer}>
+        <SearchBar
+          round={true}
+          lightTheme={true}
+          placeholder={search}
+          containerStyle={[
+            appStyles.container,
+            styles.containerStyle,
+            {backgroundColor: colors.white},
+          ]}
+          showLoading={apiInProgress}
+          inputContainerStyle={[
+            styles.inputContainerStyle,
+            {backgroundColor: colors.white},
+          ]}
+          loadingProps={{color: colors.accentColor}}
+          cancelIcon={false}
+          onSubmitEditing={() => {
+            if (item !== null && item.trim().length > 2) {
+              onSearch(item, SEARCH_QUERY.PRODUCT);
+            }
           }}
-          selectedCard={selectedCard}
+          onChangeText={setItem}
+          value={item}
         />
+        <TouchableOpacity
+          style={[styles.filter, {borderColor: colors.accentColor}]}>
+          <Text
+            style={{color: colors.accentColor}}
+            activeOpacity={0.7}
+            onPress={openRBSheet}>
+            Filter <Icon name="filter" size={14} />
+          </Text>
+        </TouchableOpacity>
+        <RBSheet ref={refRBSheet} height={Dimensions.get('window').height / 2}>
+          <Filters closeRBSheet={closeRBSheet} />
+        </RBSheet>
       </View>
-      <SearchBar
-        round={true}
-        lightTheme={true}
-        placeholder={`${search} ${selectedCard}`}
-        containerStyle={[
-          styles.containerStyle,
-          {backgroundColor: colors.white},
-        ]}
-        showLoading={apiInProgress}
-        inputContainerStyle={[
-          styles.inputContainerStyle,
-          {backgroundColor: colors.white},
-        ]}
-        cancelIcon={false}
-        onSubmitEditing={() => {
-          if (item !== null && item.trim().length > 2) {
-            onSearch(item, selectedCard);
-          }
-        }}
-        onChangeText={setItem}
-        value={item}
-      />
     </View>
   );
 };
@@ -126,8 +115,15 @@ const styles = StyleSheet.create({
   subContainer: {flexDirection: 'row', alignItems: 'center'},
   locationContainer: {marginBottom: 10},
   textContainer: {marginLeft: 8, flexShrink: 1},
-  containerStyle: {padding: 0, borderRadius: 15},
+  containerStyle: {padding: 0, borderRadius: 50},
   cardContainer: {flexDirection: 'row', marginBottom: 10},
   space: {marginHorizontal: 5},
-  inputContainerStyle: {elevation: 10, borderRadius: 15},
+  inputContainerStyle: {elevation: 10, borderRadius: 10},
+  filter: {
+    paddingVertical: 13,
+    paddingHorizontal: 18,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginLeft: 5,
+  },
 });

@@ -3,12 +3,13 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   BackHandler,
   DeviceEventEmitter,
+  FlatList,
   Image,
   StyleSheet,
   View,
 } from 'react-native';
 import Config from 'react-native-config';
-import {CheckBox} from 'react-native-elements';
+import {Card, CheckBox, Divider} from 'react-native-elements';
 import {Text, withTheme} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
@@ -62,10 +63,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
   } = useContext(AuthContext);
   const [selectedPaymentOption, setSelectedPaymentOption] = useState(null);
   const [initializeOrderRequested, setInitializeOrderRequested] =
-    useState(true);
+    useState(false);
   const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
-  const orderRef = useRef();
+  const [orders, setOrders] = useState(null);
+  const [total, setTotal] = useState(null);
+  const [fulFillment, setFulFillment] = useState(null);
   const signedPayload = useRef(null);
   const timeStamp = useRef(null);
 
@@ -85,7 +88,15 @@ const Payment = ({navigation, theme, route: {params}}) => {
           },
         );
 
-        orderRef.current = data;
+        setOrders(data);
+        const ordersArray = data.filter(one => !one.hasOwnProperty('error'));
+        const breakupItem = ordersArray[0].message.order.quote.breakup.find(
+          one => one.title === 'FULFILLMENT',
+        );
+        breakupItem
+          ? setFulFillment(breakupItem.price.value)
+          : setFulFillment(null);
+        setTotal(ordersArray[0].message.order.quote.price.value);
       } catch (error) {
         handleApiError(error);
       }
@@ -93,19 +104,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
     setTimeout(() => {
       clearInterval(order);
-      const ordersArray = orderRef.current;
-      if (ordersArray) {
-        const errorObj = ordersArray.find(item => item.hasOwnProperty('error'));
-        if (errorObj) {
-          showToastWithGravity(strings('network_error.something_went_wrong'));
-        } else {
-          setConfirmOrderRequested(false);
-        }
-      } else {
-        showToastWithGravity(strings('network_error.something_went_wrong'));
-      }
+
       setInitializeOrderRequested(false);
-    }, 11000);
+    }, 10000);
   };
 
   const onConfirmOrder = messageIdArray => {
@@ -374,12 +375,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
   const confirmOrder = async method => {
     try {
-      if (orderRef.current && orderRef.current.length > 0) {
-        const errorObj = orderRef.current.find(one =>
-          one.hasOwnProperty('error'),
-        );
+      if (orders && orders.length > 0) {
+        const errorObj = orders.find(one => one.hasOwnProperty('error'));
         if (!errorObj) {
-          const payload = orderRef.current.map(item => {
+          const payload = orders.map(item => {
             return {
               context: {
                 transaction_id: item.context.transaction_id,
@@ -511,54 +510,95 @@ const Payment = ({navigation, theme, route: {params}}) => {
       ) : (
         <>
           <View style={styles.container}>
-            <Text style={styles.text}>{addressTitle}</Text>
-            <View style={styles.addressContainer}>
+            <Card containerStyle={styles.containerStyle}>
+              <FlatList
+                data={confirmationList}
+                renderItem={({item}) => {
+                  const element = cartItems.find(one => one.id === item.id);
+
+                  return element ? (
+                    <>
+                      <View style={styles.priceContainer}>
+                        <Text>{element.descriptor.name}</Text>
+                        <Text>₹{element.price.value * element.quantity}</Text>
+                      </View>
+                      <Divider />
+                    </>
+                  ) : null;
+                }}
+              />
+              {fulFillment && (
+                <>
+                  <View style={styles.priceContainer}>
+                    <Text>FULFILLMENT</Text>
+                    <Text style={styles.fulfillment}>₹{fulFillment}</Text>
+                  </View>
+                  <Divider />
+                </>
+              )}
+
+              {total && (
+                <View style={styles.priceContainer}>
+                  <Text>Total Payable</Text>
+                  <Text style={styles.fulfillment}>₹{total}</Text>
+                </View>
+              )}
+            </Card>
+            <Card containerStyle={styles.containerStyle}>
+              <Text style={styles.text}>{addressTitle}</Text>
+
               <Text>
                 {selectedAddress.address.street},{' '}
                 {selectedAddress.address.locality},{' '}
                 {selectedAddress.address.city}, {selectedAddress.address.state}{' '}
                 - {selectedAddress.address.area_code}
               </Text>
-            </View>
+            </Card>
+            {orders && (
+              <Card containerStyle={styles.containerStyle}>
+                <Text style={styles.text}>{paymentOptionsTitle}</Text>
 
-            <Text style={styles.text}>{paymentOptionsTitle}</Text>
-            <View style={styles.paymentOptions}>
-              {PAYMENT_OPTIONS.map((option, index) => (
-                <CheckBox
-                  key={option.value}
-                  title={
-                    <View style={styles.titleStyle}>
-                      <Text style={styles.textStyle}>{option.label}</Text>
-                      {option.label === 'Prepaid' && (
-                        <View style={styles.juspayContainer}>
-                          <Text>{poweredBy}</Text>
-                          <FastImage
-                            source={{
-                              uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
-                            }}
-                            style={styles.image}
-                            resizeMode={'contain'}
-                          />
+                <View style={styles.paymentOptions}>
+                  {PAYMENT_OPTIONS.map((option, index) => (
+                    <CheckBox
+                      key={option.value}
+                      title={
+                        <View style={styles.titleStyle}>
+                          <Text style={styles.textStyle}>{option.label}</Text>
+                          {option.label === 'Prepaid' && (
+                            <View style={styles.juspayContainer}>
+                              <Text>{poweredBy}</Text>
+                              <FastImage
+                                source={{
+                                  uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
+                                }}
+                                style={styles.image}
+                                resizeMode={'contain'}
+                              />
+                            </View>
+                          )}
                         </View>
-                      )}
-                    </View>
-                  }
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
-                  checked={option.value === selectedPaymentOption}
-                  onPress={() => setSelectedPaymentOption(option.value)}
-                />
-              ))}
-            </View>
+                      }
+                      checkedIcon="dot-circle-o"
+                      uncheckedIcon="circle-o"
+                      checked={option.value === selectedPaymentOption}
+                      onPress={() => setSelectedPaymentOption(option.value)}
+                    />
+                  ))}
+                </View>
+              </Card>
+            )}
           </View>
 
-          <View style={styles.buttonContainer}>
-            <ContainButton
-              title={buttonTitle}
-              onPress={placeOrder}
-              loading={confirmOrderRequested}
-            />
-          </View>
+          {orders && (
+            <View style={styles.buttonContainer}>
+              <ContainButton
+                title={'Proceed'}
+                onPress={placeOrder}
+                loading={confirmOrderRequested}
+              />
+            </View>
+          )}
         </>
       )}
     </View>
@@ -571,7 +611,6 @@ const styles = StyleSheet.create({
   container: {padding: 15},
   text: {fontSize: 18, fontWeight: '600'},
   buttonContainer: {width: 300, alignSelf: 'center'},
-  addressContainer: {marginBottom: 15},
   paymentOptions: {marginVertical: 10},
   labelStyle: {fontSize: 16, fontWeight: '400'},
   buttonStyle: {marginBottom: 10},
@@ -579,4 +618,11 @@ const styles = StyleSheet.create({
   textStyle: {fontSize: 16, fontWeight: '700'},
   juspayContainer: {flexDirection: 'row', alignItems: 'center'},
   image: {height: 15, width: 80},
+  containerStyle: {marginHorizontal: 0},
+  priceContainer: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
 });

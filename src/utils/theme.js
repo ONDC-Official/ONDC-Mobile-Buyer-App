@@ -8,5 +8,6 @@ export const theme = {
     success: '#2EB086',
     white: '#ffffff',
     cancelledBackground: '#FFE8E7',
+    statusBackground: '#E9F1F8',
   },
 };

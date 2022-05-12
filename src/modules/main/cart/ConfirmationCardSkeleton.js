@@ -9,12 +9,12 @@ const ConfirmationCardSkeleton = () => {
     <Card>
       <SkeletonPlaceholder>
         <View style={styles.container}>
-          <View style={styles.image}/>
+          <View style={styles.image} />
           <View style={appStyles.container}>
-            <View style={styles.name}/>
-            <View style={styles.description}/>
+            <View style={styles.name} />
+            <View style={styles.description} />
             <View style={styles.priceContainer}>
-              <View style={styles.price}/>
+              <View style={styles.price} />
             </View>
           </View>
         </View>

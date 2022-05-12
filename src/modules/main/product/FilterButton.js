@@ -1,7 +1,6 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {appStyles} from '../../../styles/styles';
 
 /**
@@ -13,7 +12,7 @@ import {appStyles} from '../../../styles/styles';
  * @constructor
  * @returns {JSX.Element}
  */
-const FilterButton = ({theme, name, selectedCard, onPress}) => {
+const FilterButton = ({theme, card, name, selectedCard, onPress}) => {
   const {colors} = theme;
   return (
     <View style={appStyles.container}>
@@ -22,17 +21,17 @@ const FilterButton = ({theme, name, selectedCard, onPress}) => {
           styles.container,
           {
             backgroundColor:
-              selectedCard === name
+              selectedCard === card
                 ? colors.accentColor
                 : colors.backgroundColor,
             borderColor:
-              selectedCard === name ? colors.accentColor : colors.borderColor,
+              selectedCard === card ? colors.accentColor : colors.borderColor,
           },
         ]}
         onPress={onPress}>
         <Text
           style={{
-            color: selectedCard === name ? colors.white : colors.black,
+            color: selectedCard === card ? colors.white : colors.black,
           }}>
           {name}
         </Text>

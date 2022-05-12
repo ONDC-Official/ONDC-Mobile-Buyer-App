@@ -12,12 +12,12 @@ const OrderAccordion = ({item, theme, getOrderList}) => {
   const _renderHeader = sections => <OrderCard item={sections} />;
 
   const _renderContent = sections => (
-    <ShippingDetails item={sections} getOrderList={getOrderList} />
+    <ShippingDetails order={sections} getOrderList={getOrderList} />
   );
 
   const _updateSections = activesections => setActiveSections(activesections);
 
-  return item.quote ? (
+  return item.id && item.quote ? (
     <Card containerStyle={styles.card}>
       <Accordion
         sections={[item]}

@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Card, Text, withTheme} from 'react-native-elements';
+import {Card, Divider, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
 import ContainButton from '../../../components/button/ContainButton';
@@ -10,23 +10,30 @@ import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../utils/apiUtilities';
-import {showToastWithGravity, skeletonList} from '../../../utils/utils';
+import {
+  maskAmount,
+  showToastWithGravity,
+  skeletonList,
+} from '../../../utils/utils';
 import Header from '../cart/addressPicker/Header';
 import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
+  const {colors} = theme;
   const {
     state: {token},
   } = useContext(AuthContext);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const {handleApiError} = useNetworkErrorHandling();
   const [confirmationList, setConfirmationList] = useState(null);
+  const [total, setTotal] = useState(null);
+  const [fulfillment, setFulFillment] = useState(null);
 
   const onGetQuote = messageId => {
     const messageIds = messageId.toString();
     let getConfirmation = setInterval(async () => {
       try {
-        const response = await getData(
+        const {data} = await getData(
           `${BASE_URL}${ON_GET_QUOTE}messageIds=${messageIds}`,
           {
             headers: {Authorization: `Bearer ${token}`},
@@ -34,7 +41,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         );
 
         let list = [];
-        response.data.forEach(item => {
+        data.forEach(item => {
           if (!item.error) {
             if (item.context.bpp_id) {
               item.message.quote.items.forEach(element => {
@@ -44,7 +51,13 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                   descriptor: object.descriptor,
                   locations: object.locations,
                 };
-
+                setTotal(item.message.quote.quote.price.value);
+                const breakupItem = item.message.quote.quote.breakup.find(
+                  one => one.title === 'FULFILLMENT',
+                );
+                breakupItem
+                  ? setFulFillment(breakupItem.price.value)
+                  : setFulFillment(null);
                 element.transaction_id = item.context.transaction_id;
                 element.bpp_id = item.context.bpp_id;
                 list.push(element);
@@ -60,7 +73,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     }, 2000);
     setTimeout(() => {
       clearInterval(getConfirmation);
-    }, 10000);
+    }, 14000);
   };
 
   const getQuote = async () => {
@@ -177,6 +190,10 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                   </Text>
                 </View>
                 <View style={styles.priceContainer}>
+                  <Text>
+                    {element.price.value} X {element.quantity}
+                  </Text>
+
                   <Text>₹ {element.price.value * element.quantity}</Text>
                 </View>
               </View>
@@ -207,7 +224,23 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           );
         }}
       />
-
+      {total && (
+        <Card containerStyle={styles.card}>
+          {fulfillment && (
+            <>
+              <View style={styles.priceContainer}>
+                <Text style={styles.fulfillment}>FULFILLMENT</Text>
+                <Text style={styles.fulfillment}>₹{fulfillment}</Text>
+              </View>
+              <Divider />
+            </>
+          )}
+          <View style={styles.priceContainer}>
+            <Text style={styles.title}>Total Payable </Text>
+            <Text style={styles.title}>₹{maskAmount(total)}</Text>
+          </View>
+        </Card>
+      )}
       {confirmationList && confirmationList.length > 0 && (
         <View style={styles.buttonContainer}>
           <ContainButton
@@ -238,8 +271,14 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {paddingBottom: 10},
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
-  title: {fontSize: 18, fontWeight: '600'},
+  title: {fontSize: 18, marginTop: 10, fontWeight: '600'},
   buttonContainer: {width: 300, padding: 20, alignSelf: 'center'},
   totalContainer: {paddingHorizontal: 10},
   emptyListComponent: {alignItems: 'center', justifyContent: 'center'},
+  quantityContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 4,
+  },
+  fulfillment: {fontSize: 16, fontWeight: '600', marginBottom: 10},
 });

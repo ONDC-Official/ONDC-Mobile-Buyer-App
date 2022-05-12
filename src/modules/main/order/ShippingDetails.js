@@ -1,13 +1,13 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   TouchableOpacity,
   StyleSheet,
   Linking,
   ActivityIndicator,
+  FlatList,
 } from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
-import StepIndicator from 'react-native-step-indicator';
+import {Divider, Text, withTheme} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../locales/i18n';
@@ -27,33 +27,7 @@ const statusLabel = strings('main.order.status_label');
 const returnLabel = strings('main.order.return');
 const cancel = strings('main.order.cancel');
 
-const labels = ['Ordered', 'Shipped', 'Delivered'];
-
-const customStyles = {
-  stepIndicatorSize: 40,
-  currentStepIndicatorSize: 60,
-  separatorStrokeWidth: 5,
-  currentStepStrokeWidth: 7,
-  stepStrokeCurrentColor: '#ffff',
-  stepStrokeWidth: 0,
-  stepStrokeFinishedColor: '#ffff',
-  stepStrokeUnFinishedColor: '#ffff',
-  separatorFinishedColor: '#30B086',
-  separatorUnFinishedColor: '#aaaaaa',
-  stepIndicatorFinishedColor: '#ffff',
-  stepIndicatorUnFinishedColor: '#ffffff',
-  stepIndicatorCurrentColor: '#ffffff',
-  stepIndicatorLabelFontSize: 0,
-  currentStepIndicatorLabelFontSize: 0,
-  stepIndicatorLabelCurrentColor: '#30B086',
-  stepIndicatorLabelFinishedColor: '#30B086',
-  stepIndicatorLabelUnFinishedColor: '#30B086',
-  labelColor: '#999999',
-  labelSize: 16,
-  currentStepLabelColor: '#30B086',
-};
-
-const ShippingDetails = ({item, getOrderList, theme}) => {
+const ShippingDetails = ({order, getOrderList, theme}) => {
   const {colors} = theme;
   const separator = ',';
   const {
@@ -66,19 +40,8 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
     },
   };
 
-  const [currentPosition, setCurrentPosition] = useState(0);
   const [cancelInProgress, setCancelInProgress] = useState(false);
   const [trackInProgress, setTrackInProgress] = useState(false);
-
-  const setPosition = () => {
-    if (item.state === 'PENDING-CONFIRMATION') {
-      setCurrentPosition(0);
-    } else if (item.state === 'shipped') {
-      setCurrentPosition(1);
-    } else {
-      setCurrentPosition(2);
-    }
-  };
 
   const trackOrder = async () => {
     try {
@@ -86,10 +49,10 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
       const payload = [
         {
           context: {
-            transaction_id: item.transactionId,
-            bpp_id: item.bppId,
+            transaction_id: order.transactionId,
+            bpp_id: order.bppId,
           },
-          message: {order_id: item.id},
+          message: {order_id: order.id},
         },
       ];
       const {data} = await postData(
@@ -121,10 +84,10 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
       setCancelInProgress(true);
       const payload = {
         context: {
-          bpp_id: item.bppId,
-          transaction_id: item.transactionId,
+          bpp_id: order.bppId,
+          transaction_id: order.transactionId,
         },
-        message: {order_id: item.id, cancellation_reason_id: 'item'},
+        message: {order_id: order.id, cancellation_reason_id: 'item'},
       };
       const {data} = await postData(
         `${BASE_URL}${CANCEL_ORDER}`,
@@ -150,130 +113,111 @@ const ShippingDetails = ({item, getOrderList, theme}) => {
     }
   };
 
-  const setColor = position =>
-    position <= currentPosition ? '#30B086' : '#aaaaaa';
-
-  useEffect(() => {
-    setPosition();
-  }, []);
+  const renderItem = ({item}) => {
+    return (
+      <View style={styles.priceContainer}>
+        <Text style={styles.title} numberOfLines={1}>
+          {item.title}
+        </Text>
+        <View style={styles.space} />
+        <Text style={styles.price}>₹{item.price.value}</Text>
+      </View>
+    );
+  };
 
   return (
-    <>
-      <View style={styles.addressContainer}>
-        <Text style={{color: colors.grey}}>{deliveryTo}</Text>
+    <View style={styles.container}>
+      <Divider />
+      <FlatList data={order.quote.breakup} renderItem={renderItem} />
+      <View>
+        <View style={styles.addressContainer}>
+          <Text style={{color: colors.grey}}>Billing Address:</Text>
+          <Text style={styles.name}>{order.billing.name}</Text>
+          <Text style={styles.address}>
+            {order.billing.address.building
+              ? order.billing.address.building
+              : null}
+            {order.billing.address.building ? separator : null}{' '}
+            {order.billing.address.street}
+          </Text>
 
-        <Text>
-          {item.billing.address.building ? item.billing.address.building : null}
-          {item.billing.address.building ? separator : null}{' '}
-          {item.billing.address.street}, {item.billing.address.city}{' '}
-          {item.billing.address.state}
-        </Text>
-
-        <Text style={{color: colors.grey}}>
-          {item.billing.address.area_code}
-        </Text>
+          <Text>
+            {order.billing.address.city} {order.billing.address.state}
+          </Text>
+        </View>
       </View>
+      <Divider />
 
       <View>
-        <>
-          <Text style={{color: colors.grey}}>{statusLabel}</Text>
-          {item.state !== ORDER_STATUS.CANCELLED ? (
-            <>
-              <StepIndicator
-                currentPosition={currentPosition}
-                stepCount={labels.length}
-                customStyles={customStyles}
-                renderStepIndicator={({position}) => {
-                  return (
-                    <View
-                      style={[
-                        styles.stepIndicator,
-                        {backgroundColor: setColor(position)},
-                      ]}
-                    />
-                  );
-                }}
-                labels={labels}
-                renderLabel={({position, label}) => {
-                  return (
-                    <Text style={{color: setColor(position)}}>{label}</Text>
-                  );
-                }}
-              />
-              <View>
-                <View style={styles.container}>
-                  {item.state === ORDER_STATUS.DELIVERED ? (
-                    <TouchableOpacity
-                      style={[
-                        styles.clearCartButton,
-                        {borderColor: colors.grey},
-                      ]}>
-                      <Text style={[styles.text, {color: colors.grey}]}>
-                        {returnLabel}
-                      </Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      style={[
-                        styles.clearCartButton,
-                        {borderColor: colors.grey},
-                      ]}
-                      onPress={() => {
-                        trackOrder()
-                          .then(() => {})
-                          .catch(() => {});
-                      }}>
-                      <Text style={[styles.text, {color: colors.grey}]}>
-                        Track
-                      </Text>
-                      {trackInProgress && (
-                        <ActivityIndicator
-                          showLoading={trackInProgress}
-                          color={colors.black}
-                          size={14}
-                        />
-                      )}
-                    </TouchableOpacity>
-                  )}
-                  <View style={styles.space} />
+        {order.state !== ORDER_STATUS.CANCELLED ? (
+          <>
+            <View>
+              <View style={styles.subContainer}>
+                {order.state === ORDER_STATUS.DELIVERED ? (
                   <TouchableOpacity
                     style={[
                       styles.clearCartButton,
-                      {borderColor: colors.accentColor},
+                      {borderColor: colors.greyOutline},
+                    ]}>
+                    <Text style={styles.text}>{returnLabel}</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={[
+                      styles.clearCartButton,
+                      {backgroundColor: colors.greyOutline},
                     ]}
-                    onPress={cancelOrder}>
-                    <Text style={[styles.text, {color: colors.accentColor}]}>
-                      {cancel}
-                    </Text>
-                    {cancelInProgress && (
+                    onPress={() => {
+                      trackOrder()
+                        .then(() => {})
+                        .catch(() => {});
+                    }}>
+                    <Text style={styles.text}>Track</Text>
+                    {trackInProgress && (
                       <ActivityIndicator
-                        showLoading={cancelInProgress}
-                        color={colors.accentColor}
+                        showLoading={trackInProgress}
+                        color={colors.black}
                         size={14}
                       />
                     )}
                   </TouchableOpacity>
-                </View>
+                )}
+                <View style={styles.space} />
+                <TouchableOpacity
+                  style={[
+                    styles.clearCartButton,
+                    {backgroundColor: colors.accentColor},
+                  ]}
+                  onPress={cancelOrder}>
+                  <Text style={[styles.text, {color: colors.white}]}>
+                    {cancel}
+                  </Text>
+                  {cancelInProgress && (
+                    <ActivityIndicator
+                      showLoading={cancelInProgress}
+                      color={colors.white}
+                      size={14}
+                    />
+                  )}
+                </TouchableOpacity>
               </View>
-            </>
-          ) : (
-            <View
-              style={[
-                styles.cancelledButton,
-                {
-                  borderColor: colors.error,
-                  backgroundColor: colors.cancelledBackground,
-                },
-              ]}
-              onPress={cancelOrder}>
-              <Text style={[styles.text, {color: colors.error}]}>
-                Cancelled
-              </Text>
             </View>
-          )}
-        </>
+          </>
+        ) : (
+          <View
+            style={[
+              styles.cancelledButton,
+              {
+                borderColor: colors.error,
+                backgroundColor: colors.cancelledBackground,
+              },
+            ]}
+            onPress={cancelOrder}>
+            <Text style={[styles.text, {color: colors.error}]}>Cancelled</Text>
+          </View>
+        )}
       </View>
-    </>
+    </View>
   );
 };
 
@@ -282,24 +226,23 @@ export default withTheme(ShippingDetails);
 const styles = StyleSheet.create({
   addressContainer: {marginVertical: 20},
   text: {fontSize: 16, marginRight: 5},
-  container: {
+  subContainer: {
     marginTop: 20,
     padding: 10,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   clearCartButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 15,
+    paddingVertical: 5,
+    paddingHorizontal: 20,
     borderRadius: 50,
-    borderWidth: 1,
     alignItems: 'center',
     flexDirection: 'row',
   },
   space: {margin: 10},
   stepIndicator: {width: 20, height: 20, borderRadius: 50},
   cancelledButton: {
-    paddingVertical: 8,
+    paddingVertical: 5,
     paddingHorizontal: 15,
     borderRadius: 50,
     borderWidth: 1,
@@ -307,4 +250,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignSelf: 'flex-start',
   },
+  container: {paddingVertical: 10},
+  priceContainer: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  name: {fontSize: 18, fontWeight: '700', marginVertical: 4},
+  title: {fontSize: 16, fontWeight: '700', marginRight: 10, flexShrink: 1},
+  price: {fontSize: 16, fontWeight: '700'},
+  address: {marginBottom: 4},
 });
