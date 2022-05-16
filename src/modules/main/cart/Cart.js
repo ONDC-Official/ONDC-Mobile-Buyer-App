@@ -2,6 +2,7 @@ import React from 'react';
 import {
   FlatList,
   SafeAreaView,
+  StatusBar,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -131,9 +132,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
     elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
-    shadowOpacity: 0.4,
-    shadowRadius: 3,
+    // shadowColor: '#000',
+    // shadowOffset: {width: 0, height: 1},
+    // shadowOpacity: 0.4,
+    // shadowRadius: 3,
   },
 });

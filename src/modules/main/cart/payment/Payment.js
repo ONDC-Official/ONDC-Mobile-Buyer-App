@@ -5,6 +5,7 @@ import {
   DeviceEventEmitter,
   FlatList,
   Image,
+  SafeAreaView,
   StyleSheet,
   View,
 } from 'react-native';
@@ -256,6 +257,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setInitializeOrderRequested(false);
       }
     } catch (error) {
+      console.log(error);
       handleApiError(error);
       setInitializeOrderRequested(false);
     }
@@ -502,106 +504,108 @@ const Payment = ({navigation, theme, route: {params}}) => {
   }, []);
 
   return (
-    <View
-      style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title={heading} navigation={navigation} />
-      {initializeOrderRequested ? (
-        <PaymentSkeleton />
-      ) : (
-        <>
-          <View style={styles.container}>
-            <Card containerStyle={styles.containerStyle}>
-              <FlatList
-                data={confirmationList}
-                renderItem={({item}) => {
-                  const element = cartItems.find(one => one.id === item.id);
-
-                  return element ? (
-                    <>
-                      <View style={styles.priceContainer}>
-                        <Text>{element.descriptor.name}</Text>
-                        <Text>₹{element.price.value * element.quantity}</Text>
-                      </View>
-                      <Divider />
-                    </>
-                  ) : null;
-                }}
-              />
-              {fulFillment && (
-                <>
-                  <View style={styles.priceContainer}>
-                    <Text>FULFILLMENT</Text>
-                    <Text style={styles.fulfillment}>₹{fulFillment}</Text>
-                  </View>
-                  <Divider />
-                </>
-              )}
-
-              {total && (
-                <View style={styles.priceContainer}>
-                  <Text>Total Payable</Text>
-                  <Text style={styles.fulfillment}>₹{total}</Text>
-                </View>
-              )}
-            </Card>
-            <Card containerStyle={styles.containerStyle}>
-              <Text style={styles.text}>{addressTitle}</Text>
-
-              <Text>
-                {selectedAddress.address.street},{' '}
-                {selectedAddress.address.locality},{' '}
-                {selectedAddress.address.city}, {selectedAddress.address.state}{' '}
-                - {selectedAddress.address.area_code}
-              </Text>
-            </Card>
-            {orders && (
+    <SafeAreaView style={appStyles.container}>
+      <View style={appStyles.container}>
+        <Header title={heading} navigation={navigation} />
+        {initializeOrderRequested ? (
+          <PaymentSkeleton />
+        ) : (
+          <>
+            <View style={styles.container}>
               <Card containerStyle={styles.containerStyle}>
-                <Text style={styles.text}>{paymentOptionsTitle}</Text>
+                <FlatList
+                  data={confirmationList}
+                  renderItem={({item}) => {
+                    const element = cartItems.find(one => one.id === item.id);
 
-                <View style={styles.paymentOptions}>
-                  {PAYMENT_OPTIONS.map((option, index) => (
-                    <CheckBox
-                      key={option.value}
-                      title={
-                        <View style={styles.titleStyle}>
-                          <Text style={styles.textStyle}>{option.label}</Text>
-                          {option.label === 'Prepaid' && (
-                            <View style={styles.juspayContainer}>
-                              <Text>{poweredBy}</Text>
-                              <FastImage
-                                source={{
-                                  uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
-                                }}
-                                style={styles.image}
-                                resizeMode={'contain'}
-                              />
-                            </View>
-                          )}
+                    return element ? (
+                      <>
+                        <View style={styles.priceContainer}>
+                          <Text>{element.descriptor.name}</Text>
+                          <Text>₹{element.price.value * element.quantity}</Text>
                         </View>
-                      }
-                      checkedIcon="dot-circle-o"
-                      uncheckedIcon="circle-o"
-                      checked={option.value === selectedPaymentOption}
-                      onPress={() => setSelectedPaymentOption(option.value)}
-                    />
-                  ))}
-                </View>
-              </Card>
-            )}
-          </View>
+                        <Divider />
+                      </>
+                    ) : null;
+                  }}
+                />
+                {fulFillment && (
+                  <>
+                    <View style={styles.priceContainer}>
+                      <Text>FULFILLMENT</Text>
+                      <Text style={styles.fulfillment}>₹{fulFillment}</Text>
+                    </View>
+                    <Divider />
+                  </>
+                )}
 
-          {orders && (
-            <View style={styles.buttonContainer}>
-              <ContainButton
-                title={'Proceed'}
-                onPress={placeOrder}
-                loading={confirmOrderRequested}
-              />
+                {total && (
+                  <View style={styles.priceContainer}>
+                    <Text>Total Payable</Text>
+                    <Text style={styles.fulfillment}>₹{total}</Text>
+                  </View>
+                )}
+              </Card>
+              <Card containerStyle={styles.containerStyle}>
+                <Text style={styles.text}>{addressTitle}</Text>
+
+                <Text>
+                  {selectedAddress.address.street},{' '}
+                  {selectedAddress.address.locality},{' '}
+                  {selectedAddress.address.city},{' '}
+                  {selectedAddress.address.state} -{' '}
+                  {selectedAddress.address.area_code}
+                </Text>
+              </Card>
+              {orders && (
+                <Card containerStyle={styles.containerStyle}>
+                  <Text style={styles.text}>{paymentOptionsTitle}</Text>
+
+                  <View style={styles.paymentOptions}>
+                    {PAYMENT_OPTIONS.map((option, index) => (
+                      <CheckBox
+                        key={option.value}
+                        title={
+                          <View style={styles.titleStyle}>
+                            <Text style={styles.textStyle}>{option.label}</Text>
+                            {option.label === 'Prepaid' && (
+                              <View style={styles.juspayContainer}>
+                                <Text>{poweredBy}</Text>
+                                <FastImage
+                                  source={{
+                                    uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
+                                  }}
+                                  style={styles.image}
+                                  resizeMode={'contain'}
+                                />
+                              </View>
+                            )}
+                          </View>
+                        }
+                        checkedIcon="dot-circle-o"
+                        uncheckedIcon="circle-o"
+                        checked={option.value === selectedPaymentOption}
+                        onPress={() => setSelectedPaymentOption(option.value)}
+                      />
+                    ))}
+                  </View>
+                </Card>
+              )}
             </View>
-          )}
-        </>
-      )}
-    </View>
+
+            {orders && (
+              <View style={styles.buttonContainer}>
+                <ContainButton
+                  title={'Proceed'}
+                  onPress={placeOrder}
+                  loading={confirmOrderRequested}
+                />
+              </View>
+            )}
+          </>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 

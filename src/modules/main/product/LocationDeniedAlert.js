@@ -20,12 +20,15 @@ const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
   return (
     <Dialog isVisible={isVisible} overlayStyle={styles.overlayStyle}>
       <View
-        style={[styles.iconContainer, {backgroundColor: colors.greyOutline}]}>
+        style={[
+          styles.iconContainer,
+          {backgroundColor: colors.statusBackground},
+        ]}>
         <Icon
           name="location-off"
           type="material"
           size={34}
-          color={colors.primary}
+          color={colors.accentColor}
         />
       </View>
       <Dialog.Title
@@ -38,7 +41,7 @@ const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
           name: 'search',
           type: 'font-awesome',
           size: 14,
-          color: theme.colors.primary,
+          color: colors.accentColor,
         }}
         title={enterLocationMessage}
         onPress={() => {
@@ -63,6 +66,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: 'center',
   },
-  titleStyle: {fontSize: 16},
+  titleStyle: {fontSize: 16, alignSelf: 'center'},
   overlayStyle: {borderRadius: 10},
 });

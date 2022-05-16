@@ -66,18 +66,16 @@ const Header = ({
 
       <View style={styles.subContainer}>
         <SearchBar
-          round={true}
+          round={false}
           lightTheme={true}
           placeholder={search}
-          containerStyle={[
-            appStyles.container,
-            styles.containerStyle,
-            {backgroundColor: colors.white},
-          ]}
+          containerStyle={[appStyles.container, styles.containerStyle]}
           showLoading={apiInProgress}
           inputContainerStyle={[
             styles.inputContainerStyle,
-            {backgroundColor: colors.white},
+            {
+              backgroundColor: colors.white,
+            },
           ]}
           loadingProps={{color: colors.accentColor}}
           cancelIcon={false}
@@ -89,6 +87,7 @@ const Header = ({
           onChangeText={setItem}
           value={item}
         />
+
         <TouchableOpacity
           style={[styles.filter, {borderColor: colors.accentColor}]}>
           <Text
@@ -115,10 +114,21 @@ const styles = StyleSheet.create({
   subContainer: {flexDirection: 'row', alignItems: 'center'},
   locationContainer: {marginBottom: 10},
   textContainer: {marginLeft: 8, flexShrink: 1},
-  containerStyle: {padding: 0, borderRadius: 50},
+  inputContainerStyle: {
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderTopWidth: 1,
+    borderRadius: 10,
+  },
+  containerStyle: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    padding: 0,
+  },
   cardContainer: {flexDirection: 'row', marginBottom: 10},
   space: {marginHorizontal: 5},
-  inputContainerStyle: {elevation: 10, borderRadius: 10},
   filter: {
     paddingVertical: 13,
     paddingHorizontal: 18,

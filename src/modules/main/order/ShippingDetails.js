@@ -4,10 +4,10 @@ import {
   TouchableOpacity,
   StyleSheet,
   Linking,
-  ActivityIndicator,
   FlatList,
 } from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../locales/i18n';
@@ -21,6 +21,8 @@ import {
 } from '../../../utils/apiUtilities';
 import {FAQS, ORDER_STATUS} from '../../../utils/Constants';
 import {showToastWithGravity} from '../../../utils/utils';
+import Button from './Button';
+import Support from './Support';
 
 const deliveryTo = strings('main.order.delivery_to_label');
 const statusLabel = strings('main.order.status_label');
@@ -34,14 +36,21 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
     state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
+  const [cancelInProgress, setCancelInProgress] = useState(false);
+  const [trackInProgress, setTrackInProgress] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+
   const options = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
 
-  const [cancelInProgress, setCancelInProgress] = useState(false);
-  const [trackInProgress, setTrackInProgress] = useState(false);
+  const getSupportObj = {
+    bpp_id: order.bppId,
+    transaction_id: order.transactionId,
+    ref_id: order.id,
+  };
 
   const trackOrder = async () => {
     try {
@@ -140,7 +149,6 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
             {order.billing.address.building ? separator : null}{' '}
             {order.billing.address.street}
           </Text>
-
           <Text>
             {order.billing.address.city} {order.billing.address.state}
           </Text>
@@ -148,73 +156,67 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
       </View>
       <Divider />
 
-      <View>
+      <View style={[styles.priceContainer, styles.container]}>
+        <TouchableOpacity
+          onPress={() => {
+            setModalVisible(true);
+          }}
+          style={[styles.icon, {backgroundColor: colors.accentColor}]}>
+          <Icon name="phone" color={colors.white} size={20} />
+        </TouchableOpacity>
+        <Support
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          item={getSupportObj}
+        />
         {order.state !== ORDER_STATUS.CANCELLED ? (
           <>
             <View>
               <View style={styles.subContainer}>
                 {order.state === ORDER_STATUS.DELIVERED ? (
-                  <TouchableOpacity
-                    style={[
-                      styles.clearCartButton,
-                      {borderColor: colors.greyOutline},
-                    ]}>
-                    <Text style={styles.text}>{returnLabel}</Text>
-                  </TouchableOpacity>
+                  <Button
+                    backgroundColor={colors.greyOutline}
+                    borderColor={colors.greyOutline}
+                    title={returnLabel}
+                  />
                 ) : (
-                  <TouchableOpacity
-                    style={[
-                      styles.clearCartButton,
-                      {backgroundColor: colors.greyOutline},
-                    ]}
+                  <Button
+                    backgroundColor={colors.greyOutline}
+                    borderColor={colors.greyOutline}
+                    title={'Track'}
                     onPress={() => {
                       trackOrder()
                         .then(() => {})
                         .catch(() => {});
-                    }}>
-                    <Text style={styles.text}>Track</Text>
-                    {trackInProgress && (
-                      <ActivityIndicator
-                        showLoading={trackInProgress}
-                        color={colors.black}
-                        size={14}
-                      />
-                    )}
-                  </TouchableOpacity>
+                    }}
+                    loader={trackInProgress}
+                    color={colors.black}
+                  />
                 )}
                 <View style={styles.space} />
-                <TouchableOpacity
-                  style={[
-                    styles.clearCartButton,
-                    {backgroundColor: colors.accentColor},
-                  ]}
-                  onPress={cancelOrder}>
-                  <Text style={[styles.text, {color: colors.white}]}>
-                    {cancel}
-                  </Text>
-                  {cancelInProgress && (
-                    <ActivityIndicator
-                      showLoading={cancelInProgress}
-                      color={colors.white}
-                      size={14}
-                    />
-                  )}
-                </TouchableOpacity>
+                <Button
+                  backgroundColor={colors.accentColor}
+                  borderColor={colors.accentColor}
+                  title={cancel}
+                  onPress={() => {
+                    cancelOrder()
+                      .then(() => {})
+                      .catch(() => {});
+                  }}
+                  loader={cancelInProgress}
+                  color={colors.white}
+                />
               </View>
             </View>
           </>
         ) : (
-          <View
-            style={[
-              styles.cancelledButton,
-              {
-                borderColor: colors.error,
-                backgroundColor: colors.cancelledBackground,
-              },
-            ]}
-            onPress={cancelOrder}>
-            <Text style={[styles.text, {color: colors.error}]}>Cancelled</Text>
-          </View>
+          <Button
+            backgroundColor={colors.cancelledBackground}
+            borderColor={colors.error}
+            color={colors.error}
+            title={'Cancelled'}
+            loader={cancelInProgress}
+          />
         )}
       </View>
     </View>
@@ -227,38 +229,20 @@ const styles = StyleSheet.create({
   addressContainer: {marginVertical: 20},
   text: {fontSize: 16, marginRight: 5},
   subContainer: {
-    marginTop: 20,
-    padding: 10,
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  clearCartButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 20,
-    borderRadius: 50,
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  space: {margin: 10},
-  stepIndicator: {width: 20, height: 20, borderRadius: 50},
-  cancelledButton: {
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 50,
-    borderWidth: 1,
-    alignItems: 'center',
-    marginTop: 20,
-    alignSelf: 'flex-start',
-  },
+  space: {margin: 5},
   container: {paddingVertical: 10},
   priceContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 10,
+    marginTop: 10,
   },
   name: {fontSize: 18, fontWeight: '700', marginVertical: 4},
   title: {fontSize: 16, fontWeight: '700', marginRight: 10, flexShrink: 1},
   price: {fontSize: 16, fontWeight: '700'},
   address: {marginBottom: 4},
+  icon: {paddingVertical: 8, paddingHorizontal: 10, borderRadius: 50},
 });

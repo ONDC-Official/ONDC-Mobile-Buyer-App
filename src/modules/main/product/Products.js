@@ -51,7 +51,7 @@ const selectLocation = strings('main.product.please_select_location');
  * @constructor
  * @returns {JSX.Element}
  */
-const Products = ({theme}) => {
+const Products = ({theme, navigation}) => {
   const dispatch = useDispatch();
   const [location, setLocation] = useState(unKnownLabel);
   const [isVisible, setIsVisible] = useState(false);
@@ -83,7 +83,11 @@ const Products = ({theme}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <ProductCardSkeleton item={item} />
     ) : (
-      <ProductCard item={item} apiInProgress={apiInProgress} />
+      <ProductCard
+        item={item}
+        apiInProgress={apiInProgress}
+        navigation={navigation}
+      />
     );
   };
 

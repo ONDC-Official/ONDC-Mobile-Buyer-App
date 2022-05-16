@@ -19,6 +19,7 @@ import Order from '../modules/main/order/Order';
 import Products from '../modules/main/product/Products';
 import {useSelector} from 'react-redux';
 import Support from '../modules/main/more/support/Support';
+import ProductDetails from '../modules/main/product/ProductDetails';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -174,6 +175,11 @@ const Navigation = () => {
         <Stack.Screen
           name="Support"
           component={Support}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ProductDetails"
+          component={ProductDetails}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

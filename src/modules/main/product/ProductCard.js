@@ -23,7 +23,7 @@ const addToCart = strings('main.product.add_to_cart');
  * @constructor
  * @returns {JSX.Element}
  */
-const ProductCard = ({theme, item, apiInProgress}) => {
+const ProductCard = ({theme, navigation, item, apiInProgress}) => {
   const {colors} = theme;
   const dispatch = useDispatch();
 
@@ -49,55 +49,64 @@ const ProductCard = ({theme, item, apiInProgress}) => {
 
   return (
     <Card containerStyle={styles.card}>
-      <View style={styles.subContainer}>
-        <FastImage
-          source={{
-            uri: item.descriptor.images ? item.descriptor.images[0] : null,
-          }}
-          style={styles.image}
-          resizeMode={'contain'}
-        />
-        <View style={appStyles.container}>
-          <Text style={styles.title} numberOfLines={1}>
-            {item.descriptor.name}
-          </Text>
-          <View style={styles.organizationNameContainer}>
-            <Text numberOfLines={1}>{item.provider}</Text>
-          </View>
-          <View style={styles.priceContainer}>
-            <Text>{maskAmount(item.price.value)}</Text>
-            {item.quantity < 1 ? (
-              <TouchableOpacity
-                style={[styles.button, {borderColor: colors.accentColor}]}
-                onPress={() => {
-                  showInfoToast(addToCart);
-                  addItem(item);
-                }}
-                disabled={apiInProgress}>
-                <Text style={{color: colors.accentColor}}>{addButton}</Text>
-              </TouchableOpacity>
-            ) : (
-              <View
-                style={[
-                  styles.quantityDisplayButton,
-                  {backgroundColor: colors.accentColor},
-                ]}>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {
+          navigation.navigate('ProductDetails', {
+            images: item.descriptor.images,
+            item: item,
+          });
+        }}>
+        <View style={styles.subContainer}>
+          <FastImage
+            source={{
+              uri: item.descriptor.images ? item.descriptor.images[0] : null,
+            }}
+            style={styles.image}
+            resizeMode={'contain'}
+          />
+          <View style={appStyles.container}>
+            <Text style={styles.title} numberOfLines={1}>
+              {item.descriptor.name}
+            </Text>
+            <View style={styles.organizationNameContainer}>
+              <Text numberOfLines={1}>{item.provider}</Text>
+            </View>
+            <View style={styles.priceContainer}>
+              <Text>{maskAmount(item.price.value)}</Text>
+              {item.quantity < 1 ? (
                 <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => updateQuantity(false)}>
-                  <Icon name="minus" size={16} color={colors.white} />
+                  style={[styles.button, {borderColor: colors.accentColor}]}
+                  onPress={() => {
+                    showInfoToast(addToCart);
+                    addItem(item);
+                  }}
+                  disabled={apiInProgress}>
+                  <Text style={{color: colors.accentColor}}>{addButton}</Text>
                 </TouchableOpacity>
-                <Text style={{color: colors.white}}>{item.quantity}</Text>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => updateQuantity(true)}>
-                  <Icon name="plus" color={colors.white} size={16} />
-                </TouchableOpacity>
-              </View>
-            )}
+              ) : (
+                <View
+                  style={[
+                    styles.quantityDisplayButton,
+                    {backgroundColor: colors.accentColor},
+                  ]}>
+                  <TouchableOpacity
+                    style={styles.actionButton}
+                    onPress={() => updateQuantity(false)}>
+                    <Icon name="minus" size={16} color={colors.white} />
+                  </TouchableOpacity>
+                  <Text style={{color: colors.white}}>{item.quantity}</Text>
+                  <TouchableOpacity
+                    style={styles.actionButton}
+                    onPress={() => updateQuantity(true)}>
+                    <Icon name="plus" color={colors.white} size={16} />
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </Card>
   );
 };

@@ -20,3 +20,6 @@ export const CANCEL_ORDER = '/clientApis/v1/cancel_order';
 export const ON_CANCEL_ORDER = '/clientApis/v1/on_cancel_order?';
 export const TRACK_ORDER = '/clientApis/v2/track';
 export const ON_TRACK_ORDER = '/clientApis/v2/on_track?';
+export const SUPPORT = '/clientApis/v2/get_support';
+export const ON_SUPPORT = '/clientApis/v2/on_support?';
+export const CALL = '/knowlarity/api/call-patron';

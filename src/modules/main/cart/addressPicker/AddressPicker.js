@@ -1,6 +1,6 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
@@ -99,29 +99,35 @@ const AddressPicker = ({navigation, theme}) => {
   const listData = list ? list : skeletonList;
 
   return (
-    <View
+    <SafeAreaView
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title={selectAddress} show navigation={navigation} />
+      <View
+        style={[
+          appStyles.container,
+          {backgroundColor: colors.backgroundColor},
+        ]}>
+        <Header title={selectAddress} show navigation={navigation} />
 
-      <FlatList
-        data={listData}
-        renderItem={renderItem}
-        ListEmptyComponent={() => {
-          return <Text>{emptyListMessage}</Text>;
-        }}
-        contentContainerStyle={
-          listData.length > 0
-            ? styles.contentContainerStyle
-            : [appStyles.container, styles.emptyContainer]
-        }
-      />
+        <FlatList
+          data={listData}
+          renderItem={renderItem}
+          ListEmptyComponent={() => {
+            return <Text>{emptyListMessage}</Text>;
+          }}
+          contentContainerStyle={
+            listData.length > 0
+              ? styles.contentContainerStyle
+              : [appStyles.container, styles.emptyContainer]
+          }
+        />
 
-      {selectedAddress !== null && (
-        <View style={styles.buttonContainer}>
-          <ContainButton title={buttonTitle} onPress={onPressHandler} />
-        </View>
-      )}
-    </View>
+        {selectedAddress !== null && (
+          <View style={styles.buttonContainer}>
+            <ContainButton title={buttonTitle} onPress={onPressHandler} />
+          </View>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 

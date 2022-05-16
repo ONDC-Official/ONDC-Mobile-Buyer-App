@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Card, Divider, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
@@ -206,55 +206,57 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
   const listData = confirmationList ? confirmationList : skeletonList;
   return (
-    <View style={appStyles.container}>
-      <Header title="Order Confirmation" navigation={navigation} />
+    <SafeAreaView style={appStyles.container}>
+      <View style={appStyles.container}>
+        <Header title="Order Confirmation" navigation={navigation} />
 
-      <FlatList
-        keyExtractor={(item, index) => {
-          return index.toString();
-        }}
-        data={listData}
-        renderItem={renderItem}
-        contentContainerStyle={styles.contentContainerStyle}
-        ListEmptyComponent={() => {
-          return (
-            <View style={styles.emptyListComponent}>
-              <Text>No data found</Text>
-            </View>
-          );
-        }}
-      />
-      {total && (
-        <Card containerStyle={styles.card}>
-          {fulfillment && (
-            <>
-              <View style={styles.priceContainer}>
-                <Text style={styles.fulfillment}>FULFILLMENT</Text>
-                <Text style={styles.fulfillment}>₹{fulfillment}</Text>
+        <FlatList
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
+          data={listData}
+          renderItem={renderItem}
+          contentContainerStyle={styles.contentContainerStyle}
+          ListEmptyComponent={() => {
+            return (
+              <View style={styles.emptyListComponent}>
+                <Text>No data found</Text>
               </View>
-              <Divider />
-            </>
-          )}
-          <View style={styles.priceContainer}>
-            <Text style={styles.title}>Total Payable </Text>
-            <Text style={styles.title}>₹{maskAmount(total)}</Text>
+            );
+          }}
+        />
+        {total && (
+          <Card containerStyle={styles.card}>
+            {fulfillment && (
+              <>
+                <View style={styles.priceContainer}>
+                  <Text style={styles.fulfillment}>FULFILLMENT</Text>
+                  <Text style={styles.fulfillment}>₹{fulfillment}</Text>
+                </View>
+                <Divider />
+              </>
+            )}
+            <View style={styles.priceContainer}>
+              <Text style={styles.title}>Total Payable </Text>
+              <Text style={styles.title}>₹{maskAmount(total)}</Text>
+            </View>
+          </Card>
+        )}
+        {confirmationList && confirmationList.length > 0 && (
+          <View style={styles.buttonContainer}>
+            <ContainButton
+              title="Proceed"
+              onPress={() =>
+                navigation.navigate('Payment', {
+                  selectedAddress: params.selectedAddress,
+                  confirmationList: confirmationList,
+                })
+              }
+            />
           </View>
-        </Card>
-      )}
-      {confirmationList && confirmationList.length > 0 && (
-        <View style={styles.buttonContainer}>
-          <ContainButton
-            title="Proceed"
-            onPress={() =>
-              navigation.navigate('Payment', {
-                selectedAddress: params.selectedAddress,
-                confirmationList: confirmationList,
-              })
-            }
-          />
-        </View>
-      )}
-    </View>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
