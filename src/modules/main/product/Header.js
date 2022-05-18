@@ -31,6 +31,7 @@ const Header = ({
   onSearch,
   locationInProgress,
   location,
+  filters,
 }) => {
   const {colors} = theme;
 
@@ -98,7 +99,7 @@ const Header = ({
           </Text>
         </TouchableOpacity>
         <RBSheet ref={refRBSheet} height={Dimensions.get('window').height / 2}>
-          <Filters closeRBSheet={closeRBSheet} />
+          <Filters closeRBSheet={closeRBSheet} filters={filters} />
         </RBSheet>
       </View>
     </View>

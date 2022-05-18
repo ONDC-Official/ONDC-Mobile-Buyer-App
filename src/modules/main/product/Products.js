@@ -22,6 +22,7 @@ import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {
   BASE_URL,
+  FILTER,
   GET_LATLONG,
   GET_LOCATION_FROM_LAT_LONG,
   GET_MESSAGE_ID,
@@ -31,6 +32,7 @@ import {SEARCH_QUERY} from '../../../utils/Constants';
 import {isIOS, skeletonList} from '../../../utils/utils';
 import EmptyComponent from '../cart/EmptyComponent';
 import AddressPicker from './AddressPicker';
+import useProductList from './component/hooks/useProductList';
 import Header from './Header';
 import LocationDeniedAlert from './LocationDeniedAlert';
 import ProductCard from './ProductCard';
@@ -60,9 +62,11 @@ const Products = ({theme, navigation}) => {
   const [eloc, setEloc] = useState(null);
   const [apiInProgress, setApiInProgress] = useState(false);
   const [locationInProgress, setLocationInProgress] = useState(false);
+  const [filters, setFilters] = useState(null);
 
   const {products} = useSelector(({productReducer}) => productReducer);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+  const {getProducts} = useProductList();
 
   const {
     state: {token},
@@ -73,6 +77,12 @@ const Products = ({theme, navigation}) => {
 
   const openSheet = () => refRBSheet.current.open();
   const closeSheet = () => refRBSheet.current.close();
+
+  const options = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
   /**
    * Function is used to render single product card in the list
@@ -213,33 +223,12 @@ const Products = ({theme, navigation}) => {
    * Function used to get list of requested products
    * @returns {Promise<void>}
    **/
-  const getProducts = (id, transactionId) => {
+  const getFilter = id => {
     let getList = setInterval(async () => {
       try {
-        const {data} = await getData(`${BASE_URL}${GET_PRODUCTS}${id}`);
-        let items = [];
-        data.message.catalogs.forEach(catalog => {
-          if (catalog.bpp_id) {
-            if (catalog.bpp_providers && catalog.bpp_providers.length > 0) {
-              catalog.bpp_providers.forEach(item => {
-                item.items.forEach(element => {
-                  const index = cartItems.findIndex(
-                    cartItem => cartItem.id === element.id,
-                  );
-                  element.quantity = index > -1 ? cartItems[index].quantity : 0;
-                  element.provider_id = item.id;
-                  element.locations = item.locations;
-                  element.provider = item.descriptor.name;
-                  element.bpp_id = catalog.bpp_id;
-                  element.transaction_id = transactionId;
-                  items.push(element);
-                });
-              });
-            }
-          }
-        });
+        const {data} = await getData(`${BASE_URL}${FILTER}${id}`, options);
 
-        dispatch(saveProducts(items));
+        setFilters(data);
       } catch (error) {
         handleApiError(error);
         setApiInProgress(false);
@@ -274,16 +263,12 @@ const Products = ({theme, navigation}) => {
   const onSearch = async (searchQuery, selectedCard) => {
     if (longitude && latitude) {
       setApiInProgress(true);
-      const options = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
+
       let requestParameters;
       try {
         if (selectedCard === SEARCH_QUERY.PRODUCT) {
           requestParameters = {
-            context: {},
+            context: {bpp_id: 'bpp1.beckn.org'},
             message: {
               criteria: {
                 delivery_location: `${latitude},${longitude}`,
@@ -293,7 +278,7 @@ const Products = ({theme, navigation}) => {
           };
         } else if (selectedCard === SEARCH_QUERY.PROVIDER) {
           requestParameters = {
-            context: {},
+            context: {bpp_id: 'bpp1.beckn.org'},
             message: {
               criteria: {
                 delivery_location: `${latitude},${longitude}`,
@@ -303,7 +288,9 @@ const Products = ({theme, navigation}) => {
           };
         } else {
           requestParameters = {
-            context: {},
+            context: {
+              bpp_id: 'bpp1.beckn.org',
+            },
             message: {
               criteria: {
                 delivery_location: `${latitude},${longitude}`,
@@ -318,10 +305,9 @@ const Products = ({theme, navigation}) => {
           options,
         );
 
-        getProducts(
-          response.data.context.message_id,
-          response.data.context.transaction_id,
-        );
+        getProducts(response.data.context.message_id);
+
+        getFilter(response.data.context.message_id);
       } catch (error) {
         handleApiError(error);
         setApiInProgress(false);
@@ -364,6 +350,7 @@ const Products = ({theme, navigation}) => {
           onSearch={onSearch}
           locationInProgress={locationInProgress}
           apiInProgress={apiInProgress}
+          filters={filters}
         />
         <RBSheet ref={refRBSheet} height={Dimensions.get('window').height / 2}>
           <AddressPicker

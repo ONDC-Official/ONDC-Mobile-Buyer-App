@@ -70,10 +70,12 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
               {item.descriptor.name}
             </Text>
             <View style={styles.organizationNameContainer}>
-              <Text numberOfLines={1}>{item.provider}</Text>
+              <Text numberOfLines={1}>
+                {item.provider_details.descriptor.name}
+              </Text>
             </View>
             <View style={styles.priceContainer}>
-              <Text>{maskAmount(item.price.value)}</Text>
+              <Text>₹{maskAmount(item.price.value)}</Text>
               {item.quantity < 1 ? (
                 <TouchableOpacity
                   style={[styles.button, {borderColor: colors.accentColor}]}

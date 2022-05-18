@@ -4,7 +4,6 @@ import {
   BackHandler,
   DeviceEventEmitter,
   FlatList,
-  Image,
   SafeAreaView,
   StyleSheet,
   View,
