@@ -108,7 +108,8 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
         `${BASE_URL}${ON_CANCEL_ORDER}messageId=${data.context.message_id}`,
         options,
       );
-      if (response.data.hasOwnProperty('message')) {
+      console.log(response.data);
+      if (response.data.message) {
         getOrderList(1)
           .then(() => {})
           .catch(() => {});

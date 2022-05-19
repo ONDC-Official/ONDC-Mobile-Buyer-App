@@ -67,3 +67,31 @@ export const maskAmount = value => {
  * @param item
  */
 export const keyExtractor = item => item._id;
+
+/**
+ * Check if the value is of type object
+ * @param obj
+ * @returns {boolean}
+ */
+const isObject = obj => {
+  return obj != null && obj.constructor.name === 'Object';
+};
+
+/**
+ * Function is used to remove the keys which has blank/null values
+ * @param initialObject: Form object which needs to be cleans
+ */
+export const cleanFormData = initialObject => {
+  const object = Object.assign({}, initialObject);
+  Object.keys(object).forEach(key => {
+    if (object[key] == null || object[key] === '') {
+      delete object[key];
+    } else {
+      if (isObject(object[key])) {
+        object[key] = cleanFormData(object[key]);
+      }
+    }
+  });
+
+  return object;
+};

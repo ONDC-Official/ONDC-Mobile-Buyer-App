@@ -54,15 +54,14 @@ const selectLocation = strings('main.product.please_select_location');
  * @returns {JSX.Element}
  */
 const Products = ({theme, navigation}) => {
-  const dispatch = useDispatch();
   const [location, setLocation] = useState(unKnownLabel);
   const [isVisible, setIsVisible] = useState(false);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [eloc, setEloc] = useState(null);
-  const [apiInProgress, setApiInProgress] = useState(false);
   const [locationInProgress, setLocationInProgress] = useState(false);
   const [filters, setFilters] = useState(null);
+  const [apiInProgress, setApiInProgress] = useState(false);
 
   const {products} = useSelector(({productReducer}) => productReducer);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
@@ -223,12 +222,16 @@ const Products = ({theme, navigation}) => {
    * Function used to get list of requested products
    * @returns {Promise<void>}
    **/
-  const getFilter = id => {
+  const getFilter = (id, transactionId) => {
     let getList = setInterval(async () => {
       try {
         const {data} = await getData(`${BASE_URL}${FILTER}${id}`, options);
-
-        setFilters(data);
+        const filterData = Object.assign({}, data, {
+          message_id: id,
+          transaction_id: transactionId,
+        });
+        setFilters(filterData);
+        setApiInProgress(false);
       } catch (error) {
         handleApiError(error);
         setApiInProgress(false);
@@ -237,7 +240,6 @@ const Products = ({theme, navigation}) => {
 
     setTimeout(() => {
       clearInterval(getList);
-      setApiInProgress(false);
     }, 10000);
   };
 
@@ -305,9 +307,15 @@ const Products = ({theme, navigation}) => {
           options,
         );
 
-        getProducts(response.data.context.message_id);
+        getProducts(
+          response.data.context.message_id,
+          response.data.context.transaction_id,
+        );
 
-        getFilter(response.data.context.message_id);
+        getFilter(
+          response.data.context.message_id,
+          response.data.context.transaction_id,
+        );
       } catch (error) {
         handleApiError(error);
         setApiInProgress(false);

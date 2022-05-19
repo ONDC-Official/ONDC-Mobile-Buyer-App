@@ -42,14 +42,15 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
         let list = [];
         data.forEach(item => {
+          console.log(JSON.stringify(item, undefined, 4));
           if (!item.error) {
             if (item.context.bpp_id) {
               item.message.quote.items.forEach(element => {
                 const object = cartItems.find(one => one.id === element.id);
                 element.provider = {
-                  id: object.provider_id,
-                  descriptor: object.descriptor,
-                  locations: object.locations,
+                  id: object.provider_details.id,
+                  descriptor: object.provider_details.descriptor,
+                  locations: [object.location_details.id],
                 };
                 setTotal(item.message.quote.quote.price.value);
                 const breakupItem = item.message.quote.quote.breakup.find(
@@ -77,12 +78,13 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   };
 
   const getQuote = async () => {
+    console.log(JSON.stringify(cartItems, undefined, 4));
     try {
       let payload = [];
       let providerIdArray = [];
       cartItems.forEach(item => {
         const index = providerIdArray.findIndex(
-          one => one === item.provider_id,
+          one => one === item.provider_details.id,
         );
         if (index > -1) {
           let itemObj = {
@@ -91,15 +93,15 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               id: item.id,
               descriptor: item.descriptor,
               price: item.price,
-              provider_name: item.provider,
+              provider_name: item.provider_details.descriptor.name,
             },
             quantity: {
               count: item.quantity,
             },
-            bpp_id: item.bpp_id,
+            bpp_id: item.bpp_details.bpp_id,
             provider: {
-              id: item.provider_id,
-              locations: ['el'],
+              id: item.provider_details.id,
+              locations: [item.location_details.id],
             },
           };
           payload[index].message.cart.items.push(itemObj);
@@ -115,16 +117,15 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                       id: item.id,
                       descriptor: item.descriptor,
                       price: item.price,
-                      provider_name: item.provider,
+                      provider_name: item.provider_details.descriptor.name,
                     },
                     quantity: {
                       count: item.quantity,
                     },
-
-                    bpp_id: item.bpp_id,
+                    bpp_id: item.bpp_details.bpp_id,
                     provider: {
-                      id: item.provider_id,
-                      locations: ['el'],
+                      id: item.provider_details.id,
+                      locations: [item.location_details.id],
                     },
                   },
                 ],
@@ -132,10 +133,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             },
           };
           payload.push(payloadObj);
-          providerIdArray.push(item.provider_id);
+          providerIdArray.push(item.provider_details.id);
         }
       });
-
       const {data} = await postData(`${BASE_URL}${GET_QUOTE}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
@@ -152,6 +152,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         setConfirmationList([]);
       }
     } catch (error) {
+      console.log(error);
       handleApiError(error);
     }
   };
@@ -164,6 +165,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
   const renderItem = ({item}) => {
     const element = cartItems.find(one => one.id === item.id);
+    console.log(JSON.stringify(element, undefined, 4));
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <ConfirmationCardSkeleton item={item} />
     ) : (
@@ -186,7 +188,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 </Text>
                 <View style={styles.organizationNameContainer}>
                   <Text numberOfLines={1}>
-                    {element.provider ? element.provider : null}
+                    {element.provider_details
+                      ? element.provider_details.descriptor.name
+                      : null}
                   </Text>
                 </View>
                 <View style={styles.priceContainer}>

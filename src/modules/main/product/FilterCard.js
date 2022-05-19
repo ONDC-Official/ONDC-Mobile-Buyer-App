@@ -2,31 +2,28 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 
-const FilterCard = ({theme, card, selectedPriceFilter, name, onPress}) => {
+const FilterCard = ({theme, card, selectedFilter, name, onPress}) => {
   const {colors} = theme;
   return (
-    <Card
-      containerStyle={[
+    <TouchableOpacity
+      onPress={onPress}
+      style={[
         styles.containerStyle,
         {
           backgroundColor:
-            selectedPriceFilter === card ? colors.accentColor : colors.white,
+            selectedFilter === card ? colors.accentColor : colors.white,
           borderColor:
-            selectedPriceFilter === card
-              ? colors.accentColor
-              : colors.borderColor,
+            selectedFilter === card ? colors.accentColor : colors.borderColor,
         },
       ]}>
-      <TouchableOpacity onPress={onPress}>
-        <Text
-          style={[
-            styles.text,
-            {color: selectedPriceFilter === card ? colors.white : colors.black},
-          ]}>
-          {name}
-        </Text>
-      </TouchableOpacity>
-    </Card>
+      <Text
+        style={[
+          styles.text,
+          {color: selectedFilter === card ? colors.white : colors.black},
+        ]}>
+        {name}
+      </Text>
+    </TouchableOpacity>
   );
 };
 
@@ -34,10 +31,12 @@ export default withTheme(FilterCard);
 
 const styles = StyleSheet.create({
   containerStyle: {
-    marginLeft: 0,
-    marginTop: 5,
+    marginTop: 10,
     borderRadius: 8,
     paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    marginRight: 10,
   },
   text: {fontSize: 16},
 });

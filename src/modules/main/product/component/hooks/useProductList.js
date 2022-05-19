@@ -12,6 +12,7 @@ export default () => {
     state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
+  const [pageNumber, setPageNumber] = useState(1);
 
   const options = {
     headers: {
@@ -19,16 +20,30 @@ export default () => {
     },
   };
 
-  const getProducts = id => {
+  const getProducts = (id, transactionId, filters) => {
     let getList = setInterval(async () => {
       try {
+        let params;
+        if (filters) {
+          let filterParams = [];
+          Object.keys(filters).forEach(key =>
+            filterParams.push(`&${key}=${filters[key]}`),
+          );
+          params = filterParams.toString().replace(/,/g, '');
+        }
+        const url = filters
+          ? `${BASE_URL}${GET_PRODUCTS}${id}${params}`
+          : `${BASE_URL}${GET_PRODUCTS}${id}`;
         const {data} = await getData(
-          `${BASE_URL}${GET_PRODUCTS}${id}`,
+          `${url}&pageNumber=${pageNumber}&limit=10`,
           options,
         );
 
         const productsList = data.message.catalogs.map(item => {
-          return Object.assign({}, item, {quantity: 0});
+          return Object.assign({}, item, {
+            quantity: 0,
+            transaction_id: transactionId,
+          });
         });
 
         dispatch(saveProducts(productsList));

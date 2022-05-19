@@ -119,6 +119,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
+
         const errorObj = data.find(item => item.hasOwnProperty('error'));
         setError(errorObj);
       } catch (error) {
@@ -378,6 +379,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
     try {
       if (orders && orders.length > 0) {
         const errorObj = orders.find(one => one.hasOwnProperty('error'));
+
         if (!errorObj) {
           const payload = orders.map(item => {
             return {
@@ -413,11 +415,15 @@ const Payment = ({navigation, theme, route: {params}}) => {
           onConfirmOrder(messageIds);
         } else {
           showToastWithGravity(strings('network_error.something_went_wrong'));
+          console.log('i am running');
         }
       } else {
         showToastWithGravity(strings('network_error.something_went_wrong'));
+        console.log('ites runnings');
       }
     } catch (error) {
+      console.log(error);
+
       handleApiError(error);
       setConfirmOrderRequested(false);
     }
