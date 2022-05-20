@@ -10,7 +10,6 @@ const image = require('../../../assets/logo.png');
 const ProductDetails = ({theme, route: {params}}) => {
   const {colors} = theme;
   const {item} = params;
-  console.log(item);
 
   return (
     <SafeAreaView
@@ -49,7 +48,7 @@ const ProductDetails = ({theme, route: {params}}) => {
             }}
           />
           <Text style={{fontWeight: '700'}}>
-            Deal Price :- Rs {item.price.value}/-
+            Deal Price: Rs {item.price.value}/-
           </Text>
         </View>
         <Divider width={4} style={{marginVertical: 10}} />

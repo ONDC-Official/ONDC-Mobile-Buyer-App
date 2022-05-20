@@ -24,8 +24,6 @@ import {showToastWithGravity} from '../../../utils/utils';
 import Button from './Button';
 import Support from './Support';
 
-const deliveryTo = strings('main.order.delivery_to_label');
-const statusLabel = strings('main.order.status_label');
 const returnLabel = strings('main.order.return');
 const cancel = strings('main.order.cancel');
 

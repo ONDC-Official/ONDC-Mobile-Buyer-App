@@ -61,11 +61,11 @@ const Products = ({theme, navigation}) => {
   const [eloc, setEloc] = useState(null);
   const [locationInProgress, setLocationInProgress] = useState(false);
   const [filters, setFilters] = useState(null);
-  const [apiInProgress, setApiInProgress] = useState(false);
 
   const {products} = useSelector(({productReducer}) => productReducer);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
-  const {getProducts} = useProductList();
+  const {getProducts, requstInProgress, setRequestInProgress} =
+    useProductList();
 
   const {
     state: {token},
@@ -94,7 +94,7 @@ const Products = ({theme, navigation}) => {
     ) : (
       <ProductCard
         item={item}
-        apiInProgress={apiInProgress}
+        apiInProgress={requstInProgress}
         navigation={navigation}
       />
     );
@@ -231,15 +231,14 @@ const Products = ({theme, navigation}) => {
           transaction_id: transactionId,
         });
         setFilters(filterData);
-        setApiInProgress(false);
       } catch (error) {
         handleApiError(error);
-        setApiInProgress(false);
       }
     }, 2000);
 
     setTimeout(() => {
       clearInterval(getList);
+      setRequestInProgress(false);
     }, 10000);
   };
 
@@ -262,9 +261,9 @@ const Products = ({theme, navigation}) => {
    * Function is used to handle onEndEditing event of searchbar
    * @returns {Promise<void>}
    **/
-  const onSearch = async (searchQuery, selectedCard) => {
+  const onSearch = async (searchQuery, selectedCard, closeRBSheet) => {
     if (longitude && latitude) {
-      setApiInProgress(true);
+      setRequestInProgress(true);
 
       let requestParameters;
       try {
@@ -310,6 +309,7 @@ const Products = ({theme, navigation}) => {
         getProducts(
           response.data.context.message_id,
           response.data.context.transaction_id,
+          closeRBSheet,
         );
 
         getFilter(
@@ -318,7 +318,7 @@ const Products = ({theme, navigation}) => {
         );
       } catch (error) {
         handleApiError(error);
-        setApiInProgress(false);
+        setRequestInProgress(false);
       }
     } else {
       alert(selectLocation);
@@ -357,10 +357,15 @@ const Products = ({theme, navigation}) => {
           openSheet={openSheet}
           onSearch={onSearch}
           locationInProgress={locationInProgress}
-          apiInProgress={apiInProgress}
+          apiInProgress={requstInProgress}
           filters={filters}
         />
-        <RBSheet ref={refRBSheet} height={Dimensions.get('window').height / 2}>
+        <RBSheet
+          ref={refRBSheet}
+          height={Dimensions.get('window').height / 2}
+          customStyles={{
+            container: styles.container,
+          }}>
           <AddressPicker
             closeSheet={closeSheet}
             location={location}
@@ -379,7 +384,7 @@ const Products = ({theme, navigation}) => {
           ListEmptyComponent={() => {
             return (
               <EmptyComponent
-                message={!apiInProgress ? searchItemMessage : noResults}
+                message={!requstInProgress ? searchItemMessage : noResults}
               />
             );
           }}
@@ -398,4 +403,5 @@ export default withTheme(Products);
 
 const styles = StyleSheet.create({
   contentContainerStyle: {paddingBottom: 10},
+  container: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
 });

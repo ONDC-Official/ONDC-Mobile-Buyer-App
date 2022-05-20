@@ -13,6 +13,7 @@ export default () => {
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
   const [pageNumber, setPageNumber] = useState(1);
+  const [requstInProgress, setRequestInProgress] = useState(false);
 
   const options = {
     headers: {
@@ -20,9 +21,10 @@ export default () => {
     },
   };
 
-  const getProducts = (id, transactionId, filters) => {
+  const getProducts = (id, transactionId, closeRBSheet, filters) => {
     let getList = setInterval(async () => {
       try {
+        setRequestInProgress(true);
         let params;
         if (filters) {
           let filterParams = [];
@@ -54,8 +56,10 @@ export default () => {
 
     setTimeout(() => {
       clearInterval(getList);
+      setRequestInProgress(false);
+      closeRBSheet();
     }, 10000);
   };
 
-  return {getProducts};
+  return {getProducts, requstInProgress, setRequestInProgress};
 };

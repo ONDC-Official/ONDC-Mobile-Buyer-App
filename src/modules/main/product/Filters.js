@@ -1,7 +1,14 @@
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {CheckBox, Divider, Text, withTheme} from 'react-native-elements';
 import RangeSlider from 'rn-range-slider';
+import {appStyles} from '../../../styles/styles';
 import {SORTINGLIST} from '../../../utils/Constants';
 import {cleanFormData} from '../../../utils/utils';
 import useProductList from './component/hooks/useProductList';
@@ -10,14 +17,16 @@ import FilterCard from './FilterCard';
 const Filters = ({theme, filters, closeRBSheet}) => {
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
-  const [provider, setProvider] = useState(null);
+  const [providers, setProviders] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(
     SORTINGLIST.RATINGS_LOW_TO_HIGH,
   );
   const [category, setCategory] = useState(null);
-  const {getProducts} = useProductList();
+  const {getProducts, requstInProgress, setRequestInProgress} =
+    useProductList();
 
   const onPressHandler = () => {
+    setRequestInProgress(true);
     let sortField;
     let sortOrder;
     if (selectedFilter === SORTINGLIST.RATINGS_HIGH_TO_LOW) {
@@ -35,13 +44,19 @@ const Filters = ({theme, filters, closeRBSheet}) => {
     }
 
     const filterData = cleanFormData({
-      providerId: provider,
+      providerId: providers.toString(),
       sortField: sortField,
       sortOrder: sortOrder,
       // priceMin: min,
       // priceMax: max,
     });
-    getProducts(filters.message_id, filters.transaction_id, filterData);
+
+    getProducts(
+      filters.message_id,
+      filters.transaction_id,
+      closeRBSheet,
+      filterData,
+    );
   };
 
   const {colors} = theme;
@@ -49,9 +64,22 @@ const Filters = ({theme, filters, closeRBSheet}) => {
     <ScrollView>
       <View>
         <View style={styles.header}>
+          <TouchableOpacity style={styles.applyButton} onPress={onPressHandler}>
+            <Text style={[styles.text, {color: colors.accentColor}]}>
+              APPLY{'  '}
+            </Text>
+            {requstInProgress && (
+              <ActivityIndicator
+                show={requstInProgress}
+                color={colors.accentColor}
+                size={14}
+                style={styles.activityIndicator}
+              />
+            )}
+          </TouchableOpacity>
           <TouchableOpacity onPress={closeRBSheet}>
             <Text style={[styles.text, {color: colors.accentColor}]}>
-              Close
+              CLOSE
             </Text>
           </TouchableOpacity>
         </View>
@@ -63,16 +91,25 @@ const Filters = ({theme, filters, closeRBSheet}) => {
               <>
                 <Text style={[styles.text]}>Providers</Text>
 
-                {filters.providers.map(item => (
-                  <CheckBox
-                    key={item.id}
-                    title={item.name}
-                    checkedIcon="dot-circle-o"
-                    uncheckedIcon="circle-o"
-                    checked={item.id === provider}
-                    onPress={() => setProvider(item.id)}
-                  />
-                ))}
+                {filters.providers.map(item => {
+                  const index = providers.findIndex(one => one === item.id);
+                  return (
+                    <CheckBox
+                      key={item.id}
+                      title={item.name}
+                      checked={index > -1}
+                      onPress={() => {
+                        let providerlist = providers.slice();
+                        if (index > -1) {
+                          providerlist.splice(index, 1);
+                        } else {
+                          providerlist.push(item.id);
+                        }
+                        setProviders(providerlist);
+                      }}
+                    />
+                  );
+                })}
               </>
             )}
             {filters.categories && filters.categories.length > 0 && (
@@ -97,7 +134,7 @@ const Filters = ({theme, filters, closeRBSheet}) => {
                 ₹{min} - ₹{max}
               </Text>
               <RangeSlider
-                style={styles.rangSlider}
+                style={[styles.rangSlider]}
                 gravity={'center'}
                 min={filters.minPrice}
                 max={filters.maxPrice}
@@ -123,7 +160,13 @@ const Filters = ({theme, filters, closeRBSheet}) => {
                 renderRail={() => {
                   return (
                     <View
-                      style={[styles.rail, {backgroundColor: colors.primary}]}
+                      style={[
+                        appStyles.container,
+                        styles.rail,
+                        {
+                          backgroundColor: colors.black,
+                        },
+                      ]}
                     />
                   );
                 }}
@@ -133,7 +176,7 @@ const Filters = ({theme, filters, closeRBSheet}) => {
                   return (
                     <View
                       style={[
-                        styles.rail,
+                        styles.railSelected,
                         {backgroundColor: colors.accentColor},
                       ]}
                     />
@@ -176,16 +219,6 @@ const Filters = ({theme, filters, closeRBSheet}) => {
                 card={SORTINGLIST.PRICE_LOW_TO_HIGH}
               />
             </View>
-            <TouchableOpacity
-              style={[
-                styles.applyButton,
-                {
-                  backgroundColor: colors.accentColor,
-                },
-              ]}
-              onPress={onPressHandler}>
-              <Text style={{color: colors.white}}>APPLY</Text>
-            </TouchableOpacity>
           </View>
         ) : (
           <View style={styles.emptyContainer}>
@@ -200,8 +233,13 @@ const Filters = ({theme, filters, closeRBSheet}) => {
 export default withTheme(Filters);
 
 const styles = StyleSheet.create({
-  header: {padding: 10, alignItems: 'flex-end'},
-  text: {fontSize: 18, fontWeight: '700', marginBottom: 8},
+  header: {
+    padding: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  text: {fontSize: 16, fontWeight: '700', marginBottom: 8},
   container: {padding: 10},
   inputContainer: {
     flexDirection: 'row',
@@ -221,12 +259,12 @@ const styles = StyleSheet.create({
   rangSlider: {width: 200},
   thumb: {width: 20, height: 20, borderRadius: 10, borderWidth: 2},
   rail: {height: 4, borderRadius: 2},
-  applyButton: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 10,
-    alignSelf: 'flex-start',
-    marginVertical: 20,
-  },
+  railSelected: {height: 4, borderRadius: 2},
   sortContainer: {flexWrap: 'wrap', flexDirection: 'row'},
+  applyButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activityIndicator: {marginBottom: 8},
 });

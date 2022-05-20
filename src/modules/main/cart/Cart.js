@@ -2,13 +2,11 @@ import React from 'react';
 import {
   FlatList,
   SafeAreaView,
-  StatusBar,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import {strings} from '../../../locales/i18n';
@@ -87,13 +85,14 @@ const Cart = ({navigation, theme}) => {
         ]}>
         {cartItems.length !== 0 && (
           <View style={[styles.header, {backgroundColor: colors.white}]}>
-            <View style={appStyles.container}>
-              <Text style={styles.text}>
-                {subTotalLabel} {subTotal}
-              </Text>
-            </View>
-            <TouchableOpacity onPress={onClearCart}>
-              <Icon name="delete" size={30} color={colors.error} />
+            <Text style={styles.text}>
+              {subTotalLabel} <Text style={styles.price}>₹{subTotal}</Text>
+            </Text>
+
+            <TouchableOpacity
+              style={[styles.button, {borderColor: colors.accentColor}]}
+              onPress={onClearCart}>
+              <Text style={{color: colors.accentColor}}>CLEAR CART</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -130,11 +129,16 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 15,
     elevation: 1,
-    // shadowColor: '#000',
-    // shadowOffset: {width: 0, height: 1},
-    // shadowOpacity: 0.4,
-    // shadowRadius: 3,
   },
+  button: {
+    marginTop: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 8,
+  },
+  price: {fontWeight: '700', fontSize: 20},
 });

@@ -67,6 +67,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
   const [orders, setOrders] = useState(null);
+  const refOrders = useRef();
   const [total, setTotal] = useState(null);
   const [fulFillment, setFulFillment] = useState(null);
   const signedPayload = useRef(null);
@@ -90,6 +91,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
         setOrders(data);
         const ordersArray = data.filter(one => !one.hasOwnProperty('error'));
+        refOrders.current = data;
         const breakupItem = ordersArray[0].message.order.quote.breakup.find(
           one => one.title === 'FULFILLMENT',
         );
@@ -377,11 +379,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
   const confirmOrder = async method => {
     try {
-      if (orders && orders.length > 0) {
-        const errorObj = orders.find(one => one.hasOwnProperty('error'));
+      const orderList = refOrders.current;
+      if (orderList && orderList.length > 0) {
+        const errorObj = orderList.find(one => one.hasOwnProperty('error'));
 
         if (!errorObj) {
-          const payload = orders.map(item => {
+          const payload = orderList.map(item => {
             return {
               context: {
                 transaction_id: item.context.transaction_id,
@@ -415,11 +418,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
           onConfirmOrder(messageIds);
         } else {
           showToastWithGravity(strings('network_error.something_went_wrong'));
-          console.log('i am running');
         }
       } else {
+        console.log(refOrders.current);
         showToastWithGravity(strings('network_error.something_went_wrong'));
-        console.log('ites runnings');
       }
     } catch (error) {
       console.log(error);

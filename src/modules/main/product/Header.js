@@ -12,9 +12,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {SEARCH_QUERY} from '../../../utils/Constants';
+import FilterButton from './FilterButton';
 import Filters from './Filters';
 
 const search = strings('main.product.search_label');
+const product = strings('main.product.product_label');
+const provider = strings('main.product.provider_label');
+const category = strings('main.product.category_label');
 
 /**
  * Component to header on products screen
@@ -36,10 +40,13 @@ const Header = ({
   const {colors} = theme;
 
   const [item, setItem] = useState(null);
+  const [selectedCard, setSelectedCard] = useState(SEARCH_QUERY.PRODUCT);
   const refRBSheet = useRef();
 
   const openRBSheet = () => refRBSheet.current.open();
   const closeRBSheet = () => refRBSheet.current.close();
+
+  const onCardSelect = card => setSelectedCard(card);
 
   return (
     <View style={[styles.container, {backgroundColor: colors.white}]}>
@@ -64,6 +71,35 @@ const Header = ({
           </TouchableOpacity>
         )}
       </View>
+      <View style={styles.cardContainer}>
+        <FilterButton
+          name={product}
+          onPress={() => {
+            onCardSelect(SEARCH_QUERY.PRODUCT);
+          }}
+          selectedCard={selectedCard}
+          card={SEARCH_QUERY.PRODUCT}
+        />
+        <View style={styles.space} />
+        <FilterButton
+          name={provider}
+          onPress={() => {
+            onCardSelect(SEARCH_QUERY.PROVIDER);
+          }}
+          selectedCard={selectedCard}
+          card={SEARCH_QUERY.PROVIDER}
+        />
+        <View style={styles.space} />
+
+        <FilterButton
+          name={category}
+          onPress={() => {
+            onCardSelect(SEARCH_QUERY.CATEGORY);
+          }}
+          selectedCard={selectedCard}
+          card={SEARCH_QUERY.CATEGORY}
+        />
+      </View>
 
       <View style={styles.subContainer}>
         <SearchBar
@@ -82,7 +118,7 @@ const Header = ({
           cancelIcon={false}
           onSubmitEditing={() => {
             if (item !== null && item.trim().length > 2) {
-              onSearch(item, SEARCH_QUERY.PRODUCT);
+              onSearch(item, selectedCard, closeRBSheet);
             }
           }}
           onChangeText={setItem}
@@ -98,7 +134,12 @@ const Header = ({
             Filter <Icon name="filter" size={14} />
           </Text>
         </TouchableOpacity>
-        <RBSheet ref={refRBSheet} height={Dimensions.get('window').height / 2}>
+        <RBSheet
+          ref={refRBSheet}
+          height={Dimensions.get('window').height - 200}
+          customStyles={{
+            container: styles.rbSheet,
+          }}>
           <Filters closeRBSheet={closeRBSheet} filters={filters} />
         </RBSheet>
       </View>
@@ -137,4 +178,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginLeft: 5,
   },
+  rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
 });

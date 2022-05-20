@@ -24,8 +24,12 @@ const Details = ({item}) => {
           <Text style={{fontSize: 16, marginBottom: 4}}>
             {item.descriptor.name}
           </Text>
-          <Text style={{fontSize: 16, marginBottom: 4}}>{item.bpp_id}</Text>
-          <Text style={{fontSize: 16, marginBottom: 4}}>{item.provider}</Text>
+          <Text style={{fontSize: 16, marginBottom: 4}}>
+            {item.bpp_details.bpp_id}
+          </Text>
+          <Text style={{fontSize: 16, marginBottom: 4}}>
+            {item.provider_details.descriptor.name}
+          </Text>
         </View>
       </View>
     </View>

@@ -1,7 +1,7 @@
 import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
-import {Dialog, Text, withTheme} from 'react-native-elements';
+import {Dialog, withTheme} from 'react-native-elements';
 import InputField from '../../../components/input/InputField';
 import * as Yup from 'yup';
 import {strings} from '../../../locales/i18n';
@@ -28,7 +28,6 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
     state: {token},
   } = useContext(AuthContext);
   const [callInProgress, setCallInProgress] = useState(false);
-  console.log(token);
 
   const userInfo = {
     number: '',

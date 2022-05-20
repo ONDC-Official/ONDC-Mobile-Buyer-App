@@ -1,10 +1,9 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
+import {useSelector} from 'react-redux';
 import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
-
-const checkOutButton = strings('main.cart.checkout');
 
 /**
  * Component to render footer in cart
@@ -16,6 +15,12 @@ const checkOutButton = strings('main.cart.checkout');
  */
 const Footer = ({theme, onCheckout, onClearCart}) => {
   const {colors} = theme;
+  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+
+  const itemsCount = cartItems.reduce((total, item) => {
+    total += item.quantity;
+    return total;
+  }, 0);
 
   return (
     <View style={styles.container}>
@@ -30,7 +35,7 @@ const Footer = ({theme, onCheckout, onClearCart}) => {
         ]}
         onPress={onCheckout}>
         <Text style={[styles.text, {color: colors.white}]}>
-          {checkOutButton}
+          proceed to buy {itemsCount} items
         </Text>
       </TouchableOpacity>
     </View>
@@ -45,7 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  text: {fontSize: 20},
+  text: {fontSize: 16, textTransform: 'uppercase'},
   clearCartButton: {
     paddingVertical: 8,
     borderRadius: 4,

@@ -18,20 +18,13 @@ const requiredField = strings('errors.required');
 const shortPassword = strings('errors.short_password');
 const invalidEmail = strings('errors.invalid_email');
 const title = strings('authentication.signup.button_title');
-const unmatchPassowrd = strings('errors.unmatch_password');
-// const confirmPassword = strings(
-//   'authentication.signup.confirm_password_placeholder',
-// );
+
 const namePlaceholder = strings('authentication.signup.name_placeholder');
 
 const validationSchema = Yup.object({
   email: Yup.string().trim().email(invalidEmail).required(requiredField),
   password: Yup.string().trim().min(8, shortPassword).required(requiredField),
   name: Yup.string().trim().required(requiredField),
-  // confirmPassword: Yup.string()
-  //   .trim()
-  //   .required(requiredField)
-  //   .equals([Yup.ref('password'), null], unmatchPassowrd),
 });
 
 /**
@@ -43,7 +36,7 @@ const SignUpFrom = ({navigation}) => {
   const userInfo = {
     email: '',
     password: '',
-    // confirmPassword: '',
+
     name: '',
   };
   const {storeLoginDetails} = useContext(AuthContext);
@@ -116,14 +109,7 @@ const SignUpFrom = ({navigation}) => {
               errorMessage={touched.password ? errors.password : null}
               onChangeText={handleChange('password')}
             />
-            {/* <PasswordField
-              value={values.confirmPassword}
-              onBlur={handleBlur('confirmPassword')}
-              placeholder={confirmPassword}
-              secureTextEntry
-              errorMessage={touched.password ? errors.confirmPassword : null}
-              onChangeText={handleChange('confirmPassword')}
-            /> */}
+
             <View style={styles.buttonContainer}>
               <ContainButton
                 title={title}

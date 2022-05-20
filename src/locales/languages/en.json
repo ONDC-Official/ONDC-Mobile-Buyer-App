@@ -20,7 +20,7 @@
   },
   "main": {
     "cart": {
-      "sub_total_label": "Sub Total:",
+      "sub_total_label": "Subtotal:",
       "clear_cart_title": "Clear Cart",
       "check_out_title": "Check Out",
       "empty_cart_message": "You have no items in your shopping cart",
@@ -34,7 +34,7 @@
       "street": "Street",
       "name": "Name",
       "add": "ADD",
-      "next": "Next",
+      "next": "NEXT",
       "select_address_title": "Delivery Address",
       "checkout": "Checkout",
       "address": "Address",
