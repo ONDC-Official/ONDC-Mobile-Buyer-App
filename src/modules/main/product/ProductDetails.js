@@ -25,9 +25,7 @@ const ProductDetails = ({theme, route: {params}}) => {
             ImageComponent={FastImage}
             images={[...item.descriptor.images, image]}
             sliderBoxHeight={300}
-            onCurrentImagePressed={index =>
-              console.log(`image ${index} pressed`)
-            }
+            onCurrentImagePressed={index =>{}}
             resizeMode="contain"
             dotColor={colors.accentColor}
             inactiveDotColor={colors.greyOutline}

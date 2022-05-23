@@ -42,7 +42,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
         let list = [];
         data.forEach(item => {
-          console.log(JSON.stringify(item, undefined, 4));
           if (!item.error) {
             if (item.context.bpp_id) {
               item.message.quote.items.forEach(element => {
@@ -78,7 +77,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   };
 
   const getQuote = async () => {
-    console.log(JSON.stringify(cartItems, undefined, 4));
     try {
       let payload = [];
       let providerIdArray = [];
@@ -165,7 +163,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
   const renderItem = ({item}) => {
     const element = cartItems.find(one => one.id === item.id);
-    console.log(JSON.stringify(element, undefined, 4));
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <ConfirmationCardSkeleton item={item} />
     ) : (

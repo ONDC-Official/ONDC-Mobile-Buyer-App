@@ -259,7 +259,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setInitializeOrderRequested(false);
       }
     } catch (error) {
-      console.log(error);
       handleApiError(error);
       setInitializeOrderRequested(false);
     }
@@ -276,8 +275,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
       timestamp: timeStamp.current,
       return_url: 'https://sandbox.juspay.in/end',
     };
-    console.log('------------orderDetails payload---------');
-    console.log(JSON.stringify(orderDetails, undefined, 4));
 
     const processPayload = {
       requestId: confirmationList[0].transaction_id,
@@ -298,14 +295,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
         environment: 'sandbox',
       },
     };
-    console.log('--------process payload-----------');
-    console.log(JSON.stringify(processPayload));
 
     const initialised = await HyperSdkReact.isInitialised();
     if (initialised) {
       HyperSdkReact.process(JSON.stringify(processPayload));
-    } else {
-      console.log('Sdk is not initialised');
     }
   };
 
@@ -322,14 +315,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
         break;
 
       case 'initiate_result':
-        console.log('initiate_result: ', data);
         processPayment()
           .then(() => {})
           .catch(() => {});
         break;
 
       case 'process_result':
-        console.log(JSON.stringify(data.payload, undefined, 4));
         if (data.payload.hasOwnProperty('status')) {
           switch (data.payload.status.toUpperCase()) {
             case 'CHARGED':
@@ -420,12 +411,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
           showToastWithGravity(strings('network_error.something_went_wrong'));
         }
       } else {
-        console.log(refOrders.current);
         showToastWithGravity(strings('network_error.something_went_wrong'));
       }
     } catch (error) {
-      console.log(error);
-
       handleApiError(error);
       setConfirmOrderRequested(false);
     }
@@ -453,8 +441,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
           return_url: 'https://sandbox.juspay.in/end',
         });
 
-        console.log('----------sign payload---------', payload);
-
         const {data} = await postData(
           `${BASE_URL}${SIGN_PAYLOAD}`,
           {payload: payload},
@@ -464,7 +450,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         signedPayload.current = data.signedPayload;
         initializeJusPaySdk(payload);
       } catch (error) {
-        console.log(error);
         handleApiError(error);
       }
     }
@@ -484,8 +469,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         environment: 'sandbox',
       },
     };
-    console.log('-----------initiate payload----------');
-    console.log(JSON.stringify(initiatePayload));
     HyperSdkReact.initiate(JSON.stringify(initiatePayload));
   };
 

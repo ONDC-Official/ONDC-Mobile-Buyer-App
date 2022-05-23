@@ -62,7 +62,6 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
           `${BASE_URL}${ON_SUPPORT}messageIds=${data[0].context.message_id}`,
           options,
         );
-        console.log(response.data);
 
         const res = await postData(
           `${BASE_URL}${CALL}`,
@@ -73,12 +72,10 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
           },
           options,
         );
-        console.lof(res);
         setModalVisible(false);
       }
       setCallInProgress(false);
     } catch (e) {
-      console.log(e.response);
       setCallInProgress(false);
     }
   };
