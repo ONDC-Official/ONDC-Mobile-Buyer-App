@@ -116,7 +116,7 @@ const AddAddress = ({navigation, theme}) => {
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header title={addAddress} navigation={navigation} />
+      <Header title={addAddress} navigation={navigation}/>
       <KeyboardAwareScrollView>
         <Card containerStyle={styles.containerStyle}>
           <Formik
@@ -130,13 +130,13 @@ const AddAddress = ({navigation, theme}) => {
                 });
             }}>
             {({
-              values,
-              errors,
-              handleChange,
-              handleBlur,
-              touched,
-              handleSubmit,
-            }) => {
+                values,
+                errors,
+                handleChange,
+                handleBlur,
+                touched,
+                handleSubmit,
+              }) => {
               return (
                 <>
                   <InputField

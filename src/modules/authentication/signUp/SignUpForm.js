@@ -1,3 +1,4 @@
+import auth from '@react-native-firebase/auth';
 import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
@@ -8,7 +9,6 @@ import PasswordField from '../../../components/input/PasswordField';
 import {Context as AuthContext} from '../../../context/Auth';
 import {strings} from '../../../locales/i18n';
 import {showToastWithGravity} from '../../../utils/utils';
-import auth from '@react-native-firebase/auth';
 
 const emailPlaceholder = strings('authentication.login.email_placeholder');
 const passwordPlaceholder = strings(

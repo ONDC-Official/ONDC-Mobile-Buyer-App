@@ -1,33 +1,18 @@
 import Geolocation from '@react-native-community/geolocation';
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  PermissionsAndroid,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {Dimensions, FlatList, PermissionsAndroid, StyleSheet, View,} from 'react-native';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import {colors, withTheme} from 'react-native-elements';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
-import {useDispatch} from 'react-redux';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../locales/i18n';
-import {saveProducts} from '../../../redux/product/actions';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
-import {
-  BASE_URL,
-  FILTER,
-  GET_LATLONG,
-  GET_LOCATION_FROM_LAT_LONG,
-  GET_MESSAGE_ID,
-  GET_PRODUCTS,
-} from '../../../utils/apiUtilities';
+import {BASE_URL, FILTER, GET_LATLONG, GET_LOCATION_FROM_LAT_LONG, GET_MESSAGE_ID,} from '../../../utils/apiUtilities';
 import {SEARCH_QUERY} from '../../../utils/Constants';
 import {isIOS, skeletonList} from '../../../utils/utils';
 import EmptyComponent from '../cart/EmptyComponent';
@@ -90,7 +75,7 @@ const Products = ({theme, navigation}) => {
    */
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ProductCardSkeleton item={item} />
+      <ProductCardSkeleton item={item}/>
     ) : (
       <ProductCard
         item={item}

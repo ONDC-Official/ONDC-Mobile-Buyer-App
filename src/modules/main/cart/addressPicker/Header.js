@@ -26,7 +26,7 @@ const Header = ({theme, title, show, navigation}) => {
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}>
-        <Icon name="arrow-left" size={16} color={colors.accentColor} />
+        <Icon name="arrow-left" size={16} color={colors.accentColor}/>
       </TouchableOpacity>
       <View style={appStyles.container}>
         <Text style={styles.text}>{title}</Text>

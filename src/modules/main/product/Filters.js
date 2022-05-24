@@ -1,11 +1,5 @@
 import React, {useState} from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {CheckBox, Divider, Text, withTheme} from 'react-native-elements';
 import RangeSlider from 'rn-range-slider';
 import {appStyles} from '../../../styles/styles';
@@ -83,7 +77,7 @@ const Filters = ({theme, filters, closeRBSheet}) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <Divider />
+        <Divider/>
 
         {filters ? (
           <View style={styles.container}>

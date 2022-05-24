@@ -1,10 +1,10 @@
 import {useContext, useState} from 'react';
+import {useDispatch} from 'react-redux';
+import {Context as AuthContext} from '../../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
+import {saveProducts} from '../../../../../redux/product/actions';
 import {getData} from '../../../../../utils/api';
 import {BASE_URL, GET_PRODUCTS} from '../../../../../utils/apiUtilities';
-import {Context as AuthContext} from '../../../../../context/Auth';
-import {useDispatch} from 'react-redux';
-import {saveProducts} from '../../../../../redux/product/actions';
 
 export default () => {
   const dispatch = useDispatch();

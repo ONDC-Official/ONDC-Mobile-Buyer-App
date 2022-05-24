@@ -1,26 +1,20 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {
-  BackHandler,
-  DeviceEventEmitter,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {BackHandler, DeviceEventEmitter, FlatList, SafeAreaView, StyleSheet, View,} from 'react-native';
 import Config from 'react-native-config';
 import {Card, CheckBox, Divider} from 'react-native-elements';
 import {Text, withTheme} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
+import {clearAllData} from '../../../../redux/actions';
 import {appStyles} from '../../../../styles/styles';
 import {alertWithOneButton} from '../../../../utils/alerts';
 import {getData, postData} from '../../../../utils/api';
-import {clearAllData} from '../../../../redux/actions';
 import {
   BASE_URL,
   CONFIRM_ORDER,
@@ -34,7 +28,6 @@ import {PAYMENT_OPTIONS} from '../../../../utils/Constants';
 import {showToastWithGravity} from '../../../../utils/utils';
 import Header from '../addressPicker/Header';
 import PaymentSkeleton from './PaymentSkeleton';
-import FastImage from 'react-native-fast-image';
 
 const heading = strings('main.cart.checkout');
 const buttonTitle = strings('main.cart.next');
@@ -496,9 +489,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={heading} navigation={navigation} />
+        <Header title={heading} navigation={navigation}/>
         {initializeOrderRequested ? (
-          <PaymentSkeleton />
+          <PaymentSkeleton/>
         ) : (
           <>
             <View style={styles.container}>
@@ -514,7 +507,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                           <Text>{element.descriptor.name}</Text>
                           <Text>₹{element.price.value * element.quantity}</Text>
                         </View>
-                        <Divider />
+                        <Divider/>
                       </>
                     ) : null;
                   }}
@@ -525,7 +518,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                       <Text>FULFILLMENT</Text>
                       <Text style={styles.fulfillment}>₹{fulFillment}</Text>
                     </View>
-                    <Divider />
+                    <Divider/>
                   </>
                 )}
 

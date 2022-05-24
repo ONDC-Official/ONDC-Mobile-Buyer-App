@@ -1,10 +1,11 @@
 import React from 'react';
 import {SafeAreaView, View} from 'react-native';
-import {appStyles} from '../../../styles/styles';
-import {SliderBox} from 'react-native-image-slider-box';
-import FastImage from 'react-native-fast-image';
 import {Divider, Text, withTheme} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
+import {SliderBox} from 'react-native-image-slider-box';
+import {appStyles} from '../../../styles/styles';
 import Details from './component/Details';
+
 const image = require('../../../assets/logo.png');
 
 const ProductDetails = ({theme, route: {params}}) => {
@@ -25,7 +26,7 @@ const ProductDetails = ({theme, route: {params}}) => {
             ImageComponent={FastImage}
             images={[...item.descriptor.images, image]}
             sliderBoxHeight={300}
-            onCurrentImagePressed={index =>{}}
+            onCurrentImagePressed={index => {}}
             resizeMode="contain"
             dotColor={colors.accentColor}
             inactiveDotColor={colors.greyOutline}
@@ -49,9 +50,9 @@ const ProductDetails = ({theme, route: {params}}) => {
             Deal Price: Rs {item.price.value}/-
           </Text>
         </View>
-        <Divider width={4} style={{marginVertical: 10}} />
-        <Details width={2} style={{marginVertical: 10}} item={item} />
-        <Divider />
+        <Divider width={4} style={{marginVertical: 10}}/>
+        <Details width={2} style={{marginVertical: 10}} item={item}/>
+        <Divider/>
       </View>
     </SafeAreaView>
   );

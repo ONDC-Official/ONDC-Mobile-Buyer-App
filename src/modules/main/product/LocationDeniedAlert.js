@@ -35,7 +35,7 @@ const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
         title={locationDeniedMessage}
         titleStyle={styles.titleStyle}
       />
-      <Divider />
+      <Divider/>
       <Dialog.Button
         icon={{
           name: 'search',
@@ -49,7 +49,7 @@ const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
           openSheet();
         }}
       />
-      <Divider />
+      <Divider/>
     </Dialog>
   );
 };

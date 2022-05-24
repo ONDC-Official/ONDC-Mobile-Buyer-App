@@ -1,8 +1,10 @@
-import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import React from 'react';
+import {useTheme, withBadge} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useSelector} from 'react-redux';
 import Landing from '../modules/authentication/landing/Landing';
 import Login from '../modules/authentication/login/Login';
 import SignUp from '../modules/authentication/signUp/SignUp';
@@ -14,12 +16,10 @@ import Confirmation from '../modules/main/cart/Confirmation';
 import Payment from '../modules/main/cart/payment/Payment';
 import More from '../modules/main/more/More';
 import Profile from '../modules/main/more/Profile';
-import {useTheme, withBadge} from 'react-native-elements';
-import Order from '../modules/main/order/Order';
-import Products from '../modules/main/product/Products';
-import {useSelector} from 'react-redux';
 import Support from '../modules/main/more/support/Support';
+import Order from '../modules/main/order/Order';
 import ProductDetails from '../modules/main/product/ProductDetails';
+import Products from '../modules/main/product/Products';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();

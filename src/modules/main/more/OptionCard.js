@@ -1,12 +1,12 @@
 import React, {useContext} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Card, Icon, Text, withTheme} from 'react-native-elements';
-import {Context as AuthContext} from '../../../context/Auth';
-import {OPTIONS} from '../../../utils/Constants';
 import {useDispatch} from 'react-redux';
+import {Context as AuthContext} from '../../../context/Auth';
+import {strings} from '../../../locales/i18n';
 import {clearAllData} from '../../../redux/actions';
 import {alertWithTwoButtons} from '../../../utils/alerts';
-import {strings} from '../../../locales/i18n';
+import {OPTIONS} from '../../../utils/Constants';
 
 const logOutMessage = strings('main.more.log_out_message');
 const okLabel = strings('main.product.ok_label');
@@ -47,7 +47,7 @@ const OptionCard = ({theme, navigation, item}) => {
         onPress={() => {
           onPressHandler(item.name);
         }}>
-        <Icon type="font-awesome" name={item.icon} color={colors.accentColor} />
+        <Icon type="font-awesome" name={item.icon} color={colors.accentColor}/>
         <Text style={[styles.text, {color: colors.accentColor}]}>
           {item.string}
         </Text>

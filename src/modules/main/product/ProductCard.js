@@ -97,13 +97,13 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
                   <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => updateQuantity(false)}>
-                    <Icon name="minus" size={16} color={colors.white} />
+                    <Icon name="minus" size={16} color={colors.white}/>
                   </TouchableOpacity>
                   <Text style={{color: colors.white}}>{item.quantity}</Text>
                   <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => updateQuantity(true)}>
-                    <Icon name="plus" color={colors.white} size={16} />
+                    <Icon name="plus" color={colors.white} size={16}/>
                   </TouchableOpacity>
                 </View>
               )}

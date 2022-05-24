@@ -1,6 +1,6 @@
-import FastImage from 'react-native-fast-image';
 import React, {memo} from 'react';
 import {withTheme} from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
 
 /**
  * Component to render image in the avatar
@@ -22,9 +22,9 @@ const AvatarImage = ({uri, dimension, backgroundColor}) => {
     uri === 'Unknown'
       ? require('../../assets/profile.png')
       : {
-          uri,
-          priority: FastImage.priority.normal,
-        };
+        uri,
+        priority: FastImage.priority.normal,
+      };
 
   return (
     <FastImage

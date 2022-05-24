@@ -14,7 +14,7 @@
     "signup": {
       "button_title": "Sign Up",
       "confirm_password_placeholder": "Confirm Password",
-      "name_placeholder":"Full Name"
+      "name_placeholder": "Full Name"
     },
     "splash": {}
   },
@@ -39,18 +39,17 @@
       "checkout": "Checkout",
       "address": "Address",
       "payment_options": "Payment Options",
-      "clear_cart_message":"Are you sure you want to clear cart?",
-      "order_placed_message":"Your order has been placed!"
+      "clear_cart_message": "Are you sure you want to clear cart?",
+      "order_placed_message": "Your order has been placed!"
     },
     "dashboard": {},
     "order": {
-      "delivery_to_label":"Delivery to",
-      "ordered_on_label":"Ordered on ",
-      "status_label":"Status :",
-      "return":"Return",
-      "cancel":"Cancel",
-      "list_empty_message":"No data found"
-      
+      "delivery_to_label": "Delivery to",
+      "ordered_on_label": "Ordered on ",
+      "status_label": "Status :",
+      "return": "Return",
+      "cancel": "Cancel",
+      "list_empty_message": "No data found"
     },
     "product": {
       "select_location_label": "Select a location",
@@ -69,22 +68,21 @@
       "ok_label": "Ok",
       "cancel_label": "Cancel",
       "please_select_location": "Please select location",
-      "add_to_cart":"Added to cart"
+      "add_to_cart": "Added to cart"
     },
     "more": {
       "profile": "Profile",
       "log_out": "Log Out",
-      "support":"Support",
-      "our_policy":"Our Policy",
-      "our_policy_message":"Read Abc's condition of Use & Sale, privacy policy and other applicable user's policy",
-      "faqs":"FAQs",
-      "faqs_message":"Browse through the questions frequently asked by users",
-      "ondc_policy":"ONDC Policy",
-      "ondc_policy_message":"Read the policy and confitions of the ONDC network",
-      "contact_us":"Contact Us",
-      "contact_us_message":"Not Satisfied? You can reach out to Customer Care",
-      "log_out_message":"Are you sure you want to log out?"
-
+      "support": "Support",
+      "our_policy": "Our Policy",
+      "our_policy_message": "Read Abc's condition of Use & Sale, privacy policy and other applicable user's policy",
+      "faqs": "FAQs",
+      "faqs_message": "Browse through the questions frequently asked by users",
+      "ondc_policy": "ONDC Policy",
+      "ondc_policy_message": "Read the policy and confitions of the ONDC network",
+      "contact_us": "Contact Us",
+      "contact_us_message": "Not Satisfied? You can reach out to Customer Care",
+      "log_out_message": "Are you sure you want to log out?"
     }
   },
   "miscellaneous": {},

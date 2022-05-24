@@ -10,11 +10,7 @@ import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../utils/apiUtilities';
-import {
-  maskAmount,
-  showToastWithGravity,
-  skeletonList,
-} from '../../../utils/utils';
+import {maskAmount, showToastWithGravity, skeletonList,} from '../../../utils/utils';
 import Header from '../cart/addressPicker/Header';
 import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
 
@@ -164,7 +160,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const renderItem = ({item}) => {
     const element = cartItems.find(one => one.id === item.id);
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ConfirmationCardSkeleton item={item} />
+      <ConfirmationCardSkeleton item={item}/>
     ) : (
       <>
         {element ? (
@@ -209,7 +205,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title="Order Confirmation" navigation={navigation} />
+        <Header title="Order Confirmation" navigation={navigation}/>
 
         <FlatList
           keyExtractor={(item, index) => {
@@ -234,7 +230,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                   <Text style={styles.fulfillment}>FULFILLMENT</Text>
                   <Text style={styles.fulfillment}>₹{fulfillment}</Text>
                 </View>
-                <Divider />
+                <Divider/>
               </>
             )}
             <View style={styles.priceContainer}>

@@ -33,7 +33,7 @@ const list = [
  */
 const More = ({navigation}) => {
   const renderItem = ({item}) => {
-    return <OptionCard item={item} navigation={navigation} />;
+    return <OptionCard item={item} navigation={navigation}/>;
   };
   return (
     <SafeAreaView style={appStyles.container}>

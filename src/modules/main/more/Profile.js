@@ -1,12 +1,12 @@
 import React, {useContext} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {Context as AuthContext} from '../../../context/Auth';
-import {appStyles} from '../../../styles/styles';
-import {AVATAR_SIZES} from '../../../utils/Constants';
 import {Text} from 'react-native-elements';
 import AvatarImage from '../../../components/avatar/AvatarImage';
-import Header from '../cart/addressPicker/Header';
+import {Context as AuthContext} from '../../../context/Auth';
 import {strings} from '../../../locales/i18n';
+import {appStyles} from '../../../styles/styles';
+import {AVATAR_SIZES} from '../../../utils/Constants';
+import Header from '../cart/addressPicker/Header';
 
 const profile = strings('main.more.profile');
 
@@ -18,9 +18,9 @@ const Profile = ({navigation}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={profile} navigation={navigation} />
+        <Header title={profile} navigation={navigation}/>
         <View style={styles.container}>
-          <AvatarImage uri={photoURL} dimension={AVATAR_SIZES.LARGE} />
+          <AvatarImage uri={photoURL} dimension={AVATAR_SIZES.LARGE}/>
           <View style={styles.profileDetailsContainer}>
             {name !== 'Unknown' ? (
               <Text style={styles.name}>{name}</Text>

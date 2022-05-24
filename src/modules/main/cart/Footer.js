@@ -2,7 +2,6 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import {useSelector} from 'react-redux';
-import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 
 /**

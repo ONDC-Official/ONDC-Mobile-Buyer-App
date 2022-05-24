@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import {Card, Text, withTheme} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-elements';
 
 const FilterCard = ({theme, card, selectedFilter, name, onPress}) => {
   const {colors} = theme;

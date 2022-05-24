@@ -1,15 +1,15 @@
 import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Dialog, withTheme} from 'react-native-elements';
-import InputField from '../../../components/input/InputField';
-import * as Yup from 'yup';
-import {strings} from '../../../locales/i18n';
-import {Context as AuthContext} from '../../../context/Auth';
-import Button from './Button';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as Yup from 'yup';
+import InputField from '../../../components/input/InputField';
+import {Context as AuthContext} from '../../../context/Auth';
+import {strings} from '../../../locales/i18n';
 import {getData, postData} from '../../../utils/api';
 import {BASE_URL, CALL, ON_SUPPORT, SUPPORT} from '../../../utils/apiUtilities';
+import Button from './Button';
 
 const invalidNumber = strings('errors.invalid_number');
 const requiredField = strings('errors.required');
@@ -91,13 +91,13 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
               .catch(() => {});
           }}>
           {({
-            values,
-            errors,
-            handleChange,
-            handleBlur,
-            touched,
-            handleSubmit,
-          }) => {
+              values,
+              errors,
+              handleChange,
+              handleBlur,
+              touched,
+              handleSubmit,
+            }) => {
             return (
               <>
                 <TouchableOpacity
