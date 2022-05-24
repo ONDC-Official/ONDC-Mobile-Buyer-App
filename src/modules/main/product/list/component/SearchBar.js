@@ -2,16 +2,17 @@ import React, {useContext, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import {Text, withTheme} from 'react-native-elements';
-import {Context as AuthContext} from '../../../context/Auth';
-import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {strings} from '../../../locales/i18n';
-import {getData} from '../../../utils/api';
-import {BASE_URL, GET_LOCATION} from '../../../utils/apiUtilities';
+import {Context as AuthContext} from '../../../../../context/Auth';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
+import {strings} from '../../../../../locales/i18n';
+import {getData} from '../../../../../utils/api';
+import {BASE_URL, GET_LOCATION} from '../../../../../utils/apiUtilities';
 
 const search = strings('main.product.search_label');
 
 /**
  * Component to show searchbar to select location in addresspicker
+ * @param theme
  * @param closeSheet:function which close the rb sheet
  * @param setLocation:function to set location selected by user
  * @param setEloc:function set eloc of selected location

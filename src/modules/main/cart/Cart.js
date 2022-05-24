@@ -7,7 +7,7 @@ import {strings} from '../../../locales/i18n';
 import {clearCart} from '../../../redux/actions';
 import {appStyles} from '../../../styles/styles';
 import {alertWithTwoButtons} from '../../../utils/alerts';
-import ProductCard from '../product/ProductCard';
+import ProductCard from '../product/list/component/ProductCard';
 import EmptyComponent from './EmptyComponent';
 import Footer from './Footer';
 

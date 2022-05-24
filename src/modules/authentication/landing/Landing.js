@@ -8,7 +8,7 @@ import {appStyles} from '../../../styles/styles';
 import {isIOS} from '../../../utils/utils';
 import useLoginWithGoogle from './hooks/useLoginWithGoogle';
 
-const logo = require('../../../assets/logo.png');
+const logo = require('../../../assets/ondc.png');
 
 const login = strings('authentication.landing.login');
 const signUp = strings('authentication.landing.sign_up');

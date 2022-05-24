@@ -1,17 +1,19 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
-import {appStyles} from '../../../styles/styles';
+import {appStyles} from '../../../../../styles/styles';
 
 /**
  * Component to show filter buttons in the header of product screen
  * @param theme
+ * @param card
  * @param name:name of the card
  * @param selectedCard:filter button selected by user
  * @param onPress:function handles click event of filter button
  * @constructor
  * @returns {JSX.Element}
  */
+//TODO: Name is not explanatory
 const FilterButton = ({theme, card, name, selectedCard, onPress}) => {
   const {colors} = theme;
   return (

@@ -1,10 +1,10 @@
 import {useContext, useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {Context as AuthContext} from '../../../../../context/Auth';
-import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
-import {saveProducts} from '../../../../../redux/product/actions';
-import {getData} from '../../../../../utils/api';
-import {BASE_URL, GET_PRODUCTS} from '../../../../../utils/apiUtilities';
+import {Context as AuthContext} from '../../../../context/Auth';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {saveProducts} from '../../../../redux/product/actions';
+import {getData} from '../../../../utils/api';
+import {BASE_URL, GET_PRODUCTS} from '../../../../utils/apiUtilities';
 
 export default () => {
   const dispatch = useDispatch();
@@ -13,7 +13,7 @@ export default () => {
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
   const [pageNumber, setPageNumber] = useState(1);
-  const [requstInProgress, setRequestInProgress] = useState(false);
+  const [requestInProgress, setRequestInProgress] = useState(false);
 
   const options = {
     headers: {
@@ -61,5 +61,5 @@ export default () => {
     }, 10000);
   };
 
-  return {getProducts, requstInProgress, setRequestInProgress};
+  return {getProducts, requestInProgress, setRequestInProgress};
 };

@@ -7,23 +7,23 @@ import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
-import {Context as AuthContext} from '../../../context/Auth';
-import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {strings} from '../../../locales/i18n';
-import {appStyles} from '../../../styles/styles';
-import {getData, postData} from '../../../utils/api';
-import {BASE_URL, FILTER, GET_LATLONG, GET_LOCATION_FROM_LAT_LONG, GET_MESSAGE_ID,} from '../../../utils/apiUtilities';
-import {SEARCH_QUERY} from '../../../utils/Constants';
-import {isIOS, skeletonList} from '../../../utils/utils';
-import EmptyComponent from '../cart/EmptyComponent';
-import AddressPicker from './AddressPicker';
-import useProductList from './component/hooks/useProductList';
-import Header from './Header';
-import LocationDeniedAlert from './LocationDeniedAlert';
-import ProductCard from './ProductCard';
-import ProductCardSkeleton from './ProductCardSkeleton';
+import {Context as AuthContext} from '../../../../context/Auth';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {strings} from '../../../../locales/i18n';
+import {appStyles} from '../../../../styles/styles';
+import {getData, postData} from '../../../../utils/api';
+import {BASE_URL, FILTER, GET_LATLONG, GET_LOCATION_FROM_LAT_LONG, GET_MESSAGE_ID,} from '../../../../utils/apiUtilities';
+import {SEARCH_QUERY} from '../../../../utils/Constants';
+import {isIOS, skeletonList} from '../../../../utils/utils';
+import EmptyComponent from '../../cart/EmptyComponent';
+import AddressPicker from './component/AddressPicker';
+import useProductList from '../hooks/useProductList';
+import Header from './component/Header';
+import LocationDeniedAlert from './component/LocationDeniedAlert';
+import ProductCard from './component/ProductCard';
+import ProductCardSkeleton from './component/ProductCardSkeleton';
 
-const permissionNeededdMessage = strings(
+const permissionNeededMessage = strings(
   'main.product.permission_needed_message',
 );
 const unKnownLabel = strings('main.product.unknown');
@@ -38,7 +38,7 @@ const selectLocation = strings('main.product.please_select_location');
  * @constructor
  * @returns {JSX.Element}
  */
-const Products = ({theme, navigation}) => {
+const Products = ({navigation}) => {
   const [location, setLocation] = useState(unKnownLabel);
   const [isVisible, setIsVisible] = useState(false);
   const [latitude, setLatitude] = useState(null);
@@ -48,8 +48,7 @@ const Products = ({theme, navigation}) => {
   const [filters, setFilters] = useState(null);
 
   const {products} = useSelector(({productReducer}) => productReducer);
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
-  const {getProducts, requstInProgress, setRequestInProgress} =
+  const {getProducts, requestInProgress, setRequestInProgress} =
     useProductList();
 
   const {
@@ -79,7 +78,7 @@ const Products = ({theme, navigation}) => {
     ) : (
       <ProductCard
         item={item}
-        apiInProgress={requstInProgress}
+        apiInProgress={requestInProgress}
         navigation={navigation}
       />
     );
@@ -184,7 +183,7 @@ const Products = ({theme, navigation}) => {
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             {
-              title: permissionNeededdMessage,
+              title: permissionNeededMessage,
               buttonNegative: cancelLabel,
               buttonPositive: okLabel,
             },
@@ -246,45 +245,34 @@ const Products = ({theme, navigation}) => {
    * Function is used to handle onEndEditing event of searchbar
    * @returns {Promise<void>}
    **/
-  const onSearch = async (searchQuery, selectedCard, closeRBSheet) => {
+  const onSearch = async (query, selectedSearchOption, closeRBSheet) => {
     if (longitude && latitude) {
       setRequestInProgress(true);
 
-      let requestParameters;
+      let requestParameters = {
+        context: {},
+        message: {
+          criteria: {
+            delivery_location: `${latitude},${longitude}`,
+          },
+        },
+      };
+
       try {
-        if (selectedCard === SEARCH_QUERY.PRODUCT) {
-          requestParameters = {
-            context: {bpp_id: 'bpp1.beckn.org'},
-            message: {
-              criteria: {
-                delivery_location: `${latitude},${longitude}`,
-                search_string: searchQuery,
-              },
-            },
-          };
-        } else if (selectedCard === SEARCH_QUERY.PROVIDER) {
-          requestParameters = {
-            context: {bpp_id: 'bpp1.beckn.org'},
-            message: {
-              criteria: {
-                delivery_location: `${latitude},${longitude}`,
-                provider_id: searchQuery,
-              },
-            },
-          };
-        } else {
-          requestParameters = {
-            context: {
-              bpp_id: 'bpp1.beckn.org',
-            },
-            message: {
-              criteria: {
-                delivery_location: `${latitude},${longitude}`,
-                category_id: searchQuery,
-              },
-            },
-          };
+        switch (selectedSearchOption) {
+          case SEARCH_QUERY.PRODUCT:
+            requestParameters.message.criteria.search_string = query;
+          break;
+
+          case SEARCH_QUERY.PROVIDER:
+            requestParameters.message.criteria.provider_id = query;
+          break;
+
+          default:
+            requestParameters.message.criteria.category_id = query;
+            break;
         }
+
         const response = await postData(
           `${BASE_URL}${GET_MESSAGE_ID}`,
           requestParameters,
@@ -297,7 +285,7 @@ const Products = ({theme, navigation}) => {
           closeRBSheet,
         );
 
-        getFilter(
+        await getFilter(
           response.data.context.message_id,
           response.data.context.transaction_id,
         );
@@ -342,7 +330,7 @@ const Products = ({theme, navigation}) => {
           openSheet={openSheet}
           onSearch={onSearch}
           locationInProgress={locationInProgress}
-          apiInProgress={requstInProgress}
+          apiInProgress={requestInProgress}
           filters={filters}
         />
         <RBSheet
@@ -369,7 +357,7 @@ const Products = ({theme, navigation}) => {
           ListEmptyComponent={() => {
             return (
               <EmptyComponent
-                message={!requstInProgress ? searchItemMessage : noResults}
+                message={!requestInProgress ? searchItemMessage : noResults}
               />
             );
           }}

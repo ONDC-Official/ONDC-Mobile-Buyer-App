@@ -2,24 +2,34 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 
+//TODO: Name is not explanatory?
 const FilterCard = ({theme, card, selectedFilter, name, onPress}) => {
   const {colors} = theme;
+
+  let backgroundColor = colors.white;
+  let borderColor = colors.borderColor;
+  let textColor = colors.black;
+
+  if (selectedFilter === card) {
+    backgroundColor = colors.accentColor;
+    borderColor = colors.accentColor;
+    textColor = colors.white;
+  }
+
   return (
     <TouchableOpacity
       onPress={onPress}
       style={[
         styles.containerStyle,
         {
-          backgroundColor:
-            selectedFilter === card ? colors.accentColor : colors.white,
-          borderColor:
-            selectedFilter === card ? colors.accentColor : colors.borderColor,
+          backgroundColor,
+          borderColor,
         },
       ]}>
       <Text
         style={[
           styles.text,
-          {color: selectedFilter === card ? colors.white : colors.black},
+          {color: textColor},
         ]}>
         {name}
       </Text>

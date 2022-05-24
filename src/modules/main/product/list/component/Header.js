@@ -3,9 +3,9 @@ import {ActivityIndicator, Dimensions, StyleSheet, TouchableOpacity, View,} from
 import {SearchBar, Text, withTheme} from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {strings} from '../../../locales/i18n';
-import {appStyles} from '../../../styles/styles';
-import {SEARCH_QUERY} from '../../../utils/Constants';
+import {strings} from '../../../../../locales/i18n';
+import {appStyles} from '../../../../../styles/styles';
+import {SEARCH_QUERY} from '../../../../../utils/Constants';
 import FilterButton from './FilterButton';
 import Filters from './Filters';
 
@@ -14,11 +14,16 @@ const product = strings('main.product.product_label');
 const provider = strings('main.product.provider_label');
 const category = strings('main.product.category_label');
 
+//TODO: i18n missing
 /**
  * Component to header on products screen
+ * @param theme
  * @param openSheet: function to open rb sheet when user wants to select location
+ * @param apiInProgress
+ * @param locationInProgress
  * @param location:location of user or location selected by user
  * @param onSearch:function handles onEndEditing event of searchbar
+ * @param filters
  * @constructor
  * @returns {JSX.Element}
  */

@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Icon, Text} from 'react-native-elements';
-import Logo from '../../../assets/logo.svg';
-import {strings} from '../../../locales/i18n';
-import {appStyles} from '../../../styles/styles';
+import Logo from '../../../../../assets/map_my_india.svg';
+import {strings} from '../../../../../locales/i18n';
+import {appStyles} from '../../../../../styles/styles';
 import SearchBar from './SearchBar';
 
 const selectLocationLabel = strings('main.product.select_location_label');
@@ -12,7 +12,7 @@ const selectLocationLabel = strings('main.product.select_location_label');
  * Component to show address picker screen when user wants to select location
  * @param closeSheet:function which close the rb sheet
  * @param setLocation:function to set location selected by user
- * @param setEloc:function set eloc of selected location
+ * @param setEloc: function set eloc of selected location
  * @constructor
  * @returns {JSX.Element}
  */

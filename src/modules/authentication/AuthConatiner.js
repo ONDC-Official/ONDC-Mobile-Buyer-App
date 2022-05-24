@@ -11,7 +11,7 @@ const userAgreement = strings('global.user_agreement');
 const termsOfServices = strings('global.terms_of_services');
 const andLabel = strings('global.and_label');
 const privacyPolicy = strings('global.privacy_policy');
-const image = require('../../assets/logo.png');
+const image = require('../../assets/ondc.png');
 
 /**
  * Component is used to render common page for authentication forms

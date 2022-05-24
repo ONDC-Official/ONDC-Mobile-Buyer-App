@@ -1,16 +1,17 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Dialog, Divider, Icon, withTheme} from 'react-native-elements';
-import {strings} from '../../../locales/i18n';
+import {strings} from '../../../../../locales/i18n';
 
 const locationDeniedMessage = strings('main.product.location_denied_message');
 const enterLocationMessage = strings('main.product.enter_location_message');
 
 /**
  * Component to show dialog to select location
+ * @param theme
  * @param openSheet:function which open the rb sheet
- * @param setIsVisible:function to set vivibility of dialog
- * @param isVisible:indicates vivibility of dialog
+ * @param setIsVisible:function to set visibility of dialog
+ * @param isVisible:indicates visibility of dialog
  * @constructor
  * @returns {JSX.Element}
  */

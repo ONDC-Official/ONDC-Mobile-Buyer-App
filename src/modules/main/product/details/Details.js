@@ -2,6 +2,8 @@ import React from 'react';
 import {View} from 'react-native';
 import {Text} from 'react-native-elements';
 
+//TODO: i18n missing
+//TODO: Why we are using inline styling here?
 const Details = ({item}) => {
   return (
     <View style={{padding: 10}}>

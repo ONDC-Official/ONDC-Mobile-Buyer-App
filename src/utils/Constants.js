@@ -47,7 +47,7 @@ export const ONDC_POLICY = 'https://ondc.org/index.html';
 
 export const CONTACT_US = 'https://ondc.org/contactus.html';
 
-export const SORTINGLIST = {
+export const PRODUCT_SORTING = {
   RATINGS_HIGH_TO_LOW: 'Rating: high to low',
   RATINGS_LOW_TO_HIGH: 'Ratings: Low to high',
   PRICE_HIGH_TO_LOW: 'Price: High to low',

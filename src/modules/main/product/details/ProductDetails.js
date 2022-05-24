@@ -3,11 +3,12 @@ import {SafeAreaView, View} from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {SliderBox} from 'react-native-image-slider-box';
-import {appStyles} from '../../../styles/styles';
-import Details from './component/Details';
+import {appStyles} from '../../../../styles/styles';
+import Details from './Details';
 
-const image = require('../../../assets/logo.png');
+const image = require('../../../../assets/ondc.png');
 
+//TODO: Why we are using inline styling here?
 const ProductDetails = ({theme, route: {params}}) => {
   const {colors} = theme;
   const {item} = params;

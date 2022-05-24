@@ -4,14 +4,14 @@ import {Card, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
-import {strings} from '../../../locales/i18n';
-import {removeItemFromCart} from '../../../redux/actions';
-import {updateItemInCart} from '../../../redux/actions';
-import {addItemToCart} from '../../../redux/actions';
-import {appStyles} from '../../../styles/styles';
-import {maskAmount} from '../../../utils/utils';
-import {showInfoToast} from '../../../utils/utils';
-import useProductList from './component/hooks/useProductList';
+import {strings} from '../../../../../locales/i18n';
+import {removeItemFromCart} from '../../../../../redux/actions';
+import {updateItemInCart} from '../../../../../redux/actions';
+import {addItemToCart} from '../../../../../redux/actions';
+import {appStyles} from '../../../../../styles/styles';
+import {maskAmount} from '../../../../../utils/utils';
+import {showInfoToast} from '../../../../../utils/utils';
+import useProductList from '../../hooks/useProductList';
 
 const addButton = strings('main.product.add_button_title');
 const addToCart = strings('main.product.add_to_cart');
@@ -19,6 +19,7 @@ const addToCart = strings('main.product.add_to_cart');
 /**
  * Component to render single product card on product screen
  * @param theme
+ * @param navigation
  * @param item: object which contains product details
  * @param apiInProgress
  * @constructor
@@ -27,7 +28,7 @@ const addToCart = strings('main.product.add_to_cart');
 const ProductCard = ({theme, navigation, item, apiInProgress}) => {
   const {colors} = theme;
   const dispatch = useDispatch();
-  const {requstInProgress} = useProductList();
+  const {requestInProgress} = useProductList();
 
   const addItem = () => {
     const product = Object.assign({}, item, {quantity: 1});

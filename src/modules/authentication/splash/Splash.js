@@ -5,7 +5,7 @@ import {Context as AuthContext} from '../../../context/Auth';
 import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 
-const image = require('../../../assets/logo.png');
+const image = require('../../../assets/ondc.png');
 const versionLabel = strings('global.version_label');
 
 /**

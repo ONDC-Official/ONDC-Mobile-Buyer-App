@@ -6,7 +6,7 @@ import {CONTACT_US, FAQS, ONDC_POLICY, POLICY_URL,} from '../../../../utils/Cons
 import Header from '../../cart/addressPicker/Header';
 import SupportCard from './SupportCard';
 
-const image = require('../../../../assets/logo.png');
+const image = require('../../../../assets/ondc.png');
 
 const heading = strings('main.more.support');
 const ourPolicy = strings('main.more.our_policy');
