@@ -39,28 +39,31 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
+        console.log(JSON.stringify(data, undefined, 4));
 
         let list = [];
         data.forEach(item => {
           if (!item.error) {
-            item.message.quote.items.forEach(element => {
-              const object = cartItems.find(one => one.id === element.id);
-              element.provider = {
-                id: object.provider_details.id,
-                descriptor: object.provider_details.descriptor,
-                locations: [object.location_details.id],
-              };
-              setTotal(item.message.quote.quote.price.value);
-              const breakupItem = item.message.quote.quote.breakup.find(
-                one => one.title === 'FULFILLMENT',
-              );
-              breakupItem
-                ? setFulFillment(breakupItem.price.value)
-                : setFulFillment(null);
-              element.transaction_id = item.context.transaction_id;
-              element.bpp_id = item.context.bpp_id;
-              list.push(element);
-            });
+            if (item.context.bpp_id) {
+              item.message.quote.items.forEach(element => {
+                const object = cartItems.find(one => one.id === element.id);
+                element.provider = {
+                  id: object.provider_details.id,
+                  descriptor: object.provider_details.descriptor,
+                  locations: [object.location_details.id],
+                };
+                setTotal(item.message.quote.quote.price.value);
+                const breakupItem = item.message.quote.quote.breakup.find(
+                  one => one.title === 'FULFILLMENT',
+                );
+                breakupItem
+                  ? setFulFillment(breakupItem.price.value)
+                  : setFulFillment(null);
+                element.transaction_id = item.context.transaction_id;
+                element.bpp_id = item.context.bpp_id;
+                list.push(element);
+              });
+            }
           }
         });
 
@@ -85,12 +88,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         if (index > -1) {
           let itemObj = {
             id: item.id,
-            product: {
-              id: item.id,
-              descriptor: item.descriptor,
-              price: item.price,
-              provider_name: item.provider_details.descriptor.name,
-            },
             quantity: {
               count: item.quantity,
             },
@@ -109,12 +106,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 items: [
                   {
                     id: item.id,
-                    product: {
-                      id: item.id,
-                      descriptor: item.descriptor,
-                      price: item.price,
-                      provider_name: item.provider_details.descriptor.name,
-                    },
+
                     quantity: {
                       count: item.quantity,
                     },
@@ -132,11 +124,12 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           providerIdArray.push(item.provider_details.id);
         }
       });
-      console.log(payload);
+
       const {data} = await postData(`${BASE_URL}${GET_QUOTE}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
       let messageIds = [];
+
       data.forEach(item => {
         if (item.message.ack.status === 'ACK') {
           messageIds.push(item.context.message_id);

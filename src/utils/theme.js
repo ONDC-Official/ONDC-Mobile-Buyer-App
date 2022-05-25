@@ -9,6 +9,6 @@ export const theme = {
     white: '#ffffff',
     cancelledBackground: '#FFE8E7',
     statusBackground: '#E9F1F8',
-    tabColor: '#606161'
+    tabColor: '#606161',
   },
 };

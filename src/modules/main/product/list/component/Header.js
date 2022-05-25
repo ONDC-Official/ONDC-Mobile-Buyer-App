@@ -22,7 +22,6 @@ const category = strings('main.product.category_label');
 const filter = strings('main.product.filters.filter');
 const detectLocation = strings('main.product.detecting_location');
 
-//TODO: i18n missing
 /**
  * Component to header on products screen
  * @param theme
@@ -61,7 +60,9 @@ const Header = ({
       <View style={styles.locationContainer}>
         {locationInProgress ? (
           <View style={styles.subContainer}>
-            <Text>Detecting location {'    '}</Text>
+            <Text>
+              {detectLocation} {'    '}
+            </Text>
             <ActivityIndicator
               showLoading={locationInProgress}
               color={colors.accentColor}

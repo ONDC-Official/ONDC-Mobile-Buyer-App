@@ -19,6 +19,7 @@ import {useDispatch} from 'react-redux';
 import {saveProducts} from '../../../../../redux/product/actions';
 import {strings} from '../../../../../locales/i18n';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
+import ClearButton from '../../../../../components/button/ClearButton';
 
 const applyTitle = strings('main.product.filters.apply_title');
 const close = strings('main.product.filters.close');
@@ -136,25 +137,17 @@ const Filters = ({theme, setCount, filters, closeRBSheet}) => {
     <ScrollView>
       <View>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.applyButton} onPress={onApply}>
-            <Text style={[styles.text, {color: colors.accentColor}]}>
-              {applyTitle}
-              {'  '}
-            </Text>
-            {requestInProgress && (
-              <ActivityIndicator
-                show={requestInProgress}
-                color={colors.accentColor}
-                size={14}
-                style={styles.activityIndicator}
-              />
-            )}
-          </TouchableOpacity>
-          <TouchableOpacity onPress={closeRBSheet}>
-            <Text style={[styles.text, {color: colors.accentColor}]}>
-              {close}
-            </Text>
-          </TouchableOpacity>
+          <ClearButton
+            title={applyTitle}
+            loading={requestInProgress}
+            onPress={onApply}
+            textColor={colors.accentColor}
+          />
+          <ClearButton
+            title={close}
+            onPress={closeRBSheet}
+            textColor={colors.accentColor}
+          />
         </View>
         <Divider />
 
@@ -162,7 +155,7 @@ const Filters = ({theme, setCount, filters, closeRBSheet}) => {
           <View style={styles.container}>
             {filters.providers && filters.providers.length > 0 && (
               <>
-                <Text style={[styles.text]}>{provider}</Text>
+                <Text style={[styles.price]}>{provider}</Text>
 
                 {filters.providers.map(item => {
                   const index = providers.findIndex(one => one === item.id);
@@ -172,6 +165,13 @@ const Filters = ({theme, setCount, filters, closeRBSheet}) => {
                       title={item.name}
                       checked={index > -1}
                       onPress={() => onProviderCheckBoxPress(item, index)}
+                      containerStyle={[
+                        styles.containerStyle,
+                        {
+                          backgroundColor: colors.backgroundColor,
+                        },
+                      ]}
+                      wrapperStyle={styles.wrapperStyle}
                     />
                   );
                 })}
@@ -179,7 +179,7 @@ const Filters = ({theme, setCount, filters, closeRBSheet}) => {
             )}
             {filters.categories && filters.categories.length > 0 && (
               <>
-                <Text style={[styles.text]}>{category}</Text>
+                <Text style={[styles.price]}>{category}</Text>
                 {filters.categories.map(item => {
                   const index = categories.findIndex(one => one === item.id);
                   return (
@@ -304,7 +304,7 @@ export default withTheme(Filters);
 
 const styles = StyleSheet.create({
   header: {
-    padding: 10,
+    padding: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -337,4 +337,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   activityIndicator: {marginBottom: 8},
+  wrapperStyle: {margin: 0},
+  containerStyle: {
+    borderWidth: 0,
+    padding: 0,
+    marginHorizontal: 0,
+  },
 });
