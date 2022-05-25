@@ -19,6 +19,8 @@ const search = strings('main.product.search_label');
 const product = strings('main.product.product_label');
 const provider = strings('main.product.provider_label');
 const category = strings('main.product.category_label');
+const filter = strings('main.product.filters.filter');
+const detectLocation = strings('main.product.detecting_location');
 
 //TODO: i18n missing
 /**
@@ -41,6 +43,7 @@ const Header = ({
   locationInProgress,
   location,
   filters,
+  setCount,
 }) => {
   const {colors} = theme;
 
@@ -136,7 +139,7 @@ const Header = ({
             style={{color: colors.accentColor}}
             activeOpacity={0.7}
             onPress={openRBSheet}>
-            Filter <Icon name="filter" size={14} />
+            {filter} <Icon name="filter" size={14} />
           </Text>
         </TouchableOpacity>
         <RBSheet
@@ -145,7 +148,11 @@ const Header = ({
           customStyles={{
             container: styles.rbSheet,
           }}>
-          <Filters closeRBSheet={closeRBSheet} filters={filters} />
+          <Filters
+            closeRBSheet={closeRBSheet}
+            filters={filters}
+            setCount={setCount}
+          />
         </RBSheet>
       </View>
     </View>

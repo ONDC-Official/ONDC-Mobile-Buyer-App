@@ -43,26 +43,24 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         let list = [];
         data.forEach(item => {
           if (!item.error) {
-            if (item.context.bpp_id) {
-              item.message.quote.items.forEach(element => {
-                const object = cartItems.find(one => one.id === element.id);
-                element.provider = {
-                  id: object.provider_details.id,
-                  descriptor: object.provider_details.descriptor,
-                  locations: [object.location_details.id],
-                };
-                setTotal(item.message.quote.quote.price.value);
-                const breakupItem = item.message.quote.quote.breakup.find(
-                  one => one.title === 'FULFILLMENT',
-                );
-                breakupItem
-                  ? setFulFillment(breakupItem.price.value)
-                  : setFulFillment(null);
-                element.transaction_id = item.context.transaction_id;
-                element.bpp_id = item.context.bpp_id;
-                list.push(element);
-              });
-            }
+            item.message.quote.items.forEach(element => {
+              const object = cartItems.find(one => one.id === element.id);
+              element.provider = {
+                id: object.provider_details.id,
+                descriptor: object.provider_details.descriptor,
+                locations: [object.location_details.id],
+              };
+              setTotal(item.message.quote.quote.price.value);
+              const breakupItem = item.message.quote.quote.breakup.find(
+                one => one.title === 'FULFILLMENT',
+              );
+              breakupItem
+                ? setFulFillment(breakupItem.price.value)
+                : setFulFillment(null);
+              element.transaction_id = item.context.transaction_id;
+              element.bpp_id = item.context.bpp_id;
+              list.push(element);
+            });
           }
         });
 
@@ -134,6 +132,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           providerIdArray.push(item.provider_details.id);
         }
       });
+      console.log(payload);
       const {data} = await postData(`${BASE_URL}${GET_QUOTE}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });

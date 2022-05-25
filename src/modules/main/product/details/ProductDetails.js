@@ -8,7 +8,6 @@ import Details from './Details';
 
 const image = require('../../../../assets/ondc.png');
 
-//TODO: Why we are using inline styling here?
 const ProductDetails = ({theme, route: {params}}) => {
   const {colors} = theme;
   const {item} = params;

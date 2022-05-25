@@ -1,5 +1,5 @@
 import {useContext, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {saveProducts} from '../../../../redux/product/actions';
@@ -14,6 +14,8 @@ export default () => {
   const {handleApiError} = useNetworkErrorHandling();
   const [pageNumber, setPageNumber] = useState(1);
   const [requestInProgress, setRequestInProgress] = useState(false);
+  const [count, setCount] = useState(null);
+  const {products} = useSelector(({productReducer}) => productReducer);
 
   const options = {
     headers: {
@@ -21,25 +23,17 @@ export default () => {
     },
   };
 
-  const getProducts = (id, transactionId, closeRBSheet, filters) => {
+  const getProducts = (id, transactionId) => {
     let getList = setInterval(async () => {
       try {
         setRequestInProgress(true);
-        let params;
-        if (filters) {
-          let filterParams = [];
-          Object.keys(filters).forEach(key =>
-            filterParams.push(`&${key}=${filters[key]}`),
-          );
-          params = filterParams.toString().replace(/,/g, '');
-        }
-        const url = filters
-          ? `${BASE_URL}${GET_PRODUCTS}${id}${params}`
-          : `${BASE_URL}${GET_PRODUCTS}${id}`;
+
+        const url = `${BASE_URL}${GET_PRODUCTS}${id}`;
         const {data} = await getData(
           `${url}&pageNumber=${pageNumber}&limit=10`,
           options,
         );
+        setCount(data.message.count);
 
         const productsList = data.message.catalogs.map(item => {
           return Object.assign({}, item, {
@@ -49,6 +43,7 @@ export default () => {
         });
 
         dispatch(saveProducts(productsList));
+        setPageNumber(pageNumber + 1);
       } catch (error) {
         handleApiError(error);
       }
@@ -57,9 +52,8 @@ export default () => {
     setTimeout(() => {
       clearInterval(getList);
       setRequestInProgress(false);
-      closeRBSheet();
     }, 10000);
   };
 
-  return {getProducts, requestInProgress, setRequestInProgress};
+  return {getProducts, requestInProgress, setRequestInProgress, count};
 };

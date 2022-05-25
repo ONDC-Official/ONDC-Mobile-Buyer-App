@@ -68,7 +68,25 @@
       "ok_label": "Ok",
       "cancel_label": "Cancel",
       "please_select_location": "Please select location",
-      "add_to_cart": "Added to cart"
+      "add_to_cart": "Added to cart",
+      "detecting_location":"Detecting Location",
+      "product_details":{
+        "id":"Id:",
+        "name":"Name:",
+        "bpp_id":"Bpp Id:",
+        "provider":"Provider:",
+        "title":"Product Details"
+      },
+      "filters":{
+        "filter":"Filter",
+        "apply_title":"APPLY",
+        "close":"CLOSE",
+        "no_filters_message":"No filters available",
+        "providers":"Providers",
+        "categories":"Categories",
+        "sorting":"Sorting",
+        "price_range":"Price Range"
+      }
     },
     "more": {
       "profile": "Profile",

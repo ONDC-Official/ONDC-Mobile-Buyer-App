@@ -1,19 +1,24 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-elements';
+import {strings} from '../../../../locales/i18n';
 
-//TODO: i18n missing
+const id = strings('main.product.product_details.id');
+const name = strings('main.product.product_details.name');
+const bpp_id = strings('main.product.product_details.bpp_id');
+const provider = strings('main.product.product_details.provider');
+const title = strings('main.product.product_details.title');
 
 const Details = ({item}) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Product Details</Text>
+      <Text style={styles.heading}>{title}</Text>
       <View style={styles.productDetailsContainer}>
         <View style={styles.productDetailsTitleContainer}>
-          <Text style={styles.title}>Id</Text>
-          <Text style={styles.title}>Name</Text>
-          <Text style={styles.title}>Bpp Id</Text>
-          <Text style={styles.title}>Provider</Text>
+          <Text style={styles.title}>{id}</Text>
+          <Text style={styles.title}>{name}</Text>
+          <Text style={styles.title}>{bpp_id}</Text>
+          <Text style={styles.title}>{provider}</Text>
         </View>
         <View>
           <Text style={styles.title}>{item.id}</Text>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -9,29 +9,49 @@ import {
 import {CheckBox, Divider, Text, withTheme} from 'react-native-elements';
 import RangeSlider from 'rn-range-slider';
 import {appStyles} from '../../../../../styles/styles';
+import {BASE_URL, GET_PRODUCTS} from '../../../../../utils/apiUtilities';
 import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 import {cleanFormData} from '../../../../../utils/utils';
-import useProductList from '../../hooks/useProductList';
 import FilterCard from './SortOptionSelector';
+import {Context as AuthContext} from '../../../../../context/Auth';
+import {getData} from '../../../../../utils/api';
+import {useDispatch} from 'react-redux';
+import {saveProducts} from '../../../../../redux/product/actions';
+import {strings} from '../../../../../locales/i18n';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 
-//TODO: i18n is missing again.
+const applyTitle = strings('main.product.filters.apply_title');
+const close = strings('main.product.filters.close');
+const noFiltersMessage = strings('main.product.filters.no_filters_message');
+const provider = strings('main.product.filters.providers');
+const category = strings('main.product.filters.categories');
+const priceRange = strings('main.product.filters.price_range');
+const sorting = strings('main.product.filters.sorting');
 
-const Filters = ({theme, filters, closeRBSheet}) => {
+const Filters = ({theme, setCount, filters, closeRBSheet}) => {
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
   const [providers, setProviders] = useState([]);
-
+  const dispatch = useDispatch();
+  const {
+    state: {token},
+  } = useContext(AuthContext);
   const [selectedSortingOption, setSelectedSortingOption] = useState(
     PRODUCT_SORTING.RATINGS_LOW_TO_HIGH,
   );
   const [categories, setCategories] = useState([]);
-  const {getProducts, requestInProgress, setRequestInProgress} =
-    useProductList();
+  const [requestInProgress, setRequestInProgress] = useState(false);
+  const options = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const {handleApiError} = useNetworkErrorHandling();
 
-  const onApply = () => {
+  const onApply = async () => {
     setRequestInProgress(true);
-    let sortField = 'desc';
-    let sortOrder = 'price';
+    let sortField = 'price';
+    let sortOrder = 'desc';
 
     switch (selectedSortingOption) {
       case PRODUCT_SORTING.RATINGS_HIGH_TO_LOW:
@@ -49,23 +69,47 @@ const Filters = ({theme, filters, closeRBSheet}) => {
         sortField = 'price';
         break;
     }
-    console.log(providers.toString());
 
     const filterData = cleanFormData({
-      providerIds: providers.toString(),
       sortField: sortField,
       sortOrder: sortOrder,
-      categoryIds: categories.toString(),
-      priceMin: min,
-      priceMax: max,
+      priceMin: filters.minPrice ? min : null,
+      priceMax: filters.maxPrice ? max : null,
     });
 
-    // getProducts(
-    //   filters.message_id,
-    //   filters.transaction_id,
-    //   closeRBSheet,
-    //   filterData,
-    // );
+    let params;
+
+    let filterParams = [];
+    Object.keys(filterData).forEach(key =>
+      filterParams.push(`&${key}=${filterData[key]}`),
+    );
+    params = filterParams.toString().replace(/,/g, '');
+
+    params =
+      providers && providers.length > 0
+        ? params + `&providerIds=${providers.toString()}`
+        : params;
+    params =
+      categories && categories.length > 0
+        ? params + `&categoryIds=${categories.toString()}`
+        : params;
+
+    const url = `${BASE_URL}${GET_PRODUCTS}${filters.message_id}${params}`;
+    try {
+      const {data} = await getData(`${url}`, options);
+      setCount(data.message.count);
+      const productsList = data.message.catalogs.map(item => {
+        return Object.assign({}, item, {
+          quantity: 0,
+          transaction_id: filters.transaction_id,
+        });
+      });
+
+      dispatch(saveProducts(productsList));
+      closeRBSheet();
+    } catch (e) {
+      handleApiError(e);
+    }
   };
 
   const onProviderCheckBoxPress = (item, index) => {
@@ -94,7 +138,8 @@ const Filters = ({theme, filters, closeRBSheet}) => {
         <View style={styles.header}>
           <TouchableOpacity style={styles.applyButton} onPress={onApply}>
             <Text style={[styles.text, {color: colors.accentColor}]}>
-              APPLY{'  '}
+              {applyTitle}
+              {'  '}
             </Text>
             {requestInProgress && (
               <ActivityIndicator
@@ -107,7 +152,7 @@ const Filters = ({theme, filters, closeRBSheet}) => {
           </TouchableOpacity>
           <TouchableOpacity onPress={closeRBSheet}>
             <Text style={[styles.text, {color: colors.accentColor}]}>
-              CLOSE
+              {close}
             </Text>
           </TouchableOpacity>
         </View>
@@ -117,7 +162,7 @@ const Filters = ({theme, filters, closeRBSheet}) => {
           <View style={styles.container}>
             {filters.providers && filters.providers.length > 0 && (
               <>
-                <Text style={[styles.text]}>Providers</Text>
+                <Text style={[styles.text]}>{provider}</Text>
 
                 {filters.providers.map(item => {
                   const index = providers.findIndex(one => one === item.id);
@@ -134,7 +179,7 @@ const Filters = ({theme, filters, closeRBSheet}) => {
             )}
             {filters.categories && filters.categories.length > 0 && (
               <>
-                <Text style={[styles.text]}>Categories</Text>
+                <Text style={[styles.text]}>{category}</Text>
                 {filters.categories.map(item => {
                   const index = categories.findIndex(one => one === item.id);
                   return (
@@ -149,63 +194,67 @@ const Filters = ({theme, filters, closeRBSheet}) => {
               </>
             )}
 
-            <Text style={styles.price}>Price Range</Text>
-            <View style={styles.sliderContainer}>
-              <Text style={styles.amount}>
-                ₹{min} - ₹{max}
-              </Text>
-              <RangeSlider
-                style={[styles.rangSlider]}
-                gravity={'center'}
-                min={filters.minPrice}
-                max={filters.maxPrice}
-                step={20}
-                floatingLabel={true}
-                onValueChanged={(low, high, fromUser) => {
-                  setMin(low);
-                  setMax(high);
-                }}
-                renderThumb={value => {
-                  return (
-                    <View
-                      style={[
-                        styles.thumb,
-                        {
-                          borderColor: colors.accentColor,
-                          backgroundColor: colors.white,
-                        },
-                      ]}
-                    />
-                  );
-                }}
-                renderRail={() => {
-                  return (
-                    <View
-                      style={[
-                        appStyles.container,
-                        styles.rail,
-                        {
-                          backgroundColor: colors.black,
-                        },
-                      ]}
-                    />
-                  );
-                }}
-                renderNotch={value => {}}
-                renderLabel={value => {}}
-                renderRailSelected={value => {
-                  return (
-                    <View
-                      style={[
-                        styles.railSelected,
-                        {backgroundColor: colors.accentColor},
-                      ]}
-                    />
-                  );
-                }}
-              />
-            </View>
-            <Text style={styles.price}>Sorting</Text>
+            {filters.minPrice && filters.maxPrice && (
+              <>
+                <Text style={styles.price}>{priceRange}</Text>
+                <View style={styles.sliderContainer}>
+                  <Text style={styles.amount}>
+                    ₹{min} - ₹{max}
+                  </Text>
+                  <RangeSlider
+                    style={[styles.rangSlider]}
+                    gravity={'center'}
+                    min={filters.minPrice}
+                    max={filters.maxPrice}
+                    step={20}
+                    floatingLabel={true}
+                    onValueChanged={(low, high, fromUser) => {
+                      setMin(low);
+                      setMax(high);
+                    }}
+                    renderThumb={value => {
+                      return (
+                        <View
+                          style={[
+                            styles.thumb,
+                            {
+                              borderColor: colors.accentColor,
+                              backgroundColor: colors.white,
+                            },
+                          ]}
+                        />
+                      );
+                    }}
+                    renderRail={() => {
+                      return (
+                        <View
+                          style={[
+                            appStyles.container,
+                            styles.rail,
+                            {
+                              backgroundColor: colors.black,
+                            },
+                          ]}
+                        />
+                      );
+                    }}
+                    renderNotch={value => {}}
+                    renderLabel={value => {}}
+                    renderRailSelected={value => {
+                      return (
+                        <View
+                          style={[
+                            styles.railSelected,
+                            {backgroundColor: colors.accentColor},
+                          ]}
+                        />
+                      );
+                    }}
+                  />
+                </View>
+              </>
+            )}
+            <Text style={styles.price}>{sorting}</Text>
             <View style={styles.sortContainer}>
               <FilterCard
                 name={PRODUCT_SORTING.RATINGS_HIGH_TO_LOW}
@@ -243,7 +292,7 @@ const Filters = ({theme, filters, closeRBSheet}) => {
           </View>
         ) : (
           <View style={styles.emptyContainer}>
-            <Text>No filters available</Text>
+            <Text>{noFiltersMessage}</Text>
           </View>
         )}
       </View>

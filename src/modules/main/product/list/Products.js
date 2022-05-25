@@ -12,10 +12,11 @@ import {colors, withTheme} from 'react-native-elements';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
+import {saveProducts} from '../../../../redux/product/actions';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
 import {
@@ -24,13 +25,14 @@ import {
   GET_LATLONG,
   GET_LOCATION_FROM_LAT_LONG,
   GET_MESSAGE_ID,
+  GET_PRODUCTS,
 } from '../../../../utils/apiUtilities';
 import {SEARCH_QUERY} from '../../../../utils/Constants';
 import {isIOS, skeletonList} from '../../../../utils/utils';
 import EmptyComponent from '../../cart/EmptyComponent';
 import AddressPicker from './component/AddressPicker';
-import useProductList from '../hooks/useProductList';
 import Header from './component/Header';
+import ListFooter from './component/ListFooter';
 import LocationDeniedAlert from './component/LocationDeniedAlert';
 import ProductCard from './component/ProductCard';
 import ProductCardSkeleton from './component/ProductCardSkeleton';
@@ -59,9 +61,12 @@ const Products = ({navigation}) => {
   const [locationInProgress, setLocationInProgress] = useState(false);
   const [filters, setFilters] = useState(null);
 
+  const [requestInProgress, setRequestInProgress] = useState(false);
+  const [count, setCount] = useState(null);
+  const [moreListRequested, setMoreListRequested] = useState(false);
+
   const {products} = useSelector(({productReducer}) => productReducer);
-  const {getProducts, requestInProgress, setRequestInProgress} =
-    useProductList();
+  const dispatch = useDispatch();
 
   const {
     state: {token},
@@ -69,6 +74,9 @@ const Products = ({navigation}) => {
   const {handleApiError} = useNetworkErrorHandling();
 
   const refRBSheet = useRef();
+  const refPageNumber = useRef();
+  const refmessageId = useRef();
+  const refTransactionId = useRef();
 
   const openSheet = () => refRBSheet.current.open();
   const closeSheet = () => refRBSheet.current.close();
@@ -214,6 +222,41 @@ const Products = ({navigation}) => {
     }
   };
 
+  const getProducts = setApiInProgress => {
+    let getList = setInterval(async () => {
+      try {
+        setApiInProgress(true);
+
+        const url = `${BASE_URL}${GET_PRODUCTS}${refmessageId.current}`;
+        const {data} = await getData(
+          `${url}&pageNumber=${refPageNumber.current}&limit=10`,
+          options,
+        );
+        setCount(data.message.count);
+
+        const productsList = data.message.catalogs.map(item => {
+          return Object.assign({}, item, {
+            quantity: 0,
+            transaction_id: refTransactionId.current,
+          });
+        });
+        const newProducts =
+          refPageNumber.current === 1
+            ? productsList
+            : [...products, ...productsList];
+        dispatch(saveProducts(newProducts));
+      } catch (error) {
+        handleApiError(error);
+      }
+    }, 2000);
+
+    setTimeout(() => {
+      clearInterval(getList);
+      setApiInProgress(false);
+      refPageNumber.current = refPageNumber.current + 1;
+    }, 10000);
+  };
+
   /**
    * Function used to get list of requested products
    * @returns {Promise<void>}
@@ -235,7 +278,7 @@ const Products = ({navigation}) => {
     setTimeout(() => {
       clearInterval(getList);
       setRequestInProgress(false);
-    }, 10000);
+    }, 8000);
   };
 
   /**
@@ -260,6 +303,7 @@ const Products = ({navigation}) => {
   const onSearch = async (query, selectedSearchOption, closeRBSheet) => {
     if (longitude && latitude) {
       setRequestInProgress(true);
+      dispatch(saveProducts([]));
 
       let requestParameters = {
         context: {},
@@ -269,6 +313,7 @@ const Products = ({navigation}) => {
           },
         },
       };
+      refPageNumber.current = 1;
 
       try {
         switch (selectedSearchOption) {
@@ -291,22 +336,28 @@ const Products = ({navigation}) => {
           options,
         );
 
-        getProducts(
-          response.data.context.message_id,
-          response.data.context.transaction_id,
-          closeRBSheet,
-        );
+        refmessageId.current = response.data.context.message_id;
+        refTransactionId.current = response.data.context.transaction_id;
+        getProducts(setRequestInProgress);
 
         await getFilter(
           response.data.context.message_id,
           response.data.context.transaction_id,
         );
       } catch (error) {
+        console.log(error);
         handleApiError(error);
         setRequestInProgress(false);
       }
     } else {
       alert(selectLocation);
+    }
+  };
+
+  const loadMoreList = () => {
+    if (count > products.length) {
+      console.log(products.length);
+      getProducts(setMoreListRequested);
     }
   };
 
@@ -344,6 +395,7 @@ const Products = ({navigation}) => {
           locationInProgress={locationInProgress}
           apiInProgress={requestInProgress}
           filters={filters}
+          setCount={setCount}
         />
         <RBSheet
           ref={refRBSheet}
@@ -373,11 +425,14 @@ const Products = ({navigation}) => {
               />
             );
           }}
+          onEndReachedThreshold={0.2}
+          onEndReached={loadMoreList}
           contentContainerStyle={
             listData.length > 0
               ? styles.contentContainerStyle
               : appStyles.container
           }
+          ListFooterComponent={<ListFooter moreRequested={moreListRequested} />}
         />
       </View>
     </SafeAreaView>

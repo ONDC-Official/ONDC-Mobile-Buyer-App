@@ -84,7 +84,7 @@ const isObject = obj => {
 export const cleanFormData = initialObject => {
   const object = Object.assign({}, initialObject);
   Object.keys(object).forEach(key => {
-    if (object[key] == null || object[key] === '') {
+    if (object[key] == null || object[key] === '' || object[key].length === 0) {
       delete object[key];
     } else {
       if (isObject(object[key])) {

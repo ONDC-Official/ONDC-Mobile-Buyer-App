@@ -48,8 +48,8 @@ export const ONDC_POLICY = 'https://ondc.org/index.html';
 export const CONTACT_US = 'https://ondc.org/contactus.html';
 
 export const PRODUCT_SORTING = {
-  RATINGS_HIGH_TO_LOW: 'Rating: high to low',
-  RATINGS_LOW_TO_HIGH: 'Ratings: Low to high',
-  PRICE_HIGH_TO_LOW: 'Price: High to low',
-  PRICE_LOW_TO_HIGH: 'Price: Low to high',
+  RATINGS_HIGH_TO_LOW: 'Rating: High To Low',
+  RATINGS_LOW_TO_HIGH: 'Ratings: Low To High',
+  PRICE_HIGH_TO_LOW: 'Price: High To Low',
+  PRICE_LOW_TO_HIGH: 'Price: Low To High',
 };
