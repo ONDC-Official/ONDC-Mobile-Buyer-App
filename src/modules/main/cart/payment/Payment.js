@@ -1,6 +1,13 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {BackHandler, DeviceEventEmitter, FlatList, SafeAreaView, StyleSheet, View,} from 'react-native';
+import {
+  BackHandler,
+  DeviceEventEmitter,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Config from 'react-native-config';
 import {Card, CheckBox, Divider} from 'react-native-elements';
 import {Text, withTheme} from 'react-native-elements';
@@ -489,9 +496,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={heading} navigation={navigation}/>
+        <Header title={heading} navigation={navigation} />
         {initializeOrderRequested ? (
-          <PaymentSkeleton/>
+          <PaymentSkeleton />
         ) : (
           <>
             <View style={styles.container}>
@@ -507,7 +514,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                           <Text>{element.descriptor.name}</Text>
                           <Text>₹{element.price.value * element.quantity}</Text>
                         </View>
-                        <Divider/>
+                        <Divider />
                       </>
                     ) : null;
                   }}
@@ -518,7 +525,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                       <Text>FULFILLMENT</Text>
                       <Text style={styles.fulfillment}>₹{fulFillment}</Text>
                     </View>
-                    <Divider/>
+                    <Divider />
                   </>
                 )}
 

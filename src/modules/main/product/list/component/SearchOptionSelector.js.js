@@ -13,8 +13,8 @@ import {appStyles} from '../../../../../styles/styles';
  * @constructor
  * @returns {JSX.Element}
  */
-//TODO: Name is not explanatory
-const FilterButton = ({theme, card, name, selectedCard, onPress}) => {
+
+const SearchOptionSelector = ({theme, card, name, selectedCard, onPress}) => {
   const {colors} = theme;
   return (
     <View style={appStyles.container}>
@@ -42,7 +42,7 @@ const FilterButton = ({theme, card, name, selectedCard, onPress}) => {
   );
 };
 
-export default withTheme(FilterButton);
+export default withTheme(SearchOptionSelector);
 
 const styles = StyleSheet.create({
   container: {

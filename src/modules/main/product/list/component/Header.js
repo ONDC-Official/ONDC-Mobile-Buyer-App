@@ -1,12 +1,18 @@
 import React, {useRef, useState} from 'react';
-import {ActivityIndicator, Dimensions, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  ActivityIndicator,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SearchBar, Text, withTheme} from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {strings} from '../../../../../locales/i18n';
 import {appStyles} from '../../../../../styles/styles';
 import {SEARCH_QUERY} from '../../../../../utils/Constants';
-import FilterButton from './FilterButton';
+import FilterButton from './SearchOptionSelector.js';
 import Filters from './Filters';
 
 const search = strings('main.product.search_label');
@@ -28,14 +34,14 @@ const category = strings('main.product.category_label');
  * @returns {JSX.Element}
  */
 const Header = ({
-                  theme,
-                  openSheet,
-                  apiInProgress,
-                  onSearch,
-                  locationInProgress,
-                  location,
-                  filters,
-                }) => {
+  theme,
+  openSheet,
+  apiInProgress,
+  onSearch,
+  locationInProgress,
+  location,
+  filters,
+}) => {
   const {colors} = theme;
 
   const [item, setItem] = useState(null);
@@ -61,10 +67,10 @@ const Header = ({
           </View>
         ) : (
           <TouchableOpacity style={styles.subContainer} onPress={openSheet}>
-            <Icon name="map-marker" size={20} color={colors.accentColor}/>
+            <Icon name="map-marker" size={20} color={colors.accentColor} />
             <View style={styles.textContainer}>
               <Text style={{color: colors.accentColor}}>
-                {location} <Icon name="angle-down" size={14}/>
+                {location} <Icon name="angle-down" size={14} />
               </Text>
             </View>
           </TouchableOpacity>
@@ -79,7 +85,7 @@ const Header = ({
           selectedCard={selectedCard}
           card={SEARCH_QUERY.PRODUCT}
         />
-        <View style={styles.space}/>
+        <View style={styles.space} />
         <FilterButton
           name={provider}
           onPress={() => {
@@ -88,7 +94,7 @@ const Header = ({
           selectedCard={selectedCard}
           card={SEARCH_QUERY.PROVIDER}
         />
-        <View style={styles.space}/>
+        <View style={styles.space} />
 
         <FilterButton
           name={category}
@@ -130,7 +136,7 @@ const Header = ({
             style={{color: colors.accentColor}}
             activeOpacity={0.7}
             onPress={openRBSheet}>
-            Filter <Icon name="filter" size={14}/>
+            Filter <Icon name="filter" size={14} />
           </Text>
         </TouchableOpacity>
         <RBSheet
@@ -139,7 +145,7 @@ const Header = ({
           customStyles={{
             container: styles.rbSheet,
           }}>
-          <Filters closeRBSheet={closeRBSheet} filters={filters}/>
+          <Filters closeRBSheet={closeRBSheet} filters={filters} />
         </RBSheet>
       </View>
     </View>

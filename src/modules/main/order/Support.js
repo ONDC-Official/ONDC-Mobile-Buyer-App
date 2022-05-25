@@ -91,13 +91,13 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
               .catch(() => {});
           }}>
           {({
-              values,
-              errors,
-              handleChange,
-              handleBlur,
-              touched,
-              handleSubmit,
-            }) => {
+            values,
+            errors,
+            handleChange,
+            handleBlur,
+            touched,
+            handleSubmit,
+          }) => {
             return (
               <>
                 <TouchableOpacity

@@ -11,7 +11,8 @@ import Products from '../product/list/Products';
 
 const Tab = createBottomTabNavigator();
 
-const tabIconColor = (focused, highlightedColor, tabColor) => focused ? highlightedColor : tabColor;
+const tabIconColor = (focused, highlightedColor, tabColor) =>
+  focused ? highlightedColor : tabColor;
 
 const Dashboard = () => {
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
@@ -26,9 +27,10 @@ const Dashboard = () => {
   );
 
   return (
-    <Tab.Navigator screenOptions={{
-      tabBarStyle:  { height: 60 }}
-    }>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {height: 60},
+      }}>
       <Tab.Screen
         name="Products"
         component={Products}
@@ -39,7 +41,11 @@ const Dashboard = () => {
               <Icon
                 name="basket"
                 size={24}
-                color={tabIconColor(tabInfo.focused, theme.colors.accentColor, theme.colors.tabColor)}
+                color={tabIconColor(
+                  tabInfo.focused,
+                  theme.colors.accentColor,
+                  theme.colors.tabColor,
+                )}
               />
             );
           },
@@ -56,13 +62,21 @@ const Dashboard = () => {
                 type="ionicon"
                 name="cart"
                 size={24}
-                color={tabIconColor(tabInfo.focused, theme.colors.accentColor, theme.colors.tabColor)}
+                color={tabIconColor(
+                  tabInfo.focused,
+                  theme.colors.accentColor,
+                  theme.colors.tabColor,
+                )}
               />
             ) : (
               <Icon
                 name="cart"
                 size={24}
-                color={tabIconColor(tabInfo.focused, theme.colors.accentColor, theme.colors.tabColor)}
+                color={tabIconColor(
+                  tabInfo.focused,
+                  theme.colors.accentColor,
+                  theme.colors.tabColor,
+                )}
               />
             );
           },
@@ -78,7 +92,11 @@ const Dashboard = () => {
               <Icon
                 name="clipboard-edit"
                 size={24}
-                color={tabIconColor(tabInfo.focused, theme.colors.accentColor, theme.colors.tabColor)}
+                color={tabIconColor(
+                  tabInfo.focused,
+                  theme.colors.accentColor,
+                  theme.colors.tabColor,
+                )}
               />
             );
           },
@@ -94,7 +112,11 @@ const Dashboard = () => {
               <Icon
                 name="dots-horizontal-circle"
                 size={24}
-                color={tabIconColor(tabInfo.focused, theme.colors.accentColor, theme.colors.tabColor)}
+                color={tabIconColor(
+                  tabInfo.focused,
+                  theme.colors.accentColor,
+                  theme.colors.tabColor,
+                )}
               />
             );
           },

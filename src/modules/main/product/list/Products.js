@@ -1,6 +1,12 @@
 import Geolocation from '@react-native-community/geolocation';
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {Dimensions, FlatList, PermissionsAndroid, StyleSheet, View,} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  PermissionsAndroid,
+  StyleSheet,
+  View,
+} from 'react-native';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import {colors, withTheme} from 'react-native-elements';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
@@ -12,7 +18,13 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {BASE_URL, FILTER, GET_LATLONG, GET_LOCATION_FROM_LAT_LONG, GET_MESSAGE_ID,} from '../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  FILTER,
+  GET_LATLONG,
+  GET_LOCATION_FROM_LAT_LONG,
+  GET_MESSAGE_ID,
+} from '../../../../utils/apiUtilities';
 import {SEARCH_QUERY} from '../../../../utils/Constants';
 import {isIOS, skeletonList} from '../../../../utils/utils';
 import EmptyComponent from '../../cart/EmptyComponent';
@@ -74,7 +86,7 @@ const Products = ({navigation}) => {
    */
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ProductCardSkeleton item={item}/>
+      <ProductCardSkeleton item={item} />
     ) : (
       <ProductCard
         item={item}
@@ -262,11 +274,11 @@ const Products = ({navigation}) => {
         switch (selectedSearchOption) {
           case SEARCH_QUERY.PRODUCT:
             requestParameters.message.criteria.search_string = query;
-          break;
+            break;
 
           case SEARCH_QUERY.PROVIDER:
             requestParameters.message.criteria.provider_id = query;
-          break;
+            break;
 
           default:
             requestParameters.message.criteria.category_id = query;

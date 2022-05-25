@@ -2,7 +2,12 @@ import React from 'react';
 import {SafeAreaView, ScrollView, View} from 'react-native';
 import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
-import {CONTACT_US, FAQS, ONDC_POLICY, POLICY_URL,} from '../../../../utils/Constants';
+import {
+  CONTACT_US,
+  FAQS,
+  ONDC_POLICY,
+  POLICY_URL,
+} from '../../../../utils/Constants';
 import Header from '../../cart/addressPicker/Header';
 import SupportCard from './SupportCard';
 
@@ -22,7 +27,7 @@ const Support = ({navigation}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={heading} navigation={navigation}/>
+        <Header title={heading} navigation={navigation} />
         <ScrollView>
           <SupportCard
             icon={'bag-checked'}

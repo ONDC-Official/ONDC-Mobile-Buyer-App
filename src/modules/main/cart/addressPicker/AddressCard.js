@@ -17,10 +17,8 @@ const AddressCard = ({item, theme, selectedAddress, setSelectedAddress}) => {
   const {colors} = theme;
 
   const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
-  const separator = ',';
 
   const {building, street, city, state} = item.address;
-  const bldg = building ? building : '';
 
   const onPressHandler = () => setSelectedAddress(item);
 

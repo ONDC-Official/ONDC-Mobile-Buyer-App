@@ -1,34 +1,39 @@
 import React, {useState} from 'react';
-import {ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {CheckBox, Divider, Text, withTheme} from 'react-native-elements';
 import RangeSlider from 'rn-range-slider';
 import {appStyles} from '../../../../../styles/styles';
 import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 import {cleanFormData} from '../../../../../utils/utils';
 import useProductList from '../../hooks/useProductList';
-import FilterCard from './FilterCard';
+import FilterCard from './SortOptionSelector';
 
 //TODO: i18n is missing again.
-//TODO: Categories are also multiselect
+
 const Filters = ({theme, filters, closeRBSheet}) => {
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
   const [providers, setProviders] = useState([]);
-  //TODO: all things are filters, so I dont think this name is relevant
-  const [selectedFilter, setSelectedFilter] = useState(
+
+  const [selectedSortingOption, setSelectedSortingOption] = useState(
     PRODUCT_SORTING.RATINGS_LOW_TO_HIGH,
   );
-  const [category, setCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
   const {getProducts, requestInProgress, setRequestInProgress} =
     useProductList();
 
-  //TODO: What does press handler means? Cant we give the meaning full name which button was pressed?
-  const onPressHandler = () => {
+  const onApply = () => {
     setRequestInProgress(true);
     let sortField = 'desc';
     let sortOrder = 'price';
 
-    switch (selectedFilter) {
+    switch (selectedSortingOption) {
       case PRODUCT_SORTING.RATINGS_HIGH_TO_LOW:
         sortOrder = 'desc';
         sortField = 'rating';
@@ -44,21 +49,42 @@ const Filters = ({theme, filters, closeRBSheet}) => {
         sortField = 'price';
         break;
     }
+    console.log(providers.toString());
 
     const filterData = cleanFormData({
-      providerId: providers.toString(),
+      providerIds: providers.toString(),
       sortField: sortField,
       sortOrder: sortOrder,
-      // priceMin: min,
-      // priceMax: max,
+      categoryIds: categories.toString(),
+      priceMin: min,
+      priceMax: max,
     });
 
-    getProducts(
-      filters.message_id,
-      filters.transaction_id,
-      closeRBSheet,
-      filterData,
-    );
+    // getProducts(
+    //   filters.message_id,
+    //   filters.transaction_id,
+    //   closeRBSheet,
+    //   filterData,
+    // );
+  };
+
+  const onProviderCheckBoxPress = (item, index) => {
+    let providerlist = providers.slice();
+    if (index > -1) {
+      providerlist.splice(index, 1);
+    } else {
+      providerlist.push(item.id);
+    }
+    setProviders(providerlist);
+  };
+  const onCategoryCheckBoxPress = (item, index) => {
+    let categorylist = categories.slice();
+    if (index > -1) {
+      categorylist.splice(index, 1);
+    } else {
+      categorylist.push(item.id);
+    }
+    setCategories(categorylist);
   };
 
   const {colors} = theme;
@@ -66,7 +92,7 @@ const Filters = ({theme, filters, closeRBSheet}) => {
     <ScrollView>
       <View>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.applyButton} onPress={onPressHandler}>
+          <TouchableOpacity style={styles.applyButton} onPress={onApply}>
             <Text style={[styles.text, {color: colors.accentColor}]}>
               APPLY{'  '}
             </Text>
@@ -85,7 +111,7 @@ const Filters = ({theme, filters, closeRBSheet}) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <Divider/>
+        <Divider />
 
         {filters ? (
           <View style={styles.container}>
@@ -100,16 +126,7 @@ const Filters = ({theme, filters, closeRBSheet}) => {
                       key={item.id}
                       title={item.name}
                       checked={index > -1}
-                      onPress={() => {
-                        //TODO: Instead of doing a inline function cant we define the function?
-                        let providerlist = providers.slice();
-                        if (index > -1) {
-                          providerlist.splice(index, 1);
-                        } else {
-                          providerlist.push(item.id);
-                        }
-                        setProviders(providerlist);
-                      }}
+                      onPress={() => onProviderCheckBoxPress(item, index)}
                     />
                   );
                 })}
@@ -118,16 +135,17 @@ const Filters = ({theme, filters, closeRBSheet}) => {
             {filters.categories && filters.categories.length > 0 && (
               <>
                 <Text style={[styles.text]}>Categories</Text>
-                {filters.categories.map(item => (
-                  <CheckBox
-                    key={item.id}
-                    title={item.name}
-                    checkedIcon="dot-circle-o"
-                    uncheckedIcon="circle-o"
-                    checked={item.id === category}
-                    onPress={() => setCategory(item.id)}
-                  />
-                ))}
+                {filters.categories.map(item => {
+                  const index = categories.findIndex(one => one === item.id);
+                  return (
+                    <CheckBox
+                      key={item.id}
+                      title={item.name}
+                      checked={index > -1}
+                      onPress={() => onCategoryCheckBoxPress(item, index)}
+                    />
+                  );
+                })}
               </>
             )}
 
@@ -192,33 +210,33 @@ const Filters = ({theme, filters, closeRBSheet}) => {
               <FilterCard
                 name={PRODUCT_SORTING.RATINGS_HIGH_TO_LOW}
                 onPress={() => {
-                  setSelectedFilter(PRODUCT_SORTING.RATINGS_HIGH_TO_LOW);
+                  setSelectedSortingOption(PRODUCT_SORTING.RATINGS_HIGH_TO_LOW);
                 }}
-                selectedFilter={selectedFilter}
+                selectedFilter={selectedSortingOption}
                 card={PRODUCT_SORTING.RATINGS_HIGH_TO_LOW}
               />
               <FilterCard
                 name={PRODUCT_SORTING.RATINGS_LOW_TO_HIGH}
                 onPress={() => {
-                  setSelectedFilter(PRODUCT_SORTING.RATINGS_LOW_TO_HIGH);
+                  setSelectedSortingOption(PRODUCT_SORTING.RATINGS_LOW_TO_HIGH);
                 }}
-                selectedFilter={selectedFilter}
+                selectedFilter={selectedSortingOption}
                 card={PRODUCT_SORTING.RATINGS_LOW_TO_HIGH}
               />
               <FilterCard
                 name={PRODUCT_SORTING.PRICE_HIGH_TO_LOW}
                 onPress={() => {
-                  setSelectedFilter(PRODUCT_SORTING.PRICE_HIGH_TO_LOW);
+                  setSelectedSortingOption(PRODUCT_SORTING.PRICE_HIGH_TO_LOW);
                 }}
-                selectedFilter={selectedFilter}
+                selectedFilter={selectedSortingOption}
                 card={PRODUCT_SORTING.PRICE_HIGH_TO_LOW}
               />
               <FilterCard
                 name={PRODUCT_SORTING.PRICE_LOW_TO_HIGH}
                 onPress={() => {
-                  setSelectedFilter(PRODUCT_SORTING.PRICE_LOW_TO_HIGH);
+                  setSelectedSortingOption(PRODUCT_SORTING.PRICE_LOW_TO_HIGH);
                 }}
-                selectedFilter={selectedFilter}
+                selectedFilter={selectedSortingOption}
                 card={PRODUCT_SORTING.PRICE_LOW_TO_HIGH}
               />
             </View>

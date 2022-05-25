@@ -2,8 +2,7 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 
-//TODO: Name is not explanatory?
-const FilterCard = ({theme, card, selectedFilter, name, onPress}) => {
+const SortOptionSelector = ({theme, card, selectedFilter, name, onPress}) => {
   const {colors} = theme;
 
   let backgroundColor = colors.white;
@@ -26,18 +25,12 @@ const FilterCard = ({theme, card, selectedFilter, name, onPress}) => {
           borderColor,
         },
       ]}>
-      <Text
-        style={[
-          styles.text,
-          {color: textColor},
-        ]}>
-        {name}
-      </Text>
+      <Text style={[styles.text, {color: textColor}]}>{name}</Text>
     </TouchableOpacity>
   );
 };
 
-export default withTheme(FilterCard);
+export default withTheme(SortOptionSelector);
 
 const styles = StyleSheet.create({
   containerStyle: {

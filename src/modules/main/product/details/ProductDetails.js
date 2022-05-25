@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {SliderBox} from 'react-native-image-slider-box';
@@ -17,11 +17,9 @@ const ProductDetails = ({theme, route: {params}}) => {
     <SafeAreaView
       style={[appStyles.container, {backgroundColor: colors.white}]}>
       <View style={[appStyles.container, {backgroundColor: colors.white}]}>
-        <View style={{padding: 10}}>
-          <Text style={{fontSize: 18, fontWeight: '700'}}>
-            {item.descriptor.name}
-          </Text>
-          <Text style={{fontSize: 16}}>{item.provider}</Text>
+        <View style={styles.imageContainer}>
+          <Text style={styles.discriptorName}>{item.descriptor.name}</Text>
+          <Text style={styles.provider}>{item.provider}</Text>
 
           <SliderBox
             ImageComponent={FastImage}
@@ -32,31 +30,41 @@ const ProductDetails = ({theme, route: {params}}) => {
             dotColor={colors.accentColor}
             inactiveDotColor={colors.greyOutline}
             resizeMethod={'resize'}
-            ImageComponentStyle={{
-              width: '100%',
-              marginBottom: 30,
-              backgroundColor: colors.white,
-            }}
-            dotStyle={{
-              width: 12,
-              height: 12,
-              borderRadius: 6,
-            }}
-            paginationBoxStyle={{
-              backgroundColor: colors.white,
-              width: '100%',
-            }}
+            ImageComponentStyle={[
+              styles.imageComponentStyle,
+              {backgroundColor: colors.white},
+            ]}
+            dotStyle={styles.dotStyle}
+            paginationBoxStyle={[
+              styles.paginationBoxStyle,
+              {backgroundColor: colors.white},
+            ]}
           />
-          <Text style={{fontWeight: '700'}}>
+          <Text style={styles.priceContainer}>
             Deal Price: Rs {item.price.value}/-
           </Text>
         </View>
-        <Divider width={4} style={{marginVertical: 10}}/>
-        <Details width={2} style={{marginVertical: 10}} item={item}/>
-        <Divider/>
+        <Divider width={4} style={styles.divider} />
+        <Details width={2} style={styles.divider} item={item} />
+        <Divider />
       </View>
     </SafeAreaView>
   );
 };
 
 export default withTheme(ProductDetails);
+
+const styles = StyleSheet.create({
+  discriptorName: {fontSize: 18, fontWeight: '700'},
+  provider: {fontSize: 16},
+  imageContainer: {padding: 10},
+  priceContainer: {fontWeight: '700'},
+  imageComponentStyle: {width: '100%', marginBottom: 30},
+  dotStyle: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+  },
+  paginationBoxStyle: {width: '100%'},
+  divider: {marginVertical: 10},
+});
