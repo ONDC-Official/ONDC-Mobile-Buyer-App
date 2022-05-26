@@ -1,39 +1,56 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-elements';
 import {strings} from '../../../../locales/i18n';
+import IconField from './IconField';
 
-const id = strings('main.product.product_details.id');
-const name = strings('main.product.product_details.name');
-const bpp_id = strings('main.product.product_details.bpp_id');
-const provider = strings('main.product.product_details.provider');
 const title = strings('main.product.product_details.title');
 
-const Details = ({item}) => {
+const Details = ({item, theme}) => {
+  const {colors} = theme;
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>{title}</Text>
-      <View style={styles.productDetailsContainer}>
-        <View style={styles.productDetailsTitleContainer}>
-          <Text style={styles.title}>{id}</Text>
-          <Text style={styles.title}>{name}</Text>
-          <Text style={styles.title}>{bpp_id}</Text>
-          <Text style={styles.title}>{provider}</Text>
-        </View>
-        <View>
-          <Text style={styles.title}>{item.id}</Text>
-          <Text style={styles.title}>{item.descriptor.name}</Text>
-          <Text style={styles.title}>{item.bpp_details.bpp_id}</Text>
-          <Text style={styles.title}>
-            {item.provider_details.descriptor.name}
-          </Text>
+    <>
+      <View style={[styles.container, styles.productDetailsContainer]}>
+        <IconField name="Returnable" icon="package-variant" />
+        <View style={styles.space} />
+        <IconField name="Cancellable" icon="package-variant-closed" />
+      </View>
+      <View style={styles.container}>
+        <Text style={[styles.heading, {color: colors.gray}]}>{title}</Text>
+        <View style={styles.productDetailsContainer}>
+          <View style={styles.productDetailsTitleContainer}>
+            <Text style={[styles.title, {color: colors.gray}]}>
+              Manufacture Name
+            </Text>
+            <Text style={[styles.title, {color: colors.gray}]}>
+              Net Quantity
+            </Text>
+            <Text style={[styles.title, {color: colors.gray}]}>
+              Manufacturing Date
+            </Text>
+            <Text style={[styles.title, {color: colors.gray}]}>
+              Country of Origin
+            </Text>
+            <Text style={[styles.title, {color: colors.gray}]}>
+              Brand Owner Name
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.value}>
+              {item.provider_details.descriptor.name}
+            </Text>
+            <Text style={styles.value}>10Kg</Text>
+            <Text style={styles.value}>1/1/2022</Text>
+            <Text style={styles.value}>India</Text>
+            <Text style={styles.value}>ONDC</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </>
   );
 };
 
-export default Details;
+export default withTheme(Details);
 
 const styles = StyleSheet.create({
   container: {padding: 10},
@@ -43,5 +60,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   productDetailsTitleContainer: {marginRight: 30},
-  title: {fontSize: 16, marginBottom: 4},
+  title: {fontSize: 14, marginBottom: 4},
+  value: {fontSize: 14, marginBottom: 4, fontWeight: 'bold'},
+  space: {margin: 10},
 });

@@ -352,12 +352,12 @@ const Products = ({navigation}) => {
     }
   };
 
-  const loadMoreList = () => {
-    if (count > products.length) {
-      console.log(products.length);
-      getProducts(setMoreListRequested);
-    }
-  };
+  // const loadMoreList = () => {
+  //   if (count > products.length) {
+  //     console.log(products.length);
+  //     getProducts(setMoreListRequested);
+  //   }
+  // };
 
   useEffect(() => {
     if (location === unKnownLabel) {
@@ -424,7 +424,7 @@ const Products = ({navigation}) => {
             );
           }}
           onEndReachedThreshold={0.2}
-          onEndReached={loadMoreList}
+          // onEndReached={loadMoreList}
           contentContainerStyle={
             listData.length > 0
               ? styles.contentContainerStyle
