@@ -48,9 +48,13 @@ const Header = ({
 
   const [item, setItem] = useState(null);
   const [selectedCard, setSelectedCard] = useState(SEARCH_QUERY.PRODUCT);
+  const [appliedFilters, setAppliedFilters] = useState([]);
   const refRBSheet = useRef();
 
-  const openRBSheet = () => refRBSheet.current.open();
+  const openRBSheet = () => {
+    setAppliedFilters([]);
+    refRBSheet.current.open();
+  };
   const closeRBSheet = () => refRBSheet.current.close();
 
   const onCardSelect = card => setSelectedCard(card);
@@ -127,6 +131,7 @@ const Header = ({
           cancelIcon={false}
           onSubmitEditing={() => {
             if (item !== null && item.trim().length > 2) {
+              setAppliedFilters([]);
               onSearch(item, selectedCard, closeRBSheet);
             }
           }}
@@ -140,7 +145,11 @@ const Header = ({
             style={{color: colors.accentColor}}
             activeOpacity={0.7}
             onPress={openRBSheet}>
-            {filter} <Icon name="filter" size={14} />
+            {filter}
+            {appliedFilters.length > 0
+              ? `(${appliedFilters.length})`
+              : null}{' '}
+            <Icon name="filter" size={14} />
           </Text>
         </TouchableOpacity>
         <RBSheet
@@ -153,6 +162,8 @@ const Header = ({
             closeRBSheet={closeRBSheet}
             filters={filters}
             setCount={setCount}
+            setAppliedFilters={setAppliedFilters}
+            appliedFilters={appliedFilters}
           />
         </RBSheet>
       </View>

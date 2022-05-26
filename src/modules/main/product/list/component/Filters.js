@@ -29,7 +29,14 @@ const category = strings('main.product.filters.categories');
 const priceRange = strings('main.product.filters.price_range');
 const sorting = strings('main.product.filters.sorting');
 
-const Filters = ({theme, setCount, filters, closeRBSheet}) => {
+const Filters = ({
+  theme,
+  setCount,
+  appliedFilters,
+  setAppliedFilters,
+  filters,
+  closeRBSheet,
+}) => {
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
   const [providers, setProviders] = useState([]);
@@ -86,14 +93,19 @@ const Filters = ({theme, setCount, filters, closeRBSheet}) => {
     );
     params = filterParams.toString().replace(/,/g, '');
 
-    params =
-      providers && providers.length > 0
-        ? params + `&providerIds=${providers.toString()}`
-        : params;
-    params =
-      categories && categories.length > 0
-        ? params + `&categoryIds=${categories.toString()}`
-        : params;
+    if (providers && providers.length > 0) {
+      params = params + `&providerIds=${providers.toString()}`;
+      let filteredData = appliedFilters.slice();
+      filteredData.push(providers);
+      setAppliedFilters(filteredData);
+    }
+
+    if (categories && categories.length > 0) {
+      params = params + `&categoryIds=${categories.toString()}`;
+      let filteredData = appliedFilters.slice();
+      filteredData.push(categories);
+      setAppliedFilters(filteredData);
+    }
 
     const url = `${BASE_URL}${GET_PRODUCTS}${filters.message_id}${params}`;
     try {
@@ -152,10 +164,10 @@ const Filters = ({theme, setCount, filters, closeRBSheet}) => {
         <Divider />
 
         {filters ? (
-          <View style={styles.container}>
+          <>
             {filters.providers && filters.providers.length > 0 && (
               <>
-                <Text style={[styles.price]}>{provider}</Text>
+                <Text style={styles.text}>{provider}</Text>
 
                 {filters.providers.map(item => {
                   const index = providers.findIndex(one => one === item.id);
@@ -179,7 +191,7 @@ const Filters = ({theme, setCount, filters, closeRBSheet}) => {
             )}
             {filters.categories && filters.categories.length > 0 && (
               <>
-                <Text style={[styles.price]}>{category}</Text>
+                <Text style={styles.text}>{category}</Text>
                 {filters.categories.map(item => {
                   const index = categories.findIndex(one => one === item.id);
                   return (
@@ -193,103 +205,108 @@ const Filters = ({theme, setCount, filters, closeRBSheet}) => {
                 })}
               </>
             )}
-
-            {filters.minPrice && filters.maxPrice && (
-              <>
-                <Text style={styles.price}>{priceRange}</Text>
-                <View style={styles.sliderContainer}>
-                  <Text style={styles.amount}>
-                    ₹{min} - ₹{max}
-                  </Text>
-                  <RangeSlider
-                    style={[styles.rangSlider]}
-                    gravity={'center'}
-                    min={filters.minPrice}
-                    max={filters.maxPrice}
-                    step={20}
-                    floatingLabel={true}
-                    onValueChanged={(low, high, fromUser) => {
-                      setMin(low);
-                      setMax(high);
-                    }}
-                    renderThumb={value => {
-                      return (
-                        <View
-                          style={[
-                            styles.thumb,
-                            {
-                              borderColor: colors.accentColor,
-                              backgroundColor: colors.white,
-                            },
-                          ]}
-                        />
-                      );
-                    }}
-                    renderRail={() => {
-                      return (
-                        <View
-                          style={[
-                            appStyles.container,
-                            styles.rail,
-                            {
-                              backgroundColor: colors.black,
-                            },
-                          ]}
-                        />
-                      );
-                    }}
-                    renderNotch={value => {}}
-                    renderLabel={value => {}}
-                    renderRailSelected={value => {
-                      return (
-                        <View
-                          style={[
-                            styles.railSelected,
-                            {backgroundColor: colors.accentColor},
-                          ]}
-                        />
-                      );
-                    }}
-                  />
-                </View>
-              </>
-            )}
-            <Text style={styles.price}>{sorting}</Text>
-            <View style={styles.sortContainer}>
-              <FilterCard
-                name={PRODUCT_SORTING.RATINGS_HIGH_TO_LOW}
-                onPress={() => {
-                  setSelectedSortingOption(PRODUCT_SORTING.RATINGS_HIGH_TO_LOW);
-                }}
-                selectedFilter={selectedSortingOption}
-                card={PRODUCT_SORTING.RATINGS_HIGH_TO_LOW}
-              />
-              <FilterCard
-                name={PRODUCT_SORTING.RATINGS_LOW_TO_HIGH}
-                onPress={() => {
-                  setSelectedSortingOption(PRODUCT_SORTING.RATINGS_LOW_TO_HIGH);
-                }}
-                selectedFilter={selectedSortingOption}
-                card={PRODUCT_SORTING.RATINGS_LOW_TO_HIGH}
-              />
-              <FilterCard
-                name={PRODUCT_SORTING.PRICE_HIGH_TO_LOW}
-                onPress={() => {
-                  setSelectedSortingOption(PRODUCT_SORTING.PRICE_HIGH_TO_LOW);
-                }}
-                selectedFilter={selectedSortingOption}
-                card={PRODUCT_SORTING.PRICE_HIGH_TO_LOW}
-              />
-              <FilterCard
-                name={PRODUCT_SORTING.PRICE_LOW_TO_HIGH}
-                onPress={() => {
-                  setSelectedSortingOption(PRODUCT_SORTING.PRICE_LOW_TO_HIGH);
-                }}
-                selectedFilter={selectedSortingOption}
-                card={PRODUCT_SORTING.PRICE_LOW_TO_HIGH}
-              />
+            <View style={styles.container}>
+              {filters.minPrice && filters.maxPrice && (
+                <>
+                  <Text style={styles.price}>{priceRange}</Text>
+                  <View style={styles.sliderContainer}>
+                    <Text style={styles.amount}>
+                      ₹{min} - ₹{max}
+                    </Text>
+                    <RangeSlider
+                      style={[styles.rangSlider]}
+                      gravity={'center'}
+                      min={filters.minPrice}
+                      max={filters.maxPrice}
+                      step={20}
+                      floatingLabel={true}
+                      onValueChanged={(low, high, fromUser) => {
+                        setMin(low);
+                        setMax(high);
+                      }}
+                      renderThumb={value => {
+                        return (
+                          <View
+                            style={[
+                              styles.thumb,
+                              {
+                                borderColor: colors.accentColor,
+                                backgroundColor: colors.white,
+                              },
+                            ]}
+                          />
+                        );
+                      }}
+                      renderRail={() => {
+                        return (
+                          <View
+                            style={[
+                              appStyles.container,
+                              styles.rail,
+                              {
+                                backgroundColor: colors.black,
+                              },
+                            ]}
+                          />
+                        );
+                      }}
+                      renderNotch={value => {}}
+                      renderLabel={value => {}}
+                      renderRailSelected={value => {
+                        return (
+                          <View
+                            style={[
+                              styles.railSelected,
+                              {backgroundColor: colors.accentColor},
+                            ]}
+                          />
+                        );
+                      }}
+                    />
+                  </View>
+                </>
+              )}
+              <Text style={styles.price}>{sorting}</Text>
+              <View style={styles.sortContainer}>
+                <FilterCard
+                  name={PRODUCT_SORTING.RATINGS_HIGH_TO_LOW}
+                  onPress={() => {
+                    setSelectedSortingOption(
+                      PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
+                    );
+                  }}
+                  selectedFilter={selectedSortingOption}
+                  card={PRODUCT_SORTING.RATINGS_HIGH_TO_LOW}
+                />
+                <FilterCard
+                  name={PRODUCT_SORTING.RATINGS_LOW_TO_HIGH}
+                  onPress={() => {
+                    setSelectedSortingOption(
+                      PRODUCT_SORTING.RATINGS_LOW_TO_HIGH,
+                    );
+                  }}
+                  selectedFilter={selectedSortingOption}
+                  card={PRODUCT_SORTING.RATINGS_LOW_TO_HIGH}
+                />
+                <FilterCard
+                  name={PRODUCT_SORTING.PRICE_HIGH_TO_LOW}
+                  onPress={() => {
+                    setSelectedSortingOption(PRODUCT_SORTING.PRICE_HIGH_TO_LOW);
+                  }}
+                  selectedFilter={selectedSortingOption}
+                  card={PRODUCT_SORTING.PRICE_HIGH_TO_LOW}
+                />
+                <FilterCard
+                  name={PRODUCT_SORTING.PRICE_LOW_TO_HIGH}
+                  onPress={() => {
+                    setSelectedSortingOption(PRODUCT_SORTING.PRICE_LOW_TO_HIGH);
+                  }}
+                  selectedFilter={selectedSortingOption}
+                  card={PRODUCT_SORTING.PRICE_LOW_TO_HIGH}
+                />
+              </View>
             </View>
-          </View>
+          </>
         ) : (
           <View style={styles.emptyContainer}>
             <Text>{noFiltersMessage}</Text>
@@ -309,7 +326,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  text: {fontSize: 16, fontWeight: '700', marginBottom: 8},
+  text: {fontSize: 18, fontWeight: '700', marginVertical: 8, marginLeft: 10},
   container: {padding: 10},
   inputContainer: {
     flexDirection: 'row',

@@ -78,7 +78,7 @@
         "title":"Product Details"
       },
       "filters":{
-        "filter":"Filter",
+        "filter":"Filters",
         "apply_title":"APPLY",
         "close":"CLOSE",
         "no_filters_message":"No filters available",
