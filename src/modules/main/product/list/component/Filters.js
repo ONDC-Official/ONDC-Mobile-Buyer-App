@@ -1,18 +1,12 @@
 import React, {useState, useContext} from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {CheckBox, Divider, Text, withTheme} from 'react-native-elements';
 import RangeSlider from 'rn-range-slider';
 import {appStyles} from '../../../../../styles/styles';
 import {BASE_URL, GET_PRODUCTS} from '../../../../../utils/apiUtilities';
 import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 import {cleanFormData} from '../../../../../utils/utils';
-import FilterCard from './SortOptionSelector';
+
 import {Context as AuthContext} from '../../../../../context/Auth';
 import {getData} from '../../../../../utils/api';
 import {useDispatch} from 'react-redux';
@@ -58,29 +52,8 @@ const Filters = ({
 
   const onApply = async () => {
     setRequestInProgress(true);
-    let sortField = 'price';
-    let sortOrder = 'desc';
-
-    switch (selectedSortingOption) {
-      case PRODUCT_SORTING.RATINGS_HIGH_TO_LOW:
-        sortOrder = 'desc';
-        sortField = 'rating';
-        break;
-
-      case PRODUCT_SORTING.RATINGS_LOW_TO_HIGH:
-        sortOrder = 'asc';
-        sortField = 'rating';
-        break;
-
-      case PRODUCT_SORTING.PRICE_LOW_TO_HIGH:
-        sortOrder = 'asc';
-        sortField = 'price';
-        break;
-    }
 
     const filterData = cleanFormData({
-      sortField: sortField,
-      sortOrder: sortOrder,
       priceMin: filters.minPrice ? min : null,
       priceMax: filters.maxPrice ? max : null,
     });
@@ -266,45 +239,6 @@ const Filters = ({
                   </View>
                 </>
               )}
-              <Text style={styles.price}>{sorting}</Text>
-              <View style={styles.sortContainer}>
-                <FilterCard
-                  name={PRODUCT_SORTING.RATINGS_HIGH_TO_LOW}
-                  onPress={() => {
-                    setSelectedSortingOption(
-                      PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
-                    );
-                  }}
-                  selectedFilter={selectedSortingOption}
-                  card={PRODUCT_SORTING.RATINGS_HIGH_TO_LOW}
-                />
-                <FilterCard
-                  name={PRODUCT_SORTING.RATINGS_LOW_TO_HIGH}
-                  onPress={() => {
-                    setSelectedSortingOption(
-                      PRODUCT_SORTING.RATINGS_LOW_TO_HIGH,
-                    );
-                  }}
-                  selectedFilter={selectedSortingOption}
-                  card={PRODUCT_SORTING.RATINGS_LOW_TO_HIGH}
-                />
-                <FilterCard
-                  name={PRODUCT_SORTING.PRICE_HIGH_TO_LOW}
-                  onPress={() => {
-                    setSelectedSortingOption(PRODUCT_SORTING.PRICE_HIGH_TO_LOW);
-                  }}
-                  selectedFilter={selectedSortingOption}
-                  card={PRODUCT_SORTING.PRICE_HIGH_TO_LOW}
-                />
-                <FilterCard
-                  name={PRODUCT_SORTING.PRICE_LOW_TO_HIGH}
-                  onPress={() => {
-                    setSelectedSortingOption(PRODUCT_SORTING.PRICE_LOW_TO_HIGH);
-                  }}
-                  selectedFilter={selectedSortingOption}
-                  card={PRODUCT_SORTING.PRICE_LOW_TO_HIGH}
-                />
-              </View>
             </View>
           </>
         ) : (
@@ -347,7 +281,6 @@ const styles = StyleSheet.create({
   thumb: {width: 20, height: 20, borderRadius: 10, borderWidth: 2},
   rail: {height: 4, borderRadius: 2},
   railSelected: {height: 4, borderRadius: 2},
-  sortContainer: {flexWrap: 'wrap', flexDirection: 'row'},
   applyButton: {
     flexDirection: 'row',
     alignItems: 'center',

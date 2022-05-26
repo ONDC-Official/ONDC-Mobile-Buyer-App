@@ -228,10 +228,7 @@ const Products = ({navigation}) => {
         setApiInProgress(true);
 
         const url = `${BASE_URL}${GET_PRODUCTS}${refmessageId.current}`;
-        const {data} = await getData(
-          `${url}&pageNumber=${refPageNumber.current}&limit=10`,
-          options,
-        );
+        const {data} = await getData(`${url}`, options);
         setCount(data.message.count);
 
         const productsList = data.message.catalogs.map(item => {
@@ -240,11 +237,11 @@ const Products = ({navigation}) => {
             transaction_id: refTransactionId.current,
           });
         });
-        const newProducts =
-          refPageNumber.current === 1
-            ? productsList
-            : [...products, ...productsList];
-        dispatch(saveProducts(newProducts));
+        // const newProducts =
+        //   refPageNumber.current === 1
+        //     ? productsList
+        //     : [...products, ...productsList];
+        dispatch(saveProducts(productsList));
       } catch (error) {
         handleApiError(error);
       }
@@ -300,9 +297,10 @@ const Products = ({navigation}) => {
    * Function is used to handle onEndEditing event of searchbar
    * @returns {Promise<void>}
    **/
-  const onSearch = async (query, selectedSearchOption, closeRBSheet) => {
+  const onSearch = async (query, selectedSearchOption) => {
     if (longitude && latitude) {
       setRequestInProgress(true);
+      setFilters(null);
       dispatch(saveProducts([]));
 
       let requestParameters = {

@@ -10,7 +10,7 @@ export const getData = async (url, options) => {
     console.log('Get request ------', url);
     const response = await axios.get(url, options);
     // console.log('------Response-------');
-    // console.log(JSON.stringify(response.data, undefined, 4));
+    console.log(JSON.stringify(response.data, undefined, 4));
     return response;
   } catch (error) {
     throw error;

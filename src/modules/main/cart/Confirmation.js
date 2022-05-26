@@ -91,6 +91,12 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             quantity: {
               count: item.quantity,
             },
+            product: {
+              id: item.id,
+              descriptor: item.descriptor,
+              price: item.price,
+              provider_name: item.provider_details.descriptor.name,
+            },
             bpp_id: item.bpp_details.bpp_id,
             provider: {
               id: item.provider_details.id,
@@ -106,7 +112,12 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 items: [
                   {
                     id: item.id,
-
+                    product: {
+                      id: item.id,
+                      descriptor: item.descriptor,
+                      price: item.price,
+                      provider_name: item.provider_details.descriptor.name,
+                    },
                     quantity: {
                       count: item.quantity,
                     },

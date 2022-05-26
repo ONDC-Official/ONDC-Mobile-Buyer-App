@@ -46,7 +46,7 @@ export default withTheme(SearchOptionSelector);
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 10,
+    paddingVertical: 6,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,

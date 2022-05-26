@@ -98,13 +98,13 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
                   <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => updateQuantity(false)}>
-                    <Icon name="minus" size={16} color={colors.white}/>
+                    <Icon name="minus" size={16} color={colors.white} />
                   </TouchableOpacity>
                   <Text style={{color: colors.white}}>{item.quantity}</Text>
                   <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => updateQuantity(true)}>
-                    <Icon name="plus" color={colors.white} size={16}/>
+                    <Icon name="plus" color={colors.white} size={16} />
                   </TouchableOpacity>
                 </View>
               )}
@@ -119,7 +119,7 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
 export default withTheme(ProductCard);
 
 const styles = StyleSheet.create({
-  card: {marginTop: 15, borderRadius: 8, elevation: 6},
+  card: {marginTop: 8, marginHorizontal: 8, borderRadius: 8, elevation: 6},
   subContainer: {flexDirection: 'row'},
   image: {height: 80, width: 80, marginRight: 10},
   priceContainer: {
