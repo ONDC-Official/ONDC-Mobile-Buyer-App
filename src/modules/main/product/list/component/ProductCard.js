@@ -59,7 +59,8 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
             images: item.descriptor.images,
             item: item,
           });
-        }}>
+        }}
+        disabled={apiInProgress}>
         <View style={styles.subContainer}>
           <FastImage
             source={{
@@ -78,7 +79,10 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
               </Text>
             </View>
             <View style={styles.priceContainer}>
-              <Text>₹{maskAmount(item.price.value)}</Text>
+              <Text>
+                ₹{' '}
+                {item.price.value ? item.price.value : item.price.maximum_value}
+              </Text>
               {item.quantity < 1 ? (
                 <TouchableOpacity
                   style={[styles.button, {borderColor: colors.accentColor}]}
@@ -119,7 +123,7 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
 export default withTheme(ProductCard);
 
 const styles = StyleSheet.create({
-  card: {marginTop: 8, marginHorizontal: 8, borderRadius: 8, elevation: 6},
+  card: {marginTop: 10, marginHorizontal: 10, borderRadius: 8, elevation: 6},
   subContainer: {flexDirection: 'row'},
   image: {height: 80, width: 80, marginRight: 10},
   priceContainer: {

@@ -38,9 +38,7 @@ const Filters = ({
   const {
     state: {token},
   } = useContext(AuthContext);
-  const [selectedSortingOption, setSelectedSortingOption] = useState(
-    PRODUCT_SORTING.RATINGS_LOW_TO_HIGH,
-  );
+
   const [categories, setCategories] = useState([]);
   const [requestInProgress, setRequestInProgress] = useState(false);
   const options = {

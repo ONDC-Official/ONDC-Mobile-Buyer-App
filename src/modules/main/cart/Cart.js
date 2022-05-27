@@ -86,7 +86,10 @@ const Cart = ({navigation, theme}) => {
         {cartItems.length !== 0 && (
           <View style={[styles.header, {backgroundColor: colors.white}]}>
             <Text style={styles.text}>
-              {subTotalLabel} <Text style={styles.price}>₹{subTotal}</Text>
+              {subTotalLabel}{' '}
+              <Text style={styles.price}>
+                ₹{parseFloat(subTotal).toFixed(2)}
+              </Text>
             </Text>
 
             <TouchableOpacity

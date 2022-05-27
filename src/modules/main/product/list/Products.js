@@ -237,10 +237,7 @@ const Products = ({navigation}) => {
             transaction_id: refTransactionId.current,
           });
         });
-        // const newProducts =
-        //   refPageNumber.current === 1
-        //     ? productsList
-        //     : [...products, ...productsList];
+
         dispatch(saveProducts(productsList));
       } catch (error) {
         handleApiError(error);
@@ -250,7 +247,6 @@ const Products = ({navigation}) => {
     setTimeout(() => {
       clearInterval(getList);
       setApiInProgress(false);
-      refPageNumber.current = refPageNumber.current + 1;
     }, 10000);
   };
 
@@ -351,13 +347,6 @@ const Products = ({navigation}) => {
       alert(selectLocation);
     }
   };
-
-  // const loadMoreList = () => {
-  //   if (count > products.length) {
-  //     console.log(products.length);
-  //     getProducts(setMoreListRequested);
-  //   }
-  // };
 
   useEffect(() => {
     if (location === unKnownLabel) {

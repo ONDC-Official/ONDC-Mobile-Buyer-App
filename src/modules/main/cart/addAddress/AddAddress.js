@@ -11,7 +11,11 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {postData} from '../../../../utils/api';
-import {ADD_ADDRESS, BASE_URL} from '../../../../utils/apiUtilities';
+import {
+  ADD_ADDRESS,
+  BASE_URL,
+  BILLING_ADDRESS,
+} from '../../../../utils/apiUtilities';
 import Header from '../addressPicker/Header';
 
 const invalidNumber = strings('errors.invalid_number');
@@ -53,13 +57,14 @@ const validationSchema = Yup.object({
  * @constructor
  * @returns {JSX.Element}
  */
-const AddAddress = ({navigation, theme}) => {
+const AddAddress = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
   const {
     state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState(false);
+  const {selectedAddress} = params;
 
   const userInfo = {
     email: '',
@@ -82,32 +87,56 @@ const AddAddress = ({navigation, theme}) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    try {
-      setApiInProgress(true);
-      await postData(
-        `${BASE_URL}${ADD_ADDRESS}`,
-        {
-          descriptor: {
+    const payload =
+      selectedAddress === 'address'
+        ? {
+            descriptor: {
+              name: values.name,
+              email: values.email,
+              phone: values.number,
+            },
+            gps: '',
+            default: true,
+            address: {
+              area_code: values.pin,
+              city: values.city,
+              locality: values.landMark,
+              state: values.state,
+              street: values.street,
+              country: 'IND',
+            },
+          }
+        : {
+            address: {
+              area_code: values.pin,
+              city: values.city,
+              locality: values.landMark,
+              state: values.state,
+              street: values.street,
+              country: 'IND',
+            },
             name: values.name,
             email: values.email,
             phone: values.number,
-          },
-          gps: '',
-          default: true,
-          address: {
-            area_code: values.pin,
-            city: values.city,
-            locality: values.landMark,
-            state: values.state,
-            street: values.street,
-            country: 'IND',
-          },
-        },
-        options,
-      );
-      navigation.navigate('AddressPicker');
+          };
+
+    try {
+      setApiInProgress(true);
+      const url =
+        selectedAddress === 'address'
+          ? `${BASE_URL}${ADD_ADDRESS}`
+          : `${BASE_URL}${BILLING_ADDRESS}`;
+      await postData(url, payload, options);
+      if (selectedAddress === 'address') {
+        navigation.navigate('AddressPicker');
+      } else {
+        navigation.navigate('BillingAddressPicker', {
+          selectedAddress: params.selectedAddress,
+        });
+      }
       setApiInProgress(false);
     } catch (error) {
+      console.log(error);
       handleApiError(error);
       setApiInProgress(false);
     }

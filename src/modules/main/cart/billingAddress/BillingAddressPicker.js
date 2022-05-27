@@ -1,18 +1,22 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
+import {CheckBox, Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {BASE_URL, GET_ADDRESS} from '../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  BILLING_ADDRESS,
+  GET_ADDRESS,
+} from '../../../../utils/apiUtilities';
 import {skeletonList} from '../../../../utils/utils';
-import AddressCard from './AddressCard';
-import AddressCardSkeleton from './AddressCardSkeleton';
-import Header from './Header';
+import AddressCard from '../addressPicker/AddressCard';
+import AddressCardSkeleton from '../addressPicker/AddressCardSkeleton';
+import Header from '../addressPicker/Header';
 
 const buttonTitle = strings('main.cart.next');
 const selectAddress = strings('main.cart.select_address_title');
@@ -25,15 +29,17 @@ const emptyListMessage = strings('main.order.list_empty_message');
  * @constructor
  * @returns {JSX.Element}
  */
-const AddressPicker = ({navigation, theme}) => {
+const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
   const [list, setList] = useState(null);
-  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedBillingAddress, setSelectedBillingAddress] = useState(null);
+  const [checked, setChecked] = useState(false);
   const isFocused = useIsFocused();
   const {
     state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
+  const {selectedAddress} = params;
 
   /**
    * function to get list of address from server
@@ -41,7 +47,7 @@ const AddressPicker = ({navigation, theme}) => {
    */
   const getAddressList = async () => {
     try {
-      const {data} = await getData(`${BASE_URL}${GET_ADDRESS}`, {
+      const {data} = await getData(`${BASE_URL}${BILLING_ADDRESS}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -68,7 +74,17 @@ const AddressPicker = ({navigation, theme}) => {
    * function handles click event of next button
    */
   const onPressHandler = () => {
-    navigation.navigate('BillingAddressPicker', {selectedAddress});
+    if (checked) {
+      navigation.navigate('Confirmation', {
+        selectedAddress,
+        selectedBillingAddress: selectedAddress,
+      });
+    } else {
+      navigation.navigate('Confirmation', {
+        selectedAddress,
+        selectedBillingAddress: selectedBillingAddress,
+      });
+    }
   };
 
   /**
@@ -82,8 +98,8 @@ const AddressPicker = ({navigation, theme}) => {
     ) : (
       <AddressCard
         item={item}
-        selectedAddress={selectedAddress}
-        setSelectedAddress={setSelectedAddress}
+        selectedAddress={selectedBillingAddress}
+        setSelectedAddress={setSelectedBillingAddress}
       />
     );
   };
@@ -106,7 +122,11 @@ const AddressPicker = ({navigation, theme}) => {
           appStyles.container,
           {backgroundColor: colors.backgroundColor},
         ]}>
-        <Header title={selectAddress} show="address" navigation={navigation} />
+        <Header
+          title={'Billing Address'}
+          show={selectedAddress}
+          navigation={navigation}
+        />
 
         <FlatList
           data={listData}
@@ -120,8 +140,15 @@ const AddressPicker = ({navigation, theme}) => {
               : [appStyles.container, styles.emptyContainer]
           }
         />
+        <CheckBox
+          title={'Same as delivery address'}
+          checked={checked}
+          onPress={() => {
+            setChecked(!checked);
+          }}
+        />
 
-        {selectedAddress !== null && (
+        {(selectedBillingAddress !== null || checked) && (
           <View style={styles.buttonContainer}>
             <ContainButton title={buttonTitle} onPress={onPressHandler} />
           </View>
@@ -131,7 +158,7 @@ const AddressPicker = ({navigation, theme}) => {
   );
 };
 
-export default withTheme(AddressPicker);
+export default withTheme(BillingAddressPicker);
 const styles = StyleSheet.create({
   buttonContainer: {
     width: 300,

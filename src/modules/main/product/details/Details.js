@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import {strings} from '../../../../locales/i18n';
 import IconField from './IconField';
@@ -11,9 +11,15 @@ const Details = ({item, theme}) => {
   return (
     <>
       <View style={[styles.container, styles.productDetailsContainer]}>
-        <IconField name="Returnable" icon="package-variant" />
-        <View style={styles.space} />
-        <IconField name="Cancellable" icon="package-variant-closed" />
+        {item['@ondc/org/returnable'] && (
+          <>
+            <IconField name="Returnable" icon="package-variant" />
+            <View style={styles.space} />
+          </>
+        )}
+        {item['@ondc/org/cancellable'] && (
+          <IconField name="Cancellable" icon="package-variant-closed" />
+        )}
       </View>
       <View style={styles.container}>
         <Text style={[styles.heading, {color: colors.gray}]}>{title}</Text>
@@ -22,27 +28,76 @@ const Details = ({item, theme}) => {
             <Text style={[styles.title, {color: colors.gray}]}>
               Manufacture Name
             </Text>
-            <Text style={[styles.title, {color: colors.gray}]}>
-              Net Quantity
-            </Text>
-            <Text style={[styles.title, {color: colors.gray}]}>
-              Manufacturing Date
-            </Text>
-            <Text style={[styles.title, {color: colors.gray}]}>
-              Country of Origin
-            </Text>
-            <Text style={[styles.title, {color: colors.gray}]}>
-              Brand Owner Name
-            </Text>
+            {item['@ondc/org/statutory_reqs_packaged_commodities'] && (
+              <>
+                {item['@ondc/org/statutory_reqs_packaged_commodities']
+                  .net_quantity_or_measure_of_commodity_in_pkg && (
+                  <Text style={[styles.title, {color: colors.gray}]}>
+                    Net Quantity
+                  </Text>
+                )}
+
+                {item['@ondc/org/statutory_reqs_packaged_commodities']
+                  .month_year_of_manufacture_packing_import && (
+                  <Text style={[styles.title, {color: colors.gray}]}>
+                    Manufacturing Date
+                  </Text>
+                )}
+                {item['@ondc/org/statutory_reqs_packaged_commodities']
+                  .imported_product_country_of_origin && (
+                  <Text style={[styles.title, {color: colors.gray}]}>
+                    Country of Origin
+                  </Text>
+                )}
+              </>
+            )}
+            {item.bpp_details.long_desc && (
+              <Text style={[styles.title, {color: colors.gray}]}>
+                Brand Owner Name
+              </Text>
+            )}
           </View>
           <View>
             <Text style={styles.value}>
               {item.provider_details.descriptor.name}
             </Text>
-            <Text style={styles.value}>10Kg</Text>
-            <Text style={styles.value}>1/1/2022</Text>
-            <Text style={styles.value}>India</Text>
-            <Text style={styles.value}>ONDC</Text>
+            {item['@ondc/org/statutory_reqs_packaged_commodities'] && (
+              <>
+                {item['@ondc/org/statutory_reqs_packaged_commodities']
+                  .net_quantity_or_measure_of_commodity_in_pkg && (
+                  <Text style={styles.value}>
+                    {
+                      item['@ondc/org/statutory_reqs_packaged_commodities']
+                        .net_quantity_or_measure_of_commodity_in_pkg
+                    }
+                  </Text>
+                )}
+
+                {item['@ondc/org/statutory_reqs_packaged_commodities']
+                  .month_year_of_manufacture_packing_import && (
+                  <Text style={styles.value}>
+                    {
+                      item['@ondc/org/statutory_reqs_packaged_commodities']
+                        .month_year_of_manufacture_packing_import
+                    }
+                  </Text>
+                )}
+
+                {item['@ondc/org/statutory_reqs_packaged_commodities']
+                  .imported_product_country_of_origin && (
+                  <Text style={styles.value}>
+                    {
+                      item['@ondc/org/statutory_reqs_packaged_commodities']
+                        .imported_product_country_of_origin
+                    }
+                  </Text>
+                )}
+              </>
+            )}
+
+            {item.bpp_details.long_desc && (
+              <Text style={styles.value}>{item.bpp_details.long_desc}</Text>
+            )}
           </View>
         </View>
       </View>

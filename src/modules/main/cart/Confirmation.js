@@ -39,7 +39,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
-        console.log(JSON.stringify(data, undefined, 4));
 
         let list = [];
         data.forEach(item => {
@@ -237,7 +236,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                   <Text style={styles.fulfillment}>FULFILLMENT</Text>
                   <Text style={styles.fulfillment}>₹{fulfillment}</Text>
                 </View>
-                <Divider />
+                <Divider style={styles.divider} />
               </>
             )}
             <View style={styles.priceContainer}>
@@ -253,6 +252,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               onPress={() =>
                 navigation.navigate('Payment', {
                   selectedAddress: params.selectedAddress,
+                  selectedBillingAddress: params.selectedBillingAddress,
                   confirmationList: confirmationList,
                 })
               }
@@ -267,7 +267,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 export default withTheme(Confirmation);
 
 const styles = StyleSheet.create({
-  card: {marginTop: 15, borderRadius: 8, elevation: 6},
+  card: {marginTop: 10, marginHorizontal: 10, borderRadius: 8, elevation: 6},
   subContainer: {flexDirection: 'row'},
   image: {height: 80, width: 80, marginRight: 10},
   priceContainer: {
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {paddingBottom: 10},
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
-  title: {fontSize: 18, marginTop: 10, fontWeight: '600'},
+  title: {fontSize: 18, fontWeight: '600'},
   buttonContainer: {width: 300, padding: 20, alignSelf: 'center'},
   totalContainer: {paddingHorizontal: 10},
   emptyListComponent: {alignItems: 'center', justifyContent: 'center'},
@@ -286,5 +286,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 4,
   },
+  divider: {marginBottom: 10},
   fulfillment: {fontSize: 16, fontWeight: '600', marginBottom: 10},
 });

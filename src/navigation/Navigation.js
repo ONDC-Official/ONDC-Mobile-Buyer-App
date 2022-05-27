@@ -7,6 +7,7 @@ import SignUp from '../modules/authentication/signUp/SignUp';
 import Splash from '../modules/authentication/splash/Splash';
 import AddAddress from '../modules/main/cart/addAddress/AddAddress';
 import AddressPicker from '../modules/main/cart/addressPicker/AddressPicker';
+import BillingAddressPicker from '../modules/main/cart/billingAddress/BillingAddressPicker';
 import Confirmation from '../modules/main/cart/Confirmation';
 import Payment from '../modules/main/cart/payment/Payment';
 import Dashboard from '../modules/main/dashboard/Dashboard';
@@ -83,6 +84,11 @@ const Navigation = () => {
         <Stack.Screen
           name="ProductDetails"
           component={ProductDetails}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="BillingAddressPicker"
+          component={BillingAddressPicker}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -1,6 +1,7 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
+  ActivityIndicator,
   BackHandler,
   DeviceEventEmitter,
   FlatList,
@@ -55,7 +56,7 @@ const poweredBy = strings('main.product.powered_by_label');
 const Payment = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
   const dispatch = useDispatch();
-  const {selectedAddress, confirmationList} = params;
+  const {selectedAddress, selectedBillingAddress, confirmationList} = params;
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const [error, setError] = useState(null);
   const {
@@ -75,7 +76,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
   const onOrderSuccess = () => {
     dispatch(clearAllData());
-    navigation.navigate('Dashboard');
+    navigation.navigate('Dashboard', {screen: 'Orders'});
   };
 
   const onInitializeOrder = messageIdArray => {
@@ -106,8 +107,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
     setTimeout(() => {
       clearInterval(order);
-
-      setInitializeOrderRequested(false);
     }, 10000);
   };
 
@@ -199,21 +198,27 @@ const Payment = ({navigation, theme, route: {params}}) => {
               ],
               billing_info: {
                 address: {
-                  door: selectedAddress.address.door
-                    ? selectedAddress.address.door
-                    : selectedAddress.address.street,
+                  door: selectedBillingAddress.address.door
+                    ? selectedBillingAddress.address.door
+                    : selectedBillingAddress.address.street,
                   country: 'IND',
-                  city: selectedAddress.address.city,
-                  street: selectedAddress.address.street,
-                  area_code: selectedAddress.address.area_code,
-                  state: selectedAddress.address.state,
-                  building: selectedAddress.address.building
-                    ? selectedAddress.address.building
-                    : selectedAddress.address.street,
+                  city: selectedBillingAddress.address.city,
+                  street: selectedBillingAddress.address.street,
+                  area_code: selectedBillingAddress.address.area_code,
+                  state: selectedBillingAddress.address.state,
+                  building: selectedBillingAddress.address.building
+                    ? selectedBillingAddress.address.building
+                    : selectedBillingAddress.address.street,
                 },
-                phone: selectedAddress.descriptor.phone,
-                name: selectedAddress.descriptor.name,
-                email: selectedAddress.descriptor.email,
+                phone: selectedBillingAddress.descriptor
+                  ? selectedBillingAddress.descriptor.phone
+                  : selectedBillingAddress.phone,
+                name: selectedBillingAddress.descriptor
+                  ? selectedBillingAddress.descriptor.name
+                  : selectedBillingAddress.name,
+                email: selectedBillingAddress.descriptor
+                  ? selectedBillingAddress.descriptor.email
+                  : selectedBillingAddress.email,
               },
               delivery_info: {
                 type: 'HOME-DELIVERY',
@@ -243,6 +248,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           providerIdArray.push(item.provider.id);
         }
       });
+
       const {data} = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
@@ -265,40 +271,45 @@ const Payment = ({navigation, theme, route: {params}}) => {
   };
 
   const processPayment = async () => {
-    const orderDetails = {
-      merchant_id: Config.MERCHANT_ID.toUpperCase(),
-      customer_id: uid,
-      order_id: confirmationList[0].transaction_id,
-      customer_phone: selectedAddress.descriptor.phone,
-      customer_email: selectedAddress.descriptor.email,
-      amount: String(9),
-      timestamp: timeStamp.current,
-      return_url: 'https://sandbox.juspay.in/end',
-    };
+    setConfirmOrderRequested(true);
 
-    const processPayload = {
-      requestId: confirmationList[0].transaction_id,
-      service: 'in.juspay.hyperpay',
-      payload: {
-        action: 'paymentPage',
-        merchantId: Config.MERCHANT_ID.toUpperCase(),
-        clientId: Config.CLIENT_ID.toLowerCase(),
-        orderId: confirmationList[0].transaction_id,
+    if (selectedPaymentOption === PAYMENT_METHODS.COD.name) {
+      await confirmOrder(PAYMENT_METHODS.COD);
+    } else {
+      const orderDetails = {
+        merchant_id: Config.MERCHANT_ID.toUpperCase(),
+        customer_id: uid,
+        order_id: confirmationList[0].transaction_id,
+        customer_phone: selectedAddress.descriptor.phone,
+        customer_email: selectedAddress.descriptor.email,
         amount: String(9),
-        customerId: uid,
-        customerEmail: selectedAddress.descriptor.email,
-        customerMobile: selectedAddress.descriptor.phone,
-        orderDetails: JSON.stringify(orderDetails),
-        signature: signedPayload.current,
-        merchantKeyId: Config.MERCHANT_KEY_ID,
-        language: 'english',
-        environment: 'sandbox',
-      },
-    };
+        timestamp: timeStamp.current,
+        return_url: 'https://sandbox.juspay.in/end',
+      };
 
-    const initialised = await HyperSdkReact.isInitialised();
-    if (initialised) {
-      HyperSdkReact.process(JSON.stringify(processPayload));
+      const processPayload = {
+        requestId: confirmationList[0].transaction_id,
+        service: 'in.juspay.hyperpay',
+        payload: {
+          action: 'paymentPage',
+          merchantId: Config.MERCHANT_ID.toUpperCase(),
+          clientId: Config.CLIENT_ID.toLowerCase(),
+          orderId: confirmationList[0].transaction_id,
+          amount: String(9),
+          customerId: uid,
+          customerEmail: selectedAddress.descriptor.email,
+          customerMobile: selectedAddress.descriptor.phone,
+          orderDetails: JSON.stringify(orderDetails),
+          signature: signedPayload.current,
+          merchantKeyId: Config.MERCHANT_KEY_ID,
+          language: 'english',
+          environment: 'sandbox',
+        },
+      };
+      console.log(await HyperSdkReact.isInitialised());
+      if (await HyperSdkReact.isInitialised()) {
+        HyperSdkReact.process(JSON.stringify(processPayload));
+      }
     }
   };
 
@@ -315,9 +326,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
         break;
 
       case 'initiate_result':
-        processPayment()
-          .then(() => {})
-          .catch(() => {});
+        var payload = data.payload || {};
+        console.log('initiate_result: ', payload);
         break;
 
       case 'process_result':
@@ -420,38 +430,34 @@ const Payment = ({navigation, theme, route: {params}}) => {
   };
 
   const placeOrder = async () => {
-    setConfirmOrderRequested(true);
     const options = {
       headers: {Authorization: `Bearer ${token}`},
     };
-    if (selectedPaymentOption === PAYMENT_METHODS.COD.name) {
-      await confirmOrder(PAYMENT_METHODS.COD);
-    } else {
-      try {
-        timeStamp.current = String(new Date().getTime());
 
-        const payload = JSON.stringify({
-          merchant_id: Config.MERCHANT_ID.toUpperCase(),
-          customer_id: uid,
-          order_id: confirmationList[0].transaction_id,
-          customer_phone: selectedAddress.descriptor.phone,
-          customer_email: selectedAddress.descriptor.email,
-          amount: String(9),
-          timestamp: timeStamp.current,
-          return_url: 'https://sandbox.juspay.in/end',
-        });
+    try {
+      timeStamp.current = String(new Date().getTime());
 
-        const {data} = await postData(
-          `${BASE_URL}${SIGN_PAYLOAD}`,
-          {payload: payload},
-          options,
-        );
+      const payload = JSON.stringify({
+        merchant_id: Config.MERCHANT_ID.toUpperCase(),
+        customer_id: uid,
+        order_id: confirmationList[0].transaction_id,
+        customer_phone: selectedAddress.descriptor.phone,
+        customer_email: selectedAddress.descriptor.email,
+        amount: String(9),
+        timestamp: timeStamp.current,
+        return_url: 'https://sandbox.juspay.in/end',
+      });
 
-        signedPayload.current = data.signedPayload;
-        initializeJusPaySdk(payload);
-      } catch (error) {
-        handleApiError(error);
-      }
+      const {data} = await postData(
+        `${BASE_URL}${SIGN_PAYLOAD}`,
+        {payload: payload},
+        options,
+      );
+
+      signedPayload.current = data.signedPayload;
+      initializeJusPaySdk(payload);
+    } catch (error) {
+      handleApiError(error);
     }
   };
 
@@ -476,6 +482,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
     initializeOrder()
       .then(() => {
         HyperSdkReact.createHyperServices();
+        placeOrder()
+          .then(() => {})
+          .catch(() => {});
+        setInitializeOrderRequested(false);
       })
       .catch(() => {});
 
@@ -495,60 +505,65 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
   return (
     <SafeAreaView style={appStyles.container}>
-      <View style={appStyles.container}>
-        <Header title={heading} navigation={navigation} />
-        {initializeOrderRequested ? (
-          <PaymentSkeleton />
-        ) : (
-          <>
-            <View style={styles.container}>
-              <Card containerStyle={styles.containerStyle}>
-                <FlatList
-                  data={confirmationList}
-                  renderItem={({item}) => {
-                    const element = cartItems.find(one => one.id === item.id);
+      {!confirmOrderRequested ? (
+        <View style={appStyles.container}>
+          <Header title={heading} navigation={navigation} />
+          {initializeOrderRequested ? (
+            <PaymentSkeleton />
+          ) : (
+            <>
+              <View style={styles.container}>
+                <Card containerStyle={styles.itemsContainerStyle}>
+                  <FlatList
+                    data={confirmationList}
+                    renderItem={({item}) => {
+                      const element = cartItems.find(one => one.id === item.id);
 
-                    return element ? (
-                      <>
-                        <View style={styles.priceContainer}>
-                          <Text>{element.descriptor.name}</Text>
-                          <Text>₹{element.price.value * element.quantity}</Text>
-                        </View>
-                        <Divider />
-                      </>
-                    ) : null;
-                  }}
-                />
-                {fulFillment && (
-                  <>
+                      return element ? (
+                        <>
+                          <View style={styles.priceContainer}>
+                            <Text style={styles.price}>
+                              {element.descriptor.name}
+                            </Text>
+                            <Text>
+                              ₹{element.price.value * element.quantity}
+                            </Text>
+                          </View>
+                          <Divider />
+                        </>
+                      ) : null;
+                    }}
+                  />
+                  {fulFillment && (
+                    <>
+                      <View style={styles.priceContainer}>
+                        <Text>FULFILLMENT</Text>
+                        <Text style={styles.fulfillment}>₹{fulFillment}</Text>
+                      </View>
+                      <Divider />
+                    </>
+                  )}
+
+                  {total && (
                     <View style={styles.priceContainer}>
-                      <Text>FULFILLMENT</Text>
-                      <Text style={styles.fulfillment}>₹{fulFillment}</Text>
+                      <Text>Total Payable</Text>
+                      <Text style={styles.fulfillment}>₹{total}</Text>
                     </View>
-                    <Divider />
-                  </>
-                )}
+                  )}
+                </Card>
+                <Card containerStyle={styles.cardContainerStyle}>
+                  <Text style={styles.text}>{addressTitle}</Text>
 
-                {total && (
-                  <View style={styles.priceContainer}>
-                    <Text>Total Payable</Text>
-                    <Text style={styles.fulfillment}>₹{total}</Text>
-                  </View>
-                )}
-              </Card>
-              <Card containerStyle={styles.containerStyle}>
-                <Text style={styles.text}>{addressTitle}</Text>
+                  <Text style={styles.titleStyle}>
+                    {selectedAddress.address.street},{' '}
+                    {selectedAddress.address.locality},{' '}
+                    {selectedAddress.address.city},{' '}
+                    {selectedAddress.address.state} -{' '}
+                    {selectedAddress.address.area_code}
+                  </Text>
+                </Card>
 
-                <Text>
-                  {selectedAddress.address.street},{' '}
-                  {selectedAddress.address.locality},{' '}
-                  {selectedAddress.address.city},{' '}
-                  {selectedAddress.address.state} -{' '}
-                  {selectedAddress.address.area_code}
-                </Text>
-              </Card>
-              {orders && (
-                <Card containerStyle={styles.containerStyle}>
+                <Card containerStyle={styles.cardContainerStyle}>
                   <Text style={styles.text}>{paymentOptionsTitle}</Text>
 
                   <View style={styles.paymentOptions}>
@@ -574,27 +589,43 @@ const Payment = ({navigation, theme, route: {params}}) => {
                         }
                         checkedIcon="dot-circle-o"
                         uncheckedIcon="circle-o"
+                        containerStyle={[
+                          styles.checkBoxcontainerStyle,
+                          {
+                            backgroundColor: colors.backgroundColor,
+                          },
+                        ]}
+                        wrapperStyle={styles.wrapperStyle}
                         checked={option.value === selectedPaymentOption}
                         onPress={() => setSelectedPaymentOption(option.value)}
                       />
                     ))}
                   </View>
                 </Card>
-              )}
-            </View>
+              </View>
 
-            {orders && (
               <View style={styles.buttonContainer}>
                 <ContainButton
                   title={'Proceed'}
-                  onPress={placeOrder}
+                  onPress={() => {
+                    processPayment()
+                      .then(() => {})
+                      .catch(() => {});
+                  }}
                   loading={confirmOrderRequested}
                 />
               </View>
-            )}
-          </>
-        )}
-      </View>
+            </>
+          )}
+        </View>
+      ) : (
+        <View style={[appStyles.container, styles.processing]}>
+          <ActivityIndicator size={30} color={colors.accentColor} />
+          <Text style={[styles.processingText, {color: colors.accentColor}]}>
+            Processing{' '}
+          </Text>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -603,7 +634,7 @@ export default withTheme(Payment);
 
 const styles = StyleSheet.create({
   container: {padding: 15},
-  text: {fontSize: 18, fontWeight: '600'},
+  text: {fontSize: 18, fontWeight: '600', paddingLeft: 10},
   buttonContainer: {width: 300, alignSelf: 'center'},
   paymentOptions: {marginVertical: 10},
   labelStyle: {fontSize: 16, fontWeight: '400'},
@@ -612,11 +643,34 @@ const styles = StyleSheet.create({
   textStyle: {fontSize: 16, fontWeight: '700'},
   juspayContainer: {flexDirection: 'row', alignItems: 'center'},
   image: {height: 15, width: 80},
-  containerStyle: {marginHorizontal: 0},
+  itemsContainerStyle: {
+    marginHorizontal: 0,
+    marginVertical: 0,
+    borderRadius: 10,
+    marginBottom: 10,
+    paddingVertical: 0,
+    paddingHorizontal: 10,
+  },
+  cardContainerStyle: {
+    marginHorizontal: 0,
+    marginVertical: 0,
+    borderRadius: 10,
+    marginBottom: 10,
+    paddingHorizontal: 0,
+  },
   priceContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 10,
   },
+  price: {flexShrink: 1},
+  wrapperStyle: {margin: 0},
+  checkBoxcontainerStyle: {
+    borderWidth: 0,
+    padding: 0,
+    marginHorizontal: 0,
+  },
+  processing: {alignItems: 'center', justifyContent: 'center'},
+  processingText: {fontSize: 18, fontWeight: '700', marginTop: 20},
 });

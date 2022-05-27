@@ -19,14 +19,16 @@ const addButton = strings('main.cart.add');
 const Header = ({theme, title, show, navigation}) => {
   const {colors} = theme;
 
-  const onPressHandler = () => navigation.navigate('AddAddress');
+  const onPressHandler = () => {
+    navigation.navigate('AddAddress', {selectedAddress: show});
+  };
 
   return (
     <View style={[styles.container, {backgroundColor: colors.white}]}>
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}>
-        <Icon name="arrow-left" size={16} color={colors.accentColor}/>
+        <Icon name="arrow-left" size={16} color={colors.accentColor} />
       </TouchableOpacity>
       <View style={appStyles.container}>
         <Text style={styles.text}>{title}</Text>

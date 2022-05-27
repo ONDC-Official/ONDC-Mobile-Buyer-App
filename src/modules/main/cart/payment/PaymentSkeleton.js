@@ -6,7 +6,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 const PaymentSkeleton = () => {
   return (
     <>
-      <Card>
+      <Card containerStyle={styles.cardContainerStyle}>
         <SkeletonPlaceholder>
           <View style={styles.items}>
             <View style={styles.title} />
@@ -28,13 +28,13 @@ const PaymentSkeleton = () => {
           </View>
         </SkeletonPlaceholder>
       </Card>
-      <Card>
+      <Card containerStyle={styles.cardContainerStyle}>
         <SkeletonPlaceholder>
           <View style={styles.heading} />
           <View style={styles.address} />
         </SkeletonPlaceholder>
       </Card>
-      <Card>
+      <Card containerStyle={styles.cardContainerStyle}>
         <SkeletonPlaceholder>
           <View style={styles.paymentOptionsHeading} />
         </SkeletonPlaceholder>
@@ -84,4 +84,5 @@ const styles = StyleSheet.create({
   },
   title: {height: 15, width: 200},
   price: {height: 15, width: 50},
+  cardContainerStyle: {borderRadius: 10},
 });
