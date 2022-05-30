@@ -10,6 +10,7 @@ import {useDispatch} from 'react-redux';
 import {BASE_URL, GET_PRODUCTS} from '../../../../../utils/apiUtilities';
 import {saveProducts} from '../../../../../redux/product/actions';
 import {getData} from '../../../../../utils/api';
+import ContainButton from '../../../../../components/button/ContainButton';
 
 const applyTitle = strings('main.product.filters.apply_title');
 const close = strings('main.product.filters.close');
@@ -21,9 +22,16 @@ const list = [
   {name: 'Ratings: Low To High', value: PRODUCT_SORTING.RATINGS_LOW_TO_HIGH},
 ];
 
-const SortMenu = ({theme, filters, setCount, closeSortSheet}) => {
+const SortMenu = ({
+  theme,
+  filters,
+  selectedSortMethod,
+  setSelectedSortMethod,
+  setCount,
+  closeSortSheet,
+}) => {
   const {colors} = theme;
-  const [selectedSortMethod, setSelectedSortMethod] = useState(null);
+
   const [requestInProgress, setRequestInProgress] = useState(false);
   const {
     state: {token},
@@ -79,12 +87,6 @@ const SortMenu = ({theme, filters, setCount, closeSortSheet}) => {
     <View>
       <View style={styles.header}>
         <ClearButton
-          title={applyTitle}
-          textColor={colors.accentColor}
-          loading={requestInProgress}
-          onPress={onApply}
-        />
-        <ClearButton
           title={close}
           onPress={closeSortSheet}
           textColor={colors.accentColor}
@@ -103,6 +105,13 @@ const SortMenu = ({theme, filters, setCount, closeSortSheet}) => {
           />
         ))}
       </View>
+      <View style={styles.buttonContainer}>
+        <ContainButton
+          title={applyTitle}
+          loading={requestInProgress}
+          onPress={onApply}
+        />
+      </View>
     </View>
   );
 };
@@ -113,8 +122,14 @@ const styles = StyleSheet.create({
   header: {
     padding: 15,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   divider: {marginBottom: 10},
+  buttonContainer: {
+    alignSelf: 'flex-end',
+    marginVertical: 20,
+    width: 120,
+    marginHorizontal: 10,
+  },
 });

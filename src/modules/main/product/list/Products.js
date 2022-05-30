@@ -117,6 +117,7 @@ const Products = ({navigation}) => {
 
       setLatitude(response.coords.latitude);
       setLongitude(response.coords.longitude);
+
       setLocation(
         `${data.results[0].city} ${data.results[0].state} ${data.results[0].area}`,
       );
@@ -285,6 +286,7 @@ const Products = ({navigation}) => {
       setLatitude(data.latitude);
       setLongitude(data.longitude);
     } catch (error) {
+      setLocation(unKnownLabel);
       handleApiError(error);
     }
   };

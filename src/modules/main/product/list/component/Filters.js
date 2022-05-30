@@ -1,10 +1,9 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, memo} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {CheckBox, Divider, Text, withTheme} from 'react-native-elements';
+import {CheckBox, Divider, Text, useTheme} from 'react-native-elements';
 import RangeSlider from 'rn-range-slider';
 import {appStyles} from '../../../../../styles/styles';
 import {BASE_URL, GET_PRODUCTS} from '../../../../../utils/apiUtilities';
-import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 import {cleanFormData} from '../../../../../utils/utils';
 
 import {Context as AuthContext} from '../../../../../context/Auth';
@@ -14,6 +13,7 @@ import {saveProducts} from '../../../../../redux/product/actions';
 import {strings} from '../../../../../locales/i18n';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import ClearButton from '../../../../../components/button/ClearButton';
+import ContainButton from '../../../../../components/button/ContainButton';
 
 const applyTitle = strings('main.product.filters.apply_title');
 const close = strings('main.product.filters.close');
@@ -21,26 +21,29 @@ const noFiltersMessage = strings('main.product.filters.no_filters_message');
 const provider = strings('main.product.filters.providers');
 const category = strings('main.product.filters.categories');
 const priceRange = strings('main.product.filters.price_range');
-const sorting = strings('main.product.filters.sorting');
 
 const Filters = ({
-  theme,
   setCount,
   appliedFilters,
   setAppliedFilters,
   filters,
   closeRBSheet,
+  providers,
+  setProviders,
+  categories,
+  setCategories,
 }) => {
-  const [min, setMin] = useState(0);
-  const [max, setMax] = useState(0);
-  const [providers, setProviders] = useState([]);
   const dispatch = useDispatch();
+  const {theme} = useTheme();
+  const {colors} = theme;
+
   const {
     state: {token},
   } = useContext(AuthContext);
 
-  const [categories, setCategories] = useState([]);
   const [requestInProgress, setRequestInProgress] = useState(false);
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(0);
   const options = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -115,27 +118,20 @@ const Filters = ({
     setCategories(categorylist);
   };
 
-  const {colors} = theme;
   return (
-    <ScrollView>
-      <View>
-        <View style={styles.header}>
-          <ClearButton
-            title={applyTitle}
-            loading={requestInProgress}
-            onPress={onApply}
-            textColor={colors.accentColor}
-          />
-          <ClearButton
-            title={close}
-            onPress={closeRBSheet}
-            textColor={colors.accentColor}
-          />
-        </View>
-        <Divider />
+    <View style={appStyles.container}>
+      <View style={styles.header}>
+        <ClearButton
+          title={close}
+          onPress={closeRBSheet}
+          textColor={colors.accentColor}
+        />
+      </View>
+      <Divider />
 
-        {filters ? (
-          <>
+      {filters ? (
+        <View style={appStyles.container}>
+          <ScrollView>
             {filters.providers && filters.providers.length > 0 && (
               <>
                 <Text style={styles.text}>{provider}</Text>
@@ -177,85 +173,94 @@ const Filters = ({
               </>
             )}
             <View style={styles.container}>
-              {filters.minPrice && filters.maxPrice && (
-                <>
-                  <Text style={styles.price}>{priceRange}</Text>
-                  <View style={styles.sliderContainer}>
-                    <Text style={styles.amount}>
-                      ₹{min} - ₹{max}
-                    </Text>
-                    <RangeSlider
-                      style={[styles.rangSlider]}
-                      gravity={'center'}
-                      min={filters.minPrice}
-                      max={filters.maxPrice}
-                      step={20}
-                      floatingLabel={true}
-                      onValueChanged={(low, high, fromUser) => {
-                        setMin(low);
-                        setMax(high);
-                      }}
-                      renderThumb={value => {
-                        return (
-                          <View
-                            style={[
-                              styles.thumb,
-                              {
-                                borderColor: colors.accentColor,
-                                backgroundColor: colors.white,
-                              },
-                            ]}
-                          />
-                        );
-                      }}
-                      renderRail={() => {
-                        return (
-                          <View
-                            style={[
-                              appStyles.container,
-                              styles.rail,
-                              {
-                                backgroundColor: colors.black,
-                              },
-                            ]}
-                          />
-                        );
-                      }}
-                      renderNotch={value => {}}
-                      renderLabel={value => {}}
-                      renderRailSelected={value => {
-                        return (
-                          <View
-                            style={[
-                              styles.railSelected,
-                              {backgroundColor: colors.accentColor},
-                            ]}
-                          />
-                        );
-                      }}
-                    />
-                  </View>
-                </>
-              )}
+              {filters.minPrice &&
+                filters.maxPrice &&
+                filters.minPrice !== filters.maxPrice && (
+                  <>
+                    <Text style={styles.price}>{priceRange}</Text>
+                    <View style={styles.sliderContainer}>
+                      <Text style={styles.amount}>
+                        ₹{min} - ₹{max}
+                      </Text>
+                      <RangeSlider
+                        style={[styles.rangSlider]}
+                        gravity={'center'}
+                        min={filters.minPrice}
+                        max={filters.maxPrice}
+                        step={20}
+                        floatingLabel={true}
+                        onValueChanged={(low, high, fromUser) => {
+                          setMin(low);
+                          setMax(high);
+                        }}
+                        renderThumb={value => {
+                          return (
+                            <View
+                              style={[
+                                styles.thumb,
+                                {
+                                  borderColor: colors.accentColor,
+                                  backgroundColor: colors.white,
+                                },
+                              ]}
+                            />
+                          );
+                        }}
+                        renderRail={() => {
+                          return (
+                            <View
+                              style={[
+                                appStyles.container,
+                                styles.rail,
+                                {
+                                  backgroundColor: colors.black,
+                                },
+                              ]}
+                            />
+                          );
+                        }}
+                        renderNotch={value => {}}
+                        renderLabel={value => {}}
+                        renderRailSelected={value => {
+                          return (
+                            <View
+                              style={[
+                                styles.railSelected,
+                                {backgroundColor: colors.accentColor},
+                              ]}
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                  </>
+                )}
             </View>
-          </>
-        ) : (
-          <View style={styles.emptyContainer}>
-            <Text>{noFiltersMessage}</Text>
+          </ScrollView>
+          <View style={styles.buttonContainer}>
+            <ContainButton
+              title={applyTitle}
+              loading={requestInProgress}
+              onPress={onApply}
+            />
           </View>
-        )}
-      </View>
-    </ScrollView>
+        </View>
+      ) : (
+        <View style={styles.emptyContainer}>
+          <Text>{noFiltersMessage}</Text>
+        </View>
+      )}
+    </View>
   );
 };
 
-export default withTheme(Filters);
+export default memo(Filters);
 
 const styles = StyleSheet.create({
   header: {
     padding: 15,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
   },
   text: {fontSize: 18, fontWeight: '700', marginVertical: 8, marginLeft: 10},
@@ -290,5 +295,11 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     padding: 0,
     marginHorizontal: 0,
+  },
+  buttonContainer: {
+    alignSelf: 'flex-end',
+    marginVertical: 20,
+    width: 120,
+    marginHorizontal: 10,
   },
 });

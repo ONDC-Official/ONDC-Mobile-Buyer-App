@@ -1,6 +1,12 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  FlatList,
+  TouchableOpacity,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {CheckBox, Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
@@ -40,6 +46,10 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
   const {selectedAddress} = params;
+
+  const onAdd = () => {
+    navigation.navigate('AddAddress', {selectedAddress: selectedAddress});
+  };
 
   /**
    * function to get list of address from server
@@ -132,7 +142,15 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
           data={listData}
           renderItem={renderItem}
           ListEmptyComponent={() => {
-            return <Text>{emptyListMessage}</Text>;
+            return (
+              <TouchableOpacity
+                style={[styles.button, {borderColor: colors.accentColor}]}
+                onPress={onAdd}>
+                <Text style={{color: colors.accentColor}}>
+                  ADD BILLING ADDRESS
+                </Text>
+              </TouchableOpacity>
+            );
           }}
           contentContainerStyle={
             listData.length > 0
@@ -168,4 +186,11 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {paddingHorizontal: 10, paddingBottom: 10},
   emptyContainer: {justifyContent: 'center', alignItems: 'center'},
+  button: {
+    marginTop: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 8,
+  },
 });

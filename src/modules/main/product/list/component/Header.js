@@ -1,26 +1,22 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {
   ActivityIndicator,
-  Dimensions,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Divider, SearchBar, Text, withTheme} from 'react-native-elements';
-import RBSheet from 'react-native-raw-bottom-sheet';
+import {SearchBar, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {strings} from '../../../../../locales/i18n';
 import {appStyles} from '../../../../../styles/styles';
 import {SEARCH_QUERY} from '../../../../../utils/Constants';
-import Filters from './Filters';
 import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
-import SortMenu from './SortMenu';
+import SortAndFilter from './SortAndFilter';
 
 const search = strings('main.product.search_label');
 const product = strings('main.product.product_label');
 const provider = strings('main.product.provider_label');
 const category = strings('main.product.category_label');
-const filter = strings('main.product.filters.filter');
 const detectLocation = strings('main.product.detecting_location');
 
 /**
@@ -51,24 +47,9 @@ const Header = ({
   const [selectedCard, setSelectedCard] = useState(SEARCH_QUERY.PRODUCT);
   const [visible, setVisible] = useState(false);
 
-  const [appliedFilters, setAppliedFilters] = useState([]);
-  const refRBSheet = useRef();
-  const refSortSheet = useRef();
-
-  const closeSortSheet = () => refSortSheet.current.close();
-
-  const openSortSheet = () => refSortSheet.current.open();
-
   const hideMenu = () => setVisible(false);
 
   const showMenu = () => setVisible(true);
-
-  const closeRBSheet = () => refRBSheet.current.close();
-
-  const openRBSheet = () => {
-    setAppliedFilters([]);
-    refRBSheet.current.open();
-  };
 
   const onCardSelect = card => setSelectedCard(card);
 
@@ -159,8 +140,7 @@ const Header = ({
             cancelIcon={false}
             onSubmitEditing={() => {
               if (item !== null && item.trim().length > 2) {
-                setAppliedFilters([]);
-                onSearch(item, selectedCard, closeRBSheet);
+                onSearch(item, selectedCard);
               }
             }}
             onChangeText={setItem}
@@ -168,58 +148,7 @@ const Header = ({
           />
         </View>
       </View>
-      {filters && (
-        <>
-          <Divider width={1} />
-          <View
-            style={[
-              styles.sortFilterContainer,
-              {backgroundColor: colors.white},
-            ]}>
-            <Text
-              style={[styles.text, {color: colors.accentColor}]}
-              onPress={openSortSheet}>
-              Sort
-            </Text>
-            <RBSheet
-              ref={refSortSheet}
-              height={Dimensions.get('window').height / 2}
-              customStyles={{
-                container: styles.rbSheet,
-              }}>
-              <SortMenu
-                closeSortSheet={closeSortSheet}
-                filters={filters}
-                setCount={setCount}
-              />
-            </RBSheet>
-            <Divider orientation="vertical" width={1} />
-            <Text
-              style={[styles.text, {color: colors.accentColor}]}
-              onPress={openRBSheet}>
-              {filter}
-              {appliedFilters.length > 0
-                ? `(${appliedFilters.length})`
-                : null}{' '}
-              <Icon name="filter" size={14} />
-            </Text>
-            <RBSheet
-              ref={refRBSheet}
-              height={Dimensions.get('window').height - 200}
-              customStyles={{
-                container: styles.rbSheet,
-              }}>
-              <Filters
-                closeRBSheet={closeRBSheet}
-                filters={filters}
-                setCount={setCount}
-                setAppliedFilters={setAppliedFilters}
-                appliedFilters={appliedFilters}
-              />
-            </RBSheet>
-          </View>
-        </>
-      )}
+      {filters && <SortAndFilter filters={filters} setCount={setCount} />}
     </>
   );
 };
