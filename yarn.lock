@@ -1208,6 +1208,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@ptomasroos/react-native-multi-slider@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@ptomasroos/react-native-multi-slider/-/react-native-multi-slider-2.2.2.tgz#35a97fb8c355627c6a2ded010b360ac5728b44ad"
+  integrity sha512-HWyCnRD3Z3SbHK2FLWYmBBqd1B4iXipeKv1+AK0FoY/CElEDTEixHE8hN60TsqxalPrznn798LE2Q4tHuCiyaA==
+
 "@react-native-async-storage/async-storage@^1.17.3":
   version "1.17.3"
   resolved "https://registry.yarnpkg.com/@react-native-async-storage/async-storage/-/async-storage-1.17.3.tgz#fa7010aa9b6a811ff653df3698a90d3c173dd6a6"
@@ -6447,6 +6452,11 @@ react-native-material-menu@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-native-material-menu/-/react-native-material-menu-2.0.0.tgz#139f407a52fbc0d47e5351d50ac769e05812da5c"
   integrity sha512-SmO9PLE3E469EPbVWZqvdu6JGPPZIm7YjqDcWs2PPoY0k7w2V9tFo3BmmLXNzNZDCVCAi+PPSsL7h/5WkfHcSg==
+
+react-native-multi-slider@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/react-native-multi-slider/-/react-native-multi-slider-0.3.6.tgz#3fa9d98bb92c8c27e05e3b43849f0a99ee9a42cc"
+  integrity sha1-P6nZi7ksjCfgXjtDhJ8Kme6aQsw=
 
 react-native-permissions@^3.3.1:
   version "3.3.1"

@@ -22,6 +22,8 @@ const SortAndFilter = ({theme, filters, setCount}) => {
 
   const [selectedSortMethod, setSelectedSortMethod] = useState(null);
   const [providers, setProviders] = useState([]);
+  const [min, setMin] = useState(0);
+  const [max, setMax] = useState(0);
 
   const [categories, setCategories] = useState([]);
 
@@ -102,6 +104,10 @@ const SortAndFilter = ({theme, filters, setCount}) => {
             setProviders={setProviders}
             setCategories={setCategories}
             categories={categories}
+            min={min}
+            setMin={setMin}
+            max={max}
+            setMax={setMax}
           />
         </RBSheet>
       </View>

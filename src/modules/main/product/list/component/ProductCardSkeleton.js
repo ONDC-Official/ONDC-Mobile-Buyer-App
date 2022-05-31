@@ -13,15 +13,15 @@ const ProductCardSkeleton = () => {
     <Card>
       <SkeletonPlaceholder>
         <View style={styles.container}>
-          <View style={styles.image}/>
+          <View style={styles.image} />
           <View style={appStyles.container}>
-            <View style={styles.name}/>
-            <View style={styles.description}/>
+            <View style={styles.name} />
+            <View style={styles.description} />
             <View style={styles.priceContainer}>
               <View style={appStyles.container}>
-                <View style={styles.price}/>
+                <View style={styles.price} />
               </View>
-              <View style={styles.button}/>
+              <View style={styles.button} />
             </View>
           </View>
         </View>

@@ -9,7 +9,6 @@ import {removeItemFromCart} from '../../../../../redux/actions';
 import {updateItemInCart} from '../../../../../redux/actions';
 import {addItemToCart} from '../../../../../redux/actions';
 import {appStyles} from '../../../../../styles/styles';
-import {maskAmount} from '../../../../../utils/utils';
 import {showInfoToast} from '../../../../../utils/utils';
 
 const addButton = strings('main.product.add_button_title');
@@ -27,7 +26,6 @@ const addToCart = strings('main.product.add_to_cart');
 const ProductCard = ({theme, navigation, item, apiInProgress}) => {
   const {colors} = theme;
   const dispatch = useDispatch();
-  const {requestInProgress} = useProductList();
 
   /**
    * function handles click event add button
@@ -38,7 +36,7 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
   };
 
   /**
-   *function handles click event of increase and decrease buttons
+   * function handles click event of increase and decrease buttons
    */
   const updateQuantity = (increase = true) => {
     let product = null;
