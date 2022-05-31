@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Card, withTheme} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -29,10 +36,10 @@ const AuthContainer = ({theme, children, onBackPress}) => {
       <KeyboardAwareScrollView
         contentContainerStyle={[appStyles.container, styles.container]}>
         <TouchableOpacity onPress={onBackPress}>
-          <Icon name="angle-left" size={30} color={colors.accentColor}/>
+          <Icon name="angle-left" size={30} color={colors.accentColor} />
         </TouchableOpacity>
         <View style={styles.imageContainer}>
-          <Image source={image} resizeMode={'contain'} style={styles.image}/>
+          <Image source={image} resizeMode={'contain'} style={styles.image} />
         </View>
 
         <View style={[appStyles.container, styles.mainContainer]}>
@@ -40,9 +47,9 @@ const AuthContainer = ({theme, children, onBackPress}) => {
             {children}
             <View style={styles.footerContainer}>
               <Text>{userAgreement}</Text>
-              <ClearButton title={termsOfServices}/>
+              <ClearButton title={termsOfServices} />
               <Text> {andLabel} </Text>
-              <ClearButton title={privacyPolicy}/>
+              <ClearButton title={privacyPolicy} />
             </View>
           </Card>
         </View>

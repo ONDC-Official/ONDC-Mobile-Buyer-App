@@ -142,6 +142,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }, 10000);
   };
 
+  /**
+   * function request initialize order
+   * @returns {Promise<void>}
+   */
   const initializeOrder = async () => {
     try {
       setInitializeOrderRequested(true);
@@ -270,6 +274,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }
   };
 
+  /**
+   * function used to process hypersdk
+   * @returns {Promise<void>}
+   */
   const processPayment = async () => {
     setConfirmOrderRequested(true);
 
@@ -306,7 +314,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           environment: 'sandbox',
         },
       };
-      console.log(await HyperSdkReact.isInitialised());
+
       if (await HyperSdkReact.isInitialised()) {
         HyperSdkReact.process(JSON.stringify(processPayload));
       }
@@ -378,6 +386,11 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }
   };
 
+  /**
+   * function request confirm order
+   * @param method:payment method selected by user
+   * @returns {Promise<void>}
+   */
   const confirmOrder = async method => {
     try {
       const orderList = refOrders.current;
@@ -429,6 +442,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }
   };
 
+  /**
+   * function request signpayload and initialize hypersdk
+   */
   const placeOrder = async () => {
     const options = {
       headers: {Authorization: `Bearer ${token}`},
@@ -461,6 +477,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }
   };
 
+  /**
+   * function used to initialize hypersdk
+   */
   const initializeJusPaySdk = signaturePayload => {
     const initiatePayload = {
       requestId: confirmationList[0].transaction_id,

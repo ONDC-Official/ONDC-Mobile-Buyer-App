@@ -3,6 +3,10 @@ import {StyleSheet, View} from 'react-native';
 import {Card, Divider} from 'react-native-elements';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
+/**
+ * Component to show skeleton of payment screen
+ * @returns {JSX.Element}
+ */
 const PaymentSkeleton = () => {
   return (
     <>

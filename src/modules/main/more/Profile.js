@@ -10,6 +10,12 @@ import Header from '../cart/addressPicker/Header';
 
 const profile = strings('main.more.profile');
 
+/**
+ * Component to render profile screen which shows user profile
+ * @param navigation :application navigation object
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const Profile = ({navigation}) => {
   const {
     state: {name, emailId, photoURL},

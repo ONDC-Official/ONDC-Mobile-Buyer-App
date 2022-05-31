@@ -6,6 +6,13 @@ import {strings} from '../../../locales/i18n';
 
 const orderedOn = strings('main.order.ordered_on_label');
 
+/**
+ * Component to render signle card on orders screen
+ * @param theme:application theme
+ * @param item:single order object
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const OrderCard = ({item, theme}) => {
   const {colors} = theme;
 

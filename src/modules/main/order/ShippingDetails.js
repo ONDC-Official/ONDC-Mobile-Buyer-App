@@ -27,6 +27,14 @@ import Support from './Support';
 const returnLabel = strings('main.order.return');
 const cancel = strings('main.order.cancel');
 
+/**
+ * Component is used to display shipping details to the user when card is expanded
+ * @param order:single order object
+ * @param getOrderList:function to request order list
+ * @param theme:application theme
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const ShippingDetails = ({order, getOrderList, theme}) => {
   const {colors} = theme;
   const separator = ',';
@@ -50,6 +58,10 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
     ref_id: order.id,
   };
 
+  /**
+   * function used to request tracking details of order
+   * @returns {Promise<void>}
+   */
   const trackOrder = async () => {
     try {
       setTrackInProgress(true);
@@ -86,6 +98,10 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
     }
   };
 
+  /**
+   * function used to request cancel order
+   * @returns {Promise<void>}
+   */
   const cancelOrder = async () => {
     try {
       setCancelInProgress(true);
@@ -120,6 +136,12 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
     }
   };
 
+  /**
+   * Component is used to display single item with title and cost
+   * @param item:single ordered item
+   * @returns {JSX.Element}
+   * @constructor
+   */
   const renderItem = ({item}) => {
     return (
       <View style={styles.priceContainer}>

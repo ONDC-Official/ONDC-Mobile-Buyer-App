@@ -22,6 +22,15 @@ const validationSchema = Yup.object({
     .required(requiredField),
 });
 
+/**
+ * Component is used to display dialogue when user clicks on call icon
+ * @param theme: application theme
+ * @param item:single order object
+ * @param modalVisible:boolean indicates visibility of dialogue
+ * @param setModalVisible:function to set visibility of dialogue
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const Support = ({modalVisible, setModalVisible, item, theme}) => {
   const {colors} = theme;
   const {
@@ -39,6 +48,11 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
     },
   };
 
+  /**
+   * Component is used to handle click event of call me button
+   * @param number:number entered by uder
+   * @returns {Promise<void>}
+   */
   const callMe = async number => {
     try {
       setCallInProgress(true);
@@ -79,6 +93,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
       setCallInProgress(false);
     }
   };
+
   return (
     <View style={styles.centeredView}>
       <Dialog isVisible={modalVisible}>

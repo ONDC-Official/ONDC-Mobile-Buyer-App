@@ -14,6 +14,11 @@ import OrderCardSkeleton from './OrderCardSkeleton';
 
 const emptyListMessage = strings('main.order.list_empty_message');
 
+/**
+ * Component to render orders screen
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const Order = () => {
   const {
     state: {token},
@@ -24,6 +29,11 @@ const Order = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [moreListRequested, setMoreListRequested] = useState(false);
 
+  /**
+   * function used to request list of orders
+   * @param number:It specifies the number of page
+   * @returns {Promise<void>}
+   */
   const getOrderList = async number => {
     try {
       const {data} = await getData(
@@ -48,6 +58,9 @@ const Order = () => {
     }
   };
 
+  /**
+   * Function is called when to get next list of elements on infinite scroll
+   */
   const loadMoreList = () => {
     if (orders) {
       if (totalOrders > orders.length) {
@@ -69,6 +82,12 @@ const Order = () => {
       .catch(() => {});
   }, []);
 
+  /**
+   * Component to render signle card
+   * @param item:single order object
+   * @constructor
+   * @returns {JSX.Element}
+   */
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <OrderCardSkeleton item={item} />

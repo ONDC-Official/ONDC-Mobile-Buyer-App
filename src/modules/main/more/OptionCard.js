@@ -12,11 +12,21 @@ const logOutMessage = strings('main.more.log_out_message');
 const okLabel = strings('main.product.ok_label');
 const cancelLabel = strings('main.product.cancel_label');
 
+/**
+ * Component to render single option card in more screen
+ * @param navigation :application navigation object
+ * @param item : single object from  list
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const OptionCard = ({theme, navigation, item}) => {
   const {colors} = theme;
   const {logoutUser} = useContext(AuthContext);
   const dispatch = useDispatch();
 
+  /**
+   * Function handles click event of card and depending on option it navigates to respective screen
+   */
   const onPressHandler = option => {
     if (option === OPTIONS.LOG_OUT) {
       alertWithTwoButtons(

@@ -8,6 +8,8 @@ import {Input} from 'react-native-elements';
  * @returns {JSX.Element}
  * @constructor
  */
-const InputField = props => <Input {...props} placeholder={props.placeholder}/>;
+const InputField = props => (
+  <Input {...props} placeholder={props.placeholder} />
+);
 
 export default InputField;

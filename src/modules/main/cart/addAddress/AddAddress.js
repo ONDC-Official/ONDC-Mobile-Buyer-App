@@ -136,7 +136,6 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
       }
       setApiInProgress(false);
     } catch (error) {
-      console.log(error);
       handleApiError(error);
       setApiInProgress(false);
     }

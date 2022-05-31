@@ -19,6 +19,9 @@ const addButton = strings('main.cart.add');
 const Header = ({theme, title, show, navigation}) => {
   const {colors} = theme;
 
+  /**
+   * function handles click event of add button
+   */
   const onPressHandler = () => {
     navigation.navigate('AddAddress', {selectedAddress: show});
   };

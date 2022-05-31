@@ -4,8 +4,22 @@ import {Card, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {appStyles} from '../../../../styles/styles';
 
+/**
+ * Component to render signle card on support   screen
+ * @param icon:icon to show in card
+ * @param url:url
+ * @param title:title of card
+ * @param message:message to show below the card
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const SupportCard = ({theme, url, icon, title, onPress, message, source}) => {
   const {colors} = theme;
+
+  /**
+   * function handles click event of next arraow and navigates to the given url
+   * @returns {Promise<void>}
+   */
   const onPressHandler = async () => {
     try {
       const supported = await Linking.canOpenURL(url);

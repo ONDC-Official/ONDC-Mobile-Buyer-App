@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import {strings} from '../../../../locales/i18n';
 import IconField from './IconField';

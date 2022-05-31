@@ -10,14 +10,10 @@ import SortMenu from './SortMenu';
 const filter = strings('main.product.filters.filter');
 
 /**
- * Component to header on products screen
+ * Component to show sort and filter on header of products screen
  * @param theme
- * @param openSheet: function to open rb sheet when user wants to select location
- * @param apiInProgress
- * @param locationInProgress
- * @param location:location of user or location selected by user
- * @param onSearch:function handles onEndEditing event of searchbar
- * @param filters
+ * @param setCount:function to set items count
+ * @param filters:object containing filter parameters
  * @constructor
  * @returns {JSX.Element}
  */
@@ -33,12 +29,24 @@ const SortAndFilter = ({theme, filters, setCount}) => {
   const refRBSheet = useRef();
   const refSortSheet = useRef();
 
+  /**
+   * function to close sort sheet
+   */
   const closeSortSheet = () => refSortSheet.current.close();
 
+  /**
+   * function to open sort sheet
+   */
   const openSortSheet = () => refSortSheet.current.open();
 
+  /**
+   * function to close filters sheet
+   */
   const closeRBSheet = () => refRBSheet.current.close();
 
+  /**
+   * function to open filters sheet
+   */
   const openRBSheet = () => {
     setAppliedFilters([]);
     refRBSheet.current.open();

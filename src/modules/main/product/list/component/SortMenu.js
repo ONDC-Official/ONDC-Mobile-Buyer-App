@@ -22,6 +22,16 @@ const list = [
   {name: 'Ratings: Low To High', value: PRODUCT_SORTING.RATINGS_LOW_TO_HIGH},
 ];
 
+/**
+ * Component to render filters screen
+ * @param setCount:function to set items count
+ * @param filters:object containing filter parameters
+ * @param closeSortSheet:function used to close sort sheet
+ * @param selectedSortMethod:sort method selected by user
+ * @param setSelectedSortMethod:function to set selected sort method
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const SortMenu = ({
   theme,
   filters,
@@ -44,6 +54,11 @@ const SortMenu = ({
     },
   };
 
+  /**
+   * function handles click event of apply button
+   * it request list of products with selected sort method
+   * @returns {Promise<void>}
+   */
   const onApply = async () => {
     setRequestInProgress(true);
     let sortField = 'price';

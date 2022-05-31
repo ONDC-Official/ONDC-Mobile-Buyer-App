@@ -223,6 +223,9 @@ const Products = ({navigation}) => {
     }
   };
 
+  /**
+   * function to get list of products
+   */
   const getProducts = setApiInProgress => {
     let getList = setInterval(async () => {
       try {
@@ -252,7 +255,7 @@ const Products = ({navigation}) => {
   };
 
   /**
-   * Function used to get list of requested products
+   * Function used to get list of filters
    * @returns {Promise<void>}
    **/
   const getFilter = (id, transactionId) => {

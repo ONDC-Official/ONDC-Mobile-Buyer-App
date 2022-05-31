@@ -22,9 +22,9 @@ const AvatarImage = ({uri, dimension, backgroundColor}) => {
     uri === 'Unknown'
       ? require('../../assets/profile.png')
       : {
-        uri,
-        priority: FastImage.priority.normal,
-      };
+          uri,
+          priority: FastImage.priority.normal,
+        };
 
   return (
     <FastImage

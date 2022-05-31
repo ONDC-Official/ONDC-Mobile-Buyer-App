@@ -16,6 +16,9 @@ const Footer = ({theme, onCheckout, onClearCart}) => {
   const {colors} = theme;
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
+  /**
+   * function to calculate total selected quantity
+   */
   const itemsCount = cartItems.reduce((total, item) => {
     total += item.quantity;
     return total;

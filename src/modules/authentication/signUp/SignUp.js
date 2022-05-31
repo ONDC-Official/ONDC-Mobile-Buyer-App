@@ -11,7 +11,7 @@ import SignUpFrom from './SignUpForm';
 const SignUp = ({navigation}) => {
   return (
     <AuthContainer onBackPress={() => navigation.goBack()}>
-      <SignUpFrom navigation={navigation}/>
+      <SignUpFrom navigation={navigation} />
     </AuthContainer>
   );
 };

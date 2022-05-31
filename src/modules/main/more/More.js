@@ -32,6 +32,11 @@ const list = [
  * @returns {JSX.Element}
  */
 const More = ({navigation}) => {
+  /**
+   * Function  used to render single option card in the list
+   * @param item: single object from  list
+   * @returns {JSX.Element}
+   */
   const renderItem = ({item}) => {
     return <OptionCard item={item} navigation={navigation} />;
   };

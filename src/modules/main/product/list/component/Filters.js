@@ -22,6 +22,20 @@ const provider = strings('main.product.filters.providers');
 const category = strings('main.product.filters.categories');
 const priceRange = strings('main.product.filters.price_range');
 
+/**
+ * Component to render filters screen
+ * @param setCount:function to set items count
+ * @param appliedFilters:data containing filters selected by user
+ * @param setAppliedFilters:function to set filters selected by user
+ * @param filters:object containing filter parameters
+ * @param closeRBSheet:function used to close filters sheet
+ * @param providers:list of providers selected by user
+ * @param setProviders:function to set providers selected by user
+ * @param categories:list of providers selected by user
+ * @param setCategories:function to set providers selected by user
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const Filters = ({
   setCount,
   appliedFilters,
@@ -51,6 +65,11 @@ const Filters = ({
   };
   const {handleApiError} = useNetworkErrorHandling();
 
+  /**
+   * function handles click event of apply button
+   * it request list of products with selected filter params
+   * @returns {Promise<void>}
+   */
   const onApply = async () => {
     setRequestInProgress(true);
 
@@ -99,6 +118,9 @@ const Filters = ({
     }
   };
 
+  /**
+   * function handles click event of checkbox in providers list
+   */
   const onProviderCheckBoxPress = (item, index) => {
     let providerlist = providers.slice();
     if (index > -1) {
@@ -108,6 +130,10 @@ const Filters = ({
     }
     setProviders(providerlist);
   };
+
+  /**
+   * function handles click event of checkbox in category list
+   */
   const onCategoryCheckBoxPress = (item, index) => {
     let categorylist = categories.slice();
     if (index > -1) {

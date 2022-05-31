@@ -30,11 +30,17 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
   const dispatch = useDispatch();
   const {requestInProgress} = useProductList();
 
+  /**
+   * function handles click event add button
+   */
   const addItem = () => {
     const product = Object.assign({}, item, {quantity: 1});
     dispatch(addItemToCart(product));
   };
 
+  /**
+   *function handles click event of increase and decrease buttons
+   */
   const updateQuantity = (increase = true) => {
     let product = null;
     if (increase) {

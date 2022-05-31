@@ -23,6 +23,12 @@ const ondcPolicyMessage = strings('main.more.ondc_policy_message');
 const contactUs = strings('main.more.contact_us');
 const contactUsMessage = strings('main.more.contact_us_message');
 
+/**
+ * Component to render support  screen
+ * @param navigation :application navigation object
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const Support = ({navigation}) => {
   return (
     <SafeAreaView style={appStyles.container}>
