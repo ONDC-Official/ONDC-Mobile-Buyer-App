@@ -11,7 +11,6 @@ import {addItemToCart} from '../../../../../redux/actions';
 import {appStyles} from '../../../../../styles/styles';
 import {maskAmount} from '../../../../../utils/utils';
 import {showInfoToast} from '../../../../../utils/utils';
-import useProductList from '../../hooks/useProductList';
 
 const addButton = strings('main.product.add_button_title');
 const addToCart = strings('main.product.add_to_cart');
