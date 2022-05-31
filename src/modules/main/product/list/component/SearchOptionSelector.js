@@ -4,7 +4,7 @@ import {Text, withTheme} from 'react-native-elements';
 import {appStyles} from '../../../../../styles/styles';
 
 /**
- * Component to show filter buttons in the header of product screen
+ * Component to show search option buttons in the header of product screen
  * @param theme
  * @param card
  * @param name:name of the card

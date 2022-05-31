@@ -3,6 +3,10 @@ import {StyleSheet, View} from 'react-native';
 import {Card} from 'react-native-elements';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
+/**
+ * Component to show skeleton of order card
+ * @returns {JSX.Element}
+ */
 const OrderCardSkeleton = () => {
   return (
     <Card containerStyle={styles.card}>

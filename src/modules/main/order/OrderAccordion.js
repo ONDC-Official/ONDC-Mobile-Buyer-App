@@ -5,6 +5,14 @@ import {Card, withTheme} from 'react-native-elements';
 import OrderCard from './OrderCard';
 import ShippingDetails from './ShippingDetails';
 
+/**
+ * Component is used to display accordion card on order screen
+ * @param theme: application theme
+ * @param item:single accordion card in the list
+ * @param getOrderList:function to request order list
+ * @returns {JSX.Element}
+ * @constructor
+ */
 const OrderAccordion = ({item, theme, getOrderList}) => {
   const {colors} = theme;
   const [activeSections, setActiveSections] = useState([]);

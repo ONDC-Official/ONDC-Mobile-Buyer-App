@@ -47,6 +47,9 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
   const {handleApiError} = useNetworkErrorHandling();
   const {selectedAddress} = params;
 
+  /**
+   * function handles click event of add billing address button
+   */
   const onAdd = () => {
     navigation.navigate('AddAddress', {selectedAddress: selectedAddress});
   };

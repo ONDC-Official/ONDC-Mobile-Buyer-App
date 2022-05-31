@@ -20,7 +20,7 @@ const category = strings('main.product.category_label');
 const detectLocation = strings('main.product.detecting_location');
 
 /**
- * Component to header on products screen
+ * Component to render header on products screen
  * @param theme
  * @param openSheet: function to open rb sheet when user wants to select location
  * @param apiInProgress
