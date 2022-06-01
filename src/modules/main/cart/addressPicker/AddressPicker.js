@@ -47,12 +47,8 @@ const AddressPicker = ({navigation, theme}) => {
         },
       });
 
-      let newList = data.map(element => {
-        element.id = Math.random().toString();
-        return element;
-      });
-
-      setList(newList);
+      setList(data);
+      console.log(data);
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -77,6 +73,12 @@ const AddressPicker = ({navigation, theme}) => {
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => {
+    const onEdit = () => {
+      navigation.navigate('AddAddress', {
+        selectedAddress: 'address',
+        item: item,
+      });
+    };
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <AddressCardSkeleton item={item} />
     ) : (
@@ -84,6 +86,7 @@ const AddressPicker = ({navigation, theme}) => {
         item={item}
         selectedAddress={selectedAddress}
         setSelectedAddress={setSelectedAddress}
+        onEdit={onEdit}
       />
     );
   };

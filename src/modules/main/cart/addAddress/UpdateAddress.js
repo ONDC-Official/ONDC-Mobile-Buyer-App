@@ -15,7 +15,6 @@ import {
   ADD_ADDRESS,
   BASE_URL,
   BILLING_ADDRESS,
-  UPDATE_ADDRESS,
 } from '../../../../utils/apiUtilities';
 import Header from '../addressPicker/Header';
 
@@ -65,7 +64,7 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState(false);
-  const {selectedAddress, item} = params;
+  const {selectedAddress, id} = params;
 
   const userInfo = {
     email: '',
@@ -99,7 +98,7 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
             gps: '',
             defaultAddress: true,
             address: {
-              areaCode: values.pin,
+              area_code: values.pin,
               city: values.city,
               locality: values.landMark,
               state: values.state,
@@ -109,7 +108,7 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
           }
         : {
             address: {
-              areaCode: values.pin,
+              area_code: values.pin,
               city: values.city,
               locality: values.landMark,
               state: values.state,
@@ -123,20 +122,10 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
 
     try {
       setApiInProgress(true);
-      let url;
-      if (item) {
-        url =
-          selectedAddress === 'address'
-            ? `${BASE_URL}${UPDATE_ADDRESS}${item.id}`
-            : `${BASE_URL}${BILLING_ADDRESS}`;
-      } else {
-        url =
-          selectedAddress === 'address'
-            ? `${BASE_URL}${ADD_ADDRESS}`
-            : `${BASE_URL}${BILLING_ADDRESS}`;
-      }
-      console.log(payload);
-      console.log(url);
+      const url =
+        selectedAddress === 'address'
+          ? `${BASE_URL}${ADD_ADDRESS}`
+          : `${BASE_URL}${BILLING_ADDRESS}`;
       await postData(url, payload, options);
       if (selectedAddress === 'address') {
         navigation.navigate('AddressPicker');
@@ -147,7 +136,6 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
       }
       setApiInProgress(false);
     } catch (error) {
-      console.log(error.response);
       handleApiError(error);
       setApiInProgress(false);
     }
@@ -156,10 +144,7 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
   return (
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header
-        title={item ? 'Update Address' : addAddress}
-        navigation={navigation}
-      />
+      <Header title={addAddress} navigation={navigation} />
       <KeyboardAwareScrollView>
         <Card containerStyle={styles.containerStyle}>
           <Formik
@@ -245,7 +230,7 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
 
                   <View style={styles.buttonContainer}>
                     <ContainButton
-                      title={item ? 'UPDATE' : buttonTitle}
+                      title={'UPDATE'}
                       onPress={handleSubmit}
                       loading={apiInProgress}
                       disabled={apiInProgress}

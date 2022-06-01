@@ -13,12 +13,18 @@ import {appStyles} from '../../../../styles/styles';
  * @constructor
  * @returns {JSX.Element}
  */
-const AddressCard = ({item, theme, selectedAddress, setSelectedAddress}) => {
+const AddressCard = ({
+  item,
+  theme,
+  onEdit,
+  selectedAddress,
+  setSelectedAddress,
+}) => {
   const {colors} = theme;
 
   const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
 
-  const {building, street, city, state} = item.address;
+  const {street, city, state} = item.address;
 
   const onPressHandler = () => setSelectedAddress(item);
 
@@ -38,8 +44,14 @@ const AddressCard = ({item, theme, selectedAddress, setSelectedAddress}) => {
             <Text style={[styles.address, {color: colors.grey}]}>
               {street} {city} {state}
             </Text>
-            <Text style={{color: colors.grey}}>{item.address.area_code}</Text>
+            <Text style={{color: colors.grey}}>{item.address.areaCode}</Text>
+            <TouchableOpacity
+              style={[styles.button, {borderColor: colors.accentColor}]}
+              onPress={onEdit}>
+              <Text style={{color: colors.accentColor}}>EDIT</Text>
+            </TouchableOpacity>
           </View>
+
           <View style={styles.radioButton}>
             <RadioButtonInput
               obj={item}
@@ -109,4 +121,12 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   address: {textTransform: 'capitalize', marginVertical: 4},
+  button: {
+    marginTop: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+  },
 });
