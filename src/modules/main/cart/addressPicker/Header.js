@@ -52,6 +52,7 @@ export default withTheme(Header);
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
   backButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: 16,
   },
   text: {fontSize: 22, fontWeight: '600'},
   button: {

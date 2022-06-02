@@ -1,5 +1,5 @@
 import React, {useState, useContext, memo, useEffect} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {CheckBox, Divider, Text, useTheme} from 'react-native-elements';
 import RangeSlider from 'rn-range-slider';
 import {appStyles} from '../../../../../styles/styles';
@@ -15,6 +15,8 @@ import {strings} from '../../../../../locales/i18n';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import ClearButton from '../../../../../components/button/ClearButton';
 import ContainButton from '../../../../../components/button/ContainButton';
+import {Input} from 'react-native-elements/dist/input/Input';
+import InputField from '../../../../../components/input/InputField';
 
 const applyTitle = strings('main.product.filters.apply_title');
 const close = strings('main.product.filters.close');
@@ -200,6 +202,7 @@ const Filters = ({
                 })}
               </>
             )}
+
             {filters.categories && filters.categories.length > 0 && (
               <>
                 <Text style={styles.text}>{category}</Text>
@@ -224,19 +227,19 @@ const Filters = ({
                     <Text style={styles.price}>{priceRange}</Text>
 
                     <View style={styles.applyButton}>
-                      <View
-                        style={[
-                          styles.amountContainer,
-                          {borderColor: colors.greyOutline},
-                        ]}>
-                        <Text style={styles.amount}>{min}</Text>
+                      <View style={styles.amountContainer}>
+                        <InputField
+                          label={'Min'}
+                          value={`${min}`}
+                          renderErrorMessage={false}
+                        />
                       </View>
-                      <View
-                        style={[
-                          styles.amountContainer,
-                          {borderColor: colors.greyOutline},
-                        ]}>
-                        <Text style={styles.amount}>{max}</Text>
+                      <View style={styles.amountContainer}>
+                        <InputField
+                          label={'Max'}
+                          value={`${max}`}
+                          renderErrorMessage={false}
+                        />
                       </View>
                     </View>
 
@@ -251,7 +254,7 @@ const Filters = ({
                       ]}
                       trackStyle={styles.trackStyle}
                       values={[min, max]}
-                      sliderLength={200}
+                      sliderLength={Dimensions.get('window').width - 40}
                       onValuesChange={handleValueChange}
                       min={filters.minPrice}
                       max={filters.maxPrice}
@@ -299,21 +302,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   amountContainer: {
-    height: 30,
     width: 100,
-    borderWidth: 1,
-    borderRadius: 5,
-    marginRight: 5,
   },
   emptyContainer: {alignItems: 'center', justifyContent: 'center'},
   price: {fontSize: 18, fontWeight: '700', marginVertical: 8},
   amount: {fontSize: 16, fontWeight: '600', marginBottom: 8},
-  sliderContainer: {paddingHorizontal: 10},
+  sliderContainer: {paddingHorizontal: 10, alignSelf: 'center'},
   applyButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
   },
-  trackStyle: {height: 6, borderRadius: 4},
+  trackStyle: {height: 5, borderRadius: 4},
   containerStyle: {
     borderWidth: 0,
     padding: 0,
@@ -325,5 +326,5 @@ const styles = StyleSheet.create({
     width: 120,
     marginHorizontal: 10,
   },
-  markerStyle: {height: 20, width: 20},
+  markerStyle: {height: 21, width: 21},
 });
