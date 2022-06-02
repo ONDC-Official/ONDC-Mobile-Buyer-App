@@ -1,7 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Card, CheckBox, Text, withTheme} from 'react-native-elements';
-import {RadioButtonInput} from 'react-native-simple-radio-button';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {appStyles} from '../../../../styles/styles';
 
@@ -52,10 +51,14 @@ const AddressCard = ({
               </TouchableOpacity>
             </View>
             {item.descriptor.email ? (
-              <Text style={{color: colors.grey}}>{item.descriptor.email}</Text>
+              <Text style={[styles.text, {color: colors.grey}]}>
+                {item.descriptor.email}
+              </Text>
             ) : null}
             {item.descriptor.phone ? (
-              <Text style={{color: colors.grey}}>{item.descriptor.phone}</Text>
+              <Text style={[styles.text, {color: colors.grey}]}>
+                {item.descriptor.phone}
+              </Text>
             ) : null}
             <Text style={[styles.address, {color: colors.grey}]}>
               {street} {city} {state}
@@ -87,10 +90,14 @@ const AddressCard = ({
             </View>
 
             {item.email ? (
-              <Text style={{color: colors.grey}}>{item.email}</Text>
+              <Text style={[styles.text, {color: colors.grey}]}>
+                {item.email}
+              </Text>
             ) : null}
             {item.phone ? (
-              <Text style={{color: colors.grey}}>{item.phone}</Text>
+              <Text style={[styles.text, {color: colors.grey}]}>
+                {item.phone}
+              </Text>
             ) : null}
             <Text style={[styles.address, {color: colors.grey}]}>
               {street} {city} {state}
@@ -126,7 +133,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     flexShrink: 1,
   },
-  address: {textTransform: 'capitalize', marginVertical: 4},
+  text: {marginBottom: 4},
+  address: {textTransform: 'capitalize', marginBottom: 4},
   button: {
     marginTop: 5,
     paddingVertical: 4,
