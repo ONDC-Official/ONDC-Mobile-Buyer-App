@@ -14,11 +14,7 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  BILLING_ADDRESS,
-  GET_ADDRESS,
-} from '../../../../utils/apiUtilities';
+import {BASE_URL, BILLING_ADDRESS} from '../../../../utils/apiUtilities';
 import {skeletonList} from '../../../../utils/utils';
 import AddressCard from '../addressPicker/AddressCard';
 import AddressCardSkeleton from '../addressPicker/AddressCardSkeleton';
@@ -66,12 +62,7 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
         },
       });
 
-      let newList = data.map(element => {
-        element.id = Math.random().toString();
-        return element;
-      });
-
-      setList(newList);
+      setList(data);
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -106,6 +97,12 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => {
+    const onEdit = () => {
+      navigation.navigate('AddAddress', {
+        selectedAddress: selectedAddress,
+        item: item,
+      });
+    };
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <AddressCardSkeleton item={item} />
     ) : (
@@ -113,6 +110,7 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
         item={item}
         selectedAddress={selectedBillingAddress}
         setSelectedAddress={setSelectedBillingAddress}
+        onEdit={onEdit}
       />
     );
   };
@@ -185,7 +183,6 @@ const styles = StyleSheet.create({
     width: 300,
     marginVertical: 10,
     alignSelf: 'center',
-    backgroundColor: 'red',
   },
   contentContainerStyle: {paddingHorizontal: 10, paddingBottom: 10},
   emptyContainer: {justifyContent: 'center', alignItems: 'center'},

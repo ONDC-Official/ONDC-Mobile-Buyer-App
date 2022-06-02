@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     width: 300,
     marginVertical: 10,
     alignSelf: 'center',
-    backgroundColor: 'red',
   },
   contentContainerStyle: {paddingHorizontal: 10, paddingBottom: 10},
   emptyContainer: {justifyContent: 'center', alignItems: 'center'},

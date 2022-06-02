@@ -4,6 +4,7 @@ import {Divider, Text, withTheme} from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {strings} from '../../../../../locales/i18n';
+import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 import Filters from './Filters';
 import SortMenu from './SortMenu';
 
@@ -20,14 +21,16 @@ const filter = strings('main.product.filters.filter');
 const SortAndFilter = ({theme, filters, setCount}) => {
   const {colors} = theme;
 
-  const [selectedSortMethod, setSelectedSortMethod] = useState(null);
+  const [selectedSortMethod, setSelectedSortMethod] = useState(
+    PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
+  );
   const [providers, setProviders] = useState([]);
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(0);
 
   const [categories, setCategories] = useState([]);
 
-  const [appliedFilters, setAppliedFilters] = useState([]);
+  const [appliedFilters, setAppliedFilters] = useState({});
   const refRBSheet = useRef();
   const refSortSheet = useRef();
 
@@ -49,10 +52,7 @@ const SortAndFilter = ({theme, filters, setCount}) => {
   /**
    * function to open filters sheet
    */
-  const openRBSheet = () => {
-    setAppliedFilters([]);
-    refRBSheet.current.open();
-  };
+  const openRBSheet = () => refRBSheet.current.open();
 
   return (
     <>
@@ -62,6 +62,8 @@ const SortAndFilter = ({theme, filters, setCount}) => {
         <TouchableOpacity onPress={openSortSheet}>
           <Text style={[styles.text, {color: colors.accentColor}]}>
             {selectedSortMethod ? selectedSortMethod : 'Sort'}
+            {'   '}
+            <Icon name="pencil-square" size={14} />
           </Text>
         </TouchableOpacity>
         <RBSheet
@@ -82,8 +84,8 @@ const SortAndFilter = ({theme, filters, setCount}) => {
         <TouchableOpacity onPress={openRBSheet}>
           <Text style={[styles.text, {color: colors.accentColor}]}>
             {filter}
-            {appliedFilters.length > 0
-              ? `(${appliedFilters.length})`
+            {Object.keys(appliedFilters).length > 0
+              ? `(${Object.keys(appliedFilters).length})`
               : null}{' '}
             <Icon name="filter" size={14} />
           </Text>

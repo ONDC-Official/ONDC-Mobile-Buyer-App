@@ -231,7 +231,7 @@ const Products = ({navigation}) => {
       try {
         setApiInProgress(true);
 
-        const url = `${BASE_URL}${GET_PRODUCTS}${refmessageId.current}`;
+        const url = `${BASE_URL}${GET_PRODUCTS}${refmessageId.current}&sortField=rating&sortOrder=desc`;
         const {data} = await getData(`${url}`, options);
         setCount(data.message.count);
 
@@ -300,6 +300,8 @@ const Products = ({navigation}) => {
    **/
   const onSearch = async (query, selectedSearchOption) => {
     if (longitude && latitude) {
+      console.log(latitude);
+      console.log(longitude);
       setRequestInProgress(true);
       setFilters(null);
       dispatch(saveProducts([]));

@@ -162,15 +162,14 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
         <View style={styles.addressContainer}>
           <Text style={{color: colors.grey}}>Billing Address:</Text>
           <Text style={styles.name}>{order.billing.name}</Text>
+          <Text style={styles.address}>{order.billing.address.street}</Text>
           <Text style={styles.address}>
-            {order.billing.address.building
-              ? order.billing.address.building
-              : null}
-            {order.billing.address.building ? separator : null}{' '}
-            {order.billing.address.street}
+            {order.billing.address.city} {order.billing.address.state}
           </Text>
           <Text>
-            {order.billing.address.city} {order.billing.address.state}
+            {order.billing.address.areaCode
+              ? order.billing.address.areaCode
+              : null}
           </Text>
         </View>
       </View>

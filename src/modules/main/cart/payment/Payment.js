@@ -58,7 +58,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const dispatch = useDispatch();
   const {selectedAddress, selectedBillingAddress, confirmationList} = params;
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
-  const [error, setError] = useState(null);
+  const error = useRef(null);
   const {
     state: {token, uid},
   } = useContext(AuthContext);
@@ -121,21 +121,22 @@ const Payment = ({navigation, theme, route: {params}}) => {
           },
         );
 
-        const errorObj = data.find(item => item.hasOwnProperty('error'));
-        setError(errorObj);
+        const e = data.find(item => item.hasOwnProperty('error'));
+        error.current = e;
       } catch (error) {
         handleApiError(error);
-        setError(error);
+
         setConfirmOrderRequested(false);
       }
     }, 2000);
     setTimeout(() => {
       clearInterval(order);
-
-      if (!error) {
+      if (!error.current) {
         setConfirmOrderRequested(false);
         alertWithOneButton(null, message, ok, onOrderSuccess);
       } else {
+        console.log(error.current);
+
         showToastWithGravity(strings('network_error.something_went_wrong'));
         setConfirmOrderRequested(false);
       }
@@ -208,7 +209,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   country: 'IND',
                   city: selectedBillingAddress.address.city,
                   street: selectedBillingAddress.address.street,
-                  area_code: selectedBillingAddress.address.area_code,
+                  area_code: selectedBillingAddress.address.areaCode,
                   state: selectedBillingAddress.address.state,
                   building: selectedBillingAddress.address.building
                     ? selectedBillingAddress.address.building
@@ -237,7 +238,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                     country: 'IND',
                     city: selectedAddress.address.city,
                     street: selectedAddress.address.street,
-                    area_code: selectedAddress.address.area_code,
+                    area_code: selectedAddress.address.areaCode,
                     state: selectedAddress.address.state,
                     building: selectedAddress.address.building
                       ? selectedAddress.address.building
@@ -578,7 +579,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                     {selectedAddress.address.locality},{' '}
                     {selectedAddress.address.city},{' '}
                     {selectedAddress.address.state} -{' '}
-                    {selectedAddress.address.area_code}
+                    {selectedAddress.address.areaCode}
                   </Text>
                 </Card>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import {StyleSheet} from 'react-native';
 import {Button, withTheme} from 'react-native-elements';
 import {appStyles} from '../../styles/styles';
 
@@ -17,13 +18,20 @@ const ContainButton = props => {
         appStyles.container,
         {color: props.color ? props.color : colors.white},
       ]}
-      buttonStyle={{
-        backgroundColor: props.backgroundColor
-          ? props.backgroundColor
-          : colors.accentColor,
-      }}
+      buttonStyle={[
+        styles.buttonStyle,
+        {
+          backgroundColor: props.backgroundColor
+            ? props.backgroundColor
+            : colors.accentColor,
+        },
+      ]}
     />
   );
 };
 
 export default withTheme(ContainButton);
+
+const styles = StyleSheet.create({
+  buttonStyle: {borderRadius: 4},
+});

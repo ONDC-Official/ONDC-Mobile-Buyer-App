@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Card, Text, withTheme} from 'react-native-elements';
+import {Card, CheckBox, Text, withTheme} from 'react-native-elements';
 import {RadioButtonInput} from 'react-native-simple-radio-button';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {appStyles} from '../../../../styles/styles';
 
 /**
@@ -30,75 +31,74 @@ const AddressCard = ({
 
   return item.descriptor ? (
     <Card containerStyle={styles.card}>
-      <TouchableOpacity activeOpacity={0.8} onPress={onPressHandler}>
-        <View style={styles.container}>
-          <View style={[appStyles.container]}>
-            {item.descriptor.name ? (
-              <Text style={styles.name}>{item.descriptor.name}</Text>
-            ) : null}
+      <CheckBox
+        key={item.id}
+        checked={isSelected}
+        onPress={onPressHandler}
+        containerStyle={[
+          styles.containerStyle,
+          {
+            backgroundColor: colors.backgroundColor,
+          },
+        ]}
+        title={
+          <View style={[styles.title, appStyles.container]}>
+            <View style={styles.iconContainer}>
+              {item.descriptor.name ? (
+                <Text style={styles.name}>{item.descriptor.name}</Text>
+              ) : null}
+              <TouchableOpacity onPress={onEdit}>
+                <Icon name="pencil" size={14} color={colors.accentColor} />
+              </TouchableOpacity>
+            </View>
             {item.descriptor.email ? (
-              <Text style={{color: colors.grey}}>
-                {item.descriptor.email} - {item.descriptor.phone}
-              </Text>
+              <Text style={{color: colors.grey}}>{item.descriptor.email}</Text>
+            ) : null}
+            {item.descriptor.phone ? (
+              <Text style={{color: colors.grey}}>{item.descriptor.phone}</Text>
             ) : null}
             <Text style={[styles.address, {color: colors.grey}]}>
               {street} {city} {state}
             </Text>
             <Text style={{color: colors.grey}}>{item.address.areaCode}</Text>
-            <TouchableOpacity
-              style={[styles.button, {borderColor: colors.accentColor}]}
-              onPress={onEdit}>
-              <Text style={{color: colors.accentColor}}>EDIT</Text>
-            </TouchableOpacity>
           </View>
-
-          <View style={styles.radioButton}>
-            <RadioButtonInput
-              obj={item}
-              borderWidth={1}
-              index={item.id}
-              buttonSize={10}
-              buttonInnerColor={colors.accentColor}
-              buttonOuterColor={colors.accentColor}
-              buttonOuterSize={18}
-              isSelected={isSelected}
-              onPress={onPressHandler}
-            />
-          </View>
-        </View>
-      </TouchableOpacity>
+        }
+      />
     </Card>
   ) : (
     <Card containerStyle={styles.card}>
-      <TouchableOpacity activeOpacity={0.8} onPress={onPressHandler}>
-        <View style={styles.container}>
-          <View style={[appStyles.container]}>
-            {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
+      <CheckBox
+        key={item.id}
+        checked={isSelected}
+        onPress={onPressHandler}
+        containerStyle={[
+          styles.containerStyle,
+          {
+            backgroundColor: colors.backgroundColor,
+          },
+        ]}
+        title={
+          <View style={[styles.title, appStyles.container]}>
+            <View style={styles.iconContainer}>
+              {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
+              <TouchableOpacity onPress={onEdit}>
+                <Icon name="pencil" size={14} color={colors.accentColor} />
+              </TouchableOpacity>
+            </View>
+
             {item.email ? (
-              <Text style={{color: colors.grey}}>
-                {item.email} - {item.phone}
-              </Text>
+              <Text style={{color: colors.grey}}>{item.email}</Text>
+            ) : null}
+            {item.phone ? (
+              <Text style={{color: colors.grey}}>{item.phone}</Text>
             ) : null}
             <Text style={[styles.address, {color: colors.grey}]}>
               {street} {city} {state}
             </Text>
-            <Text style={{color: colors.grey}}>{item.address.area_code}</Text>
+            <Text style={{color: colors.grey}}>{item.address.areaCode}</Text>
           </View>
-          <View style={styles.radioButton}>
-            <RadioButtonInput
-              obj={item}
-              borderWidth={1}
-              index={item.id}
-              buttonSize={10}
-              buttonInnerColor={colors.accentColor}
-              buttonOuterColor={colors.accentColor}
-              buttonOuterSize={18}
-              isSelected={isSelected}
-              onPress={onPressHandler}
-            />
-          </View>
-        </View>
-      </TouchableOpacity>
+        }
+      />
     </Card>
   );
 };
@@ -108,17 +108,23 @@ export default withTheme(AddressCard);
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     padding: 5,
   },
-  card: {margin: 0, elevation: 4, marginTop: 15, borderRadius: 8},
-  radioButton: {marginLeft: 10},
+  card: {
+    margin: 0,
+    elevation: 4,
+    marginTop: 15,
+    borderRadius: 8,
+    padding: 0,
+  },
   textContainer: {flexShrink: 1, flexDirection: 'row'},
   name: {
     textTransform: 'capitalize',
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 4,
+    flexShrink: 1,
   },
   address: {textTransform: 'capitalize', marginVertical: 4},
   button: {
@@ -129,4 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignSelf: 'flex-start',
   },
+  iconContainer: {flexDirection: 'row', justifyContent: 'space-between'},
+  title: {marginLeft: 5},
+  containerStyle: {borderWidth: 0, margin: 0},
 });

@@ -80,6 +80,7 @@ const Filters = ({
       priceMin: filters.minPrice ? min : null,
       priceMax: filters.maxPrice ? max : null,
     });
+    appliedFilters.range = {priceMin: min, priceMax: max};
 
     let params;
 
@@ -91,16 +92,16 @@ const Filters = ({
 
     if (providers && providers.length > 0) {
       params = params + `&providerIds=${providers.toString()}`;
-      let filteredData = appliedFilters.slice();
-      filteredData.push(providers);
-      setAppliedFilters(filteredData);
+      appliedFilters.providers = providers;
+    } else {
+      delete appliedFilters.providers;
     }
 
     if (categories && categories.length > 0) {
       params = params + `&categoryIds=${categories.toString()}`;
-      let filteredData = appliedFilters.slice();
-      filteredData.push(categories);
-      setAppliedFilters(filteredData);
+      appliedFilters.categories = categories;
+    } else {
+      delete appliedFilters.categories;
     }
 
     const url = `${BASE_URL}${GET_PRODUCTS}${filters.message_id}${params}`;
@@ -264,7 +265,11 @@ const Filters = ({
             <ContainButton
               title={applyTitle}
               loading={requestInProgress}
-              onPress={onApply}
+              onPress={() => {
+                onApply()
+                  .then(() => {})
+                  .catch(() => {});
+              }}
             />
           </View>
         </View>

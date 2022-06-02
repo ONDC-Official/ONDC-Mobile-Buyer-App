@@ -43,11 +43,15 @@ const SortMenu = ({
   const {colors} = theme;
 
   const [requestInProgress, setRequestInProgress] = useState(false);
+  const [sortingMethod, setSortingMethod] = useState(
+    PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
+  );
   const {
     state: {token},
   } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
   const dispatch = useDispatch();
+
   const options = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -64,7 +68,7 @@ const SortMenu = ({
     let sortField = 'price';
     let sortOrder = 'desc';
 
-    switch (selectedSortMethod) {
+    switch (sortingMethod) {
       case PRODUCT_SORTING.RATINGS_HIGH_TO_LOW:
         sortOrder = 'desc';
         sortField = 'rating';
@@ -93,6 +97,7 @@ const SortMenu = ({
       });
 
       dispatch(saveProducts(productsList));
+      setSelectedSortMethod(sortingMethod);
       closeSortSheet();
     } catch (e) {
       handleApiError(e);
@@ -115,8 +120,16 @@ const SortMenu = ({
             title={item.name}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
-            checked={item.value === selectedSortMethod}
-            onPress={() => setSelectedSortMethod(item.value)}
+            checked={item.value === sortingMethod}
+            containerStyle={[
+              styles.containerStyle,
+              {
+                backgroundColor: colors.backgroundColor,
+              },
+            ]}
+            onPress={() => {
+              setSortingMethod(item.value);
+            }}
           />
         ))}
       </View>
@@ -147,4 +160,5 @@ const styles = StyleSheet.create({
     width: 120,
     marginHorizontal: 10,
   },
+  containerStyle: {borderWidth: 0, margin: 0},
 });

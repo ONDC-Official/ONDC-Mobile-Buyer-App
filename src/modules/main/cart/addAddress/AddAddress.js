@@ -16,6 +16,7 @@ import {
   BASE_URL,
   BILLING_ADDRESS,
   UPDATE_ADDRESS,
+  UPDATE_BILLING_ADDRESS,
 } from '../../../../utils/apiUtilities';
 import Header from '../addressPicker/Header';
 
@@ -128,15 +129,14 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
         url =
           selectedAddress === 'address'
             ? `${BASE_URL}${UPDATE_ADDRESS}${item.id}`
-            : `${BASE_URL}${BILLING_ADDRESS}`;
+            : `${BASE_URL}${UPDATE_BILLING_ADDRESS}${item.id}`;
       } else {
         url =
           selectedAddress === 'address'
             ? `${BASE_URL}${ADD_ADDRESS}`
             : `${BASE_URL}${BILLING_ADDRESS}`;
       }
-      console.log(payload);
-      console.log(url);
+
       await postData(url, payload, options);
       if (selectedAddress === 'address') {
         navigation.navigate('AddressPicker');
@@ -147,7 +147,6 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
       }
       setApiInProgress(false);
     } catch (error) {
-      console.log(error.response);
       handleApiError(error);
       setApiInProgress(false);
     }
