@@ -1,15 +1,9 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 import {CheckBox, Divider, withTheme} from 'react-native-elements';
 import ClearButton from '../../../../../components/button/ClearButton';
 import {strings} from '../../../../../locales/i18n';
-import {Context as AuthContext} from '../../../../../context/Auth';
-import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
-import {useDispatch} from 'react-redux';
-import {BASE_URL, GET_PRODUCTS} from '../../../../../utils/apiUtilities';
-import {saveProducts} from '../../../../../redux/product/actions';
-import {getData} from '../../../../../utils/api';
 import ContainButton from '../../../../../components/button/ContainButton';
 
 const applyTitle = strings('main.product.filters.apply_title');

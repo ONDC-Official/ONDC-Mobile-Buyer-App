@@ -1,12 +1,6 @@
 import Geolocation from '@react-native-community/geolocation';
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  PermissionsAndroid,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {FlatList, PermissionsAndroid, StyleSheet, View} from 'react-native';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import {colors, withTheme} from 'react-native-elements';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
