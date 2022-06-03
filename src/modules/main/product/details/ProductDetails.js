@@ -18,7 +18,6 @@ const image = require('../../../../assets/ondc.png');
 const ProductDetails = ({theme, navigation, route: {params}}) => {
   const {colors} = theme;
   const {item} = params;
-  console.log(JSON.stringify(item, undefined, 4));
 
   return (
     <SafeAreaView
@@ -73,7 +72,9 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
               </Text>
             )}
 
-            <Text style={styles.discriptorName}>₹{item.price.value}</Text>
+            <Text style={styles.discriptorName}>
+              ₹{item.price.value ? item.price.value : item.price.maximum_value}
+            </Text>
           </View>
           <Divider width={1} style={styles.divider} />
           <Details style={styles.divider} item={item} />

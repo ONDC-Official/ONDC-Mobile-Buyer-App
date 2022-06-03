@@ -1,21 +1,11 @@
-import React, {useState, useContext, memo, useEffect} from 'react';
+import React, {useState, memo, useEffect} from 'react';
 import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {CheckBox, Divider, Text, useTheme} from 'react-native-elements';
-import RangeSlider from 'rn-range-slider';
 import {appStyles} from '../../../../../styles/styles';
-import {BASE_URL, GET_PRODUCTS} from '../../../../../utils/apiUtilities';
-import {cleanFormData} from '../../../../../utils/utils';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-
-import {Context as AuthContext} from '../../../../../context/Auth';
-import {getData} from '../../../../../utils/api';
-import {useDispatch} from 'react-redux';
-import {saveProducts} from '../../../../../redux/product/actions';
 import {strings} from '../../../../../locales/i18n';
-import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import ClearButton from '../../../../../components/button/ClearButton';
 import ContainButton from '../../../../../components/button/ContainButton';
-import {Input} from 'react-native-elements/dist/input/Input';
 import InputField from '../../../../../components/input/InputField';
 
 const applyTitle = strings('main.product.filters.apply_title');
@@ -40,9 +30,7 @@ const priceRange = strings('main.product.filters.price_range');
  * @returns {JSX.Element}
  */
 const Filters = ({
-  setCount,
-  appliedFilters,
-  setAppliedFilters,
+  selectedSortMethod,
   filters,
   closeRBSheet,
   providers,
@@ -53,87 +41,18 @@ const Filters = ({
   max,
   setMin,
   setMax,
+  onApply,
 }) => {
-  const dispatch = useDispatch();
   const {theme} = useTheme();
   const {colors} = theme;
-
-  const {
-    state: {token},
-  } = useContext(AuthContext);
-
   const [requestInProgress, setRequestInProgress] = useState(false);
-  const options = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  const {handleApiError} = useNetworkErrorHandling();
-
-  /**
-   * function handles click event of apply button
-   * it request list of products with selected filter params
-   * @returns {Promise<void>}
-   */
-  const onApply = async () => {
-    setRequestInProgress(true);
-
-    const filterData = cleanFormData({
-      priceMin: filters.minPrice ? min : null,
-      priceMax: filters.maxPrice ? max : null,
-    });
-    appliedFilters.range = {priceMin: min, priceMax: max};
-
-    let params;
-
-    let filterParams = [];
-    Object.keys(filterData).forEach(key =>
-      filterParams.push(`&${key}=${filterData[key]}`),
-    );
-    params = filterParams.toString().replace(/,/g, '');
-
-    if (providers && providers.length > 0) {
-      params = params + `&providerIds=${providers.toString()}`;
-      appliedFilters.providers = providers;
-    } else {
-      delete appliedFilters.providers;
-    }
-
-    if (categories && categories.length > 0) {
-      params = params + `&categoryIds=${categories.toString()}`;
-      appliedFilters.categories = categories;
-    } else {
-      delete appliedFilters.categories;
-    }
-
-    const url = `${BASE_URL}${GET_PRODUCTS}${filters.message_id}${params}`;
-    try {
-      const {data} = await getData(`${url}`, options);
-      setCount(data.message.count);
-      const productsList = data.message.catalogs.map(item => {
-        return Object.assign({}, item, {
-          quantity: 0,
-          transaction_id: filters.transaction_id,
-        });
-      });
-
-      dispatch(saveProducts(productsList));
-      closeRBSheet();
-    } catch (e) {
-      handleApiError(e);
-    }
-  };
 
   /**
    * function handles click event of checkbox in providers list
    */
   const onProviderCheckBoxPress = (item, index) => {
     let providerlist = providers.slice();
-    if (index > -1) {
-      providerlist.splice(index, 1);
-    } else {
-      providerlist.push(item.id);
-    }
+    index > -1 ? providerlist.splice(index, 1) : providerlist.push(item.id);
     setProviders(providerlist);
   };
 
@@ -142,11 +61,7 @@ const Filters = ({
    */
   const onCategoryCheckBoxPress = (item, index) => {
     let categorylist = categories.slice();
-    if (index > -1) {
-      categorylist.splice(index, 1);
-    } else {
-      categorylist.push(item.id);
-    }
+    index > -1 ? categorylist.splice(index, 1) : categorylist.push(item.id);
     setCategories(categorylist);
   };
 
@@ -269,9 +184,15 @@ const Filters = ({
               title={applyTitle}
               loading={requestInProgress}
               onPress={() => {
-                onApply()
-                  .then(() => {})
-                  .catch(() => {});
+                setRequestInProgress(true);
+                onApply(selectedSortMethod)
+                  .then(() => {
+                    setRequestInProgress(false);
+                    closeRBSheet();
+                  })
+                  .catch(() => {
+                    setRequestInProgress(false);
+                  });
               }}
             />
           </View>

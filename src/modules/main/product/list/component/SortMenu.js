@@ -32,77 +32,14 @@ const list = [
  * @constructor
  * @returns {JSX.Element}
  */
-const SortMenu = ({
-  theme,
-  filters,
-  selectedSortMethod,
-  setSelectedSortMethod,
-  setCount,
-  closeSortSheet,
-}) => {
+const SortMenu = ({theme, setSelectedSortMethod, closeSortSheet, onApply}) => {
   const {colors} = theme;
 
   const [requestInProgress, setRequestInProgress] = useState(false);
   const [sortingMethod, setSortingMethod] = useState(
     PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
   );
-  const {
-    state: {token},
-  } = useContext(AuthContext);
-  const {handleApiError} = useNetworkErrorHandling();
-  const dispatch = useDispatch();
 
-  const options = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  /**
-   * function handles click event of apply button
-   * it request list of products with selected sort method
-   * @returns {Promise<void>}
-   */
-  const onApply = async () => {
-    setRequestInProgress(true);
-    let sortField = 'price';
-    let sortOrder = 'desc';
-
-    switch (sortingMethod) {
-      case PRODUCT_SORTING.RATINGS_HIGH_TO_LOW:
-        sortOrder = 'desc';
-        sortField = 'rating';
-        break;
-
-      case PRODUCT_SORTING.RATINGS_LOW_TO_HIGH:
-        sortOrder = 'asc';
-        sortField = 'rating';
-        break;
-
-      case PRODUCT_SORTING.PRICE_LOW_TO_HIGH:
-        sortOrder = 'asc';
-        sortField = 'price';
-        break;
-    }
-
-    const url = `${BASE_URL}${GET_PRODUCTS}${filters.message_id}&sortField=${sortField}&sortOrder=${sortOrder}`;
-    try {
-      const {data} = await getData(`${url}`, options);
-      setCount(data.message.count);
-      const productsList = data.message.catalogs.map(item => {
-        return Object.assign({}, item, {
-          quantity: 0,
-          transaction_id: filters.transaction_id,
-        });
-      });
-
-      dispatch(saveProducts(productsList));
-      setSelectedSortMethod(sortingMethod);
-      closeSortSheet();
-    } catch (e) {
-      handleApiError(e);
-    }
-  };
   return (
     <View>
       <View style={styles.header}>
@@ -137,7 +74,18 @@ const SortMenu = ({
         <ContainButton
           title={applyTitle}
           loading={requestInProgress}
-          onPress={onApply}
+          onPress={() => {
+            setRequestInProgress(true);
+            onApply(sortingMethod)
+              .then(() => {
+                setRequestInProgress(false);
+                setSelectedSortMethod(sortingMethod);
+                closeSortSheet();
+              })
+              .catch(() => {
+                setRequestInProgress(false);
+              });
+          }}
         />
       </View>
     </View>

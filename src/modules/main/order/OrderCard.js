@@ -16,12 +16,12 @@ const orderedOn = strings('main.order.ordered_on_label');
 const OrderCard = ({item, theme}) => {
   const {colors} = theme;
 
-  return item.id ? (
+  return (
     <>
       <View style={styles.container}>
         <View>
           <Text numberOfLines={1} style={styles.itemName}>
-            {item.id}
+            {item.id ? item.id : 'NA'}
           </Text>
           <Text style={{color: colors.grey}}>
             {orderedOn}
@@ -44,7 +44,7 @@ const OrderCard = ({item, theme}) => {
         </View>
       </View>
     </>
-  ) : null;
+  );
 };
 
 export default withTheme(OrderCard);

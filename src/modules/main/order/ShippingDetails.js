@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../locales/i18n';
+import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {
   BASE_URL,
@@ -37,7 +38,6 @@ const cancel = strings('main.order.cancel');
  */
 const ShippingDetails = ({order, getOrderList, theme}) => {
   const {colors} = theme;
-  const separator = ',';
   const {
     state: {token},
   } = useContext(AuthContext);
@@ -45,6 +45,8 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
   const [cancelInProgress, setCancelInProgress] = useState(false);
   const [trackInProgress, setTrackInProgress] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const shippingAddress = order.fulfillment.end.location.address;
 
   const options = {
     headers: {
@@ -155,16 +157,19 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[appStyles.container, styles.container]}>
       <Divider />
       <FlatList data={order.quote.breakup} renderItem={renderItem} />
       <View>
         <View style={styles.addressContainer}>
-          <Text style={{color: colors.grey}}>Billing Address:</Text>
+          <Text style={{color: colors.grey}}>Billed To:</Text>
           <Text style={styles.name}>{order.billing.name}</Text>
-          <Text style={styles.address}>{order.billing.address.street}</Text>
+          <Text style={styles.address}>{order.billing.email}</Text>
+          <Text style={styles.address}>{order.billing.phone}</Text>
+
           <Text style={styles.address}>
-            {order.billing.address.city} {order.billing.address.state}
+            {order.billing.address.street} {order.billing.address.city}{' '}
+            {order.billing.address.state}
           </Text>
           <Text>
             {order.billing.address.areaCode
@@ -172,8 +177,27 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
               : null}
           </Text>
         </View>
+        {order.fulfillment && (
+          <View style={styles.addressContainer}>
+            <Text style={{color: colors.grey}}>Shipped To:</Text>
+            <Text style={styles.name}>{shippingAddress.name}</Text>
+            <Text style={styles.address}>
+              {order.fulfillment.end.contact.email}
+            </Text>
+            <Text style={styles.address}>
+              {order.fulfillment.end.contact.phone}
+            </Text>
+            <Text style={styles.address}>
+              {shippingAddress.street} {shippingAddress.city}{' '}
+              {shippingAddress.state}
+            </Text>
+            <Text>
+              {shippingAddress.areaCode ? shippingAddress.areaCode : null}
+            </Text>
+          </View>
+        )}
       </View>
-      <Divider />
+      <Divider style={styles.divider} />
 
       <View style={[styles.priceContainer, styles.container]}>
         <TouchableOpacity
@@ -245,7 +269,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
 export default withTheme(ShippingDetails);
 
 const styles = StyleSheet.create({
-  addressContainer: {marginVertical: 20},
+  addressContainer: {marginTop: 20, flexShrink: 1},
   text: {fontSize: 16, marginRight: 5},
   subContainer: {
     flexDirection: 'row',
@@ -259,9 +283,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-  name: {fontSize: 18, fontWeight: '700', marginVertical: 4},
+  name: {fontSize: 18, fontWeight: '700', marginVertical: 4, flexShrink: 1},
   title: {fontSize: 16, fontWeight: '700', marginRight: 10, flexShrink: 1},
   price: {fontSize: 16, fontWeight: '700'},
   address: {marginBottom: 4},
   icon: {paddingVertical: 8, paddingHorizontal: 10, borderRadius: 50},
+  divider: {marginTop: 10},
 });

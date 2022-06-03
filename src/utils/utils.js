@@ -1,4 +1,4 @@
-import {Platform} from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 import Toast from 'react-native-toast-message';
 
 export const isIOS = Platform.OS === 'ios';
@@ -67,6 +67,10 @@ export const maskAmount = value => {
  * @param item
  */
 export const keyExtractor = item => item._id;
+
+export const threeForth = Dimensions.get('window').height - 200;
+
+export const half = Dimensions.get('window').height / 2;
 
 /**
  * Check if the value is of type object

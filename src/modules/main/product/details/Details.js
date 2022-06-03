@@ -8,6 +8,20 @@ const title = strings('main.product.product_details.title');
 
 const Details = ({item, theme}) => {
   const {colors} = theme;
+
+  const packageCommodity =
+    item['@ondc/org/statutory_reqs_packaged_commodities'];
+
+  const netQuantity = packageCommodity
+    ? packageCommodity.net_quantity_or_measure_of_commodity_in_pkg
+    : null;
+  const manufacturingDate = packageCommodity
+    ? packageCommodity.month_year_of_manufacture_packing_import
+    : null;
+  const country = packageCommodity
+    ? packageCommodity.imported_product_country_of_origin
+    : null;
+  const ownerName = item.bpp_details.long_desc;
   return (
     <>
       <View style={[styles.container, styles.productDetailsContainer]}>
@@ -28,30 +42,27 @@ const Details = ({item, theme}) => {
             <Text style={[styles.title, {color: colors.gray}]}>
               Manufacture Name
             </Text>
-            {item['@ondc/org/statutory_reqs_packaged_commodities'] && (
+            {packageCommodity && (
               <>
-                {item['@ondc/org/statutory_reqs_packaged_commodities']
-                  .net_quantity_or_measure_of_commodity_in_pkg && (
+                {netQuantity && (
                   <Text style={[styles.title, {color: colors.gray}]}>
                     Net Quantity
                   </Text>
                 )}
 
-                {item['@ondc/org/statutory_reqs_packaged_commodities']
-                  .month_year_of_manufacture_packing_import && (
+                {manufacturingDate && (
                   <Text style={[styles.title, {color: colors.gray}]}>
                     Manufacturing Date
                   </Text>
                 )}
-                {item['@ondc/org/statutory_reqs_packaged_commodities']
-                  .imported_product_country_of_origin && (
+                {country && (
                   <Text style={[styles.title, {color: colors.gray}]}>
                     Country of Origin
                   </Text>
                 )}
               </>
             )}
-            {item.bpp_details.long_desc && (
+            {ownerName && (
               <Text style={[styles.title, {color: colors.gray}]}>
                 Brand Owner Name
               </Text>
@@ -63,41 +74,14 @@ const Details = ({item, theme}) => {
             </Text>
             {item['@ondc/org/statutory_reqs_packaged_commodities'] && (
               <>
-                {item['@ondc/org/statutory_reqs_packaged_commodities']
-                  .net_quantity_or_measure_of_commodity_in_pkg && (
-                  <Text style={styles.value}>
-                    {
-                      item['@ondc/org/statutory_reqs_packaged_commodities']
-                        .net_quantity_or_measure_of_commodity_in_pkg
-                    }
-                  </Text>
+                {netQuantity && <Text style={styles.value}>{netQuantity}</Text>}
+                {manufacturingDate && (
+                  <Text style={styles.value}>{manufacturingDate}</Text>
                 )}
-
-                {item['@ondc/org/statutory_reqs_packaged_commodities']
-                  .month_year_of_manufacture_packing_import && (
-                  <Text style={styles.value}>
-                    {
-                      item['@ondc/org/statutory_reqs_packaged_commodities']
-                        .month_year_of_manufacture_packing_import
-                    }
-                  </Text>
-                )}
-
-                {item['@ondc/org/statutory_reqs_packaged_commodities']
-                  .imported_product_country_of_origin && (
-                  <Text style={styles.value}>
-                    {
-                      item['@ondc/org/statutory_reqs_packaged_commodities']
-                        .imported_product_country_of_origin
-                    }
-                  </Text>
-                )}
+                {country && <Text style={styles.value}>{country}</Text>}
               </>
             )}
-
-            {item.bpp_details.long_desc && (
-              <Text style={styles.value}>{item.bpp_details.long_desc}</Text>
-            )}
+            {ownerName && <Text style={styles.value}>{ownerName}</Text>}
           </View>
         </View>
       </View>

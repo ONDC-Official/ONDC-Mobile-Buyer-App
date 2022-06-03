@@ -28,7 +28,7 @@ import {
   GET_PRODUCTS,
 } from '../../../../utils/apiUtilities';
 import {SEARCH_QUERY} from '../../../../utils/Constants';
-import {isIOS, skeletonList} from '../../../../utils/utils';
+import {half, isIOS, skeletonList} from '../../../../utils/utils';
 import EmptyComponent from '../../cart/EmptyComponent';
 import AddressPicker from './component/AddressPicker';
 import Header from './component/Header';
@@ -393,7 +393,7 @@ const Products = ({navigation}) => {
         />
         <RBSheet
           ref={refRBSheet}
-          height={Dimensions.get('window').height / 2}
+          height={half}
           customStyles={{
             container: styles.container,
           }}>

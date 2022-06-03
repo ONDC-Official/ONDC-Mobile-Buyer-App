@@ -19,7 +19,6 @@ import Header from '../cart/addressPicker/Header';
 import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
-  const {colors} = theme;
   const {
     state: {token},
   } = useContext(AuthContext);
@@ -152,7 +151,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         setConfirmationList([]);
       }
     } catch (error) {
-      console.log(error);
       handleApiError(error);
     }
   };
