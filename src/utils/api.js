@@ -30,7 +30,7 @@ export const postData = async (url, payload, options) => {
     console.log(JSON.stringify(payload, undefined, 4));
     const response = await axios.post(url, payload, options);
     // console.log('------Response-------');
-    // console.log(JSON.stringify(response.data, undefined, 4));
+    console.log(JSON.stringify(response.data, undefined, 4));
     return response;
   } catch (error) {
     throw error;

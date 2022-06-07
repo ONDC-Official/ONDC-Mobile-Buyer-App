@@ -537,7 +537,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   <FlatList
                     data={confirmationList}
                     renderItem={({item}) => {
-                      const element = cartItems.find(one => one.id === item.id);
+                      const element = cartItems.find(one => one.id == item.id);
 
                       return element ? (
                         <>

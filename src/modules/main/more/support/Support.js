@@ -1,5 +1,5 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, View} from 'react-native';
+import {FlatList, SafeAreaView, ScrollView, View} from 'react-native';
 import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {
@@ -8,6 +8,7 @@ import {
   ONDC_POLICY,
   POLICY_URL,
 } from '../../../../utils/Constants';
+import {keyExtractor} from '../../../../utils/utils';
 import Header from '../../cart/addressPicker/Header';
 import SupportCard from './SupportCard';
 
@@ -23,6 +24,37 @@ const ondcPolicyMessage = strings('main.more.ondc_policy_message');
 const contactUs = strings('main.more.contact_us');
 const contactUsMessage = strings('main.more.contact_us_message');
 
+const list = [
+  {
+    _id: 'ghjshgkjdj',
+    icon: 'bag-checked',
+    title: ourPolicy,
+    message: outPolicyMessage,
+    url: POLICY_URL,
+  },
+  {
+    _id: 'mkmnjhj',
+    icon: 'help-circle',
+    title: faqs,
+    message: faqsMessage,
+    url: FAQS,
+  },
+  {
+    _id: 'mjknhbgyj',
+    source: image,
+    title: ondcPolicy,
+    message: ondcPolicyMessage,
+    url: ONDC_POLICY,
+  },
+  {
+    _id: 'gghjghj',
+    icon: 'account',
+    title: contactUs,
+    message: contactUsMessage,
+    url: CONTACT_US,
+  },
+];
+
 /**
  * Component to render support  screen
  * @param navigation :application navigation object
@@ -34,35 +66,19 @@ const Support = ({navigation}) => {
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
         <Header title={heading} navigation={navigation} />
-        <ScrollView>
-          <SupportCard
-            icon={'bag-checked'}
-            title={ourPolicy}
-            message={outPolicyMessage}
-            url={POLICY_URL}
-          />
-
-          <SupportCard
-            icon={'help-circle'}
-            title={faqs}
-            message={faqsMessage}
-            url={FAQS}
-          />
-
-          <SupportCard
-            source={image}
-            title={ondcPolicy}
-            message={ondcPolicyMessage}
-            url={ONDC_POLICY}
-          />
-
-          <SupportCard
-            icon={'account'}
-            title={contactUs}
-            message={contactUsMessage}
-            url={CONTACT_US}
-          />
-        </ScrollView>
+        <FlatList
+          data={list}
+          keyExtractor={keyExtractor}
+          renderItem={({item}) => (
+            <SupportCard
+              icon={item.icon}
+              source={item.source}
+              title={item.title}
+              url={item.url}
+              message={item.message}
+            />
+          )}
+        />
       </View>
     </SafeAreaView>
   );

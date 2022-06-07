@@ -17,7 +17,7 @@ const OrderCard = ({item, theme}) => {
   const {colors} = theme;
 
   return (
-    <>
+    <View>
       <View style={styles.container}>
         <View>
           <Text numberOfLines={1} style={styles.itemName}>
@@ -43,7 +43,7 @@ const OrderCard = ({item, theme}) => {
           </View>
         </View>
       </View>
-    </>
+    </View>
   );
 };
 

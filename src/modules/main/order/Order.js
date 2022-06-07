@@ -45,6 +45,7 @@ const Order = () => {
         },
       );
       setTotalOrders(data.totalCount);
+
       setOrders(number === 1 ? data.orders : [...orders, ...data.orders]);
       setPageNumber(pageNumber + 1);
     } catch (error) {

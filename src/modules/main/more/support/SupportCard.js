@@ -13,7 +13,7 @@ import {appStyles} from '../../../../styles/styles';
  * @constructor
  * @returns {JSX.Element}
  */
-const SupportCard = ({theme, url, icon, title, onPress, message, source}) => {
+const SupportCard = ({theme, url, icon, title, message, source}) => {
   const {colors} = theme;
 
   /**
@@ -31,7 +31,7 @@ const SupportCard = ({theme, url, icon, title, onPress, message, source}) => {
     }
   };
   return (
-    <Card>
+    <Card containerStyle={styles.card}>
       <View style={styles.container}>
         <View style={[styles.icon]}>
           {icon ? (
@@ -71,4 +71,5 @@ const styles = StyleSheet.create({
   icon: {alignItems: 'center', width: 90},
   text: {fontSize: 20, flexShrink: 1},
   textContainer: {flexShrink: 1, marginHorizontal: 8},
+  card: {margin: 10, borderRadius: 8},
 });

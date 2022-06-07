@@ -13,6 +13,7 @@ import {showInfoToast} from '../../../../../utils/utils';
 
 const addButton = strings('main.product.add_button_title');
 const addToCart = strings('main.product.add_to_cart');
+const image = require('../../../../../assets/noImage.png');
 
 /**
  * Component to render single product card on product screen
@@ -23,7 +24,7 @@ const addToCart = strings('main.product.add_to_cart');
  * @constructor
  * @returns {JSX.Element}
  */
-const ProductCard = ({theme, navigation, item, apiInProgress}) => {
+const ProductCard = ({theme, navigation, item, cancellable, apiInProgress}) => {
   const {colors} = theme;
   const dispatch = useDispatch();
 
@@ -53,6 +54,14 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
     }
   };
 
+  const cancelItem = () => {
+    const product = Object.assign({}, item, {quantity: 0});
+    dispatch(updateItemInCart(product));
+    dispatch(removeItemFromCart(product));
+  };
+
+  const uri = item.descriptor.images ? item.descriptor.images[0] : null;
+
   return (
     <Card containerStyle={styles.card}>
       <TouchableOpacity
@@ -60,22 +69,30 @@ const ProductCard = ({theme, navigation, item, apiInProgress}) => {
         onPress={() => {
           navigation.navigate('ProductDetails', {
             images: item.descriptor.images,
-            item: item,
+            product: item,
           });
         }}
         disabled={apiInProgress}>
         <View style={styles.subContainer}>
           <FastImage
-            source={{
-              uri: item.descriptor.images ? item.descriptor.images[0] : null,
-            }}
+            source={uri ? {uri} : image}
             style={styles.image}
             resizeMode={'contain'}
           />
           <View style={appStyles.container}>
-            <Text style={styles.title} numberOfLines={1}>
-              {item.descriptor.name}
-            </Text>
+            <View style={styles.priceContainer}>
+              <Text style={styles.title} numberOfLines={1}>
+                {item.descriptor.name}
+              </Text>
+              {cancellable && (
+                <TouchableOpacity
+                  onPress={() => {
+                    cancelItem(item);
+                  }}>
+                  <Icon name="close" size={20} />
+                </TouchableOpacity>
+              )}
+            </View>
             <View style={styles.organizationNameContainer}>
               <Text numberOfLines={1}>
                 {item.provider_details.descriptor.name}
@@ -133,6 +150,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingRight: 10,
   },
   button: {
     paddingHorizontal: 20,

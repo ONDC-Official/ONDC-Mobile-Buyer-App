@@ -7,7 +7,7 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
  * Component to show skeleton of order card
  * @returns {JSX.Element}
  */
-const OrderCardSkeleton = () => {
+const OrderCardSkeleton = ({item}) => {
   return (
     <Card containerStyle={styles.card}>
       <SkeletonPlaceholder>

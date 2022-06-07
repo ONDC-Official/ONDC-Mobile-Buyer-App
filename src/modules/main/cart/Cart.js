@@ -103,7 +103,7 @@ const Cart = ({navigation, theme}) => {
           data={cartItems}
           renderItem={renderItem}
           ListEmptyComponent={() => {
-            return <EmptyComponent message={message} />;
+            return <EmptyComponent navigation={navigation} />;
           }}
           contentContainerStyle={
             cartItems.length === 0

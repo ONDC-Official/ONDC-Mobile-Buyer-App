@@ -36,9 +36,7 @@ const Footer = ({theme, onCheckout, onClearCart}) => {
           },
         ]}
         onPress={onCheckout}>
-        <Text style={[styles.text, {color: colors.white}]}>
-          proceed to buy {itemsCount} items
-        </Text>
+        <Text style={[styles.text, {color: colors.white}]}>Checkout</Text>
       </TouchableOpacity>
     </View>
   );

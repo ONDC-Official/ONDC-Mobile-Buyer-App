@@ -1,5 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {Card, Divider, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
@@ -16,6 +22,7 @@ import {
   skeletonList,
 } from '../../../utils/utils';
 import Header from '../cart/addressPicker/Header';
+import ProductCard from '../product/list/component/ProductCard';
 import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
@@ -27,6 +34,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const [confirmationList, setConfirmationList] = useState(null);
   const [total, setTotal] = useState(null);
   const [fulfillment, setFulFillment] = useState(null);
+  const [apiInProgress, setApiInProgress] = useState(false);
+  const {colors} = theme;
 
   const onGetQuote = messageId => {
     const messageIds = messageId.toString();
@@ -44,7 +53,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           if (!item.error) {
             if (item.context.bpp_id) {
               item.message.quote.items.forEach(element => {
-                const object = cartItems.find(one => one.id === element.id);
+                const object = cartItems.find(one => one.id == element.id);
+                console.log('////////////');
+                console.log(object);
+                console.log(cartItems);
+                console.log(element);
                 element.provider = {
                   id: object.provider_details.id,
                   descriptor: object.provider_details.descriptor,
@@ -64,19 +77,25 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             }
           }
         });
+        console.log('list');
+
+        console.log(list);
 
         setConfirmationList(list);
       } catch (error) {
+        console.log(error);
         handleApiError(error);
       }
     }, 2000);
     setTimeout(() => {
       clearInterval(getConfirmation);
-    }, 14000);
+      setApiInProgress(false);
+    }, 12000);
   };
 
   const getQuote = async () => {
     try {
+      setApiInProgress(true);
       let payload = [];
       let providerIdArray = [];
       cartItems.forEach(item => {
@@ -122,7 +141,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                     bpp_id: item.bpp_details.bpp_id,
                     provider: {
                       id: item.provider_details.id,
-                      locations: [item.location_details.id],
+                      locations: [item.location_id],
                     },
                   },
                 ],
@@ -156,52 +175,22 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   };
 
   useEffect(() => {
-    getQuote()
-      .then(() => {})
-      .catch(() => {});
-  }, []);
+    if (cartItems.length > 0) {
+      getQuote()
+        .then(() => {})
+        .catch(() => {});
+    } else {
+      navigation.navigate('Dashboard', {screen: 'Cart'});
+    }
+  }, [cartItems]);
 
   const renderItem = ({item}) => {
-    const element = cartItems.find(one => one.id === item.id);
+    const element = cartItems.find(one => one.id == item.id);
+
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <ConfirmationCardSkeleton item={item} />
     ) : (
-      <>
-        {element ? (
-          <Card containerStyle={styles.card}>
-            <View style={styles.subContainer}>
-              <FastImage
-                source={{
-                  uri: element.descriptor.images
-                    ? element.descriptor.images[0]
-                    : null,
-                }}
-                style={styles.image}
-                resizeMode={'contain'}
-              />
-              <View style={appStyles.container}>
-                <Text style={styles.title} numberOfLines={1}>
-                  {element.descriptor.name ? element.descriptor.name : null}
-                </Text>
-                <View style={styles.organizationNameContainer}>
-                  <Text numberOfLines={1}>
-                    {element.provider_details
-                      ? element.provider_details.descriptor.name
-                      : null}
-                  </Text>
-                </View>
-                <View style={styles.priceContainer}>
-                  <Text>
-                    {element.price.value} X {element.quantity}
-                  </Text>
-
-                  <Text>₹ {element.price.value * element.quantity}</Text>
-                </View>
-              </View>
-            </View>
-          </Card>
-        ) : null}
-      </>
+      <>{element ? <ProductCard item={element} cancellable={true} /> : null}</>
     );
   };
 
@@ -226,7 +215,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             );
           }}
         />
-        {total && (
+        {total && !apiInProgress && (
           <Card containerStyle={styles.card}>
             {fulfillment && (
               <>
@@ -243,10 +232,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             </View>
           </Card>
         )}
-        {confirmationList && confirmationList.length > 0 && (
-          <View style={styles.buttonContainer}>
+
+        <View style={styles.buttonContainer}>
+          {confirmationList && confirmationList.length > 0 && !apiInProgress ? (
             <ContainButton
-              title="Proceed"
+              title="Place Order"
               onPress={() =>
                 navigation.navigate('Payment', {
                   selectedAddress: params.selectedAddress,
@@ -255,8 +245,14 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 })
               }
             />
-          </View>
-        )}
+          ) : (
+            <ActivityIndicator
+              color={colors.accentColor}
+              style={styles.activityindicator}
+              size={26}
+            />
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -286,4 +282,5 @@ const styles = StyleSheet.create({
   },
   divider: {marginBottom: 10},
   fulfillment: {fontSize: 16, fontWeight: '600', marginBottom: 10},
+  activityindicator: {paddingVertical: 10},
 });

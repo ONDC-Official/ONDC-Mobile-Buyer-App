@@ -23,8 +23,8 @@ import {
 } from '../../../../utils/apiUtilities';
 import {SEARCH_QUERY} from '../../../../utils/Constants';
 import {half, isIOS, skeletonList} from '../../../../utils/utils';
-import EmptyComponent from '../../cart/EmptyComponent';
 import AddressPicker from './component/AddressPicker';
+import EmptyComponent from './component/EmptyComponent';
 import Header from './component/Header';
 import ListFooter from './component/ListFooter';
 import LocationDeniedAlert from './component/LocationDeniedAlert';

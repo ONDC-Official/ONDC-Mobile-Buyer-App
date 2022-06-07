@@ -119,6 +119,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
         payload,
         options,
       );
+      console.log(data);
 
       const response = await getData(
         `${BASE_URL}${ON_CANCEL_ORDER}messageId=${data.context.message_id}`,
@@ -133,6 +134,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
       }
       setCancelInProgress(false);
     } catch (e) {
+      console.log(e.response);
       handleApiError(e);
       setCancelInProgress(false);
     }
@@ -177,7 +179,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
               : null}
           </Text>
         </View>
-        {order.fulfillment && (
+        {/* {order.fulfillment && (
           <View style={styles.addressContainer}>
             <Text style={{color: colors.grey}}>Shipped To:</Text>
             <Text style={styles.name}>{shippingAddress.name}</Text>
@@ -195,7 +197,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
               {shippingAddress.areaCode ? shippingAddress.areaCode : null}
             </Text>
           </View>
-        )}
+        )} */}
       </View>
       <Divider style={styles.divider} />
 
