@@ -18,7 +18,6 @@ import EmptyComponent from './EmptyComponent';
 import Footer from './Footer';
 
 const subTotalLabel = strings('main.cart.sub_total_label');
-const message = strings('main.cart.empty_cart_message');
 const ok = strings('main.product.ok_label');
 const clearCartMessage = strings('main.cart.clear_cart_message');
 const cancelLabel = strings('main.product.cancel_label');

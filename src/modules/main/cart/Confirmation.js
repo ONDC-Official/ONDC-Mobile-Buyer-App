@@ -198,7 +198,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title="Order Confirmation" navigation={navigation} />
+        <Header title="Update Cart" navigation={navigation} />
 
         <FlatList
           keyExtractor={(item, index) => {
@@ -236,7 +236,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         <View style={styles.buttonContainer}>
           {confirmationList && confirmationList.length > 0 && !apiInProgress ? (
             <ContainButton
-              title="Place Order"
+              title="Proceed To Pay"
               onPress={() =>
                 navigation.navigate('Payment', {
                   selectedAddress: params.selectedAddress,

@@ -1,28 +1,23 @@
 import Geolocation from '@react-native-community/geolocation';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, PermissionsAndroid, StyleSheet, View} from 'react-native';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import {colors, withTheme} from 'react-native-elements';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useDispatch, useSelector} from 'react-redux';
-import {Context as AuthContext} from '../../../../context/Auth';
+import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
-import {saveProducts} from '../../../../redux/product/actions';
 import {appStyles} from '../../../../styles/styles';
-import {getData, postData} from '../../../../utils/api';
+import {getData} from '../../../../utils/api';
 import {
   BASE_URL,
-  FILTER,
   GET_LATLONG,
   GET_LOCATION_FROM_LAT_LONG,
-  GET_MESSAGE_ID,
-  GET_PRODUCTS,
 } from '../../../../utils/apiUtilities';
-import {SEARCH_QUERY} from '../../../../utils/Constants';
 import {half, isIOS, skeletonList} from '../../../../utils/utils';
+import useProductList from '../hook/useProductList';
 import AddressPicker from './component/AddressPicker';
 import EmptyComponent from './component/EmptyComponent';
 import Header from './component/Header';
@@ -39,7 +34,6 @@ const noResults = strings('main.product.no_results');
 const searchItemMessage = strings('main.product.search_item_message');
 const okLabel = strings('main.product.ok_label');
 const cancelLabel = strings('main.product.cancel_label');
-const selectLocation = strings('main.product.please_select_location');
 
 /**
  * Component to show list of requested products
@@ -52,34 +46,25 @@ const Products = ({navigation}) => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [eloc, setEloc] = useState(null);
-  const [locationInProgress, setLocationInProgress] = useState(false);
-  const [filters, setFilters] = useState(null);
-
-  const [requestInProgress, setRequestInProgress] = useState(false);
   const [count, setCount] = useState(null);
-  const [moreListRequested, setMoreListRequested] = useState(false);
-
+  const [locationInProgress, setLocationInProgress] = useState(false);
+  const [apiInProgress, setApiInProgress] = useState(false);
+  const [appliedFilters, setAppliedFilters] = useState(null);
   const {products} = useSelector(({productReducer}) => productReducer);
-  const dispatch = useDispatch();
+  const {getProductsList} = useProductList(setCount);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [moreListRequested, setMoreListRequested] = useState(false);
+  const {messageId, transactionId} = useSelector(
+    ({filterReducer}) => filterReducer,
+  );
 
-  const {
-    state: {token},
-  } = useContext(AuthContext);
   const {handleApiError} = useNetworkErrorHandling();
-
   const refRBSheet = useRef();
-  const refPageNumber = useRef();
-  const refmessageId = useRef();
-  const refTransactionId = useRef();
+
+  const {search} = useProductList();
 
   const openSheet = () => refRBSheet.current.open();
   const closeSheet = () => refRBSheet.current.close();
-
-  const options = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
 
   /**
    * Function is used to render single product card in the list
@@ -92,7 +77,7 @@ const Products = ({navigation}) => {
     ) : (
       <ProductCard
         item={item}
-        apiInProgress={requestInProgress}
+        apiInProgress={apiInProgress}
         navigation={navigation}
       />
     );
@@ -218,61 +203,6 @@ const Products = ({navigation}) => {
   };
 
   /**
-   * function to get list of products
-   */
-  const getProducts = setApiInProgress => {
-    let getList = setInterval(async () => {
-      try {
-        setApiInProgress(true);
-
-        const url = `${BASE_URL}${GET_PRODUCTS}${refmessageId.current}&sortField=rating&sortOrder=desc`;
-        const {data} = await getData(`${url}`, options);
-        setCount(data.message.count);
-
-        const productsList = data.message.catalogs.map(item => {
-          return Object.assign({}, item, {
-            quantity: 0,
-            transaction_id: refTransactionId.current,
-          });
-        });
-
-        dispatch(saveProducts(productsList));
-      } catch (error) {
-        handleApiError(error);
-      }
-    }, 2000);
-
-    setTimeout(() => {
-      clearInterval(getList);
-      setApiInProgress(false);
-    }, 10000);
-  };
-
-  /**
-   * Function used to get list of filters
-   * @returns {Promise<void>}
-   **/
-  const getFilter = (id, transactionId) => {
-    let getList = setInterval(async () => {
-      try {
-        const {data} = await getData(`${BASE_URL}${FILTER}${id}`, options);
-        const filterData = Object.assign({}, data, {
-          message_id: id,
-          transaction_id: transactionId,
-        });
-        setFilters(filterData);
-      } catch (error) {
-        handleApiError(error);
-      }
-    }, 2000);
-
-    setTimeout(() => {
-      clearInterval(getList);
-      setRequestInProgress(false);
-    }, 8000);
-  };
-
-  /**
    * Function is used to get latitude and longitude
    * @returns {Promise<void>}
    **/
@@ -293,62 +223,46 @@ const Products = ({navigation}) => {
    * @returns {Promise<void>}
    **/
   const onSearch = async (query, selectedSearchOption) => {
-    if (longitude && latitude) {
-      console.log(latitude);
-      console.log(longitude);
-      setRequestInProgress(true);
-      setFilters(null);
-      dispatch(saveProducts([]));
-
-      let requestParameters = {
-        context: {},
-        message: {
-          criteria: {
-            delivery_location: `${latitude},${longitude}`,
-          },
-        },
-      };
-      refPageNumber.current = 1;
-
-      try {
-        switch (selectedSearchOption) {
-          case SEARCH_QUERY.PRODUCT:
-            requestParameters.message.criteria.search_string = query;
-            break;
-
-          case SEARCH_QUERY.PROVIDER:
-            requestParameters.message.criteria.provider_id = query;
-            break;
-
-          default:
-            requestParameters.message.criteria.category_id = query;
-            break;
-        }
-
-        const response = await postData(
-          `${BASE_URL}${GET_MESSAGE_ID}`,
-          requestParameters,
-          options,
-        );
-
-        refmessageId.current = response.data.context.message_id;
-        refTransactionId.current = response.data.context.transaction_id;
-        getProducts(setRequestInProgress);
-
-        await getFilter(
-          response.data.context.message_id,
-          response.data.context.transaction_id,
-        );
-      } catch (error) {
-        console.log(error);
-        handleApiError(error);
-        setRequestInProgress(false);
-      }
-    } else {
-      alert(selectLocation);
-    }
+    setAppliedFilters(null);
+    setPageNumber(1);
+    setApiInProgress(true);
+    search(
+      setCount,
+      query,
+      latitude,
+      longitude,
+      selectedSearchOption,
+      setApiInProgress,
+      1,
+    )
+      .then(() => {
+        setPageNumber(prev => prev + 1);
+      })
+      .catch(() => {});
   };
 
+  const loadMoreList = () => {
+    console.log(count);
+    if (count && count > products.length && !apiInProgress) {
+      console.log('moreRequested');
+      console.log(pageNumber);
+      setMoreListRequested(true);
+      getProductsList(
+        setCount,
+        messageId,
+        transactionId,
+        pageNumber,
+        appliedFilters,
+      )
+        .then(() => {
+          setPageNumber(prev => prev + 1);
+          setMoreListRequested(false);
+        })
+        .catch(() => {
+          setMoreListRequested(false);
+        });
+    }
+  };
   useEffect(() => {
     if (location === unKnownLabel) {
       requestPermission()
@@ -381,9 +295,11 @@ const Products = ({navigation}) => {
           openSheet={openSheet}
           onSearch={onSearch}
           locationInProgress={locationInProgress}
-          apiInProgress={requestInProgress}
-          filters={filters}
+          apiInProgress={apiInProgress}
           setCount={setCount}
+          appliedFilters={appliedFilters}
+          setAppliedFilters={setAppliedFilters}
+          setPageNumber={setPageNumber}
         />
         <RBSheet
           ref={refRBSheet}
@@ -409,12 +325,12 @@ const Products = ({navigation}) => {
           ListEmptyComponent={() => {
             return (
               <EmptyComponent
-                message={!requestInProgress ? searchItemMessage : noResults}
+                message={!apiInProgress ? searchItemMessage : noResults}
               />
             );
           }}
           onEndReachedThreshold={0.2}
-          // onEndReached={loadMoreList}
+          onEndReached={loadMoreList}
           contentContainerStyle={
             listData.length > 0
               ? styles.contentContainerStyle

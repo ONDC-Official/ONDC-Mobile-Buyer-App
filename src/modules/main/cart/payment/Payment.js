@@ -20,6 +20,7 @@ import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
 import {clearAllData} from '../../../../redux/actions';
+import {clearFilters} from '../../../../redux/filter/actions';
 import {appStyles} from '../../../../styles/styles';
 import {alertWithOneButton} from '../../../../utils/alerts';
 import {getData, postData} from '../../../../utils/api';
@@ -76,6 +77,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
   const onOrderSuccess = () => {
     dispatch(clearAllData());
+    dispatch(clearFilters());
     navigation.navigate('Dashboard', {screen: 'Orders'});
   };
 
@@ -626,7 +628,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
               <View style={styles.buttonContainer}>
                 <ContainButton
-                  title={'Proceed'}
+                  title={'Place Order'}
                   onPress={() => {
                     processPayment()
                       .then(() => {})

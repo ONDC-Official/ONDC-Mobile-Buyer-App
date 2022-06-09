@@ -12,6 +12,7 @@ import {appStyles} from '../../../../../styles/styles';
 import {SEARCH_QUERY} from '../../../../../utils/Constants';
 import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
 import SortAndFilter from './SortAndFilter';
+import {useSelector} from 'react-redux';
 
 const search = strings('main.product.search_label');
 const product = strings('main.product.product_label');
@@ -34,12 +35,14 @@ const detectLocation = strings('main.product.detecting_location');
 const Header = ({
   theme,
   openSheet,
-  apiInProgress,
   onSearch,
+  apiInProgress,
   locationInProgress,
   location,
-  filters,
   setCount,
+  appliedFilters,
+  setAppliedFilters,
+  setPageNumber,
 }) => {
   const {colors} = theme;
 
@@ -52,6 +55,7 @@ const Header = ({
   const showMenu = () => setVisible(true);
 
   const onCardSelect = card => setSelectedCard(card);
+  const {filters} = useSelector(({filterReducer}) => filterReducer);
 
   return (
     <>
@@ -148,7 +152,14 @@ const Header = ({
           />
         </View>
       </View>
-      {filters && <SortAndFilter filters={filters} setCount={setCount} />}
+      {filters && (
+        <SortAndFilter
+          setCount={setCount}
+          appliedFilters={appliedFilters}
+          setAppliedFilters={setAppliedFilters}
+          setPageNumber={setPageNumber}
+        />
+      )}
     </>
   );
 };

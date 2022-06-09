@@ -7,6 +7,7 @@ import {strings} from '../../../../../locales/i18n';
 import ClearButton from '../../../../../components/button/ClearButton';
 import ContainButton from '../../../../../components/button/ContainButton';
 import InputField from '../../../../../components/input/InputField';
+import {useSelector} from 'react-redux';
 
 const applyTitle = strings('main.product.filters.apply_title');
 const close = strings('main.product.filters.close');
@@ -31,8 +32,8 @@ const priceRange = strings('main.product.filters.price_range');
  */
 const Filters = ({
   selectedSortMethod,
-  filters,
   closeRBSheet,
+  apiInProgress,
   providers,
   setProviders,
   categories,
@@ -45,7 +46,7 @@ const Filters = ({
 }) => {
   const {theme} = useTheme();
   const {colors} = theme;
-  const [requestInProgress, setRequestInProgress] = useState(false);
+  const {filters} = useSelector(({filterReducer}) => filterReducer);
 
   /**
    * function handles click event of checkbox in providers list
@@ -77,7 +78,7 @@ const Filters = ({
         setMin(min === 0 ? filters.minPrice : min);
       }
     }
-  }, []);
+  }, [filters]);
 
   return (
     <View style={appStyles.container}>
@@ -182,17 +183,9 @@ const Filters = ({
           <View style={styles.buttonContainer}>
             <ContainButton
               title={applyTitle}
-              loading={requestInProgress}
+              loading={apiInProgress}
               onPress={() => {
-                setRequestInProgress(true);
-                onApply(selectedSortMethod)
-                  .then(() => {
-                    setRequestInProgress(false);
-                    closeRBSheet();
-                  })
-                  .catch(() => {
-                    setRequestInProgress(false);
-                  });
+                onApply(selectedSortMethod);
               }}
             />
           </View>

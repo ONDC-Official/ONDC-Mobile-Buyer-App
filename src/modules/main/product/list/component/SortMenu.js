@@ -26,10 +26,9 @@ const list = [
  * @constructor
  * @returns {JSX.Element}
  */
-const SortMenu = ({theme, setSelectedSortMethod, closeSortSheet, onApply}) => {
+const SortMenu = ({theme, closeSortSheet, apiInProgress, onApply}) => {
   const {colors} = theme;
 
-  const [requestInProgress, setRequestInProgress] = useState(false);
   const [sortingMethod, setSortingMethod] = useState(
     PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
   );
@@ -67,18 +66,9 @@ const SortMenu = ({theme, setSelectedSortMethod, closeSortSheet, onApply}) => {
       <View style={styles.buttonContainer}>
         <ContainButton
           title={applyTitle}
-          loading={requestInProgress}
+          loading={apiInProgress}
           onPress={() => {
-            setRequestInProgress(true);
-            onApply(sortingMethod)
-              .then(() => {
-                setRequestInProgress(false);
-                setSelectedSortMethod(sortingMethod);
-                closeSortSheet();
-              })
-              .catch(() => {
-                setRequestInProgress(false);
-              });
+            onApply(sortingMethod);
           }}
         />
       </View>
