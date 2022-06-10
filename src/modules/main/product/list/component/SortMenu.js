@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 import {CheckBox, Divider, withTheme} from 'react-native-elements';
 import ClearButton from '../../../../../components/button/ClearButton';
-import {strings} from '../../../../../locales/i18n';
 import ContainButton from '../../../../../components/button/ContainButton';
+import {strings} from '../../../../../locales/i18n';
+import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 
 const applyTitle = strings('main.product.filters.apply_title');
 const close = strings('main.product.filters.close');
@@ -42,7 +42,7 @@ const SortMenu = ({theme, closeSortSheet, apiInProgress, onApply}) => {
           textColor={colors.accentColor}
         />
       </View>
-      <Divider style={styles.divider} />
+      <Divider style={styles.divider}/>
       <View>
         {list.map(item => (
           <CheckBox

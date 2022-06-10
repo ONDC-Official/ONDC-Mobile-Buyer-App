@@ -27,12 +27,12 @@ const Details = ({item, theme}) => {
       <View style={[styles.container, styles.productDetailsContainer]}>
         {item['@ondc/org/returnable'] && (
           <>
-            <IconField name="Returnable" icon="package-variant" />
-            <View style={styles.space} />
+            <IconField name="Returnable" icon="package-variant"/>
+            <View style={styles.space}/>
           </>
         )}
         {item['@ondc/org/cancellable'] && (
-          <IconField name="Cancellable" icon="package-variant-closed" />
+          <IconField name="Cancellable" icon="package-variant-closed"/>
         )}
       </View>
       <View style={styles.container}>

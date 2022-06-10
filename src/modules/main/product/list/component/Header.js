@@ -1,18 +1,13 @@
 import React, {useState} from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {SearchBar, Text, withTheme} from 'react-native-elements';
+import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useSelector} from 'react-redux';
 import {strings} from '../../../../../locales/i18n';
 import {appStyles} from '../../../../../styles/styles';
 import {SEARCH_QUERY} from '../../../../../utils/Constants';
-import {Menu, MenuItem, MenuDivider} from 'react-native-material-menu';
 import SortAndFilter from './SortAndFilter';
-import {useSelector} from 'react-redux';
 
 const search = strings('main.product.search_label');
 const product = strings('main.product.product_label');
@@ -33,17 +28,17 @@ const detectLocation = strings('main.product.detecting_location');
  * @returns {JSX.Element}
  */
 const Header = ({
-  theme,
-  openSheet,
-  onSearch,
-  apiInProgress,
-  locationInProgress,
-  location,
-  setCount,
-  appliedFilters,
-  setAppliedFilters,
-  setPageNumber,
-}) => {
+                  theme,
+                  openSheet,
+                  onSearch,
+                  apiInProgress,
+                  locationInProgress,
+                  location,
+                  setCount,
+                  appliedFilters,
+                  setAppliedFilters,
+                  setPageNumber,
+                }) => {
   const {colors} = theme;
 
   const [item, setItem] = useState(null);
@@ -75,10 +70,10 @@ const Header = ({
             </View>
           ) : (
             <TouchableOpacity style={styles.subContainer} onPress={openSheet}>
-              <Icon name="map-marker" size={20} color={colors.accentColor} />
+              <Icon name="map-marker" size={20} color={colors.accentColor}/>
               <View style={styles.textContainer}>
                 <Text style={{color: colors.accentColor}}>
-                  {location} <Icon name="angle-down" size={14} />
+                  {location} <Icon name="angle-down" size={14}/>
                 </Text>
               </View>
             </TouchableOpacity>
@@ -93,7 +88,7 @@ const Header = ({
                 activeOpacity={0.8}
                 onPress={showMenu}>
                 <Text style={{color: colors.white}}>
-                  {selectedCard} <Icon name="angle-down" size={14} />
+                  {selectedCard} <Icon name="angle-down" size={14}/>
                 </Text>
               </TouchableOpacity>
             }>
@@ -105,7 +100,7 @@ const Header = ({
               pressColor={colors.accentColor}>
               {product}
             </MenuItem>
-            <MenuDivider />
+            <MenuDivider/>
             <MenuItem
               onPress={() => {
                 onCardSelect(SEARCH_QUERY.PROVIDER);
@@ -114,7 +109,7 @@ const Header = ({
               pressColor={colors.accentColor}>
               {provider}
             </MenuItem>
-            <MenuDivider />
+            <MenuDivider/>
 
             <MenuItem
               onPress={() => {
@@ -124,7 +119,7 @@ const Header = ({
               pressColor={colors.accentColor}>
               {category}
             </MenuItem>
-            <MenuDivider />
+            <MenuDivider/>
           </Menu>
 
           <SearchBar

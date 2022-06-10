@@ -91,9 +91,9 @@ const Order = () => {
    */
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <OrderCardSkeleton item={item} />
+      <OrderCardSkeleton item={item}/>
     ) : (
-      <OrderAccordion item={item} getOrderList={getOrderList} />
+      <OrderAccordion item={item} getOrderList={getOrderList}/>
     );
   };
 
@@ -116,7 +116,7 @@ const Order = () => {
               ? styles.contentContainerStyle
               : [appStyles.container, styles.emptyContainer]
           }
-          ListFooterComponent={<ListFooter moreRequested={moreListRequested} />}
+          ListFooterComponent={<ListFooter moreRequested={moreListRequested}/>}
         />
       </View>
     </SafeAreaView>

@@ -1,13 +1,7 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  FlatList,
-  TouchableOpacity,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from 'react-native';
-import {CheckBox, Text, withTheme} from 'react-native-elements';
+import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -96,7 +90,7 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
       });
     };
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item} />
+      <AddressCardSkeleton item={item}/>
     ) : (
       <AddressCard
         item={item}
@@ -154,7 +148,7 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
 
         {selectedBillingAddress !== null && (
           <View style={styles.buttonContainer}>
-            <ContainButton title={'Save'} onPress={onPressHandler} />
+            <ContainButton title={'Save'} onPress={onPressHandler}/>
           </View>
         )}
       </View>

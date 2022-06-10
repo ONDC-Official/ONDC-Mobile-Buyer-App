@@ -38,7 +38,7 @@ const More = ({navigation}) => {
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => {
-    return <OptionCard item={item} navigation={navigation} />;
+    return <OptionCard item={item} navigation={navigation}/>;
   };
   return (
     <SafeAreaView style={appStyles.container}>

@@ -42,7 +42,7 @@ const OptionCard = ({theme, navigation, item}) => {
           });
         },
         cancelLabel,
-        () => console.log('cancelled'),
+        () => {},
       );
     } else if (option === OPTIONS.PROFILE) {
       navigation.navigate('Profile');
@@ -57,7 +57,7 @@ const OptionCard = ({theme, navigation, item}) => {
         onPress={() => {
           onPressHandler(item.name);
         }}>
-        <Icon type="font-awesome" name={item.icon} color={colors.accentColor} />
+        <Icon type="font-awesome" name={item.icon} color={colors.accentColor}/>
         <Text style={[styles.text, {color: colors.accentColor}]}>
           {item.string}
         </Text>

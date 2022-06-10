@@ -3,19 +3,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
-import {
-  clearFilters,
-  saveFilters,
-  saveIds,
-} from '../../../../redux/filter/actions';
+import {clearFilters, saveFilters, saveIds,} from '../../../../redux/filter/actions';
 import {saveProducts} from '../../../../redux/product/actions';
 import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  FILTER,
-  GET_MESSAGE_ID,
-  GET_PRODUCTS,
-} from '../../../../utils/apiUtilities';
+import {BASE_URL, FILTER, GET_MESSAGE_ID, GET_PRODUCTS,} from '../../../../utils/apiUtilities';
 import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
 import {cleanFormData} from '../../../../utils/utils';
 
@@ -99,14 +90,9 @@ export default () => {
           transaction_id: transactionId,
         });
       });
-      productsList.forEach(item => console.log(item.id));
 
       const list =
         pageNumber === 1 ? productsList : [...products, ...productsList];
-      console.log('/////////');
-      list.forEach(item => {
-        console.log(item.id);
-      });
       dispatch(saveProducts(list));
       setCount(data.message.count);
     } catch (error) {

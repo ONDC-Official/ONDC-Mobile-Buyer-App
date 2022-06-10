@@ -1,13 +1,13 @@
-import React, {useState, memo, useEffect} from 'react';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import React, {memo, useEffect} from 'react';
 import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {CheckBox, Divider, Text, useTheme} from 'react-native-elements';
-import {appStyles} from '../../../../../styles/styles';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import {strings} from '../../../../../locales/i18n';
+import {useSelector} from 'react-redux';
 import ClearButton from '../../../../../components/button/ClearButton';
 import ContainButton from '../../../../../components/button/ContainButton';
 import InputField from '../../../../../components/input/InputField';
-import {useSelector} from 'react-redux';
+import {strings} from '../../../../../locales/i18n';
+import {appStyles} from '../../../../../styles/styles';
 
 const applyTitle = strings('main.product.filters.apply_title');
 const close = strings('main.product.filters.close');
@@ -19,9 +19,6 @@ const priceRange = strings('main.product.filters.price_range');
 /**
  * Component to render filters screen
  * @param setCount:function to set items count
- * @param appliedFilters:data containing filters selected by user
- * @param setAppliedFilters:function to set filters selected by user
- * @param filters:object containing filter parameters
  * @param closeRBSheet:function used to close filters sheet
  * @param providers:list of providers selected by user
  * @param setProviders:function to set providers selected by user
@@ -31,19 +28,19 @@ const priceRange = strings('main.product.filters.price_range');
  * @returns {JSX.Element}
  */
 const Filters = ({
-  selectedSortMethod,
-  closeRBSheet,
-  apiInProgress,
-  providers,
-  setProviders,
-  categories,
-  setCategories,
-  min,
-  max,
-  setMin,
-  setMax,
-  onApply,
-}) => {
+                   selectedSortMethod,
+                   closeRBSheet,
+                   apiInProgress,
+                   providers,
+                   setProviders,
+                   categories,
+                   setCategories,
+                   min,
+                   max,
+                   setMin,
+                   setMax,
+                   onApply,
+                 }) => {
   const {theme} = useTheme();
   const {colors} = theme;
   const {filters} = useSelector(({filterReducer}) => filterReducer);
@@ -89,7 +86,7 @@ const Filters = ({
           textColor={colors.accentColor}
         />
       </View>
-      <Divider />
+      <Divider/>
 
       {filters ? (
         <View style={appStyles.container}>
@@ -137,47 +134,47 @@ const Filters = ({
             )}
             <View style={styles.container}>
               {filters.minPrice &&
-                filters.maxPrice &&
-                filters.minPrice !== filters.maxPrice && (
-                  <>
-                    <Text style={styles.price}>{priceRange}</Text>
+              filters.maxPrice &&
+              filters.minPrice !== filters.maxPrice && (
+                <>
+                  <Text style={styles.price}>{priceRange}</Text>
 
-                    <View style={styles.applyButton}>
-                      <View style={styles.amountContainer}>
-                        <InputField
-                          label={'Min'}
-                          value={`${min}`}
-                          renderErrorMessage={false}
-                        />
-                      </View>
-                      <View style={styles.amountContainer}>
-                        <InputField
-                          label={'Max'}
-                          value={`${max}`}
-                          renderErrorMessage={false}
-                        />
-                      </View>
+                  <View style={styles.applyButton}>
+                    <View style={styles.amountContainer}>
+                      <InputField
+                        label={'Min'}
+                        value={`${min}`}
+                        renderErrorMessage={false}
+                      />
                     </View>
+                    <View style={styles.amountContainer}>
+                      <InputField
+                        label={'Max'}
+                        value={`${max}`}
+                        renderErrorMessage={false}
+                      />
+                    </View>
+                  </View>
 
-                    <MultiSlider
-                      selectedStyle={{
-                        backgroundColor: colors.accentColor,
-                      }}
-                      containerStyle={styles.sliderContainer}
-                      markerStyle={[
-                        styles.markerStyle,
-                        {backgroundColor: colors.accentColor},
-                      ]}
-                      trackStyle={styles.trackStyle}
-                      values={[min, max]}
-                      sliderLength={Dimensions.get('window').width - 40}
-                      onValuesChange={handleValueChange}
-                      min={filters.minPrice}
-                      max={filters.maxPrice}
-                      step={1}
-                    />
-                  </>
-                )}
+                  <MultiSlider
+                    selectedStyle={{
+                      backgroundColor: colors.accentColor,
+                    }}
+                    containerStyle={styles.sliderContainer}
+                    markerStyle={[
+                      styles.markerStyle,
+                      {backgroundColor: colors.accentColor},
+                    ]}
+                    trackStyle={styles.trackStyle}
+                    values={[min, max]}
+                    sliderLength={Dimensions.get('window').width - 40}
+                    onValuesChange={handleValueChange}
+                    min={filters.minPrice}
+                    max={filters.maxPrice}
+                    step={1}
+                  />
+                </>
+              )}
             </View>
           </ScrollView>
           <View style={styles.buttonContainer}>

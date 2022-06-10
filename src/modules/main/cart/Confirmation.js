@@ -1,13 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {ActivityIndicator, FlatList, SafeAreaView, StyleSheet, View,} from 'react-native';
 import {Card, Divider, Text, withTheme} from 'react-native-elements';
-import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
 import ContainButton from '../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../context/Auth';
@@ -16,11 +9,7 @@ import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../utils/apiUtilities';
-import {
-  maskAmount,
-  showToastWithGravity,
-  skeletonList,
-} from '../../../utils/utils';
+import {maskAmount, showToastWithGravity, skeletonList,} from '../../../utils/utils';
 import Header from '../cart/addressPicker/Header';
 import ProductCard from '../product/list/component/ProductCard';
 import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
@@ -54,10 +43,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             if (item.context.bpp_id) {
               item.message.quote.items.forEach(element => {
                 const object = cartItems.find(one => one.id == element.id);
-                console.log('////////////');
-                console.log(object);
-                console.log(cartItems);
-                console.log(element);
                 element.provider = {
                   id: object.provider_details.id,
                   descriptor: object.provider_details.descriptor,
@@ -77,16 +62,13 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             }
           }
         });
-        console.log('list');
-
-        console.log(list);
-
         setConfirmationList(list);
       } catch (error) {
         console.log(error);
         handleApiError(error);
       }
     }, 2000);
+
     setTimeout(() => {
       clearInterval(getConfirmation);
       setApiInProgress(false);
@@ -188,17 +170,16 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     const element = cartItems.find(one => one.id == item.id);
 
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ConfirmationCardSkeleton item={item} />
-    ) : (
-      <>{element ? <ProductCard item={element} cancellable={true} /> : null}</>
-    );
+      <ConfirmationCardSkeleton item={item}/>
+    ) : (element ? <ProductCard item={element} cancellable={true}/> : null);
   };
 
   const listData = confirmationList ? confirmationList : skeletonList;
+
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title="Update Cart" navigation={navigation} />
+        <Header title="Update Cart" navigation={navigation}/>
 
         <FlatList
           keyExtractor={(item, index) => {
@@ -223,7 +204,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                   <Text style={styles.fulfillment}>FULFILLMENT</Text>
                   <Text style={styles.fulfillment}>₹{fulfillment}</Text>
                 </View>
-                <Divider style={styles.divider} />
+                <Divider style={styles.divider}/>
               </>
             )}
             <View style={styles.priceContainer}>
