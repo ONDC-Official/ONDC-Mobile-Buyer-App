@@ -42,7 +42,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           if (!item.error) {
             if (item.context.bpp_id) {
               item.message.quote.items.forEach(element => {
-                const object = cartItems.find(one => one.id === element.id);
+                const object = cartItems.find(one => one.id == element.id);
                 element.provider = {
                   id: object.provider_details.id,
                   descriptor: object.provider_details.descriptor,
@@ -64,6 +64,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         });
         setConfirmationList(list);
       } catch (error) {
+        console.log(error);
         handleApiError(error);
       }
     }, 2000);
@@ -134,6 +135,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         }
       });
 
+      console.log(JSON.stringify(payload, undefined, 4));
       const {data} = await postData(`${BASE_URL}${GET_QUOTE}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
@@ -166,16 +168,15 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   }, [cartItems]);
 
   const renderItem = ({item}) => {
-    const element = cartItems.find(one => one.id === item.id);
-
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <ConfirmationCardSkeleton item={item}/>
     ) : (
-      <>{element ? <ProductCard item={element} cancellable={true}/> : null}</>
+      <ProductCard item={element} cancellable={true}/>
     );
   };
 
   const listData = confirmationList ? confirmationList : skeletonList;
+  console.log(JSON.stringify(listData, undefined, 4));
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
