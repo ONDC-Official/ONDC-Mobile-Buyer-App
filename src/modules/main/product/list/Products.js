@@ -11,11 +11,7 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  GET_LATLONG,
-  GET_LOCATION_FROM_LAT_LONG,
-} from '../../../../utils/apiUtilities';
+import {BASE_URL, GET_LATLONG, GET_LOCATION_FROM_LAT_LONG,} from '../../../../utils/apiUtilities';
 import {half, isIOS, skeletonList} from '../../../../utils/utils';
 import useProductList from '../hook/useProductList';
 import AddressPicker from './component/AddressPicker';
@@ -73,7 +69,7 @@ const Products = ({navigation}) => {
    */
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ProductCardSkeleton item={item} />
+      <ProductCardSkeleton item={item}/>
     ) : (
       <ProductCard
         item={item}
@@ -336,7 +332,7 @@ const Products = ({navigation}) => {
               ? styles.contentContainerStyle
               : appStyles.container
           }
-          ListFooterComponent={<ListFooter moreRequested={moreListRequested} />}
+          ListFooterComponent={<ListFooter moreRequested={moreListRequested}/>}
         />
       </View>
     </SafeAreaView>

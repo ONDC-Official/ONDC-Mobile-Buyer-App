@@ -1,14 +1,7 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-  FlatList,
-  SafeAreaView,
-  TouchableOpacity,
-  StyleSheet,
-  View,
-} from 'react-native';
-import {Card, Text, withTheme} from 'react-native-elements';
+import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -29,6 +22,7 @@ const emptyListMessage = strings('main.order.list_empty_message');
  * Component to render list of address
  * @param navigation: required: to navigate to the respective screen
  * @param theme:application theme
+ * @param params
  * @constructor
  * @returns {JSX.Element}
  */
@@ -97,7 +91,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
       });
     };
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item} />
+      <AddressCardSkeleton item={item}/>
     ) : (
       <AddressCard
         item={item}
@@ -132,7 +126,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
           appStyles.container,
           {backgroundColor: colors.backgroundColor},
         ]}>
-        <Header title={selectAddress} show="address" navigation={navigation} />
+        <Header title={selectAddress} show="address" navigation={navigation}/>
 
         <FlatList
           data={listData}
@@ -187,7 +181,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
 
             {selectedAddress !== null && (
               <View style={styles.buttonContainer}>
-                <ContainButton title={buttonTitle} onPress={onPressHandler} />
+                <ContainButton title={buttonTitle} onPress={onPressHandler}/>
               </View>
             )}
           </View>
@@ -198,6 +192,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
 };
 
 export default withTheme(AddressPicker);
+
 const styles = StyleSheet.create({
   buttonContainer: {
     width: 300,

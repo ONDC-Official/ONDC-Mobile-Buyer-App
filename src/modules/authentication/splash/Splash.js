@@ -64,7 +64,7 @@ const Splash = ({navigation}) => {
   return (
     <View style={appStyles.container}>
       <View style={[appStyles.container, styles.container]}>
-        <Image source={image} style={styles.image} />
+        <Image source={image} style={styles.image}/>
       </View>
       <View style={styles.footer}>
         <Text>{versionLabel}</Text>

@@ -13,54 +13,54 @@ const PaymentSkeleton = () => {
       <Card containerStyle={styles.cardContainerStyle}>
         <SkeletonPlaceholder>
           <View style={styles.items}>
-            <View style={styles.title} />
-            <View style={styles.price} />
+            <View style={styles.title}/>
+            <View style={styles.price}/>
           </View>
         </SkeletonPlaceholder>
-        <Divider />
+        <Divider/>
         <SkeletonPlaceholder>
           <View style={styles.items}>
-            <View style={styles.title} />
-            <View style={styles.price} />
+            <View style={styles.title}/>
+            <View style={styles.price}/>
           </View>
         </SkeletonPlaceholder>
-        <Divider />
+        <Divider/>
         <SkeletonPlaceholder>
           <View style={styles.items}>
-            <View style={styles.title} />
-            <View style={styles.price} />
+            <View style={styles.title}/>
+            <View style={styles.price}/>
           </View>
         </SkeletonPlaceholder>
       </Card>
       <Card containerStyle={styles.cardContainerStyle}>
         <SkeletonPlaceholder>
-          <View style={styles.heading} />
-          <View style={styles.address} />
+          <View style={styles.heading}/>
+          <View style={styles.address}/>
         </SkeletonPlaceholder>
       </Card>
       <Card containerStyle={styles.cardContainerStyle}>
         <SkeletonPlaceholder>
-          <View style={styles.paymentOptionsHeading} />
+          <View style={styles.paymentOptionsHeading}/>
         </SkeletonPlaceholder>
         <Card>
           <SkeletonPlaceholder>
             <View style={styles.paymentOption}>
-              <View style={styles.radioButton} />
-              <View style={styles.label} />
+              <View style={styles.radioButton}/>
+              <View style={styles.label}/>
             </View>
           </SkeletonPlaceholder>
         </Card>
         <Card>
           <SkeletonPlaceholder>
             <View style={styles.paymentOption}>
-              <View style={styles.radioButton} />
-              <View style={styles.label} />
+              <View style={styles.radioButton}/>
+              <View style={styles.label}/>
             </View>
           </SkeletonPlaceholder>
         </Card>
       </Card>
       <SkeletonPlaceholder>
-        <View style={styles.button} />
+        <View style={styles.button}/>
       </SkeletonPlaceholder>
     </>
   );

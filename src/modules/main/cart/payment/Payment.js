@@ -529,9 +529,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
     <SafeAreaView style={appStyles.container}>
       {!confirmOrderRequested ? (
         <View style={appStyles.container}>
-          <Header title={heading} navigation={navigation} />
+          <Header title={heading} navigation={navigation}/>
           {initializeOrderRequested ? (
-            <PaymentSkeleton />
+            <PaymentSkeleton/>
           ) : (
             <>
               <View style={styles.container}>
@@ -551,7 +551,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                               ₹{element.price.value * element.quantity}
                             </Text>
                           </View>
-                          <Divider />
+                          <Divider/>
                         </>
                       ) : null;
                     }}
@@ -562,7 +562,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                         <Text>FULFILLMENT</Text>
                         <Text style={styles.fulfillment}>₹{fulFillment}</Text>
                       </View>
-                      <Divider />
+                      <Divider/>
                     </>
                   )}
 
@@ -642,7 +642,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         </View>
       ) : (
         <View style={[appStyles.container, styles.processing]}>
-          <ActivityIndicator size={30} color={colors.accentColor} />
+          <ActivityIndicator size={30} color={colors.accentColor}/>
           <Text style={[styles.processingText, {color: colors.accentColor}]}>
             Processing{' '}
           </Text>

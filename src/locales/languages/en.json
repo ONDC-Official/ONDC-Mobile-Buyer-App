@@ -35,8 +35,8 @@
       "name": "Name",
       "add": "ADD",
       "next": "NEXT",
-      "select_address_title": "Delivery Address",
-      "checkout": "Checkout",
+      "select_address_title": "Address",
+      "checkout": "Place Order",
       "address": "Address",
       "payment_options": "Payment Options",
       "clear_cart_message": "Are you sure you want to clear cart?",
@@ -69,23 +69,23 @@
       "cancel_label": "Cancel",
       "please_select_location": "Please select location",
       "add_to_cart": "Added to cart",
-      "detecting_location":"Detecting Location",
-      "product_details":{
-        "id":"Id:",
-        "name":"Name:",
-        "bpp_id":"Bpp Id:",
-        "provider":"Provider:",
-        "title":"Product Details"
+      "detecting_location": "Detecting Location",
+      "product_details": {
+        "id": "Id:",
+        "name": "Name:",
+        "bpp_id": "Bpp Id:",
+        "provider": "Provider:",
+        "title": "Product Details"
       },
-      "filters":{
-        "filter":"Filters",
-        "apply_title":"APPLY",
-        "close":"CLOSE",
-        "no_filters_message":"No filters available",
-        "providers":"Providers",
-        "categories":"Categories",
-        "sorting":"Sorting",
-        "price_range":"Price Range"
+      "filters": {
+        "filter": "Filters",
+        "apply_title": "APPLY",
+        "close": "CLOSE",
+        "no_filters_message": "No filters available",
+        "providers": "Providers",
+        "categories": "Categories",
+        "sorting": "Sorting",
+        "price_range": "Price Range"
       }
     },
     "more": {

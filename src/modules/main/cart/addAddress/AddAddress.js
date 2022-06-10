@@ -70,40 +70,40 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
 
   const userInfo = item
     ? {
-        email:
-          selectedAddress === 'address' ? item.descriptor.email : item.email,
-        name: selectedAddress === 'address' ? item.descriptor.name : item.name,
-        number:
-          selectedAddress === 'address' ? item.descriptor.phone : item.phone,
-        city:
-          selectedAddress === 'address' ? item.address.city : item.address.city,
-        state:
-          selectedAddress === 'address'
-            ? item.address.state
-            : item.address.state,
-        pin:
-          selectedAddress === 'address'
-            ? item.address.areaCode
-            : item.address.areaCode,
-        landMark:
-          selectedAddress === 'address'
-            ? item.address.locality
-            : item.address.locality,
-        street:
-          selectedAddress === 'address'
-            ? item.address.street
-            : item.address.street,
-      }
+      email:
+        selectedAddress === 'address' ? item.descriptor.email : item.email,
+      name: selectedAddress === 'address' ? item.descriptor.name : item.name,
+      number:
+        selectedAddress === 'address' ? item.descriptor.phone : item.phone,
+      city:
+        selectedAddress === 'address' ? item.address.city : item.address.city,
+      state:
+        selectedAddress === 'address'
+          ? item.address.state
+          : item.address.state,
+      pin:
+        selectedAddress === 'address'
+          ? item.address.areaCode
+          : item.address.areaCode,
+      landMark:
+        selectedAddress === 'address'
+          ? item.address.locality
+          : item.address.locality,
+      street:
+        selectedAddress === 'address'
+          ? item.address.street
+          : item.address.street,
+    }
     : {
-        email: '',
-        name: '',
-        number: '',
-        city: '',
-        state: '',
-        pin: '',
-        landMark: '',
-        street: '',
-      };
+      email: '',
+      name: '',
+      number: '',
+      city: '',
+      state: '',
+      pin: '',
+      landMark: '',
+      street: '',
+    };
 
   /**
    * Function is used to save new address
@@ -118,35 +118,35 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
     const payload =
       selectedAddress === 'address'
         ? {
-            descriptor: {
-              name: values.name,
-              email: values.email,
-              phone: values.number,
-            },
-            gps: '',
-            defaultAddress: true,
-            address: {
-              areaCode: values.pin,
-              city: values.city,
-              locality: values.landMark,
-              state: values.state,
-              street: values.street,
-              country: 'IND',
-            },
-          }
-        : {
-            address: {
-              areaCode: values.pin,
-              city: values.city,
-              locality: values.landMark,
-              state: values.state,
-              street: values.street,
-              country: 'IND',
-            },
+          descriptor: {
             name: values.name,
             email: values.email,
             phone: values.number,
-          };
+          },
+          gps: '',
+          defaultAddress: true,
+          address: {
+            areaCode: values.pin,
+            city: values.city,
+            locality: values.landMark,
+            state: values.state,
+            street: values.street,
+            country: 'IND',
+          },
+        }
+        : {
+          address: {
+            areaCode: values.pin,
+            city: values.city,
+            locality: values.landMark,
+            state: values.state,
+            street: values.street,
+            country: 'IND',
+          },
+          name: values.name,
+          email: values.email,
+          phone: values.number,
+        };
 
     try {
       setApiInProgress(true);
@@ -198,13 +198,13 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                 });
             }}>
             {({
-              values,
-              errors,
-              handleChange,
-              handleBlur,
-              touched,
-              handleSubmit,
-            }) => {
+                values,
+                errors,
+                handleChange,
+                handleBlur,
+                touched,
+                handleSubmit,
+              }) => {
               return (
                 <>
                   <InputField

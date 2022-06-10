@@ -9,7 +9,7 @@ import ProductCardSkeleton from './ProductCardSkeleton';
  * @returns {JSX.Element}
  */
 const ListFooter = ({moreRequested}) => {
-  return moreRequested ? <ProductCardSkeleton /> : null;
+  return moreRequested ? <ProductCardSkeleton/> : null;
 };
 
 export default ListFooter;
