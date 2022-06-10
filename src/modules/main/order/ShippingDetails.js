@@ -107,7 +107,6 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
         payload,
         options,
       );
-      console.log(data);
 
       const response = await getData(
         `${BASE_URL}${ON_CANCEL_ORDER}messageId=${data.context.message_id}`,
@@ -122,7 +121,6 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
       }
       setCancelInProgress(false);
     } catch (e) {
-      console.log(e.response);
       handleApiError(e);
       setCancelInProgress(false);
     }

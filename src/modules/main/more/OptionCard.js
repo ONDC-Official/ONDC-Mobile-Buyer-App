@@ -42,7 +42,7 @@ const OptionCard = ({theme, navigation, item}) => {
           });
         },
         cancelLabel,
-        () => console.log('cancelled'),
+        () => {},
       );
     } else if (option === OPTIONS.PROFILE) {
       navigation.navigate('Profile');

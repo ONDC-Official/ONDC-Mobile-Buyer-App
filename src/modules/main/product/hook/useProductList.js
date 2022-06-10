@@ -90,14 +90,9 @@ export default () => {
           transaction_id: transactionId,
         });
       });
-      productsList.forEach(item => console.log(item.id));
 
       const list =
         pageNumber === 1 ? productsList : [...products, ...productsList];
-      console.log('/////////');
-      list.forEach(item => {
-        console.log(item.id);
-      });
       dispatch(saveProducts(list));
       setCount(data.message.count);
     } catch (error) {

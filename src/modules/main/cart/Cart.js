@@ -50,7 +50,7 @@ const Cart = ({navigation, theme}) => {
       ok,
       emptyCart,
       cancelLabel,
-      () => console.log('Cancelled'),
+      () => {},
     );
   };
 

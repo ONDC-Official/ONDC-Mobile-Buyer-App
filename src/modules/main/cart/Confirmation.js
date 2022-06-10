@@ -43,10 +43,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             if (item.context.bpp_id) {
               item.message.quote.items.forEach(element => {
                 const object = cartItems.find(one => one.id === element.id);
-                console.log('////////////');
-                console.log(object);
-                console.log(cartItems);
-                console.log(element);
                 element.provider = {
                   id: object.provider_details.id,
                   descriptor: object.provider_details.descriptor,
@@ -66,16 +62,12 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             }
           }
         });
-        console.log('list');
-
-        console.log(list);
-
         setConfirmationList(list);
       } catch (error) {
-        console.log(error);
         handleApiError(error);
       }
     }, 2000);
+
     setTimeout(() => {
       clearInterval(getConfirmation);
       setApiInProgress(false);

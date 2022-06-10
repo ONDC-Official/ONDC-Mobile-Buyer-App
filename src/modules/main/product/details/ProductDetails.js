@@ -36,8 +36,6 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
    * function handles click event of increase and decrease buttons
    */
   const updateQuantity = (increase = true) => {
-    console.log('running');
-
     let updatedProduct = null;
     if (increase) {
       updatedProduct = Object.assign({}, item, {quantity: item.quantity + 1});

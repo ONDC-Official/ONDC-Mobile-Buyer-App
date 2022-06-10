@@ -112,7 +112,6 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
       params
         ? setBillingAdrress(params.billingAddress)
         : setBillingAdrress(selectedAddress);
-      console.log(billingAddress);
     }
   }, [isFocused]);
 

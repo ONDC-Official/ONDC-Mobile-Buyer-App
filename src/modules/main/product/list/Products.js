@@ -238,10 +238,7 @@ const Products = ({navigation}) => {
   };
 
   const loadMoreList = () => {
-    console.log(count);
     if (count && count > products.length && !apiInProgress) {
-      console.log('moreRequested');
-      console.log(pageNumber);
       setMoreListRequested(true);
       getProductsList(
         setCount,

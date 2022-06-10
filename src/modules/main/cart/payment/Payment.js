@@ -137,8 +137,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setConfirmOrderRequested(false);
         alertWithOneButton(null, message, ok, onOrderSuccess);
       } else {
-        console.log(error.current);
-
         showToastWithGravity(strings('network_error.something_went_wrong'));
         setConfirmOrderRequested(false);
       }
@@ -337,8 +335,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         break;
 
       case 'initiate_result':
-        var payload = data.payload || {};
-        console.log('initiate_result: ', payload);
+        const payload = data.payload || {};
         break;
 
       case 'process_result':
