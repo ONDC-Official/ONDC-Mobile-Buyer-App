@@ -4,6 +4,7 @@ import {useDispatch} from 'react-redux';
 import {Context as AuthContext} from '../context/Auth';
 import {strings} from '../locales/i18n';
 import {clearAllData} from '../redux/actions';
+import {clearFilters} from '../redux/filter/actions';
 import {alertWithOneButton} from '../utils/alerts';
 import {showToastWithGravity} from '../utils/utils';
 
@@ -17,6 +18,8 @@ export default () => {
   const clearDataAndLogout = () => {
     logoutUser();
     dispatch(clearAllData());
+    dispatch(clearFilters());
+
     navigation.reset({
       index: 0,
       routes: [{name: 'Landing'}],
