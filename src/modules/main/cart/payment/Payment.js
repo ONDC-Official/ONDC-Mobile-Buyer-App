@@ -95,13 +95,18 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setOrders(data);
         const ordersArray = data.filter(one => !one.hasOwnProperty('error'));
         refOrders.current = data;
-        const breakupItem = ordersArray[0].message.order.quote.breakup.find(
-          one => one.title === 'FULFILLMENT',
-        );
-        breakupItem
-          ? setFulFillment(breakupItem.price.value)
-          : setFulFillment(null);
-        setTotal(ordersArray[0].message.order.quote.price.value);
+        const e = refOrders.current.find(item => item.hasOwnProperty('error'));
+        error.current = e;
+
+        if (ordersArray.length > 0) {
+          const breakupItem = ordersArray[0].message.order.quote.breakup.find(
+            one => one.title === 'FULFILLMENT',
+          );
+          breakupItem
+            ? setFulFillment(breakupItem.price.value)
+            : setFulFillment(null);
+          setTotal(ordersArray[0].message.order.quote.price.value);
+        }
       } catch (error) {
         handleApiError(error);
       }
@@ -109,6 +114,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
     setTimeout(() => {
       clearInterval(order);
+      if (error.current) {
+        showToastWithGravity(strings('network_error.something_went_wrong'));
+      }
+      setInitializeOrderRequested(false);
     }, 10000);
   };
 
@@ -137,8 +146,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setConfirmOrderRequested(false);
         alertWithOneButton(null, message, ok, onOrderSuccess);
       } else {
-        console.log(error.current);
-
         showToastWithGravity(strings('network_error.something_went_wrong'));
         setConfirmOrderRequested(false);
       }
@@ -503,11 +510,11 @@ const Payment = ({navigation, theme, route: {params}}) => {
   useEffect(() => {
     initializeOrder()
       .then(() => {
+        console.log('Its errror');
         HyperSdkReact.createHyperServices();
         placeOrder()
           .then(() => {})
           .catch(() => {});
-        setInitializeOrderRequested(false);
       })
       .catch(() => {});
 
@@ -585,58 +592,64 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   </Text>
                 </Card>
 
-                <Card containerStyle={styles.cardContainerStyle}>
-                  <Text style={styles.text}>{paymentOptionsTitle}</Text>
+                {!error.current && (
+                  <Card containerStyle={styles.cardContainerStyle}>
+                    <Text style={styles.text}>{paymentOptionsTitle}</Text>
 
-                  <View style={styles.paymentOptions}>
-                    {PAYMENT_OPTIONS.map((option, index) => (
-                      <CheckBox
-                        key={option.value}
-                        title={
-                          <View style={styles.titleStyle}>
-                            <Text style={styles.textStyle}>{option.label}</Text>
-                            {option.label === 'Prepaid' && (
-                              <View style={styles.juspayContainer}>
-                                <Text>{poweredBy}</Text>
-                                <FastImage
-                                  source={{
-                                    uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
-                                  }}
-                                  style={styles.image}
-                                  resizeMode={'contain'}
-                                />
-                              </View>
-                            )}
-                          </View>
-                        }
-                        checkedIcon="dot-circle-o"
-                        uncheckedIcon="circle-o"
-                        containerStyle={[
-                          styles.checkBoxcontainerStyle,
-                          {
-                            backgroundColor: colors.backgroundColor,
-                          },
-                        ]}
-                        wrapperStyle={styles.wrapperStyle}
-                        checked={option.value === selectedPaymentOption}
-                        onPress={() => setSelectedPaymentOption(option.value)}
-                      />
-                    ))}
-                  </View>
-                </Card>
+                    <View style={styles.paymentOptions}>
+                      {PAYMENT_OPTIONS.map((option, index) => (
+                        <CheckBox
+                          key={option.value}
+                          title={
+                            <View style={styles.titleStyle}>
+                              <Text style={styles.textStyle}>
+                                {option.label}
+                              </Text>
+                              {option.label === 'Prepaid' && (
+                                <View style={styles.juspayContainer}>
+                                  <Text>{poweredBy}</Text>
+                                  <FastImage
+                                    source={{
+                                      uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
+                                    }}
+                                    style={styles.image}
+                                    resizeMode={'contain'}
+                                  />
+                                </View>
+                              )}
+                            </View>
+                          }
+                          checkedIcon="dot-circle-o"
+                          uncheckedIcon="circle-o"
+                          containerStyle={[
+                            styles.checkBoxcontainerStyle,
+                            {
+                              backgroundColor: colors.backgroundColor,
+                            },
+                          ]}
+                          wrapperStyle={styles.wrapperStyle}
+                          checked={option.value === selectedPaymentOption}
+                          onPress={() => setSelectedPaymentOption(option.value)}
+                        />
+                      ))}
+                    </View>
+                  </Card>
+                )}
               </View>
 
-              <View style={styles.buttonContainer}>
-                <ContainButton
-                  title={'Place Order'}
-                  onPress={() => {
-                    processPayment()
-                      .then(() => {})
-                      .catch(() => {});
-                  }}
-                  loading={confirmOrderRequested}
-                />
-              </View>
+              {!error.current && (
+                <View style={styles.buttonContainer}>
+                  <ContainButton
+                    title={'Place Order'}
+                    onPress={() => {
+                      processPayment()
+                        .then(() => {})
+                        .catch(() => {});
+                    }}
+                    loading={confirmOrderRequested}
+                  />
+                </View>
+              )}
             </>
           )}
         </View>
@@ -655,7 +668,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
 export default withTheme(Payment);
 
 const styles = StyleSheet.create({
-  container: {padding: 15},
+  container: {padding: 10},
   text: {fontSize: 18, fontWeight: '600', paddingLeft: 10},
   buttonContainer: {width: 300, alignSelf: 'center'},
   paymentOptions: {marginVertical: 10},
