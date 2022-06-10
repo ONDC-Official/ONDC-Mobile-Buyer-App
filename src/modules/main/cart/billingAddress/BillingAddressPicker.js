@@ -78,17 +78,9 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
    * function handles click event of next button
    */
   const onPressHandler = () => {
-    if (checked) {
-      navigation.navigate('Confirmation', {
-        selectedAddress,
-        selectedBillingAddress: selectedAddress,
-      });
-    } else {
-      navigation.navigate('Confirmation', {
-        selectedAddress,
-        selectedBillingAddress: selectedBillingAddress,
-      });
-    }
+    navigation.navigate('AddressPicker', {
+      billingAddress: selectedBillingAddress,
+    });
   };
 
   /**
@@ -117,6 +109,7 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
 
   useEffect(() => {
     if (isFocused) {
+      setSelectedBillingAddress(null);
       getAddressList()
         .then(() => {})
         .catch(() => {});
@@ -138,7 +131,6 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
           show={selectedAddress}
           navigation={navigation}
         />
-
         <FlatList
           data={listData}
           renderItem={renderItem}
@@ -159,17 +151,10 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
               : [appStyles.container, styles.emptyContainer]
           }
         />
-        <CheckBox
-          title={'Same as delivery address'}
-          checked={checked}
-          onPress={() => {
-            setChecked(!checked);
-          }}
-        />
 
-        {(selectedBillingAddress !== null || checked) && (
+        {selectedBillingAddress !== null && (
           <View style={styles.buttonContainer}>
-            <ContainButton title={buttonTitle} onPress={onPressHandler} />
+            <ContainButton title={'Save'} onPress={onPressHandler} />
           </View>
         )}
       </View>

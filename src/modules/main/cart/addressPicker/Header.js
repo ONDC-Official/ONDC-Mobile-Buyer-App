@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 1,
+    elevation: 15,
   },
   backButton: {
     alignItems: 'center',
@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 10,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: 4,
   },
 });

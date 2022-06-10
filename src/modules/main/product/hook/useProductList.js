@@ -177,7 +177,7 @@ export default () => {
     if (longitude && latitude) {
       setApiInProgress(true);
       dispatch(saveProducts([]));
-      dispatch(clearFilters);
+      dispatch(clearFilters());
 
       let requestParameters = {
         context: {},

@@ -1,7 +1,14 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  FlatList,
+  SafeAreaView,
+  TouchableOpacity,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {Card, Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -25,10 +32,11 @@ const emptyListMessage = strings('main.order.list_empty_message');
  * @constructor
  * @returns {JSX.Element}
  */
-const AddressPicker = ({navigation, theme}) => {
+const AddressPicker = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
   const [list, setList] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [billingAddress, setBillingAdrress] = useState(null);
   const isFocused = useIsFocused();
   const {
     state: {token},
@@ -48,7 +56,6 @@ const AddressPicker = ({navigation, theme}) => {
       });
 
       setList(data);
-      console.log(data);
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -64,6 +71,16 @@ const AddressPicker = ({navigation, theme}) => {
    * function handles click event of next button
    */
   const onPressHandler = () => {
+    navigation.navigate('Confirmation', {
+      selectedAddress,
+      selectedBillingAddress: billingAddress,
+    });
+  };
+
+  /**
+   * function handles click event of next button
+   */
+  const onEditHandler = () => {
     navigation.navigate('BillingAddressPicker', {selectedAddress});
   };
 
@@ -86,6 +103,8 @@ const AddressPicker = ({navigation, theme}) => {
         item={item}
         selectedAddress={selectedAddress}
         setSelectedAddress={setSelectedAddress}
+        params={params}
+        setBillingAdrress={setBillingAdrress}
         onEdit={onEdit}
       />
     );
@@ -96,6 +115,10 @@ const AddressPicker = ({navigation, theme}) => {
       getAddressList()
         .then(() => {})
         .catch(() => {});
+      params
+        ? setBillingAdrress(params.billingAddress)
+        : setBillingAdrress(selectedAddress);
+      console.log(billingAddress);
     }
   }, [isFocused]);
 
@@ -124,9 +147,49 @@ const AddressPicker = ({navigation, theme}) => {
           }
         />
 
-        {selectedAddress !== null && (
-          <View style={styles.buttonContainer}>
-            <ContainButton title={buttonTitle} onPress={onPressHandler} />
+        {billingAddress !== null && (
+          <View style={[styles.container, {backgroundColor: colors.white}]}>
+            <Text style={styles.name}>Billing address</Text>
+            <View style={styles.subContainer}>
+              <View style={styles.title}>
+                <Text style={styles.address}>
+                  {billingAddress.descriptor
+                    ? billingAddress.descriptor.name
+                    : billingAddress.name}
+                </Text>
+
+                <Text style={[styles.text, {color: colors.grey}]}>
+                  {billingAddress.descriptor
+                    ? billingAddress.descriptor.email
+                    : billingAddress.email}
+                </Text>
+
+                <Text style={[styles.text, {color: colors.grey}]}>
+                  {billingAddress.descriptor
+                    ? billingAddress.descriptor.phone
+                    : billingAddress.phone}
+                </Text>
+
+                <Text style={[styles.address, {color: colors.grey}]}>
+                  {billingAddress.address.street} {billingAddress.address.city}{' '}
+                  {billingAddress.address.state}
+                </Text>
+                <Text style={{color: colors.grey}}>
+                  {billingAddress.address.areaCode}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={[styles.button, {borderColor: colors.accentColor}]}
+                onPress={onEditHandler}>
+                <Text style={{color: colors.accentColor}}>EDIT</Text>
+              </TouchableOpacity>
+            </View>
+
+            {selectedAddress !== null && (
+              <View style={styles.buttonContainer}>
+                <ContainButton title={buttonTitle} onPress={onPressHandler} />
+              </View>
+            )}
           </View>
         )}
       </View>
@@ -143,4 +206,43 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {paddingHorizontal: 10, paddingBottom: 10},
   emptyContainer: {justifyContent: 'center', alignItems: 'center'},
+  subContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  card: {
+    margin: 0,
+    elevation: 4,
+    marginTop: 15,
+    borderRadius: 8,
+    padding: 0,
+  },
+  textContainer: {flexShrink: 1, flexDirection: 'row'},
+  name: {
+    textTransform: 'capitalize',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+    flexShrink: 1,
+  },
+  text: {marginBottom: 4},
+  address: {textTransform: 'capitalize', marginBottom: 4},
+
+  button: {
+    marginTop: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderRadius: 4,
+  },
+  title: {marginRight: 5},
+  containerStyle: {borderRadius: 8, margin: 10},
+  container: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    elevation: 15,
+  },
 });

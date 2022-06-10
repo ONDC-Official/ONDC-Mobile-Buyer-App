@@ -19,6 +19,8 @@ const AddressCard = ({
   onEdit,
   selectedAddress,
   setSelectedAddress,
+  params,
+  setBillingAdrress,
 }) => {
   const {colors} = theme;
 
@@ -26,7 +28,12 @@ const AddressCard = ({
 
   const {street, city, state} = item.address;
 
-  const onPressHandler = () => setSelectedAddress(item);
+  const onPressHandler = () => {
+    setSelectedAddress(item);
+    if (!params && setBillingAdrress) {
+      setBillingAdrress(item);
+    }
+  };
 
   return item.descriptor ? (
     <Card containerStyle={styles.card}>
