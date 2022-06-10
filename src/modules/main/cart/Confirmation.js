@@ -135,7 +135,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         }
       });
 
-      console.log(JSON.stringify(payload, undefined, 4));
       const {data} = await postData(`${BASE_URL}${GET_QUOTE}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
@@ -168,15 +167,15 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   }, [cartItems]);
 
   const renderItem = ({item}) => {
+    const element = cartItems.find(one => one.id == item.id);
+
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <ConfirmationCardSkeleton item={item}/>
-    ) : (
-      <ProductCard item={element} cancellable={true}/>
-    );
+    ) : (element ? <ProductCard item={element} cancellable={true}/> : null);
   };
 
   const listData = confirmationList ? confirmationList : skeletonList;
-  console.log(JSON.stringify(listData, undefined, 4));
+
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
