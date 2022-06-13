@@ -35,9 +35,9 @@ const SupportCard = ({theme, url, icon, title, message, source}) => {
       <View style={styles.container}>
         <View style={[styles.icon]}>
           {icon ? (
-            <Icon name={icon} color={colors.accentColor} size={40}/>
+            <Icon name={icon} color={colors.accentColor} size={40} />
           ) : (
-            <Image source={source} style={styles.image}/>
+            <Image source={source} style={styles.image} />
           )}
         </View>
         <View style={[appStyles.container, styles.textContainer]}>
@@ -52,7 +52,7 @@ const SupportCard = ({theme, url, icon, title, message, source}) => {
               .then(() => {})
               .catch(() => {});
           }}>
-          <Icon name="chevron-right" color={colors.accentColor} size={24}/>
+          <Icon name="chevron-right" color={colors.accentColor} size={24} />
         </TouchableOpacity>
       </View>
     </Card>

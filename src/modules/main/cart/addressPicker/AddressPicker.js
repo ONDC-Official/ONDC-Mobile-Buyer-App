@@ -1,6 +1,12 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
@@ -17,6 +23,7 @@ import Header from './Header';
 const buttonTitle = strings('main.cart.next');
 const selectAddress = strings('main.cart.select_address_title');
 const emptyListMessage = strings('main.order.list_empty_message');
+const edit = strings('main.cart.edit');
 
 /**
  * Component to render list of address
@@ -91,7 +98,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
       });
     };
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item}/>
+      <AddressCardSkeleton item={item} />
     ) : (
       <AddressCard
         item={item}
@@ -125,7 +132,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
           appStyles.container,
           {backgroundColor: colors.backgroundColor},
         ]}>
-        <Header title={selectAddress} show="address" navigation={navigation}/>
+        <Header title={selectAddress} show="address" navigation={navigation} />
 
         <FlatList
           data={listData}
@@ -174,13 +181,13 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
               <TouchableOpacity
                 style={[styles.button, {borderColor: colors.accentColor}]}
                 onPress={onEditHandler}>
-                <Text style={{color: colors.accentColor}}>EDIT</Text>
+                <Text style={{color: colors.accentColor}}>{edit}</Text>
               </TouchableOpacity>
             </View>
 
             {selectedAddress !== null && (
               <View style={styles.buttonContainer}>
-                <ContainButton title={buttonTitle} onPress={onPressHandler}/>
+                <ContainButton title={buttonTitle} onPress={onPressHandler} />
               </View>
             )}
           </View>

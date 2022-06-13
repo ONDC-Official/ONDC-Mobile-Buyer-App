@@ -2,7 +2,12 @@ import React from 'react';
 import {FlatList, SafeAreaView, View} from 'react-native';
 import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
-import {CONTACT_US, FAQS, ONDC_POLICY, POLICY_URL,} from '../../../../utils/Constants';
+import {
+  CONTACT_US,
+  FAQS,
+  ONDC_POLICY,
+  POLICY_URL,
+} from '../../../../utils/Constants';
 import {keyExtractor} from '../../../../utils/utils';
 import Header from '../../cart/addressPicker/Header';
 import SupportCard from './SupportCard';
@@ -60,7 +65,7 @@ const Support = ({navigation}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={heading} navigation={navigation}/>
+        <Header title={heading} navigation={navigation} />
         <FlatList
           data={list}
           keyExtractor={keyExtractor}

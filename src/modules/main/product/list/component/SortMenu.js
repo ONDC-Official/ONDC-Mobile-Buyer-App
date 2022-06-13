@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {CheckBox, Divider, withTheme} from 'react-native-elements';
 import ClearButton from '../../../../../components/button/ClearButton';
@@ -26,12 +26,22 @@ const list = [
  * @constructor
  * @returns {JSX.Element}
  */
-const SortMenu = ({theme, closeSortSheet, apiInProgress, onApply}) => {
+const SortMenu = ({
+  theme,
+  closeSortSheet,
+  selectedSortMethod,
+  apiInProgress,
+  onApply,
+}) => {
   const {colors} = theme;
 
   const [sortingMethod, setSortingMethod] = useState(
-    PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
+    PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
   );
+
+  useEffect(() => {
+    setSortingMethod(selectedSortMethod);
+  }, []);
 
   return (
     <View>
@@ -42,7 +52,7 @@ const SortMenu = ({theme, closeSortSheet, apiInProgress, onApply}) => {
           textColor={colors.accentColor}
         />
       </View>
-      <Divider style={styles.divider}/>
+      <Divider style={styles.divider} />
       <View>
         {list.map(item => (
           <CheckBox

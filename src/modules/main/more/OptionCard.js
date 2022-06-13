@@ -57,7 +57,7 @@ const OptionCard = ({theme, navigation, item}) => {
         onPress={() => {
           onPressHandler(item.name);
         }}>
-        <Icon type="font-awesome" name={item.icon} color={colors.accentColor}/>
+        <Icon type="font-awesome" name={item.icon} color={colors.accentColor} />
         <Text style={[styles.text, {color: colors.accentColor}]}>
           {item.string}
         </Text>

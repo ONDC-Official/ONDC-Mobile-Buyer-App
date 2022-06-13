@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -22,15 +22,15 @@ const filter = strings('main.product.filters.filter');
  * @returns {JSX.Element}
  */
 const SortAndFilter = ({
-                         theme,
-                         setCount,
-                         appliedFilters,
-                         setAppliedFilters,
-                         setPageNumber,
-                       }) => {
+  theme,
+  setCount,
+  appliedFilters,
+  setAppliedFilters,
+  setPageNumber,
+}) => {
   const {colors} = theme;
   const [selectedSortMethod, setSelectedSortMethod] = useState(
-    PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
+    PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
   );
   const [providers, setProviders] = useState([]);
   const [min, setMin] = useState(0);
@@ -98,14 +98,14 @@ const SortAndFilter = ({
 
   return (
     <>
-      <Divider width={1}/>
+      <Divider width={1} />
       <View
         style={[styles.sortFilterContainer, {backgroundColor: colors.white}]}>
         <TouchableOpacity onPress={openSortSheet}>
           <Text style={[styles.text, {color: colors.accentColor}]}>
             {selectedSortMethod ? selectedSortMethod : 'Sort'}
             {'   '}
-            <Icon name="pencil-square" size={14}/>
+            <Icon name="pencil-square" size={14} />
           </Text>
         </TouchableOpacity>
         <RBSheet
@@ -119,16 +119,15 @@ const SortAndFilter = ({
             apiInProgress={apiInProgress}
             setCount={setCount}
             selectedSortMethod={selectedSortMethod}
-            setSelectedSortMethod={setSelectedSortMethod}
             onApply={onApply}
           />
         </RBSheet>
-        <Divider orientation="vertical" width={1}/>
+        <Divider orientation="vertical" width={1} />
         <TouchableOpacity onPress={openRBSheet}>
           <Text style={[styles.text, {color: colors.accentColor}]}>
             {filter}
             {filtersLength ? `(${filtersLength - 1})` : null}{' '}
-            <Icon name="filter" size={14}/>
+            <Icon name="filter" size={14} />
           </Text>
         </TouchableOpacity>
         <RBSheet

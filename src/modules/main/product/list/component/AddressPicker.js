@@ -30,7 +30,7 @@ const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
         />
       </View>
       <View style={styles.header}>
-        <Logo/>
+        <Logo />
       </View>
       <SearchBar
         setLocation={setLocation}

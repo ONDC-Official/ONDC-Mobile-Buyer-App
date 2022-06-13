@@ -14,6 +14,8 @@ import Button from './Button';
 const invalidNumber = strings('errors.invalid_number');
 const requiredField = strings('errors.required');
 const numberPlaceholder = strings('main.cart.number');
+const callMeLabel = strings('main.order.call_me');
+const cancel = strings('main.order.cancel');
 
 const validationSchema = Yup.object({
   number: Yup.string()
@@ -106,13 +108,13 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
               .catch(() => {});
           }}>
           {({
-              values,
-              errors,
-              handleChange,
-              handleBlur,
-              touched,
-              handleSubmit,
-            }) => {
+            values,
+            errors,
+            handleChange,
+            handleBlur,
+            touched,
+            handleSubmit,
+          }) => {
             return (
               <>
                 <TouchableOpacity
@@ -139,7 +141,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
                   <Button
                     backgroundColor={colors.statusBackground}
                     borderColor={colors.accentColor}
-                    title={'Call me'}
+                    title={callMeLabel}
                     onPress={handleSubmit}
                     color={colors.accentColor}
                     loader={callInProgress}
@@ -147,7 +149,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
                   <Button
                     backgroundColor={colors.cancelledBackground}
                     borderColor={colors.error}
-                    title={'Cancel'}
+                    title={cancel}
                     onPress={() => {
                       setModalVisible(false);
                     }}

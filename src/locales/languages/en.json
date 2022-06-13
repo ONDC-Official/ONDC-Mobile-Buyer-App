@@ -22,9 +22,13 @@
     "cart": {
       "sub_total_label": "Subtotal:",
       "clear_cart_title": "Clear Cart",
-      "check_out_title": "Check Out",
-      "empty_cart_message": "You have no items in your shopping cart",
+      "empty_cart": "Your cart is empty",
+      "message":"looks like your shopping cart is empty, you can shop now by clicking button below",
       "add_address": "Add Address",
+      "update_address":"Update Address",
+      "update":"UPDATE",
+      "edit":"EDIT",
+      "save":"SAVE",
       "email": "Email",
       "number": "Number",
       "pin": "Pin Code",
@@ -36,11 +40,19 @@
       "add": "ADD",
       "next": "NEXT",
       "select_address_title": "Address",
-      "checkout": "Place Order",
+      "billing_address":"Billing Address",
+      "add_billing_address":"Add Billing Address",
+      "update_cart":"Update Cart",
+      "fulfillment":"FULFILLMENT",
+      "total_payable":"Total Payable",
+      "proceed_to_pay":"Proceed To Pay",
+      "checkout": "Checkout",
       "address": "Address",
       "payment_options": "Payment Options",
       "clear_cart_message": "Are you sure you want to clear cart?",
-      "order_placed_message": "Your order has been placed!"
+      "order_placed_message": "Your order has been placed!",
+      "shop_now":"Shop Now"
+     
     },
     "dashboard": {},
     "order": {
@@ -49,7 +61,8 @@
       "status_label": "Status :",
       "return": "Return",
       "cancel": "Cancel",
-      "list_empty_message": "No data found"
+      "list_empty_message": "No data found",
+      "call_me":"Call Me"
     },
     "product": {
       "select_location_label": "Select a location",
@@ -71,11 +84,12 @@
       "add_to_cart": "Added to cart",
       "detecting_location": "Detecting Location",
       "product_details": {
-        "id": "Id:",
-        "name": "Name:",
-        "bpp_id": "Bpp Id:",
-        "provider": "Provider:",
-        "title": "Product Details"
+        "manufacture_name":"Manufacture Name",
+        "title": "Product Details",
+        "manufacture_date":"Manufacture Date",
+        "net_quantity":"Net Quantity",
+        "country_of_origin":"Country of Origin",
+        "brand_owner_name":"Brand Owner Name"
       },
       "filters": {
         "filter": "Filters",

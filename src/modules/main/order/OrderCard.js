@@ -5,6 +5,7 @@ import {Text, withTheme} from 'react-native-elements';
 import {strings} from '../../../locales/i18n';
 
 const orderedOn = strings('main.order.ordered_on_label');
+const status = strings('main.order.status_label');
 
 /**
  * Component to render signle card on orders screen
@@ -30,7 +31,7 @@ const OrderCard = ({item, theme}) => {
         </View>
 
         <View style={styles.statusContainer}>
-          <Text>Status:</Text>
+          <Text>{status}</Text>
           <View
             style={[
               styles.orderStatus,

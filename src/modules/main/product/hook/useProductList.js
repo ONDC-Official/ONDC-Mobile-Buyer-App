@@ -3,10 +3,19 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {strings} from '../../../../locales/i18n';
-import {clearFilters, saveFilters, saveIds,} from '../../../../redux/filter/actions';
+import {
+  clearFilters,
+  saveFilters,
+  saveIds,
+} from '../../../../redux/filter/actions';
 import {saveProducts} from '../../../../redux/product/actions';
 import {getData, postData} from '../../../../utils/api';
-import {BASE_URL, FILTER, GET_MESSAGE_ID, GET_PRODUCTS,} from '../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  FILTER,
+  GET_MESSAGE_ID,
+  GET_PRODUCTS,
+} from '../../../../utils/apiUtilities';
 import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
 import {cleanFormData} from '../../../../utils/utils';
 
@@ -81,7 +90,7 @@ export default () => {
 
         url = `${BASE_URL}${GET_PRODUCTS}${messageId}${params}&sortField=${sortField}&sortOrder=${sortOrder}&pageNumber=${pageNumber}&limit=10`;
       } else {
-        url = `${BASE_URL}${GET_PRODUCTS}${messageId}&sortField=rating&sortOrder=desc&pageNumber=${pageNumber}&limit=10`;
+        url = `${BASE_URL}${GET_PRODUCTS}${messageId}&sortField=price&sortOrder=asc&pageNumber=${pageNumber}&limit=10`;
       }
       const {data} = await getData(`${url}`, options);
       const productsList = data.message.catalogs.map(item => {

@@ -1,5 +1,11 @@
 import React from 'react';
-import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
@@ -64,7 +70,7 @@ const Cart = ({navigation, theme}) => {
    * @param item:single object from cart list
    * @returns {JSX.Element}
    */
-  const renderItem = ({item}) => <ProductCard item={item}/>;
+  const renderItem = ({item}) => <ProductCard item={item} />;
 
   return (
     <SafeAreaView
@@ -95,7 +101,7 @@ const Cart = ({navigation, theme}) => {
           data={cartItems}
           renderItem={renderItem}
           ListEmptyComponent={() => {
-            return <EmptyComponent navigation={navigation}/>;
+            return <EmptyComponent navigation={navigation} />;
           }}
           contentContainerStyle={
             cartItems.length === 0
@@ -103,7 +109,7 @@ const Cart = ({navigation, theme}) => {
               : styles.contentContainerStyle
           }
         />
-        {cartItems.length !== 0 && <Footer onCheckout={onCheckout}/>}
+        {cartItems.length !== 0 && <Footer onCheckout={onCheckout} />}
       </View>
     </SafeAreaView>
   );

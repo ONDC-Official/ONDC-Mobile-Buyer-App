@@ -5,6 +5,15 @@ import {strings} from '../../../../locales/i18n';
 import IconField from './IconField';
 
 const title = strings('main.product.product_details.title');
+const manufactureName = strings(
+  'main.product.product_details.manufacture_name',
+);
+const manufactureDate = strings(
+  'main.product.product_details.manufacture_date',
+);
+const netQuantityLabel = strings('main.product.product_details.net_quantity');
+const countryLabel = strings('main.product.product_details.country_of_origin');
+const brandLabel = strings('main.product.product_details.brand_owner_name');
 
 const Details = ({item, theme}) => {
   const {colors} = theme;
@@ -27,12 +36,12 @@ const Details = ({item, theme}) => {
       <View style={[styles.container, styles.productDetailsContainer]}>
         {item['@ondc/org/returnable'] && (
           <>
-            <IconField name="Returnable" icon="package-variant"/>
-            <View style={styles.space}/>
+            <IconField name="Returnable" icon="package-variant" />
+            <View style={styles.space} />
           </>
         )}
         {item['@ondc/org/cancellable'] && (
-          <IconField name="Cancellable" icon="package-variant-closed"/>
+          <IconField name="Cancellable" icon="package-variant-closed" />
         )}
       </View>
       <View style={styles.container}>
@@ -40,31 +49,31 @@ const Details = ({item, theme}) => {
         <View style={styles.productDetailsContainer}>
           <View style={styles.productDetailsTitleContainer}>
             <Text style={[styles.title, {color: colors.gray}]}>
-              Manufacture Name
+              {manufactureName}
             </Text>
             {packageCommodity && (
               <>
                 {netQuantity && (
                   <Text style={[styles.title, {color: colors.gray}]}>
-                    Net Quantity
+                    {netQuantityLabel}
                   </Text>
                 )}
 
                 {manufacturingDate && (
                   <Text style={[styles.title, {color: colors.gray}]}>
-                    Manufacturing Date
+                    {manufactureDate}
                   </Text>
                 )}
                 {country && (
                   <Text style={[styles.title, {color: colors.gray}]}>
-                    Country of Origin
+                    {countryLabel}
                   </Text>
                 )}
               </>
             )}
             {ownerName && (
               <Text style={[styles.title, {color: colors.gray}]}>
-                Brand Owner Name
+                {brandLabel}
               </Text>
             )}
           </View>

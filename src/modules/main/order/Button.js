@@ -14,13 +14,13 @@ import {Text} from 'react-native-elements';
  * @returns {JSX.Element}
  */
 const Button = ({
-                  title,
-                  borderColor,
-                  backgroundColor,
-                  onPress,
-                  color,
-                  loader,
-                }) => {
+  title,
+  borderColor,
+  backgroundColor,
+  onPress,
+  color,
+  loader,
+}) => {
   return (
     <TouchableOpacity
       style={[
@@ -33,7 +33,7 @@ const Button = ({
       onPress={onPress}>
       <Text style={[styles.text, {color: color}]}>{title}</Text>
       {loader && (
-        <ActivityIndicator showLoading={loader} color={color} size={14}/>
+        <ActivityIndicator showLoading={loader} color={color} size={14} />
       )}
     </TouchableOpacity>
   );

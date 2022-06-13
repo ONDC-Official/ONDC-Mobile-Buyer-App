@@ -24,9 +24,9 @@ const Profile = ({navigation}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={profile} navigation={navigation}/>
+        <Header title={profile} navigation={navigation} />
         <View style={styles.container}>
-          <AvatarImage uri={photoURL} dimension={AVATAR_SIZES.LARGE}/>
+          <AvatarImage uri={photoURL} dimension={AVATAR_SIZES.LARGE} />
           <View style={styles.profileDetailsContainer}>
             {name !== 'Unknown' ? (
               <Text style={styles.name}>{name}</Text>

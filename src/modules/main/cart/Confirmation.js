@@ -1,5 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, SafeAreaView, StyleSheet, View,} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {Card, Divider, Text, withTheme} from 'react-native-elements';
 import {useSelector} from 'react-redux';
 import ContainButton from '../../../components/button/ContainButton';
@@ -9,10 +15,20 @@ import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../utils/apiUtilities';
-import {maskAmount, showToastWithGravity, skeletonList,} from '../../../utils/utils';
+import {
+  maskAmount,
+  showToastWithGravity,
+  skeletonList,
+} from '../../../utils/utils';
 import Header from '../cart/addressPicker/Header';
 import ProductCard from '../product/list/component/ProductCard';
 import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
+
+const updateCart = strings('main.cart.update_cart');
+const emptyList = strings('main.order.list_empty_message');
+const fulFillment = strings('main.cart.fulfillment');
+const totalPayable = strings('main.cart.total_payable');
+const proceedToPay = strings('main.cart.proceed_to_pay');
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
   const {
@@ -64,7 +80,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         });
         setConfirmationList(list);
       } catch (error) {
-        console.log(error);
         handleApiError(error);
       }
     }, 2000);
@@ -170,8 +185,10 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     const element = cartItems.find(one => one.id == item.id);
 
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ConfirmationCardSkeleton item={item}/>
-    ) : (element ? <ProductCard item={element} cancellable={true}/> : null);
+      <ConfirmationCardSkeleton item={item} />
+    ) : element ? (
+      <ProductCard item={element} cancellable={true} />
+    ) : null;
   };
 
   const listData = confirmationList ? confirmationList : skeletonList;
@@ -179,7 +196,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title="Update Cart" navigation={navigation}/>
+        <Header title={updateCart} navigation={navigation} />
 
         <FlatList
           keyExtractor={(item, index) => {
@@ -191,7 +208,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           ListEmptyComponent={() => {
             return (
               <View style={styles.emptyListComponent}>
-                <Text>No data found</Text>
+                <Text>{emptyList}</Text>
               </View>
             );
           }}
@@ -201,14 +218,14 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             {fulfillment && (
               <>
                 <View style={styles.priceContainer}>
-                  <Text style={styles.fulfillment}>FULFILLMENT</Text>
+                  <Text style={styles.fulfillment}>{fulFillment}</Text>
                   <Text style={styles.fulfillment}>₹{fulfillment}</Text>
                 </View>
-                <Divider style={styles.divider}/>
+                <Divider style={styles.divider} />
               </>
             )}
             <View style={styles.priceContainer}>
-              <Text style={styles.title}>Total Payable </Text>
+              <Text style={styles.title}>{totalPayable}</Text>
               <Text style={styles.title}>₹{maskAmount(total)}</Text>
             </View>
           </Card>
@@ -217,7 +234,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         <View style={styles.buttonContainer}>
           {confirmationList && confirmationList.length > 0 && !apiInProgress ? (
             <ContainButton
-              title="Proceed To Pay"
+              title={proceedToPay}
               onPress={() =>
                 navigation.navigate('Payment', {
                   selectedAddress: params.selectedAddress,

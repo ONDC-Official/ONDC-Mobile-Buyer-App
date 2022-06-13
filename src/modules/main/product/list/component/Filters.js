@@ -28,19 +28,19 @@ const priceRange = strings('main.product.filters.price_range');
  * @returns {JSX.Element}
  */
 const Filters = ({
-                   selectedSortMethod,
-                   closeRBSheet,
-                   apiInProgress,
-                   providers,
-                   setProviders,
-                   categories,
-                   setCategories,
-                   min,
-                   max,
-                   setMin,
-                   setMax,
-                   onApply,
-                 }) => {
+  selectedSortMethod,
+  closeRBSheet,
+  apiInProgress,
+  providers,
+  setProviders,
+  categories,
+  setCategories,
+  min,
+  max,
+  setMin,
+  setMax,
+  onApply,
+}) => {
   const {theme} = useTheme();
   const {colors} = theme;
   const {filters} = useSelector(({filterReducer}) => filterReducer);
@@ -86,7 +86,7 @@ const Filters = ({
           textColor={colors.accentColor}
         />
       </View>
-      <Divider/>
+      <Divider />
 
       {filters ? (
         <View style={appStyles.container}>
@@ -134,47 +134,47 @@ const Filters = ({
             )}
             <View style={styles.container}>
               {filters.minPrice &&
-              filters.maxPrice &&
-              filters.minPrice !== filters.maxPrice && (
-                <>
-                  <Text style={styles.price}>{priceRange}</Text>
+                filters.maxPrice &&
+                filters.minPrice !== filters.maxPrice && (
+                  <>
+                    <Text style={styles.price}>{priceRange}</Text>
 
-                  <View style={styles.applyButton}>
-                    <View style={styles.amountContainer}>
-                      <InputField
-                        label={'Min'}
-                        value={`${min}`}
-                        renderErrorMessage={false}
-                      />
+                    <View style={styles.applyButton}>
+                      <View style={styles.amountContainer}>
+                        <InputField
+                          label={'Min'}
+                          value={`${min}`}
+                          renderErrorMessage={false}
+                        />
+                      </View>
+                      <View style={styles.amountContainer}>
+                        <InputField
+                          label={'Max'}
+                          value={`${max}`}
+                          renderErrorMessage={false}
+                        />
+                      </View>
                     </View>
-                    <View style={styles.amountContainer}>
-                      <InputField
-                        label={'Max'}
-                        value={`${max}`}
-                        renderErrorMessage={false}
-                      />
-                    </View>
-                  </View>
 
-                  <MultiSlider
-                    selectedStyle={{
-                      backgroundColor: colors.accentColor,
-                    }}
-                    containerStyle={styles.sliderContainer}
-                    markerStyle={[
-                      styles.markerStyle,
-                      {backgroundColor: colors.accentColor},
-                    ]}
-                    trackStyle={styles.trackStyle}
-                    values={[min, max]}
-                    sliderLength={Dimensions.get('window').width - 40}
-                    onValuesChange={handleValueChange}
-                    min={filters.minPrice}
-                    max={filters.maxPrice}
-                    step={1}
-                  />
-                </>
-              )}
+                    <MultiSlider
+                      selectedStyle={{
+                        backgroundColor: colors.accentColor,
+                      }}
+                      containerStyle={styles.sliderContainer}
+                      markerStyle={[
+                        styles.markerStyle,
+                        {backgroundColor: colors.accentColor},
+                      ]}
+                      trackStyle={styles.trackStyle}
+                      values={[min, max]}
+                      sliderLength={Dimensions.get('window').width - 40}
+                      onValuesChange={handleValueChange}
+                      min={filters.minPrice}
+                      max={filters.maxPrice}
+                      step={1}
+                    />
+                  </>
+                )}
             </View>
           </ScrollView>
           <View style={styles.buttonContainer}>

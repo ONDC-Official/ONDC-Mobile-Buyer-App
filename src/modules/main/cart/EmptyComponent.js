@@ -2,7 +2,12 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
+
+const shopNow = strings('main.cart.shop_now');
+const emptyCartMessage = strings('main.cart.empty_cart');
+const message = strings('main.cart.message');
 
 /**
  * Component to render list empty component
@@ -14,16 +19,13 @@ const EmptyComponent = ({theme, navigation}) => {
   const {colors} = theme;
   return (
     <View style={[appStyles.container, styles.container]}>
-      <Icon name="folder-open" size={60} color={colors.accentColor}/>
-      <Text style={styles.title}>Your cart is empty</Text>
-      <Text style={styles.subTitle}>
-        looks like your shopping cart is empty, you can shop now by clicking
-        button below
-      </Text>
+      <Icon name="folder-open" size={60} color={colors.accentColor} />
+      <Text style={styles.title}>{emptyCartMessage}</Text>
+      <Text style={styles.subTitle}>{message}</Text>
       <TouchableOpacity
         style={[styles.button, {borderColor: colors.accentColor}]}
         onPress={() => navigation.navigate('Dashboard', {screen: 'Products'})}>
-        <Text style={{color: colors.accentColor}}>{'Shop now'}</Text>
+        <Text style={{color: colors.accentColor}}>{shopNow}</Text>
       </TouchableOpacity>
     </View>
   );
