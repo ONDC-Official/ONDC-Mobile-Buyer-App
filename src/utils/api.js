@@ -7,13 +7,15 @@ import axios from 'axios';
  */
 export const getData = async (url, options) => {
   try {
-    // console.log('Post request ------', url);
+    console.log('Get request ------', url);
 
     const response = await axios.get(url, options);
     // console.log('------Response-------');
     // console.log(JSON.stringify(response.data, undefined, 4));
     return response;
   } catch (error) {
+    console.log(JSON.stringify(error.response, undefined, 4));
+
     throw error;
   }
 };
@@ -34,6 +36,7 @@ export const postData = async (url, payload, options) => {
     console.log(JSON.stringify(response.data, undefined, 4));
     return response;
   } catch (error) {
+    console.log(JSON.stringify(error.response, undefined, 4));
     throw error;
   }
 };
