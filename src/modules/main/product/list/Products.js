@@ -286,7 +286,7 @@ const Products = ({navigation}) => {
     }
   }, [eloc]);
 
-  const listData = products === null ? skeletonList : products;
+  const listData = apiInProgress ? skeletonList : products;
 
   return (
     <SafeAreaView

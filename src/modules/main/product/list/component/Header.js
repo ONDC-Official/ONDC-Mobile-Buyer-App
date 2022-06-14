@@ -56,6 +56,8 @@ const Header = ({
 
   const {filters} = useSelector(({filterReducer}) => filterReducer);
 
+  const {products} = useSelector(({productReducer}) => productReducer);
+
   return (
     <>
       <View style={[styles.container, {backgroundColor: colors.white}]}>
@@ -151,7 +153,7 @@ const Header = ({
           />
         </View>
       </View>
-      {filters && (
+      {filters && products.length > 0 && (
         <SortAndFilter
           setCount={setCount}
           appliedFilters={appliedFilters}
