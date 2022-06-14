@@ -1,5 +1,6 @@
 import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Card, withTheme} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -8,7 +9,6 @@ import ContainButton from '../../../../components/button/ContainButton';
 import InputField from '../../../../components/input/InputField';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {postData} from '../../../../utils/api';
 import {
@@ -20,40 +20,6 @@ import {
 } from '../../../../utils/apiUtilities';
 import Header from '../addressPicker/Header';
 
-const invalidNumber = strings('errors.invalid_number');
-const invalidPin = strings('errors.invalid_pin');
-const requiredField = strings('errors.required');
-const invalidEmail = strings('errors.invalid_email');
-const addAddress = strings('main.cart.add_address');
-const updateAddress = strings('main.cart.update_address');
-const emailPlaceholder = strings('main.cart.email');
-const namePlaceholder = strings('main.cart.name');
-const cityPlaceholder = strings('main.cart.city');
-const statePlaceholder = strings('main.cart.state');
-const numberPlaceholder = strings('main.cart.number');
-const pinPlaceholder = strings('main.cart.pin');
-const streetPlaceholder = strings('main.cart.street');
-const landMartPlaceholder = strings('main.cart.landMark');
-const buttonTitle = strings('main.cart.next');
-const update = strings('main.cart.update');
-
-const validationSchema = Yup.object({
-  name: Yup.string().trim().required(requiredField),
-  email: Yup.string().trim().email(invalidEmail).required(requiredField),
-  number: Yup.string()
-    .trim()
-    .matches(/^[6-9]{1}[0-9]{9}$/, invalidNumber)
-    .required(requiredField),
-  city: Yup.string().trim().required(requiredField),
-  state: Yup.string().trim().required(requiredField),
-  pin: Yup.string()
-    .trim()
-    .matches(/^[1-9]{1}[0-9]{5}$/, invalidPin)
-    .required(requiredField),
-  landMark: Yup.string().trim().required(requiredField),
-  street: Yup.string().trim().required(requiredField),
-});
-
 /**
  * Component to render form in add new address screen
  * @param navigation: required: to navigate to the respective screen
@@ -63,12 +29,38 @@ const validationSchema = Yup.object({
  */
 const AddAddress = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
+
+  const {t} = useTranslation();
+
   const {
     state: {token},
   } = useContext(AuthContext);
+
   const {handleApiError} = useNetworkErrorHandling();
+
   const [apiInProgress, setApiInProgress] = useState(false);
+
   const {selectedAddress, item} = params;
+
+  const validationSchema = Yup.object({
+    name: Yup.string().trim().required(t('errors.required')),
+    email: Yup.string()
+      .trim()
+      .email(t('errors.invalid_email'))
+      .required(t('errors.required')),
+    number: Yup.string()
+      .trim()
+      .matches(/^[6-9]{1}[0-9]{9}$/, t('errors.invalid_number'))
+      .required(t('errors.required')),
+    city: Yup.string().trim().required(t('errors.required')),
+    state: Yup.string().trim().required(t('errors.required')),
+    pin: Yup.string()
+      .trim()
+      .matches(/^[1-9]{1}[0-9]{5}$/, t('errors.invalid_pin'))
+      .required(t('errors.required')),
+    landMark: Yup.string().trim().required(t('errors.required')),
+    street: Yup.string().trim().required(t('errors.required')),
+  });
 
   const userInfo = item
     ? {
@@ -184,7 +176,9 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
     <View
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
       <Header
-        title={item ? updateAddress : addAddress}
+        title={
+          item ? t('main.cart.update_address') : t('main.cart.add_address')
+        }
         navigation={navigation}
       />
       <KeyboardAwareScrollView>
@@ -212,14 +206,14 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                   <InputField
                     value={values.name}
                     onBlur={handleBlur('name')}
-                    placeholder={namePlaceholder}
+                    placeholder={t('main.cart.name')}
                     errorMessage={touched.name ? errors.name : null}
                     onChangeText={handleChange('name')}
                   />
                   <InputField
                     value={values.email}
                     onBlur={handleBlur('email')}
-                    placeholder={emailPlaceholder}
+                    placeholder={t('main.cart.email')}
                     errorMessage={touched.email ? errors.email : null}
                     onChangeText={handleChange('email')}
                   />
@@ -228,35 +222,35 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                     maxLength={10}
                     value={values.number}
                     onBlur={handleBlur('number')}
-                    placeholder={numberPlaceholder}
+                    placeholder={t('main.cart.number')}
                     errorMessage={touched.number ? errors.number : null}
                     onChangeText={handleChange('number')}
                   />
                   <InputField
                     value={values.street}
                     onBlur={handleBlur('street')}
-                    placeholder={streetPlaceholder}
+                    placeholder={t('main.cart.street')}
                     errorMessage={touched.street ? errors.street : null}
                     onChangeText={handleChange('street')}
                   />
                   <InputField
                     value={values.landMark}
                     onBlur={handleBlur('landMark')}
-                    placeholder={landMartPlaceholder}
+                    placeholder={t('main.cart.landMark')}
                     errorMessage={touched.landMark ? errors.landMark : null}
                     onChangeText={handleChange('landMark')}
                   />
                   <InputField
                     value={values.city}
                     onBlur={handleBlur('city')}
-                    placeholder={cityPlaceholder}
+                    placeholder={t('main.cart.city')}
                     errorMessage={touched.city ? errors.city : null}
                     onChangeText={handleChange('city')}
                   />
                   <InputField
                     value={values.state}
                     onBlur={handleBlur('state')}
-                    placeholder={statePlaceholder}
+                    placeholder={t('main.cart.state')}
                     errorMessage={touched.state ? errors.state : null}
                     onChangeText={handleChange('state')}
                   />
@@ -265,14 +259,14 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                     keyboardType={'numeric'}
                     maxLength={6}
                     onBlur={handleBlur('pin')}
-                    placeholder={pinPlaceholder}
+                    placeholder={t('main.cart.pin')}
                     errorMessage={touched.pin ? errors.pin : null}
                     onChangeText={handleChange('pin')}
                   />
 
                   <View style={styles.buttonContainer}>
                     <ContainButton
-                      title={item ? update : buttonTitle}
+                      title={item ? t('main.cart.update') : t('main.cart.next')}
                       onPress={handleSubmit}
                       loading={apiInProgress}
                       disabled={apiInProgress}

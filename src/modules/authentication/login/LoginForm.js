@@ -1,38 +1,39 @@
 import auth from '@react-native-firebase/auth';
 import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import * as Yup from 'yup';
 import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
 import PasswordField from '../../../components/input/PasswordField';
 import {Context as AuthContext} from '../../../context/Auth';
-import {strings} from '../../../locales/i18n';
 import {showToastWithGravity} from '../../../utils/utils';
-
-const emailPlaceholder = strings('authentication.login.email_placeholder');
-const passwordPlaceholder = strings(
-  'authentication.login.password_placeholder',
-);
-const requiredField = strings('errors.required');
-const shortPassword = strings('errors.short_password');
-const invalidEmail = strings('errors.invalid_email');
-const title = strings('authentication.login.button_title');
-
-const validationSchema = Yup.object({
-  email: Yup.string().trim().email(invalidEmail).required(requiredField),
-  password: Yup.string().trim().min(8, shortPassword).required(requiredField),
-});
 
 /**
  * Component is used to render login form
  */
 const LoginForm = ({navigation}) => {
+  const {t} = useTranslation();
+
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .trim()
+      .email(t('errors.invalid_email'))
+      .required(t('errors.required')),
+    password: Yup.string()
+      .trim()
+      .min(8, t('errors.short_password'))
+      .required(t('errors.required')),
+  });
+
   const userInfo = {
     email: '',
     password: '',
   };
+
   const {storeLoginDetails} = useContext(AuthContext);
+
   const [apiInProgress, setApiInProgress] = useState(false);
 
   /**
@@ -42,6 +43,7 @@ const LoginForm = ({navigation}) => {
   const login = async values => {
     try {
       setApiInProgress(true);
+
       const response = await auth().signInWithEmailAndPassword(
         values.email,
         values.password,
@@ -61,6 +63,7 @@ const LoginForm = ({navigation}) => {
         index: 0,
         routes: [{name: 'Dashboard'}],
       });
+
       setApiInProgress(false);
     } catch (error) {
       showToastWithGravity(error.message);
@@ -83,21 +86,21 @@ const LoginForm = ({navigation}) => {
             <InputField
               value={values.email}
               onBlur={handleBlur('email')}
-              placeholder={emailPlaceholder}
+              placeholder={t('authentication.login.email_placeholder')}
               errorMessage={touched.email ? errors.email : null}
               onChangeText={handleChange('email')}
             />
             <PasswordField
               value={values.password}
               onBlur={handleBlur('password')}
-              placeholder={passwordPlaceholder}
+              placeholder={t('authentication.login.password_placeholder')}
               secureTextEntry
               errorMessage={touched.password ? errors.password : null}
               onChangeText={handleChange('password')}
             />
             <View style={styles.buttonContainer}>
               <ContainButton
-                title={title}
+                title={t('authentication.login.button_title')}
                 onPress={handleSubmit}
                 loading={apiInProgress}
                 disabled={apiInProgress}

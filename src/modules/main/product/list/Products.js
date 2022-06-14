@@ -1,5 +1,6 @@
 import Geolocation from '@react-native-community/geolocation';
 import React, {useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {FlatList, PermissionsAndroid, StyleSheet, View} from 'react-native';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import {colors, withTheme} from 'react-native-elements';
@@ -8,7 +9,6 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
 import {
@@ -26,44 +26,54 @@ import LocationDeniedAlert from './component/LocationDeniedAlert';
 import ProductCard from './component/ProductCard';
 import ProductCardSkeleton from './component/ProductCardSkeleton';
 
-const permissionNeededMessage = strings(
-  'main.product.permission_needed_message',
-);
-const unKnownLabel = strings('main.product.unknown');
-const noResults = strings('main.product.no_results');
-const searchItemMessage = strings('main.product.search_item_message');
-const okLabel = strings('main.product.ok_label');
-const cancelLabel = strings('main.product.cancel_label');
-
 /**
  * Component to show list of requested products
  * @constructor
  * @returns {JSX.Element}
  */
 const Products = ({navigation}) => {
+  const {t} = useTranslation();
+
+  const unKnownLabel = t('main.product.unknown');
+
   const [location, setLocation] = useState(unKnownLabel);
+
   const [isVisible, setIsVisible] = useState(false);
+
   const [latitude, setLatitude] = useState(null);
+
   const [longitude, setLongitude] = useState(null);
+
   const [eloc, setEloc] = useState(null);
+
   const [count, setCount] = useState(null);
+
   const [locationInProgress, setLocationInProgress] = useState(false);
+
   const [apiInProgress, setApiInProgress] = useState(false);
+
   const [appliedFilters, setAppliedFilters] = useState(null);
+
   const {products} = useSelector(({productReducer}) => productReducer);
+
   const {getProductsList} = useProductList(setCount);
+
   const [pageNumber, setPageNumber] = useState(1);
+
   const [moreListRequested, setMoreListRequested] = useState(false);
+
   const {messageId, transactionId} = useSelector(
     ({filterReducer}) => filterReducer,
   );
 
   const {handleApiError} = useNetworkErrorHandling();
+
   const refRBSheet = useRef();
 
   const {search} = useProductList();
 
   const openSheet = () => refRBSheet.current.open();
+
   const closeSheet = () => refRBSheet.current.close();
 
   /**
@@ -183,9 +193,9 @@ const Products = ({navigation}) => {
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
             {
-              title: permissionNeededMessage,
-              buttonNegative: cancelLabel,
-              buttonPositive: okLabel,
+              title: t('main.product.permission_needed_message'),
+              buttonNegative: t('main.product.cancel_label'),
+              buttonPositive: t('main.product.ok_label'),
             },
           );
           if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -322,7 +332,11 @@ const Products = ({navigation}) => {
           ListEmptyComponent={() => {
             return (
               <EmptyComponent
-                message={!apiInProgress ? searchItemMessage : noResults}
+                message={
+                  !apiInProgress
+                    ? t('main.product.search_item_message')
+                    : t('main.product.no_results')
+                }
               />
             );
           }}

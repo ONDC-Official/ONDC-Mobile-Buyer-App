@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -9,16 +10,9 @@ import {SearchBar, Text, withTheme} from 'react-native-elements';
 import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
-import {strings} from '../../../../../locales/i18n';
 import {appStyles} from '../../../../../styles/styles';
 import {SEARCH_QUERY} from '../../../../../utils/Constants';
 import SortAndFilter from './SortAndFilter';
-
-const search = strings('main.product.search_label');
-const product = strings('main.product.product_label');
-const provider = strings('main.product.provider_label');
-const category = strings('main.product.category_label');
-const detectLocation = strings('main.product.detecting_location');
 
 /**
  * Component to render header on products screen
@@ -46,8 +40,12 @@ const Header = ({
 }) => {
   const {colors} = theme;
 
+  const {t} = useTranslation();
+
   const [item, setItem] = useState(null);
+
   const [selectedCard, setSelectedCard] = useState(SEARCH_QUERY.PRODUCT);
+
   const [visible, setVisible] = useState(false);
 
   const hideMenu = () => setVisible(false);
@@ -55,6 +53,7 @@ const Header = ({
   const showMenu = () => setVisible(true);
 
   const onCardSelect = card => setSelectedCard(card);
+
   const {filters} = useSelector(({filterReducer}) => filterReducer);
 
   return (
@@ -65,7 +64,7 @@ const Header = ({
           {locationInProgress ? (
             <View style={styles.subContainer}>
               <Text>
-                {detectLocation} {'    '}
+                {t('main.product.detecting_location')} {'    '}
               </Text>
               <ActivityIndicator
                 showLoading={locationInProgress}
@@ -103,7 +102,7 @@ const Header = ({
                 hideMenu();
               }}
               pressColor={colors.accentColor}>
-              {product}
+              {t('main.product.product_label')}
             </MenuItem>
             <MenuDivider />
             <MenuItem
@@ -112,7 +111,7 @@ const Header = ({
                 hideMenu();
               }}
               pressColor={colors.accentColor}>
-              {provider}
+              {t('main.product.provider_label')}
             </MenuItem>
             <MenuDivider />
 
@@ -122,7 +121,7 @@ const Header = ({
                 hideMenu();
               }}
               pressColor={colors.accentColor}>
-              {category}
+              {t('main.product.category_label')}
             </MenuItem>
             <MenuDivider />
           </Menu>
@@ -130,7 +129,7 @@ const Header = ({
           <SearchBar
             round={false}
             lightTheme={true}
-            placeholder={`${search} ${selectedCard}`}
+            placeholder={`${t('main.product.search_label')} ${selectedCard}`}
             containerStyle={[appStyles.container, styles.containerStyle]}
             showLoading={apiInProgress}
             inputStyle={styles.inputStyle}

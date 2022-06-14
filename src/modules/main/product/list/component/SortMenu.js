@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {CheckBox, Divider, withTheme} from 'react-native-elements';
 import ClearButton from '../../../../../components/button/ClearButton';
 import ContainButton from '../../../../../components/button/ContainButton';
 import {strings} from '../../../../../locales/i18n';
 import {PRODUCT_SORTING} from '../../../../../utils/Constants';
-
-const applyTitle = strings('main.product.filters.apply_title');
-const close = strings('main.product.filters.close');
 
 const list = [
   {name: 'Price: High To Low', value: PRODUCT_SORTING.PRICE_HIGH_TO_LOW},
@@ -35,6 +33,8 @@ const SortMenu = ({
 }) => {
   const {colors} = theme;
 
+  const {t} = useTranslation();
+
   const [sortingMethod, setSortingMethod] = useState(
     PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
   );
@@ -47,7 +47,7 @@ const SortMenu = ({
     <View>
       <View style={styles.header}>
         <ClearButton
-          title={close}
+          title={t('main.product.filters.close')}
           onPress={closeSortSheet}
           textColor={colors.accentColor}
         />
@@ -75,7 +75,7 @@ const SortMenu = ({
       </View>
       <View style={styles.buttonContainer}>
         <ContainButton
-          title={applyTitle}
+          title={t('main.product.filters.apply_title')}
           loading={apiInProgress}
           onPress={() => {
             onApply(sortingMethod);

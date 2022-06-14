@@ -1,22 +1,13 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
-import {strings} from '../../../../locales/i18n';
 import IconField from './IconField';
-
-const title = strings('main.product.product_details.title');
-const manufactureName = strings(
-  'main.product.product_details.manufacture_name',
-);
-const manufactureDate = strings(
-  'main.product.product_details.manufacture_date',
-);
-const netQuantityLabel = strings('main.product.product_details.net_quantity');
-const countryLabel = strings('main.product.product_details.country_of_origin');
-const brandLabel = strings('main.product.product_details.brand_owner_name');
 
 const Details = ({item, theme}) => {
   const {colors} = theme;
+
+  const {t} = useTranslation();
 
   const packageCommodity =
     item['@ondc/org/statutory_reqs_packaged_commodities'];
@@ -24,13 +15,17 @@ const Details = ({item, theme}) => {
   const netQuantity = packageCommodity
     ? packageCommodity.net_quantity_or_measure_of_commodity_in_pkg
     : null;
+
   const manufacturingDate = packageCommodity
     ? packageCommodity.month_year_of_manufacture_packing_import
     : null;
+
   const country = packageCommodity
     ? packageCommodity.imported_product_country_of_origin
     : null;
+
   const ownerName = item.bpp_details.long_desc;
+
   return (
     <>
       <View style={[styles.container, styles.productDetailsContainer]}>
@@ -45,35 +40,37 @@ const Details = ({item, theme}) => {
         )}
       </View>
       <View style={styles.container}>
-        <Text style={[styles.heading, {color: colors.gray}]}>{title}</Text>
+        <Text style={[styles.heading, {color: colors.gray}]}>
+          {t('main.product.product_details.title')}
+        </Text>
         <View style={styles.productDetailsContainer}>
           <View style={styles.productDetailsTitleContainer}>
             <Text style={[styles.title, {color: colors.gray}]}>
-              {manufactureName}
+              {t('main.product.product_details.manufacture_name')}
             </Text>
             {packageCommodity && (
               <>
                 {netQuantity && (
                   <Text style={[styles.title, {color: colors.gray}]}>
-                    {netQuantityLabel}
+                    {t('main.product.product_details.net_quantity')}
                   </Text>
                 )}
 
                 {manufacturingDate && (
                   <Text style={[styles.title, {color: colors.gray}]}>
-                    {manufactureDate}
+                    {t('main.product.product_details.manufacture_date')}
                   </Text>
                 )}
                 {country && (
                   <Text style={[styles.title, {color: colors.gray}]}>
-                    {countryLabel}
+                    {t('main.product.product_details.country_of_origin')}
                   </Text>
                 )}
               </>
             )}
             {ownerName && (
               <Text style={[styles.title, {color: colors.gray}]}>
-                {brandLabel}
+                {t('main.product.product_details.brand_owner_name')}
               </Text>
             )}
           </View>

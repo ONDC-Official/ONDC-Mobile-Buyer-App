@@ -1,12 +1,11 @@
 import React, {useContext, useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Image, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
-import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 
 const image = require('../../../assets/ondc.png');
-const versionLabel = strings('global.version_label');
 
 /**
  * Component to render splash screen
@@ -15,6 +14,8 @@ const versionLabel = strings('global.version_label');
  * @returns {JSX.Element}
  */
 const Splash = ({navigation}) => {
+  const {t} = useTranslation();
+
   const {
     state: {isLoading, token},
     tryLocalSignIn,
@@ -64,10 +65,10 @@ const Splash = ({navigation}) => {
   return (
     <View style={appStyles.container}>
       <View style={[appStyles.container, styles.container]}>
-        <Image source={image} style={styles.image}/>
+        <Image source={image} style={styles.image} />
       </View>
       <View style={styles.footer}>
-        <Text>{versionLabel}</Text>
+        <Text>{t('global.version_label')}</Text>
       </View>
     </View>
   );

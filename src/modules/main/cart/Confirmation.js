@@ -1,4 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
@@ -11,7 +12,6 @@ import {useSelector} from 'react-redux';
 import ContainButton from '../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../utils/apiUtilities';
@@ -24,22 +24,25 @@ import Header from '../cart/addressPicker/Header';
 import ProductCard from '../product/list/component/ProductCard';
 import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
 
-const updateCart = strings('main.cart.update_cart');
-const emptyList = strings('main.order.list_empty_message');
-const fulFillment = strings('main.cart.fulfillment');
-const totalPayable = strings('main.cart.total_payable');
-const proceedToPay = strings('main.cart.proceed_to_pay');
-
 const Confirmation = ({theme, navigation, route: {params}}) => {
   const {
     state: {token},
   } = useContext(AuthContext);
+
+  const {t} = useTranslation();
+
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+
   const {handleApiError} = useNetworkErrorHandling();
+
   const [confirmationList, setConfirmationList] = useState(null);
+
   const [total, setTotal] = useState(null);
+
   const [fulfillment, setFulFillment] = useState(null);
+
   const [apiInProgress, setApiInProgress] = useState(false);
+
   const {colors} = theme;
 
   const onGetQuote = messageId => {
@@ -163,7 +166,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       if (messageIds.length > 0) {
         onGetQuote(messageIds);
       } else {
-        showToastWithGravity(strings('network_error.something_went_wrong'));
+        showToastWithGravity(t('network_error.something_went_wrong'));
         setConfirmationList([]);
       }
     } catch (error) {
@@ -196,7 +199,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={updateCart} navigation={navigation} />
+        <Header title={t('main.cart.update_cart')} navigation={navigation} />
 
         <FlatList
           keyExtractor={(item, index) => {
@@ -208,7 +211,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           ListEmptyComponent={() => {
             return (
               <View style={styles.emptyListComponent}>
-                <Text>{emptyList}</Text>
+                <Text>{t('main.order.list_empty_message')}</Text>
               </View>
             );
           }}
@@ -218,14 +221,16 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             {fulfillment && (
               <>
                 <View style={styles.priceContainer}>
-                  <Text style={styles.fulfillment}>{fulFillment}</Text>
+                  <Text style={styles.fulfillment}>
+                    {t('main.cart.fulfillment')}
+                  </Text>
                   <Text style={styles.fulfillment}>₹{fulfillment}</Text>
                 </View>
                 <Divider style={styles.divider} />
               </>
             )}
             <View style={styles.priceContainer}>
-              <Text style={styles.title}>{totalPayable}</Text>
+              <Text style={styles.title}>{t('main.cart.total_payable')}</Text>
               <Text style={styles.title}>₹{maskAmount(total)}</Text>
             </View>
           </Card>
@@ -234,7 +239,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         <View style={styles.buttonContainer}>
           {confirmationList && confirmationList.length > 0 && !apiInProgress ? (
             <ContainButton
-              title={proceedToPay}
+              title={t('main.cart.proceed_to_pay')}
               onPress={() =>
                 navigation.navigate('Payment', {
                   selectedAddress: params.selectedAddress,

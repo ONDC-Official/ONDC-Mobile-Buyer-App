@@ -1,16 +1,19 @@
 import React from 'react';
-import {Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Card, withTheme} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import ClearButton from '../../components/button/ClearButton';
-import {strings} from '../../locales/i18n';
 import {appStyles} from '../../styles/styles';
 
-const userAgreement = strings('global.user_agreement');
-const termsOfServices = strings('global.terms_of_services');
-const andLabel = strings('global.and_label');
-const privacyPolicy = strings('global.privacy_policy');
 const image = require('../../assets/ondc.png');
 
 /**
@@ -23,26 +26,30 @@ const image = require('../../assets/ondc.png');
  */
 const AuthContainer = ({theme, children, onBackPress}) => {
   const {colors} = theme;
+
+  const {t} = useTranslation();
+
   return (
     <SafeAreaView
       style={[appStyles.container, {backgroundColor: colors.white}]}>
       <KeyboardAwareScrollView
         contentContainerStyle={[appStyles.container, styles.container]}>
         <TouchableOpacity onPress={onBackPress}>
-          <Icon name="angle-left" size={30} color={colors.accentColor}/>
+          <Icon name="angle-left" size={30} color={colors.accentColor} />
         </TouchableOpacity>
+
         <View style={styles.imageContainer}>
-          <Image source={image} resizeMode={'contain'} style={styles.image}/>
+          <Image source={image} resizeMode={'contain'} style={styles.image} />
         </View>
 
         <View style={[appStyles.container, styles.mainContainer]}>
           <Card containerStyle={styles.containerStyle}>
             {children}
             <View style={styles.footerContainer}>
-              <Text>{userAgreement}</Text>
-              <ClearButton title={termsOfServices}/>
-              <Text> {andLabel} </Text>
-              <ClearButton title={privacyPolicy}/>
+              <Text>{t('global.user_agreement')}</Text>
+              <ClearButton title={t('global.terms_of_services')} />
+              <Text> {t('global.and_label')} </Text>
+              <ClearButton title={t('global.privacy_policy')} />
             </View>
           </Card>
         </View>

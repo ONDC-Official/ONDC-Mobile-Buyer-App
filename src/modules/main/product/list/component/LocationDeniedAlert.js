@@ -1,10 +1,7 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Dialog, Divider, Icon, withTheme} from 'react-native-elements';
-import {strings} from '../../../../../locales/i18n';
-
-const locationDeniedMessage = strings('main.product.location_denied_message');
-const enterLocationMessage = strings('main.product.enter_location_message');
 
 /**
  * Component to show dialog to select location
@@ -17,6 +14,8 @@ const enterLocationMessage = strings('main.product.enter_location_message');
  */
 const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
   const {colors} = theme;
+
+  const {t} = useTranslation();
 
   return (
     <Dialog isVisible={isVisible} overlayStyle={styles.overlayStyle}>
@@ -33,7 +32,7 @@ const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
         />
       </View>
       <Dialog.Title
-        title={locationDeniedMessage}
+        title={t('main.product.location_denied_message')}
         titleStyle={styles.titleStyle}
       />
       <Divider />
@@ -44,7 +43,7 @@ const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
           size: 14,
           color: colors.accentColor,
         }}
-        title={enterLocationMessage}
+        title={t('main.product.enter_location_message')}
         onPress={() => {
           setIsVisible(!isVisible);
           openSheet();

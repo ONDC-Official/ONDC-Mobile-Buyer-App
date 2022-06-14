@@ -1,11 +1,9 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
-
-const addButton = strings('main.cart.add');
 
 /**
  * Component to header on checkout screens
@@ -19,6 +17,8 @@ const addButton = strings('main.cart.add');
 const Header = ({theme, title, show, navigation}) => {
   const {colors} = theme;
 
+  const {t} = useTranslation();
+
   /**
    * function handles click event of add button
    */
@@ -31,16 +31,18 @@ const Header = ({theme, title, show, navigation}) => {
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}>
-        <Icon name="arrow-left" size={16} color={colors.accentColor}/>
+        <Icon name="arrow-left" size={16} color={colors.accentColor} />
       </TouchableOpacity>
+
       <View style={appStyles.container}>
         <Text style={styles.text}>{title}</Text>
       </View>
+
       {show && (
         <TouchableOpacity
           style={[styles.button, {borderColor: colors.accentColor}]}
           onPress={onPressHandler}>
-          <Text style={{color: colors.accentColor}}>{addButton}</Text>
+          <Text style={{color: colors.accentColor}}>{t('main.cart.add')}</Text>
         </TouchableOpacity>
       )}
     </View>

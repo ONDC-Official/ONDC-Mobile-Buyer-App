@@ -1,28 +1,15 @@
 import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Dialog, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Yup from 'yup';
 import InputField from '../../../components/input/InputField';
 import {Context as AuthContext} from '../../../context/Auth';
-import {strings} from '../../../locales/i18n';
 import {getData, postData} from '../../../utils/api';
 import {BASE_URL, CALL, ON_SUPPORT, SUPPORT} from '../../../utils/apiUtilities';
 import Button from './Button';
-
-const invalidNumber = strings('errors.invalid_number');
-const requiredField = strings('errors.required');
-const numberPlaceholder = strings('main.cart.number');
-const callMeLabel = strings('main.order.call_me');
-const cancel = strings('main.order.cancel');
-
-const validationSchema = Yup.object({
-  number: Yup.string()
-    .trim()
-    .matches(/^[6-9]{1}[0-9]{9}$/, invalidNumber)
-    .required(requiredField),
-});
 
 /**
  * Component is used to display dialogue when user clicks on call icon
@@ -35,14 +22,25 @@ const validationSchema = Yup.object({
  */
 const Support = ({modalVisible, setModalVisible, item, theme}) => {
   const {colors} = theme;
+
+  const {t} = useTranslation();
+
   const {
     state: {token},
   } = useContext(AuthContext);
+
   const [callInProgress, setCallInProgress] = useState(false);
 
   const userInfo = {
     number: '',
   };
+
+  const validationSchema = Yup.object({
+    number: Yup.string()
+      .trim()
+      .matches(/^[6-9]{1}[0-9]{9}$/, t('errors.invalid_number'))
+      .required(t('errors.required')),
+  });
 
   const options = {
     headers: {
@@ -79,7 +77,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
           options,
         );
 
-        const res = await postData(
+        await postData(
           `${BASE_URL}${CALL}`,
 
           {
@@ -133,7 +131,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
                   maxLength={10}
                   value={values.number}
                   onBlur={handleBlur('number')}
-                  placeholder={numberPlaceholder}
+                  placeholder={t('main.cart.number')}
                   errorMessage={touched.number ? errors.number : null}
                   onChangeText={handleChange('number')}
                 />
@@ -141,7 +139,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
                   <Button
                     backgroundColor={colors.statusBackground}
                     borderColor={colors.accentColor}
-                    title={callMeLabel}
+                    title={t('main.order.call_me')}
                     onPress={handleSubmit}
                     color={colors.accentColor}
                     loader={callInProgress}
@@ -149,7 +147,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
                   <Button
                     backgroundColor={colors.cancelledBackground}
                     borderColor={colors.error}
-                    title={cancel}
+                    title={t('main.order.cancel')}
                     onPress={() => {
                       setModalVisible(false);
                     }}

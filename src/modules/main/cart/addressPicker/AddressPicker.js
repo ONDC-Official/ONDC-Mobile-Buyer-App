@@ -1,5 +1,6 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   SafeAreaView,
@@ -11,7 +12,6 @@ import {Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {strings} from '../../../../locales/i18n';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
 import {BASE_URL, GET_ADDRESS} from '../../../../utils/apiUtilities';
@@ -19,11 +19,6 @@ import {skeletonList} from '../../../../utils/utils';
 import AddressCard from './AddressCard';
 import AddressCardSkeleton from './AddressCardSkeleton';
 import Header from './Header';
-
-const buttonTitle = strings('main.cart.next');
-const selectAddress = strings('main.cart.select_address_title');
-const emptyListMessage = strings('main.order.list_empty_message');
-const edit = strings('main.cart.edit');
 
 /**
  * Component to render list of address
@@ -35,13 +30,20 @@ const edit = strings('main.cart.edit');
  */
 const AddressPicker = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
+
+  const {t} = useTranslation();
+
   const [list, setList] = useState(null);
+
   const [selectedAddress, setSelectedAddress] = useState(null);
+
   const [billingAddress, setBillingAdrress] = useState(null);
+
   const isFocused = useIsFocused();
   const {
     state: {token},
   } = useContext(AuthContext);
+
   const {handleApiError} = useNetworkErrorHandling();
 
   /**
@@ -132,13 +134,17 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
           appStyles.container,
           {backgroundColor: colors.backgroundColor},
         ]}>
-        <Header title={selectAddress} show="address" navigation={navigation} />
+        <Header
+          title={t('main.cart.select_address_title')}
+          show="address"
+          navigation={navigation}
+        />
 
         <FlatList
           data={listData}
           renderItem={renderItem}
           ListEmptyComponent={() => {
-            return <Text>{emptyListMessage}</Text>;
+            return <Text>{t('main.order.list_empty_message')}</Text>;
           }}
           contentContainerStyle={
             listData.length > 0
@@ -181,13 +187,18 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
               <TouchableOpacity
                 style={[styles.button, {borderColor: colors.accentColor}]}
                 onPress={onEditHandler}>
-                <Text style={{color: colors.accentColor}}>{edit}</Text>
+                <Text style={{color: colors.accentColor}}>
+                  {t('main.cart.edit')}
+                </Text>
               </TouchableOpacity>
             </View>
 
             {selectedAddress !== null && (
               <View style={styles.buttonContainer}>
-                <ContainButton title={buttonTitle} onPress={onPressHandler} />
+                <ContainButton
+                  title={t('main.cart.next')}
+                  onPress={onPressHandler}
+                />
               </View>
             )}
           </View>

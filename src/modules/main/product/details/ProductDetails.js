@@ -1,4 +1,5 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   SafeAreaView,
   ScrollView,
@@ -11,7 +12,6 @@ import FastImage from 'react-native-fast-image';
 import {SliderBox} from 'react-native-image-slider-box';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
-import {strings} from '../../../../locales/i18n';
 import {removeItemFromCart} from '../../../../redux/actions';
 import {updateItemInCart} from '../../../../redux/actions';
 import {addItemToCart} from '../../../../redux/actions';
@@ -20,13 +20,16 @@ import {showInfoToast} from '../../../../utils/utils';
 import Details from './Details';
 
 const image = require('../../../../assets/ondc.png');
-const addToCart = strings('main.product.add_to_cart');
-const add = strings('main.product.add_button_title');
 
 const ProductDetails = ({theme, navigation, route: {params}}) => {
   const {colors} = theme;
+
+  const {t} = useTranslation();
+
   const {product} = params;
+
   const dispatch = useDispatch();
+
   const {products} = useSelector(({productReducer}) => productReducer);
 
   const item = products.find(one => one.id === product.id);
@@ -94,7 +97,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
           <View style={styles.imageContainer}>
             <Text style={styles.discriptorName}>{item.descriptor.name}</Text>
             <Text style={[styles.provider, {color: colors.gray}]}>
-              Ordering from{' '}
+              {t('main.product.ordering_from')}{' '}
               <Text
                 style={[
                   styles.provider,
@@ -122,10 +125,12 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
               <TouchableOpacity
                 style={[styles.button, {borderColor: colors.accentColor}]}
                 onPress={() => {
-                  showInfoToast(addToCart);
+                  showInfoToast(t('main.product.add_to_cart'));
                   addItem(item);
                 }}>
-                <Text style={{color: colors.accentColor}}>{add}</Text>
+                <Text style={{color: colors.accentColor}}>
+                  {t('main.product.add_button_title')}
+                </Text>
               </TouchableOpacity>
             ) : (
               <View

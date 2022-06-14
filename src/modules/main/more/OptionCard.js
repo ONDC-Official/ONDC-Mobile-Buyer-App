@@ -1,16 +1,12 @@
 import React, {useContext} from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Card, Icon, Text, withTheme} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import {Context as AuthContext} from '../../../context/Auth';
-import {strings} from '../../../locales/i18n';
 import {clearAllData} from '../../../redux/actions';
 import {alertWithTwoButtons} from '../../../utils/alerts';
 import {OPTIONS} from '../../../utils/Constants';
-
-const logOutMessage = strings('main.more.log_out_message');
-const okLabel = strings('main.product.ok_label');
-const cancelLabel = strings('main.product.cancel_label');
 
 /**
  * Component to render single option card in more screen
@@ -21,8 +17,12 @@ const cancelLabel = strings('main.product.cancel_label');
  */
 const OptionCard = ({theme, navigation, item}) => {
   const {colors} = theme;
+
   const {logoutUser} = useContext(AuthContext);
+
   const dispatch = useDispatch();
+
+  const {t} = useTranslation();
 
   /**
    * Function handles click event of card and depending on option it navigates to respective screen
@@ -31,8 +31,8 @@ const OptionCard = ({theme, navigation, item}) => {
     if (option === OPTIONS.LOG_OUT) {
       alertWithTwoButtons(
         null,
-        logOutMessage,
-        okLabel,
+        t('main.more.log_out_message'),
+        t('main.product.ok_label'),
         () => {
           logoutUser();
           dispatch(clearAllData());
@@ -41,7 +41,7 @@ const OptionCard = ({theme, navigation, item}) => {
             routes: [{name: 'Landing'}],
           });
         },
-        cancelLabel,
+        t('main.product.cancel_label'),
         () => {},
       );
     } else if (option === OPTIONS.PROFILE) {

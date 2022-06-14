@@ -1,18 +1,16 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
-import {strings} from '../../../../../locales/i18n';
 import {removeItemFromCart} from '../../../../../redux/actions';
 import {updateItemInCart} from '../../../../../redux/actions';
 import {addItemToCart} from '../../../../../redux/actions';
 import {appStyles} from '../../../../../styles/styles';
 import {showInfoToast} from '../../../../../utils/utils';
 
-const addButton = strings('main.product.add_button_title');
-const addToCart = strings('main.product.add_to_cart');
 const image = require('../../../../../assets/noImage.png');
 
 /**
@@ -26,7 +24,10 @@ const image = require('../../../../../assets/noImage.png');
  */
 const ProductCard = ({theme, navigation, item, cancellable, apiInProgress}) => {
   const {colors} = theme;
+
   const dispatch = useDispatch();
+
+  const {t} = useTranslation();
 
   /**
    * function handles click event add button
@@ -107,11 +108,13 @@ const ProductCard = ({theme, navigation, item, cancellable, apiInProgress}) => {
                 <TouchableOpacity
                   style={[styles.button, {borderColor: colors.accentColor}]}
                   onPress={() => {
-                    showInfoToast(addToCart);
+                    showInfoToast(t('main.product.add_to_cart'));
                     addItem(item);
                   }}
                   disabled={apiInProgress}>
-                  <Text style={{color: colors.accentColor}}>{addButton}</Text>
+                  <Text style={{color: colors.accentColor}}>
+                    {t('main.product.add_button_title')}
+                  </Text>
                 </TouchableOpacity>
               ) : (
                 <View

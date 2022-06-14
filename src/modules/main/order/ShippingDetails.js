@@ -1,4 +1,5 @@
 import React, {useContext, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   Linking,
@@ -10,7 +11,6 @@ import {Divider, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {
@@ -25,9 +25,6 @@ import {showToastWithGravity} from '../../../utils/utils';
 import Button from './Button';
 import Support from './Support';
 
-const returnLabel = strings('main.order.return');
-const cancel = strings('main.order.cancel');
-
 /**
  * Component is used to display shipping details to the user when card is expanded
  * @param order:single order object
@@ -38,6 +35,7 @@ const cancel = strings('main.order.cancel');
  */
 const ShippingDetails = ({order, getOrderList, theme}) => {
   const {colors} = theme;
+  const {t} = useTranslation();
   const {
     state: {token},
   } = useContext(AuthContext);
@@ -220,13 +218,13 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
                   <Button
                     backgroundColor={colors.greyOutline}
                     borderColor={colors.greyOutline}
-                    title={returnLabel}
+                    title={t('main.order.return')}
                   />
                 ) : (
                   <Button
                     backgroundColor={colors.greyOutline}
                     borderColor={colors.greyOutline}
-                    title={'Track'}
+                    title={t('main.order.track')}
                     onPress={() => {
                       trackOrder()
                         .then(() => {})
@@ -240,7 +238,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
                 <Button
                   backgroundColor={colors.accentColor}
                   borderColor={colors.accentColor}
-                  title={cancel}
+                  title={t('main.order.return')}
                   onPress={() => {
                     cancelOrder()
                       .then(() => {})
@@ -257,7 +255,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
             backgroundColor={colors.cancelledBackground}
             borderColor={colors.error}
             color={colors.error}
-            title={'Cancelled'}
+            title={t('main.order.cancelled')}
             loader={cancelInProgress}
           />
         )}

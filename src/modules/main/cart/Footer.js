@@ -1,10 +1,8 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
-import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
-
-const checkout = strings('main.cart.checkout');
 
 /**
  * Component to render footer in cart
@@ -16,6 +14,8 @@ const checkout = strings('main.cart.checkout');
  */
 const Footer = ({theme, onCheckout, onClearCart}) => {
   const {colors} = theme;
+
+  const {t} = useTranslation();
 
   return (
     <View style={styles.container}>
@@ -29,7 +29,9 @@ const Footer = ({theme, onCheckout, onClearCart}) => {
           },
         ]}
         onPress={onCheckout}>
-        <Text style={[styles.text, {color: colors.white}]}>{checkout}</Text>
+        <Text style={[styles.text, {color: colors.white}]}>
+          {t('main.cart.checkout')}
+        </Text>
       </TouchableOpacity>
     </View>
   );

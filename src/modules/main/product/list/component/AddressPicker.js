@@ -1,12 +1,10 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Icon, Text} from 'react-native-elements';
 import Logo from '../../../../../assets/map_my_india.svg';
-import {strings} from '../../../../../locales/i18n';
 import {appStyles} from '../../../../../styles/styles';
 import SearchBar from './SearchBar';
-
-const selectLocationLabel = strings('main.product.select_location_label');
 
 /**
  * Component to show address picker screen when user wants to select location
@@ -17,11 +15,12 @@ const selectLocationLabel = strings('main.product.select_location_label');
  * @returns {JSX.Element}
  */
 const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
+  const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={appStyles.container}>
-          <Text>{selectLocationLabel}</Text>
+          <Text>{t('main.product.select_location_label')}</Text>
         </View>
         <Icon
           type="material-community"

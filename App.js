@@ -3,10 +3,11 @@ import {Provider as StoreProvider} from 'react-redux';
 import {ThemeProvider} from 'react-native-elements';
 
 import {Provider as AuthProvider} from './src/context/Auth';
-import Toast, {ErrorToast, InfoToast} from 'react-native-toast-message';
+import Toast, {ErrorToast} from 'react-native-toast-message';
 import Navigation from './src/navigation/Navigation';
 import {theme} from './src/utils/theme';
 import store from './src/redux/store';
+import i18n from './src/locales/i18next';
 
 const App = () => {
   const toastConfig = {

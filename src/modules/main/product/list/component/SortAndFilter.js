@@ -1,17 +1,15 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
-import {strings} from '../../../../../locales/i18n';
 import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 import {cleanFormData, half, threeForth} from '../../../../../utils/utils';
 import useProductList from '../../hook/useProductList';
 import Filters from './Filters';
 import SortMenu from './SortMenu';
-
-const filter = strings('main.product.filters.filter');
 
 /**
  * Component to show sort and filter on header of products screen
@@ -29,20 +27,33 @@ const SortAndFilter = ({
   setPageNumber,
 }) => {
   const {colors} = theme;
+
   const [selectedSortMethod, setSelectedSortMethod] = useState(
     PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
   );
+
+  const {t} = useTranslation();
+
   const [providers, setProviders] = useState([]);
+
   const [min, setMin] = useState(0);
+
   const [max, setMax] = useState(0);
+
   const [categories, setCategories] = useState([]);
+
   const refRBSheet = useRef();
+
   const refSortSheet = useRef();
+
   const [apiInProgress, setApiInProgress] = useState(false);
+
   const {getProductsList} = useProductList();
+
   const {messageId, transactionId} = useSelector(
     ({filterReducer}) => filterReducer,
   );
+
   const filtersLength = appliedFilters
     ? Object.keys(appliedFilters).length
     : null;
@@ -125,7 +136,7 @@ const SortAndFilter = ({
         <Divider orientation="vertical" width={1} />
         <TouchableOpacity onPress={openRBSheet}>
           <Text style={[styles.text, {color: colors.accentColor}]}>
-            {filter}
+            {t('main.product.filters.filter')}
             {filtersLength ? `(${filtersLength - 1})` : null}{' '}
             <Icon name="filter" size={14} />
           </Text>

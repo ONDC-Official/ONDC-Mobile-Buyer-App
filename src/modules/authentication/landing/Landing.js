@@ -1,22 +1,14 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {Image, StyleSheet, View} from 'react-native';
 import {Text, useTheme} from 'react-native-elements';
 import ContainButton from '../../../components/button/ContainButton';
 import OutlineButton from '../../../components/button/OutlineButton';
-import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {isIOS} from '../../../utils/utils';
 import useLoginWithGoogle from './hooks/useLoginWithGoogle';
 
 const logo = require('../../../assets/ondc.png');
-
-const login = strings('authentication.landing.login');
-const signUp = strings('authentication.landing.sign_up');
-const continueWithGoogle = strings(
-  'authentication.landing.continue_with_google',
-);
-const continueWithApple = strings('authentication.landing.continue_with_apple');
-const versionLabel = strings('global.version_label');
 
 /**
  * Component is used to render landing screen
@@ -25,26 +17,30 @@ const versionLabel = strings('global.version_label');
  */
 const Landing = ({navigation}) => {
   const {theme} = useTheme();
+
   const {loginWithGoogle} = useLoginWithGoogle(navigation);
+
+  const {t} = useTranslation();
 
   return (
     <View style={appStyles.container}>
       <View style={[appStyles.container, styles.container]}>
-        <Image source={logo} style={styles.image}/>
+        <Image source={logo} style={styles.image} />
 
         <View style={styles.buttonContainer}>
           <ContainButton
-            title={login}
+            title={t('authentication.landing.login')}
             onPress={() => navigation.navigate('Login')}
           />
         </View>
 
         <View style={styles.buttonContainer}>
           <ContainButton
-            title={signUp}
+            title={t('authentication.landing.sign_up')}
             onPress={() => navigation.navigate('SignUp')}
           />
         </View>
+
         <View
           style={[
             styles.divider,
@@ -54,7 +50,7 @@ const Landing = ({navigation}) => {
 
         <View style={styles.buttonContainer}>
           <OutlineButton
-            title={continueWithGoogle}
+            title={t('authentication.landing.continue_with_google')}
             onPress={loginWithGoogle}
             icon={{
               name: 'google',
@@ -65,10 +61,11 @@ const Landing = ({navigation}) => {
             color={theme.colors.accentColor}
           />
         </View>
+
         {isIOS && (
           <View style={styles.buttonContainer}>
             <OutlineButton
-              title={continueWithApple}
+              title={t('authentication.landing.continue_with_apple')}
               icon={{
                 name: 'apple',
                 type: 'font-awesome',
@@ -80,7 +77,7 @@ const Landing = ({navigation}) => {
           </View>
         )}
 
-        <Text>{versionLabel}</Text>
+        <Text>{t('global.version_label')}</Text>
       </View>
     </View>
   );

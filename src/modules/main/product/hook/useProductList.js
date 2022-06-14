@@ -1,8 +1,8 @@
 import {useContext} from 'react';
+import {useTranslation} from 'react-i18next';
 import {useDispatch, useSelector} from 'react-redux';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {strings} from '../../../../locales/i18n';
 import {
   clearFilters,
   saveFilters,
@@ -19,11 +19,13 @@ import {
 import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
 import {cleanFormData} from '../../../../utils/utils';
 
-const selectLocation = strings('main.product.please_select_location');
-
 export default () => {
   const {handleApiError} = useNetworkErrorHandling();
+
   const dispatch = useDispatch();
+
+  const {t} = useTranslation();
+
   const {products} = useSelector(({productReducer}) => productReducer);
 
   const {
@@ -130,7 +132,7 @@ export default () => {
     setTimeout(() => {
       clearInterval(getList);
       setApiInProgress(false);
-    }, 10000);
+    }, 12000);
   };
 
   /**
@@ -227,7 +229,7 @@ export default () => {
         handleApiError(error);
       }
     } else {
-      alert(selectLocation);
+      alert(t('main.product.please_select_location'));
     }
   };
 

@@ -1,11 +1,8 @@
 import moment from 'moment';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
-import {strings} from '../../../locales/i18n';
-
-const orderedOn = strings('main.order.ordered_on_label');
-const status = strings('main.order.status_label');
 
 /**
  * Component to render signle card on orders screen
@@ -17,6 +14,8 @@ const status = strings('main.order.status_label');
 const OrderCard = ({item, theme}) => {
   const {colors} = theme;
 
+  const {t} = useTranslation();
+
   return (
     <View>
       <View style={styles.container}>
@@ -25,13 +24,13 @@ const OrderCard = ({item, theme}) => {
             {item.id ? item.id : 'NA'}
           </Text>
           <Text style={{color: colors.grey}}>
-            {orderedOn}
+            {t('main.order.ordered_on_label')}
             {moment(item.updatedAt).format('Do MMMM YYYY')}
           </Text>
         </View>
 
         <View style={styles.statusContainer}>
-          <Text>{status}</Text>
+          <Text>{t('main.order.status_label')}</Text>
           <View
             style={[
               styles.orderStatus,

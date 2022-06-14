@@ -1,31 +1,14 @@
 import auth from '@react-native-firebase/auth';
 import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import * as Yup from 'yup';
 import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
 import PasswordField from '../../../components/input/PasswordField';
 import {Context as AuthContext} from '../../../context/Auth';
-import {strings} from '../../../locales/i18n';
 import {showToastWithGravity} from '../../../utils/utils';
-
-const emailPlaceholder = strings('authentication.login.email_placeholder');
-const passwordPlaceholder = strings(
-  'authentication.login.password_placeholder',
-);
-const requiredField = strings('errors.required');
-const shortPassword = strings('errors.short_password');
-const invalidEmail = strings('errors.invalid_email');
-const title = strings('authentication.signup.button_title');
-
-const namePlaceholder = strings('authentication.signup.name_placeholder');
-
-const validationSchema = Yup.object({
-  email: Yup.string().trim().email(invalidEmail).required(requiredField),
-  password: Yup.string().trim().min(8, shortPassword).required(requiredField),
-  name: Yup.string().trim().required(requiredField),
-});
 
 /**
  * Component is used to render sign up form
@@ -33,13 +16,28 @@ const validationSchema = Yup.object({
  * @param navigation: application navigation object
  */
 const SignUpFrom = ({navigation}) => {
+  const {t} = useTranslation();
+
   const userInfo = {
     email: '',
     password: '',
-
     name: '',
   };
+
+  const validationSchema = Yup.object({
+    email: Yup.string()
+      .trim()
+      .email(t('errors.invalid_email'))
+      .required(t('errors.required')),
+    password: Yup.string()
+      .trim()
+      .min(8, t('errors.short_password'))
+      .required(t('errors.required')),
+    name: Yup.string().trim().required(t('errors.required')),
+  });
+
   const {storeLoginDetails} = useContext(AuthContext);
+
   const [apiInProgress, setApiInProgress] = useState(false);
 
   /**
@@ -49,11 +47,13 @@ const SignUpFrom = ({navigation}) => {
   const createUser = async values => {
     try {
       setApiInProgress(true);
+
       const response = await auth().createUserWithEmailAndPassword(
         values.email,
         values.password,
       );
       await auth().currentUser.updateProfile({displayName: values.name});
+
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
       const loginDetails = {
@@ -63,11 +63,14 @@ const SignUpFrom = ({navigation}) => {
         name: values.name,
         photoURL: 'Unknown',
       };
+
       await storeLoginDetails(loginDetails);
+
       navigation.reset({
         index: 0,
         routes: [{name: 'Dashboard'}],
       });
+
       setApiInProgress(false);
     } catch (error) {
       showToastWithGravity(error.message);
@@ -90,21 +93,21 @@ const SignUpFrom = ({navigation}) => {
             <InputField
               value={values.name}
               onBlur={handleBlur('name')}
-              placeholder={namePlaceholder}
+              placeholder={t('authentication.signup.name_placeholder')}
               errorMessage={touched.name ? errors.name : null}
               onChangeText={handleChange('name')}
             />
             <InputField
               value={values.email}
               onBlur={handleBlur('email')}
-              placeholder={emailPlaceholder}
+              placeholder={t('authentication.login.email_placeholder')}
               errorMessage={touched.email ? errors.email : null}
               onChangeText={handleChange('email')}
             />
             <PasswordField
               value={values.password}
               onBlur={handleBlur('password')}
-              placeholder={passwordPlaceholder}
+              placeholder={t('authentication.login.password_placeholder')}
               secureTextEntry
               errorMessage={touched.password ? errors.password : null}
               onChangeText={handleChange('password')}
@@ -112,7 +115,7 @@ const SignUpFrom = ({navigation}) => {
 
             <View style={styles.buttonContainer}>
               <ContainButton
-                title={title}
+                title={t('authentication.signup.button_title')}
                 onPress={handleSubmit}
                 loading={apiInProgress}
                 disabled={apiInProgress}

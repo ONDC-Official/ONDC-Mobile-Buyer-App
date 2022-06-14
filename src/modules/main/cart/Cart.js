@@ -1,4 +1,5 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   FlatList,
   SafeAreaView,
@@ -17,11 +18,6 @@ import ProductCard from '../product/list/component/ProductCard';
 import EmptyComponent from './EmptyComponent';
 import Footer from './Footer';
 
-const subTotalLabel = strings('main.cart.sub_total_label');
-const ok = strings('main.product.ok_label');
-const clearCartMessage = strings('main.cart.clear_cart_message');
-const cancelLabel = strings('main.product.cancel_label');
-
 /**
  * Component to render list of items added in cart
  * @param navigation: required: to navigate to the respective screen
@@ -31,6 +27,9 @@ const cancelLabel = strings('main.product.cancel_label');
  */
 const Cart = ({navigation, theme}) => {
   const dispatch = useDispatch();
+
+  const {t} = useTranslation();
+
   const {colors} = theme;
 
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
@@ -52,10 +51,10 @@ const Cart = ({navigation, theme}) => {
   const onClearCart = () => {
     alertWithTwoButtons(
       null,
-      clearCartMessage,
-      ok,
+      t('main.cart.clear_cart_message'),
+      t('main.product.ok_label'),
       emptyCart,
-      cancelLabel,
+      t('main.product.cancel_label'),
       () => {},
     );
   };
@@ -84,7 +83,7 @@ const Cart = ({navigation, theme}) => {
         {cartItems.length !== 0 && (
           <View style={[styles.header, {backgroundColor: colors.white}]}>
             <Text style={styles.text}>
-              {subTotalLabel}{' '}
+              {strings('main.cart.sub_total_label')}{' '}
               <Text style={styles.price}>
                 ₹{parseFloat(subTotal).toFixed(2)}
               </Text>

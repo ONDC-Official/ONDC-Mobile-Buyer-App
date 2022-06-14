@@ -1,4 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
@@ -12,8 +13,6 @@ import ListFooter from './ListFooter';
 import OrderAccordion from './OrderAccordion';
 import OrderCardSkeleton from './OrderCardSkeleton';
 
-const emptyListMessage = strings('main.order.list_empty_message');
-
 /**
  * Component to render orders screen
  * @constructor
@@ -23,10 +22,17 @@ const Order = () => {
   const {
     state: {token},
   } = useContext(AuthContext);
+
+  const {t} = useTranslation();
+
   const {handleApiError} = useNetworkErrorHandling();
+
   const [orders, setOrders] = useState(null);
+
   const [totalOrders, setTotalOrders] = useState(null);
+
   const [pageNumber, setPageNumber] = useState(1);
+
   const [moreListRequested, setMoreListRequested] = useState(false);
 
   /**
@@ -106,7 +112,7 @@ const Order = () => {
           data={listData}
           renderItem={renderItem}
           ListEmptyComponent={() => {
-            return <Text>{emptyListMessage}</Text>;
+            return <Text>{t('main.order.list_empty_message')}</Text>;
           }}
           keyExtractor={keyExtractor}
           onEndReachedThreshold={0.2}

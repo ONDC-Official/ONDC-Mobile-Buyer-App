@@ -1,20 +1,13 @@
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import React, {memo, useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
 import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {CheckBox, Divider, Text, useTheme} from 'react-native-elements';
 import {useSelector} from 'react-redux';
 import ClearButton from '../../../../../components/button/ClearButton';
 import ContainButton from '../../../../../components/button/ContainButton';
 import InputField from '../../../../../components/input/InputField';
-import {strings} from '../../../../../locales/i18n';
 import {appStyles} from '../../../../../styles/styles';
-
-const applyTitle = strings('main.product.filters.apply_title');
-const close = strings('main.product.filters.close');
-const noFiltersMessage = strings('main.product.filters.no_filters_message');
-const provider = strings('main.product.filters.providers');
-const category = strings('main.product.filters.categories');
-const priceRange = strings('main.product.filters.price_range');
 
 /**
  * Component to render filters screen
@@ -42,7 +35,11 @@ const Filters = ({
   onApply,
 }) => {
   const {theme} = useTheme();
+
   const {colors} = theme;
+
+  const {t} = useTranslation();
+
   const {filters} = useSelector(({filterReducer}) => filterReducer);
 
   /**
@@ -81,7 +78,7 @@ const Filters = ({
     <View style={appStyles.container}>
       <View style={styles.header}>
         <ClearButton
-          title={close}
+          title={t('main.product.filters.close')}
           onPress={closeRBSheet}
           textColor={colors.accentColor}
         />
@@ -93,7 +90,9 @@ const Filters = ({
           <ScrollView>
             {filters.providers && filters.providers.length > 0 && (
               <>
-                <Text style={styles.text}>{provider}</Text>
+                <Text style={styles.text}>
+                  {t('main.product.filters.providers')}
+                </Text>
 
                 {filters.providers.map(item => {
                   const index = providers.findIndex(one => one === item.id);
@@ -118,7 +117,9 @@ const Filters = ({
 
             {filters.categories && filters.categories.length > 0 && (
               <>
-                <Text style={styles.text}>{category}</Text>
+                <Text style={styles.text}>
+                  {t('main.product.filters.categories')}
+                </Text>
                 {filters.categories.map(item => {
                   const index = categories.findIndex(one => one === item.id);
                   return (
@@ -137,19 +138,21 @@ const Filters = ({
                 filters.maxPrice &&
                 filters.minPrice !== filters.maxPrice && (
                   <>
-                    <Text style={styles.price}>{priceRange}</Text>
+                    <Text style={styles.price}>
+                      {t('main.product.filters.price_range')}
+                    </Text>
 
                     <View style={styles.applyButton}>
                       <View style={styles.amountContainer}>
                         <InputField
-                          label={'Min'}
+                          label={t('main.product.filters.min')}
                           value={`${min}`}
                           renderErrorMessage={false}
                         />
                       </View>
                       <View style={styles.amountContainer}>
                         <InputField
-                          label={'Max'}
+                          label={t('main.product.filters.max')}
                           value={`${max}`}
                           renderErrorMessage={false}
                         />
@@ -179,7 +182,7 @@ const Filters = ({
           </ScrollView>
           <View style={styles.buttonContainer}>
             <ContainButton
-              title={applyTitle}
+              title={t('main.product.filters.apply_title')}
               loading={apiInProgress}
               onPress={() => {
                 onApply(selectedSortMethod);
@@ -189,7 +192,7 @@ const Filters = ({
         </View>
       ) : (
         <View style={styles.emptyContainer}>
-          <Text>{noFiltersMessage}</Text>
+          <Text>{t('main.product.filters.no_filters_message')}</Text>
         </View>
       )}
     </View>
