@@ -58,8 +58,6 @@ const Products = ({navigation}) => {
 
   const {getProductsList} = useProductList(setCount);
 
-  const [pageNumber, setPageNumber] = useState(1);
-
   const [moreListRequested, setMoreListRequested] = useState(false);
 
   const {messageId, transactionId} = useSelector(
@@ -234,7 +232,6 @@ const Products = ({navigation}) => {
    **/
   const onSearch = async (query, selectedSearchOption) => {
     setAppliedFilters(null);
-    setPageNumber(1);
     setApiInProgress(true);
     search(
       setCount,
@@ -245,14 +242,18 @@ const Products = ({navigation}) => {
       setApiInProgress,
       1,
     )
-      .then(() => {
-        setPageNumber(prev => prev + 1);
-      })
+      .then(() => {})
       .catch(() => {});
   };
 
   const loadMoreList = () => {
-    if (count && count > products.length && !apiInProgress) {
+    if (
+      count &&
+      count > products.length &&
+      !apiInProgress &&
+      !moreListRequested
+    ) {
+      const pageNumber = products.length / 10 + 1;
       setMoreListRequested(true);
       getProductsList(
         setCount,
@@ -262,7 +263,6 @@ const Products = ({navigation}) => {
         appliedFilters,
       )
         .then(() => {
-          setPageNumber(prev => prev + 1);
           setMoreListRequested(false);
         })
         .catch(() => {
@@ -306,7 +306,6 @@ const Products = ({navigation}) => {
           setCount={setCount}
           appliedFilters={appliedFilters}
           setAppliedFilters={setAppliedFilters}
-          setPageNumber={setPageNumber}
         />
         <RBSheet
           ref={refRBSheet}

@@ -1,7 +1,7 @@
 import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {Card, withTheme} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
@@ -173,112 +173,120 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
   };
 
   return (
-    <View
+    <SafeAreaView
       style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <Header
-        title={
-          item ? t('main.cart.update_address') : t('main.cart.add_address')
-        }
-        navigation={navigation}
-      />
-      <KeyboardAwareScrollView>
-        <Card containerStyle={styles.containerStyle}>
-          <Formik
-            initialValues={userInfo}
-            validationSchema={validationSchema}
-            onSubmit={values => {
-              saveAddress(values)
-                .then(() => {})
-                .catch(err => {
-                  console.log(err);
-                });
-            }}>
-            {({
-              values,
-              errors,
-              handleChange,
-              handleBlur,
-              touched,
-              handleSubmit,
-            }) => {
-              return (
-                <>
-                  <InputField
-                    value={values.name}
-                    onBlur={handleBlur('name')}
-                    placeholder={t('main.cart.name')}
-                    errorMessage={touched.name ? errors.name : null}
-                    onChangeText={handleChange('name')}
-                  />
-                  <InputField
-                    value={values.email}
-                    onBlur={handleBlur('email')}
-                    placeholder={t('main.cart.email')}
-                    errorMessage={touched.email ? errors.email : null}
-                    onChangeText={handleChange('email')}
-                  />
-                  <InputField
-                    keyboardType={'numeric'}
-                    maxLength={10}
-                    value={values.number}
-                    onBlur={handleBlur('number')}
-                    placeholder={t('main.cart.number')}
-                    errorMessage={touched.number ? errors.number : null}
-                    onChangeText={handleChange('number')}
-                  />
-                  <InputField
-                    value={values.street}
-                    onBlur={handleBlur('street')}
-                    placeholder={t('main.cart.street')}
-                    errorMessage={touched.street ? errors.street : null}
-                    onChangeText={handleChange('street')}
-                  />
-                  <InputField
-                    value={values.landMark}
-                    onBlur={handleBlur('landMark')}
-                    placeholder={t('main.cart.landMark')}
-                    errorMessage={touched.landMark ? errors.landMark : null}
-                    onChangeText={handleChange('landMark')}
-                  />
-                  <InputField
-                    value={values.city}
-                    onBlur={handleBlur('city')}
-                    placeholder={t('main.cart.city')}
-                    errorMessage={touched.city ? errors.city : null}
-                    onChangeText={handleChange('city')}
-                  />
-                  <InputField
-                    value={values.state}
-                    onBlur={handleBlur('state')}
-                    placeholder={t('main.cart.state')}
-                    errorMessage={touched.state ? errors.state : null}
-                    onChangeText={handleChange('state')}
-                  />
-                  <InputField
-                    value={values.pin}
-                    keyboardType={'numeric'}
-                    maxLength={6}
-                    onBlur={handleBlur('pin')}
-                    placeholder={t('main.cart.pin')}
-                    errorMessage={touched.pin ? errors.pin : null}
-                    onChangeText={handleChange('pin')}
-                  />
-
-                  <View style={styles.buttonContainer}>
-                    <ContainButton
-                      title={item ? t('main.cart.update') : t('main.cart.next')}
-                      onPress={handleSubmit}
-                      loading={apiInProgress}
-                      disabled={apiInProgress}
+      <View
+        style={[
+          appStyles.container,
+          {backgroundColor: colors.backgroundColor},
+        ]}>
+        <Header
+          title={
+            item ? t('main.cart.update_address') : t('main.cart.add_address')
+          }
+          navigation={navigation}
+        />
+        <KeyboardAwareScrollView>
+          <Card containerStyle={styles.containerStyle}>
+            <Formik
+              initialValues={userInfo}
+              validationSchema={validationSchema}
+              onSubmit={values => {
+                saveAddress(values)
+                  .then(() => {})
+                  .catch(err => {
+                    console.log(err);
+                  });
+              }}>
+              {({
+                values,
+                errors,
+                handleChange,
+                handleBlur,
+                touched,
+                handleSubmit,
+              }) => {
+                return (
+                  <>
+                    <InputField
+                      value={values.name}
+                      onBlur={handleBlur('name')}
+                      placeholder={t('main.cart.name')}
+                      errorMessage={touched.name ? errors.name : null}
+                      onChangeText={handleChange('name')}
                     />
-                  </View>
-                </>
-              );
-            }}
-          </Formik>
-        </Card>
-      </KeyboardAwareScrollView>
-    </View>
+                    <InputField
+                      value={values.email}
+                      onBlur={handleBlur('email')}
+                      placeholder={t('main.cart.email')}
+                      errorMessage={touched.email ? errors.email : null}
+                      onChangeText={handleChange('email')}
+                    />
+                    <InputField
+                      keyboardType={'numeric'}
+                      maxLength={10}
+                      value={values.number}
+                      onBlur={handleBlur('number')}
+                      placeholder={t('main.cart.number')}
+                      errorMessage={touched.number ? errors.number : null}
+                      onChangeText={handleChange('number')}
+                    />
+                    <InputField
+                      value={values.street}
+                      onBlur={handleBlur('street')}
+                      placeholder={t('main.cart.street')}
+                      errorMessage={touched.street ? errors.street : null}
+                      onChangeText={handleChange('street')}
+                    />
+                    <InputField
+                      value={values.landMark}
+                      onBlur={handleBlur('landMark')}
+                      placeholder={t('main.cart.landMark')}
+                      errorMessage={touched.landMark ? errors.landMark : null}
+                      onChangeText={handleChange('landMark')}
+                    />
+                    <InputField
+                      value={values.city}
+                      onBlur={handleBlur('city')}
+                      placeholder={t('main.cart.city')}
+                      errorMessage={touched.city ? errors.city : null}
+                      onChangeText={handleChange('city')}
+                    />
+                    <InputField
+                      value={values.state}
+                      onBlur={handleBlur('state')}
+                      placeholder={t('main.cart.state')}
+                      errorMessage={touched.state ? errors.state : null}
+                      onChangeText={handleChange('state')}
+                    />
+                    <InputField
+                      value={values.pin}
+                      keyboardType={'numeric'}
+                      maxLength={6}
+                      onBlur={handleBlur('pin')}
+                      placeholder={t('main.cart.pin')}
+                      errorMessage={touched.pin ? errors.pin : null}
+                      onChangeText={handleChange('pin')}
+                    />
+
+                    <View style={styles.buttonContainer}>
+                      <ContainButton
+                        title={
+                          item ? t('main.cart.update') : t('main.cart.next')
+                        }
+                        onPress={handleSubmit}
+                        loading={apiInProgress}
+                        disabled={apiInProgress}
+                      />
+                    </View>
+                  </>
+                );
+              }}
+            </Formik>
+          </Card>
+        </KeyboardAwareScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 

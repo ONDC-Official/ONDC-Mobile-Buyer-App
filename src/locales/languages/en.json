@@ -62,7 +62,9 @@
       "return": "Return",
       "cancel": "Cancel",
       "list_empty_message": "No data found",
-      "call_me":"Call Me"
+      "call_me":"Call Me",
+      "track":"Track",
+      "cancelled":"Cancelled"
     },
     "product": {
       "select_location_label": "Select a location",
@@ -89,7 +91,8 @@
         "manufacture_date":"Manufacture Date",
         "net_quantity":"Net Quantity",
         "country_of_origin":"Country of Origin",
-        "brand_owner_name":"Brand Owner Name"
+        "brand_owner_name":"Brand Owner Name",
+        "ordering_from":"Ordering from"
       },
       "filters": {
         "filter": "Filters",
@@ -99,7 +102,9 @@
         "providers": "Providers",
         "categories": "Categories",
         "sorting": "Sorting",
-        "price_range": "Price Range"
+        "price_range": "Price Range",
+        "min":"Min",
+        "max":"Max"
       }
     },
     "more": {

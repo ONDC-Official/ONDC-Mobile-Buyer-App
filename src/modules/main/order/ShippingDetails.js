@@ -238,7 +238,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
                 <Button
                   backgroundColor={colors.accentColor}
                   borderColor={colors.accentColor}
-                  title={t('main.order.return')}
+                  title={t('main.order.cancel')}
                   onPress={() => {
                     cancelOrder()
                       .then(() => {})

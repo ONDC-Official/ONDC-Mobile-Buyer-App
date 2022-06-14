@@ -36,7 +36,6 @@ const Header = ({
   setCount,
   appliedFilters,
   setAppliedFilters,
-  setPageNumber,
 }) => {
   const {colors} = theme;
 
@@ -158,7 +157,6 @@ const Header = ({
           setCount={setCount}
           appliedFilters={appliedFilters}
           setAppliedFilters={setAppliedFilters}
-          setPageNumber={setPageNumber}
         />
       )}
     </>

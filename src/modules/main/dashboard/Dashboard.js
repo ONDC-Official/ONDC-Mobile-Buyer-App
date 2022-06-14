@@ -8,6 +8,7 @@ import Cart from '../cart/Cart';
 import More from '../more/More';
 import Order from '../order/Order';
 import Products from '../product/list/Products';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +18,7 @@ const tabIconColor = (focused, highlightedColor, tabColor) =>
 const Dashboard = () => {
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const {theme} = useTheme();
+  const insets = useSafeAreaInsets();
   const badgeStyles = {
     backgroundColor: theme.colors.accentColor,
     paddingHorizontal: 4,
@@ -29,7 +31,7 @@ const Dashboard = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: {height: 60},
+        tabBarStyle: {height: 60 + insets.bottom},
       }}>
       <Tab.Screen
         name="Products"

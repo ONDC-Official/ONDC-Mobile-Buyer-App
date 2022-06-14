@@ -7,11 +7,11 @@ import axios from 'axios';
  */
 export const getData = async (url, options) => {
   try {
-    console.log('Post request ------', url);
+    // console.log('Post request ------', url);
 
     const response = await axios.get(url, options);
     // console.log('------Response-------');
-    console.log(JSON.stringify(response.data, undefined, 4));
+    // console.log(JSON.stringify(response.data, undefined, 4));
     return response;
   } catch (error) {
     throw error;

@@ -24,6 +24,10 @@ const Details = ({item, theme}) => {
     ? packageCommodity.imported_product_country_of_origin
     : null;
 
+  const manufactureName = packageCommodity
+    ? packageCommodity.manufacturer_or_packer_name
+    : null;
+
   const ownerName = item.bpp_details.long_desc;
 
   return (
@@ -45,11 +49,13 @@ const Details = ({item, theme}) => {
         </Text>
         <View style={styles.productDetailsContainer}>
           <View style={styles.productDetailsTitleContainer}>
-            <Text style={[styles.title, {color: colors.gray}]}>
-              {t('main.product.product_details.manufacture_name')}
-            </Text>
             {packageCommodity && (
               <>
+                {manufactureName && (
+                  <Text style={[styles.title, {color: colors.gray}]}>
+                    {t('main.product.product_details.manufacture_name')}
+                  </Text>
+                )}
                 {netQuantity && (
                   <Text style={[styles.title, {color: colors.gray}]}>
                     {t('main.product.product_details.net_quantity')}
@@ -75,11 +81,11 @@ const Details = ({item, theme}) => {
             )}
           </View>
           <View>
-            <Text style={styles.value}>
-              {item.provider_details.descriptor.name}
-            </Text>
             {item['@ondc/org/statutory_reqs_packaged_commodities'] && (
               <>
+                {manufactureName && (
+                  <Text style={styles.value}>{manufactureName}</Text>
+                )}
                 {netQuantity && <Text style={styles.value}>{netQuantity}</Text>}
                 {manufacturingDate && (
                   <Text style={styles.value}>{manufacturingDate}</Text>
@@ -104,8 +110,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  productDetailsTitleContainer: {marginRight: 30},
-  title: {fontSize: 14, marginBottom: 4},
-  value: {fontSize: 14, marginBottom: 4, fontWeight: 'bold'},
+  productDetailsTitleContainer: {marginRight: 20},
+  title: {fontSize: 14, marginBottom: 4, flexShrink: 1},
+  value: {fontSize: 14, marginBottom: 4, fontWeight: 'bold', flexShrink: 1},
   space: {margin: 10},
 });

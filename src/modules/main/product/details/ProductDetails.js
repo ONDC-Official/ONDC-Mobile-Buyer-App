@@ -97,7 +97,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
           <View style={styles.imageContainer}>
             <Text style={styles.discriptorName}>{item.descriptor.name}</Text>
             <Text style={[styles.provider, {color: colors.gray}]}>
-              {t('main.product.ordering_from')}{' '}
+              {t('main.product.product_details.ordering_from')}{' '}
               <Text
                 style={[
                   styles.provider,
@@ -161,8 +161,8 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 export default withTheme(ProductDetails);
 
 const styles = StyleSheet.create({
-  discriptorName: {fontSize: 18, fontWeight: '700'},
-  provider: {fontSize: 14, marginBottom: 4},
+  discriptorName: {fontSize: 18, fontWeight: '700', marginBottom: 4},
+  provider: {fontSize: 14, marginBottom: 4, flexShrink: 1},
   imageContainer: {padding: 10},
   priceContainer: {fontWeight: '700'},
   imageComponentStyle: {

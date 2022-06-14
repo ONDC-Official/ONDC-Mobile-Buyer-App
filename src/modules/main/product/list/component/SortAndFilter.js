@@ -24,7 +24,6 @@ const SortAndFilter = ({
   setCount,
   appliedFilters,
   setAppliedFilters,
-  setPageNumber,
 }) => {
   const {colors} = theme;
 
@@ -97,7 +96,6 @@ const SortAndFilter = ({
         setApiInProgress(false);
         closeRBSheet();
         closeSortSheet();
-        setPageNumber(1);
       })
       .catch(() => {
         setApiInProgress(false);

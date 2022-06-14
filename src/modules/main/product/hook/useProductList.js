@@ -102,8 +102,12 @@ export default () => {
         });
       });
 
+      console.log(pageNumber);
+
       const list =
-        pageNumber === 1 ? productsList : [...products, ...productsList];
+        pageNumber === 1
+          ? productsList
+          : [...new Set([...products, ...productsList])];
       dispatch(saveProducts(list));
       setCount(data.message.count);
     } catch (error) {
