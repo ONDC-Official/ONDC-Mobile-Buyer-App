@@ -1,5 +1,5 @@
 import Geolocation from '@react-native-community/geolocation';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useContext, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, PermissionsAndroid, StyleSheet, View} from 'react-native';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
@@ -25,6 +25,7 @@ import ListFooter from './component/ListFooter';
 import LocationDeniedAlert from './component/LocationDeniedAlert';
 import ProductCard from './component/ProductCard';
 import ProductCardSkeleton from './component/ProductCardSkeleton';
+import {Context as AuthContext} from '../../../../context/Auth';
 
 /**
  * Component to show list of requested products
@@ -34,7 +35,7 @@ import ProductCardSkeleton from './component/ProductCardSkeleton';
 const Products = ({navigation}) => {
   const {t} = useTranslation();
 
-  const unKnownLabel = t('main.product.unknown');
+  const unKnownLabel = t('main.product.please_select_location');
 
   const [location, setLocation] = useState(unKnownLabel);
 
@@ -60,9 +61,15 @@ const Products = ({navigation}) => {
 
   const [moreListRequested, setMoreListRequested] = useState(false);
 
+  const [latLongInProgress, setLatLongInProgress] = useState(false);
+
   const {messageId, transactionId} = useSelector(
     ({filterReducer}) => filterReducer,
   );
+
+  const {
+    state: {token},
+  } = useContext(AuthContext);
 
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -216,13 +223,20 @@ const Products = ({navigation}) => {
    **/
   const getPosition = async () => {
     try {
-      const {data} = await getData(`${BASE_URL}${GET_LATLONG}${eloc}`);
+      setLatLongInProgress(true);
+      const {data} = await getData(`${BASE_URL}${GET_LATLONG}${eloc}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       setLatitude(data.latitude);
       setLongitude(data.longitude);
+      setLatLongInProgress(false);
     } catch (error) {
-      setLocation(unKnownLabel);
+      setLocation(t('main.product.please_select_location'));
       handleApiError(error);
+      setLatLongInProgress(false);
     }
   };
 
@@ -232,7 +246,7 @@ const Products = ({navigation}) => {
    **/
   const onSearch = async (query, selectedSearchOption) => {
     setAppliedFilters(null);
-    setApiInProgress(true);
+
     search(
       setCount,
       query,
@@ -306,6 +320,7 @@ const Products = ({navigation}) => {
           setCount={setCount}
           appliedFilters={appliedFilters}
           setAppliedFilters={setAppliedFilters}
+          latLongInProgress={latLongInProgress}
         />
         <RBSheet
           ref={refRBSheet}

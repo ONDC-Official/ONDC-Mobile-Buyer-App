@@ -36,6 +36,7 @@ const Header = ({
   setCount,
   appliedFilters,
   setAppliedFilters,
+  latLongInProgress,
 }) => {
   const {colors} = theme;
 
@@ -77,9 +78,20 @@ const Header = ({
             <TouchableOpacity style={styles.subContainer} onPress={openSheet}>
               <Icon name="map-marker" size={20} color={colors.accentColor} />
               <View style={styles.textContainer}>
-                <Text style={{color: colors.accentColor}}>
-                  {location} <Icon name="angle-down" size={14} />
-                </Text>
+                <Text style={{color: colors.accentColor}}>{location} </Text>
+                {latLongInProgress ? (
+                  <ActivityIndicator
+                    showLoading={latLongInProgress}
+                    color={colors.accentColor}
+                    size={12}
+                  />
+                ) : (
+                  <Icon
+                    name="angle-down"
+                    color={colors.accentColor}
+                    size={14}
+                  />
+                )}
               </View>
             </TouchableOpacity>
           )}
@@ -147,6 +159,7 @@ const Header = ({
                 onSearch(item, selectedCard);
               }
             }}
+            editable={!latLongInProgress}
             onChangeText={setItem}
             value={item}
           />
@@ -171,7 +184,12 @@ const styles = StyleSheet.create({
   },
   subContainer: {flexDirection: 'row', alignItems: 'center'},
   locationContainer: {paddingBottom: 10},
-  textContainer: {marginLeft: 8, flexShrink: 1},
+  textContainer: {
+    marginLeft: 8,
+    flexShrink: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   inputContainerStyle: {
     borderRightWidth: 1,
     borderBottomWidth: 1,

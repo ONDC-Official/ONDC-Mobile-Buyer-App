@@ -64,7 +64,9 @@
       "list_empty_message": "No data found",
       "call_me":"Call Me",
       "track":"Track",
-      "cancelled":"Cancelled"
+      "cancelled":"Cancelled",
+      "message":"Enter the phone number on which you want us to call",
+      "placeholder":"Enter the phone number"
     },
     "product": {
       "select_location_label": "Select a location",
@@ -103,6 +105,7 @@
         "categories": "Categories",
         "sorting": "Sorting",
         "price_range": "Price Range",
+        "clear_filter":"CLEAR FILTER",
         "min":"Min",
         "max":"Max"
       }

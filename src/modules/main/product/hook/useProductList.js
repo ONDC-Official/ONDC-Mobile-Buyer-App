@@ -69,18 +69,20 @@ export default () => {
             sortField = 'price';
             break;
         }
-        const filterData = cleanFormData({
-          priceMin: range.priceMin ? range.priceMin : null,
-          priceMax: range.priceMax ? range.priceMax : null,
-        });
 
         let params;
+        if (range) {
+          const filterData = cleanFormData({
+            priceMin: range.priceMin ? range.priceMin : null,
+            priceMax: range.priceMax ? range.priceMax : null,
+          });
 
-        let filterParams = [];
-        Object.keys(filterData).forEach(key =>
-          filterParams.push(`&${key}=${filterData[key]}`),
-        );
-        params = filterParams.toString().replace(/,/g, '');
+          let filterParams = [];
+          Object.keys(filterData).forEach(key =>
+            filterParams.push(`&${key}=${filterData[key]}`),
+          );
+          params = filterParams.toString().replace(/,/g, '');
+        }
 
         if (providers && providers.length > 0) {
           params = params + `&providerIds=${providers.toString()}`;
@@ -90,7 +92,9 @@ export default () => {
           params = params + `&categoryIds=${categories.toString()}`;
         }
 
-        url = `${BASE_URL}${GET_PRODUCTS}${messageId}${params}&sortField=${sortField}&sortOrder=${sortOrder}&pageNumber=${pageNumber}&limit=10`;
+        url = params
+          ? `${BASE_URL}${GET_PRODUCTS}${messageId}${params}&sortField=${sortField}&sortOrder=${sortOrder}&pageNumber=${pageNumber}&limit=10`
+          : `${BASE_URL}${GET_PRODUCTS}${messageId}&sortField=${sortField}&sortOrder=${sortOrder}&pageNumber=${pageNumber}&limit=10`;
       } else {
         url = `${BASE_URL}${GET_PRODUCTS}${messageId}&sortField=price&sortOrder=asc&pageNumber=${pageNumber}&limit=10`;
       }
@@ -102,8 +106,6 @@ export default () => {
         });
       });
 
-      console.log(pageNumber);
-
       const list =
         pageNumber === 1
           ? productsList
@@ -111,6 +113,7 @@ export default () => {
       dispatch(saveProducts(list));
       setCount(data.message.count);
     } catch (error) {
+      console.log(error);
       handleApiError(error);
     }
   };

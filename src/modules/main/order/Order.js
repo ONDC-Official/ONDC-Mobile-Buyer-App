@@ -4,7 +4,6 @@ import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {strings} from '../../../locales/i18n';
 import {appStyles} from '../../../styles/styles';
 import {getData} from '../../../utils/api';
 import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';

@@ -47,9 +47,11 @@ const SortAndFilter = ({
 
   const [apiInProgress, setApiInProgress] = useState(false);
 
+  const [clearInProgress, setClearInProgress] = useState(false);
+
   const {getProductsList} = useProductList();
 
-  const {messageId, transactionId} = useSelector(
+  const {messageId, transactionId, filters} = useSelector(
     ({filterReducer}) => filterReducer,
   );
 
@@ -105,6 +107,33 @@ const SortAndFilter = ({
     setSelectedSortMethod(sortMethod);
   };
 
+  /**
+   * function handles click event of apply button
+   * it request list of products with selected filter params
+   * @returns {Promise<void>}
+   */
+  const onClear = async sortMethod => {
+    setClearInProgress(true);
+    const filterObject = cleanFormData({
+      sortMethod: sortMethod,
+    });
+    setAppliedFilters(filterObject);
+    getProductsList(setCount, messageId, transactionId, 1, filterObject)
+      .then(() => {
+        setClearInProgress(false);
+        closeRBSheet();
+        setProviders([]);
+        setCategories([]);
+        setMax(filters.maxPrice);
+        setMin(filters.minPrice);
+      })
+      .catch(() => {
+        setClearInProgress(false);
+        closeRBSheet();
+      });
+    setSelectedSortMethod(sortMethod);
+  };
+
   return (
     <>
       <Divider width={1} />
@@ -135,7 +164,9 @@ const SortAndFilter = ({
         <TouchableOpacity onPress={openRBSheet}>
           <Text style={[styles.text, {color: colors.accentColor}]}>
             {t('main.product.filters.filter')}
-            {filtersLength ? `(${filtersLength - 1})` : null}{' '}
+            {filtersLength && filtersLength > 1
+              ? `(${filtersLength - 1})`
+              : null}{' '}
             <Icon name="filter" size={14} />
           </Text>
         </TouchableOpacity>
@@ -147,7 +178,6 @@ const SortAndFilter = ({
           }}>
           <Filters
             closeRBSheet={closeRBSheet}
-            apiInProgress={apiInProgress}
             providers={providers}
             setProviders={setProviders}
             setCategories={setCategories}
@@ -158,6 +188,9 @@ const SortAndFilter = ({
             max={max}
             setMax={setMax}
             onApply={onApply}
+            onClear={onClear}
+            apiInProgress={apiInProgress}
+            clearInProgress={clearInProgress}
           />
         </RBSheet>
       </View>

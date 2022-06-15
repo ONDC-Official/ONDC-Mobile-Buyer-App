@@ -10,7 +10,6 @@ import {
 import {Text, withTheme} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
-import {strings} from '../../../locales/i18n';
 import {clearCart} from '../../../redux/actions';
 import {appStyles} from '../../../styles/styles';
 import {alertWithTwoButtons} from '../../../utils/alerts';
@@ -83,7 +82,7 @@ const Cart = ({navigation, theme}) => {
         {cartItems.length !== 0 && (
           <View style={[styles.header, {backgroundColor: colors.white}]}>
             <Text style={styles.text}>
-              {strings('main.cart.sub_total_label')}{' '}
+              {t('main.cart.sub_total_label')}{' '}
               <Text style={styles.price}>
                 ₹{parseFloat(subTotal).toFixed(2)}
               </Text>

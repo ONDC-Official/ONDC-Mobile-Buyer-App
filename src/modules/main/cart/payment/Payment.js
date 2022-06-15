@@ -1,5 +1,6 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useContext, useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   BackHandler,
@@ -18,7 +19,6 @@ import {useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {strings} from '../../../../locales/i18n';
 import {clearAllData} from '../../../../redux/actions';
 import {clearFilters} from '../../../../redux/filter/actions';
 import {appStyles} from '../../../../styles/styles';
@@ -38,14 +38,6 @@ import {showToastWithGravity} from '../../../../utils/utils';
 import Header from '../addressPicker/Header';
 import PaymentSkeleton from './PaymentSkeleton';
 
-const heading = strings('main.cart.checkout');
-const buttonTitle = strings('main.cart.next');
-const addressTitle = strings('main.cart.address');
-const paymentOptionsTitle = strings('main.cart.payment_options');
-const ok = strings('main.product.ok_label');
-const message = strings('main.cart.order_placed_message');
-const poweredBy = strings('main.product.powered_by_label');
-
 /**
  * Component to payment screen in application
  * @param navigation: required: to navigate to the respective screen
@@ -56,6 +48,7 @@ const poweredBy = strings('main.product.powered_by_label');
  */
 const Payment = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const {selectedAddress, selectedBillingAddress, confirmationList} = params;
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
@@ -115,7 +108,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
     setTimeout(() => {
       clearInterval(order);
       if (error.current) {
-        showToastWithGravity(strings('network_error.something_went_wrong'));
+        showToastWithGravity(t('network_error.something_went_wrong'));
       }
       setInitializeOrderRequested(false);
     }, 10000);
@@ -144,9 +137,14 @@ const Payment = ({navigation, theme, route: {params}}) => {
       clearInterval(order);
       if (!error.current) {
         setConfirmOrderRequested(false);
-        alertWithOneButton(null, message, ok, onOrderSuccess);
+        alertWithOneButton(
+          null,
+          t('main.cart.order_placed_message'),
+          t('main.product.ok_label'),
+          onOrderSuccess,
+        );
       } else {
-        showToastWithGravity(strings('network_error.something_went_wrong'));
+        showToastWithGravity(t('network_error.something_went_wrong'));
         setConfirmOrderRequested(false);
       }
     }, 10000);
@@ -275,7 +273,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       if (messageIds.length > 0) {
         onInitializeOrder(messageIds);
       } else {
-        showToastWithGravity(strings('network_error.something_went_wrong'));
+        showToastWithGravity(t('network_error.something_went_wrong'));
         setInitializeOrderRequested(false);
       }
     } catch (error) {
@@ -440,10 +438,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
           onConfirmOrder(messageIds);
         } else {
-          showToastWithGravity(strings('network_error.something_went_wrong'));
+          showToastWithGravity(t('network_error.something_went_wrong'));
         }
       } else {
-        showToastWithGravity(strings('network_error.something_went_wrong'));
+        showToastWithGravity(t('network_error.something_went_wrong'));
       }
     } catch (error) {
       handleApiError(error);
@@ -535,9 +533,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
     <SafeAreaView style={appStyles.container}>
       {!confirmOrderRequested ? (
         <View style={appStyles.container}>
-          <Header title={heading} navigation={navigation}/>
+          <Header title={t('main.cart.checkout')} navigation={navigation} />
           {initializeOrderRequested ? (
-            <PaymentSkeleton/>
+            <PaymentSkeleton />
           ) : (
             <>
               <View style={styles.container}>
@@ -557,7 +555,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                               ₹{element.price.value * element.quantity}
                             </Text>
                           </View>
-                          <Divider/>
+                          <Divider />
                         </>
                       ) : null;
                     }}
@@ -568,7 +566,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                         <Text>FULFILLMENT</Text>
                         <Text style={styles.fulfillment}>₹{fulFillment}</Text>
                       </View>
-                      <Divider/>
+                      <Divider />
                     </>
                   )}
 
@@ -580,7 +578,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   )}
                 </Card>
                 <Card containerStyle={styles.cardContainerStyle}>
-                  <Text style={styles.text}>{addressTitle}</Text>
+                  <Text style={styles.text}>{t('main.cart.address')}</Text>
 
                   <Text style={styles.titleStyle}>
                     {selectedAddress.address.street},{' '}
@@ -593,7 +591,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
                 {!error.current && (
                   <Card containerStyle={styles.cardContainerStyle}>
-                    <Text style={styles.text}>{paymentOptionsTitle}</Text>
+                    <Text style={styles.text}>
+                      {t('main.cart.payment_options')}
+                    </Text>
 
                     <View style={styles.paymentOptions}>
                       {PAYMENT_OPTIONS.map((option, index) => (
@@ -606,7 +606,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
                               </Text>
                               {option.label === 'Prepaid' && (
                                 <View style={styles.juspayContainer}>
-                                  <Text>{poweredBy}</Text>
+                                  <Text>
+                                    {t('main.product.powered_by_label')}
+                                  </Text>
                                   <FastImage
                                     source={{
                                       uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
@@ -654,7 +656,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         </View>
       ) : (
         <View style={[appStyles.container, styles.processing]}>
-          <ActivityIndicator size={30} color={colors.accentColor}/>
+          <ActivityIndicator size={30} color={colors.accentColor} />
           <Text style={[styles.processingText, {color: colors.accentColor}]}>
             Processing{' '}
           </Text>

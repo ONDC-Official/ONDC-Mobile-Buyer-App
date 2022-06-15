@@ -44,6 +44,7 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
             Authorization: `Bearer ${token}`,
           },
         });
+
         setFilteredLocations(data);
       } catch (error) {
         handleApiError(error);
@@ -62,26 +63,32 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
           style: {
             margin: 5,
             borderColor: colors.accentColor,
+            maxHeight: 350,
           },
           keyExtractor: (_, id) => id,
+
           renderItem: ({item}) => {
             return (
               <TouchableOpacity
                 onPress={() => {
                   setFilteredLocations(null);
                   setEloc(item.eLoc);
-                  setLocation(`${item.placeName} ${item.placeAddress}`);
+                  setLocation(`${item.placeName}`);
                   closeSheet();
                 }}
                 style={styles.itemContainer}>
-                <Text>
-                  {item.placeName} {item.placeAddress}
-                </Text>
+                <Text style={styles.placeName}>{item.placeName}</Text>
+                {item.alternateName !== '' && (
+                  <Text style={[styles.alternateName, {color: colors.primary}]}>
+                    {item.alternateName}
+                  </Text>
+                )}
               </TouchableOpacity>
             );
           },
         }}
         value={selectedValue}
+        scrollEnabled={true}
         onChangeText={value => {
           findLocation(value)
             .then(() => {})
@@ -114,4 +121,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   inputContainerStyle: {borderWidth: 0},
+  placeName: {fontSize: 16},
+  alternateName: {fontSize: 12},
 });

@@ -33,6 +33,8 @@ const Filters = ({
   setMin,
   setMax,
   onApply,
+  onClear,
+  clearInProgress,
 }) => {
   const {theme} = useTheme();
 
@@ -181,13 +183,24 @@ const Filters = ({
             </View>
           </ScrollView>
           <View style={styles.buttonContainer}>
-            <ContainButton
-              title={t('main.product.filters.apply_title')}
-              loading={apiInProgress}
-              onPress={() => {
-                onApply(selectedSortMethod);
-              }}
-            />
+            <View style={styles.button}>
+              <ContainButton
+                title={t('main.product.filters.clear_filter')}
+                loading={clearInProgress}
+                onPress={() => {
+                  onClear(selectedSortMethod, setMax, setMin);
+                }}
+              />
+            </View>
+            <View style={styles.amountContainer}>
+              <ContainButton
+                title={t('main.product.filters.apply_title')}
+                loading={apiInProgress}
+                onPress={() => {
+                  onApply(selectedSortMethod);
+                }}
+              />
+            </View>
           </View>
         </View>
       ) : (
@@ -235,10 +248,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
   },
   buttonContainer: {
-    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginVertical: 20,
-    width: 120,
     marginHorizontal: 10,
   },
   markerStyle: {height: 21, width: 21},
+  button: {
+    width: 150,
+  },
 });

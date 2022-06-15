@@ -171,6 +171,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       }
     } catch (error) {
       handleApiError(error);
+      setApiInProgress(false);
     }
   };
 
@@ -194,7 +195,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     ) : null;
   };
 
-  const listData = confirmationList ? confirmationList : skeletonList;
+  const listData =
+    confirmationList && !apiInProgress ? confirmationList : skeletonList;
 
   return (
     <SafeAreaView style={appStyles.container}>

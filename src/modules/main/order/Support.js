@@ -2,7 +2,7 @@ import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Dialog, withTheme} from 'react-native-elements';
+import {Dialog, Overlay, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Yup from 'yup';
 import InputField from '../../../components/input/InputField';
@@ -96,7 +96,35 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
 
   return (
     <View style={styles.centeredView}>
-      <Dialog isVisible={modalVisible}>
+      <Dialog
+        isVisible={modalVisible}
+        overlayStyle={{
+          borderRadius: 10,
+          width: '90%',
+          paddingTop: 0,
+          paddingHorizontal: 0,
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: 10,
+            borderTopRightRadius: 10,
+            borderTopLeftRadius: 10,
+          }}>
+          <Text style={{fontSize: 18}}>ONDC{'  '}SUPPORT</Text>
+
+          <TouchableOpacity
+            onPress={() => {
+              setModalVisible(false);
+            }}
+            style={styles.close}>
+            <Icon name="close-thick" color={colors.accentColor} size={16} />
+          </TouchableOpacity>
+        </View>
+        <Text style={{padding: 10}}>{t('main.order.message')}</Text>
+
         <Formik
           initialValues={userInfo}
           validationSchema={validationSchema}
@@ -115,35 +143,17 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
           }) => {
             return (
               <>
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalVisible(false);
-                  }}
-                  style={styles.close}>
-                  <Icon
-                    name="close-thick"
-                    color={colors.accentColor}
-                    size={16}
-                  />
-                </TouchableOpacity>
                 <InputField
                   keyboardType={'numeric'}
                   maxLength={10}
+                  numberOfLines={1}
                   value={values.number}
                   onBlur={handleBlur('number')}
-                  placeholder={t('main.cart.number')}
+                  placeholder={t('main.order.placeholder')}
                   errorMessage={touched.number ? errors.number : null}
                   onChangeText={handleChange('number')}
                 />
                 <View style={styles.buttonContainer}>
-                  <Button
-                    backgroundColor={colors.statusBackground}
-                    borderColor={colors.accentColor}
-                    title={t('main.order.call_me')}
-                    onPress={handleSubmit}
-                    color={colors.accentColor}
-                    loader={callInProgress}
-                  />
                   <Button
                     backgroundColor={colors.cancelledBackground}
                     borderColor={colors.error}
@@ -152,6 +162,14 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
                       setModalVisible(false);
                     }}
                     color={colors.error}
+                  />
+                  <Button
+                    backgroundColor={colors.statusBackground}
+                    borderColor={colors.accentColor}
+                    title={t('main.order.call_me')}
+                    onPress={handleSubmit}
+                    color={colors.accentColor}
+                    loader={callInProgress}
                   />
                 </View>
               </>

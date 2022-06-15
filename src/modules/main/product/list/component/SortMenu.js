@@ -4,7 +4,6 @@ import {StyleSheet, View} from 'react-native';
 import {CheckBox, Divider, withTheme} from 'react-native-elements';
 import ClearButton from '../../../../../components/button/ClearButton';
 import ContainButton from '../../../../../components/button/ContainButton';
-import {strings} from '../../../../../locales/i18n';
 import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 
 const list = [
