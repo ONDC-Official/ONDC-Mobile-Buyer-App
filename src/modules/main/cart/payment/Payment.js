@@ -100,8 +100,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
             : setFulFillment(null);
           setTotal(ordersArray[0].message.order.quote.price.value);
         }
-      } catch (error) {
-        handleApiError(error);
+      } catch (err) {
+        handleApiError(err);
       }
     }, 2000);
 
@@ -127,8 +127,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
         const e = data.find(item => item.hasOwnProperty('error'));
         error.current = e;
-      } catch (error) {
-        handleApiError(error);
+      } catch (err) {
+        handleApiError(err);
 
         setConfirmOrderRequested(false);
       }
