@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
-import {SliderBox} from 'react-native-image-slider-box';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {removeItemFromCart} from '../../../../redux/actions';
@@ -60,6 +59,8 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
     }
   };
 
+  const uri = item.descriptor.images ? item.descriptor.images[0] : null;
+
   return (
     <SafeAreaView
       style={[appStyles.container, {backgroundColor: colors.white}]}>
@@ -69,30 +70,20 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
           style={styles.backIcon}>
           <Icon name="arrow-left" size={16} color={colors.accentColor} />
         </TouchableOpacity>
+        <View
+          style={[
+            styles.container,
+            {
+              borderColor: colors.greyOutline,
+            },
+          ]}>
+          <FastImage
+            source={uri ? {uri} : image}
+            style={styles.image}
+            resizeMode={'contain'}
+          />
+        </View>
 
-        <SliderBox
-          ImageComponent={FastImage}
-          images={
-            item.descriptor.images
-              ? [...item.descriptor.images, image]
-              : [image]
-          }
-          sliderBoxHeight={250}
-          onCurrentImagePressed={index => {}}
-          resizeMode="contain"
-          dotColor={colors.accentColor}
-          inactiveDotColor={colors.greyOutline}
-          resizeMethod={'resize'}
-          ImageComponentStyle={[
-            styles.imageComponentStyle,
-            {backgroundColor: colors.white},
-          ]}
-          dotStyle={styles.dotStyle}
-          paginationBoxStyle={[
-            styles.paginationBoxStyle,
-            {backgroundColor: colors.white},
-          ]}
-        />
         <ScrollView>
           <View style={styles.imageContainer}>
             <Text style={styles.discriptorName}>{item.descriptor.name}</Text>
@@ -118,9 +109,13 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             </Text>
           </View>
           <Divider width={1} style={styles.divider} />
-          <Details style={styles.divider} item={item} />
-          <Divider />
-          <View style={{alignItems: 'flex-start', padding: 10}}>
+          {item['@ondc/org/statutory_reqs_packaged_commodities'] && (
+            <>
+              <Details style={styles.divider} item={item} />
+              <Divider />
+            </>
+          )}
+          <View style={styles.addButton}>
             {item.quantity < 1 ? (
               <TouchableOpacity
                 style={[styles.button, {borderColor: colors.accentColor}]}
@@ -165,22 +160,10 @@ const styles = StyleSheet.create({
   provider: {fontSize: 14, marginBottom: 4, flexShrink: 1},
   imageContainer: {padding: 10},
   priceContainer: {fontWeight: '700'},
-  imageComponentStyle: {
-    width: '100%',
-    marginBottom: 30,
-  },
-  dotStyle: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-  },
-  paginationBoxStyle: {width: '100%'},
   divider: {marginVertical: 8},
   backIcon: {paddingTop: 10, paddingHorizontal: 10, paddingBottom: 5},
   card: {marginTop: 10, marginHorizontal: 10, borderRadius: 8, elevation: 6},
   subContainer: {flexDirection: 'row'},
-  image: {height: 80, width: 80, marginRight: 10},
-
   button: {
     paddingHorizontal: 20,
     paddingVertical: 5,
@@ -202,4 +185,17 @@ const styles = StyleSheet.create({
   },
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
   title: {fontSize: 18, fontWeight: '600'},
+  image: {
+    height: 190,
+    width: 250,
+    alignSelf: 'center',
+  },
+  container: {
+    borderWidth: 1,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    alignSelf: 'center',
+    borderRadius: 8,
+  },
+  addButton: {alignItems: 'flex-start', padding: 10},
 });

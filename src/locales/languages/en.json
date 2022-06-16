@@ -105,7 +105,7 @@
         "categories": "Categories",
         "sorting": "Sorting",
         "price_range": "Price Range",
-        "clear_filter":"CLEAR FILTER",
+        "clear":"CLEAR",
         "min":"Min",
         "max":"Max"
       }

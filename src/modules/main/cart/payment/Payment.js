@@ -108,7 +108,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
     setTimeout(() => {
       clearInterval(order);
       if (error.current) {
-        showToastWithGravity(t('network_error.something_went_wrong'));
+        showToastWithGravity(error.current.error.message);
       }
       setInitializeOrderRequested(false);
     }, 10000);
@@ -144,7 +144,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           onOrderSuccess,
         );
       } else {
-        showToastWithGravity(t('network_error.something_went_wrong'));
+        showToastWithGravity(error.current.error.message);
         setConfirmOrderRequested(false);
       }
     }, 10000);
@@ -273,11 +273,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
       if (messageIds.length > 0) {
         onInitializeOrder(messageIds);
       } else {
-        showToastWithGravity(t('network_error.something_went_wrong'));
+        showToastWithGravity('No Data Found');
         setInitializeOrderRequested(false);
       }
-    } catch (error) {
-      handleApiError(error);
+    } catch (err) {
+      error.current = err;
+      handleApiError(err);
       setInitializeOrderRequested(false);
     }
   };
@@ -443,8 +444,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
       } else {
         showToastWithGravity(t('network_error.something_went_wrong'));
       }
-    } catch (error) {
-      handleApiError(error);
+    } catch (err) {
+      handleApiError(err);
       setConfirmOrderRequested(false);
     }
   };
@@ -479,8 +480,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
       signedPayload.current = data.signedPayload;
       initializeJusPaySdk(payload);
-    } catch (error) {
-      handleApiError(error);
+    } catch (err) {
+      handleApiError(err);
     }
   };
 
@@ -533,7 +534,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
     <SafeAreaView style={appStyles.container}>
       {!confirmOrderRequested ? (
         <View style={appStyles.container}>
-          <Header title={t('main.cart.checkout')} navigation={navigation} />
+          <Header
+            title={'Payment & Order Confirmation'}
+            navigation={navigation}
+          />
           {initializeOrderRequested ? (
             <PaymentSkeleton />
           ) : (

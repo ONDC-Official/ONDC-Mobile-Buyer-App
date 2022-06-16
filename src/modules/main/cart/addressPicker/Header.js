@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 16,
   },
-  text: {fontSize: 22, fontWeight: '600'},
+  text: {fontSize: 20, fontWeight: '600'},
   button: {
     marginTop: 5,
     paddingVertical: 4,

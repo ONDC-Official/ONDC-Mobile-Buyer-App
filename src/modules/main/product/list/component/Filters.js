@@ -5,7 +5,7 @@ import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
 import {CheckBox, Divider, Text, useTheme} from 'react-native-elements';
 import {useSelector} from 'react-redux';
 import ClearButton from '../../../../../components/button/ClearButton';
-import ContainButton from '../../../../../components/button/ContainButton';
+import OutlineButton from '../../../../../components/button/OutlineButton';
 import InputField from '../../../../../components/input/InputField';
 import {appStyles} from '../../../../../styles/styles';
 
@@ -183,18 +183,20 @@ const Filters = ({
             </View>
           </ScrollView>
           <View style={styles.buttonContainer}>
-            <View style={styles.button}>
-              <ContainButton
-                title={t('main.product.filters.clear_filter')}
+            <View style={styles.amountContainer}>
+              <OutlineButton
+                title={t('main.product.filters.clear')}
                 loading={clearInProgress}
                 onPress={() => {
                   onClear(selectedSortMethod, setMax, setMin);
                 }}
+                color={colors.accentColor}
               />
             </View>
             <View style={styles.amountContainer}>
-              <ContainButton
+              <OutlineButton
                 title={t('main.product.filters.apply_title')}
+                color={colors.accentColor}
                 loading={apiInProgress}
                 onPress={() => {
                   onApply(selectedSortMethod);

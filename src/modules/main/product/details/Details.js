@@ -6,6 +6,7 @@ import IconField from './IconField';
 
 const Details = ({item, theme}) => {
   const {colors} = theme;
+  console.log(JSON.stringify(item, undefined, 4));
 
   const {t} = useTranslation();
 
@@ -28,20 +29,53 @@ const Details = ({item, theme}) => {
     ? packageCommodity.manufacturer_or_packer_name
     : null;
 
-  const ownerName = item.bpp_details.long_desc;
-
   return (
     <>
       <View style={[styles.container, styles.productDetailsContainer]}>
-        {item['@ondc/org/returnable'] && (
-          <>
-            <IconField name="Returnable" icon="package-variant" />
-            <View style={styles.space} />
-          </>
-        )}
-        {item['@ondc/org/cancellable'] && (
-          <IconField name="Cancellable" icon="package-variant-closed" />
-        )}
+        <View style={styles.productDetailsTitleContainer}>
+          {item.hasOwnProperty('@ondc/org/returnable') && (
+            <Text style={[styles.title, {color: colors.gray}]}>
+              {'Returnable '}
+            </Text>
+          )}
+          {item.hasOwnProperty('@ondc/org/cancellable') && (
+            <Text style={[styles.title, {color: colors.gray}]}>
+              {'Cancellable'}
+            </Text>
+          )}
+          {item.hasOwnProperty('@ondc/org/available_on_cod') && (
+            <Text style={[styles.title, {color: colors.gray}]}>
+              {'Cash On Delivery'}
+            </Text>
+          )}
+          {item.hasOwnProperty('AvailableQuantity') && (
+            <Text style={[styles.title, {color: colors.gray}]}>
+              {'Available Quantity'}
+            </Text>
+          )}
+        </View>
+        <View>
+          {item.hasOwnProperty('@ondc/org/returnable') && (
+            <Text style={[styles.title, {color: colors.gray}]}>
+              {item['@ondc/org/returnable'] ? 'Yes' : 'No'}
+            </Text>
+          )}
+          {item.hasOwnProperty('@ondc/org/cancellable') && (
+            <Text style={[styles.title, {color: colors.gray}]}>
+              {item['@ondc/org/cancellable'] ? 'Yes' : 'No'}
+            </Text>
+          )}
+          {item.hasOwnProperty('@ondc/org/available_on_cod') && (
+            <Text style={[styles.title, {color: colors.gray}]}>
+              {item['@ondc/org/available_on_cod'] ? 'Yes' : 'No'}
+            </Text>
+          )}
+          {item.hasOwnProperty('AvailableQuantity') && (
+            <Text style={[styles.title, {color: colors.gray}]}>
+              {item.AvailableQuantity}
+            </Text>
+          )}
+        </View>
       </View>
       <View style={styles.container}>
         <Text style={[styles.heading, {color: colors.gray}]}>
@@ -74,11 +108,6 @@ const Details = ({item, theme}) => {
                 )}
               </>
             )}
-            {ownerName && (
-              <Text style={[styles.title, {color: colors.gray}]}>
-                {t('main.product.product_details.brand_owner_name')}
-              </Text>
-            )}
           </View>
           <View>
             {item['@ondc/org/statutory_reqs_packaged_commodities'] && (
@@ -93,7 +122,6 @@ const Details = ({item, theme}) => {
                 {country && <Text style={styles.value}>{country}</Text>}
               </>
             )}
-            {ownerName && <Text style={styles.value}>{ownerName}</Text>}
           </View>
         </View>
       </View>

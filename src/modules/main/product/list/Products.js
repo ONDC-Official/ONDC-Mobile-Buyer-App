@@ -7,7 +7,7 @@ import {colors, withTheme} from 'react-native-elements';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
@@ -26,6 +26,8 @@ import LocationDeniedAlert from './component/LocationDeniedAlert';
 import ProductCard from './component/ProductCard';
 import ProductCardSkeleton from './component/ProductCardSkeleton';
 import {Context as AuthContext} from '../../../../context/Auth';
+import {saveProducts} from '../../../../redux/product/actions';
+import {clearFilters} from '../../../../redux/filter/actions';
 
 /**
  * Component to show list of requested products
@@ -71,6 +73,8 @@ const Products = ({navigation}) => {
     state: {token},
   } = useContext(AuthContext);
 
+  const dispatch = useDispatch();
+
   const {handleApiError} = useNetworkErrorHandling();
 
   const refRBSheet = useRef();
@@ -115,6 +119,9 @@ const Products = ({navigation}) => {
       setLocation(
         `${data.results[0].city} ${data.results[0].state} ${data.results[0].area}`,
       );
+      dispatch(saveProducts([]));
+      dispatch(clearFilters());
+
       setLocationInProgress(false);
     } catch (error) {
       setLocation(unKnownLabel);
@@ -229,9 +236,14 @@ const Products = ({navigation}) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      setLatitude(data.latitude);
-      setLongitude(data.longitude);
+      if (data.latitude && data.longitude) {
+        setLatitude(data.latitude);
+        setLongitude(data.longitude);
+        dispatch(saveProducts([]));
+        dispatch(clearFilters());
+      } else {
+        setLocation(t('main.product.please_select_location'));
+      }
       setLatLongInProgress(false);
     } catch (error) {
       setLocation(t('main.product.please_select_location'));
@@ -355,7 +367,7 @@ const Products = ({navigation}) => {
             );
           }}
           onEndReachedThreshold={0.2}
-          onEndReached={loadMoreList}
+          // onEndReached={loadMoreList}
           contentContainerStyle={
             listData.length > 0
               ? styles.contentContainerStyle

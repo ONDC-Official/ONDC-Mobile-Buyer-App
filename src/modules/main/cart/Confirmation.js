@@ -156,18 +156,27 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       const {data} = await postData(`${BASE_URL}${GET_QUOTE}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
+      const fulfillmentMissingItem = data.find(
+        item => !item.message.hasOwnProperty('ack'),
+      );
+      console.log(fulfillmentMissingItem);
       let messageIds = [];
-
-      data.forEach(item => {
-        if (item.message.ack.status === 'ACK') {
-          messageIds.push(item.context.message_id);
+      if (!fulfillmentMissingItem) {
+        data.forEach(item => {
+          if (item.message.ack.status === 'ACK') {
+            messageIds.push(item.context.message_id);
+          }
+        });
+        if (messageIds.length > 0) {
+          onGetQuote(messageIds);
+        } else {
+          setConfirmationList([]);
+          setApiInProgress(false);
         }
-      });
-      if (messageIds.length > 0) {
-        onGetQuote(messageIds);
       } else {
-        showToastWithGravity(t('network_error.something_went_wrong'));
+        showToastWithGravity(fulfillmentMissingItem.message);
         setConfirmationList([]);
+        setApiInProgress(false);
       }
     } catch (error) {
       handleApiError(error);
@@ -251,11 +260,15 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               }
             />
           ) : (
-            <ActivityIndicator
-              color={colors.accentColor}
-              style={styles.activityindicator}
-              size={26}
-            />
+            <>
+              {apiInProgress && (
+                <ActivityIndicator
+                  color={colors.accentColor}
+                  style={styles.activityindicator}
+                  size={26}
+                />
+              )}
+            </>
           )}
         </View>
       </View>
