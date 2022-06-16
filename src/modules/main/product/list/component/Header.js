@@ -37,6 +37,7 @@ const Header = ({
   appliedFilters,
   setAppliedFilters,
   latLongInProgress,
+  locationMessage,
 }) => {
   const {colors} = theme;
 
@@ -65,8 +66,8 @@ const Header = ({
           style={[styles.locationContainer, {backgroundColor: colors.white}]}>
           {locationInProgress ? (
             <View style={styles.subContainer}>
-              <Text>
-                {t('main.product.detecting_location')} {'    '}
+              <Text style={{color: colors.primary}}>
+                {locationMessage} {'    '}
               </Text>
               <ActivityIndicator
                 showLoading={locationInProgress}

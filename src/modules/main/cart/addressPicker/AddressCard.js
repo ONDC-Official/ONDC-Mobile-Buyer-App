@@ -151,6 +151,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   iconContainer: {flexDirection: 'row', justifyContent: 'space-between'},
-  title: {marginLeft: 5},
+  title: {marginLeft: 8},
   containerStyle: {borderWidth: 0, margin: 0},
 });

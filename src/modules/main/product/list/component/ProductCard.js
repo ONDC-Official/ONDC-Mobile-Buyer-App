@@ -81,7 +81,7 @@ const ProductCard = ({theme, navigation, item, cancellable, apiInProgress}) => {
             resizeMode={'contain'}
           />
           <View style={appStyles.container}>
-            <View style={styles.priceContainer}>
+            <View style={[styles.priceContainer, styles.iconContainer]}>
               <Text style={styles.title} numberOfLines={1}>
                 {item.descriptor.name}
               </Text>
@@ -146,14 +146,18 @@ const ProductCard = ({theme, navigation, item, cancellable, apiInProgress}) => {
 export default withTheme(ProductCard);
 
 const styles = StyleSheet.create({
-  card: {marginTop: 10, marginHorizontal: 10, borderRadius: 8, elevation: 6},
+  card: {
+    marginTop: 10,
+    marginHorizontal: 10,
+    borderRadius: 8,
+    elevation: 6,
+  },
   subContainer: {flexDirection: 'row'},
   image: {height: 80, width: 80, marginRight: 10},
   priceContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingRight: 10,
   },
   button: {
     paddingHorizontal: 20,
@@ -176,4 +180,5 @@ const styles = StyleSheet.create({
   },
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
   title: {fontSize: 18, fontWeight: '600'},
+  iconContainer: {marginRight: 12},
 });

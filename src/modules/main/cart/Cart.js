@@ -68,7 +68,9 @@ const Cart = ({navigation, theme}) => {
    * @param item:single object from cart list
    * @returns {JSX.Element}
    */
-  const renderItem = ({item}) => <ProductCard item={item} />;
+  const renderItem = ({item}) => (
+    <ProductCard item={item} navigation={navigation} />
+  );
 
   return (
     <SafeAreaView

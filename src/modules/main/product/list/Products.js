@@ -64,10 +64,13 @@ const Products = ({navigation}) => {
   const [moreListRequested, setMoreListRequested] = useState(false);
 
   const [latLongInProgress, setLatLongInProgress] = useState(false);
+  const [searchInProgress, setSearchInProgress] = useState(false);
 
   const {messageId, transactionId} = useSelector(
     ({filterReducer}) => filterReducer,
   );
+
+  const [locationMessage, setLocationMessage] = useState('');
 
   const {
     state: {token},
@@ -109,6 +112,8 @@ const Products = ({navigation}) => {
    **/
   const getLocation = async response => {
     try {
+      setLocationMessage('Requesting address');
+
       const {data} = await getData(
         `${BASE_URL}${GET_LOCATION_FROM_LAT_LONG}lat=${response.coords.latitude}&long=${response.coords.longitude}`,
       );
@@ -137,6 +142,7 @@ const Products = ({navigation}) => {
    **/
   const getLatLong = () => {
     setLocationInProgress(true);
+    setLocationMessage(t('main.product.detecting_location'));
     Geolocation.getCurrentPosition(
       res => {
         getLocation(res)
@@ -258,7 +264,7 @@ const Products = ({navigation}) => {
    **/
   const onSearch = async (query, selectedSearchOption) => {
     setAppliedFilters(null);
-
+    setSearchInProgress(true);
     search(
       setCount,
       query,
@@ -268,8 +274,13 @@ const Products = ({navigation}) => {
       setApiInProgress,
       1,
     )
-      .then(() => {})
-      .catch(() => {});
+      .then(() => {
+        setSearchInProgress(false);
+      })
+
+      .catch(() => {
+        setSearchInProgress(false);
+      });
   };
 
   const loadMoreList = () => {
@@ -312,7 +323,7 @@ const Products = ({navigation}) => {
     }
   }, [eloc]);
 
-  const listData = apiInProgress ? skeletonList : products;
+  const listData = searchInProgress ? skeletonList : products;
 
   return (
     <SafeAreaView
@@ -333,6 +344,7 @@ const Products = ({navigation}) => {
           appliedFilters={appliedFilters}
           setAppliedFilters={setAppliedFilters}
           latLongInProgress={latLongInProgress}
+          locationMessage={locationMessage}
         />
         <RBSheet
           ref={refRBSheet}

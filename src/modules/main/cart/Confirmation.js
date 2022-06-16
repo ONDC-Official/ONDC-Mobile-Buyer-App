@@ -22,7 +22,7 @@ import {
 } from '../../../utils/utils';
 import Header from '../cart/addressPicker/Header';
 import ProductCard from '../product/list/component/ProductCard';
-import ConfirmationCardSkeleton from './ConfirmationCardSkeleton';
+import ProductCardSkeleton from '../product/list/component/ProductCardSkeleton';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
   const {
@@ -198,9 +198,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     const element = cartItems.find(one => one.id == item.id);
 
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ConfirmationCardSkeleton item={item} />
+      <ProductCardSkeleton item={item} />
     ) : element ? (
-      <ProductCard item={element} cancellable={true} />
+      <ProductCard item={element} navigation={navigation} cancellable={true} />
     ) : null;
   };
 
