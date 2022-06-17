@@ -581,7 +581,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                     </View>
                   )}
                 </Card>
-                <Card containerStyle={styles.cardContainerStyle}>
+                <Card containerStyle={styles.addressCard}>
                   <Text style={styles.text}>{t('main.cart.address')}</Text>
 
                   <Text style={styles.titleStyle}>
@@ -713,4 +713,12 @@ const styles = StyleSheet.create({
   },
   processing: {alignItems: 'center', justifyContent: 'center'},
   processingText: {fontSize: 18, fontWeight: '700', marginTop: 20},
+  addressCard: {
+    paddingVertical: 10,
+    marginHorizontal: 0,
+    marginVertical: 0,
+    borderRadius: 10,
+    marginBottom: 10,
+    paddingHorizontal: 0,
+  },
 });

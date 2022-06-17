@@ -38,6 +38,7 @@ const Header = ({
   setAppliedFilters,
   latLongInProgress,
   locationMessage,
+  pageNumber,
 }) => {
   const {colors} = theme;
 
@@ -171,6 +172,7 @@ const Header = ({
           setCount={setCount}
           appliedFilters={appliedFilters}
           setAppliedFilters={setAppliedFilters}
+          pageNumber={pageNumber}
         />
       )}
     </>

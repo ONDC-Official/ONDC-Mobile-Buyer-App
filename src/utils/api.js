@@ -10,7 +10,7 @@ export const getData = async (url, options) => {
     console.log('Get request ------', url);
 
     const response = await axios.get(url, options);
-    // console.log('------Response-------');
+    console.log('------Response-------');
     console.log(JSON.stringify(response.data, undefined, 4));
     return response;
   } catch (error) {
@@ -32,7 +32,7 @@ export const postData = async (url, payload, options) => {
     console.log('------Payload-------');
     console.log(JSON.stringify(payload, undefined, 4));
     const response = await axios.post(url, payload, options);
-    // console.log('------Response-------');
+    console.log('------Response-------');
     console.log(JSON.stringify(response.data, undefined, 4));
     return response;
   } catch (error) {

@@ -99,17 +99,21 @@ export default () => {
         url = `${BASE_URL}${GET_PRODUCTS}${messageId}&sortField=price&sortOrder=asc&pageNumber=${pageNumber}&limit=10`;
       }
       const {data} = await getData(`${url}`, options);
+      console.log('------count--------');
+      console.log(data.message.count);
       const productsList = data.message.catalogs.map(item => {
         return Object.assign({}, item, {
           quantity: 0,
           transaction_id: transactionId,
         });
       });
-
+      console.log('-------pageNumber---------');
+      console.log(pageNumber);
       const list =
         pageNumber === 1
           ? productsList
           : [...new Set([...products, ...productsList])];
+
       dispatch(saveProducts(list));
       setCount(data.message.count);
     } catch (error) {

@@ -31,6 +31,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
   const {t} = useTranslation();
 
+  const {transactionId} = useSelector(({filterReducer}) => filterReducer);
+
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
   const {handleApiError} = useNetworkErrorHandling();
@@ -123,7 +125,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           payload[index].message.cart.items.push(itemObj);
         } else {
           let payloadObj = {
-            context: {transaction_id: item.transaction_id},
+            context: {transaction_id: transactionId},
             message: {
               cart: {
                 items: [
@@ -290,7 +292,7 @@ const styles = StyleSheet.create({
   contentContainerStyle: {paddingBottom: 10},
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
   title: {fontSize: 18, fontWeight: '600'},
-  buttonContainer: {width: 300, padding: 20, alignSelf: 'center'},
+  buttonContainer: {width: 300, paddingVertical: 20, alignSelf: 'center'},
   totalContainer: {paddingHorizontal: 10},
   emptyListComponent: {alignItems: 'center', justifyContent: 'center'},
   quantityContainer: {

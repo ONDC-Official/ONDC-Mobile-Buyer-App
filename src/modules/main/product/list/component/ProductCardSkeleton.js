@@ -10,7 +10,7 @@ import {appStyles} from '../../../../../styles/styles';
  */
 const ProductCardSkeleton = () => {
   return (
-    <Card>
+    <Card containerStyle={styles.card}>
       <SkeletonPlaceholder>
         <View style={styles.container}>
           <View style={styles.image} />
@@ -33,6 +33,12 @@ const ProductCardSkeleton = () => {
 export default ProductCardSkeleton;
 
 const styles = StyleSheet.create({
+  card: {
+    marginTop: 10,
+    marginHorizontal: 10,
+    borderRadius: 8,
+    elevation: 6,
+  },
   container: {flexDirection: 'row'},
   image: {width: 80, height: 80, marginRight: 10},
   name: {width: '100%', height: 15, marginBottom: 10},

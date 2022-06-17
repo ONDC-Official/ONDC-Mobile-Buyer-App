@@ -59,12 +59,13 @@ const Products = ({navigation}) => {
 
   const {products} = useSelector(({productReducer}) => productReducer);
 
-  const {getProductsList} = useProductList(setCount);
-
   const [moreListRequested, setMoreListRequested] = useState(false);
 
   const [latLongInProgress, setLatLongInProgress] = useState(false);
+
   const [searchInProgress, setSearchInProgress] = useState(false);
+
+  const pageNumber = useRef(1);
 
   const {messageId, transactionId} = useSelector(
     ({filterReducer}) => filterReducer,
@@ -82,7 +83,7 @@ const Products = ({navigation}) => {
 
   const refRBSheet = useRef();
 
-  const {search} = useProductList();
+  const {search, getProductsList} = useProductList();
 
   const openSheet = () => refRBSheet.current.open();
 
@@ -165,6 +166,7 @@ const Products = ({navigation}) => {
 
                 err => {
                   setLocation(unKnownLabel);
+
                   setLocationInProgress(false);
                 },
                 {timeout: 20000},
@@ -180,7 +182,7 @@ const Products = ({navigation}) => {
           setLocationInProgress(false);
         }
       },
-      {enableHighAccuracy: true, timeout: 20000},
+      {timeout: 20000},
     );
   };
 
@@ -264,6 +266,7 @@ const Products = ({navigation}) => {
    **/
   const onSearch = async (query, selectedSearchOption) => {
     setAppliedFilters(null);
+    pageNumber.current = 1;
     setSearchInProgress(true);
     search(
       setCount,
@@ -276,6 +279,7 @@ const Products = ({navigation}) => {
     )
       .then(() => {
         setSearchInProgress(false);
+        pageNumber.current = pageNumber.current + 1;
       })
 
       .catch(() => {
@@ -290,17 +294,22 @@ const Products = ({navigation}) => {
       !apiInProgress &&
       !moreListRequested
     ) {
-      const pageNumber = products.length / 10 + 1;
+      console.log('--------count---------');
+      console.log(count);
+      console.log('--------products---------');
+      console.log(products.length);
+
       setMoreListRequested(true);
       getProductsList(
         setCount,
         messageId,
         transactionId,
-        pageNumber,
+        pageNumber.current,
         appliedFilters,
       )
         .then(() => {
           setMoreListRequested(false);
+          pageNumber.current = pageNumber.current + 1;
         })
         .catch(() => {
           setMoreListRequested(false);
@@ -345,6 +354,7 @@ const Products = ({navigation}) => {
           setAppliedFilters={setAppliedFilters}
           latLongInProgress={latLongInProgress}
           locationMessage={locationMessage}
+          pageNumber={pageNumber}
         />
         <RBSheet
           ref={refRBSheet}
@@ -367,6 +377,9 @@ const Products = ({navigation}) => {
         <FlatList
           data={listData}
           renderItem={renderItem}
+          keyExtractor={(items, index) => {
+            return index.toString();
+          }}
           ListEmptyComponent={() => {
             return (
               <EmptyComponent
@@ -379,7 +392,7 @@ const Products = ({navigation}) => {
             );
           }}
           onEndReachedThreshold={0.2}
-          // onEndReached={loadMoreList}
+          onEndReached={loadMoreList}
           contentContainerStyle={
             listData.length > 0
               ? styles.contentContainerStyle

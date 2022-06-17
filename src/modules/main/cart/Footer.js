@@ -41,9 +41,9 @@ export default withTheme(Footer);
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignSelf: 'center',
+    width: 300,
   },
   text: {fontSize: 16, textTransform: 'uppercase'},
   clearCartButton: {
