@@ -6,7 +6,6 @@ import IconField from './IconField';
 
 const Details = ({item, theme}) => {
   const {colors} = theme;
-  console.log(JSON.stringify(item, undefined, 4));
 
   const {t} = useTranslation();
 

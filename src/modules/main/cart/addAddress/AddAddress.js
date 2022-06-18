@@ -24,6 +24,7 @@ import Header from '../addressPicker/Header';
  * Component to render form in add new address screen
  * @param navigation: required: to navigate to the respective screen
  * @param theme:application theme
+ * @param params
  * @constructor
  * @returns {JSX.Element}
  */
@@ -62,42 +63,42 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
     street: Yup.string().trim().required(t('errors.required')),
   });
 
-  const userInfo = item
-    ? {
-        email:
-          selectedAddress === 'address' ? item.descriptor.email : item.email,
-        name: selectedAddress === 'address' ? item.descriptor.name : item.name,
-        number:
-          selectedAddress === 'address' ? item.descriptor.phone : item.phone,
-        city:
-          selectedAddress === 'address' ? item.address.city : item.address.city,
-        state:
-          selectedAddress === 'address'
-            ? item.address.state
-            : item.address.state,
-        pin:
-          selectedAddress === 'address'
-            ? item.address.areaCode
-            : item.address.areaCode,
-        landMark:
-          selectedAddress === 'address'
-            ? item.address.locality
-            : item.address.locality,
-        street:
-          selectedAddress === 'address'
-            ? item.address.street
-            : item.address.street,
+  let userInfo = {
+    email: '',
+    name: '',
+    number: '',
+    city: '',
+    state: '',
+    pin: '',
+    landMark: '',
+    street: '',
+  };
+
+  if (item) {
+    if (selectedAddress === 'address') {
+      userInfo = {
+        email: item.descriptor.email,
+        name: item.descriptor.name,
+        number: item.descriptor.phone,
+        city: item.address.city,
+        state: item.address.state,
+        pin: item.address.areaCode,
+        landMark: item.address.locality,
+        street: item.address.street,
       }
-    : {
-        email: '',
-        name: '',
-        number: '',
-        city: '',
-        state: '',
-        pin: '',
-        landMark: '',
-        street: '',
+    } else {
+      userInfo = {
+        email: item.email,
+        name: item.name,
+        number: item.phone,
+        city: item.address.city,
+        state: item.address.state,
+        pin: item.address.areaCode,
+        landMark: item.address.locality,
+        street: item.address.street,
       };
+    }
+  }
 
   /**
    * Function is used to save new address

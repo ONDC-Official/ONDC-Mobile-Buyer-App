@@ -81,15 +81,14 @@ const ProductCard = ({theme, navigation, item, cancellable, apiInProgress}) => {
             resizeMode={'contain'}
           />
           <View style={appStyles.container}>
-            <View style={[styles.priceContainer, styles.iconContainer]}>
+            <View style={styles.titleContainer}>
               <Text style={styles.title} numberOfLines={1}>
                 {item.descriptor.name}
               </Text>
               {cancellable && (
                 <TouchableOpacity
-                  onPress={() => {
-                    cancelItem(item);
-                  }}>
+                  style={styles.actionButton}
+                  onPress={() => cancelItem(item)}>
                   <Icon name="close" size={20} />
                 </TouchableOpacity>
               )}
@@ -179,6 +178,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
-  title: {fontSize: 18, fontWeight: '600'},
+  title: {fontSize: 16, fontWeight: '600', flex: 1},
   iconContainer: {marginRight: 12},
+  titleContainer: {flexDirection: 'row', justifyContent: 'space-between',},
 });

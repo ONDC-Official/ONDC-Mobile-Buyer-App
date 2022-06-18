@@ -275,15 +275,14 @@ const Products = ({navigation}) => {
       longitude,
       selectedSearchOption,
       setApiInProgress,
+      setSearchInProgress,
       1,
     )
       .then(() => {
-        setSearchInProgress(false);
         pageNumber.current = pageNumber.current + 1;
       })
 
       .catch(() => {
-        setSearchInProgress(false);
       });
   };
 
@@ -294,11 +293,6 @@ const Products = ({navigation}) => {
       !apiInProgress &&
       !moreListRequested
     ) {
-      console.log('--------count---------');
-      console.log(count);
-      console.log('--------products---------');
-      console.log(products.length);
-
       setMoreListRequested(true);
       getProductsList(
         setCount,

@@ -161,7 +161,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       const fulfillmentMissingItem = data.find(
         item => !item.message.hasOwnProperty('ack'),
       );
-      console.log(fulfillmentMissingItem);
       let messageIds = [];
       if (!fulfillmentMissingItem) {
         data.forEach(item => {

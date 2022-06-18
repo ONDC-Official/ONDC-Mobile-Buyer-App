@@ -44,6 +44,8 @@ export default () => {
     transactionId,
     pageNumber,
     appliedFilters,
+    requestCount = 6,
+    setSearchInProgress = null,
   ) => {
     try {
       let url = null;
@@ -98,26 +100,26 @@ export default () => {
       } else {
         url = `${BASE_URL}${GET_PRODUCTS}${messageId}&sortField=price&sortOrder=asc&pageNumber=${pageNumber}&limit=10`;
       }
-      const {data} = await getData(`${url}`, options);
-      console.log('------count--------');
-      console.log(data.message.count);
-      const productsList = data.message.catalogs.map(item => {
-        return Object.assign({}, item, {
-          quantity: 0,
-          transaction_id: transactionId,
+      const {data} = await getData(url, options);
+      if (data.message.catalogs.length > 0 || requestCount === 6) {
+        const productsList = data.message.catalogs.map(item => {
+          return Object.assign({}, item, {
+            quantity: 0,
+            transaction_id: transactionId,
+          });
         });
-      });
-      console.log('-------pageNumber---------');
-      console.log(pageNumber);
-      const list =
-        pageNumber === 1
-          ? productsList
-          : [...new Set([...products, ...productsList])];
+        const list =
+          pageNumber === 1
+            ? productsList
+            : [...new Set([...products, ...productsList])];
 
-      dispatch(saveProducts(list));
-      setCount(data.message.count);
+        dispatch(saveProducts(list));
+        setCount(data.message.count);
+        if (setSearchInProgress) {
+          setSearchInProgress(false);
+        }
+      }
     } catch (error) {
-      console.log(error);
       handleApiError(error);
     }
   };
@@ -131,10 +133,13 @@ export default () => {
     messageId,
     transactionId,
     pageNumber,
+    setSearchInProgress,
   ) => {
+    let requestCount = 0;
     let getList = setInterval(async () => {
       try {
-        await getProductsList(setCount, messageId, transactionId, pageNumber);
+        requestCount++;
+        await getProductsList(setCount, messageId, transactionId, pageNumber, null, requestCount, setSearchInProgress);
       } catch (error) {
         handleApiError(error);
       }
@@ -143,6 +148,7 @@ export default () => {
     setTimeout(() => {
       clearInterval(getList);
       setApiInProgress(false);
+      setSearchInProgress(false);
     }, 12000);
   };
 
@@ -180,6 +186,7 @@ export default () => {
     longitude,
     selectedSearchOption,
     setApiInProgress,
+    setSearchInProgress,
     pageNumber,
   ) => {
     if (longitude && latitude) {
@@ -229,6 +236,7 @@ export default () => {
           response.data.context.message_id,
           response.data.context.transaction_id,
           pageNumber,
+          setSearchInProgress,
         );
 
         await getFilter(

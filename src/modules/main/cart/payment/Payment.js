@@ -63,8 +63,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const {handleApiError} = useNetworkErrorHandling();
   const [orders, setOrders] = useState(null);
   const refOrders = useRef();
-  const [total, setTotal] = useState(null);
-  const [fulFillment, setFulFillment] = useState(null);
+  const [quote, setQuote] = useState(null);
   const signedPayload = useRef(null);
   const timeStamp = useRef(null);
 
@@ -88,17 +87,15 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setOrders(data);
         const ordersArray = data.filter(one => !one.hasOwnProperty('error'));
         refOrders.current = data;
-        const e = refOrders.current.find(item => item.hasOwnProperty('error'));
-        error.current = e;
-
+        error.current = refOrders.current.find(item => item.hasOwnProperty('error'));
         if (ordersArray.length > 0) {
-          const breakupItem = ordersArray[0].message.order.quote.breakup.find(
-            one => one.title === 'FULFILLMENT',
-          );
-          breakupItem
-            ? setFulFillment(breakupItem.price.value)
-            : setFulFillment(null);
-          setTotal(ordersArray[0].message.order.quote.price.value);
+          let breakup = [];
+          let total = 0;
+          ordersArray.forEach(one => {
+            breakup = breakup.concat(one.message.order.quote.breakup);
+            total += Number(one.message.order.quote.price.value);
+          });
+          setQuote({total, breakup});
         }
       } catch (err) {
         handleApiError(err);
@@ -125,8 +122,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           },
         );
 
-        const e = data.find(item => item.hasOwnProperty('error'));
-        error.current = e;
+        error.current = data.find(item => item.hasOwnProperty('error'));
       } catch (err) {
         handleApiError(err);
 
@@ -451,7 +447,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   };
 
   /**
-   * function request signpayload and initialize hypersdk
+   * function request signpost and initialize hyper sdk
    */
   const placeOrder = async () => {
     const options = {
@@ -508,7 +504,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
   useEffect(() => {
     initializeOrder()
       .then(() => {
-        console.log('Its errror');
         HyperSdkReact.createHyperServices();
         placeOrder()
           .then(() => {})
@@ -543,44 +538,33 @@ const Payment = ({navigation, theme, route: {params}}) => {
           ) : (
             <>
               <View style={styles.container}>
-                <Card containerStyle={styles.itemsContainerStyle}>
-                  <FlatList
-                    data={confirmationList}
-                    renderItem={({item}) => {
-                      const element = cartItems.find(one => one.id == item.id);
+                {quote && (
+                  <Card containerStyle={styles.itemsContainerStyle}>
+                    <FlatList
+                      data={quote.breakup}
+                      renderItem={({item}) => {
+                        return (
+                          <>
+                            <View style={styles.priceContainer}>
+                              <Text style={styles.price}>
+                                {item.title}
+                              </Text>
+                              <Text>
+                                ₹{item.price.value}
+                              </Text>
+                            </View>
+                            <Divider />
+                          </>
+                        )
+                      }}
+                    />
 
-                      return element ? (
-                        <>
-                          <View style={styles.priceContainer}>
-                            <Text style={styles.price}>
-                              {element.descriptor.name}
-                            </Text>
-                            <Text>
-                              ₹{element.price.value * element.quantity}
-                            </Text>
-                          </View>
-                          <Divider />
-                        </>
-                      ) : null;
-                    }}
-                  />
-                  {fulFillment && (
-                    <>
-                      <View style={styles.priceContainer}>
-                        <Text>FULFILLMENT</Text>
-                        <Text style={styles.fulfillment}>₹{fulFillment}</Text>
-                      </View>
-                      <Divider />
-                    </>
-                  )}
-
-                  {total && (
                     <View style={styles.priceContainer}>
                       <Text>Total Payable</Text>
-                      <Text style={styles.fulfillment}>₹{total}</Text>
+                      <Text style={styles.fulfillment}>₹{quote.total}</Text>
                     </View>
-                  )}
-                </Card>
+                  </Card>
+                )}
                 <Card containerStyle={styles.addressCard}>
                   <Text style={styles.text}>{t('main.cart.address')}</Text>
 
