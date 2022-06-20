@@ -7,7 +7,9 @@ import axios from 'axios';
  */
 export const getData = async (url, options) => {
   try {
-    return await axios.get(url, options);
+    const res = await axios.get(url, options);
+    console.log(JSON.stringify(res.data, undefined, 4));
+    return res;
   } catch (error) {
     throw error;
   }
@@ -21,7 +23,9 @@ export const getData = async (url, options) => {
  */
 export const postData = async (url, payload, options) => {
   try {
-    return await axios.post(url, payload, options);
+    const res = await axios.post(url, payload, options);
+    console.log(JSON.stringify(res.data, undefined, 4));
+    return res;
   } catch (error) {
     throw error;
   }

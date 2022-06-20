@@ -51,7 +51,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {selectedAddress, selectedBillingAddress, confirmationList} = params;
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const error = useRef(null);
   const {
     state: {token, uid},
@@ -87,7 +86,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setOrders(data);
         const ordersArray = data.filter(one => !one.hasOwnProperty('error'));
         refOrders.current = data;
-        error.current = refOrders.current.find(item => item.hasOwnProperty('error'));
+        error.current = refOrders.current.find(item =>
+          item.hasOwnProperty('error'),
+        );
         if (ordersArray.length > 0) {
           let breakup = [];
           let total = 0;
@@ -269,7 +270,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       if (messageIds.length > 0) {
         onInitializeOrder(messageIds);
       } else {
-        showToastWithGravity('No Data Found');
+        showToastWithGravity(t('error.no_data_found'));
         setInitializeOrderRequested(false);
       }
     } catch (err) {
@@ -352,36 +353,34 @@ const Payment = ({navigation, theme, route: {params}}) => {
               break;
 
             case 'AUTHENTICATION_FAILED':
-              showToastWithGravity('Please verify the details and try again');
+              showToastWithGravity(
+                t('main.cart.payment.authentication_failed'),
+              );
               setInitializeOrderRequested(false);
               break;
 
             case 'AUTHORIZATION_FAILED':
-              showToastWithGravity(
-                'Bank is unable to process your request at the moment',
-              );
+              showToastWithGravity(t('main.cart.payment.authorization_failed'));
               setInitializeOrderRequested(false);
               break;
 
             case 'JUSPAY_DECLINED':
-              showToastWithGravity(
-                'Unable to process your request at the moment please try again',
-              );
+              showToastWithGravity(t('main.cart.payment.juspay_declined'));
               setInitializeOrderRequested(false);
               break;
 
             case 'AUTHORIZING':
-              showToastWithGravity('Waiting for the bank to confirm');
+              showToastWithGravity(t('main.cart.payment.authorizing'));
               setInitializeOrderRequested(false);
               break;
 
             case 'PENDING_VBV':
-              showToastWithGravity('Transaction pending');
+              showToastWithGravity(t('main.cart.payment.pending_vbv'));
               setInitializeOrderRequested(false);
               break;
           }
         } else {
-          showToastWithGravity('Something went wrong.Please try again');
+          showToastWithGravity(t('network_error.something_went_wrong'));
         }
         break;
 
@@ -530,7 +529,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       {!confirmOrderRequested ? (
         <View style={appStyles.container}>
           <Header
-            title={'Payment & Order Confirmation'}
+            title={t('main.cart.payment.title')}
             navigation={navigation}
           />
           {initializeOrderRequested ? (
@@ -546,21 +545,17 @@ const Payment = ({navigation, theme, route: {params}}) => {
                         return (
                           <>
                             <View style={styles.priceContainer}>
-                              <Text style={styles.price}>
-                                {item.title}
-                              </Text>
-                              <Text>
-                                ₹{item.price.value}
-                              </Text>
+                              <Text style={styles.price}>{item.title}</Text>
+                              <Text>₹{item.price.value}</Text>
                             </View>
                             <Divider />
                           </>
-                        )
+                        );
                       }}
                     />
 
                     <View style={styles.priceContainer}>
-                      <Text>Total Payable</Text>
+                      <Text>{t('main.cart.total_payable')}</Text>
                       <Text style={styles.fulfillment}>₹{quote.total}</Text>
                     </View>
                   </Card>
@@ -629,7 +624,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
               {!error.current && (
                 <View style={styles.buttonContainer}>
                   <ContainButton
-                    title={'Place Order'}
+                    title={t('main.cart.payment.place_order')}
                     onPress={() => {
                       processPayment()
                         .then(() => {})
@@ -646,7 +641,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         <View style={[appStyles.container, styles.processing]}>
           <ActivityIndicator size={30} color={colors.accentColor} />
           <Text style={[styles.processingText, {color: colors.accentColor}]}>
-            Processing{' '}
+            {t('main.cart.payment.processing_label')}{' '}
           </Text>
         </View>
       )}

@@ -51,7 +51,17 @@
       "payment_options": "Payment Options",
       "clear_cart_message": "Are you sure you want to clear cart?",
       "order_placed_message": "Your order has been placed!",
-      "shop_now":"Shop Now"
+      "shop_now":"Shop Now",
+      "payment":{
+        "title":"Payment & Order Confirmation",
+        "place_order":"Place Order",
+        "processing_label":"Processing",
+        "authentication_failed":"Please verify the details and try again",
+        "authorization_failed":"Bank is unable to process your request at the moment",
+        "juspay_declined":"Unable to process your request at the moment please try again",
+        "authorizing":"Waiting for the bank to confirm",
+        "pending_vbv":"Transaction Pending"
+      }
      
     },
     "dashboard": {},
@@ -66,7 +76,10 @@
       "track":"Track",
       "cancelled":"Cancelled",
       "message":"Enter the phone number on which you want us to call",
-      "placeholder":"Enter the phone number"
+      "placeholder":"Enter the phone number",
+      "billed_to":"Billed To:",
+      "pending":"Pending",
+      "na":"NA"
     },
     "product": {
       "select_location_label": "Select a location",
@@ -94,7 +107,13 @@
         "net_quantity":"Net Quantity",
         "country_of_origin":"Country of Origin",
         "brand_owner_name":"Brand Owner Name",
-        "ordering_from":"Ordering from"
+        "ordering_from":"Ordering from",
+        "returnable":"Returnable",
+        "cancellable":"Cancellable",
+        "available_quantity":"Available Quantity",
+        "cash_on_elivery":"Cash On Delivery",
+        "yes":"Yes",
+        "no":"No"
       },
       "filters": {
         "filter": "Filters",
@@ -135,7 +154,8 @@
     "short_password": "Password is too short",
     "unmatch_password": "Password does not match",
     "invalid_number": "Invalid number",
-    "invalid_pin": "Invalid pin code"
+    "invalid_pin": "Invalid pin code",
+    "no_data_found":"No Data Found"
   },
   "global": {
     "and_label": " and ",

@@ -242,7 +242,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               </>
             )}
             <View style={styles.priceContainer}>
-              <Text style={styles.title}>{t('main.cart.total_payable')}</Text>
+              <Text style={styles.title}>{t('main.cart.sub_total_label')}</Text>
               <Text style={styles.title}>₹{maskAmount(total)}</Text>
             </View>
           </Card>

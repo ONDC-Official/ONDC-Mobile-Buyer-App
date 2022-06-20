@@ -59,6 +59,8 @@ const Products = ({navigation}) => {
 
   const {products} = useSelector(({productReducer}) => productReducer);
 
+  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+
   const [moreListRequested, setMoreListRequested] = useState(false);
 
   const [latLongInProgress, setLatLongInProgress] = useState(false);
@@ -95,6 +97,8 @@ const Products = ({navigation}) => {
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => {
+    const element = cartItems.find(one => one.id === item.id);
+    item.quantity = element ? element.quantity : 0;
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <ProductCardSkeleton item={item} />
     ) : (
@@ -166,7 +170,6 @@ const Products = ({navigation}) => {
 
                 err => {
                   setLocation(unKnownLabel);
-
                   setLocationInProgress(false);
                 },
                 {timeout: 20000},
@@ -282,8 +285,7 @@ const Products = ({navigation}) => {
         pageNumber.current = pageNumber.current + 1;
       })
 
-      .catch(() => {
-      });
+      .catch(() => {});
   };
 
   const loadMoreList = () => {

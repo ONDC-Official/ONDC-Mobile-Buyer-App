@@ -45,6 +45,8 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
           },
         });
 
+        console.log(data);
+
         setFilteredLocations(data);
       } catch (error) {
         handleApiError(error);

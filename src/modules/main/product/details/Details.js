@@ -2,7 +2,6 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
-import IconField from './IconField';
 
 const Details = ({item, theme}) => {
   const {colors} = theme;
@@ -34,39 +33,45 @@ const Details = ({item, theme}) => {
         <View style={styles.productDetailsTitleContainer}>
           {item.hasOwnProperty('@ondc/org/returnable') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {'Returnable '}
+              {t('main.product.product_details.returnable')}
             </Text>
           )}
           {item.hasOwnProperty('@ondc/org/cancellable') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {'Cancellable'}
+              {t('main.product.product_details.cancellable')}
             </Text>
           )}
           {item.hasOwnProperty('@ondc/org/available_on_cod') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {'Cash On Delivery'}
+              {t('main.product.product_details.cash_on_delivery')}
             </Text>
           )}
           {item.hasOwnProperty('AvailableQuantity') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {'Available Quantity'}
+              {t('main.product.product_details.available_quantity')}
             </Text>
           )}
         </View>
         <View>
           {item.hasOwnProperty('@ondc/org/returnable') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {item['@ondc/org/returnable'] ? 'Yes' : 'No'}
+              {item['@ondc/org/returnable']
+                ? t('main.product.product_details.yes')
+                : t('main.product.product_details.no')}
             </Text>
           )}
           {item.hasOwnProperty('@ondc/org/cancellable') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {item['@ondc/org/cancellable'] ? 'Yes' : 'No'}
+              {item['@ondc/org/cancellable']
+                ? t('main.product.product_details.yes')
+                : t('main.product.product_details.no')}
             </Text>
           )}
           {item.hasOwnProperty('@ondc/org/available_on_cod') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {item['@ondc/org/available_on_cod'] ? 'Yes' : 'No'}
+              {item['@ondc/org/available_on_cod']
+                ? t('main.product.product_details.yes')
+                : t('main.product.product_details.no')}
             </Text>
           )}
           {item.hasOwnProperty('AvailableQuantity') && (

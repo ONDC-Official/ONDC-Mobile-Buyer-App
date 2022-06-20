@@ -2,7 +2,7 @@ import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Dialog, Overlay, Text, withTheme} from 'react-native-elements';
+import {Dialog, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Yup from 'yup';
 import InputField from '../../../components/input/InputField';

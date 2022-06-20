@@ -22,7 +22,7 @@ const image = require('../../../../../assets/noImage.png');
  * @constructor
  * @returns {JSX.Element}
  */
-const ProductCard = ({theme, navigation, item, cancellable, apiInProgress}) => {
+const ProductCard = ({theme, navigation, item, cancellable}) => {
   const {colors} = theme;
 
   const dispatch = useDispatch();
@@ -72,8 +72,7 @@ const ProductCard = ({theme, navigation, item, cancellable, apiInProgress}) => {
             images: item.descriptor.images,
             product: item,
           });
-        }}
-        disabled={apiInProgress}>
+        }}>
         <View style={styles.subContainer}>
           <FastImage
             source={uri ? {uri} : image}
@@ -109,8 +108,7 @@ const ProductCard = ({theme, navigation, item, cancellable, apiInProgress}) => {
                   onPress={() => {
                     showInfoToast(t('main.product.add_to_cart'));
                     addItem(item);
-                  }}
-                  disabled={apiInProgress}>
+                  }}>
                   <Text style={{color: colors.accentColor}}>
                     {t('main.product.add_button_title')}
                   </Text>
@@ -180,5 +178,5 @@ const styles = StyleSheet.create({
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
   title: {fontSize: 16, fontWeight: '600', flex: 1},
   iconContainer: {marginRight: 12},
-  titleContainer: {flexDirection: 'row', justifyContent: 'space-between',},
+  titleContainer: {flexDirection: 'row', justifyContent: 'space-between'},
 });

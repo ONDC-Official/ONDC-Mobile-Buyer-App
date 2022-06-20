@@ -21,7 +21,7 @@ const OrderCard = ({item, theme}) => {
       <View style={styles.container}>
         <View>
           <Text numberOfLines={1} style={styles.itemName}>
-            {item.id ? item.id : 'NA'}
+            {item.id ? item.id : t('main.order.na')}
           </Text>
           <Text style={{color: colors.grey}}>
             {t('main.order.ordered_on_label')}
@@ -39,7 +39,9 @@ const OrderCard = ({item, theme}) => {
                 backgroundColor: colors.statusBackground,
               },
             ]}>
-            <Text style={{color: colors.accentColor}}>Pending</Text>
+            <Text style={{color: colors.accentColor}}>
+              {t('main.order.pending')}
+            </Text>
           </View>
         </View>
       </View>

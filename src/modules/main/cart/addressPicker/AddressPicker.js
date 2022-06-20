@@ -40,6 +40,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
   const [billingAddress, setBillingAdrress] = useState(null);
 
   const isFocused = useIsFocused();
+
   const {
     state: {token},
   } = useContext(AuthContext);
@@ -155,7 +156,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
 
         {billingAddress !== null && (
           <View style={[styles.container, {backgroundColor: colors.white}]}>
-            <Text style={styles.name}>Billing address</Text>
+            <Text style={styles.name}>{t('main.cart.billing_address')}</Text>
             <View style={styles.subContainer}>
               <View style={styles.title}>
                 <Text style={styles.address}>

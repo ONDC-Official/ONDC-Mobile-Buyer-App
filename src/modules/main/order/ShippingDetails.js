@@ -127,7 +127,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
           .then(() => {})
           .catch(() => {});
       } else {
-        showToastWithGravity('Something went wrong!');
+        showToastWithGravity(t('network_error.something_went_wrong'));
       }
       setCancelInProgress(false);
     } catch (e) {
@@ -160,7 +160,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
       <FlatList data={order.quote.breakup} renderItem={renderItem} />
       <View>
         <View style={styles.addressContainer}>
-          <Text style={{color: colors.grey}}>Billed To:</Text>
+          <Text style={{color: colors.grey}}>{t('main.order.billed_to')}</Text>
           <Text style={styles.name}>{order.billing.name}</Text>
           <Text style={styles.address}>{order.billing.email}</Text>
           <Text style={styles.address}>{order.billing.phone}</Text>
