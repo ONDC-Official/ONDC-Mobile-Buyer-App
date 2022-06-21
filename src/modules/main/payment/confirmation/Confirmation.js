@@ -9,20 +9,20 @@ import {
 } from 'react-native';
 import {Card, Divider, Text, withTheme} from 'react-native-elements';
 import {useSelector} from 'react-redux';
-import ContainButton from '../../../components/button/ContainButton';
-import {Context as AuthContext} from '../../../context/Auth';
-import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {appStyles} from '../../../styles/styles';
-import {getData, postData} from '../../../utils/api';
-import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../utils/apiUtilities';
+import ContainButton from '../../../../components/button/ContainButton';
+import {Context as AuthContext} from '../../../../context/Auth';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {appStyles} from '../../../../styles/styles';
+import {getData, postData} from '../../../../utils/api';
+import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../../utils/apiUtilities';
 import {
   maskAmount,
   showToastWithGravity,
   skeletonList,
-} from '../../../utils/utils';
-import Header from '../cart/addressPicker/Header';
-import ProductCard from '../product/list/component/ProductCard';
-import ProductCardSkeleton from '../product/list/component/ProductCardSkeleton';
+} from '../../../../utils/utils';
+import Header from '../addressPicker/Header';
+import ProductCard from '../../product/list/component/ProductCard';
+import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
   const {

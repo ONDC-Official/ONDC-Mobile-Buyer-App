@@ -9,7 +9,7 @@ import {
   POLICY_URL,
 } from '../../../../utils/Constants';
 import {keyExtractor} from '../../../../utils/utils';
-import Header from '../../cart/addressPicker/Header';
+import Header from '../../payment/addressPicker/Header';
 import SupportCard from './SupportCard';
 
 const image = require('../../../../assets/ondc.png');

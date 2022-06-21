@@ -6,7 +6,7 @@ import AvatarImage from '../../../components/avatar/AvatarImage';
 import {Context as AuthContext} from '../../../context/Auth';
 import {appStyles} from '../../../styles/styles';
 import {AVATAR_SIZES} from '../../../utils/Constants';
-import Header from '../cart/addressPicker/Header';
+import Header from '../payment/addressPicker/Header';
 
 /**
  * Component to render profile screen which shows user profile
