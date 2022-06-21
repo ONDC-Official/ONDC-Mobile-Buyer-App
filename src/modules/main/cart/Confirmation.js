@@ -34,15 +34,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const {transactionId} = useSelector(({filterReducer}) => filterReducer);
 
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
-
   const {handleApiError} = useNetworkErrorHandling();
-
   const [confirmationList, setConfirmationList] = useState(null);
-
   const [total, setTotal] = useState(null);
-
-  const [fulfillment, setFulFillment] = useState(null);
-
   const [apiInProgress, setApiInProgress] = useState(false);
 
   const {colors} = theme;
@@ -64,27 +58,25 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         );
 
         let list = [];
+        let orderTotal = 0;
         data.forEach(item => {
           if (!item.error) {
             if (item.context.bpp_id) {
               item.message.quote.items.forEach(element => {
                 const object = cartItems.find(one => one.id == element.id);
-                element.provider = {
-                  id: object.provider_details.id,
-                  descriptor: object.provider_details.descriptor,
-                  locations: [object.location_details.id],
-                };
-                setTotal(item.message.quote.quote.price.value);
-                const breakupItem = item.message.quote.quote.breakup.find(
-                  one => one.title === 'FULFILLMENT',
-                );
-                breakupItem
-                  ? setFulFillment(breakupItem.price.value)
-                  : setFulFillment(null);
-                element.transaction_id = item.context.transaction_id;
-                element.bpp_id = item.context.bpp_id;
-                list.push(element);
+                if (object) {
+                  element.provider = {
+                    id: object.provider_details.id,
+                    descriptor: object.provider_details.descriptor,
+                    locations: [object.location_details.id],
+                  };
+                  element.transaction_id = item.context.transaction_id;
+                  element.bpp_id = item.context.bpp_id;
+                  list.push(element);
+                  orderTotal += Number(item.message.quote.quote.price.value);
+                }
               });
+              setTotal(orderTotal);
             }
           }
         });
@@ -178,7 +170,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           }
         });
         if (messageIds.length > 0) {
-          onGetQuote(messageIds);
+          await onGetQuote(messageIds);
         } else {
           setConfirmationList([]);
           setApiInProgress(false);
@@ -210,7 +202,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <ProductCardSkeleton item={item} />
     ) : element ? (
-      <ProductCard item={element} navigation={navigation} cancellable={true} />
+      <ProductCard item={element} navigation={navigation} cancellable />
     ) : null;
   };
 
@@ -239,17 +231,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         />
         {total && !apiInProgress && (
           <Card containerStyle={styles.card}>
-            {fulfillment && (
-              <>
-                <View style={styles.priceContainer}>
-                  <Text style={styles.fulfillment}>
-                    {t('main.cart.fulfillment')}
-                  </Text>
-                  <Text style={styles.fulfillment}>₹{fulfillment}</Text>
-                </View>
-                <Divider style={styles.divider} />
-              </>
-            )}
             <View style={styles.priceContainer}>
               <Text style={styles.title}>{t('main.cart.sub_total_label')}</Text>
               <Text style={styles.title}>₹{maskAmount(total)}</Text>
@@ -274,7 +255,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               {apiInProgress && (
                 <ActivityIndicator
                   color={colors.accentColor}
-                  style={styles.activityindicator}
+                  style={styles.activityIndicator}
                   size={26}
                 />
               )}
@@ -310,5 +291,5 @@ const styles = StyleSheet.create({
   },
   divider: {marginBottom: 10},
   fulfillment: {fontSize: 16, fontWeight: '600', marginBottom: 10},
-  activityindicator: {paddingVertical: 10},
+  activityIndicator: {paddingVertical: 10},
 });
