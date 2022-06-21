@@ -26,6 +26,21 @@ import Button from './Button';
 import Support from './Support';
 
 /**
+ * Component is used to display single item with title and cost
+ * @param item:single ordered item
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const renderItem = ({item}) => (
+  <View style={[styles.rowContainer, styles.priceContainer]}>
+    <Text style={styles.title} numberOfLines={1}>
+      {item.title}
+    </Text>
+    <Text style={styles.price}>₹{item.price.value}</Text>
+  </View>
+);
+
+/**
  * Component is used to display shipping details to the user when card is expanded
  * @param order:single order object
  * @param getOrderList:function to request order list
@@ -52,7 +67,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
     },
   };
 
-  const getSupportObj = {
+  const supportInfo = {
     bpp_id: order.bppId,
     transaction_id: order.transactionId,
     ref_id: order.id,
@@ -136,24 +151,6 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
     }
   };
 
-  /**
-   * Component is used to display single item with title and cost
-   * @param item:single ordered item
-   * @returns {JSX.Element}
-   * @constructor
-   */
-  const renderItem = ({item}) => {
-    return (
-      <View style={styles.priceContainer}>
-        <Text style={styles.title} numberOfLines={1}>
-          {item.title}
-        </Text>
-        <View style={styles.space} />
-        <Text style={styles.price}>₹{item.price.value}</Text>
-      </View>
-    );
-  };
-
   return (
     <View style={[appStyles.container, styles.container]}>
       <Divider />
@@ -166,7 +163,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
           <Text style={styles.address}>{order.billing.phone}</Text>
 
           <Text style={styles.address}>
-            {order.billing.address.street} {order.billing.address.city}{' '}
+            {order.billing.address.street}, {order.billing.address.city}, {' '}
             {order.billing.address.state}
           </Text>
           <Text>
@@ -175,81 +172,56 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
               : null}
           </Text>
         </View>
-        {/* {order.fulfillment && (
-          <View style={styles.addressContainer}>
-            <Text style={{color: colors.grey}}>Shipped To:</Text>
-            <Text style={styles.name}>{shippingAddress.name}</Text>
-            <Text style={styles.address}>
-              {order.fulfillment.end.contact.email}
-            </Text>
-            <Text style={styles.address}>
-              {order.fulfillment.end.contact.phone}
-            </Text>
-            <Text style={styles.address}>
-              {shippingAddress.street} {shippingAddress.city}{' '}
-              {shippingAddress.state}
-            </Text>
-            <Text>
-              {shippingAddress.areaCode ? shippingAddress.areaCode : null}
-            </Text>
-          </View>
-        )} */}
       </View>
       <Divider style={styles.divider} />
 
-      <View style={[styles.priceContainer, styles.container]}>
+      <View style={[styles.rowContainer, styles.actionContainer]}>
         <TouchableOpacity
-          onPress={() => {
-            setModalVisible(true);
-          }}
+          onPress={() => setModalVisible(true)}
           style={[styles.icon, {backgroundColor: colors.accentColor}]}>
           <Icon name="phone" color={colors.white} size={20} />
         </TouchableOpacity>
         <Support
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
-          item={getSupportObj}
+          item={supportInfo}
         />
         {order.state !== ORDER_STATUS.CANCELLED ? (
-          <>
-            <View>
-              <View style={styles.subContainer}>
-                {order.state === ORDER_STATUS.DELIVERED ? (
-                  <Button
-                    backgroundColor={colors.greyOutline}
-                    borderColor={colors.greyOutline}
-                    title={t('main.order.return')}
-                  />
-                ) : (
-                  <Button
-                    backgroundColor={colors.greyOutline}
-                    borderColor={colors.greyOutline}
-                    title={t('main.order.track')}
-                    onPress={() => {
-                      trackOrder()
-                        .then(() => {})
-                        .catch(() => {});
-                    }}
-                    loader={trackInProgress}
-                    color={colors.black}
-                  />
-                )}
-                <View style={styles.space} />
-                <Button
-                  backgroundColor={colors.accentColor}
-                  borderColor={colors.accentColor}
-                  title={t('main.order.cancel')}
-                  onPress={() => {
-                    cancelOrder()
-                      .then(() => {})
-                      .catch(() => {});
-                  }}
-                  loader={cancelInProgress}
-                  color={colors.white}
-                />
-              </View>
-            </View>
-          </>
+          <View style={styles.subContainer}>
+            {order.state === ORDER_STATUS.DELIVERED ? (
+              <Button
+                backgroundColor={colors.greyOutline}
+                borderColor={colors.greyOutline}
+                title={t('main.order.return')}
+              />
+            ) : (
+              <Button
+                backgroundColor={colors.greyOutline}
+                borderColor={colors.greyOutline}
+                title={t('main.order.track')}
+                onPress={() => {
+                  trackOrder()
+                    .then(() => {})
+                    .catch(() => {});
+                }}
+                loader={trackInProgress}
+                color={colors.black}
+              />
+            )}
+            <View style={styles.space} />
+            <Button
+              backgroundColor={colors.accentColor}
+              borderColor={colors.accentColor}
+              title={t('main.order.cancel')}
+              onPress={() => {
+                cancelOrder()
+                  .then(() => {})
+                  .catch(() => {});
+              }}
+              loader={cancelInProgress}
+              color={colors.white}
+            />
+          </View>
         ) : (
           <Button
             backgroundColor={colors.cancelledBackground}
@@ -268,22 +240,24 @@ export default withTheme(ShippingDetails);
 
 const styles = StyleSheet.create({
   addressContainer: {marginTop: 20, flexShrink: 1},
-  text: {fontSize: 16, marginRight: 5},
   subContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
   space: {margin: 5},
+  actionContainer: {paddingVertical: 10},
   container: {paddingVertical: 10},
-  priceContainer: {
+  rowContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  priceContainer: {
     marginTop: 10,
   },
   name: {fontSize: 18, fontWeight: '700', marginVertical: 4, flexShrink: 1},
-  title: {fontSize: 16, fontWeight: '700', marginRight: 10, flexShrink: 1},
-  price: {fontSize: 16, fontWeight: '700'},
+  title: {fontSize: 16, marginRight: 10, flexShrink: 1},
+  price: {fontSize: 16, marginLeft: 10},
   address: {marginBottom: 4},
   icon: {paddingVertical: 8, paddingHorizontal: 10, borderRadius: 50},
   divider: {marginTop: 10},
