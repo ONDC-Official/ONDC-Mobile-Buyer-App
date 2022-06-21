@@ -3,9 +3,10 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
+import {appStyles} from '../../../styles/styles';
 
 /**
- * Component to render signle card on orders screen
+ * Component to render single card on orders screen
  * @param theme:application theme
  * @param item:single order object
  * @constructor
@@ -17,9 +18,8 @@ const OrderCard = ({item, theme}) => {
   const {t} = useTranslation();
 
   return (
-    <View>
       <View style={styles.container}>
-        <View>
+        <View style={appStyles.container}>
           <Text numberOfLines={1} style={styles.itemName}>
             {item.id ? item.id : t('main.order.na')}
           </Text>
@@ -29,23 +29,19 @@ const OrderCard = ({item, theme}) => {
           </Text>
         </View>
 
-        <View style={styles.statusContainer}>
-          <Text>{t('main.order.status_label')}</Text>
-          <View
-            style={[
-              styles.orderStatus,
-              {
-                borderColor: colors.accentColor,
-                backgroundColor: colors.statusBackground,
-              },
-            ]}>
-            <Text style={{color: colors.accentColor}}>
-              {t('main.order.pending')}
-            </Text>
-          </View>
+        <View
+          style={[
+            styles.orderStatus,
+            {
+              borderColor: colors.accentColor,
+              backgroundColor: colors.statusBackground,
+            },
+          ]}>
+          <Text style={{color: colors.accentColor}}>
+            {t('main.order.pending')}
+          </Text>
         </View>
       </View>
-    </View>
   );
 };
 
@@ -66,9 +62,9 @@ const styles = StyleSheet.create({
   orderStatus: {
     alignItems: 'center',
     paddingHorizontal: 10,
+    marginLeft: 10,
     paddingVertical: 5,
     borderWidth: 1,
     borderRadius: 15,
   },
-  statusContainer: {alignItems: 'center'},
 });
