@@ -33,9 +33,6 @@ const Cart = ({navigation, theme}) => {
 
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
-  /**
-   * function  use to calculate total price of item added in cart
-   */
   const subTotal = cartItems.reduce((total, item) => {
     total += item.price.value * item.quantity;
     return total;

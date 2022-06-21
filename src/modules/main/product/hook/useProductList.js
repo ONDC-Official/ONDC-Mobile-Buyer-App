@@ -139,7 +139,15 @@ export default () => {
     let getList = setInterval(async () => {
       try {
         requestCount++;
-        await getProductsList(setCount, messageId, transactionId, pageNumber, null, requestCount, setSearchInProgress);
+        await getProductsList(
+          setCount,
+          messageId,
+          transactionId,
+          pageNumber,
+          null,
+          requestCount,
+          setSearchInProgress,
+        );
       } catch (error) {
         handleApiError(error);
       }
@@ -177,6 +185,10 @@ export default () => {
 
   /**
    * Function is used to handle onEndEditing event of searchbar
+   * @param setCount:function to set count of products
+   * @param query:search query entered by user
+   * @param latitude:latitude of selected location
+   * @param longitude:longitude of selected lication
    * @returns {Promise<void>}
    **/
   const search = async (

@@ -8,11 +8,10 @@ import {appStyles} from '../../../styles/styles';
  * Component to render footer in cart
  * @param theme
  * @param onCheckout:function handles click event of check out button
- * @param onClearCart:function handles click event of clear cart button
  * @constructor
  * @returns {JSX.Element}
  */
-const Footer = ({theme, onCheckout, onClearCart}) => {
+const Footer = ({theme, onCheckout}) => {
   const {colors} = theme;
 
   const {t} = useTranslation();

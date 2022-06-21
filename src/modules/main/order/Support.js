@@ -96,24 +96,9 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
 
   return (
     <View style={styles.centeredView}>
-      <Dialog
-        isVisible={modalVisible}
-        overlayStyle={{
-          borderRadius: 10,
-          width: '90%',
-          paddingTop: 0,
-          paddingHorizontal: 0,
-        }}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: 10,
-            borderTopRightRadius: 10,
-            borderTopLeftRadius: 10,
-          }}>
-          <Text style={{fontSize: 18}}>ONDC{'  '}SUPPORT</Text>
+      <Dialog isVisible={modalVisible} overlayStyle={styles.overlayStyle}>
+        <View style={styles.container}>
+          <Text style={styles.heading}>ONDC{'  '}SUPPORT</Text>
 
           <TouchableOpacity
             onPress={() => {
@@ -123,7 +108,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
             <Icon name="close-thick" color={colors.accentColor} size={16} />
           </TouchableOpacity>
         </View>
-        <Text style={{padding: 10}}>{t('main.order.message')}</Text>
+        <Text style={styles.messageContainer}>{t('main.order.message')}</Text>
 
         <Formik
           initialValues={userInfo}
@@ -184,6 +169,14 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
 export default withTheme(Support);
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -202,4 +195,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignSelf: 'flex-end',
   },
+  overlayStyle: {
+    borderRadius: 10,
+    width: '90%',
+    paddingTop: 0,
+    paddingHorizontal: 0,
+  },
+  heading: {fontSize: 18},
+  messageContainer: {padding: 10},
 });

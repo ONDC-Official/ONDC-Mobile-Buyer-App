@@ -7,7 +7,6 @@ import {appStyles} from '../../../styles/styles';
 
 /**
  * Component to render list empty component
- * @param message: empty list message
  * @constructor
  * @returns {JSX.Element}
  */

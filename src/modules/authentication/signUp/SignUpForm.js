@@ -42,6 +42,7 @@ const SignUpFrom = ({navigation}) => {
 
   /**
    * function create user with provided the email and password and create and store token in context
+   * @param values:input values
    * @returns {Promise<void>}
    */
   const createUser = async values => {

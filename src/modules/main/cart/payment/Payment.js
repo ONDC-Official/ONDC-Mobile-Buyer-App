@@ -66,12 +66,20 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const signedPayload = useRef(null);
   const timeStamp = useRef(null);
 
+  /**
+   * function gets executes when order get placed
+   */
   const onOrderSuccess = () => {
     dispatch(clearAllData());
     dispatch(clearFilters());
     navigation.navigate('Dashboard', {screen: 'Orders'});
   };
 
+  /**
+   * function request initialize order
+   * @param messageIdArray:array of message id's
+   * @returns {Promise<void>}
+   */
   const onInitializeOrder = messageIdArray => {
     const messageIds = messageIdArray.toString();
     let order = setInterval(async () => {
@@ -112,6 +120,11 @@ const Payment = ({navigation, theme, route: {params}}) => {
     }, 10000);
   };
 
+  /**
+   * function request confirm order
+   * @param messageIdArray:array of message id's
+   * @returns {Promise<void>}
+   */
   const onConfirmOrder = messageIdArray => {
     const messageIds = messageIdArray.toString();
     let order = setInterval(async () => {
@@ -482,6 +495,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
   /**
    * function used to initialize hypersdk
+   * @param signaturePayload:payload
    */
   const initializeJusPaySdk = signaturePayload => {
     const initiatePayload = {

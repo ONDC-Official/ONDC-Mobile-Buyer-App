@@ -47,6 +47,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
   const {colors} = theme;
 
+  /**
+   * function request  order confirmation
+   * @param messageId:array of message id's
+   * @returns {Promise<void>}
+   */
   const onGetQuote = messageId => {
     const messageIds = messageId.toString();
     let getConfirmation = setInterval(async () => {
@@ -95,6 +100,10 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     }, 12000);
   };
 
+  /**
+   * function request  order confirmation
+   * @returns {Promise<void>}
+   */
   const getQuote = async () => {
     try {
       setApiInProgress(true);

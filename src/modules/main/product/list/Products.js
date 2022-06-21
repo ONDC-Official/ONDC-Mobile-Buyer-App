@@ -28,6 +28,7 @@ import ProductCardSkeleton from './component/ProductCardSkeleton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import {saveProducts} from '../../../../redux/product/actions';
 import {clearFilters} from '../../../../redux/filter/actions';
+import HomePage from './component/HomePage';
 
 /**
  * Component to show list of requested products
@@ -370,6 +371,7 @@ const Products = ({navigation}) => {
           isVisible={isVisible}
           setIsVisible={setIsVisible}
         />
+        {products.length === 0 && <HomePage />}
         <FlatList
           data={listData}
           renderItem={renderItem}

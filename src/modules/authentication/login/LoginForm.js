@@ -12,6 +12,7 @@ import {showToastWithGravity} from '../../../utils/utils';
 
 /**
  * Component is used to render login form
+ * @param navigation:application navigation object
  */
 const LoginForm = ({navigation}) => {
   const {t} = useTranslation();

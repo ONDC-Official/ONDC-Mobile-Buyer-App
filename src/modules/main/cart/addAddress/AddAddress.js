@@ -85,7 +85,7 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
         pin: item.address.areaCode,
         landMark: item.address.locality,
         street: item.address.street,
-      }
+      };
     } else {
       userInfo = {
         email: item.email,
@@ -102,6 +102,7 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
 
   /**
    * Function is used to save new address
+   * @param values:object containing user inputs
    * @returns {Promise<void>}
    **/
   const saveAddress = async values => {

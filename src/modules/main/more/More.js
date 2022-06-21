@@ -7,6 +7,7 @@ import {OPTIONS} from '../../../utils/Constants';
 import OptionCard from './OptionCard';
 
 /**
+ * Component to render more options available for user
  * @constructor
  * @returns {JSX.Element}
  */

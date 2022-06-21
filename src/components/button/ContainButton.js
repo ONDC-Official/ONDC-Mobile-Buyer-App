@@ -5,7 +5,7 @@ import {appStyles} from '../../styles/styles';
 
 /**
  * Component to render button in the screens
- *  @param props
+ * @param props
  * @returns {JSX.Element}
  * @constructor
  */

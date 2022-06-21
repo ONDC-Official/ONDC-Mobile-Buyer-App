@@ -10,6 +10,8 @@ import {appStyles} from '../../../../styles/styles';
  * @param selectedAddress:address selected by user
  * @param setSelectedAddress:function to set selected address
  * @param item:object which contains address details
+ * @param onEdit:function handles click event of edit
+ * @param setBillingAdrress:function to set billing address
  * @constructor
  * @returns {JSX.Element}
  */
@@ -27,7 +29,9 @@ const AddressCard = ({
   const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
 
   const {street, city, state} = item.address;
-
+  /**
+   * Function handles click event of checkbox
+   **/
   const onPressHandler = () => {
     setSelectedAddress(item);
     if (!params && setBillingAdrress) {
