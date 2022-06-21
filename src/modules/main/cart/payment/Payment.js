@@ -51,7 +51,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const {selectedAddress, selectedBillingAddress, confirmationList} = params;
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const error = useRef(null);
   const {
     state: {token, uid},
@@ -61,11 +60,11 @@ const Payment = ({navigation, theme, route: {params}}) => {
     useState(false);
   const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
-  const [orders, setOrders] = useState(null);
   const refOrders = useRef();
   const [quote, setQuote] = useState(null);
   const signedPayload = useRef(null);
   const timeStamp = useRef(null);
+  const parentOrderId = useRef(null);
 
   const onOrderSuccess = () => {
     dispatch(clearAllData());
@@ -83,19 +82,19 @@ const Payment = ({navigation, theme, route: {params}}) => {
             headers: {Authorization: `Bearer ${token}`},
           },
         );
-
-        setOrders(data);
         const ordersArray = data.filter(one => !one.hasOwnProperty('error'));
         refOrders.current = data;
         error.current = refOrders.current.find(item => item.hasOwnProperty('error'));
         if (ordersArray.length > 0) {
           let breakup = [];
+          let price = [];
           let total = 0;
           ordersArray.forEach(one => {
             breakup = breakup.concat(one.message.order.quote.breakup);
+            price.push(one.message.order.quote.price);
             total += Number(one.message.order.quote.price.value);
           });
-          setQuote({total, breakup});
+          setQuote({total, breakup, price});
         }
       } catch (err) {
         handleApiError(err);
@@ -129,6 +128,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         setConfirmOrderRequested(false);
       }
     }, 2000);
+
     setTimeout(() => {
       clearInterval(order);
       if (!error.current) {
@@ -181,6 +181,32 @@ const Payment = ({navigation, theme, route: {params}}) => {
           };
           payload[index].message.items.push(itemObj);
         } else {
+          let billingInfo = {};
+
+          if (selectedBillingAddress.descriptor) {
+            billingInfo.phone = selectedBillingAddress.descriptor.phone;
+            billingInfo.name = selectedBillingAddress.descriptor.name;
+            billingInfo.email = selectedBillingAddress.descriptor.email;
+          } else {
+            billingInfo.phone = selectedBillingAddress.phone;
+            billingInfo.name = selectedBillingAddress.name;
+            billingInfo.email = selectedBillingAddress.email;
+          }
+
+          billingInfo.address =  {
+            door: selectedBillingAddress.address.door
+              ? selectedBillingAddress.address.door
+              : selectedBillingAddress.address.street,
+              country: 'IND',
+              city: selectedBillingAddress.address.city,
+              street: selectedBillingAddress.address.street,
+              area_code: selectedBillingAddress.address.areaCode,
+              state: selectedBillingAddress.address.state,
+              building: selectedBillingAddress.address.building
+              ? selectedBillingAddress.address.building
+              : selectedBillingAddress.address.street,
+          };
+
           let payloadObj = {
             context: {transaction_id: item.transaction_id},
             message: {
@@ -204,30 +230,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   },
                 },
               ],
-              billing_info: {
-                address: {
-                  door: selectedBillingAddress.address.door
-                    ? selectedBillingAddress.address.door
-                    : selectedBillingAddress.address.street,
-                  country: 'IND',
-                  city: selectedBillingAddress.address.city,
-                  street: selectedBillingAddress.address.street,
-                  area_code: selectedBillingAddress.address.areaCode,
-                  state: selectedBillingAddress.address.state,
-                  building: selectedBillingAddress.address.building
-                    ? selectedBillingAddress.address.building
-                    : selectedBillingAddress.address.street,
-                },
-                phone: selectedBillingAddress.descriptor
-                  ? selectedBillingAddress.descriptor.phone
-                  : selectedBillingAddress.phone,
-                name: selectedBillingAddress.descriptor
-                  ? selectedBillingAddress.descriptor.name
-                  : selectedBillingAddress.name,
-                email: selectedBillingAddress.descriptor
-                  ? selectedBillingAddress.descriptor.email
-                  : selectedBillingAddress.email,
-              },
+              billing_info: billingInfo,
               delivery_info: {
                 type: 'HOME-DELIVERY',
                 name: selectedAddress.descriptor.name,
@@ -261,8 +264,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
         headers: {Authorization: `Bearer ${token}`},
       });
       let messageIds = [];
+
       data.forEach(item => {
         if (item.message.ack.status === 'ACK') {
+          parentOrderId.current = item.context.parent_order_id;
           messageIds.push(item.context.message_id);
         }
       });
@@ -280,7 +285,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   };
 
   /**
-   * function used to process hypersdk
+   * function used to process hyper sdk
    * @returns {Promise<void>}
    */
   const processPayment = async () => {
@@ -292,23 +297,23 @@ const Payment = ({navigation, theme, route: {params}}) => {
       const orderDetails = {
         merchant_id: Config.MERCHANT_ID.toUpperCase(),
         customer_id: uid,
-        order_id: confirmationList[0].transaction_id,
+        order_id: parentOrderId.current,
         customer_phone: selectedAddress.descriptor.phone,
         customer_email: selectedAddress.descriptor.email,
-        amount: String(9),
+        amount: Config.ENV === 'dev' ? String(9) : quote.total,
         timestamp: timeStamp.current,
         return_url: 'https://sandbox.juspay.in/end',
       };
 
       const processPayload = {
-        requestId: confirmationList[0].transaction_id,
+        requestId: parentOrderId.current,
         service: 'in.juspay.hyperpay',
         payload: {
           action: 'paymentPage',
           merchantId: Config.MERCHANT_ID.toUpperCase(),
           clientId: Config.CLIENT_ID.toLowerCase(),
-          orderId: confirmationList[0].transaction_id,
-          amount: String(9),
+          orderId: parentOrderId.current,
+          amount: Config.ENV === 'dev' ? String(9) : quote.total,
           customerId: uid,
           customerEmail: selectedAddress.descriptor.email,
           customerMobile: selectedAddress.descriptor.phone,
@@ -460,10 +465,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
       const payload = JSON.stringify({
         merchant_id: Config.MERCHANT_ID.toUpperCase(),
         customer_id: uid,
-        order_id: confirmationList[0].transaction_id,
+        order_id: parentOrderId.current,
         customer_phone: selectedAddress.descriptor.phone,
         customer_email: selectedAddress.descriptor.email,
-        amount: String(9),
+        amount: Config.ENV === 'dev' ? String(9) : quote.total,
         timestamp: timeStamp.current,
         return_url: 'https://sandbox.juspay.in/end',
       });
@@ -486,7 +491,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
    */
   const initializeJusPaySdk = signaturePayload => {
     const initiatePayload = {
-      requestId: confirmationList[0].transaction_id,
+      requestId: parentOrderId.current,
       service: 'in.juspay.hyperpay',
       payload: {
         action: 'initiate',
