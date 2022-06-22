@@ -65,7 +65,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const signedPayload = useRef(null);
   const timeStamp = useRef(null);
   const parentOrderId = useRef(null);
-  const total = useRef(0);
 
   /**
    * function gets executes when order get placed
@@ -99,19 +98,15 @@ const Payment = ({navigation, theme, route: {params}}) => {
         if (ordersArray.length > 0) {
           let breakup = [];
           let price = [];
-          total.current = 0;
-
+          let total = 0;
           ordersArray.forEach(one => {
             breakup = breakup.concat(one.message.order.quote.breakup);
             price.push(one.message.order.quote.price);
-            total.current = total.current
-              ? total.current + Number(one.message.order.quote.price.value)
-              : Number(one.message.order.quote.price.value);
+            total += Number(one.message.order.quote.price.value);
           });
-          setQuote({breakup, price});
+          setQuote({total, breakup, price});
         }
       } catch (err) {
-        console.log(err);
         handleApiError(err);
       }
     }, 2000);
@@ -213,7 +208,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             billingInfo.email = selectedBillingAddress.email;
           }
 
-          billingInfo.address = {
+          billingInfo.address =  {
             door: selectedBillingAddress.address.door
               ? selectedBillingAddress.address.door
               : selectedBillingAddress.address.street,
@@ -320,7 +315,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         order_id: parentOrderId.current,
         customer_phone: selectedAddress.descriptor.phone,
         customer_email: selectedAddress.descriptor.email,
-        amount: total.current,
+        amount: Config.ENV === 'dev' ? String(9) : quote.total,
         timestamp: timeStamp.current,
         return_url: 'https://sandbox.juspay.in/end',
       };
@@ -473,7 +468,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
    * function request signpost and initialize hyper sdk
    */
   const placeOrder = async () => {
-    console.log('i am running');
     const options = {
       headers: {Authorization: `Bearer ${token}`},
     };
@@ -487,7 +481,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         order_id: parentOrderId.current,
         customer_phone: selectedAddress.descriptor.phone,
         customer_email: selectedAddress.descriptor.email,
-        amount: total.current,
+        amount: Config.ENV === 'dev' ? String(9) : quote.total,
         timestamp: timeStamp.current,
         return_url: 'https://sandbox.juspay.in/end',
       });
@@ -501,7 +495,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
       signedPayload.current = data.signedPayload;
       initializeJusPaySdk(payload);
     } catch (err) {
-      console.log(err);
       handleApiError(err);
     }
   };
@@ -531,11 +524,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
     initializeOrder()
       .then(() => {
         HyperSdkReact.createHyperServices();
-        if (total.current) {
-          placeOrder()
-            .then(() => {})
-            .catch(() => {});
-        }
+        placeOrder()
+          .then(() => {})
+          .catch(() => {});
       })
       .catch(() => {});
 
@@ -583,12 +574,10 @@ const Payment = ({navigation, theme, route: {params}}) => {
                       }}
                     />
 
-                    {total.current && (
-                      <View style={styles.priceContainer}>
-                        <Text>{t('main.cart.total_payable')}</Text>
-                        <Text style={styles.fulfillment}>₹{total.current}</Text>
-                      </View>
-                    )}
+                    <View style={styles.priceContainer}>
+                      <Text>{t('main.cart.total_payable')}</Text>
+                      <Text style={styles.fulfillment}>₹{quote.total}</Text>
+                    </View>
                   </Card>
                 )}
                 <Card containerStyle={styles.addressCard}>
