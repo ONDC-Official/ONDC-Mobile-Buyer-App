@@ -11,6 +11,7 @@ import {appStyles} from '../../styles/styles';
  */
 const ContainButton = props => {
   const {colors} = props.theme;
+
   return (
     <Button
       {...props}
@@ -20,8 +21,14 @@ const ContainButton = props => {
       ]}
       buttonStyle={[
         styles.buttonStyle,
+
         {
           backgroundColor: props.backgroundColor
+            ? props.backgroundColor
+            : colors.accentColor,
+          borderColor: props.borderColor
+            ? props.borderColor
+            : props.backgroundColor
             ? props.backgroundColor
             : colors.accentColor,
         },
@@ -33,5 +40,5 @@ const ContainButton = props => {
 export default withTheme(ContainButton);
 
 const styles = StyleSheet.create({
-  buttonStyle: {borderRadius: 4},
+  buttonStyle: {borderRadius: 4, borderWidth: 1},
 });

@@ -5,11 +5,11 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Dialog, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Yup from 'yup';
+import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
 import {Context as AuthContext} from '../../../context/Auth';
 import {getData, postData} from '../../../utils/api';
 import {BASE_URL, CALL, ON_SUPPORT, SUPPORT} from '../../../utils/apiUtilities';
-import Button from './Button';
 
 /**
  * Component is used to display dialogue when user clicks on call icon
@@ -139,23 +139,27 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
                   onChangeText={handleChange('number')}
                 />
                 <View style={styles.buttonContainer}>
-                  <Button
-                    backgroundColor={colors.cancelledBackground}
-                    borderColor={colors.error}
-                    title={t('main.order.cancel')}
-                    onPress={() => {
-                      setModalVisible(false);
-                    }}
-                    color={colors.error}
-                  />
-                  <Button
-                    backgroundColor={colors.statusBackground}
-                    borderColor={colors.accentColor}
-                    title={t('main.order.call_me')}
-                    onPress={handleSubmit}
-                    color={colors.accentColor}
-                    loader={callInProgress}
-                  />
+                  <View style={styles.button}>
+                    <ContainButton
+                      backgroundColor={colors.cancelledBackground}
+                      borderColor={colors.error}
+                      title={t('main.order.cancel')}
+                      onPress={() => {
+                        setModalVisible(false);
+                      }}
+                      color={colors.error}
+                    />
+                  </View>
+                  <View style={styles.button}>
+                    <ContainButton
+                      backgroundColor={colors.statusBackground}
+                      borderColor={colors.accentColor}
+                      title={t('main.order.call_me')}
+                      onPress={handleSubmit}
+                      color={colors.accentColor}
+                      loader={callInProgress}
+                    />
+                  </View>
                 </View>
               </>
             );
@@ -203,4 +207,5 @@ const styles = StyleSheet.create({
   },
   heading: {fontSize: 18},
   messageContainer: {padding: 10},
+  button: {width: 90},
 });

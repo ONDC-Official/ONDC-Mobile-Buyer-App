@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import ContainButton from '../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
@@ -22,7 +23,6 @@ import {
 } from '../../../utils/apiUtilities';
 import {FAQS, ORDER_STATUS} from '../../../utils/Constants';
 import {showToastWithGravity} from '../../../utils/utils';
-import Button from './Button';
 import Support from './Support';
 
 /**
@@ -163,7 +163,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
           <Text style={styles.address}>{order.billing.phone}</Text>
 
           <Text style={styles.address}>
-            {order.billing.address.street}, {order.billing.address.city}, {' '}
+            {order.billing.address.street}, {order.billing.address.city},{' '}
             {order.billing.address.state}
           </Text>
           <Text>
@@ -189,47 +189,55 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
         {order.state !== ORDER_STATUS.CANCELLED ? (
           <View style={styles.subContainer}>
             {order.state === ORDER_STATUS.DELIVERED ? (
-              <Button
-                backgroundColor={colors.greyOutline}
-                borderColor={colors.greyOutline}
-                title={t('main.order.return')}
-              />
+              <View style={styles.Button}>
+                <ContainButton
+                  backgroundColor={colors.greyOutline}
+                  borderColor={colors.greyOutline}
+                  title={t('main.order.return')}
+                />
+              </View>
             ) : (
-              <Button
-                backgroundColor={colors.greyOutline}
-                borderColor={colors.greyOutline}
-                title={t('main.order.track')}
+              <View style={styles.Button}>
+                <ContainButton
+                  backgroundColor={colors.greyOutline}
+                  borderColor={colors.greyOutline}
+                  title={t('main.order.track')}
+                  onPress={() => {
+                    trackOrder()
+                      .then(() => {})
+                      .catch(() => {});
+                  }}
+                  loader={trackInProgress}
+                  color={colors.black}
+                />
+              </View>
+            )}
+            <View style={styles.space} />
+            <View style={styles.Button}>
+              <ContainButton
+                backgroundColor={colors.accentColor}
+                borderColor={colors.accentColor}
+                title={t('main.order.cancel')}
                 onPress={() => {
-                  trackOrder()
+                  cancelOrder()
                     .then(() => {})
                     .catch(() => {});
                 }}
-                loader={trackInProgress}
-                color={colors.black}
+                loader={cancelInProgress}
+                color={colors.white}
               />
-            )}
-            <View style={styles.space} />
-            <Button
-              backgroundColor={colors.accentColor}
-              borderColor={colors.accentColor}
-              title={t('main.order.cancel')}
-              onPress={() => {
-                cancelOrder()
-                  .then(() => {})
-                  .catch(() => {});
-              }}
-              loader={cancelInProgress}
-              color={colors.white}
-            />
+            </View>
           </View>
         ) : (
-          <Button
-            backgroundColor={colors.cancelledBackground}
-            borderColor={colors.error}
-            color={colors.error}
-            title={t('main.order.cancelled')}
-            loader={cancelInProgress}
-          />
+          <View style={styles.Button}>
+            <ContainButton
+              backgroundColor={colors.cancelledBackground}
+              borderColor={colors.error}
+              color={colors.error}
+              title={t('main.order.cancelled')}
+              loader={cancelInProgress}
+            />
+          </View>
         )}
       </View>
     </View>
@@ -261,4 +269,5 @@ const styles = StyleSheet.create({
   address: {marginBottom: 4},
   icon: {paddingVertical: 8, paddingHorizontal: 10, borderRadius: 50},
   divider: {marginTop: 10},
+  Button: {width: 90},
 });
