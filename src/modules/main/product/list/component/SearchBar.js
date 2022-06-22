@@ -45,9 +45,6 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
             Authorization: `Bearer ${token}`,
           },
         });
-
-        console.log(data);
-
         setFilteredLocations(data);
       } catch (error) {
         handleApiError(error);

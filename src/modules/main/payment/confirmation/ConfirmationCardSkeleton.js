@@ -2,30 +2,28 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Card} from 'react-native-elements';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {appStyles} from '../../../styles/styles';
+import {appStyles} from '../../../../styles/styles';
 
 /**
  * Component to show skeleton of confirmation card
  * @returns {JSX.Element}
  */
-const ConfirmationCardSkeleton = () => {
-  return (
-    <Card>
-      <SkeletonPlaceholder>
-        <View style={styles.container}>
-          <View style={styles.image} />
-          <View style={appStyles.container}>
-            <View style={styles.name} />
-            <View style={styles.description} />
-            <View style={styles.priceContainer}>
-              <View style={styles.price} />
-            </View>
+const ConfirmationCardSkeleton = () => (
+  <Card>
+    <SkeletonPlaceholder>
+      <View style={styles.container}>
+        <View style={styles.image} />
+        <View style={appStyles.container}>
+          <View style={styles.name} />
+          <View style={styles.description} />
+          <View style={styles.priceContainer}>
+            <View style={styles.price} />
           </View>
         </View>
-      </SkeletonPlaceholder>
-    </Card>
-  );
-};
+      </View>
+    </SkeletonPlaceholder>
+  </Card>
+);
 
 export default ConfirmationCardSkeleton;
 

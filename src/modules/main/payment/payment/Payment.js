@@ -117,7 +117,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         showToastWithGravity(error.current.error.message);
       }
       setInitializeOrderRequested(false);
-    }, 10000);
+    }, 12000);
   };
 
   /**
