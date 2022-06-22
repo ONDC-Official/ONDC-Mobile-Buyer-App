@@ -116,6 +116,8 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
 
   useEffect(() => {
     if (isFocused) {
+      setBillingAdrress(null);
+      setSelectedAddress(null);
       getAddressList()
         .then(() => {})
         .catch(() => {});

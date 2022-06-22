@@ -43,6 +43,7 @@ const Filters = ({
   const {t} = useTranslation();
 
   const {filters} = useSelector(({filterReducer}) => filterReducer);
+  console.log(filters);
 
   /**
    * function handles click event of checkbox in providers list
@@ -95,7 +96,10 @@ const Filters = ({
       </View>
       <Divider />
 
-      {filters ? (
+      {filters.providers.length > 0 ||
+      filters.categories.length > 0 ||
+      filters.minPrice ||
+      filters.maxPrice ? (
         <View style={appStyles.container}>
           <ScrollView>
             {filters.providers && filters.providers.length > 0 && (
@@ -157,6 +161,10 @@ const Filters = ({
                         <InputField
                           label={t('main.product.filters.min')}
                           value={`${min}`}
+                          onChangeText={value => {
+                            setMin(Number(value));
+                          }}
+                          keyboardType={'numeric'}
                           renderErrorMessage={false}
                         />
                       </View>
@@ -164,11 +172,12 @@ const Filters = ({
                         <InputField
                           label={t('main.product.filters.max')}
                           value={`${max}`}
+                          onChangeText={value => setMax(Number(value))}
+                          keyboardType={'numeric'}
                           renderErrorMessage={false}
                         />
                       </View>
                     </View>
-
                     <MultiSlider
                       selectedStyle={{
                         backgroundColor: colors.accentColor,

@@ -67,7 +67,23 @@ const LoginForm = ({navigation}) => {
 
       setApiInProgress(false);
     } catch (error) {
-      showToastWithGravity(error.message);
+      if (
+        error.message ===
+        '[auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.'
+      ) {
+        showToastWithGravity(
+          'There is no user record corresponding to this identifier. The user may have been deleted',
+        );
+      } else if (
+        error.message ===
+        '[auth/wrong-password] The password is invalid or the user does not have a password.'
+      ) {
+        showToastWithGravity(
+          'The password is invalid or the user does not have a password.',
+        );
+      } else {
+        showToastWithGravity(error.message);
+      }
       setApiInProgress(false);
     }
   };

@@ -25,7 +25,7 @@ const PasswordField = props => {
       rightIcon={
         <Icon
           type="font-awesome"
-          name={hide ? 'eye' : 'eye-slash'}
+          name={hide ? 'eye-slash' : 'eye'}
           size={20}
           color={colors.accentColor}
           onPress={onPressHandler}

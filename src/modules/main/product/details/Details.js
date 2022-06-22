@@ -1,3 +1,4 @@
+import {isEmptyArray} from 'formik';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
@@ -31,6 +32,7 @@ const Details = ({item, theme}) => {
     <>
       <View style={[styles.container, styles.productDetailsContainer]}>
         <View style={styles.productDetailsTitleContainer}>
+          <Text style={[styles.title, {color: colors.gray}]}>{item.id}</Text>
           {item.hasOwnProperty('@ondc/org/returnable') && (
             <Text style={[styles.title, {color: colors.gray}]}>
               {t('main.product.product_details.returnable')}

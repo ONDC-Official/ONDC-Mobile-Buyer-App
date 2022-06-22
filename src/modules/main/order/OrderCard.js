@@ -18,30 +18,30 @@ const OrderCard = ({item, theme}) => {
   const {t} = useTranslation();
 
   return (
-      <View style={styles.container}>
-        <View style={appStyles.container}>
-          <Text numberOfLines={1} style={styles.itemName}>
-            {item.id ? item.id : t('main.order.na')}
-          </Text>
-          <Text style={{color: colors.grey}}>
-            {t('main.order.ordered_on_label')}
-            {moment(item.updatedAt).format('Do MMMM YYYY')}
-          </Text>
-        </View>
-
-        <View
-          style={[
-            styles.orderStatus,
-            {
-              borderColor: colors.accentColor,
-              backgroundColor: colors.statusBackground,
-            },
-          ]}>
-          <Text style={{color: colors.accentColor}}>
-            {t('main.order.pending')}
-          </Text>
-        </View>
+    <View style={styles.container}>
+      <View style={appStyles.container}>
+        <Text numberOfLines={1} style={styles.itemName}>
+          {item.id ? item.id : t('main.order.na')}
+        </Text>
+        <Text style={{color: colors.grey}}>
+          {t('main.order.ordered_on_label')}
+          {moment(item.updatedAt).format('Do MMMM YYYY')}
+        </Text>
       </View>
+
+      <View
+        style={[
+          styles.orderStatus,
+          {
+            borderColor: colors.accentColor,
+            backgroundColor: colors.statusBackground,
+          },
+        ]}>
+        <Text style={{color: colors.accentColor}}>
+          {t('main.order.pending')}
+        </Text>
+      </View>
+    </View>
   );
 };
 

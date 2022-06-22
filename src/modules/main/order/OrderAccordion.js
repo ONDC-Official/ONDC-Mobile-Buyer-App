@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
-import {Card, withTheme} from 'react-native-elements';
+import {Card, Text, withTheme} from 'react-native-elements';
 import OrderCard from './OrderCard';
 import ShippingDetails from './ShippingDetails';
 
@@ -37,7 +37,11 @@ const OrderAccordion = ({item, theme, getOrderList}) => {
         keyExtractor={(item, index) => index.toString()}
       />
     </Card>
-  ) : null;
+  ) : (
+    <Card containerStyle={styles.card}>
+      <OrderCard item={item} />
+    </Card>
+  );
 };
 
 export default withTheme(OrderAccordion);
