@@ -34,6 +34,7 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
 
   /**
    * Function is used to get list of location
+   * @param value:location entered by user
    * @returns {Promise<void>}
    **/
   const findLocation = async value => {

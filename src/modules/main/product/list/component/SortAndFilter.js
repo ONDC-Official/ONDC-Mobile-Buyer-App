@@ -83,6 +83,7 @@ const SortAndFilter = ({
   /**
    * function handles click event of apply button
    * it request list of products with selected filter params
+   * @param sortMethod:selected sort method
    * @returns {Promise<void>}
    */
   const onApply = async sortMethod => {
@@ -112,6 +113,7 @@ const SortAndFilter = ({
   /**
    * function handles click event of apply button
    * it request list of products with selected filter params
+   * @param sortMethod:selected sort method
    * @returns {Promise<void>}
    */
   const onClear = async sortMethod => {

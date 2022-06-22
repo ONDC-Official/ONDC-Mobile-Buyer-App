@@ -38,6 +38,13 @@ export default () => {
     },
   };
 
+  /**
+   * function request products list with given message id and transaction id
+   * @param setCount:function to set count of products
+   * @param messageId:message id of search result
+   * @param transactionId:transactin id of search result
+   * @param setSearchInProgress:function to set boolean indicating api request progress
+   */
   const getProductsList = async (
     setCount,
     messageId,
@@ -126,6 +133,11 @@ export default () => {
 
   /**
    * function to get list of products
+   * @param setCount:function to set count of products
+   * @param messageId:message id of search result
+   * @param transactionId:transactin id of search result
+   * @param setApiInProgress:function to set boolean indicating api request progress
+   * @param setSearchInProgress:function to set boolean indicating api request progress
    */
   const getProducts = (
     setCount,
@@ -162,6 +174,8 @@ export default () => {
 
   /**
    * Function used to get list of filters
+   * @param id:message id of search result
+   * @param transactionId:transactin id of search result
    * @returns {Promise<void>}
    **/
   const getFilter = (id, transactionId) => {
@@ -188,7 +202,10 @@ export default () => {
    * @param setCount:function to set count of products
    * @param query:search query entered by user
    * @param latitude:latitude of selected location
-   * @param longitude:longitude of selected lication
+   * @param longitude:longitude of selected location
+   * @param selectedSearchOption:search query selected by user
+   * @param setApiInProgress:function to set boolean indicating api request progress
+   * @param setSearchInProgress:function to set boolean indicating api request progress
    * @returns {Promise<void>}
    **/
   const search = async (

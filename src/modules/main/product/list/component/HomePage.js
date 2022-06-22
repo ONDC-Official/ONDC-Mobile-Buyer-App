@@ -1,6 +1,5 @@
 import React from 'react';
 import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
-import {skeletonList} from '../../../../../utils/utils';
 import ItemCard from './ItemCard';
 
 const list = [

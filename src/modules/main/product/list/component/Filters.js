@@ -46,6 +46,8 @@ const Filters = ({
 
   /**
    * function handles click event of checkbox in providers list
+   * @param item: selected provider
+   * @param index:index of  selected provider
    */
   const onProviderCheckBoxPress = (item, index) => {
     let providerlist = providers.slice();
@@ -55,6 +57,8 @@ const Filters = ({
 
   /**
    * function handles click event of checkbox in category list
+   * @param item: selected category
+   * @param index:index of  selected category
    */
   const onCategoryCheckBoxPress = (item, index) => {
     let categorylist = categories.slice();
@@ -62,6 +66,10 @@ const Filters = ({
     setCategories(categorylist);
   };
 
+  /**
+   * function handles change event of slider
+   * @param val: selected range
+   */
   const handleValueChange = val => {
     setMax(val[1]);
     setMin(val[0]);

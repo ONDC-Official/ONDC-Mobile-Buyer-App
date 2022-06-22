@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Dimensions, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 

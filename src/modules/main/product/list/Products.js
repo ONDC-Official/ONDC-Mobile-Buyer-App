@@ -144,7 +144,6 @@ const Products = ({navigation}) => {
 
   /**
    * Function is used to get latitude and longitude of user current location
-
    **/
   const getLatLong = () => {
     setLocationInProgress(true);
@@ -266,6 +265,8 @@ const Products = ({navigation}) => {
 
   /**
    * Function is used to handle onEndEditing event of searchbar
+   * @param query:query entered by user
+   * @param selectedSearchOption:search query selected by user
    * @returns {Promise<void>}
    **/
   const onSearch = async (query, selectedSearchOption) => {
@@ -371,7 +372,7 @@ const Products = ({navigation}) => {
           isVisible={isVisible}
           setIsVisible={setIsVisible}
         />
-        {products.length === 0 && <HomePage />}
+        {/* {products.length === 0 && <HomePage />} */}
         <FlatList
           data={listData}
           renderItem={renderItem}

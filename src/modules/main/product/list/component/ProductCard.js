@@ -18,7 +18,7 @@ const image = require('../../../../../assets/noImage.png');
  * @param theme
  * @param navigation
  * @param item: object which contains product details
- * @param apiInProgress
+ * @param cancellable:boolean which indicates visibility of close icon
  * @constructor
  * @returns {JSX.Element}
  */
