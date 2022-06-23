@@ -8,7 +8,7 @@ import axios from 'axios';
 export const getData = async (url, options) => {
   try {
     const res = await axios.get(url, options);
-    // console.log(JSON.stringify(res.data, undefined, 4));
+    console.log(JSON.stringify(res.data, undefined, 4));
     return res;
   } catch (error) {
     console.log(JSON.stringify(error, undefined, 4));

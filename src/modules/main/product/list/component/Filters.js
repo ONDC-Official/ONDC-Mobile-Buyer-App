@@ -162,7 +162,11 @@ const Filters = ({
                           label={t('main.product.filters.min')}
                           value={`${min}`}
                           onChangeText={value => {
-                            setMin(Number(value));
+                            if (value > filters.minPrice) {
+                              setMin(Number(value));
+                            } else {
+                              setMin(0);
+                            }
                           }}
                           keyboardType={'numeric'}
                           renderErrorMessage={false}
@@ -172,7 +176,13 @@ const Filters = ({
                         <InputField
                           label={t('main.product.filters.max')}
                           value={`${max}`}
-                          onChangeText={value => setMax(Number(value))}
+                          onChangeText={value => {
+                            if (value < filters.maxPrice) {
+                              setMax(Number(value));
+                            } else {
+                              setMax(filters.maxPrice);
+                            }
+                          }}
                           keyboardType={'numeric'}
                           renderErrorMessage={false}
                         />

@@ -14,7 +14,11 @@ import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {BASE_URL, GET_QUOTE, ON_GET_QUOTE} from '../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  GET_QUOTE,
+  ON_GET_QUOTE,
+} from '../../../../utils/apiUtilities';
 import {
   maskAmount,
   showToastWithGravity,
@@ -73,9 +77,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                   element.transaction_id = item.context.transaction_id;
                   element.bpp_id = item.context.bpp_id;
                   list.push(element);
-                  orderTotal += Number(item.message.quote.quote.price.value);
                 }
               });
+              orderTotal += Number(item.message.quote.quote.price.value);
               setTotal(orderTotal);
             }
           }

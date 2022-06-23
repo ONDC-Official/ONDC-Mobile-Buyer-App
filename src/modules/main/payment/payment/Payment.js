@@ -15,7 +15,6 @@ import {Card, CheckBox, Divider} from 'react-native-elements';
 import {Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import {useDispatch} from 'react-redux';
-import {useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
