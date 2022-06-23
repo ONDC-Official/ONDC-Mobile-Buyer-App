@@ -60,6 +60,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
   const refOrders = useRef();
+  const total = useRef(0);
   const [quote, setQuote] = useState(null);
   const signedPayload = useRef(null);
   const timeStamp = useRef(null);
@@ -97,13 +98,14 @@ const Payment = ({navigation, theme, route: {params}}) => {
         if (ordersArray.length > 0) {
           let breakup = [];
           let price = [];
-          let total = 0;
+          total.current = 0;
           ordersArray.forEach(one => {
             breakup = breakup.concat(one.message.order.quote.breakup);
             price.push(one.message.order.quote.price);
-            total += Number(one.message.order.quote.price.value);
+            total.current =
+              total.current + Number(one.message.order.quote.price.value);
           });
-          setQuote({total, breakup, price});
+          setQuote({breakup, price});
         }
       } catch (err) {
         handleApiError(err);
@@ -114,6 +116,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
       clearInterval(order);
       if (error.current) {
         showToastWithGravity(error.current.error.message);
+      }
+      if (total.current) {
+        console.log(total.current);
+        placeOrder()
+          .then(() => {})
+          .catch(() => {});
       }
       setInitializeOrderRequested(false);
     }, 12000);
@@ -207,7 +215,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             billingInfo.email = selectedBillingAddress.email;
           }
 
-          billingInfo.address =  {
+          billingInfo.address = {
             door: selectedBillingAddress.address.door
               ? selectedBillingAddress.address.door
               : selectedBillingAddress.address.street,
@@ -286,7 +294,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         }
       });
       if (messageIds.length > 0) {
-        onInitializeOrder(messageIds);
+        await onInitializeOrder(messageIds);
       } else {
         showToastWithGravity(t('error.no_data_found'));
         setInitializeOrderRequested(false);
@@ -314,7 +322,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         order_id: parentOrderId.current,
         customer_phone: selectedAddress.descriptor.phone,
         customer_email: selectedAddress.descriptor.email,
-        amount: Config.ENV === 'dev' ? String(9) : quote.total,
+        amount: Config.ENV === 'dev' ? String(9) : String(total.current),
         timestamp: timeStamp.current,
         return_url: 'https://sandbox.juspay.in/end',
       };
@@ -327,7 +335,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           merchantId: Config.MERCHANT_ID.toUpperCase(),
           clientId: Config.CLIENT_ID.toLowerCase(),
           orderId: parentOrderId.current,
-          amount: Config.ENV === 'dev' ? String(9) : quote.total,
+          amount: Config.ENV === 'dev' ? String(9) : String(total.current),
           customerId: uid,
           customerEmail: selectedAddress.descriptor.email,
           customerMobile: selectedAddress.descriptor.phone,
@@ -470,6 +478,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
     const options = {
       headers: {Authorization: `Bearer ${token}`},
     };
+    console.log('its running');
 
     try {
       timeStamp.current = String(new Date().getTime());
@@ -480,7 +489,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         order_id: parentOrderId.current,
         customer_phone: selectedAddress.descriptor.phone,
         customer_email: selectedAddress.descriptor.email,
-        amount: Config.ENV === 'dev' ? String(9) : quote.total,
+        amount: Config.ENV === 'dev' ? String(9) : String(total.current),
         timestamp: timeStamp.current,
         return_url: 'https://sandbox.juspay.in/end',
       });
@@ -494,6 +503,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       signedPayload.current = data.signedPayload;
       initializeJusPaySdk(payload);
     } catch (err) {
+      console.log(err);
       handleApiError(err);
     }
   };
@@ -523,9 +533,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
     initializeOrder()
       .then(() => {
         HyperSdkReact.createHyperServices();
-        placeOrder()
-          .then(() => {})
-          .catch(() => {});
       })
       .catch(() => {});
 
@@ -573,10 +580,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
                       }}
                     />
 
-                    <View style={styles.priceContainer}>
-                      <Text>{t('main.cart.total_payable')}</Text>
-                      <Text style={styles.fulfillment}>₹{quote.total}</Text>
-                    </View>
+                    {total.current && (
+                      <View style={styles.priceContainer}>
+                        <Text>{t('main.cart.total_payable')}</Text>
+                        <Text style={styles.fulfillment}>₹{total.current}</Text>
+                      </View>
+                    )}
                   </Card>
                 )}
                 <Card containerStyle={styles.addressCard}>
