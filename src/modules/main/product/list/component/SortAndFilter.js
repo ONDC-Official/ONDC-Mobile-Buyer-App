@@ -146,8 +146,8 @@ const SortAndFilter = ({
         style={[styles.sortFilterContainer, {backgroundColor: colors.white}]}>
         <TouchableOpacity onPress={openSortSheet}>
           <Text style={[styles.text, {color: colors.accentColor}]}>
-            {selectedSortMethod ? selectedSortMethod : 'Sort'}
-            {'   '}
+            {selectedSortMethod}
+            {'  '}
             <Icon name="pencil-square" size={14} />
           </Text>
         </TouchableOpacity>

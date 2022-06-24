@@ -1,9 +1,15 @@
-import {isEmptyArray} from 'formik';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 
+/**
+ * Component to display product details
+ * @param item: object containing product details
+ * @param theme:application theme
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const Details = ({item, theme}) => {
   const {colors} = theme;
 
@@ -32,7 +38,6 @@ const Details = ({item, theme}) => {
     <>
       <View style={[styles.container, styles.productDetailsContainer]}>
         <View style={styles.productDetailsTitleContainer}>
-          <Text style={[styles.title, {color: colors.gray}]}>{item.id}</Text>
           {item.hasOwnProperty('@ondc/org/returnable') && (
             <Text style={[styles.title, {color: colors.gray}]}>
               {t('main.product.product_details.returnable')}
@@ -83,13 +88,13 @@ const Details = ({item, theme}) => {
           )}
         </View>
       </View>
-      <View style={styles.container}>
-        <Text style={[styles.heading, {color: colors.gray}]}>
-          {t('main.product.product_details.title')}
-        </Text>
-        <View style={styles.productDetailsContainer}>
-          <View style={styles.productDetailsTitleContainer}>
-            {packageCommodity && (
+      {packageCommodity && (
+        <View style={styles.container}>
+          <Text style={[styles.heading, {color: colors.gray}]}>
+            {t('main.product.product_details.title')}
+          </Text>
+          <View style={styles.productDetailsContainer}>
+            <View style={styles.productDetailsTitleContainer}>
               <>
                 {manufactureName && (
                   <Text style={[styles.title, {color: colors.gray}]}>
@@ -113,10 +118,8 @@ const Details = ({item, theme}) => {
                   </Text>
                 )}
               </>
-            )}
-          </View>
-          <View>
-            {item['@ondc/org/statutory_reqs_packaged_commodities'] && (
+            </View>
+            <View>
               <>
                 {manufactureName && (
                   <Text style={styles.value}>{manufactureName}</Text>
@@ -127,10 +130,10 @@ const Details = ({item, theme}) => {
                 )}
                 {country && <Text style={styles.value}>{country}</Text>}
               </>
-            )}
+            </View>
           </View>
         </View>
-      </View>
+      )}
     </>
   );
 };

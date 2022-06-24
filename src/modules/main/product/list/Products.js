@@ -372,7 +372,7 @@ const Products = ({navigation}) => {
           isVisible={isVisible}
           setIsVisible={setIsVisible}
         />
-        {/* {products.length === 0 && <HomePage />} */}
+        {products.length === 0 && <HomePage />}
         <FlatList
           data={listData}
           renderItem={renderItem}

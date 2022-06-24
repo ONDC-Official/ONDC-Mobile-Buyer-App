@@ -10,7 +10,7 @@ import {
 import {Divider, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {removeItemFromCart} from '../../../../redux/actions';
 import {updateItemInCart} from '../../../../redux/actions';
 import {addItemToCart} from '../../../../redux/actions';
@@ -18,20 +18,23 @@ import {appStyles} from '../../../../styles/styles';
 import {showInfoToast} from '../../../../utils/utils';
 import Details from './Details';
 
-const image = require('../../../../assets/ondc.png');
+const image = require('../../../../assets/noImage.png');
 
+/**
+ * Component to display product details
+ * @param item: object containing product details
+ * @param theme:application theme
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const ProductDetails = ({theme, navigation, route: {params}}) => {
   const {colors} = theme;
 
   const {t} = useTranslation();
 
-  const {product} = params;
+  const {item} = params;
 
   const dispatch = useDispatch();
-
-  const {products} = useSelector(({productReducer}) => productReducer);
-
-  const item = products.find(one => one.id === product.id);
 
   /**
    * function handles click event add button
@@ -109,12 +112,12 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             </Text>
           </View>
           <Divider width={1} style={styles.divider} />
-          {item['@ondc/org/statutory_reqs_packaged_commodities'] && (
-            <>
-              <Details style={styles.divider} item={item} />
-              <Divider />
-            </>
-          )}
+
+          <>
+            <Details style={styles.divider} item={item} />
+            <Divider />
+          </>
+
           <View style={styles.addButton}>
             {item.quantity < 1 ? (
               <TouchableOpacity

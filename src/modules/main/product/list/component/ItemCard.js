@@ -3,7 +3,15 @@ import {StyleSheet, View} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 
-const ItemCard = ({theme, width, item}) => {
+/**
+ * Component to render single item card on product screen
+ * @param navigation
+ * @param item: object which contains item information
+ * @param width:width of the card
+ * @constructor
+ * @returns {JSX.Element}
+ */
+const ItemCard = ({width, item}) => {
   return (
     <Card containerStyle={[styles.card, {width: width}]}>
       <View style={styles.container}>

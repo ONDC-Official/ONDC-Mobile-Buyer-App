@@ -1,34 +1,49 @@
 import React from 'react';
 import {Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import i18n from '../../../../../locales/i18next';
 import ItemCard from './ItemCard';
 
 const list = [
   {
-    category: 'Beauty & personal care',
+    category: i18n.t('main.product.homepage.beauty_personal_care'),
     image: require('../../../../../assets/beauty.png'),
   },
-  {category: 'Fashion', image: require('../../../../../assets/fashion.jpg')},
   {
-    category: 'Food & Bevarages',
+    category: i18n.t('main.product.homepage.fashion'),
+    image: require('../../../../../assets/fashion.jpg'),
+  },
+  {
+    category: i18n.t('main.product.homepage.food_bevarages'),
     image: require('../../../../../assets/food.jpg'),
   },
   {
-    category: 'Fresh fruits and vegetables',
+    category: i18n.t('main.product.homepage.fruites_label'),
     image: require('../../../../../assets/fruits.png'),
   },
   {
-    category: 'Electronics',
+    category: i18n.t('main.product.homepage.electronics'),
     image: require('../../../../../assets/electronics.png'),
   },
   {
-    category: 'Home Decore',
+    category: i18n.t('main.product.homepage.home_decore'),
     image: require('../../../../../assets/homeDecore.jpg'),
   },
 ];
 
+/**
+ * Component to render home page on product screen
+ * @constructor
+ * @returns {JSX.Element}
+ */
 const HomePage = () => {
   const width = Dimensions.get('window').width / 2 - 20;
   const numColumns = Dimensions.get('window').width / width;
+
+  /**
+   * Function is used to render single item card in the list
+   * @param item:single object containing information
+   * @returns {JSX.Element}
+   */
   const renderItem = ({item}) => {
     return <ItemCard item={item} width={width} />;
   };

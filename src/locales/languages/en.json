@@ -100,6 +100,14 @@
       "please_select_location": "Please select location",
       "add_to_cart": "Added to cart",
       "detecting_location": "Detecting Location",
+      "homepage":{
+         "fashion":"Fashion",
+         "beauty_personal_care":"Beauty and personal care",
+         "food_bevarages":"Food & Bevarages",
+         "fruites_label":"Fresh fruites and vegetables",
+         "electronics":"Electronics",
+         "home_decore":"Home Decore"
+},
       "product_details": {
         "manufacture_name":"Manufacture Name",
         "title": "Product Details",
@@ -126,7 +134,11 @@
         "price_range": "Price Range",
         "clear":"CLEAR",
         "min":"Min",
-        "max":"Max"
+        "max":"Max",
+        "price_low_to_high":"Price: Low To High",
+        "price_high_to_low":"Price: High To Low",
+        "ratings_high_to_low":"Ratings: High To Low",
+        "ratings_low_to_high":"Ratings: Low To High"
       }
     },
     "more": {

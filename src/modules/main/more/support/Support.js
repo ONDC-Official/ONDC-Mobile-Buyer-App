@@ -1,6 +1,6 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import {FlatList, SafeAreaView, View} from 'react-native';
+import i18n from '../../../../locales/i18next';
 import {appStyles} from '../../../../styles/styles';
 import {
   CONTACT_US,
@@ -13,6 +13,36 @@ import Header from '../../payment/addressPicker/Header';
 import SupportCard from './SupportCard';
 
 const image = require('../../../../assets/ondc.png');
+const list = [
+  {
+    _id: 'ghjshgkjdj',
+    icon: 'bag-checked',
+    title: i18n.t('main.more.our_policy'),
+    message: i18n.t('main.more.our_policy_message'),
+    url: POLICY_URL,
+  },
+  {
+    _id: 'mkmnjhj',
+    icon: 'help-circle',
+    title: i18n.t('main.more.faqs'),
+    message: i18n.t('main.more.faqs_message'),
+    url: FAQS,
+  },
+  {
+    _id: 'mjknhbgyj',
+    source: image,
+    title: i18n.t('main.more.ondc_policy'),
+    message: i18n.t('main.more.ondc_policy_message'),
+    url: ONDC_POLICY,
+  },
+  {
+    _id: 'gghjghj',
+    icon: 'account',
+    title: i18n.t('main.more.contact_us'),
+    message: i18n.t('main.more.contact_us_message'),
+    url: CONTACT_US,
+  },
+];
 
 /**
  * Component to render support  screen
@@ -21,43 +51,10 @@ const image = require('../../../../assets/ondc.png');
  * @returns {JSX.Element}
  */
 const Support = ({navigation}) => {
-  const {t} = useTranslation();
-
-  const list = [
-    {
-      _id: 'ghjshgkjdj',
-      icon: 'bag-checked',
-      title: t('main.more.our_policy'),
-      message: t('main.more.our_policy_message'),
-      url: POLICY_URL,
-    },
-    {
-      _id: 'mkmnjhj',
-      icon: 'help-circle',
-      title: t('main.more.faqs'),
-      message: t('main.more.faqs_message'),
-      url: FAQS,
-    },
-    {
-      _id: 'mjknhbgyj',
-      source: image,
-      title: t('main.more.ondc_policy'),
-      message: t('main.more.ondc_policy_message'),
-      url: ONDC_POLICY,
-    },
-    {
-      _id: 'gghjghj',
-      icon: 'account',
-      title: t('main.more.contact_us'),
-      message: t('main.more.contact_us_message'),
-      url: CONTACT_US,
-    },
-  ];
-
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={t('main.more.support')} navigation={navigation} />
+        <Header title={i18n.t('main.more.support')} navigation={navigation} />
         <FlatList
           data={list}
           keyExtractor={keyExtractor}

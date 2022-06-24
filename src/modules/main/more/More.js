@@ -2,9 +2,31 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {withTheme} from 'react-native-elements';
+import i18n from '../../../locales/i18next';
 import {appStyles} from '../../../styles/styles';
 import {OPTIONS} from '../../../utils/Constants';
 import OptionCard from './OptionCard';
+
+const list = [
+  {
+    id: 'gvjh',
+    name: OPTIONS.PROFILE,
+    string: i18n.t('main.more.profile'),
+    icon: 'user',
+  },
+  {
+    id: 'jnhbgv',
+    name: OPTIONS.SUPPORT,
+    string: i18n.t('main.more.support'),
+    icon: 'question',
+  },
+  {
+    id: 'nmnvh',
+    name: OPTIONS.LOG_OUT,
+    string: i18n.t('main.more.log_out'),
+    icon: 'sign-out',
+  },
+];
 
 /**
  * Component to render more options available for user
@@ -12,29 +34,6 @@ import OptionCard from './OptionCard';
  * @returns {JSX.Element}
  */
 const More = ({navigation}) => {
-  const {t} = useTranslation();
-
-  const list = [
-    {
-      id: 'gvjh',
-      name: OPTIONS.PROFILE,
-      string: t('main.more.profile'),
-      icon: 'user',
-    },
-    {
-      id: 'jnhbgv',
-      name: OPTIONS.SUPPORT,
-      string: t('main.more.support'),
-      icon: 'question',
-    },
-    {
-      id: 'nmnvh',
-      name: OPTIONS.LOG_OUT,
-      string: t('main.more.log_out'),
-      icon: 'sign-out',
-    },
-  ];
-
   /**
    * Function  used to render single option card in the list
    * @param item: single object from  list

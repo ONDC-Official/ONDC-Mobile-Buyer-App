@@ -43,7 +43,6 @@ const Filters = ({
   const {t} = useTranslation();
 
   const {filters} = useSelector(({filterReducer}) => filterReducer);
-  console.log(filters);
 
   /**
    * function handles click event of checkbox in providers list

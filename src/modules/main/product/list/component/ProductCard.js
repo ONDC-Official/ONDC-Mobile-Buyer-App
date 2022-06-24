@@ -61,7 +61,10 @@ const ProductCard = ({theme, navigation, item, cancellable}) => {
     dispatch(removeItemFromCart(product));
   };
 
-  const uri = item.descriptor.images ? item.descriptor.images[0] : null;
+  const uri =
+    item.descriptor.images && item.descriptor.images.length > 0
+      ? item.descriptor.images[0]
+      : null;
 
   return (
     <Card containerStyle={styles.card}>
@@ -69,8 +72,7 @@ const ProductCard = ({theme, navigation, item, cancellable}) => {
         activeOpacity={0.8}
         onPress={() => {
           navigation.navigate('ProductDetails', {
-            images: item.descriptor.images,
-            product: item,
+            item,
           });
         }}>
         <View style={styles.subContainer}>

@@ -7,10 +7,22 @@ import ContainButton from '../../../../../components/button/ContainButton';
 import {PRODUCT_SORTING} from '../../../../../utils/Constants';
 
 const list = [
-  {name: 'Price: High To Low', value: PRODUCT_SORTING.PRICE_HIGH_TO_LOW},
-  {name: 'Price: Low To High', value: PRODUCT_SORTING.PRICE_LOW_TO_HIGH},
-  {name: 'Ratings: High To Low', value: PRODUCT_SORTING.RATINGS_HIGH_TO_LOW},
-  {name: 'Ratings: Low To High', value: PRODUCT_SORTING.RATINGS_LOW_TO_HIGH},
+  {
+    name: 'main.product.filters.price_high_to_low',
+    value: PRODUCT_SORTING.PRICE_HIGH_TO_LOW,
+  },
+  {
+    name: 'main.product.filters.price_low_to_high',
+    value: PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
+  },
+  {
+    name: 'main.product.filters.ratings_high_to_low',
+    value: PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
+  },
+  {
+    name: 'main.product.filters.ratings_low_to_high',
+    value: PRODUCT_SORTING.RATINGS_LOW_TO_HIGH,
+  },
 ];
 
 /**
@@ -53,24 +65,26 @@ const SortMenu = ({
       </View>
       <Divider style={styles.divider} />
       <View>
-        {list.map(item => (
-          <CheckBox
-            key={item.value}
-            title={item.name}
-            checkedIcon="dot-circle-o"
-            uncheckedIcon="circle-o"
-            checked={item.value === sortingMethod}
-            containerStyle={[
-              styles.containerStyle,
-              {
-                backgroundColor: colors.backgroundColor,
-              },
-            ]}
-            onPress={() => {
-              setSortingMethod(item.value);
-            }}
-          />
-        ))}
+        {list.map(item => {
+          return (
+            <CheckBox
+              key={item.value}
+              title={t(item.name)}
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              checked={item.value === sortingMethod}
+              containerStyle={[
+                styles.containerStyle,
+                {
+                  backgroundColor: colors.backgroundColor,
+                },
+              ]}
+              onPress={() => {
+                setSortingMethod(item.value);
+              }}
+            />
+          );
+        })}
       </View>
       <View style={styles.buttonContainer}>
         <ContainButton
