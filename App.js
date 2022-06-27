@@ -7,12 +7,12 @@ import Toast, {ErrorToast} from 'react-native-toast-message';
 import Navigation from './src/navigation/Navigation';
 import {theme} from './src/utils/theme';
 import store from './src/redux/store';
-import i18n from './src/locales/i18next';
 
 const App = () => {
   const toastConfig = {
     error: props => <ErrorToast {...props} text1NumberOfLines={2} />,
   };
+
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>

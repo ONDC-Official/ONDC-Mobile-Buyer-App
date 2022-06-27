@@ -105,7 +105,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
               setModalVisible(false);
             }}
             style={styles.close}>
-            <Icon name="close-thick" color={colors.accentColor} size={16} />
+            <Icon name="close-thick" color={colors.accentColor} size={16}/>
           </TouchableOpacity>
         </View>
         <Text style={styles.messageContainer}>{t('main.order.message')}</Text>
@@ -119,13 +119,13 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
               .catch(() => {});
           }}>
           {({
-            values,
-            errors,
-            handleChange,
-            handleBlur,
-            touched,
-            handleSubmit,
-          }) => {
+              values,
+              errors,
+              handleChange,
+              handleBlur,
+              touched,
+              handleSubmit,
+            }) => {
             return (
               <>
                 <InputField

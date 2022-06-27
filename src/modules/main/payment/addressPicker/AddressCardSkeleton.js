@@ -7,23 +7,21 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
  * Component to show skeleton of address card
  * @returns {JSX.Element}
  */
-const AddressCardSkeleton = () => {
-  return (
-    <Card containerStyle={styles.card}>
-      <SkeletonPlaceholder>
-        <View style={styles.container}>
-          <View>
-            <View style={styles.name} />
-            <View style={styles.email} />
-            <View style={styles.address} />
-            <View style={styles.pin} />
-          </View>
-          <View style={styles.radioButton} />
+const AddressCardSkeleton = () => (
+  <Card containerStyle={styles.card}>
+    <SkeletonPlaceholder>
+      <View style={styles.container}>
+        <View>
+          <View style={styles.name}/>
+          <View style={styles.email}/>
+          <View style={styles.address}/>
+          <View style={styles.pin}/>
         </View>
-      </SkeletonPlaceholder>
-    </Card>
-  );
-};
+        <View style={styles.radioButton}/>
+      </View>
+    </SkeletonPlaceholder>
+  </Card>
+);
 
 export default AddressCardSkeleton;
 

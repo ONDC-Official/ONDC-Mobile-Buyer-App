@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import Accordion from 'react-native-collapsible/Accordion';
-import {Card, Text, withTheme} from 'react-native-elements';
+import {Card, withTheme} from 'react-native-elements';
+import {keyExtractor} from '../../../utils/utils';
 import OrderCard from './OrderCard';
 import ShippingDetails from './ShippingDetails';
 
@@ -17,15 +18,15 @@ const OrderAccordion = ({item, theme, getOrderList}) => {
   const {colors} = theme;
   const [activeSections, setActiveSections] = useState([]);
 
-  const _renderHeader = sections => <OrderCard item={sections} />;
+  const _renderHeader = sections => <OrderCard item={sections}/>;
 
   const _renderContent = sections => (
-    <ShippingDetails order={sections} getOrderList={getOrderList} />
+    <ShippingDetails order={sections} getOrderList={getOrderList}/>
   );
 
   const _updateSections = activesections => setActiveSections(activesections);
 
-  return item.id && item.quote ? (
+  return (
     <Card containerStyle={styles.card}>
       <Accordion
         sections={[item]}
@@ -34,12 +35,8 @@ const OrderAccordion = ({item, theme, getOrderList}) => {
         renderContent={_renderContent}
         onChange={_updateSections}
         underlayColor={colors.white}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={keyExtractor}
       />
-    </Card>
-  ) : (
-    <Card containerStyle={styles.card}>
-      <OrderCard item={item} />
     </Card>
   );
 };

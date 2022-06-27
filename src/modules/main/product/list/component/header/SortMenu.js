@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {CheckBox, Divider, withTheme} from 'react-native-elements';
-import ClearButton from '../../../../../components/button/ClearButton';
-import ContainButton from '../../../../../components/button/ContainButton';
-import {PRODUCT_SORTING} from '../../../../../utils/Constants';
+import ClearButton from '../../../../../../components/button/ClearButton';
+import ContainButton from '../../../../../../components/button/ContainButton';
+import {PRODUCT_SORTING} from '../../../../../../utils/Constants';
 
 const list = [
   {
@@ -28,20 +28,18 @@ const list = [
 /**
  * Component to render filters screen
  * @param setCount:function to set items count
- * @param filters:object containing filter parameters
  * @param closeSortSheet:function used to close sort sheet
  * @param selectedSortMethod:sort method selected by user
- * @param setSelectedSortMethod:function to set selected sort method
  * @constructor
  * @returns {JSX.Element}
  */
 const SortMenu = ({
-  theme,
-  closeSortSheet,
-  selectedSortMethod,
-  apiInProgress,
-  onApply,
-}) => {
+                    theme,
+                    closeSortSheet,
+                    selectedSortMethod,
+                    apiInProgress,
+                    onApply,
+                  }) => {
   const {colors} = theme;
 
   const {t} = useTranslation();
@@ -63,7 +61,7 @@ const SortMenu = ({
           textColor={colors.accentColor}
         />
       </View>
-      <Divider style={styles.divider} />
+      <Divider style={styles.divider}/>
       <View>
         {list.map(item => {
           return (

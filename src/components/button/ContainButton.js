@@ -29,8 +29,8 @@ const ContainButton = props => {
           borderColor: props.borderColor
             ? props.borderColor
             : props.backgroundColor
-            ? props.backgroundColor
-            : colors.accentColor,
+              ? props.backgroundColor
+              : colors.accentColor,
         },
       ]}
     />

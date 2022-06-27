@@ -8,12 +8,10 @@ import SignUpFrom from './SignUpForm';
  * @returns {JSX.Element}
  * @constructor
  */
-const SignUp = ({navigation}) => {
-  return (
-    <AuthContainer onBackPress={() => navigation.goBack()}>
-      <SignUpFrom navigation={navigation} />
-    </AuthContainer>
-  );
-};
+const SignUp = ({navigation}) => (
+  <AuthContainer onBackPress={() => navigation.goBack()}>
+    <SignUpFrom navigation={navigation}/>
+  </AuthContainer>
+);
 
 export default SignUp;

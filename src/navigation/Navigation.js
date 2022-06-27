@@ -5,14 +5,14 @@ import Landing from '../modules/authentication/landing/Landing';
 import Login from '../modules/authentication/login/Login';
 import SignUp from '../modules/authentication/signUp/SignUp';
 import Splash from '../modules/authentication/splash/Splash';
+import Dashboard from '../modules/main/dashboard/Dashboard';
+import Profile from '../modules/main/more/Profile';
+import Support from '../modules/main/more/support/Support';
 import AddAddress from '../modules/main/payment/addAddress/AddAddress';
 import AddressPicker from '../modules/main/payment/addressPicker/AddressPicker';
 import BillingAddressPicker from '../modules/main/payment/billingAddress/BillingAddressPicker';
 import Confirmation from '../modules/main/payment/confirmation/Confirmation';
 import Payment from '../modules/main/payment/payment/Payment';
-import Dashboard from '../modules/main/dashboard/Dashboard';
-import Profile from '../modules/main/more/Profile';
-import Support from '../modules/main/more/support/Support';
 import ProductDetails from '../modules/main/product/details/ProductDetails';
 
 const Stack = createStackNavigator();

@@ -37,7 +37,7 @@ const Splash = ({navigation}) => {
   };
 
   /**
-   * Function is used to show screen depending on avaibility of token
+   * Function is used to show screen depending on availability of token
    * @returns {Promise<void>}
    */
   const checkUserStatus = () => {
@@ -65,7 +65,7 @@ const Splash = ({navigation}) => {
   return (
     <View style={appStyles.container}>
       <View style={[appStyles.container, styles.container]}>
-        <Image source={image} style={styles.image} />
+        <Image source={image} style={styles.image}/>
       </View>
       <View style={styles.footer}>
         <Text>{t('global.version_label')}</Text>

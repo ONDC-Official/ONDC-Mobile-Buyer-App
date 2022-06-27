@@ -559,7 +559,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             navigation={navigation}
           />
           {initializeOrderRequested ? (
-            <PaymentSkeleton />
+            <PaymentSkeleton/>
           ) : (
             <>
               <View style={styles.container}>
@@ -574,7 +574,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                               <Text style={styles.price}>{item.title}</Text>
                               <Text>₹{item.price.value}</Text>
                             </View>
-                            <Divider />
+                            <Divider/>
                           </>
                         );
                       }}
@@ -667,7 +667,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         </View>
       ) : (
         <View style={[appStyles.container, styles.processing]}>
-          <ActivityIndicator size={30} color={colors.accentColor} />
+          <ActivityIndicator size={30} color={colors.accentColor}/>
           <Text style={[styles.processingText, {color: colors.accentColor}]}>
             {t('main.cart.payment.processing_label')}{' '}
           </Text>

@@ -3,10 +3,10 @@ import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import {Text, withTheme} from 'react-native-elements';
-import {Context as AuthContext} from '../../../../../context/Auth';
-import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
-import {getData} from '../../../../../utils/api';
-import {BASE_URL, GET_LOCATION} from '../../../../../utils/apiUtilities';
+import {Context as AuthContext} from '../../../../../../context/Auth';
+import useNetworkErrorHandling from '../../../../../../hooks/useNetworkErrorHandling';
+import {getData} from '../../../../../../utils/api';
+import {BASE_URL, GET_LOCATION} from '../../../../../../utils/apiUtilities';
 
 /**
  * Component to show searchbar to select location in addresspicker
@@ -88,7 +88,7 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
           },
         }}
         value={selectedValue}
-        scrollEnabled={true}
+        scrollEnabled
         onChangeText={value => {
           findLocation(value)
             .then(() => {})

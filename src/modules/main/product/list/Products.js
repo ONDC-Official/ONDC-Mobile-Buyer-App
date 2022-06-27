@@ -1,5 +1,5 @@
 import Geolocation from '@react-native-community/geolocation';
-import React, {useEffect, useContext, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, PermissionsAndroid, StyleSheet, View} from 'react-native';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
@@ -8,27 +8,23 @@ import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
+import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {clearFilters} from '../../../../redux/filter/actions';
+import {saveProducts} from '../../../../redux/product/actions';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  GET_LATLONG,
-  GET_LOCATION_FROM_LAT_LONG,
-} from '../../../../utils/apiUtilities';
+import {BASE_URL, GET_LATLONG, GET_LOCATION_FROM_LAT_LONG,} from '../../../../utils/apiUtilities';
 import {half, isIOS, skeletonList} from '../../../../utils/utils';
 import useProductList from '../hook/useProductList';
 import AddressPicker from './component/AddressPicker';
 import EmptyComponent from './component/EmptyComponent';
-import Header from './component/Header';
+import Header from './component/header/Header';
+import ListPlaceholder from './component/placeholder/ListPlaceholder';
 import ListFooter from './component/ListFooter';
 import LocationDeniedAlert from './component/LocationDeniedAlert';
 import ProductCard from './component/ProductCard';
 import ProductCardSkeleton from './component/ProductCardSkeleton';
-import {Context as AuthContext} from '../../../../context/Auth';
-import {saveProducts} from '../../../../redux/product/actions';
-import {clearFilters} from '../../../../redux/filter/actions';
-import HomePage from './component/HomePage';
 
 /**
  * Component to show list of requested products
@@ -101,7 +97,7 @@ const Products = ({navigation}) => {
     const element = cartItems.find(one => one.id === item.id);
     item.quantity = element ? element.quantity : 0;
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ProductCardSkeleton item={item} />
+      <ProductCardSkeleton item={item}/>
     ) : (
       <ProductCard
         item={item}
@@ -372,7 +368,7 @@ const Products = ({navigation}) => {
           isVisible={isVisible}
           setIsVisible={setIsVisible}
         />
-        {products.length === 0 && <HomePage />}
+        {products.length === 0 && <ListPlaceholder/>}
         <FlatList
           data={listData}
           renderItem={renderItem}
@@ -397,7 +393,7 @@ const Products = ({navigation}) => {
               ? styles.contentContainerStyle
               : appStyles.container
           }
-          ListFooterComponent={<ListFooter moreRequested={moreListRequested} />}
+          ListFooterComponent={<ListFooter moreRequested={moreListRequested}/>}
         />
       </View>
     </SafeAreaView>

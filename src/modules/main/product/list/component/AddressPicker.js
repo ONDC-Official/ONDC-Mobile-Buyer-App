@@ -4,7 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {Icon, Text} from 'react-native-elements';
 import Logo from '../../../../../assets/map_my_india.svg';
 import {appStyles} from '../../../../../styles/styles';
-import SearchBar from './SearchBar';
+import SearchBar from './header/SearchBar';
 
 /**
  * Component to show address picker screen when user wants to select location
@@ -29,7 +29,7 @@ const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
         />
       </View>
       <View style={styles.header}>
-        <Logo />
+        <Logo/>
       </View>
       <SearchBar
         setLocation={setLocation}

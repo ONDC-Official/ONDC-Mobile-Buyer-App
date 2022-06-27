@@ -3,19 +3,10 @@ import {useTranslation} from 'react-i18next';
 import {useDispatch, useSelector} from 'react-redux';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {
-  clearFilters,
-  saveFilters,
-  saveIds,
-} from '../../../../redux/filter/actions';
+import {clearFilters, saveFilters, saveIds,} from '../../../../redux/filter/actions';
 import {saveProducts} from '../../../../redux/product/actions';
 import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  FILTER,
-  GET_MESSAGE_ID,
-  GET_PRODUCTS,
-} from '../../../../utils/apiUtilities';
+import {BASE_URL, FILTER, GET_MESSAGE_ID, GET_PRODUCTS,} from '../../../../utils/apiUtilities';
 import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
 import {cleanFormData} from '../../../../utils/utils';
 
@@ -42,7 +33,10 @@ export default () => {
    * function request products list with given message id and transaction id
    * @param setCount:function to set count of products
    * @param messageId:message id of search result
-   * @param transactionId:transactin id of search result
+   * @param transactionId:transaction id of search result
+   * @param pageNumber
+   * @param appliedFilters
+   * @param requestCount
    * @param setSearchInProgress:function to set boolean indicating api request progress
    */
   const getProductsList = async (
@@ -137,6 +131,7 @@ export default () => {
    * @param messageId:message id of search result
    * @param transactionId:transactin id of search result
    * @param setApiInProgress:function to set boolean indicating api request progress
+   * @param pageNumber
    * @param setSearchInProgress:function to set boolean indicating api request progress
    */
   const getProducts = (
@@ -206,6 +201,7 @@ export default () => {
    * @param selectedSearchOption:search query selected by user
    * @param setApiInProgress:function to set boolean indicating api request progress
    * @param setSearchInProgress:function to set boolean indicating api request progress
+   * @param pageNumber
    * @returns {Promise<void>}
    **/
   const search = async (

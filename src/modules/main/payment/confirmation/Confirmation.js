@@ -1,32 +1,18 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  ActivityIndicator,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from 'react-native';
-import {Card, Divider, Text, withTheme} from 'react-native-elements';
+import {ActivityIndicator, FlatList, SafeAreaView, StyleSheet, View,} from 'react-native';
+import {Card, Text, withTheme} from 'react-native-elements';
 import {useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  GET_QUOTE,
-  ON_GET_QUOTE,
-} from '../../../../utils/apiUtilities';
-import {
-  maskAmount,
-  showToastWithGravity,
-  skeletonList,
-} from '../../../../utils/utils';
-import Header from '../addressPicker/Header';
+import {BASE_URL, GET_QUOTE, ON_GET_QUOTE,} from '../../../../utils/apiUtilities';
+import {maskAmount, showToastWithGravity, skeletonList,} from '../../../../utils/utils';
 import ProductCard from '../../product/list/component/ProductCard';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
+import Header from '../addressPicker/Header';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
   const {
@@ -204,9 +190,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     const element = cartItems.find(one => one.id == item.id);
 
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ProductCardSkeleton item={item} />
+      <ProductCardSkeleton item={item}/>
     ) : element ? (
-      <ProductCard item={element} navigation={navigation} cancellable />
+      <ProductCard item={element} navigation={navigation} cancellable/>
     ) : null;
   };
 
@@ -216,7 +202,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={t('main.cart.update_cart')} navigation={navigation} />
+        <Header title={t('main.cart.update_cart')} navigation={navigation}/>
 
         <FlatList
           keyExtractor={(item, index) => {

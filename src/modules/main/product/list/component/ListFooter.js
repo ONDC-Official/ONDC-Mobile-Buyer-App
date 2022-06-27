@@ -7,8 +7,6 @@ import ProductCardSkeleton from './ProductCardSkeleton';
  * @constructor
  * @returns {JSX.Element}
  */
-const ListFooter = ({moreRequested}) => {
-  return moreRequested ? <ProductCardSkeleton /> : null;
-};
+const ListFooter = ({moreRequested}) => moreRequested ? <ProductCardSkeleton/> : null;
 
 export default ListFooter;

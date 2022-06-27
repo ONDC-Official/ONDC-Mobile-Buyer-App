@@ -8,12 +8,11 @@ import LoginForm from './LoginForm';
  * @returns {JSX.Element}
  * @constructor
  */
-const Login = ({navigation}) => {
-  return (
-    <AuthContainer onBackPress={() => navigation.goBack()}>
-      <LoginForm navigation={navigation} />
-    </AuthContainer>
-  );
-};
+const Login = ({navigation}) => (
+  <AuthContainer onBackPress={() => navigation.goBack()}>
+    <LoginForm navigation={navigation}/>
+  </AuthContainer>
+);
+
 
 export default Login;

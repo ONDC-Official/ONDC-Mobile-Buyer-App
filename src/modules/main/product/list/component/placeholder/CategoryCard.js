@@ -11,22 +11,20 @@ import FastImage from 'react-native-fast-image';
  * @constructor
  * @returns {JSX.Element}
  */
-const ItemCard = ({width, item}) => {
-  return (
-    <Card containerStyle={[styles.card, {width: width}]}>
-      <View style={styles.container}>
-        <Text style={styles.text}>{item.category}</Text>
-      </View>
-      <FastImage
-        source={item.image}
-        style={styles.image}
-        resizeMode={'contain'}
-      />
-    </Card>
-  );
-};
+const CategoryCard = ({width, item}) => (
+  <Card containerStyle={[styles.card, {width: width}]}>
+    <View style={styles.container}>
+      <Text style={styles.text}>{item.category}</Text>
+    </View>
+    <FastImage
+      source={item.image}
+      style={styles.image}
+      resizeMode={'contain'}
+    />
+  </Card>
+);
 
-export default withTheme(ItemCard);
+export default withTheme(CategoryCard);
 
 const styles = StyleSheet.create({
   card: {

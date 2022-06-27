@@ -17,7 +17,7 @@ const EmptyComponent = ({theme, navigation}) => {
 
   return (
     <View style={[appStyles.container, styles.container]}>
-      <Icon name="folder-open" size={60} color={colors.accentColor} />
+      <Icon name="folder-open" size={60} color={colors.accentColor}/>
       <Text style={styles.title}>{t('main.cart.empty_cart')}</Text>
       <Text style={styles.subTitle}>{t('main.cart.message')}</Text>
       <TouchableOpacity

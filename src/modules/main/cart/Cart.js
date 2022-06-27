@@ -1,12 +1,6 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
 import {useSelector} from 'react-redux';
@@ -65,9 +59,7 @@ const Cart = ({navigation, theme}) => {
    * @param item:single object from cart list
    * @returns {JSX.Element}
    */
-  const renderItem = ({item}) => (
-    <ProductCard item={item} navigation={navigation} />
-  );
+  const renderItem = ({item}) => <ProductCard item={item} navigation={navigation}/>;
 
   return (
     <SafeAreaView
@@ -80,12 +72,14 @@ const Cart = ({navigation, theme}) => {
         ]}>
         {cartItems.length !== 0 && (
           <View style={[styles.header, {backgroundColor: colors.white}]}>
-            <Text style={styles.text}>
-              {t('main.cart.sub_total_label')}{' '}
+            <View style={styles.row}>
+              <Text style={styles.text}>
+                {t('main.cart.sub_total_label')}{' '}
+              </Text>
               <Text style={styles.price}>
                 ₹{parseFloat(subTotal).toFixed(2)}
               </Text>
-            </Text>
+            </View>
 
             <TouchableOpacity
               style={[styles.button, {borderColor: colors.accentColor}]}
@@ -98,7 +92,7 @@ const Cart = ({navigation, theme}) => {
           data={cartItems}
           renderItem={renderItem}
           ListEmptyComponent={() => {
-            return <EmptyComponent navigation={navigation} />;
+            return <EmptyComponent navigation={navigation}/>;
           }}
           contentContainerStyle={
             cartItems.length === 0
@@ -106,7 +100,7 @@ const Cart = ({navigation, theme}) => {
               : styles.contentContainerStyle
           }
         />
-        {cartItems.length !== 0 && <Footer onCheckout={onCheckout} />}
+        {cartItems.length !== 0 && <Footer onCheckout={onCheckout}/>}
       </View>
     </SafeAreaView>
   );
@@ -124,6 +118,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   contentContainerStyle: {paddingBottom: 10},
+  row: {
+    flexDirection: 'row',
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',

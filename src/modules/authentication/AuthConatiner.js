@@ -1,13 +1,6 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  Image,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import {Card, withTheme} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -35,11 +28,11 @@ const AuthContainer = ({theme, children, onBackPress}) => {
       <KeyboardAwareScrollView
         contentContainerStyle={[appStyles.container, styles.container]}>
         <TouchableOpacity onPress={onBackPress}>
-          <Icon name="angle-left" size={30} color={colors.accentColor} />
+          <Icon name="angle-left" size={30} color={colors.accentColor}/>
         </TouchableOpacity>
 
         <View style={styles.imageContainer}>
-          <Image source={image} resizeMode={'contain'} style={styles.image} />
+          <Image source={image} resizeMode={'contain'} style={styles.image}/>
         </View>
 
         <View style={[appStyles.container, styles.mainContainer]}>
@@ -47,9 +40,9 @@ const AuthContainer = ({theme, children, onBackPress}) => {
             {children}
             <View style={styles.footerContainer}>
               <Text>{t('global.user_agreement')}</Text>
-              <ClearButton title={t('global.terms_of_services')} />
+              <ClearButton title={t('global.terms_of_services')}/>
               <Text> {t('global.and_label')} </Text>
-              <ClearButton title={t('global.privacy_policy')} />
+              <ClearButton title={t('global.privacy_policy')}/>
             </View>
           </Card>
         </View>

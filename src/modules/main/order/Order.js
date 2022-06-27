@@ -94,13 +94,11 @@ const Order = () => {
    * @constructor
    * @returns {JSX.Element}
    */
-  const renderItem = ({item}) => {
-    return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <OrderCardSkeleton item={item} />
-    ) : (
-      <OrderAccordion item={item} getOrderList={getOrderList} />
-    );
-  };
+  const renderItem = ({item}) => item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
+    <OrderCardSkeleton item={item}/>
+  ) : (
+    <OrderAccordion item={item} getOrderList={getOrderList}/>
+  );
 
   const listData = orders ? orders : skeletonList;
 
@@ -121,7 +119,7 @@ const Order = () => {
               ? styles.contentContainerStyle
               : [appStyles.container, styles.emptyContainer]
           }
-          ListFooterComponent={<ListFooter moreRequested={moreListRequested} />}
+          ListFooterComponent={<ListFooter moreRequested={moreListRequested}/>}
         />
       </View>
     </SafeAreaView>
