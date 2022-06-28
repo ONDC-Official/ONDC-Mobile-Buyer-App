@@ -4,6 +4,7 @@ import {FlatList, Linking, StyleSheet, TouchableOpacity, View,} from 'react-nati
 import {Divider, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ContainButton from '../../../components/button/ContainButton';
+import OutlineButton from '../../../components/button/OutlineButton';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
@@ -187,8 +188,6 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
             ) : (
               <View style={styles.Button}>
                 <ContainButton
-                  backgroundColor={colors.greyOutline}
-                  borderColor={colors.greyOutline}
                   title={t('main.order.track')}
                   onPress={() => {
                     trackOrder()
@@ -196,15 +195,12 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
                       .catch(() => {});
                   }}
                   loader={trackInProgress}
-                  color={colors.black}
                 />
               </View>
             )}
             <View style={styles.space}/>
             <View style={styles.Button}>
-              <ContainButton
-                backgroundColor={colors.accentColor}
-                borderColor={colors.accentColor}
+              <OutlineButton
                 title={t('main.order.cancel')}
                 onPress={() => {
                   cancelOrder()
@@ -212,7 +208,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
                     .catch(() => {});
                 }}
                 loader={cancelInProgress}
-                color={colors.white}
+                color={colors.error}
               />
             </View>
           </View>
@@ -241,8 +237,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   space: {margin: 5},
-  actionContainer: {paddingVertical: 10},
-  container: {paddingVertical: 10},
+  actionContainer: {paddingTop: 10},
+  container: {
+    paddingTop: 8,
+  },
   rowContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',

@@ -19,7 +19,7 @@ const SupportCard = ({theme, url, icon, title, message, source}) => {
   const {colors} = theme;
 
   /**
-   * function handles click event of next arraow and navigates to the given url
+   * function handles click event of next arrow and navigates to the given url
    * @returns {Promise<void>}
    */
   const onPressHandler = async () => {
