@@ -28,9 +28,7 @@ const SortAndFilter = ({
                        }) => {
   const {colors} = theme;
 
-  const [selectedSortMethod, setSelectedSortMethod] = useState(
-    PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
-  );
+  const [selectedSortMethod, setSelectedSortMethod] = useState(null);
 
   const {t} = useTranslation();
 
@@ -147,7 +145,7 @@ const SortAndFilter = ({
         <TouchableOpacity onPress={openSortSheet}>
           <View style={styles.row}>
             <Text style={[styles.text, {color: colors.accentColor}]}>
-              {selectedSortMethod}
+              {selectedSortMethod ? selectedSortMethod : t('main.product.sort_products_label')}
             </Text>
             <Icon name="pencil-square" size={14} color={colors.accentColor} />
           </View>

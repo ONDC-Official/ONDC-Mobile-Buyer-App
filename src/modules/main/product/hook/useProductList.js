@@ -99,7 +99,7 @@ export default () => {
           ? `${BASE_URL}${GET_PRODUCTS}${messageId}${params}&sortField=${sortField}&sortOrder=${sortOrder}&pageNumber=${pageNumber}&limit=10`
           : `${BASE_URL}${GET_PRODUCTS}${messageId}&sortField=${sortField}&sortOrder=${sortOrder}&pageNumber=${pageNumber}&limit=10`;
       } else {
-        url = `${BASE_URL}${GET_PRODUCTS}${messageId}&sortField=price&sortOrder=asc&pageNumber=${pageNumber}&limit=10`;
+        url = `${BASE_URL}${GET_PRODUCTS}${messageId}&pageNumber=${pageNumber}&limit=10`;
       }
       const {data} = await getData(url, options);
       if (data.message.catalogs.length > 0 || requestCount === 6) {

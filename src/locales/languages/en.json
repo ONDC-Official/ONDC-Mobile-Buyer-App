@@ -81,6 +81,7 @@
       "na": "NA"
     },
     "product": {
+      "sort_products_label": "Sort Products",
       "select_location_label": "Select a location",
       "add_button_title": "Add",
       "provider_label": "Provider",

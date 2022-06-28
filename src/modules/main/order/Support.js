@@ -99,7 +99,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
     <View style={styles.centeredView}>
       <Dialog isVisible={modalVisible} overlayStyle={styles.overlayStyle}>
         <View style={styles.container}>
-          <Text style={styles.heading}>ONDC{'  '}SUPPORT</Text>
+          <Text style={styles.heading}>ONDC SUPPORT</Text>
 
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
@@ -136,6 +136,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
                   placeholder={t('main.order.placeholder')}
                   errorMessage={touched.number ? errors.number : null}
                   onChangeText={handleChange('number')}
+                  disabled={callInProgress}
                 />
                 <View style={styles.buttonContainer}>
                   <View style={styles.button}>
@@ -143,13 +144,15 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
                       title={t('main.order.cancel')}
                       onPress={() => setModalVisible(false)}
                       color={colors.error}
+                      disabled={callInProgress}
                     />
                   </View>
                   <View style={styles.button}>
                     <ContainButton
                       title={t('main.order.call_me')}
                       onPress={handleSubmit}
-                      loader={callInProgress}
+                      loading={callInProgress}
+                      disabled={callInProgress}
                     />
                   </View>
                 </View>

@@ -134,7 +134,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                     bpp_id: item.bpp_details.bpp_id,
                     provider: {
                       id: item.provider_details.id,
-                      locations: [item.location_id],
+                      locations: [item.location_details.id],
                     },
                   },
                 ],
