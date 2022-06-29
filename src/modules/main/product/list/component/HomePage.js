@@ -10,11 +10,11 @@ const list = [
   },
   {
     category: i18n.t('main.product.homepage.fashion'),
-    image: require('../../../../../assets/fashion.jpg'),
+    image: require('../../../../../assets/fashion.png'),
   },
   {
     category: i18n.t('main.product.homepage.food_bevarages'),
-    image: require('../../../../../assets/food.jpg'),
+    image: require('../../../../../assets/food.png'),
   },
   {
     category: i18n.t('main.product.homepage.fruites_label'),
@@ -26,7 +26,7 @@ const list = [
   },
   {
     category: i18n.t('main.product.homepage.home_decore'),
-    image: require('../../../../../assets/homeDecore.jpg'),
+    image: require('../../../../../assets/homeDecore.png'),
   },
 ];
 

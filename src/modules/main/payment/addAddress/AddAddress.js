@@ -83,7 +83,9 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
         city: item.address.city,
         state: item.address.state,
         pin: item.address.areaCode,
-        landMark: item.address.locality,
+        landMark: item.address.locality
+          ? item.address.locality
+          : item.address.door,
         street: item.address.street,
       };
     } else {
@@ -94,7 +96,9 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
         city: item.address.city,
         state: item.address.state,
         pin: item.address.areaCode,
-        landMark: item.address.locality,
+        landMark: item.address.locality
+          ? item.address.locality
+          : item.address.door,
         street: item.address.street,
       };
     }
