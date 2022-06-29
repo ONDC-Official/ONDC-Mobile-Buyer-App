@@ -2,13 +2,13 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import {withBadge} from 'react-native-elements';
 import {useTheme} from 'react-native-elements';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector} from 'react-redux';
 import Cart from '../cart/Cart';
 import More from '../more/More';
 import Order from '../order/Order';
 import Products from '../product/list/Products';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 

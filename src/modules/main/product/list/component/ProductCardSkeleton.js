@@ -8,27 +8,25 @@ import {appStyles} from '../../../../../styles/styles';
  * Component to show skeleton of product card
  * @returns {JSX.Element}
  */
-const ProductCardSkeleton = () => {
-  return (
-    <Card containerStyle={styles.card}>
-      <SkeletonPlaceholder>
-        <View style={styles.container}>
-          <View style={styles.image} />
-          <View style={appStyles.container}>
-            <View style={styles.name} />
-            <View style={styles.description} />
-            <View style={styles.priceContainer}>
-              <View style={appStyles.container}>
-                <View style={styles.price} />
-              </View>
-              <View style={styles.button} />
+const ProductCardSkeleton = () => (
+  <Card containerStyle={styles.card}>
+    <SkeletonPlaceholder>
+      <View style={styles.container}>
+        <View style={styles.image}/>
+        <View style={appStyles.container}>
+          <View style={styles.name}/>
+          <View style={styles.description}/>
+          <View style={styles.priceContainer}>
+            <View style={appStyles.container}>
+              <View style={styles.price}/>
             </View>
+            <View style={styles.button}/>
           </View>
         </View>
-      </SkeletonPlaceholder>
-    </Card>
-  );
-};
+      </View>
+    </SkeletonPlaceholder>
+  </Card>
+);
 
 export default ProductCardSkeleton;
 

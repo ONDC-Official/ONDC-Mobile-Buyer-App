@@ -118,35 +118,35 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
     const payload =
       selectedAddress === 'address'
         ? {
-            descriptor: {
-              name: values.name,
-              email: values.email,
-              phone: values.number,
-            },
-            gps: '',
-            defaultAddress: true,
-            address: {
-              areaCode: values.pin,
-              city: values.city,
-              locality: values.landMark,
-              state: values.state,
-              street: values.street,
-              country: 'IND',
-            },
-          }
-        : {
-            address: {
-              areaCode: values.pin,
-              city: values.city,
-              locality: values.landMark,
-              state: values.state,
-              street: values.street,
-              country: 'IND',
-            },
+          descriptor: {
             name: values.name,
             email: values.email,
             phone: values.number,
-          };
+          },
+          gps: '',
+          defaultAddress: true,
+          address: {
+            areaCode: values.pin,
+            city: values.city,
+            locality: values.landMark,
+            state: values.state,
+            street: values.street,
+            country: 'IND',
+          },
+        }
+        : {
+          address: {
+            areaCode: values.pin,
+            city: values.city,
+            locality: values.landMark,
+            state: values.state,
+            street: values.street,
+            country: 'IND',
+          },
+          name: values.name,
+          email: values.email,
+          phone: values.number,
+        };
 
     try {
       setApiInProgress(true);
@@ -205,13 +205,13 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                   });
               }}>
               {({
-                values,
-                errors,
-                handleChange,
-                handleBlur,
-                touched,
-                handleSubmit,
-              }) => {
+                  values,
+                  errors,
+                  handleChange,
+                  handleBlur,
+                  touched,
+                  handleSubmit,
+                }) => {
                 return (
                   <>
                     <InputField

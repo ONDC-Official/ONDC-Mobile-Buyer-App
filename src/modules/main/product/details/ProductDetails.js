@@ -1,12 +1,6 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -71,7 +65,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backIcon}>
-          <Icon name="arrow-left" size={16} color={colors.accentColor} />
+          <Icon name="arrow-left" size={16} color={colors.accentColor}/>
         </TouchableOpacity>
         <View
           style={[
@@ -89,7 +83,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 
         <ScrollView>
           <View style={styles.imageContainer}>
-            <Text style={styles.discriptorName}>{item.descriptor.name}</Text>
+            <Text style={styles.descriptorName}>{item.descriptor.name}</Text>
             <Text style={[styles.provider, {color: colors.gray}]}>
               {t('main.product.product_details.ordering_from')}{' '}
               <Text
@@ -107,15 +101,15 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
               </Text>
             )}
 
-            <Text style={styles.discriptorName}>
+            <Text style={styles.descriptorName}>
               ₹{item.price.value ? item.price.value : item.price.maximum_value}
             </Text>
           </View>
-          <Divider width={1} style={styles.divider} />
+          <Divider width={1} style={styles.divider}/>
 
           <>
-            <Details style={styles.divider} item={item} />
-            <Divider />
+            <Details style={styles.divider} item={item}/>
+            <Divider/>
           </>
 
           <View style={styles.addButton}>
@@ -139,13 +133,13 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => updateQuantity(false)}>
-                  <Icon name="minus" size={16} color={colors.white} />
+                  <Icon name="minus" size={16} color={colors.white}/>
                 </TouchableOpacity>
                 <Text style={{color: colors.white}}>{item.quantity}</Text>
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => updateQuantity(true)}>
-                  <Icon name="plus" color={colors.white} size={16} />
+                  <Icon name="plus" color={colors.white} size={16}/>
                 </TouchableOpacity>
               </View>
             )}
@@ -159,7 +153,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 export default withTheme(ProductDetails);
 
 const styles = StyleSheet.create({
-  discriptorName: {fontSize: 18, fontWeight: '700', marginBottom: 4},
+  descriptorName: {fontSize: 18, fontWeight: '700', marginBottom: 4},
   provider: {fontSize: 14, marginBottom: 4, flexShrink: 1},
   imageContainer: {padding: 10},
   priceContainer: {fontWeight: '700'},

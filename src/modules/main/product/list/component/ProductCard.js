@@ -90,7 +90,7 @@ const ProductCard = ({theme, navigation, item, cancellable}) => {
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => cancelItem(item)}>
-                  <Icon name="close" size={20} />
+                  <Icon name="close" size={20}/>
                 </TouchableOpacity>
               )}
             </View>
@@ -124,13 +124,13 @@ const ProductCard = ({theme, navigation, item, cancellable}) => {
                   <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => updateQuantity(false)}>
-                    <Icon name="minus" size={16} color={colors.white} />
+                    <Icon name="minus" size={16} color={colors.white}/>
                   </TouchableOpacity>
                   <Text style={{color: colors.white}}>{item.quantity}</Text>
                   <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => updateQuantity(true)}>
-                    <Icon name="plus" color={colors.white} size={16} />
+                    <Icon name="plus" color={colors.white} size={16}/>
                   </TouchableOpacity>
                 </View>
               )}
@@ -159,8 +159,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    paddingHorizontal: 26,
+    paddingVertical: 6,
     borderRadius: 15,
     borderWidth: 1,
   },

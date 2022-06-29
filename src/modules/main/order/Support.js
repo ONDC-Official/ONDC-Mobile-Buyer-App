@@ -6,6 +6,7 @@ import {Dialog, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Yup from 'yup';
 import ContainButton from '../../../components/button/ContainButton';
+import OutlineButton from '../../../components/button/OutlineButton';
 import InputField from '../../../components/input/InputField';
 import {Context as AuthContext} from '../../../context/Auth';
 import {getData, postData} from '../../../utils/api';
@@ -53,7 +54,7 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
    * @param number:number entered by uder
    * @returns {Promise<void>}
    */
-  const callMe = async number => {
+  const requestCall = async number => {
     try {
       setCallInProgress(true);
       const {data} = await postData(
@@ -98,14 +99,12 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
     <View style={styles.centeredView}>
       <Dialog isVisible={modalVisible} overlayStyle={styles.overlayStyle}>
         <View style={styles.container}>
-          <Text style={styles.heading}>ONDC{'  '}SUPPORT</Text>
+          <Text style={styles.heading}>ONDC SUPPORT</Text>
 
           <TouchableOpacity
-            onPress={() => {
-              setModalVisible(false);
-            }}
+            onPress={() => setModalVisible(false)}
             style={styles.close}>
-            <Icon name="close-thick" color={colors.accentColor} size={16} />
+            <Icon name="close-thick" color={colors.accentColor} size={16}/>
           </TouchableOpacity>
         </View>
         <Text style={styles.messageContainer}>{t('main.order.message')}</Text>
@@ -114,18 +113,18 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
           initialValues={userInfo}
           validationSchema={validationSchema}
           onSubmit={values => {
-            callMe(values.number)
+            requestCall(values.number)
               .then(() => {})
               .catch(() => {});
           }}>
           {({
-            values,
-            errors,
-            handleChange,
-            handleBlur,
-            touched,
-            handleSubmit,
-          }) => {
+              values,
+              errors,
+              handleChange,
+              handleBlur,
+              touched,
+              handleSubmit,
+            }) => {
             return (
               <>
                 <InputField
@@ -137,27 +136,23 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
                   placeholder={t('main.order.placeholder')}
                   errorMessage={touched.number ? errors.number : null}
                   onChangeText={handleChange('number')}
+                  disabled={callInProgress}
                 />
                 <View style={styles.buttonContainer}>
                   <View style={styles.button}>
-                    <ContainButton
-                      backgroundColor={colors.cancelledBackground}
-                      borderColor={colors.error}
+                    <OutlineButton
                       title={t('main.order.cancel')}
-                      onPress={() => {
-                        setModalVisible(false);
-                      }}
+                      onPress={() => setModalVisible(false)}
                       color={colors.error}
+                      disabled={callInProgress}
                     />
                   </View>
                   <View style={styles.button}>
                     <ContainButton
-                      backgroundColor={colors.statusBackground}
-                      borderColor={colors.accentColor}
                       title={t('main.order.call_me')}
                       onPress={handleSubmit}
-                      color={colors.accentColor}
-                      loader={callInProgress}
+                      loading={callInProgress}
+                      disabled={callInProgress}
                     />
                   </View>
                 </View>
@@ -190,12 +185,12 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     padding: 10,
+    justifyContent: 'flex-end',
   },
   close: {
-    paddingVertical: 5,
-    paddingHorizontal: 5,
+    paddingVertical: 4,
+    paddingHorizontal: 4,
     borderRadius: 50,
     alignSelf: 'flex-end',
   },
@@ -207,5 +202,5 @@ const styles = StyleSheet.create({
   },
   heading: {fontSize: 18},
   messageContainer: {padding: 10},
-  button: {width: 90},
+  button: {width: 90, marginHorizontal: 8},
 });

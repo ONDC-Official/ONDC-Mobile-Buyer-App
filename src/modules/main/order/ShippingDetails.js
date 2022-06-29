@@ -1,26 +1,15 @@
 import React, {useContext, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  FlatList,
-  Linking,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, Linking, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ContainButton from '../../../components/button/ContainButton';
+import OutlineButton from '../../../components/button/OutlineButton';
 import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
-import {
-  BASE_URL,
-  CANCEL_ORDER,
-  ON_CANCEL_ORDER,
-  ON_TRACK_ORDER,
-  TRACK_ORDER,
-} from '../../../utils/apiUtilities';
+import {BASE_URL, CANCEL_ORDER, ON_CANCEL_ORDER, ON_TRACK_ORDER, TRACK_ORDER,} from '../../../utils/apiUtilities';
 import {FAQS, ORDER_STATUS} from '../../../utils/Constants';
 import {showToastWithGravity} from '../../../utils/utils';
 import Support from './Support';
@@ -153,33 +142,33 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
 
   return (
     <View style={[appStyles.container, styles.container]}>
-      <Divider />
-      <FlatList data={order.quote.breakup} renderItem={renderItem} />
+      <Divider/>
+      <FlatList data={order?.quote?.breakup} renderItem={renderItem}/>
       <View>
         <View style={styles.addressContainer}>
           <Text style={{color: colors.grey}}>{t('main.order.billed_to')}</Text>
-          <Text style={styles.name}>{order.billing.name}</Text>
-          <Text style={styles.address}>{order.billing.email}</Text>
-          <Text style={styles.address}>{order.billing.phone}</Text>
+          <Text style={styles.name}>{order?.billing?.name}</Text>
+          <Text style={styles.address}>{order?.billing?.email}</Text>
+          <Text style={styles.address}>{order?.billing?.phone}</Text>
 
           <Text style={styles.address}>
-            {order.billing.address.street}, {order.billing.address.city},{' '}
-            {order.billing.address.state}
+            {order?.billing?.address.street}, {order?.billing?.address.city},{' '}
+            {order?.billing?.address.state}
           </Text>
           <Text>
-            {order.billing.address.areaCode
-              ? order.billing.address.areaCode
+            {order?.billing?.address.areaCode
+              ? order?.billing?.address.areaCode
               : null}
           </Text>
         </View>
       </View>
-      <Divider style={styles.divider} />
+      <Divider style={styles.divider}/>
 
       <View style={[styles.rowContainer, styles.actionContainer]}>
         <TouchableOpacity
           onPress={() => setModalVisible(true)}
           style={[styles.icon, {backgroundColor: colors.accentColor}]}>
-          <Icon name="phone" color={colors.white} size={20} />
+          <Icon name="phone" color={colors.white} size={20}/>
         </TouchableOpacity>
         <Support
           modalVisible={modalVisible}
@@ -199,8 +188,6 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
             ) : (
               <View style={styles.Button}>
                 <ContainButton
-                  backgroundColor={colors.greyOutline}
-                  borderColor={colors.greyOutline}
                   title={t('main.order.track')}
                   onPress={() => {
                     trackOrder()
@@ -208,15 +195,12 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
                       .catch(() => {});
                   }}
                   loader={trackInProgress}
-                  color={colors.black}
                 />
               </View>
             )}
-            <View style={styles.space} />
+            <View style={styles.space}/>
             <View style={styles.Button}>
-              <ContainButton
-                backgroundColor={colors.accentColor}
-                borderColor={colors.accentColor}
+              <OutlineButton
                 title={t('main.order.cancel')}
                 onPress={() => {
                   cancelOrder()
@@ -224,7 +208,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
                     .catch(() => {});
                 }}
                 loader={cancelInProgress}
-                color={colors.white}
+                color={colors.error}
               />
             </View>
           </View>
@@ -253,8 +237,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   space: {margin: 5},
-  actionContainer: {paddingVertical: 10},
-  container: {paddingVertical: 10},
+  actionContainer: {paddingTop: 10},
+  container: {
+    paddingTop: 8,
+  },
   rowContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',

@@ -9,13 +9,11 @@ import {appStyles} from '../../../../../styles/styles';
  * @constructor
  * @returns {JSX.Element}
  */
-const EmptyComponent = ({message}) => {
-  return (
-    <View style={[appStyles.container, styles.container]}>
-      <Text>{message}</Text>
-    </View>
-  );
-};
+const EmptyComponent = ({message}) => (
+  <View style={[appStyles.container, styles.container]}>
+    <Text>{message}</Text>
+  </View>
+);
 
 export default withTheme(EmptyComponent);
 

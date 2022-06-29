@@ -10,10 +10,10 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 const OrderCardSkeleton = () => (
   <Card containerStyle={styles.card}>
     <SkeletonPlaceholder>
-      <View style={styles.name} />
+      <View style={styles.name}/>
       <View style={styles.status}>
-        <View style={styles.date} />
-        <View style={styles.price} />
+        <View style={styles.date}/>
+        <View style={styles.price}/>
       </View>
     </SkeletonPlaceholder>
   </Card>

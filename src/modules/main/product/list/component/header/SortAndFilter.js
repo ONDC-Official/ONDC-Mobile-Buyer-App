@@ -5,10 +5,10 @@ import {Divider, Text, withTheme} from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
-import {PRODUCT_SORTING} from '../../../../../utils/Constants';
-import {cleanFormData, half, threeForth} from '../../../../../utils/utils';
-import useProductList from '../../hook/useProductList';
-import Filters from './Filters';
+import {PRODUCT_SORTING} from '../../../../../../utils/Constants';
+import {cleanFormData, half, threeForth} from '../../../../../../utils/utils';
+import useProductList from '../../../hook/useProductList';
+import Filters from '../Filters';
 import SortMenu from './SortMenu';
 
 /**
@@ -20,17 +20,15 @@ import SortMenu from './SortMenu';
  * @returns {JSX.Element}
  */
 const SortAndFilter = ({
-  theme,
-  setCount,
-  appliedFilters,
-  setAppliedFilters,
-  pageNumber,
-}) => {
+                         theme,
+                         setCount,
+                         appliedFilters,
+                         setAppliedFilters,
+                         pageNumber,
+                       }) => {
   const {colors} = theme;
 
-  const [selectedSortMethod, setSelectedSortMethod] = useState(
-    PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
-  );
+  const [selectedSortMethod, setSelectedSortMethod] = useState(null);
 
   const {t} = useTranslation();
 
@@ -141,15 +139,16 @@ const SortAndFilter = ({
 
   return (
     <>
-      <Divider width={1} />
+      <Divider width={1}/>
       <View
         style={[styles.sortFilterContainer, {backgroundColor: colors.white}]}>
         <TouchableOpacity onPress={openSortSheet}>
-          <Text style={[styles.text, {color: colors.accentColor}]}>
-            {selectedSortMethod}
-            {'  '}
-            <Icon name="pencil-square" size={14} />
-          </Text>
+          <View style={styles.row}>
+            <Text style={[styles.text, {color: colors.accentColor}]}>
+              {selectedSortMethod ? selectedSortMethod : t('main.product.sort_products_label')}
+            </Text>
+            <Icon name="pencil-square" size={14} color={colors.accentColor} />
+          </View>
         </TouchableOpacity>
         <RBSheet
           ref={refSortSheet}
@@ -165,15 +164,17 @@ const SortAndFilter = ({
             onApply={onApply}
           />
         </RBSheet>
-        <Divider orientation="vertical" width={1} />
+        <Divider orientation="vertical" width={1}/>
         <TouchableOpacity onPress={openRBSheet}>
-          <Text style={[styles.text, {color: colors.accentColor}]}>
-            {t('main.product.filters.filter')}
-            {filtersLength && filtersLength > 1
-              ? `(${filtersLength - 1})`
-              : null}{' '}
-            <Icon name="filter" size={14} />
-          </Text>
+          <View style={styles.row}>
+            <Text style={[styles.text, {color: colors.accentColor}]}>
+              {t('main.product.filters.filter')}
+              {filtersLength && filtersLength > 1
+                ? `(${filtersLength - 1})`
+                : null}
+            </Text>
+            <Icon name="filter" size={14} color={colors.accentColor}/>
+          </View>
         </TouchableOpacity>
         <RBSheet
           ref={refRBSheet}
@@ -246,5 +247,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
   },
   sortFilterContainer: {flexDirection: 'row', justifyContent: 'space-evenly'},
-  text: {paddingVertical: 8, fontWeight: '700'},
+  text: {paddingVertical: 8, fontWeight: '700', marginRight: 8},
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center', justifyContent: 'center'
+  },
 });

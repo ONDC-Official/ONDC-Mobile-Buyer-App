@@ -11,7 +11,7 @@ import FastImage from 'react-native-fast-image';
  * @constructor
  * @returns {JSX.Element}
  */
-const ItemCard = ({width, item}) => {
+const CategoryCard = ({width, item}) => {
   return (
     <View style={[styles.container, {width: width}]}>
       <FastImage
@@ -26,7 +26,7 @@ const ItemCard = ({width, item}) => {
   );
 };
 
-export default withTheme(ItemCard);
+export default withTheme(CategoryCard);
 
 const styles = StyleSheet.create({
   container: {padding: 10, alignItems: 'center'},

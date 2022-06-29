@@ -22,16 +22,14 @@ const Header = ({theme, title, show, navigation}) => {
   /**
    * function handles click event of add button
    */
-  const onPressHandler = () => {
-    navigation.navigate('AddAddress', {selectedAddress: show});
-  };
+  const onPressHandler = () => navigation.navigate('AddAddress', {selectedAddress: show});
 
   return (
     <View style={[styles.container, {backgroundColor: colors.white}]}>
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}>
-        <Icon name="arrow-left" size={16} color={colors.accentColor} />
+        <Icon name="arrow-left" size={16} color={colors.accentColor}/>
       </TouchableOpacity>
 
       <View style={appStyles.container}>

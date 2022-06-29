@@ -25,7 +25,7 @@ const Landing = ({navigation}) => {
   return (
     <View style={appStyles.container}>
       <View style={[appStyles.container, styles.container]}>
-        <Image source={logo} style={styles.image} />
+        <Image source={logo} style={styles.image}/>
 
         <View style={styles.buttonContainer}>
           <ContainButton

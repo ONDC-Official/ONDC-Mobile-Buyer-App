@@ -118,7 +118,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         showToastWithGravity(error.current.error.message);
       }
       if (total.current) {
-        console.log(total.current);
         placeOrder()
           .then(() => {})
           .catch(() => {});
@@ -165,7 +164,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         showToastWithGravity(error.current.error.message);
         setConfirmOrderRequested(false);
       }
-    }, 10000);
+    }, 20000);
   };
 
   /**
@@ -197,8 +196,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             bpp_id: item.bpp_id,
             provider: {
               id: item.provider.id,
-              locations: ['el'],
-              //   locations: location,
+              locations: item.provider.locations,
             },
           };
           payload[index].message.items.push(itemObj);
@@ -222,7 +220,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             country: 'IND',
             city: selectedBillingAddress.address.city,
             street: selectedBillingAddress.address.street,
-            area_code: selectedBillingAddress.address.areaCode,
+            areaCode: selectedBillingAddress.address.areaCode,
             state: selectedBillingAddress.address.state,
             building: selectedBillingAddress.address.building
               ? selectedBillingAddress.address.building
@@ -247,8 +245,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   bpp_id: item.bpp_id,
                   provider: {
                     id: item.provider ? item.provider.id : item.id,
-                    locations: ['el'],
-                    //   locations: location,
+                    locations: item.provider.locations,
                   },
                 },
               ],
@@ -266,7 +263,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                     country: 'IND',
                     city: selectedAddress.address.city,
                     street: selectedAddress.address.street,
-                    area_code: selectedAddress.address.areaCode,
+                    areaCode: selectedAddress.address.areaCode,
                     state: selectedAddress.address.state,
                     building: selectedAddress.address.building
                       ? selectedAddress.address.building
@@ -458,7 +455,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             }
           });
 
-          onConfirmOrder(messageIds);
+          await onConfirmOrder(messageIds);
         } else {
           showToastWithGravity(t('network_error.something_went_wrong'));
         }
@@ -478,7 +475,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
     const options = {
       headers: {Authorization: `Bearer ${token}`},
     };
-    console.log('its running');
 
     try {
       timeStamp.current = String(new Date().getTime());
@@ -559,7 +555,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
             navigation={navigation}
           />
           {initializeOrderRequested ? (
-            <PaymentSkeleton />
+            <PaymentSkeleton/>
           ) : (
             <>
               <View style={styles.container}>
@@ -574,7 +570,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                               <Text style={styles.price}>{item.title}</Text>
                               <Text>₹{item.price.value}</Text>
                             </View>
-                            <Divider />
+                            <Divider/>
                           </>
                         );
                       }}
@@ -667,7 +663,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         </View>
       ) : (
         <View style={[appStyles.container, styles.processing]}>
-          <ActivityIndicator size={30} color={colors.accentColor} />
+          <ActivityIndicator size={30} color={colors.accentColor}/>
           <Text style={[styles.processingText, {color: colors.accentColor}]}>
             {t('main.cart.payment.processing_label')}{' '}
           </Text>

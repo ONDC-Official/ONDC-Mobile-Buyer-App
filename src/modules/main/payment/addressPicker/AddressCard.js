@@ -8,22 +8,23 @@ import {appStyles} from '../../../../styles/styles';
  * Component to render single address card in select address screen
  * @param theme
  * @param selectedAddress:address selected by user
- * @param setSelectedAddress:function to set selected address
+ * @param setSelectedAddress: function to set selected address
  * @param item:object which contains address details
  * @param onEdit:function handles click event of edit
- * @param setBillingAdrress:function to set billing address
+ * @param params
+ * @param setBillingAddress: function to set billing address
  * @constructor
  * @returns {JSX.Element}
  */
 const AddressCard = ({
-  item,
-  theme,
-  onEdit,
-  selectedAddress,
-  setSelectedAddress,
-  params,
-  setBillingAdrress,
-}) => {
+                       item,
+                       theme,
+                       onEdit,
+                       selectedAddress,
+                       setSelectedAddress,
+                       params,
+                       setBillingAddress,
+                     }) => {
   const {colors} = theme;
 
   const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
@@ -34,8 +35,8 @@ const AddressCard = ({
    **/
   const onPressHandler = () => {
     setSelectedAddress(item);
-    if (!params && setBillingAdrress) {
-      setBillingAdrress(item);
+    if (!params && setBillingAddress) {
+      setBillingAddress(item);
     }
   };
 
@@ -58,7 +59,7 @@ const AddressCard = ({
                 <Text style={styles.name}>{item.descriptor.name}</Text>
               ) : null}
               <TouchableOpacity onPress={onEdit}>
-                <Icon name="pencil" size={14} color={colors.accentColor} />
+                <Icon name="pencil" size={14} color={colors.accentColor}/>
               </TouchableOpacity>
             </View>
             {item.descriptor.email ? (
@@ -96,7 +97,7 @@ const AddressCard = ({
             <View style={styles.iconContainer}>
               {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
               <TouchableOpacity onPress={onEdit}>
-                <Icon name="pencil" size={14} color={colors.accentColor} />
+                <Icon name="pencil" size={14} color={colors.accentColor}/>
               </TouchableOpacity>
             </View>
 

@@ -1,13 +1,7 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
@@ -37,7 +31,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
 
   const [selectedAddress, setSelectedAddress] = useState(null);
 
-  const [billingAddress, setBillingAdrress] = useState(null);
+  const [billingAddress, setBillingAddress] = useState(null);
 
   const isFocused = useIsFocused();
 
@@ -101,14 +95,14 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
       });
     };
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item} />
+      <AddressCardSkeleton item={item}/>
     ) : (
       <AddressCard
         item={item}
         selectedAddress={selectedAddress}
         setSelectedAddress={setSelectedAddress}
         params={params}
-        setBillingAdrress={setBillingAdrress}
+        setBillingAddress={setBillingAddress}
         onEdit={onEdit}
       />
     );
@@ -116,14 +110,14 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
 
   useEffect(() => {
     if (isFocused) {
-      setBillingAdrress(null);
+      setBillingAddress(null);
       setSelectedAddress(null);
       getAddressList()
         .then(() => {})
         .catch(() => {});
       params
-        ? setBillingAdrress(params.billingAddress)
-        : setBillingAdrress(selectedAddress);
+        ? setBillingAddress(params.billingAddress)
+        : setBillingAddress(selectedAddress);
     }
   }, [isFocused]);
 
