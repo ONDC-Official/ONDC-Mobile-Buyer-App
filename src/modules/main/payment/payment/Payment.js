@@ -164,7 +164,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         showToastWithGravity(error.current.error.message);
         setConfirmOrderRequested(false);
       }
-    }, 20000);
+    }, 12000);
   };
 
   /**

@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {useContext} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useDispatch, useSelector} from 'react-redux';
@@ -12,6 +13,7 @@ import {cleanFormData} from '../../../../utils/utils';
 
 export default () => {
   const {handleApiError} = useNetworkErrorHandling();
+  const [searchRequested, setSearchRequested] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -219,6 +221,7 @@ export default () => {
       dispatch(saveProducts([]));
       dispatch(clearFilters());
 
+      setSearchRequested(true);
       let requestParameters = {
         context: {},
         message: {
@@ -277,5 +280,5 @@ export default () => {
     }
   };
 
-  return {getProductsList, search};
+  return {getProductsList, search, searchRequested};
 };

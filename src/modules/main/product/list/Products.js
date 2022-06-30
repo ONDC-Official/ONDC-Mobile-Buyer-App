@@ -82,7 +82,7 @@ const Products = ({navigation}) => {
 
   const refRBSheet = useRef();
 
-  const {search, getProductsList} = useProductList();
+  const {search, getProductsList, searchRequested} = useProductList();
 
   const openSheet = () => refRBSheet.current.open();
 
@@ -109,7 +109,7 @@ const Products = ({navigation}) => {
 
   /**
    * Function is used to get location of user
-   * @param response:response get from getcurrent position which contains lattitude and longitude
+   * @param response:response get from recurrent position which contains latitude and longitude
    * @returns {Promise<void>}
    **/
   const getLocation = async response => {
@@ -282,7 +282,6 @@ const Products = ({navigation}) => {
       .then(() => {
         pageNumber.current = pageNumber.current + 1;
       })
-
       .catch(() => {});
   };
 
@@ -368,7 +367,6 @@ const Products = ({navigation}) => {
           isVisible={isVisible}
           setIsVisible={setIsVisible}
         />
-        {products.length === 0 && <ListPlaceholder/>}
         <FlatList
           data={listData}
           renderItem={renderItem}
@@ -376,15 +374,19 @@ const Products = ({navigation}) => {
             return index.toString();
           }}
           ListEmptyComponent={() => {
-            return (
-              <EmptyComponent
-                message={
-                  !apiInProgress
-                    ? t('main.product.search_item_message')
-                    : t('main.product.no_results')
-                }
-              />
-            );
+            if (searchRequested) {
+              return (
+                <EmptyComponent
+                  message={
+                    !apiInProgress
+                      ? t('main.product.search_item_message')
+                      : t('main.product.no_results')
+                  }
+                />
+              )
+            } else {
+              return <ListPlaceholder />
+            }
           }}
           onEndReachedThreshold={0.2}
           onEndReached={loadMoreList}

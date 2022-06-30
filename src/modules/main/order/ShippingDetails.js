@@ -48,7 +48,8 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
   const [trackInProgress, setTrackInProgress] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const shippingAddress = order.fulfillment.end.location.address;
+  const shippingAddress = order?.fulfillment?.end?.location?.address;
+  const contact = order?.fulfillment?.end?.contact;
 
   const options = {
     headers: {
@@ -144,7 +145,22 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
     <View style={[appStyles.container, styles.container]}>
       <Divider/>
       <FlatList data={order?.quote?.breakup} renderItem={renderItem}/>
-      <View>
+        <View style={styles.addressContainer}>
+          <Text style={{color: colors.grey}}>{t('main.order.shipped_to')}</Text>
+          <Text style={styles.name}>{shippingAddress?.name}</Text>
+          <Text style={styles.address}>{contact?.email}</Text>
+          <Text style={styles.address}>{contact?.phone}</Text>
+
+          <Text style={styles.address}>
+            {shippingAddress?.street}, {shippingAddress?.city},{' '}
+            {shippingAddress?.state}
+          </Text>
+          <Text>
+            {shippingAddress?.areaCode
+              ? shippingAddress?.areaCode
+              : null}
+          </Text>
+        </View>
         <View style={styles.addressContainer}>
           <Text style={{color: colors.grey}}>{t('main.order.billed_to')}</Text>
           <Text style={styles.name}>{order?.billing?.name}</Text>
@@ -161,7 +177,6 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
               : null}
           </Text>
         </View>
-      </View>
       <Divider style={styles.divider}/>
 
       <View style={[styles.rowContainer, styles.actionContainer]}>
@@ -249,7 +264,7 @@ const styles = StyleSheet.create({
   priceContainer: {
     marginTop: 10,
   },
-  name: {fontSize: 18, fontWeight: '700', marginVertical: 4, flexShrink: 1},
+  name: {fontSize: 18, fontWeight: '500', marginVertical: 4, flexShrink: 1},
   title: {fontSize: 16, marginRight: 10, flexShrink: 1},
   price: {fontSize: 16, marginLeft: 10},
   address: {marginBottom: 4},

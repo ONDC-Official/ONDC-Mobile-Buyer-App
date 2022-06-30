@@ -6,6 +6,7 @@ export const theme = {
     secondary: '#606161',
     error: '#FF5959',
     success: '#2EB086',
+    warning: '#F9C132',
     white: '#ffffff',
     cancelledBackground: '#FFE8E7',
     statusBackground: '#E9F1F8',

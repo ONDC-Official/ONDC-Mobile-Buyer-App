@@ -74,10 +74,10 @@ const Cart = ({navigation, theme}) => {
           <View style={[styles.header, {backgroundColor: colors.white}]}>
             <View style={styles.row}>
               <Text style={styles.text}>
-                {t('main.cart.sub_total_label')}{' '}
+                {t('main.cart.sub_total_label')}
               </Text>
               <Text style={styles.price}>
-                ₹{parseFloat(subTotal).toFixed(2)}
+                ₹{Number.isInteger(subTotal) ? subTotal : parseFloat(subTotal).toFixed(2)}
               </Text>
             </View>
 
@@ -135,5 +135,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
   },
-  price: {fontWeight: '700', fontSize: 20},
+  price: {fontWeight: '700', fontSize: 20, marginLeft: 8},
 });

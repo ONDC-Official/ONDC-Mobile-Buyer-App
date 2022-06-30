@@ -5,6 +5,17 @@ import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import {appStyles} from '../../../styles/styles';
 
+const ORDER_STATUS = {
+  ordered: 'ordered',
+  shipped: 'shipped',
+  delivered: 'delivered',
+  canceled: 'canceled',
+  pending_confirmation: 'pending_confirmation',
+  pending: 'pending',
+  active: 'active',
+  processing: 'processing',
+};
+
 /**
  * Component to render single card on orders screen
  * @param theme:application theme
@@ -16,6 +27,155 @@ const OrderCard = ({item, theme}) => {
   const {colors} = theme;
 
   const {t} = useTranslation();
+
+  const getOrderStatus = (status) => {
+    const orderStatus = status ? status.toLowerCase() :  null;
+    switch (orderStatus) {
+      case ORDER_STATUS.ordered:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.accentColor,
+                backgroundColor: colors.statusBackground,
+              },
+            ]}>
+            <Text style={{color: colors.accentColor}}>
+              {t(`main.order.status.${orderStatus}`)}
+            </Text>
+          </View>
+        );
+
+      case ORDER_STATUS.shipped:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.accentColor,
+                backgroundColor: colors.statusBackground,
+              },
+            ]}>
+            <Text style={{color: colors.accentColor}}>
+              {t(`main.order.status.${orderStatus}`)}
+            </Text>
+          </View>
+        );
+
+      case ORDER_STATUS.processing:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.accentColor,
+                backgroundColor: colors.statusBackground,
+              },
+            ]}>
+            <Text style={{color: colors.accentColor}}>
+              {t(`main.order.status.${orderStatus}`)}
+            </Text>
+          </View>
+        );
+
+      case ORDER_STATUS.active:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.success,
+                backgroundColor: colors.statusBackground,
+              },
+            ]}>
+            <Text style={{color: colors.success}}>
+              {t(`main.order.status.${orderStatus}`)}
+            </Text>
+          </View>
+        );
+
+      case ORDER_STATUS.delivered:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.success,
+                backgroundColor: colors.statusBackground,
+              },
+            ]}>
+            <Text style={{color: colors.success}}>
+              {t(`main.order.status.${orderStatus}`)}
+            </Text>
+          </View>
+        );
+
+      case ORDER_STATUS.canceled:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.error,
+                backgroundColor: colors.statusBackground,
+              },
+            ]}>
+            <Text style={{color: colors.error}}>
+              {t(`main.order.status.${orderStatus}`)}
+            </Text>
+          </View>
+        );
+
+      case ORDER_STATUS.pending_confirmation:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.warning,
+                backgroundColor: colors.statusBackground,
+              },
+            ]}>
+            <Text style={{color: colors.warning}}>
+              {t(`main.order.status.${orderStatus}`)}
+            </Text>
+          </View>
+        );
+
+      case ORDER_STATUS.pending:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.warning,
+                backgroundColor: colors.statusBackground,
+              },
+            ]}>
+            <Text style={{color: colors.warning}}>
+              {t(`main.order.status.${orderStatus}`)}
+            </Text>
+          </View>
+        );
+
+      default:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.accentColor,
+                backgroundColor: colors.statusBackground,
+              },
+            ]}>
+            <Text style={{color: colors.accentColor}}>
+              {t(`main.order.status.ordered`)}
+            </Text>
+          </View>
+        );
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -29,18 +189,7 @@ const OrderCard = ({item, theme}) => {
         </Text>
       </View>
 
-      <View
-        style={[
-          styles.orderStatus,
-          {
-            borderColor: colors.accentColor,
-            backgroundColor: colors.statusBackground,
-          },
-        ]}>
-        <Text style={{color: colors.accentColor}}>
-          {t('main.order.pending')}
-        </Text>
-      </View>
+      {getOrderStatus(item.state)}
     </View>
   );
 };

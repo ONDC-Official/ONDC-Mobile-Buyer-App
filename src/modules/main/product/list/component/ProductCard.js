@@ -66,6 +66,7 @@ const ProductCard = ({theme, navigation, item, cancellable}) => {
       ? item.descriptor.images[0]
       : null;
 
+  const cost = item.price.value ? item.price.value : item.price.maximum_value;
   return (
     <Card containerStyle={styles.card}>
       <TouchableOpacity
@@ -101,8 +102,7 @@ const ProductCard = ({theme, navigation, item, cancellable}) => {
             </View>
             <View style={styles.priceContainer}>
               <Text>
-                ₹{' '}
-                {item.price.value ? item.price.value : item.price.maximum_value}
+                ₹{Number.isInteger(cost) ? cost : parseFloat(cost).toFixed(2)}
               </Text>
               {item.quantity < 1 ? (
                 <TouchableOpacity

@@ -76,9 +76,20 @@
       "cancelled": "Cancelled",
       "message": "Enter the phone number on which you want us to call",
       "placeholder": "Enter the phone number",
-      "billed_to": "Billed To:",
+      "billed_to": "Billed To",
+      "shipped_to": "Shipped To",
       "pending": "Pending",
-      "na": "NA"
+      "na": "NA",
+      "status": {
+        "ordered": "Ordered",
+        "shipped": "Shipped",
+        "delivered": "Delivered",
+        "canceled": "Cancelled",
+        "pending_confirmation": "Pending Confirmation",
+        "pending": "Pending",
+        "active": "Active",
+        "processing": "Processing"
+      }
     },
     "product": {
       "sort_products_label": "Sort Products",
@@ -184,5 +195,5 @@
     "version_mismatch_title": "Version mismatch",
     "version_mismatch_message": "Please upgrade your application to the latest version",
     "session_expired_button_label": "Logout"
-  }
+  },
 }

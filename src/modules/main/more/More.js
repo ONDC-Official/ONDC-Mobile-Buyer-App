@@ -1,7 +1,9 @@
 import {useContext} from 'react';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {withTheme} from 'react-native-elements';
+import {useDispatch} from 'react-redux';
 import {Context as AuthContext} from '../../../context/Auth';
 import i18n from '../../../locales/i18next';
 import {clearAllData} from '../../../redux/actions';
@@ -38,6 +40,8 @@ const list = [
  */
 const More = ({navigation}) => {
   const {logoutUser} = useContext(AuthContext);
+  const {t} = useTranslation();
+  const dispatch = useDispatch();
 
   /**
    * Function handles click event of card and depending on option it navigates to respective screen
