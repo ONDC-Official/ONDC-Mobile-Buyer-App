@@ -160,7 +160,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           }
         });
         if (messageIds.length > 0) {
-          await onGetQuote(messageIds);
+          onGetQuote(messageIds);
         } else {
           setConfirmationList([]);
           setApiInProgress(false);

@@ -23,7 +23,7 @@ export const getData = async (url, options) => {
  */
 export const postData = async (url, payload, options) => {
   try {
-    console.log(url);
+    console.log(url, payload);
     return await axios.post(url, payload, options);
   } catch (error) {
     console.log(error);

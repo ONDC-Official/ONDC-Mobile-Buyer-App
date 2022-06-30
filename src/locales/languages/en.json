@@ -70,6 +70,7 @@
       "status_label": "Status :",
       "return": "Return",
       "cancel": "Cancel",
+      "call": "Call",
       "list_empty_message": "No data found",
       "call_me": "Call Me",
       "track": "Track",
@@ -80,6 +81,8 @@
       "shipped_to": "Shipped To",
       "pending": "Pending",
       "na": "NA",
+      "cant_call_title": "Unable to Call",
+      "cant_call_message": "Unable to place your call currently, please try again",
       "status": {
         "ordered": "Ordered",
         "shipped": "Shipped",
@@ -181,6 +184,7 @@
     "no_data_found": "No Data Found"
   },
   "global": {
+    "ok_label": "Ok",
     "and_label": " and ",
     "terms_of_services": "Terms of Services",
     "privacy_policy": "Privacy policy",
@@ -196,4 +200,7 @@
     "version_mismatch_message": "Please upgrade your application to the latest version",
     "session_expired_button_label": "Logout"
   },
+  "support": {
+    "call_is_placed": "Call is placed"
+  }
 }

@@ -1,4 +1,5 @@
 import {Formik} from 'formik';
+import {useEffect} from 'react';
 import React, {useContext, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
@@ -9,8 +10,14 @@ import ContainButton from '../../../components/button/ContainButton';
 import OutlineButton from '../../../components/button/OutlineButton';
 import InputField from '../../../components/input/InputField';
 import {Context as AuthContext} from '../../../context/Auth';
+import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {getData, postData} from '../../../utils/api';
 import {BASE_URL, CALL, ON_SUPPORT, SUPPORT} from '../../../utils/apiUtilities';
+import {showToastWithGravity} from '../../../utils/utils';
+
+const userInfo = {
+  number: '',
+};
 
 /**
  * Component is used to display dialogue when user clicks on call icon
@@ -21,9 +28,9 @@ import {BASE_URL, CALL, ON_SUPPORT, SUPPORT} from '../../../utils/apiUtilities';
  * @returns {JSX.Element}
  * @constructor
  */
-const Support = ({modalVisible, setModalVisible, item, theme}) => {
+const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
   const {colors} = theme;
-
+  const {handleApiError} = useNetworkErrorHandling();
   const {t} = useTranslation();
 
   const {
@@ -32,22 +39,12 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
 
   const [callInProgress, setCallInProgress] = useState(false);
 
-  const userInfo = {
-    number: '',
-  };
-
   const validationSchema = Yup.object({
     number: Yup.string()
       .trim()
       .matches(/^[6-9]{1}[0-9]{9}$/, t('errors.invalid_number'))
       .required(t('errors.required')),
   });
-
-  const options = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
 
   /**
    * Component is used to handle click event of call me button
@@ -56,44 +53,35 @@ const Support = ({modalVisible, setModalVisible, item, theme}) => {
    */
   const requestCall = async number => {
     try {
+      const options = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
       setCallInProgress(true);
       const {data} = await postData(
-        `${BASE_URL}${SUPPORT}`,
-        [
-          {
-            context: {
-              bpp_id: item.bpp_id,
-              transaction_id: item.transaction_id,
-            },
-            message: {
-              ref_id: item.ref_id,
-            },
-          },
-        ],
+        `${BASE_URL}${CALL}`,
+
+        {
+          customer_phone_number: `+91${number}`,
+          seller_phone_number: `+91${sellerInfo.phone}`,
+        },
         options,
       );
-      if (data[0].message.ack.status === 'ACK') {
-        const response = await getData(
-          `${BASE_URL}${ON_SUPPORT}messageIds=${data[0].context.message_id}`,
-          options,
-        );
-
-        await postData(
-          `${BASE_URL}${CALL}`,
-
-          {
-            customer_phone_number: response.data[0].message.phone,
-            seller_phone_number: `+91${number}`,
-          },
-          options,
-        );
+      if (data.hasOwnProperty('error')) {
+        showToastWithGravity(data.error.message);
+      } else {
+        setCallInProgress(false);
         setModalVisible(false);
+        showToastWithGravity(t('support.call_is_placed'));
       }
-      setCallInProgress(false);
-    } catch (e) {
+    } catch (error) {
+      console.log('requestCall', error);
+      handleApiError(error);
       setCallInProgress(false);
     }
   };
+
 
   return (
     <View style={styles.centeredView}>
