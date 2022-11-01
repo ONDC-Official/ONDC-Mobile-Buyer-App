@@ -1,6 +1,8 @@
 import Config from 'react-native-config';
 
 export const BASE_URL = Config.BASE_URL;
+export const SERVER_URL = Config.SERVER_URL;
+export const UPDATE_ORDER = '/clientApis/v1/update';
 export const GET_MESSAGE_ID = '/clientApis/v1/search';
 export const GET_PRODUCTS = '/clientApis/v1/on_search?messageId=';
 export const GET_LOCATION = '/mmi/api/mmi_query?query=';
@@ -12,8 +14,8 @@ export const UPDATE_ADDRESS = '/clientApis/v1/update_delivery_address/';
 export const BILLING_ADDRESS = '/clientApis/v1/billing_details';
 export const UPDATE_BILLING_ADDRESS = '/clientApis/v1/update_billing_details/';
 export const GET_ORDERS = '/clientApis/v1/orders';
-export const GET_QUOTE = '/clientApis/v2/get_quote';
-export const ON_GET_QUOTE = '/clientApis/v2/on_get_quote?';
+export const GET_SELECT = '/clientApis/v2/select';
+export const ON_GET_SELECT = '/clientApis/v2/on_select?';
 export const INITIALIZE_ORDER = '/clientApis/v2/initialize_order';
 export const ON_INITIALIZE_ORDER = '/clientApis/v2/on_initialize_order?';
 export const CONFIRM_ORDER = '/clientApis/v2/confirm_order';
@@ -27,3 +29,7 @@ export const SUPPORT = '/clientApis/v2/get_support';
 export const ON_SUPPORT = '/clientApis/v2/on_support?';
 export const CALL = '/knowlarity/api/call-patron';
 export const FILTER = '/clientApis/v1/getFilterParams?messageId=';
+export const GET_STATUS = '/clientApis/v2/order_status';
+export const ON_GET_STATUS = '/clientApis/v2/on_order_status?messageIds=';
+export const GET_GPS_CORDS = '/mmi/api/mmi_pin_info?pincode=';
+export const ON_UPDATE_ORDER = '/clientApis/v2/on_update?';

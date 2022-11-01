@@ -21,21 +21,21 @@ import {appStyles} from '../../../../../styles/styles';
  * @returns {JSX.Element}
  */
 const Filters = ({
-                   selectedSortMethod,
-                   closeRBSheet,
-                   apiInProgress,
-                   providers,
-                   setProviders,
-                   categories,
-                   setCategories,
-                   min,
-                   max,
-                   setMin,
-                   setMax,
-                   onApply,
-                   onClear,
-                   clearInProgress,
-                 }) => {
+  selectedSortMethod,
+  closeRBSheet,
+  apiInProgress,
+  providers,
+  setProviders,
+  categories,
+  setCategories,
+  min,
+  max,
+  setMin,
+  setMax,
+  onApply,
+  onClear,
+  clearInProgress,
+}) => {
   const {theme} = useTheme();
 
   const {colors} = theme;
@@ -43,6 +43,8 @@ const Filters = ({
   const {t} = useTranslation();
 
   const {filters} = useSelector(({filterReducer}) => filterReducer);
+
+  console.log(JSON.stringify(filters, undefined, 4));
 
   /**
    * function handles click event of checkbox in providers list
@@ -93,7 +95,7 @@ const Filters = ({
           textColor={colors.accentColor}
         />
       </View>
-      <Divider/>
+      <Divider />
 
       {filters.providers.length > 0 ||
       filters.categories.length > 0 ||
@@ -148,64 +150,64 @@ const Filters = ({
             )}
             <View style={styles.container}>
               {filters.minPrice &&
-              filters.maxPrice &&
-              filters.minPrice !== filters.maxPrice && (
-                <>
-                  <Text style={styles.price}>
-                    {t('main.product.filters.price_range')}
-                  </Text>
+                filters.maxPrice &&
+                filters.minPrice !== filters.maxPrice && (
+                  <>
+                    <Text style={styles.price}>
+                      {t('main.product.filters.price_range')}
+                    </Text>
 
-                  <View style={styles.applyButton}>
-                    <View style={styles.amountContainer}>
-                      <InputField
-                        label={t('main.product.filters.min')}
-                        value={`${min}`}
-                        onChangeText={value => {
-                          if (value > filters.minPrice) {
-                            setMin(Number(value));
-                          } else {
-                            setMin(0);
-                          }
-                        }}
-                        keyboardType={'numeric'}
-                        renderErrorMessage={false}
-                      />
+                    <View style={styles.applyButton}>
+                      <View style={styles.amountContainer}>
+                        <InputField
+                          label={t('main.product.filters.min')}
+                          value={`${min}`}
+                          onChangeText={value => {
+                            if (value > filters.minPrice) {
+                              setMin(Number(value));
+                            } else {
+                              setMin(0);
+                            }
+                          }}
+                          keyboardType={'numeric'}
+                          renderErrorMessage={false}
+                        />
+                      </View>
+                      <View style={styles.amountContainer}>
+                        <InputField
+                          label={t('main.product.filters.max')}
+                          value={`${max}`}
+                          onChangeText={value => {
+                            if (value < filters.maxPrice) {
+                              setMax(Number(value));
+                            } else {
+                              setMax(filters.maxPrice);
+                            }
+                          }}
+                          keyboardType={'numeric'}
+                          renderErrorMessage={false}
+                        />
+                      </View>
                     </View>
-                    <View style={styles.amountContainer}>
-                      <InputField
-                        label={t('main.product.filters.max')}
-                        value={`${max}`}
-                        onChangeText={value => {
-                          if (value < filters.maxPrice) {
-                            setMax(Number(value));
-                          } else {
-                            setMax(filters.maxPrice);
-                          }
-                        }}
-                        keyboardType={'numeric'}
-                        renderErrorMessage={false}
-                      />
-                    </View>
-                  </View>
-                  <MultiSlider
-                    selectedStyle={{
-                      backgroundColor: colors.accentColor,
-                    }}
-                    containerStyle={styles.sliderContainer}
-                    markerStyle={[
-                      styles.markerStyle,
-                      {backgroundColor: colors.accentColor},
-                    ]}
-                    trackStyle={styles.trackStyle}
-                    values={[min, max]}
-                    sliderLength={Dimensions.get('window').width - 40}
-                    onValuesChange={handleValueChange}
-                    min={filters.minPrice}
-                    max={filters.maxPrice}
-                    step={1}
-                  />
-                </>
-              )}
+                    <MultiSlider
+                      selectedStyle={{
+                        backgroundColor: colors.accentColor,
+                      }}
+                      containerStyle={styles.sliderContainer}
+                      markerStyle={[
+                        styles.markerStyle,
+                        {backgroundColor: colors.accentColor},
+                      ]}
+                      trackStyle={styles.trackStyle}
+                      values={[min, max]}
+                      sliderLength={Dimensions.get('window').width - 40}
+                      onValuesChange={handleValueChange}
+                      min={filters.minPrice}
+                      max={filters.maxPrice}
+                      step={1}
+                    />
+                  </>
+                )}
             </View>
           </ScrollView>
           <View style={styles.buttonContainer}>

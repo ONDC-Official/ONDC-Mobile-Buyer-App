@@ -8,7 +8,7 @@ import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {BASE_URL, BILLING_ADDRESS} from '../../../../utils/apiUtilities';
+import {SERVER_URL, BILLING_ADDRESS} from '../../../../utils/apiUtilities';
 import {skeletonList} from '../../../../utils/utils';
 import AddressCard from '../addressPicker/AddressCard';
 import AddressCardSkeleton from '../addressPicker/AddressCardSkeleton';
@@ -45,7 +45,7 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
    */
   const getAddressList = async () => {
     try {
-      const {data} = await getData(`${BASE_URL}${BILLING_ADDRESS}`, {
+      const {data} = await getData(`${SERVER_URL}${BILLING_ADDRESS}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

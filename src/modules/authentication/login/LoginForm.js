@@ -67,6 +67,7 @@ const LoginForm = ({navigation}) => {
 
       setApiInProgress(false);
     } catch (error) {
+      console.log(error);
       const message = error.message.replace(/\[.*\]/, '');
       showToastWithGravity(message);
       setApiInProgress(false);

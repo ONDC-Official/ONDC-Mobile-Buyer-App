@@ -1,6 +1,11 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -22,12 +27,21 @@ const image = require('../../../../../assets/noImage.png');
  * @constructor
  * @returns {JSX.Element}
  */
-const ProductCard = ({theme, navigation, item, cancellable}) => {
+const ProductCard = ({
+  theme,
+  navigation,
+  item,
+  cancellable,
+  confirmed,
+  apiInProgress,
+}) => {
   const {colors} = theme;
 
   const dispatch = useDispatch();
 
   const {t} = useTranslation();
+
+  const alignment = apiInProgress ? 'center' : 'auto';
 
   /**
    * function handles click event add button
@@ -67,13 +81,19 @@ const ProductCard = ({theme, navigation, item, cancellable}) => {
       : null;
 
   const cost = item.price.value ? item.price.value : item.price.maximum_value;
+  const cardStyles = !confirmed
+    ? [
+        styles.card,
+        {backgroundColor: colors.cardBackground, borderColor: colors.error},
+      ]
+    : styles.card;
   return (
-    <Card containerStyle={styles.card}>
+    <Card containerStyle={cardStyles}>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
           navigation.navigate('ProductDetails', {
-            item,
+            product: item,
           });
         }}>
         <View style={styles.subContainer}>
@@ -91,7 +111,7 @@ const ProductCard = ({theme, navigation, item, cancellable}) => {
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => cancelItem(item)}>
-                  <Icon name="close" size={20}/>
+                  <Icon name="close" size={20} />
                 </TouchableOpacity>
               )}
             </View>
@@ -124,19 +144,29 @@ const ProductCard = ({theme, navigation, item, cancellable}) => {
                   <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => updateQuantity(false)}>
-                    <Icon name="minus" size={16} color={colors.white}/>
+                    <Icon name="minus" size={16} color={colors.white} />
                   </TouchableOpacity>
                   <Text style={{color: colors.white}}>{item.quantity}</Text>
                   <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => updateQuantity(true)}>
-                    <Icon name="plus" color={colors.white} size={16}/>
+                    <Icon name="plus" color={colors.white} size={16} />
                   </TouchableOpacity>
                 </View>
               )}
             </View>
           </View>
         </View>
+        {!confirmed && (
+          <Text
+            style={{
+              color: colors.error,
+              alignSelf: alignment,
+            }}>
+            {!apiInProgress && 'Cannot fetch details for this product'}
+            {apiInProgress && <ActivityIndicator color={colors.error} />}
+          </Text>
+        )}
       </TouchableOpacity>
     </Card>
   );

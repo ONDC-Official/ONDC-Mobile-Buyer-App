@@ -87,11 +87,14 @@
         "ordered": "Ordered",
         "shipped": "Shipped",
         "delivered": "Delivered",
-        "canceled": "Cancelled",
+        "cancelled": "Cancelled",
         "pending_confirmation": "Pending Confirmation",
         "pending": "Pending",
         "active": "Active",
-        "processing": "Processing"
+        "processing": "Processing",
+        "created":"Created",
+        "returned":"Returned",
+        "updated":"Updated"
       }
     },
     "product": {

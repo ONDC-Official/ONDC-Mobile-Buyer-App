@@ -7,8 +7,8 @@
     </defs>
     <g transform="translate(-987 -299)">
         <g transform="translate(-8)">
-            <text fill="#020303" transform="translate(1056 313)" font-size="12"
-                  font-family="Montserrat-Medium, Montserrat Medium" font-weight="500" opacity="0.6">
+            <text fill="#020303" transform="translate(1056 313)" font-size="10"
+                  font-family="Montserrat-Medium, Montserrat Medium" font-weight="500" opacity="0.6" >
                 <tspan x="-60.13" y="0">Powered by</tspan>
             </text>
             <g transform="translate(1060 300)">

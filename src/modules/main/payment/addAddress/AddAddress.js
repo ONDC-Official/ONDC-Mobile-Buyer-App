@@ -1,7 +1,7 @@
 import {Formik} from 'formik';
 import React, {useContext, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Card, withTheme} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
@@ -10,11 +10,14 @@ import InputField from '../../../../components/input/InputField';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
-import {postData} from '../../../../utils/api';
+import {getData, postData} from '../../../../utils/api';
 import {
-  ADD_ADDRESS,
   BASE_URL,
+  ADD_ADDRESS,
   BILLING_ADDRESS,
+  GET_GPS_CORDS,
+  GET_LATLONG,
+  SERVER_URL,
   UPDATE_ADDRESS,
   UPDATE_BILLING_ADDRESS,
 } from '../../../../utils/apiUtilities';
@@ -40,6 +43,11 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
   const {handleApiError} = useNetworkErrorHandling();
 
   const [apiInProgress, setApiInProgress] = useState(false);
+
+  const [requestInProgress, setRequestInProgress] = useState(false);
+
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
   const {selectedAddress, item} = params;
 
@@ -104,6 +112,31 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
     }
   }
 
+  const getState = async (e, setFieldValue, setFieldError) => {
+    try {
+      setRequestInProgress(true);
+      const {data} = await getData(`${BASE_URL}${GET_GPS_CORDS}${e}`);
+      const response = await getData(
+        `${BASE_URL}${GET_LATLONG}${data.copResults.eLoc}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (response.data.latitude && response.data.longitude) {
+        setLatitude(response.data.latitude);
+        setLongitude(response.data.longitude);
+      }
+      setFieldValue('state', data.copResults.state);
+      setFieldValue('city', data.copResults.city);
+      setApiInProgress(false);
+    } catch (error) {
+      handleApiError(error);
+      setApiInProgress(false);
+    }
+  };
+
   /**
    * Function is used to save new address
    * @param values:object containing user inputs
@@ -118,35 +151,35 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
     const payload =
       selectedAddress === 'address'
         ? {
-          descriptor: {
+            descriptor: {
+              name: values.name,
+              email: values.email,
+              phone: values.number,
+            },
+            gps: `${latitude},${longitude}`,
+            defaultAddress: true,
+            address: {
+              areaCode: values.pin,
+              city: values.city,
+              locality: values.landMark,
+              state: values.state,
+              street: values.street,
+              country: 'IND',
+            },
+          }
+        : {
+            address: {
+              areaCode: values.pin,
+              city: values.city,
+              locality: values.landMark,
+              state: values.state,
+              street: values.street,
+              country: 'IND',
+            },
             name: values.name,
             email: values.email,
             phone: values.number,
-          },
-          gps: '',
-          defaultAddress: true,
-          address: {
-            areaCode: values.pin,
-            city: values.city,
-            locality: values.landMark,
-            state: values.state,
-            street: values.street,
-            country: 'IND',
-          },
-        }
-        : {
-          address: {
-            areaCode: values.pin,
-            city: values.city,
-            locality: values.landMark,
-            state: values.state,
-            street: values.street,
-            country: 'IND',
-          },
-          name: values.name,
-          email: values.email,
-          phone: values.number,
-        };
+          };
 
     try {
       setApiInProgress(true);
@@ -154,13 +187,13 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
       if (item) {
         url =
           selectedAddress === 'address'
-            ? `${BASE_URL}${UPDATE_ADDRESS}${item.id}`
-            : `${BASE_URL}${UPDATE_BILLING_ADDRESS}${item.id}`;
+            ? `${SERVER_URL}${UPDATE_ADDRESS}${item.id}`
+            : `${SERVER_URL}${UPDATE_BILLING_ADDRESS}${item.id}`;
       } else {
         url =
           selectedAddress === 'address'
-            ? `${BASE_URL}${ADD_ADDRESS}`
-            : `${BASE_URL}${BILLING_ADDRESS}`;
+            ? `${SERVER_URL}${ADD_ADDRESS}`
+            : `${SERVER_URL}${BILLING_ADDRESS}`;
       }
 
       await postData(url, payload, options);
@@ -205,13 +238,15 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                   });
               }}>
               {({
-                  values,
-                  errors,
-                  handleChange,
-                  handleBlur,
-                  touched,
-                  handleSubmit,
-                }) => {
+                values,
+                errors,
+                handleChange,
+                handleBlur,
+                touched,
+                handleSubmit,
+                setFieldValue,
+                setFieldError,
+              }) => {
                 return (
                   <>
                     <InputField
@@ -236,6 +271,30 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                       placeholder={t('main.cart.number')}
                       errorMessage={touched.number ? errors.number : null}
                       onChangeText={handleChange('number')}
+                    />
+                    <InputField
+                      value={values.pin}
+                      keyboardType={'numeric'}
+                      maxLength={6}
+                      onBlur={handleBlur('pin')}
+                      placeholder={t('main.cart.pin')}
+                      errorMessage={touched.pin ? errors.pin : null}
+                      onChangeText={e => {
+                        setFieldValue('pin', e);
+                        if (e.length === 6 && e.match(/^[1-9]{1}[0-9]{5}$/)) {
+                          setRequestInProgress(true);
+                          getState(e, setFieldValue, setFieldError)
+                            .then(() => {
+                              setRequestInProgress(false);
+                            })
+                            .catch(() => {
+                              setRequestInProgress(false);
+                            });
+                        }
+                      }}
+                      rightIcon={
+                        requestInProgress ? <ActivityIndicator /> : null
+                      }
                     />
                     <InputField
                       value={values.street}
@@ -264,15 +323,7 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                       placeholder={t('main.cart.state')}
                       errorMessage={touched.state ? errors.state : null}
                       onChangeText={handleChange('state')}
-                    />
-                    <InputField
-                      value={values.pin}
-                      keyboardType={'numeric'}
-                      maxLength={6}
-                      onBlur={handleBlur('pin')}
-                      placeholder={t('main.cart.pin')}
-                      errorMessage={touched.pin ? errors.pin : null}
-                      onChangeText={handleChange('pin')}
+                      editable={false}
                     />
 
                     <View style={styles.buttonContainer}>

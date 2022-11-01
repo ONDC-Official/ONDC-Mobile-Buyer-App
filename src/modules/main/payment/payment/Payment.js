@@ -4,8 +4,8 @@ import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   BackHandler,
-  DeviceEventEmitter,
   FlatList,
+  NativeEventEmitter,
   SafeAreaView,
   StyleSheet,
   View,
@@ -13,8 +13,9 @@ import {
 import Config from 'react-native-config';
 import {Card, CheckBox, Divider} from 'react-native-elements';
 import {Text, withTheme} from 'react-native-elements';
+import RNEventSource from 'react-native-event-source';
 import FastImage from 'react-native-fast-image';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -24,7 +25,7 @@ import {appStyles} from '../../../../styles/styles';
 import {alertWithOneButton} from '../../../../utils/alerts';
 import {getData, postData} from '../../../../utils/api';
 import {
-  BASE_URL,
+  SERVER_URL,
   CONFIRM_ORDER,
   INITIALIZE_ORDER,
   ON_CONFIRM_ORDER,
@@ -58,9 +59,18 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const [initializeOrderRequested, setInitializeOrderRequested] =
     useState(false);
   const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
+  const [inItMessageIds, setInItMessageIds] = useState(null);
+  const [confirmMessageIds, setConfirmMessageIds] = useState(null);
   const {handleApiError} = useNetworkErrorHandling();
+  const eventSources = useRef(null);
+  const [requestInProgress, setRequestInProgress] = useState(false);
+  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+  const {latitude, longitude, pinCode} = useSelector(
+    ({locationReducer}) => locationReducer,
+  );
   const refOrders = useRef();
   const total = useRef(0);
+  const breakup = useRef(null);
   const [quote, setQuote] = useState(null);
   const signedPayload = useRef(null);
   const timeStamp = useRef(null);
@@ -77,94 +87,66 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
   /**
    * function request initialize order
-   * @param messageIdArray:array of message id's
+   * @param id:message id
    * @returns {Promise<void>}
    */
-  const onInitializeOrder = messageIdArray => {
-    const messageIds = messageIdArray.toString();
-    let order = setInterval(async () => {
-      try {
-        const {data} = await getData(
-          `${BASE_URL}${ON_INITIALIZE_ORDER}messageIds=${messageIds}`,
-          {
-            headers: {Authorization: `Bearer ${token}`},
-          },
-        );
-        const ordersArray = data.filter(one => !one.hasOwnProperty('error'));
-        refOrders.current = data;
-        error.current = refOrders.current.find(item =>
-          item.hasOwnProperty('error'),
-        );
-        if (ordersArray.length > 0) {
-          let breakup = [];
-          let price = [];
-          total.current = 0;
-          ordersArray.forEach(one => {
-            breakup = breakup.concat(one.message.order.quote.breakup);
-            price.push(one.message.order.quote.price);
-            total.current =
-              total.current + Number(one.message.order.quote.price.value);
-          });
-          setQuote({breakup, price});
+  const onInitializeOrder = async id => {
+    try {
+      const {data} = await getData(
+        `${SERVER_URL}${ON_INITIALIZE_ORDER}messageIds=${id}`,
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        },
+      );
+      console.log(JSON.stringify(data[0], undefined, 4));
+      if (data[0].hasOwnProperty('error')) {
+        error.current = data[0];
+      } else {
+        let breakups = breakup.current ? breakup.current.slice() : [];
+        let price = [];
+        breakups = breakups.concat(data[0].message.order.quote.breakup);
+        breakup.current = breakups;
+        console.log(breakups);
+        price.push(data[0].message.order.quote.price);
+        total.current =
+          total.current + Number(data[0].message.order.quote.price.value);
+        setQuote({price});
+        if (refOrders.current) {
+          let newArray = refOrders.current.slice();
+          newArray.push(data[0]);
+          refOrders.current = newArray;
+        } else {
+          refOrders.current = data;
         }
-      } catch (err) {
-        handleApiError(err);
-      }
-    }, 2000);
-
-    setTimeout(() => {
-      clearInterval(order);
-      if (error.current) {
-        showToastWithGravity(error.current.error.message);
-      }
-      if (total.current) {
-        placeOrder()
-          .then(() => {})
-          .catch(() => {});
       }
       setInitializeOrderRequested(false);
-    }, 12000);
+      console.log(refOrders.current);
+    } catch (err) {
+      console.log(err);
+      handleApiError(err);
+    }
   };
 
   /**
    * function request confirm order
-   * @param messageIdArray:array of message id's
+   * @param id:message id
    * @returns {Promise<void>}
    */
-  const onConfirmOrder = messageIdArray => {
-    const messageIds = messageIdArray.toString();
-    let order = setInterval(async () => {
-      try {
-        const {data} = await getData(
-          `${BASE_URL}${ON_CONFIRM_ORDER}messageIds=${messageIds}`,
-          {
-            headers: {Authorization: `Bearer ${token}`},
-          },
-        );
+  const onConfirmOrder = async id => {
+    try {
+      const {data} = await getData(
+        `${SERVER_URL}${ON_CONFIRM_ORDER}messageIds=${id}`,
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        },
+      );
+      console.log('///confirm order/////');
+      console.log(JSON.stringify(data, undefined, 4));
+    } catch (err) {
+      handleApiError(err);
 
-        error.current = data.find(item => item.hasOwnProperty('error'));
-      } catch (err) {
-        handleApiError(err);
-
-        setConfirmOrderRequested(false);
-      }
-    }, 2000);
-
-    setTimeout(() => {
-      clearInterval(order);
-      if (!error.current) {
-        setConfirmOrderRequested(false);
-        alertWithOneButton(
-          null,
-          t('main.cart.order_placed_message'),
-          t('main.product.ok_label'),
-          onOrderSuccess,
-        );
-      } else {
-        showToastWithGravity(error.current.error.message);
-        setConfirmOrderRequested(false);
-      }
-    }, 12000);
+      setConfirmOrderRequested(false);
+    }
   };
 
   /**
@@ -173,6 +155,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
    */
   const initializeOrder = async () => {
     try {
+      breakup.current = null;
+      total.current = 0;
       setInitializeOrderRequested(true);
       let payload = [];
       let providerIdArray = [];
@@ -181,18 +165,14 @@ const Payment = ({navigation, theme, route: {params}}) => {
         const index = providerIdArray.findIndex(
           one => one === item.provider.id,
         );
+        const object = cartItems.find(one => one.id === item.id);
         if (index > -1) {
           let itemObj = {
             id: item.id,
             quantity: {
-              count: item.quantity.selected.count,
+              count: object.quantity,
             },
-            product: {
-              id: item.id,
-              descriptor: item.provider.descriptor,
-              price: item.price,
-              provider_name: item.provider.descriptor.name,
-            },
+            product: object,
             bpp_id: item.bpp_id,
             provider: {
               id: item.provider.id,
@@ -228,20 +208,19 @@ const Payment = ({navigation, theme, route: {params}}) => {
           };
 
           let payloadObj = {
-            context: {transaction_id: item.transaction_id},
+            context: {
+              transaction_id: item.transaction_id,
+              city: object.city,
+              state: object.state,
+            },
             message: {
               items: [
                 {
                   id: item.id,
                   quantity: {
-                    count: item.quantity.selected.count,
+                    count: object.quantity,
                   },
-                  product: {
-                    id: item.id,
-                    descriptor: item.provider.descriptor,
-                    price: item.price,
-                    provider_name: item.provider.descriptor.name,
-                  },
+                  product: object,
                   bpp_id: item.bpp_id,
                   provider: {
                     id: item.provider ? item.provider.id : item.id,
@@ -251,11 +230,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
               ],
               billing_info: billingInfo,
               delivery_info: {
-                type: 'HOME-DELIVERY',
+                type: 'Delivery',
                 name: selectedAddress.descriptor.name,
                 phone: selectedAddress.descriptor.phone,
                 email: selectedAddress.descriptor.email,
                 location: {
+                  gps: selectedAddress.gps,
                   address: {
                     door: selectedAddress.address.door
                       ? selectedAddress.address.door
@@ -271,6 +251,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   },
                 },
               },
+
+              payment: {type: 'POST-FULFILLMENT'},
             },
           };
 
@@ -279,19 +261,25 @@ const Payment = ({navigation, theme, route: {params}}) => {
         }
       });
 
-      const {data} = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
-        headers: {Authorization: `Bearer ${token}`},
-      });
+      const {data} = await postData(
+        `${SERVER_URL}${INITIALIZE_ORDER}`,
+        payload,
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        },
+      );
+
       let messageIds = [];
 
       data.forEach(item => {
         if (item.message.ack.status === 'ACK') {
           parentOrderId.current = item.context.parent_order_id;
           messageIds.push(item.context.message_id);
+          console.log(messageIds);
         }
       });
       if (messageIds.length > 0) {
-        await onInitializeOrder(messageIds);
+        setInItMessageIds(messageIds);
       } else {
         showToastWithGravity(t('error.no_data_found'));
         setInitializeOrderRequested(false);
@@ -309,7 +297,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
    */
   const processPayment = async () => {
     setConfirmOrderRequested(true);
-
     if (selectedPaymentOption === PAYMENT_METHODS.COD.name) {
       await confirmOrder(PAYMENT_METHODS.COD);
     } else {
@@ -319,7 +306,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         order_id: parentOrderId.current,
         customer_phone: selectedAddress.descriptor.phone,
         customer_email: selectedAddress.descriptor.email,
-        amount: Config.ENV === 'dev' ? String(9) : String(total.current),
+        amount: Config.ENV === 'dev' ? String(9) : String(9),
         timestamp: timeStamp.current,
         return_url: 'https://sandbox.juspay.in/end',
       };
@@ -332,7 +319,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           merchantId: Config.MERCHANT_ID.toUpperCase(),
           clientId: Config.CLIENT_ID.toLowerCase(),
           orderId: parentOrderId.current,
-          amount: Config.ENV === 'dev' ? String(9) : String(total.current),
+          amount: Config.ENV === 'dev' ? String(9) : String(9),
           customerId: uid,
           customerEmail: selectedAddress.descriptor.email,
           customerMobile: selectedAddress.descriptor.phone,
@@ -424,25 +411,40 @@ const Payment = ({navigation, theme, route: {params}}) => {
         const errorObj = orderList.find(one => one.hasOwnProperty('error'));
 
         if (!errorObj) {
+          console.log(orderList);
           const payload = orderList.map(item => {
+            const object = cartItems.find(
+              one => one.id === item.message.order.items[0].id,
+            );
             return {
               context: {
-                transaction_id: item.context.transaction_id,
+                transaction_id: item.context.parent_order_id,
+                parent_order_id: item.context.parent_order_id,
+                city: object.city,
+                state: object.state,
               },
               message: {
+                quote: item.message.order.quote,
                 payment: {
                   ...{
-                    paid_amount: item.message.order.payment.params.amount,
+                    paid_amount: total.current,
                     transaction_id: item.context.transaction_id,
                   },
                   ...method,
+                },
+
+                providers: {
+                  id: item.message?.order?.provider?.id,
+                  locations: [item.message?.order?.provider_location?.id],
                 },
               },
             };
           });
 
+          console.log(JSON.stringify(payload, undefined, 4));
+
           const {data} = await postData(
-            `${BASE_URL}${CONFIRM_ORDER}`,
+            `${SERVER_URL}${CONFIRM_ORDER}`,
             payload,
             {
               headers: {Authorization: `Bearer ${token}`},
@@ -454,8 +456,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
               messageIds.push(item.context.message_id);
             }
           });
-
-          await onConfirmOrder(messageIds);
+          if (messageIds.length > 0) {
+            setConfirmMessageIds(messageIds);
+          }
         } else {
           showToastWithGravity(t('network_error.something_went_wrong'));
         }
@@ -463,6 +466,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         showToastWithGravity(t('network_error.something_went_wrong'));
       }
     } catch (err) {
+      console.log(err);
       handleApiError(err);
       setConfirmOrderRequested(false);
     }
@@ -485,13 +489,13 @@ const Payment = ({navigation, theme, route: {params}}) => {
         order_id: parentOrderId.current,
         customer_phone: selectedAddress.descriptor.phone,
         customer_email: selectedAddress.descriptor.email,
-        amount: Config.ENV === 'dev' ? String(9) : String(total.current),
+        amount: Config.ENV === 'dev' ? String(9) : String(9),
         timestamp: timeStamp.current,
         return_url: 'https://sandbox.juspay.in/end',
       });
 
       const {data} = await postData(
-        `${BASE_URL}${SIGN_PAYLOAD}`,
+        `${SERVER_URL}${SIGN_PAYLOAD}`,
         {payload: payload},
         options,
       );
@@ -499,7 +503,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
       signedPayload.current = data.signedPayload;
       initializeJusPaySdk(payload);
     } catch (err) {
-      console.log(err);
       handleApiError(err);
     }
   };
@@ -525,6 +528,36 @@ const Payment = ({navigation, theme, route: {params}}) => {
     HyperSdkReact.initiate(JSON.stringify(initiatePayload));
   };
 
+  const removeInitEvent = () => {
+    if (eventSources.current) {
+      eventSources.current.forEach(eventSource => {
+        eventSource.removeAllListeners();
+        eventSource.close();
+        setRequestInProgress(false);
+      });
+      eventSources.current = null;
+      setRequestInProgress(false);
+    }
+  };
+
+  const removeEvent = sources => {
+    if (sources) {
+      sources.forEach(source => {
+        source.removeAllListeners();
+        source.close();
+      });
+      sources = null;
+      setConfirmOrderRequested(false);
+      alertWithOneButton(
+        null,
+        t('main.cart.order_placed_message'),
+        t('main.product.ok_label'),
+        onOrderSuccess,
+      );
+      setConfirmMessageIds(null);
+    }
+  };
+
   useEffect(() => {
     initializeOrder()
       .then(() => {
@@ -532,7 +565,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
       })
       .catch(() => {});
 
-    const hyperEventSubscription = DeviceEventEmitter.addListener(
+    const eventEmitter = new NativeEventEmitter(HyperSdkReact);
+    const hyperEventSubscription = eventEmitter.addListener(
       'HyperEvent',
       onHyperEvent,
     );
@@ -546,6 +580,75 @@ const Payment = ({navigation, theme, route: {params}}) => {
     };
   }, []);
 
+  useEffect(() => {
+    let timer = null;
+    if (inItMessageIds) {
+      if (!timer) {
+        timer = setTimeout(removeInitEvent, 20000);
+      }
+      let sources = inItMessageIds.map(messageId => {
+        return new RNEventSource(
+          `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
+          {
+            headers: {Authorization: `Bearer ${token}`},
+          },
+        );
+      });
+      eventSources.current = sources;
+      setRequestInProgress(true);
+      sources.forEach(eventSource => {
+        eventSource.addEventListener('on_init', event => {
+          const data = JSON.parse(event.data);
+
+          onInitializeOrder(data.messageId)
+            .then(() => {
+              placeOrder()
+                .then(() => {})
+                .catch(() => {});
+            })
+            .catch(() => {});
+        });
+      });
+    }
+
+    return () => {
+      removeInitEvent();
+      clearTimeout(timer);
+    };
+  }, [inItMessageIds]);
+
+  useEffect(() => {
+    let sources = null;
+    let timer = null;
+    if (confirmMessageIds) {
+      console.log(confirmMessageIds);
+      sources = confirmMessageIds.map(messageId => {
+        return new RNEventSource(
+          `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
+          {
+            headers: {Authorization: `Bearer ${token}`},
+          },
+        );
+      });
+      if (!timer) {
+        timer = setTimeout(removeEvent, 20000, sources);
+      }
+      sources.forEach(eventSource => {
+        eventSource.addEventListener('on_confirm', event => {
+          const data = JSON.parse(event.data);
+          onConfirmOrder(data.messageId)
+            .then(() => {})
+            .catch(() => {});
+        });
+      });
+    }
+
+    return () => {
+      removeEvent(sources);
+      clearTimeout(timer);
+    };
+  }, [confirmMessageIds]);
+
   return (
     <SafeAreaView style={appStyles.container}>
       {!confirmOrderRequested ? (
@@ -555,14 +658,14 @@ const Payment = ({navigation, theme, route: {params}}) => {
             navigation={navigation}
           />
           {initializeOrderRequested ? (
-            <PaymentSkeleton/>
+            <PaymentSkeleton />
           ) : (
             <>
               <View style={styles.container}>
-                {quote && (
+                {breakup.current && (
                   <Card containerStyle={styles.itemsContainerStyle}>
                     <FlatList
-                      data={quote.breakup}
+                      data={breakup.current}
                       renderItem={({item}) => {
                         return (
                           <>
@@ -570,7 +673,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                               <Text style={styles.price}>{item.title}</Text>
                               <Text>₹{item.price.value}</Text>
                             </View>
-                            <Divider/>
+                            <Divider />
                           </>
                         );
                       }}
@@ -650,6 +753,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                   <ContainButton
                     title={t('main.cart.payment.place_order')}
                     onPress={() => {
+                      removeInitEvent();
                       processPayment()
                         .then(() => {})
                         .catch(() => {});
@@ -663,7 +767,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         </View>
       ) : (
         <View style={[appStyles.container, styles.processing]}>
-          <ActivityIndicator size={30} color={colors.accentColor}/>
+          <ActivityIndicator size={30} color={colors.accentColor} />
           <Text style={[styles.processingText, {color: colors.accentColor}]}>
             {t('main.cart.payment.processing_label')}{' '}
           </Text>

@@ -1,10 +1,16 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {removeItemFromCart} from '../../../../redux/actions';
 import {updateItemInCart} from '../../../../redux/actions';
 import {addItemToCart} from '../../../../redux/actions';
@@ -26,7 +32,11 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 
   const {t} = useTranslation();
 
-  const {item} = params;
+  const {products} = useSelector(({productReducer}) => productReducer);
+
+  const {product} = params;
+
+  const item = products.find(one => one.id === product.id);
 
   const dispatch = useDispatch();
 
@@ -65,7 +75,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backIcon}>
-          <Icon name="arrow-left" size={16} color={colors.accentColor}/>
+          <Icon name="arrow-left" size={16} color={colors.accentColor} />
         </TouchableOpacity>
         <View
           style={[
@@ -83,6 +93,8 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 
         <ScrollView>
           <View style={styles.imageContainer}>
+            {/* <Text style={styles.descriptorName}>{item.id}</Text> */}
+
             <Text style={styles.descriptorName}>{item.descriptor.name}</Text>
             <Text style={[styles.provider, {color: colors.gray}]}>
               {t('main.product.product_details.ordering_from')}{' '}
@@ -105,11 +117,11 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
               ₹{item.price.value ? item.price.value : item.price.maximum_value}
             </Text>
           </View>
-          <Divider width={1} style={styles.divider}/>
+          <Divider width={1} style={styles.divider} />
 
           <>
-            <Details style={styles.divider} item={item}/>
-            <Divider/>
+            <Details style={styles.divider} item={item} />
+            <Divider />
           </>
 
           <View style={styles.addButton}>
@@ -133,13 +145,13 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => updateQuantity(false)}>
-                  <Icon name="minus" size={16} color={colors.white}/>
+                  <Icon name="minus" size={16} color={colors.white} />
                 </TouchableOpacity>
                 <Text style={{color: colors.white}}>{item.quantity}</Text>
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => updateQuantity(true)}>
-                  <Icon name="plus" color={colors.white} size={16}/>
+                  <Icon name="plus" color={colors.white} size={16} />
                 </TouchableOpacity>
               </View>
             )}

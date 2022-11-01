@@ -1,6 +1,11 @@
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {ActivityIndicator, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {SearchBar, Text, withTheme} from 'react-native-elements';
 import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,19 +27,20 @@ import SortAndFilter from './SortAndFilter';
  * @returns {JSX.Element}
  */
 const Header = ({
-                  theme,
-                  openSheet,
-                  onSearch,
-                  apiInProgress,
-                  locationInProgress,
-                  location,
-                  setCount,
-                  appliedFilters,
-                  setAppliedFilters,
-                  latLongInProgress,
-                  locationMessage,
-                  pageNumber,
-                }) => {
+  theme,
+  openSheet,
+  onSearch,
+  apiInProgress,
+  locationInProgress,
+  location,
+  setCount,
+  getProductsList,
+  appliedFilters,
+  setAppliedFilters,
+  latLongInProgress,
+  locationMessage,
+  pageNumber,
+}) => {
   const {colors} = theme;
 
   const {t} = useTranslation();
@@ -73,7 +79,7 @@ const Header = ({
             </View>
           ) : (
             <TouchableOpacity style={styles.subContainer} onPress={openSheet}>
-              <Icon name="map-marker" size={20} color={colors.accentColor}/>
+              <Icon name="map-marker" size={20} color={colors.accentColor} />
               <View style={styles.textContainer}>
                 <Text style={{color: colors.accentColor}}>{location} </Text>
                 {latLongInProgress ? (
@@ -102,7 +108,7 @@ const Header = ({
                 activeOpacity={0.8}
                 onPress={showMenu}>
                 <Text style={{color: colors.white}}>
-                  {selectedCard} <Icon name="angle-down" size={14}/>
+                  {selectedCard} <Icon name="angle-down" size={14} />
                 </Text>
               </TouchableOpacity>
             }>
@@ -114,7 +120,7 @@ const Header = ({
               pressColor={colors.accentColor}>
               {t('main.product.product_label')}
             </MenuItem>
-            <MenuDivider/>
+            <MenuDivider />
             <MenuItem
               onPress={() => {
                 onCardSelect(SEARCH_QUERY.PROVIDER);
@@ -123,7 +129,7 @@ const Header = ({
               pressColor={colors.accentColor}>
               {t('main.product.provider_label')}
             </MenuItem>
-            <MenuDivider/>
+            <MenuDivider />
 
             <MenuItem
               onPress={() => {
@@ -133,7 +139,7 @@ const Header = ({
               pressColor={colors.accentColor}>
               {t('main.product.category_label')}
             </MenuItem>
-            <MenuDivider/>
+            <MenuDivider />
           </Menu>
 
           <SearchBar
@@ -168,6 +174,7 @@ const Header = ({
           appliedFilters={appliedFilters}
           setAppliedFilters={setAppliedFilters}
           pageNumber={pageNumber}
+          getProductsList={getProductsList}
         />
       )}
     </>

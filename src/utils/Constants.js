@@ -20,21 +20,24 @@ export const PAYMENT_OPTIONS = [
   {value: 'COD', label: 'Cash on delivery'},
 ];
 
+export const UPDATE_TYPE = {
+  RETURN: 'return',
+  CANCEL: 'cancel',
+};
+
 export const PAYMENT_METHODS = {
   JUSPAY: {
     name: 'JUSPAY',
-    orderType: 'ON-ORDER',
-    status: 'PAID',
+    type: 'ON-ORDER',
   },
   COD: {
     name: 'COD',
     orderType: 'POST-FULFILLMENT',
-    status: 'NOT-PAID',
   },
 };
 
 export const ORDER_STATUS = {
-  CANCELLED: 'CANCELLED',
+  CANCELLED: 'Cancelled',
   DELIVERED: 'DELIVERED',
 };
 
@@ -53,3 +56,5 @@ export const PRODUCT_SORTING = {
   PRICE_HIGH_TO_LOW: 'Price: High To Low',
   PRICE_LOW_TO_HIGH: 'Price: Low To High',
 };
+
+export const DELIVERY_CHARGES = 'Delivery charges';

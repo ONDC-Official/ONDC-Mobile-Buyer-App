@@ -1,19 +1,19 @@
 import moment from 'moment';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {StyleSheet, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
-import {appStyles} from '../../../styles/styles';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, View } from 'react-native';
+import { Text, withTheme } from 'react-native-elements';
+import { appStyles } from '../../../styles/styles';
 
 const ORDER_STATUS = {
-  ordered: 'ordered',
-  shipped: 'shipped',
-  delivered: 'delivered',
-  canceled: 'canceled',
-  pending_confirmation: 'pending_confirmation',
-  pending: 'pending',
-  active: 'active',
-  processing: 'processing',
+  created: 'Created',
+  shipped: 'Shipped',
+  delivered: 'Delivered',
+  cancelled: 'Cancelled',
+  updated: 'Updated',
+  returned: 'Returned',
+  replaced: 'Replaced',
+  active: 'Active',
 };
 
 /**
@@ -23,15 +23,15 @@ const ORDER_STATUS = {
  * @constructor
  * @returns {JSX.Element}
  */
-const OrderCard = ({item, theme}) => {
-  const {colors} = theme;
+const OrderCard = ({ item, theme }) => {
+  const { colors } = theme;
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
-  const getOrderStatus = (status) => {
-    const orderStatus = status ? status.toLowerCase() :  null;
+  const getOrderStatus = status => {
+    const orderStatus = status ? status : null;
     switch (orderStatus) {
-      case ORDER_STATUS.ordered:
+      case ORDER_STATUS.created:
         return (
           <View
             style={[
@@ -41,8 +41,8 @@ const OrderCard = ({item, theme}) => {
                 backgroundColor: colors.statusBackground,
               },
             ]}>
-            <Text style={{color: colors.accentColor}}>
-              {t(`main.order.status.${orderStatus}`)}
+            <Text style={{ color: colors.accentColor }}>
+              {t('main.order.status.created')}
             </Text>
           </View>
         );
@@ -53,44 +53,12 @@ const OrderCard = ({item, theme}) => {
             style={[
               styles.orderStatus,
               {
-                borderColor: colors.accentColor,
-                backgroundColor: colors.statusBackground,
+                borderColor: colors.warning,
+                backgroundColor: colors.shippedBackground,
               },
             ]}>
-            <Text style={{color: colors.accentColor}}>
-              {t(`main.order.status.${orderStatus}`)}
-            </Text>
-          </View>
-        );
-
-      case ORDER_STATUS.processing:
-        return (
-          <View
-            style={[
-              styles.orderStatus,
-              {
-                borderColor: colors.accentColor,
-                backgroundColor: colors.statusBackground,
-              },
-            ]}>
-            <Text style={{color: colors.accentColor}}>
-              {t(`main.order.status.${orderStatus}`)}
-            </Text>
-          </View>
-        );
-
-      case ORDER_STATUS.active:
-        return (
-          <View
-            style={[
-              styles.orderStatus,
-              {
-                borderColor: colors.success,
-                backgroundColor: colors.statusBackground,
-              },
-            ]}>
-            <Text style={{color: colors.success}}>
-              {t(`main.order.status.${orderStatus}`)}
+            <Text style={{ color: colors.white }}>
+              {t('main.order.status.shipped')}
             </Text>
           </View>
         );
@@ -102,59 +70,91 @@ const OrderCard = ({item, theme}) => {
               styles.orderStatus,
               {
                 borderColor: colors.success,
-                backgroundColor: colors.statusBackground,
+                backgroundColor: colors.deliveredBackground,
               },
             ]}>
-            <Text style={{color: colors.success}}>
-              {t(`main.order.status.${orderStatus}`)}
+            <Text style={{ color: colors.white }}>
+              {t('main.order.status.delivered')}
             </Text>
           </View>
         );
 
-      case ORDER_STATUS.canceled:
+      case ORDER_STATUS.active:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.success,
+                backgroundColor: colors.deliveredBackground,
+              },
+            ]}>
+            <Text style={{ color: colors.white }}>
+              {t('main.order.status.active')}
+            </Text>
+          </View>
+        );
+
+      case ORDER_STATUS.cancelled:
         return (
           <View
             style={[
               styles.orderStatus,
               {
                 borderColor: colors.error,
-                backgroundColor: colors.statusBackground,
+                backgroundColor: colors.cancelledBackground,
               },
             ]}>
-            <Text style={{color: colors.error}}>
+            <Text style={{ color: colors.error }}>
+              {t('main.order.status.cancelled')}
+            </Text>
+          </View>
+        );
+
+      case ORDER_STATUS.returned:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.error,
+                backgroundColor: colors.cancelledBackground,
+              },
+            ]}>
+            <Text style={{ color: colors.error }}>
+              {t('main.order.status.returned')}
+            </Text>
+          </View>
+        );
+
+      case ORDER_STATUS.replaced:
+        return (
+          <View
+            style={[
+              styles.orderStatus,
+              {
+                borderColor: colors.error,
+                backgroundColor: colors.cancelledBackground,
+              },
+            ]}>
+            <Text style={{ color: colors.error }}>
               {t(`main.order.status.${orderStatus}`)}
             </Text>
           </View>
         );
 
-      case ORDER_STATUS.pending_confirmation:
+      case ORDER_STATUS.updated:
         return (
           <View
             style={[
               styles.orderStatus,
               {
                 borderColor: colors.warning,
-                backgroundColor: colors.statusBackground,
+                backgroundColor: colors.shippedBackground,
               },
             ]}>
-            <Text style={{color: colors.warning}}>
-              {t(`main.order.status.${orderStatus}`)}
-            </Text>
-          </View>
-        );
-
-      case ORDER_STATUS.pending:
-        return (
-          <View
-            style={[
-              styles.orderStatus,
-              {
-                borderColor: colors.warning,
-                backgroundColor: colors.statusBackground,
-              },
-            ]}>
-            <Text style={{color: colors.warning}}>
-              {t(`main.order.status.${orderStatus}`)}
+            <Text style={{ color: colors.white }}>
+              {t('main.order.status.updated')}
             </Text>
           </View>
         );
@@ -169,8 +169,8 @@ const OrderCard = ({item, theme}) => {
                 backgroundColor: colors.statusBackground,
               },
             ]}>
-            <Text style={{color: colors.accentColor}}>
-              {t(`main.order.status.ordered`)}
+            <Text style={{ color: colors.accentColor }}>
+              {t('main.order.status.ordered')}
             </Text>
           </View>
         );
@@ -183,13 +183,12 @@ const OrderCard = ({item, theme}) => {
         <Text numberOfLines={1} style={styles.itemName}>
           {item.id ? item.id : t('main.order.na')}
         </Text>
-        <Text style={{color: colors.grey}}>
+        <Text style={{ color: colors.grey }}>
           {t('main.order.ordered_on_label')}
-          {moment(item.updatedAt).format('Do MMMM YYYY')}
+          {moment(item.createdAt).format('Do MMMM YYYY')}
         </Text>
       </View>
-
-      {getOrderStatus(item.state)}
+      {item.state && <>{getOrderStatus(item.state)}</>}
     </View>
   );
 };
@@ -202,7 +201,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
   },
-  price: {fontSize: 16, fontWeight: 'bold'},
+  price: { fontSize: 16, fontWeight: 'bold' },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -1,14 +1,20 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {BASE_URL, GET_ADDRESS} from '../../../../utils/apiUtilities';
+import {SERVER_URL, GET_ADDRESS} from '../../../../utils/apiUtilities';
 import {skeletonList} from '../../../../utils/utils';
 import AddressCard from './AddressCard';
 import AddressCardSkeleton from './AddressCardSkeleton';
@@ -47,13 +53,20 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
    */
   const getAddressList = async () => {
     try {
-      const {data} = await getData(`${BASE_URL}${GET_ADDRESS}`, {
+      const {data} = await getData(`${SERVER_URL}${GET_ADDRESS}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       setList(data);
+      if (selectedAddress) {
+        const address = data.find(one => one.id === selectedAddress.id);
+        setSelectedAddress(address);
+        params
+          ? setBillingAddress(params.billingAddress)
+          : setBillingAddress(address);
+      }
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -95,7 +108,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
       });
     };
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item}/>
+      <AddressCardSkeleton item={item} />
     ) : (
       <AddressCard
         item={item}
@@ -110,14 +123,9 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
 
   useEffect(() => {
     if (isFocused) {
-      setBillingAddress(null);
-      setSelectedAddress(null);
       getAddressList()
         .then(() => {})
         .catch(() => {});
-      params
-        ? setBillingAddress(params.billingAddress)
-        : setBillingAddress(selectedAddress);
     }
   }, [isFocused]);
 

@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
+import React, {memo, useState} from 'react';
+import {StyleSheet, TouchableOpacity} from 'react-native';
+import Collapsible from 'react-native-collapsible';
 import Accordion from 'react-native-collapsible/Accordion';
 import {Card, withTheme} from 'react-native-elements';
 import {keyExtractor} from '../../../utils/utils';
@@ -15,28 +16,35 @@ import ShippingDetails from './ShippingDetails';
  * @constructor
  */
 const OrderAccordion = ({item, theme, getOrderList}) => {
-  const {colors} = theme;
   const [activeSections, setActiveSections] = useState([]);
 
-  const _renderHeader = sections => <OrderCard item={sections}/>;
+  const renderContent = section => {
+    const isActive = activeSections.find(one => one === section.id);
 
-  const _renderContent = sections => (
-    <ShippingDetails order={sections} getOrderList={getOrderList}/>
-  );
+    return isActive ? (
+      <ShippingDetails order={section} getOrderList={getOrderList} />
+    ) : null;
+  };
 
-  const _updateSections = activesections => setActiveSections(activesections);
+  const onPressHandler = section => {
+    const isActive = activeSections.findIndex(one => one === item.id);
+    if (isActive > -1) {
+      let newArray = activeSections.slice();
+      newArray.splice(isActive, 1);
+      setActiveSections(newArray);
+    } else {
+      let newArray = activeSections.slice();
+      newArray.push(section.id);
+      setActiveSections(newArray);
+    }
+  };
 
   return (
     <Card containerStyle={styles.card}>
-      <Accordion
-        sections={[item]}
-        activeSections={activeSections}
-        renderHeader={_renderHeader}
-        renderContent={_renderContent}
-        onChange={_updateSections}
-        underlayColor={colors.white}
-        keyExtractor={keyExtractor}
-      />
+      <TouchableOpacity onPress={() => onPressHandler(item)}>
+        <OrderCard item={item} />
+      </TouchableOpacity>
+      {renderContent(item)}
     </Card>
   );
 };

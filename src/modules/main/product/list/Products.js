@@ -10,21 +10,45 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {clearFilters} from '../../../../redux/filter/actions';
+import {
+  clearFilters,
+  saveFilters,
+  saveIds,
+} from '../../../../redux/filter/actions';
 import {saveProducts} from '../../../../redux/product/actions';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {BASE_URL, GET_LATLONG, GET_LOCATION_FROM_LAT_LONG,} from '../../../../utils/apiUtilities';
-import {half, isIOS, skeletonList} from '../../../../utils/utils';
-import useProductList from '../hook/useProductList';
+import {postData} from '../../../../utils/api';
+import {
+  BASE_URL,
+  GET_LATLONG,
+  GET_LOCATION_FROM_LAT_LONG,
+  GET_MESSAGE_ID,
+  GET_PRODUCTS,
+  SERVER_URL,
+} from '../../../../utils/apiUtilities';
+import {
+  cleanFormData,
+  half,
+  isIOS,
+  skeletonList,
+} from '../../../../utils/utils';
+import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
 import AddressPicker from './component/AddressPicker';
 import EmptyComponent from './component/EmptyComponent';
 import Header from './component/header/Header';
 import ListPlaceholder from './component/placeholder/ListPlaceholder';
-import ListFooter from './component/ListFooter';
 import LocationDeniedAlert from './component/LocationDeniedAlert';
 import ProductCard from './component/ProductCard';
 import ProductCardSkeleton from './component/ProductCardSkeleton';
+import RNEventSource from 'react-native-event-source';
+import {useIsFocused} from '@react-navigation/native';
+import {
+  saveCityState,
+  saveLatLong,
+  savePincode,
+} from '../../../../redux/location/action';
+import Pagination from './Pagination';
 
 /**
  * Component to show list of requested products
@@ -40,10 +64,6 @@ const Products = ({navigation}) => {
 
   const [isVisible, setIsVisible] = useState(false);
 
-  const [latitude, setLatitude] = useState(null);
-
-  const [longitude, setLongitude] = useState(null);
-
   const [eloc, setEloc] = useState(null);
 
   const [count, setCount] = useState(null);
@@ -58,16 +78,28 @@ const Products = ({navigation}) => {
 
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
-  const [moreListRequested, setMoreListRequested] = useState(false);
-
   const [latLongInProgress, setLatLongInProgress] = useState(false);
 
   const [searchInProgress, setSearchInProgress] = useState(false);
 
+  const [moreListRequested, setMoreListRequested] = useState(false);
+
+  const [previousRequested, setPreviousRequested] = useState(false);
+
+  const [searchRequested, setSearchRequested] = useState(false);
+
+  const listCount = useRef(0);
+
   const pageNumber = useRef(1);
+
+  const isFocused = useIsFocused();
 
   const {messageId, transactionId} = useSelector(
     ({filterReducer}) => filterReducer,
+  );
+
+  const {latitude, longitude, city, state} = useSelector(
+    ({locationReducer}) => locationReducer,
   );
 
   const [locationMessage, setLocationMessage] = useState('');
@@ -76,17 +108,23 @@ const Products = ({navigation}) => {
     state: {token},
   } = useContext(AuthContext);
 
+  const options = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const dispatch = useDispatch();
 
   const {handleApiError} = useNetworkErrorHandling();
 
   const refRBSheet = useRef();
 
-  const {search, getProductsList, searchRequested} = useProductList();
-
   const openSheet = () => refRBSheet.current.open();
 
   const closeSheet = () => refRBSheet.current.close();
+
+  const flatListRef = useRef();
 
   /**
    * Function is used to render single product card in the list
@@ -97,12 +135,13 @@ const Products = ({navigation}) => {
     const element = cartItems.find(one => one.id === item.id);
     item.quantity = element ? element.quantity : 0;
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ProductCardSkeleton item={item}/>
+      <ProductCardSkeleton item={item} />
     ) : (
       <ProductCard
         item={item}
         apiInProgress={apiInProgress}
         navigation={navigation}
+        confirmed={true}
       />
     );
   };
@@ -119,10 +158,9 @@ const Products = ({navigation}) => {
       const {data} = await getData(
         `${BASE_URL}${GET_LOCATION_FROM_LAT_LONG}lat=${response.coords.latitude}&long=${response.coords.longitude}`,
       );
-
-      setLatitude(response.coords.latitude);
-      setLongitude(response.coords.longitude);
-
+      dispatch(
+        saveLatLong(response.coords.latitude, response.coords.longitude),
+      );
       setLocation(
         `${data.results[0].city} ${data.results[0].state} ${data.results[0].area}`,
       );
@@ -132,8 +170,7 @@ const Products = ({navigation}) => {
       setLocationInProgress(false);
     } catch (error) {
       setLocation(unKnownLabel);
-      setLatitude(null);
-      setLongitude(null);
+      dispatch(saveLatLong(null, null));
       setLocationInProgress(false);
     }
   };
@@ -232,6 +269,92 @@ const Products = ({navigation}) => {
   };
 
   /**
+   * function request products list with given message id and transaction id
+   * @param id:message id of search result
+   * @param transId:transaction id of search result
+   */
+  const getProductsList = async (
+    id,
+    transId,
+    page = pageNumber.current,
+    fltrs,
+  ) => {
+    try {
+      let url = null;
+
+      if (fltrs) {
+        const {sortMethod, providers, categories, range} = fltrs;
+        let sortField = 'price';
+        let sortOrder = 'desc';
+
+        switch (sortMethod) {
+          case PRODUCT_SORTING.RATINGS_HIGH_TO_LOW:
+            sortOrder = 'desc';
+            sortField = 'rating';
+            break;
+
+          case PRODUCT_SORTING.RATINGS_LOW_TO_HIGH:
+            sortOrder = 'asc';
+            sortField = 'rating';
+            break;
+
+          case PRODUCT_SORTING.PRICE_LOW_TO_HIGH:
+            sortOrder = 'asc';
+            sortField = 'price';
+            break;
+        }
+
+        let params;
+        if (range) {
+          const filterData = cleanFormData({
+            priceMin: range.priceMin ? range.priceMin : null,
+            priceMax: range.priceMax ? range.priceMax : null,
+          });
+
+          let filterParams = [];
+          Object.keys(filterData).forEach(key =>
+            filterParams.push(`&${key}=${filterData[key]}`),
+          );
+          params = filterParams.toString().replace(/,/g, '');
+        }
+
+        if (providers && providers.length > 0) {
+          params = params + `&providerIds=${providers.toString()}`;
+        }
+
+        if (categories && categories.length > 0) {
+          params = params + `&categoryIds=${categories.toString()}`;
+        }
+
+        url = params
+          ? `${SERVER_URL}${GET_PRODUCTS}${id}${params}&sortField=${sortField}&sortOrder=${sortOrder}&pageNumber=${page}&limit=10`
+          : `${SERVER_URL}${GET_PRODUCTS}${id}&sortField=${sortField}&sortOrder=${sortOrder}&pageNumber=${page}&limit=10`;
+      } else {
+        url = `${SERVER_URL}${GET_PRODUCTS}${id}&pageNumber=${page}&limit=10`;
+      }
+      const {data} = await getData(url, options);
+
+      if (data.message.catalogs.length > 0) {
+        const productsList = data.message.catalogs.map(item => {
+          return Object.assign({}, item, {
+            quantity: 0,
+            transaction_id: transId,
+            city: city,
+            state: state,
+          });
+        });
+
+        listCount.current = productsList.length;
+        setCount(data.message.count);
+
+        dispatch(saveProducts(productsList));
+      }
+    } catch (error) {
+      handleApiError(error);
+    }
+  };
+
+  /**
    * Function is used to get latitude and longitude
    * @returns {Promise<void>}
    **/
@@ -243,9 +366,16 @@ const Products = ({navigation}) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      const res = await getData(
+        `${BASE_URL}${GET_LOCATION_FROM_LAT_LONG}lat=${data.latitude}&long=${data.longitude}`,
+      );
+      dispatch(savePincode(res.data.results[0].pincode));
+      dispatch(
+        saveCityState(res.data.results[0].city, res.data.results[0].state),
+      );
+
       if (data.latitude && data.longitude) {
-        setLatitude(data.latitude);
-        setLongitude(data.longitude);
+        dispatch(saveLatLong(data.latitude, data.longitude));
         dispatch(saveProducts([]));
         dispatch(clearFilters());
       } else {
@@ -268,47 +398,51 @@ const Products = ({navigation}) => {
   const onSearch = async (query, selectedSearchOption) => {
     setAppliedFilters(null);
     pageNumber.current = 1;
-    setSearchInProgress(true);
-    search(
-      setCount,
-      query,
-      latitude,
-      longitude,
-      selectedSearchOption,
-      setApiInProgress,
-      setSearchInProgress,
-      1,
-    )
-      .then(() => {
-        pageNumber.current = pageNumber.current + 1;
-      })
-      .catch(() => {});
-  };
-
-  const loadMoreList = () => {
-    if (
-      count &&
-      count > products.length &&
-      !apiInProgress &&
-      !moreListRequested
-    ) {
-      setMoreListRequested(true);
-      getProductsList(
-        setCount,
-        messageId,
-        transactionId,
-        pageNumber.current,
-        appliedFilters,
-      )
-        .then(() => {
-          setMoreListRequested(false);
-          pageNumber.current = pageNumber.current + 1;
-        })
-        .catch(() => {
-          setMoreListRequested(false);
-        });
+    listCount.current = 0;
+    setApiInProgress(true);
+    if (longitude && latitude && city && state) {
+      dispatch(saveProducts([]));
+      dispatch(clearFilters());
+      let requestParameters = {
+        context: {},
+        message: {
+          criteria: {
+            delivery_location: `${latitude},${longitude}`,
+          },
+        },
+      };
+      try {
+        switch (selectedSearchOption) {
+          case SEARCH_QUERY.PRODUCT:
+            requestParameters.message.criteria.search_string = query;
+            break;
+          case SEARCH_QUERY.PROVIDER:
+            requestParameters.message.criteria.provider_id = query;
+            break;
+          default:
+            requestParameters.message.criteria.category_id = query;
+            break;
+        }
+        const response = await postData(
+          `${SERVER_URL}${GET_MESSAGE_ID}`,
+          requestParameters,
+          options,
+        );
+        dispatch(
+          saveIds(
+            response.data.context.message_id,
+            response.data.context.transaction_id,
+          ),
+        );
+      } catch (error) {
+        setApiInProgress(false);
+        handleApiError(error);
+      }
+    } else {
+      alert(t('main.product.please_select_location'));
     }
   };
+
   useEffect(() => {
     if (location === unKnownLabel) {
       requestPermission()
@@ -325,11 +459,61 @@ const Products = ({navigation}) => {
     }
   }, [eloc]);
 
-  const listData = searchInProgress ? skeletonList : products;
+  useEffect(() => {
+    let eventSource = null;
+
+    if (messageId) {
+      eventSource = new RNEventSource(
+        `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
+        options,
+      );
+
+      eventSource.addEventListener('on_search', event => {
+        const data = JSON.parse(event.data);
+
+        if (data.hasOwnProperty('count')) {
+          setCount(data.count);
+          const filterData = Object.assign({}, data.filters, {
+            message_id: data.messageId,
+          });
+
+          dispatch(saveFilters(filterData));
+
+          if (listCount.current < data.count && listCount.current < 10) {
+            getProductsList(messageId, transactionId)
+              .then(() => {})
+              .catch(() => {});
+          } else {
+            setApiInProgress(false);
+          }
+        } else {
+          setCount(data.totalCount);
+          if (listCount.current < data.totalCount && listCount.current < 10) {
+            getProductsList(messageId, transactionId)
+              .then(() => {})
+              .catch(() => {});
+          } else {
+            setApiInProgress(false);
+          }
+        }
+      });
+    }
+
+    return () => {
+      if (eventSource) {
+        eventSource.removeAllListeners(); //whenever the component removes it will execute
+        eventSource.close();
+        eventSource = null;
+      }
+    };
+  }, [messageId]);
+
+  const listData = products;
 
   return (
     <SafeAreaView
-      style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
+      style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}
+      edges={['top', 'left', 'right']}>
       <View
         style={[
           appStyles.container,
@@ -345,6 +529,7 @@ const Products = ({navigation}) => {
           setCount={setCount}
           appliedFilters={appliedFilters}
           setAppliedFilters={setAppliedFilters}
+          getProductsList={getProductsList}
           latLongInProgress={latLongInProgress}
           locationMessage={locationMessage}
           pageNumber={pageNumber}
@@ -369,6 +554,7 @@ const Products = ({navigation}) => {
         />
         <FlatList
           data={listData}
+          ref={flatListRef}
           renderItem={renderItem}
           keyExtractor={(items, index) => {
             return index.toString();
@@ -383,19 +569,34 @@ const Products = ({navigation}) => {
                       : t('main.product.no_results')
                   }
                 />
-              )
+              );
             } else {
-              return <ListPlaceholder />
+              return <ListPlaceholder />;
             }
           }}
-          onEndReachedThreshold={0.2}
-          onEndReached={loadMoreList}
           contentContainerStyle={
             listData.length > 0
               ? styles.contentContainerStyle
               : appStyles.container
           }
-          ListFooterComponent={<ListFooter moreRequested={moreListRequested}/>}
+          ListFooterComponent={
+            products.length > 0 &&
+            !apiInProgress &&
+            count > 10 && (
+              <Pagination
+                pageNumber={pageNumber}
+                count={count}
+                appliedFilters={appliedFilters}
+                setCount={setCount}
+                moreListRequested={moreListRequested}
+                setMoreListRequested={setMoreListRequested}
+                previousRequested={previousRequested}
+                setPreviousRequested={setPreviousRequested}
+                flatListRef={flatListRef}
+                getProductsList={getProductsList}
+              />
+            )
+          }
         />
       </View>
     </SafeAreaView>
@@ -405,6 +606,5 @@ const Products = ({navigation}) => {
 export default withTheme(Products);
 
 const styles = StyleSheet.create({
-  contentContainerStyle: {paddingBottom: 10},
   container: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
 });

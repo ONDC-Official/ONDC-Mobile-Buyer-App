@@ -7,8 +7,13 @@ import axios from 'axios';
  */
 export const getData = async (url, options) => {
   try {
+    console.log('----------url-----------');
+
     console.log(url);
-    return await axios.get(url, options);
+    const res = await axios.get(url, options);
+    console.log('----------response-----------');
+    console.log(JSON.stringify(res.data, undefined, 4));
+    return res;
   } catch (error) {
     console.log(error);
     throw error;
@@ -23,8 +28,16 @@ export const getData = async (url, options) => {
  */
 export const postData = async (url, payload, options) => {
   try {
-    console.log(url, payload);
-    return await axios.post(url, payload, options);
+    console.log('----------url-----------');
+
+    console.log(url);
+    console.log('----------payload-----------');
+    console.log(JSON.stringify(payload, undefined, 4));
+    const res = await axios.post(url, payload, options);
+    // console.log('----------response-----------');
+
+    // console.log(JSON.stringify(res.data, undefined, 4));
+    return res;
   } catch (error) {
     console.log(error);
     throw error;

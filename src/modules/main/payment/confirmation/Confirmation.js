@@ -1,15 +1,30 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {ActivityIndicator, FlatList, SafeAreaView, StyleSheet, View,} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
+import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {BASE_URL, GET_QUOTE, ON_GET_QUOTE,} from '../../../../utils/apiUtilities';
-import {maskAmount, showToastWithGravity, skeletonList,} from '../../../../utils/utils';
+import {
+  SERVER_URL,
+  GET_SELECT,
+  ON_GET_SELECT,
+} from '../../../../utils/apiUtilities';
+import {
+  maskAmount,
+  showToastWithGravity,
+  skeletonList,
+} from '../../../../utils/utils';
 import ProductCard from '../../product/list/component/ProductCard';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 import Header from '../addressPicker/Header';
@@ -18,68 +33,71 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const {
     state: {token},
   } = useContext(AuthContext);
-
   const {t} = useTranslation();
-
   const {transactionId} = useSelector(({filterReducer}) => filterReducer);
-
+  const {latitude, longitude, pinCode} = useSelector(
+    ({locationReducer}) => locationReducer,
+  );
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const {handleApiError} = useNetworkErrorHandling();
-  const [confirmationList, setConfirmationList] = useState(null);
-  const [total, setTotal] = useState(null);
+  const confirmation = useRef(null);
+  const [messageIds, setMessageIds] = useState(null);
+  const total = useRef(null);
   const [apiInProgress, setApiInProgress] = useState(false);
-
   const {colors} = theme;
 
   /**
    * function request  order confirmation
-   * @param messageId:array of message id's
+   * @param id:message id
    * @returns {Promise<void>}
    */
-  const onGetQuote = messageId => {
-    const messageIds = messageId.toString();
-    let getConfirmation = setInterval(async () => {
-      try {
-        const {data} = await getData(
-          `${BASE_URL}${ON_GET_QUOTE}messageIds=${messageIds}`,
-          {
-            headers: {Authorization: `Bearer ${token}`},
-          },
-        );
+  const onGetQuote = async id => {
+    try {
+      setApiInProgress(true);
 
-        let list = [];
-        let orderTotal = 0;
-        data.forEach(item => {
-          if (!item.error) {
-            if (item.context.bpp_id) {
-              item.message.quote.items.forEach(element => {
-                const object = cartItems.find(one => one.id == element.id);
-                if (object) {
-                  element.provider = {
-                    id: object.provider_details.id,
-                    descriptor: object.provider_details.descriptor,
-                    locations: [object.location_details.id],
-                  };
-                  element.transaction_id = item.context.transaction_id;
-                  element.bpp_id = item.context.bpp_id;
-                  list.push(element);
-                }
-              });
-              orderTotal += Number(item.message.quote.quote.price.value);
-              setTotal(orderTotal);
+      const {data} = await getData(
+        `${SERVER_URL}${ON_GET_SELECT}messageIds=${id}`,
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        },
+      );
+
+      if (!data[0].error) {
+        if (data[0].context.bpp_id) {
+          data[0].message.quote.items.forEach(element => {
+            const object = cartItems.find(one => one.id == element.id);
+            if (object) {
+              element.provider = {
+                id: object.provider_details.id,
+                descriptor: object.provider_details.descriptor,
+                locations: [object.location_details.id],
+              };
+              element.transaction_id = data[0].context.transaction_id;
+              element.bpp_id = data[0].context.bpp_id;
+              if (confirmation.current) {
+                let newArray = confirmation.current;
+                newArray.push(element);
+                confirmation.current = newArray;
+              } else {
+                let newArray = [];
+                newArray.push(element);
+                confirmation.current = newArray;
+              }
             }
-          }
-        });
-        setConfirmationList(list);
-      } catch (error) {
-        handleApiError(error);
-      }
-    }, 2000);
+          });
 
-    setTimeout(() => {
-      clearInterval(getConfirmation);
-      setApiInProgress(false);
-    }, 12000);
+          total.current = total.current
+            ? total.current + Number(data[0].message.quote.quote.price.value)
+            : Number(data[0].message.quote.quote.price.value);
+        }
+        setApiInProgress(1);
+        const ids = confirmation.current.map(one => one.id);
+        const isAllPresent = cartItems.every(one => ids.includes(one.id));
+        isAllPresent ? setApiInProgress(false) : setApiInProgress(true);
+      }
+    } catch (error) {
+      handleApiError(error);
+    }
   };
 
   /**
@@ -88,6 +106,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
    */
   const getQuote = async () => {
     try {
+      total.current = null;
+      confirmation.current = null;
       setApiInProgress(true);
       let payload = [];
       let providerIdArray = [];
@@ -101,12 +121,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             quantity: {
               count: item.quantity,
             },
-            product: {
-              id: item.id,
-              descriptor: item.descriptor,
-              price: item.price,
-              provider_name: item.provider_details.descriptor.name,
-            },
+            product: item,
             bpp_id: item.bpp_details.bpp_id,
             provider: {
               id: item.provider_details.id,
@@ -115,19 +130,19 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           };
           payload[index].message.cart.items.push(itemObj);
         } else {
+          console.log(JSON.stringify(item, undefined, 4));
           let payloadObj = {
-            context: {transaction_id: transactionId},
+            context: {
+              transaction_id: transactionId,
+              city: item.city,
+              state: item.state,
+            },
             message: {
               cart: {
                 items: [
                   {
                     id: item.id,
-                    product: {
-                      id: item.id,
-                      descriptor: item.descriptor,
-                      price: item.price,
-                      provider_name: item.provider_details.descriptor.name,
-                    },
+                    product: item,
                     quantity: {
                       count: item.quantity,
                     },
@@ -135,6 +150,19 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                     provider: {
                       id: item.provider_details.id,
                       locations: [item.location_details.id],
+                    },
+                  },
+                ],
+                fulfillments: [
+                  {
+                    end: {
+                      location: {
+                        gps: `${latitude},${longitude}`,
+
+                        address: {
+                          area_code: `${pinCode}`,
+                        },
+                      },
                     },
                   },
                 ],
@@ -146,32 +174,47 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         }
       });
 
-      const {data} = await postData(`${BASE_URL}${GET_QUOTE}`, payload, {
+      console.log(payload);
+
+      const {data} = await postData(`${SERVER_URL}${GET_SELECT}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
+
       const fulfillmentMissingItem = data.find(
         item => !item.message.hasOwnProperty('ack'),
       );
-      let messageIds = [];
+      let messageIdArray = [];
       if (!fulfillmentMissingItem) {
         data.forEach(item => {
           if (item.message.ack.status === 'ACK') {
-            messageIds.push(item.context.message_id);
+            messageIdArray.push(item.context.message_id);
           }
         });
-        if (messageIds.length > 0) {
-          onGetQuote(messageIds);
+        if (messageIdArray.length > 0) {
+          setMessageIds(messageIdArray);
         } else {
-          setConfirmationList([]);
+          confirmation.current = [];
           setApiInProgress(false);
         }
       } else {
         showToastWithGravity(fulfillmentMissingItem.message);
-        setConfirmationList([]);
+        confirmation.current = [];
+
         setApiInProgress(false);
       }
     } catch (error) {
       handleApiError(error);
+      setApiInProgress(false);
+    }
+  };
+
+  const removeEvent = eventSources => {
+    if (eventSources) {
+      eventSources.forEach(eventSource => {
+        eventSource.removeAllListeners();
+        eventSource.close();
+      });
+      eventSources = null;
       setApiInProgress(false);
     }
   };
@@ -186,23 +229,62 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     }
   }, [cartItems]);
 
+  useEffect(() => {
+    let eventSources = null;
+    let timer = null;
+    if (messageIds) {
+      eventSources = messageIds.map(messageId => {
+        return new RNEventSource(
+          `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
+          {
+            headers: {Authorization: `Bearer ${token}`},
+          },
+        );
+      });
+      if (!timer) {
+        timer = setTimeout(removeEvent, 20000, eventSources);
+      }
+
+      eventSources.forEach(eventSource => {
+        eventSource.addEventListener('on_select', event => {
+          const data = JSON.parse(event.data);
+          onGetQuote(data.messageId)
+            .then(() => {})
+            .catch(() => {});
+        });
+      });
+    }
+
+    return () => {
+      removeEvent(eventSources);
+      clearTimeout(timer);
+    };
+  }, [messageIds]);
+
   const renderItem = ({item}) => {
-    const element = cartItems.find(one => one.id == item.id);
+    const element = confirmation.current
+      ? confirmation.current.find(one => one.id == item.id)
+      : null;
 
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ProductCardSkeleton item={item}/>
-    ) : element ? (
-      <ProductCard item={element} navigation={navigation} cancellable/>
-    ) : null;
+      <ProductCardSkeleton item={item} />
+    ) : (
+      <ProductCard
+        item={item}
+        navigation={navigation}
+        cancellable
+        confirmed={element}
+        apiInProgress={apiInProgress}
+      />
+    );
   };
 
-  const listData =
-    confirmationList && !apiInProgress ? confirmationList : skeletonList;
+  const listData = !apiInProgress ? cartItems : skeletonList;
 
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={t('main.cart.update_cart')} navigation={navigation}/>
+        <Header title={t('main.cart.update_cart')} navigation={navigation} />
 
         <FlatList
           keyExtractor={(item, index) => {
@@ -219,24 +301,26 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             );
           }}
         />
-        {total && !apiInProgress && (
+        {total.current && !apiInProgress && (
           <Card containerStyle={styles.card}>
             <View style={styles.priceContainer}>
               <Text style={styles.title}>{t('main.cart.sub_total_label')}</Text>
-              <Text style={styles.title}>₹{maskAmount(total)}</Text>
+              <Text style={styles.title}>₹{maskAmount(total.current)}</Text>
             </View>
           </Card>
         )}
 
         <View style={styles.buttonContainer}>
-          {confirmationList && confirmationList.length > 0 && !apiInProgress ? (
+          {confirmation.current &&
+          confirmation.current.length > 0 &&
+          !apiInProgress ? (
             <ContainButton
               title={t('main.cart.proceed_to_pay')}
               onPress={() =>
                 navigation.navigate('Payment', {
                   selectedAddress: params.selectedAddress,
                   selectedBillingAddress: params.selectedBillingAddress,
-                  confirmationList: confirmationList,
+                  confirmationList: confirmation.current,
                 })
               }
             />

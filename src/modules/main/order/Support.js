@@ -1,19 +1,19 @@
-import {Formik} from 'formik';
-import {useEffect} from 'react';
-import React, {useContext, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Dialog, Text, withTheme} from 'react-native-elements';
+import { Formik } from 'formik';
+import { useEffect } from 'react';
+import React, { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dialog, Text, withTheme } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Yup from 'yup';
 import ContainButton from '../../../components/button/ContainButton';
 import OutlineButton from '../../../components/button/OutlineButton';
 import InputField from '../../../components/input/InputField';
-import {Context as AuthContext} from '../../../context/Auth';
+import { Context as AuthContext } from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {getData, postData} from '../../../utils/api';
-import {BASE_URL, CALL, ON_SUPPORT, SUPPORT} from '../../../utils/apiUtilities';
-import {showToastWithGravity} from '../../../utils/utils';
+import { postData } from '../../../utils/api';
+import { CALL, SERVER_URL } from '../../../utils/apiUtilities';
+import { showToastWithGravity } from '../../../utils/utils';
 
 const userInfo = {
   number: '',
@@ -28,13 +28,13 @@ const userInfo = {
  * @returns {JSX.Element}
  * @constructor
  */
-const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
-  const {colors} = theme;
-  const {handleApiError} = useNetworkErrorHandling();
-  const {t} = useTranslation();
+const Support = ({ modalVisible, setModalVisible, sellerInfo, theme }) => {
+  const { colors } = theme;
+  const { handleApiError } = useNetworkErrorHandling();
+  const { t } = useTranslation();
 
   const {
-    state: {token},
+    state: { token },
   } = useContext(AuthContext);
 
   const [callInProgress, setCallInProgress] = useState(false);
@@ -59,8 +59,8 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
         },
       };
       setCallInProgress(true);
-      const {data} = await postData(
-        `${BASE_URL}${CALL}`,
+      const { data } = await postData(
+        `${SERVER_URL}${CALL}`,
 
         {
           customer_phone_number: `+91${number}`,
@@ -82,7 +82,6 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
     }
   };
 
-
   return (
     <View style={styles.centeredView}>
       <Dialog isVisible={modalVisible} overlayStyle={styles.overlayStyle}>
@@ -92,7 +91,7 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
             style={styles.close}>
-            <Icon name="close-thick" color={colors.accentColor} size={16}/>
+            <Icon name="close-thick" color={colors.accentColor} size={16} />
           </TouchableOpacity>
         </View>
         <Text style={styles.messageContainer}>{t('main.order.message')}</Text>
@@ -102,17 +101,17 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
           validationSchema={validationSchema}
           onSubmit={values => {
             requestCall(values.number)
-              .then(() => {})
-              .catch(() => {});
+              .then(() => { })
+              .catch(() => { });
           }}>
           {({
-              values,
-              errors,
-              handleChange,
-              handleBlur,
-              touched,
-              handleSubmit,
-            }) => {
+            values,
+            errors,
+            handleChange,
+            handleBlur,
+            touched,
+            handleSubmit,
+          }) => {
             return (
               <>
                 <InputField
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingHorizontal: 0,
   },
-  heading: {fontSize: 18},
-  messageContainer: {padding: 10},
-  button: {width: 90, marginHorizontal: 8},
+  heading: { fontSize: 18 },
+  messageContainer: { padding: 10 },
+  button: { width: 90, marginHorizontal: 8 },
 });

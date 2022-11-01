@@ -22,6 +22,7 @@ const PasswordField = props => {
       {...props}
       placeholder={props.placeholder}
       secureTextEntry={hide}
+      autoCapitalize={'none'}
       rightIcon={
         <Icon
           type="font-awesome"

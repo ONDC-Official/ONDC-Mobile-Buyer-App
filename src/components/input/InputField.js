@@ -9,7 +9,7 @@ import {Input} from 'react-native-elements';
  * @constructor
  */
 const InputField = props => (
-  <Input {...props} placeholder={props.placeholder}/>
+  <Input {...props} placeholder={props.placeholder} autoCapitalize={'none'} />
 );
 
 export default InputField;

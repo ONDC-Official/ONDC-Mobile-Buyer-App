@@ -17,17 +17,18 @@ import {appStyles} from '../../../../styles/styles';
  * @returns {JSX.Element}
  */
 const AddressCard = ({
-                       item,
-                       theme,
-                       onEdit,
-                       selectedAddress,
-                       setSelectedAddress,
-                       params,
-                       setBillingAddress,
-                     }) => {
+  item,
+  theme,
+  onEdit,
+  selectedAddress,
+  setSelectedAddress,
+  params,
+  setBillingAddress,
+}) => {
   const {colors} = theme;
 
   const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
+  console.log(item);
 
   const {street, city, state} = item.address;
   /**
@@ -59,7 +60,7 @@ const AddressCard = ({
                 <Text style={styles.name}>{item.descriptor.name}</Text>
               ) : null}
               <TouchableOpacity onPress={onEdit}>
-                <Icon name="pencil" size={14} color={colors.accentColor}/>
+                <Icon name="pencil" size={14} color={colors.accentColor} />
               </TouchableOpacity>
             </View>
             {item.descriptor.email ? (
@@ -97,7 +98,7 @@ const AddressCard = ({
             <View style={styles.iconContainer}>
               {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
               <TouchableOpacity onPress={onEdit}>
-                <Icon name="pencil" size={14} color={colors.accentColor}/>
+                <Icon name="pencil" size={14} color={colors.accentColor} />
               </TouchableOpacity>
             </View>
 

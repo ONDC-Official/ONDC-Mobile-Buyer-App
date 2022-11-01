@@ -11,5 +11,8 @@ export const theme = {
     cancelledBackground: '#FFE8E7',
     statusBackground: '#E9F1F8',
     tabColor: '#606161',
+    shippedBackground: '#FFC132',
+    deliveredBackground: '#2EB086',
+    cardBackground: '#f5d9d3',
   },
 };

@@ -20,12 +20,13 @@ import SortMenu from './SortMenu';
  * @returns {JSX.Element}
  */
 const SortAndFilter = ({
-                         theme,
-                         setCount,
-                         appliedFilters,
-                         setAppliedFilters,
-                         pageNumber,
-                       }) => {
+  theme,
+  setCount,
+  appliedFilters,
+  setAppliedFilters,
+  pageNumber,
+  getProductsList,
+}) => {
   const {colors} = theme;
 
   const [selectedSortMethod, setSelectedSortMethod] = useState(null);
@@ -47,8 +48,6 @@ const SortAndFilter = ({
   const [apiInProgress, setApiInProgress] = useState(false);
 
   const [clearInProgress, setClearInProgress] = useState(false);
-
-  const {getProductsList} = useProductList();
 
   const {messageId, transactionId, filters} = useSelector(
     ({filterReducer}) => filterReducer,
@@ -93,12 +92,13 @@ const SortAndFilter = ({
       categories: categories,
     });
     setAppliedFilters(filterObject);
-    getProductsList(setCount, messageId, transactionId, 1, filterObject)
+    getProductsList(messageId, transactionId, 1, filterObject)
       .then(() => {
         setApiInProgress(false);
+        pageNumber.current = 1;
+        setAppliedFilters(filterObject);
         closeRBSheet();
         closeSortSheet();
-        pageNumber.current = 2;
       })
       .catch(() => {
         setApiInProgress(false);
@@ -119,16 +119,16 @@ const SortAndFilter = ({
     const filterObject = cleanFormData({
       sortMethod: sortMethod,
     });
-    setAppliedFilters(filterObject);
-    getProductsList(setCount, messageId, transactionId, 1, filterObject)
+    getProductsList(messageId, transactionId, 1, filterObject)
       .then(() => {
         setClearInProgress(false);
+        pageNumber.current = 1;
+        setAppliedFilters(filterObject);
         closeRBSheet();
         setProviders([]);
         setCategories([]);
         setMax(filters.maxPrice);
         setMin(filters.minPrice);
-        pageNumber.current = 2;
       })
       .catch(() => {
         setClearInProgress(false);
@@ -139,13 +139,15 @@ const SortAndFilter = ({
 
   return (
     <>
-      <Divider width={1}/>
+      <Divider width={1} />
       <View
         style={[styles.sortFilterContainer, {backgroundColor: colors.white}]}>
         <TouchableOpacity onPress={openSortSheet}>
           <View style={styles.row}>
             <Text style={[styles.text, {color: colors.accentColor}]}>
-              {selectedSortMethod ? selectedSortMethod : t('main.product.sort_products_label')}
+              {selectedSortMethod
+                ? selectedSortMethod
+                : t('main.product.sort_products_label')}
             </Text>
             <Icon name="pencil-square" size={14} color={colors.accentColor} />
           </View>
@@ -164,7 +166,7 @@ const SortAndFilter = ({
             onApply={onApply}
           />
         </RBSheet>
-        <Divider orientation="vertical" width={1}/>
+        <Divider orientation="vertical" width={1} />
         <TouchableOpacity onPress={openRBSheet}>
           <View style={styles.row}>
             <Text style={[styles.text, {color: colors.accentColor}]}>
@@ -173,7 +175,7 @@ const SortAndFilter = ({
                 ? `(${filtersLength - 1})`
                 : null}
             </Text>
-            <Icon name="filter" size={14} color={colors.accentColor}/>
+            <Icon name="filter" size={14} color={colors.accentColor} />
           </View>
         </TouchableOpacity>
         <RBSheet
@@ -250,6 +252,7 @@ const styles = StyleSheet.create({
   text: {paddingVertical: 8, fontWeight: '700', marginRight: 8},
   row: {
     flexDirection: 'row',
-    alignItems: 'center', justifyContent: 'center'
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
