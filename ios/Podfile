@@ -38,6 +38,8 @@ target 'Buyer' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
+  pod 'RNSlangRetailAssistant', :path => '../node_modules/@slanglabs/slang-conva-react-native-retail-assistant'
+
   target 'BuyerTests' do
     inherit! :complete
     # Pods for testing
@@ -52,8 +54,5 @@ target 'Buyer' do
   post_install do |installer|
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
-    installer.pods_project.build_configurations.each do |config|
-      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
-    end
   end
 end

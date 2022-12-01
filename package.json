@@ -25,6 +25,7 @@
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/stack": "^6.1.1",
+    "@slanglabs/slang-conva-react-native-retail-assistant": "8.0.2",
     "axios": "^0.26.1",
     "formik": "^2.2.9",
     "hyper-sdk-react": "^2.1.1",

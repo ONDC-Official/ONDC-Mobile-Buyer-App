@@ -40,12 +40,13 @@ const Header = ({
   latLongInProgress,
   locationMessage,
   pageNumber,
+  onPress,
+  item,
+  setItem,
 }) => {
   const {colors} = theme;
 
   const {t} = useTranslation();
-
-  const [item, setItem] = useState(null);
 
   const [selectedCard, setSelectedCard] = useState(SEARCH_QUERY.PRODUCT);
 
@@ -147,7 +148,6 @@ const Header = ({
             lightTheme
             placeholder={`${t('main.product.search_label')} ${selectedCard}`}
             containerStyle={[appStyles.container, styles.containerStyle]}
-            showLoading={apiInProgress}
             inputStyle={styles.inputStyle}
             inputContainerStyle={[
               styles.inputContainerStyle,
@@ -156,7 +156,6 @@ const Header = ({
               },
             ]}
             loadingProps={{color: colors.accentColor}}
-            cancelIcon={false}
             onSubmitEditing={() => {
               if (item !== null && item.trim().length > 2) {
                 onSearch(item, selectedCard);
@@ -165,7 +164,14 @@ const Header = ({
             editable={!latLongInProgress}
             onChangeText={setItem}
             value={item}
+            clearIcon={null}
+            closeIcon={null}
           />
+          <TouchableOpacity
+            style={{padding: 5, position: 'absolute', right: 15}}
+            onPress={onPress}>
+            <Icon name="microphone" color={colors.accentColor} size={16} />
+          </TouchableOpacity>
         </View>
       </View>
       {filters && products.length > 0 && (

@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import SlangRetailAssistant from '@slanglabs/slang-conva-react-native-retail-assistant';
 import {useContext} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
@@ -29,6 +30,7 @@ export default () => {
 
   const handleApiError = (error, setError = null) => {
     console.log(error.response);
+    SlangRetailAssistant.cancelSession();
     if (error.response) {
       if (error.response.status === 401) {
         if (!sessionExpiredMessageShown) {

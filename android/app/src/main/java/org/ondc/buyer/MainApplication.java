@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import in.slanglabs.RNSlangRetailAssistantPackage;
+import in.slanglabs.RNSlangRetailAssistantPackage;
 import com.horcrux.svg.SvgPackage;
 import com.zoontek.rnpermissions.RNPermissionsPackage;
 import com.heanoria.library.reactnative.locationenabler.RNAndroidLocationEnablerPackage;

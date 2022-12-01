@@ -1,3 +1,4 @@
+import {SlangRetailAssistantBridge} from '@slanglabs/slang-conva-react-native-retail-assistant/rn-bridge';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {

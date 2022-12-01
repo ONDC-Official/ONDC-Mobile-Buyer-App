@@ -1,4 +1,8 @@
 rootProject.name = 'Buyer'
+include ':@slanglabs_slang-conva-react-native-retail-assistant'
+project(':@slanglabs_slang-conva-react-native-retail-assistant').projectDir = new File(rootProject.projectDir, '../node_modules/@slanglabs/slang-conva-react-native-retail-assistant/android')
+include ':@slanglabs_slang-conva-react-native-retail-assistant'
+project(':@slanglabs_slang-conva-react-native-retail-assistant').projectDir = new File(rootProject.projectDir, '../node_modules/@slanglabs/slang-conva-react-native-retail-assistant/android')
 include ':react-native-svg'
 project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
 include ':react-native-permissions'

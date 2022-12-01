@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, PermissionsAndroid, StyleSheet, View} from 'react-native';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
-import {colors, withTheme} from 'react-native-elements';
+import {withTheme} from 'react-native-elements';
 import {check, PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -27,12 +27,7 @@ import {
   GET_PRODUCTS,
   SERVER_URL,
 } from '../../../../utils/apiUtilities';
-import {
-  cleanFormData,
-  half,
-  isIOS,
-  skeletonList,
-} from '../../../../utils/utils';
+import {cleanFormData, half, isIOS} from '../../../../utils/utils';
 import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
 import AddressPicker from './component/AddressPicker';
 import EmptyComponent from './component/EmptyComponent';
@@ -42,21 +37,27 @@ import LocationDeniedAlert from './component/LocationDeniedAlert';
 import ProductCard from './component/ProductCard';
 import ProductCardSkeleton from './component/ProductCardSkeleton';
 import RNEventSource from 'react-native-event-source';
-import {useIsFocused} from '@react-navigation/native';
 import {
   saveCityState,
   saveLatLong,
   savePincode,
 } from '../../../../redux/location/action';
 import Pagination from './Pagination';
+import SlangRetailAssistant, {
+  RetailUserJourney,
+  SearchUserJourney,
+} from '@slanglabs/slang-conva-react-native-retail-assistant';
+import Config from 'react-native-config';
 
 /**
  * Component to show list of requested products
  * @constructor
  * @returns {JSX.Element}
  */
-const Products = ({navigation}) => {
+const Products = ({navigation, theme}) => {
   const {t} = useTranslation();
+
+  const {colors} = theme;
 
   const unKnownLabel = t('main.product.please_select_location');
 
@@ -65,6 +66,8 @@ const Products = ({navigation}) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const [eloc, setEloc] = useState(null);
+
+  const [item, setItem] = useState(null);
 
   const [count, setCount] = useState(null);
 
@@ -91,8 +94,6 @@ const Products = ({navigation}) => {
   const listCount = useRef(0);
 
   const pageNumber = useRef(1);
-
-  const isFocused = useIsFocused();
 
   const {messageId, transactionId} = useSelector(
     ({filterReducer}) => filterReducer,
@@ -161,9 +162,11 @@ const Products = ({navigation}) => {
       dispatch(
         saveLatLong(response.coords.latitude, response.coords.longitude),
       );
+
       setLocation(
         `${data.results[0].city} ${data.results[0].state} ${data.results[0].area}`,
       );
+      dispatch(saveCityState(data.results[0].city, data.results[0].state));
       dispatch(saveProducts([]));
       dispatch(clearFilters());
 
@@ -436,12 +439,84 @@ const Products = ({navigation}) => {
         );
       } catch (error) {
         setApiInProgress(false);
+
         handleApiError(error);
       }
     } else {
+      SlangRetailAssistant.cancelSession();
       alert(t('main.product.please_select_location'));
     }
   };
+
+  const retailAssistantListener = {
+    //Callback handler that gets called when the user triggers a search user journey
+    onSearch: (searchInfo, searchUserJourney) => {
+      console.log('item', searchInfo.item);
+      setItem(null);
+      setItem(
+        searchInfo?.item?.completeDescription
+          ? searchInfo?.item?.completeDescription
+          : searchInfo.item.description,
+      );
+
+      onSearch(
+        searchInfo?.item?.completeDescription
+          ? searchInfo?.item?.completeDescription
+          : searchInfo.item.description,
+        SEARCH_QUERY.PRODUCT,
+      );
+      searchUserJourney.setSuccess();
+
+      return SearchUserJourney.AppState.SEARCH_RESULTS;
+    },
+    onAssistantError: errorCode => {
+      switch (errorCode) {
+        case SlangRetailAssistant.ErrorCode.FATAL_ERROR:
+          console.log('Slang Fatal Error!');
+          break;
+        case SlangRetailAssistant.ErrorCode.SYSTEM_ERROR:
+          console.log('Slang System Error!');
+          break;
+        case SlangRetailAssistant.ErrorCode.ASSISTANT_DISABLED:
+          console.log('Slang Assistant Disabled!');
+          break;
+        case SlangRetailAssistant.ErrorCode.MISSING_CREDENTIALS:
+          console.log('Slang Missing Credentials!');
+          break;
+        case SlangRetailAssistant.ErrorCode.INVALID_CREDENTIALS:
+          console.log('Slang Invalid Credentials!');
+          break;
+      }
+    },
+  };
+
+  const initializeSlang = async () => {
+    try {
+      await SlangRetailAssistant.initialize({
+        requestedLocales: ['en-IN', 'hi-IN', 'kn-IN', 'ml-IN', 'ta-IN'], // The languages to enable
+        assistantId: Config.ASSISTANT_ID, // The Assistant ID from the console
+        apiKey: Config.API_KEY, // The API key from the console
+        enableCustomTrigger: true,
+      });
+
+      SlangRetailAssistant.setAction(retailAssistantListener);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onPress = () => {
+    setItem(null);
+    SlangRetailAssistant.startConversation(RetailUserJourney.SEARCH);
+  };
+
+  useEffect(() => {
+    if (city && state && longitude && latitude) {
+      initializeSlang()
+        .then(() => {})
+        .catch(() => {});
+    }
+  }, [state, latitude, city, state]);
 
   useEffect(() => {
     if (location === unKnownLabel) {
@@ -467,6 +542,7 @@ const Products = ({navigation}) => {
         `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
         options,
       );
+      SlangRetailAssistant.cancelSession();
 
       eventSource.addEventListener('on_search', event => {
         const data = JSON.parse(event.data);
@@ -533,6 +609,9 @@ const Products = ({navigation}) => {
           latLongInProgress={latLongInProgress}
           locationMessage={locationMessage}
           pageNumber={pageNumber}
+          onPress={onPress}
+          item={item}
+          setItem={setItem}
         />
         <RBSheet
           ref={refRBSheet}
