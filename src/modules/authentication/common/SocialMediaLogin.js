@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 
 import OutlineButton from '../../../components/button/OutlineButton';
 import {isIOS} from '../../../utils/utils';
-import useLoginWithGoogle from '../landing/hooks/useLoginWithGoogle';
+import useLoginWithGoogle from '../hooks/useLoginWithGoogle';
 
 const SocialMediaLogin = () => {
   const {t} = useTranslation();

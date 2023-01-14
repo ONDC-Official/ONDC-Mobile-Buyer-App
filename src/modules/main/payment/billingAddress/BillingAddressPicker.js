@@ -1,7 +1,13 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
 import {Context as AuthContext} from '../../../../context/Auth';
@@ -37,7 +43,8 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
   /**
    * function handles click event of add billing address button
    */
-  const onAdd = () => navigation.navigate('AddAddress', {selectedAddress: selectedAddress});
+  const onAdd = () =>
+    navigation.navigate('AddAddress', {selectedAddress: selectedAddress});
 
   /**
    * function to get list of address from server
@@ -66,9 +73,10 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
   /**
    * function handles click event of next button
    */
-  const onPressHandler = () => navigation.navigate('AddressPicker', {
-    billingAddress: selectedBillingAddress,
-  });
+  const onPressHandler = () =>
+    navigation.navigate('AddressPicker', {
+      billingAddress: selectedBillingAddress,
+    });
 
   /**
    * Function is used to render single address card in the list
@@ -83,7 +91,7 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
       });
     };
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item}/>
+      <AddressCardSkeleton item={item} />
     ) : (
       <AddressCard
         item={item}

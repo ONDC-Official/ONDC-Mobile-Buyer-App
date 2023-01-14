@@ -7,6 +7,7 @@ import {appStyles} from '../../../styles/styles';
 
 import ONDCLogo from '../../../assets/ondc.svg';
 import AppLogo from '../../../assets/app_logo.svg';
+import {getData} from '../../../utils/storage';
 
 /**
  * Component to render splash screen
@@ -43,9 +44,18 @@ const Splash = ({navigation}) => {
    */
   const checkUserStatus = () => {
     if (token) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Dashboard'}],
+      getData('address').then(address => {
+        if (address) {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Dashboard'}],
+          });
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'AddDefaultAddress'}],
+          });
+        }
       });
     } else {
       navigation.reset({

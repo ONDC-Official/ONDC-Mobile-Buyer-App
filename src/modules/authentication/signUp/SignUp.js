@@ -75,7 +75,7 @@ const SignUp = ({navigation}) => {
 
       navigation.reset({
         index: 0,
-        routes: [{name: 'Dashboard'}],
+        routes: [{name: 'AddDefaultAddress'}],
       });
 
       setApiInProgress(false);

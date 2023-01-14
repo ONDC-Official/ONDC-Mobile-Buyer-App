@@ -4,7 +4,7 @@ import {useContext} from 'react';
 import Config from 'react-native-config';
 import {useNavigation} from '@react-navigation/native';
 
-import {Context as AuthContext} from '../../../../context/Auth';
+import {Context as AuthContext} from '../../../context/Auth';
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_CLIENT_ID,

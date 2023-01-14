@@ -15,6 +15,7 @@ import {appStyles} from '../../../styles/styles';
 import {Text} from 'react-native-elements';
 import SocialMediaLogin from '../common/SocialMediaLogin';
 import {theme} from '../../../utils/theme';
+import {getData} from "../../../utils/storage";
 
 const userInfo = {
   email: '',
@@ -67,10 +68,18 @@ const Login = ({navigation}) => {
         photoURL: response.user.photoURL ? response.user.photoURL : 'Unknown',
       });
 
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Dashboard'}],
-      });
+      const address = await getData('address');
+      if (address) {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Dashboard'}],
+        });
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'AddDefaultAddress'}],
+        });
+      }
 
       setApiInProgress(false);
     } catch (error) {
