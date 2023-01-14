@@ -1,11 +1,12 @@
 import React, {useContext, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Image, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import {Context as AuthContext} from '../../../context/Auth';
 import {appStyles} from '../../../styles/styles';
 
-const image = require('../../../assets/ondc.png');
+import ONDCLogo from '../../../assets/ondc.svg';
+import AppLogo from '../../../assets/app_logo.svg';
 
 /**
  * Component to render splash screen
@@ -49,7 +50,7 @@ const Splash = ({navigation}) => {
     } else {
       navigation.reset({
         index: 0,
-        routes: [{name: 'Landing'}],
+        routes: [{name: 'SignUp'}],
       });
     }
   };
@@ -63,9 +64,12 @@ const Splash = ({navigation}) => {
   }, [isLoading]);
 
   return (
-    <View style={appStyles.container}>
+    <View style={[appStyles.container, appStyles.backgroundWhite]}>
       <View style={[appStyles.container, styles.container]}>
-        <Image source={image} style={styles.image}/>
+        <AppLogo width={256} height={86} />
+        <View style={styles.ondcContainer}>
+          <ONDCLogo width={240} height={95} />
+        </View>
       </View>
       <View style={styles.footer}>
         <Text>{t('global.version_label')}</Text>
@@ -77,7 +81,9 @@ const Splash = ({navigation}) => {
 export default Splash;
 
 const styles = StyleSheet.create({
+  ondcContainer: {
+    marginTop: 50,
+  },
   container: {alignItems: 'center', justifyContent: 'center'},
-  image: {height: 100, width: 200},
   footer: {alignItems: 'center', marginBottom: 20},
 });

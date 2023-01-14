@@ -8,12 +8,15 @@
     },
     "login": {
       "email_placeholder": "Email",
+      "email_label": "Email",
       "password_placeholder": "Password",
+      "password_label": "Password",
       "button_title": "Login"
     },
     "signup": {
       "button_title": "Sign Up",
       "confirm_password_placeholder": "Confirm Password",
+      "name_label": "Full Name",
       "name_placeholder": "Full Name"
     },
     "splash": {}

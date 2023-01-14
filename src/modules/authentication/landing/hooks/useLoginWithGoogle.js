@@ -2,13 +2,17 @@ import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {useContext} from 'react';
 import Config from 'react-native-config';
+import {useNavigation} from '@react-navigation/native';
+
 import {Context as AuthContext} from '../../../../context/Auth';
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_CLIENT_ID,
 });
 
-export default navigation => {
+export default () => {
+  const navigation = useNavigation();
+
   const {storeLoginDetails} = useContext(AuthContext);
 
   const loginWithGoogle = async () => {
