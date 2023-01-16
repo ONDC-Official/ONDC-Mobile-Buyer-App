@@ -6,6 +6,7 @@ import Login from '../modules/authentication/login/Login';
 import SignUp from '../modules/authentication/signUp/SignUp';
 import Splash from '../modules/authentication/splash/Splash';
 import Dashboard from '../modules/main/dashboard/Dashboard';
+import Cart from '../modules/main/cart/Cart';
 import Support from '../modules/main/more/support/Support';
 import AddAddress from '../modules/main/payment/addAddress/AddAddress';
 import AddDefaultAddress from '../modules/main/profile/AddDefaultAddress';
@@ -15,6 +16,7 @@ import Confirmation from '../modules/main/payment/confirmation/Confirmation';
 import Payment from '../modules/main/payment/payment/Payment';
 import ProductDetails from '../modules/main/product/details/ProductDetails';
 import Profile from '../modules/main/more/Profile';
+import AddressList from '../modules/main/dashboard/components/AddressList';
 
 const Stack = createStackNavigator();
 
@@ -47,12 +49,24 @@ const Navigation = () => {
           component={Dashboard}
           options={{headerShown: false}}
         />
+        <Stack.Screen
+          name="Cart"
+          component={Cart}
+        />
 
         <Stack.Screen
           name="AddDefaultAddress"
           component={AddDefaultAddress}
           options={{
-            title: 'Profile',
+            title: 'Add Delivery Address',
+          }}
+        />
+
+        <Stack.Screen
+          name="AddressList"
+          component={AddressList}
+          options={{
+            title: 'Addresses',
           }}
         />
 

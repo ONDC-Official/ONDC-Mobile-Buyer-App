@@ -1,38 +1,21 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  ActivityIndicator,
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import {ActivityIndicator, FlatList, SafeAreaView, StyleSheet, View,} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
-import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {
-  SERVER_URL,
-  GET_SELECT,
-  ON_GET_SELECT,
-} from '../../../../utils/apiUtilities';
-import {
-  maskAmount,
-  showToastWithGravity,
-  skeletonList,
-} from '../../../../utils/utils';
+import {GET_SELECT, ON_GET_SELECT, SERVER_URL,} from '../../../../utils/apiUtilities';
+import {maskAmount, showToastWithGravity, skeletonList,} from '../../../../utils/utils';
 import ProductCard from '../../product/list/component/ProductCard';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 import Header from '../addressPicker/Header';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
-  const {
-    state: {token},
-  } = useContext(AuthContext);
+  const {token} = useSelector(({authReducer}) => authReducer);
   const {t} = useTranslation();
   const {transactionId} = useSelector(({filterReducer}) => filterReducer);
   const {latitude, longitude, pinCode} = useSelector(

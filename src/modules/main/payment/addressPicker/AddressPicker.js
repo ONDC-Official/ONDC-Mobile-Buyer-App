@@ -1,24 +1,18 @@
 import {useIsFocused} from '@react-navigation/native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  FlatList,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Text, withTheme} from 'react-native-elements';
 import ContainButton from '../../../../components/button/ContainButton';
-import {Context as AuthContext} from '../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {SERVER_URL, GET_ADDRESS} from '../../../../utils/apiUtilities';
+import {GET_ADDRESS, SERVER_URL} from '../../../../utils/apiUtilities';
 import {skeletonList} from '../../../../utils/utils';
 import AddressCard from './AddressCard';
 import AddressCardSkeleton from './AddressCardSkeleton';
 import Header from './Header';
+import {useSelector} from "react-redux";
 
 /**
  * Component to render list of address
@@ -40,10 +34,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
   const [billingAddress, setBillingAddress] = useState(null);
 
   const isFocused = useIsFocused();
-
-  const {
-    state: {token},
-  } = useContext(AuthContext);
+  const {token} = useSelector(({authReducer}) => authReducer);
 
   const {handleApiError} = useNetworkErrorHandling();
 

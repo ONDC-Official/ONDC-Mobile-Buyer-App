@@ -1,5 +1,5 @@
 import {Formik} from 'formik';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ActivityIndicator, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Card, withTheme} from 'react-native-elements';
@@ -7,13 +7,13 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
 import ContainButton from '../../../../components/button/ContainButton';
 import InputField from '../../../../components/input/InputField';
-import {Context as AuthContext} from '../../../../context/Auth';
+
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
 import {
-  BASE_URL,
   ADD_ADDRESS,
+  BASE_URL,
   BILLING_ADDRESS,
   GET_GPS_CORDS,
   GET_LATLONG,
@@ -22,6 +22,7 @@ import {
   UPDATE_BILLING_ADDRESS,
 } from '../../../../utils/apiUtilities';
 import Header from '../addressPicker/Header';
+import {useSelector} from 'react-redux';
 
 /**
  * Component to render form in add new address screen
@@ -36,9 +37,7 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
 
   const {t} = useTranslation();
 
-  const {
-    state: {token},
-  } = useContext(AuthContext);
+  const {token} = useSelector(({authReducer}) => authReducer);
 
   const {handleApiError} = useNetworkErrorHandling();
 

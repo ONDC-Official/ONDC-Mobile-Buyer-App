@@ -5,9 +5,7 @@ import {Divider, Text, withTheme} from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
-import {PRODUCT_SORTING} from '../../../../../../utils/Constants';
 import {cleanFormData, half, threeForth} from '../../../../../../utils/utils';
-import useProductList from '../../../hook/useProductList';
 import Filters from '../Filters';
 import SortMenu from './SortMenu';
 

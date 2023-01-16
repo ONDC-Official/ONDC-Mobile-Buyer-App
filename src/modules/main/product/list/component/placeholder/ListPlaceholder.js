@@ -1,6 +1,5 @@
 import React from 'react';
-import {Image} from 'react-native';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, View} from 'react-native';
 import {appStyles} from '../../../../../../styles/styles';
 
 const image = require('../../../../../../assets/placeholder.jpg');

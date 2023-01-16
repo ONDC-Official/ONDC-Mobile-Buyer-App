@@ -1,8 +1,6 @@
 {
   "authentication": {
     "landing": {
-      "login": "Login",
-      "sign_up": "Sign Up",
       "continue_with_google": "Continue with google",
       "continue_with_apple": "Continue with apple"
     },
@@ -19,7 +17,6 @@
       "name_label": "Full Name",
       "name_placeholder": "Full Name"
     },
-    "splash": {}
   },
   "main": {
     "cart": {
@@ -101,13 +98,14 @@
       }
     },
     "product": {
+      "view_products_in_cart": "{{count}} Item | ₹{{total}}  View Cart",
       "sort_products_label": "Sort Products",
       "select_location_label": "Select a location",
       "add_button_title": "Add",
       "provider_label": "Provider",
       "product_label": "Product",
       "category_label": "Category",
-      "search_label": "Search",
+      "search_label": "Search {{type}}",
       "powered_by_label": "powered by",
       "location_denied_message": "Location permission not enabled",
       "enter_location_message": "Enter location manually",

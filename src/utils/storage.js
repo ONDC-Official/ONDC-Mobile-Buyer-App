@@ -4,11 +4,11 @@ export const removeData = async key => {
   await AsyncStorage.removeItem(key);
 };
 
-export const getData = async key => {
+export const getStoredData = async key => {
   return await AsyncStorage.getItem(key);
 };
 
-export const setData = async (key, value) => {
+export const setStoredData = async (key, value) => {
   await AsyncStorage.setItem(key, value);
 };
 

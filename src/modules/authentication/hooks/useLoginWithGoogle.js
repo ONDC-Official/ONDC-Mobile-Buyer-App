@@ -1,10 +1,9 @@
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {useContext} from 'react';
 import Config from 'react-native-config';
 import {useNavigation} from '@react-navigation/native';
-
-import {Context as AuthContext} from '../../../context/Auth';
+import {useDispatch} from "react-redux";
+import {storeLoginDetails} from "../../../redux/auth/actions";
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_CLIENT_ID,
@@ -12,8 +11,7 @@ GoogleSignin.configure({
 
 export default () => {
   const navigation = useNavigation();
-
-  const {storeLoginDetails} = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const loginWithGoogle = async () => {
     try {
@@ -28,7 +26,7 @@ export default () => {
 
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
-      await storeLoginDetails({
+      await storeLoginDetails(dispatch, {
         token: idTokenResult.token,
         uid: idTokenResult.claims.user_id,
         emailId: idTokenResult.claims.email,

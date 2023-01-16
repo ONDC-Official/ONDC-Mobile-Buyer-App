@@ -1,18 +1,11 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Card, Text, withTheme} from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
-import {removeItemFromCart} from '../../../../../redux/actions';
-import {updateItemInCart} from '../../../../../redux/actions';
-import {addItemToCart} from '../../../../../redux/actions';
+import {addItemToCart, removeItemFromCart, updateItemInCart} from '../../../../../redux/actions';
 import {appStyles} from '../../../../../styles/styles';
 import {showInfoToast} from '../../../../../utils/utils';
 

@@ -1,19 +1,18 @@
-import { Formik } from 'formik';
-import { useEffect } from 'react';
-import React, { useContext, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Dialog, Text, withTheme } from 'react-native-elements';
+import {Formik} from 'formik';
+import React, {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Dialog, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Yup from 'yup';
 import ContainButton from '../../../components/button/ContainButton';
 import OutlineButton from '../../../components/button/OutlineButton';
 import InputField from '../../../components/input/InputField';
-import { Context as AuthContext } from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import { postData } from '../../../utils/api';
-import { CALL, SERVER_URL } from '../../../utils/apiUtilities';
-import { showToastWithGravity } from '../../../utils/utils';
+import {postData} from '../../../utils/api';
+import {CALL, SERVER_URL} from '../../../utils/apiUtilities';
+import {showToastWithGravity} from '../../../utils/utils';
+import {useSelector} from 'react-redux';
 
 const userInfo = {
   number: '',
@@ -28,14 +27,11 @@ const userInfo = {
  * @returns {JSX.Element}
  * @constructor
  */
-const Support = ({ modalVisible, setModalVisible, sellerInfo, theme }) => {
-  const { colors } = theme;
-  const { handleApiError } = useNetworkErrorHandling();
-  const { t } = useTranslation();
-
-  const {
-    state: { token },
-  } = useContext(AuthContext);
+const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
+  const {colors} = theme;
+  const {handleApiError} = useNetworkErrorHandling();
+  const {t} = useTranslation();
+  const {token} = useSelector(({authReducer}) => authReducer);
 
   const [callInProgress, setCallInProgress] = useState(false);
 
@@ -59,7 +55,7 @@ const Support = ({ modalVisible, setModalVisible, sellerInfo, theme }) => {
         },
       };
       setCallInProgress(true);
-      const { data } = await postData(
+      const {data} = await postData(
         `${SERVER_URL}${CALL}`,
 
         {
@@ -101,8 +97,8 @@ const Support = ({ modalVisible, setModalVisible, sellerInfo, theme }) => {
           validationSchema={validationSchema}
           onSubmit={values => {
             requestCall(values.number)
-              .then(() => { })
-              .catch(() => { });
+              .then(() => {})
+              .catch(() => {});
           }}>
           {({
             values,
@@ -187,7 +183,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingHorizontal: 0,
   },
-  heading: { fontSize: 18 },
-  messageContainer: { padding: 10 },
-  button: { width: 90, marginHorizontal: 8 },
+  heading: {fontSize: 18},
+  messageContainer: {padding: 10},
+  button: {width: 90, marginHorizontal: 8},
 });

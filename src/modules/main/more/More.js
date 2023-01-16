@@ -1,16 +1,15 @@
-import {useContext} from 'react';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {withTheme} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
-import {Context as AuthContext} from '../../../context/Auth';
 import i18n from '../../../locales/i18next';
 import {clearAllData} from '../../../redux/actions';
 import {appStyles} from '../../../styles/styles';
 import {alertWithTwoButtons} from '../../../utils/alerts';
 import {OPTIONS} from '../../../utils/Constants';
 import OptionCard from './OptionCard';
+import {logoutUser} from "../../../redux/auth/actions";
 
 const list = [
   {
@@ -39,25 +38,24 @@ const list = [
  * @returns {JSX.Element}
  */
 const More = ({navigation}) => {
-  const {logoutUser} = useContext(AuthContext);
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
   /**
    * Function handles click event of card and depending on option it navigates to respective screen
    */
-  const action = (option) => {
+  const action = option => {
     if (option === OPTIONS.LOG_OUT) {
       alertWithTwoButtons(
         null,
         t('main.more.log_out_message'),
         t('main.product.ok_label'),
         () => {
-          logoutUser();
+          logoutUser(dispatch);
           dispatch(clearAllData());
           navigation.reset({
             index: 0,
-            routes: [{name: 'Landing'}],
+            routes: [{name: 'Login'}],
           });
         },
         t('main.product.cancel_label'),
@@ -74,7 +72,7 @@ const More = ({navigation}) => {
    * @param item: single object from  list
    * @returns {JSX.Element}
    */
-  const renderItem = ({item}) => <OptionCard item={item} action={action}/>;
+  const renderItem = ({item}) => <OptionCard item={item} action={action} />;
 
   return (
     <SafeAreaView style={appStyles.container}>

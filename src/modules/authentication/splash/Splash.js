@@ -1,13 +1,13 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-elements';
-import {Context as AuthContext} from '../../../context/Auth';
-import {appStyles} from '../../../styles/styles';
+import {useDispatch} from 'react-redux';
 
+import {appStyles} from '../../../styles/styles';
 import ONDCLogo from '../../../assets/ondc.svg';
 import AppLogo from '../../../assets/app_logo.svg';
-import {getData} from '../../../utils/storage';
+import {tryLocalSignIn} from '../../../redux/auth/actions';
 
 /**
  * Component to render splash screen
@@ -17,11 +17,7 @@ import {getData} from '../../../utils/storage';
  */
 const Splash = ({navigation}) => {
   const {t} = useTranslation();
-
-  const {
-    state: {isLoading, token},
-    tryLocalSignIn,
-  } = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   /**
    * Function is used to check if the token is available
@@ -29,35 +25,8 @@ const Splash = ({navigation}) => {
    */
   const checkIfUserIsLoggedIn = async () => {
     try {
-      await tryLocalSignIn();
+      await tryLocalSignIn(dispatch, navigation);
     } catch (error) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Landing'}],
-      });
-    }
-  };
-
-  /**
-   * Function is used to show screen depending on availability of token
-   * @returns {Promise<void>}
-   */
-  const checkUserStatus = () => {
-    if (token) {
-      getData('address').then(address => {
-        if (address) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'Dashboard'}],
-          });
-        } else {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'AddDefaultAddress'}],
-          });
-        }
-      });
-    } else {
       navigation.reset({
         index: 0,
         routes: [{name: 'SignUp'}],
@@ -66,12 +35,8 @@ const Splash = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (isLoading) {
-      checkIfUserIsLoggedIn().then(() => {});
-    } else {
-      checkUserStatus();
-    }
-  }, [isLoading]);
+    checkIfUserIsLoggedIn().then(() => {});
+  }, []);
 
   return (
     <View style={[appStyles.container, appStyles.backgroundWhite]}>

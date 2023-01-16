@@ -1,30 +1,28 @@
 import {useNavigation} from '@react-navigation/native';
 import SlangRetailAssistant from '@slanglabs/slang-conva-react-native-retail-assistant';
-import {useContext} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
-import {Context as AuthContext} from '../context/Auth';
 import {clearAllData} from '../redux/actions';
 import {clearFilters} from '../redux/filter/actions';
 import {alertWithOneButton} from '../utils/alerts';
 import {showToastWithGravity} from '../utils/utils';
+import {logoutUser} from '../redux/auth/actions';
 
 let sessionExpiredMessageShown = false;
 
 export default () => {
   const dispatch = useDispatch();
-  const {logoutUser} = useContext(AuthContext);
   const navigation = useNavigation();
   const {t} = useTranslation();
 
   const clearDataAndLogout = () => {
-    logoutUser();
+    logoutUser(dispatch);
     dispatch(clearAllData());
     dispatch(clearFilters());
 
     navigation.reset({
       index: 0,
-      routes: [{name: 'Landing'}],
+      routes: [{name: 'Login'}],
     });
   };
 

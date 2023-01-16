@@ -1,12 +1,12 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import AvatarImage from '../../../components/avatar/AvatarImage';
-import {Context as AuthContext} from '../../../context/Auth';
 import {appStyles} from '../../../styles/styles';
 import {AVATAR_SIZES} from '../../../utils/Constants';
 import Header from '../payment/addressPicker/Header';
+import {useSelector} from 'react-redux';
 
 /**
  * Component to render profile screen which shows user profile
@@ -16,17 +16,14 @@ import Header from '../payment/addressPicker/Header';
  */
 const Profile = ({navigation}) => {
   const {t} = useTranslation();
-
-  const {
-    state: {name, emailId, photoURL},
-  } = useContext(AuthContext);
+  const {name, emailId, photoURL} = useSelector(({authReducer}) => authReducer);
 
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={t('main.more.profile')} navigation={navigation}/>
+        <Header title={t('main.more.profile')} navigation={navigation} />
         <View style={styles.container}>
-          <AvatarImage uri={photoURL} dimension={AVATAR_SIZES.LARGE}/>
+          <AvatarImage uri={photoURL} dimension={AVATAR_SIZES.LARGE} />
           <View style={styles.profileDetailsContainer}>
             {name !== 'Unknown' ? (
               <Text style={styles.name}>{name}</Text>

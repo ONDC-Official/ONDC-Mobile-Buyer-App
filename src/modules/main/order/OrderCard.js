@@ -1,9 +1,9 @@
 import moment from 'moment';
 import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { StyleSheet, View } from 'react-native';
-import { Text, withTheme } from 'react-native-elements';
-import { appStyles } from '../../../styles/styles';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet, View} from 'react-native';
+import {Text, withTheme} from 'react-native-elements';
+import {appStyles} from '../../../styles/styles';
 
 const ORDER_STATUS = {
   created: 'Created',

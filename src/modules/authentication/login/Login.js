@@ -1,6 +1,6 @@
 import auth from '@react-native-firebase/auth';
 import {Formik} from 'formik';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
@@ -9,13 +9,14 @@ import SignUpIcon from '../../../assets/signup_icon.svg';
 import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
 import PasswordField from '../../../components/input/PasswordField';
-import {Context as AuthContext} from '../../../context/Auth';
 import {showToastWithGravity} from '../../../utils/utils';
 import {appStyles} from '../../../styles/styles';
 import {Text} from 'react-native-elements';
 import SocialMediaLogin from '../common/SocialMediaLogin';
 import {theme} from '../../../utils/theme';
-import {getData} from "../../../utils/storage";
+import {getStoredData} from '../../../utils/storage';
+import {storeLoginDetails} from '../../../redux/auth/actions';
+import {useDispatch} from 'react-redux';
 
 const userInfo = {
   email: '',
@@ -29,6 +30,7 @@ const userInfo = {
  */
 const Login = ({navigation}) => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -40,8 +42,6 @@ const Login = ({navigation}) => {
       .min(8, t('errors.short_password'))
       .required(t('errors.required')),
   });
-
-  const {storeLoginDetails} = useContext(AuthContext);
 
   const [apiInProgress, setApiInProgress] = useState(false);
 
@@ -60,15 +60,15 @@ const Login = ({navigation}) => {
 
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
-      await storeLoginDetails({
+      await storeLoginDetails(dispatch, {
         token: idTokenResult.token,
         uid: response.user.uid,
         emailId: response.user.email,
         name: response.user.displayName ? response.user.displayName : 'Unknown',
-        photoURL: response.user.photoURL ? response.user.photoURL : 'Unknown',
+        photoURL: response.user.photoURL ? response.user.photoURL : '',
       });
 
-      const address = await getData('address');
+      const address = await getStoredData('address');
       if (address) {
         navigation.reset({
           index: 0,

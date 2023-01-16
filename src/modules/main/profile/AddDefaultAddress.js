@@ -1,26 +1,20 @@
 import {Formik} from 'formik';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {Avatar, withTheme} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
 
-import {Context as AuthContext} from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {getData, postData} from '../../../utils/api';
-import {
-  ADD_ADDRESS,
-  BASE_URL,
-  GET_GPS_CORDS,
-  GET_LATLONG,
-  SERVER_URL,
-} from '../../../utils/apiUtilities';
+import {ADD_ADDRESS, BASE_URL, GET_GPS_CORDS, GET_LATLONG, SERVER_URL,} from '../../../utils/apiUtilities';
 import InputField from '../../../components/input/InputField';
 import ContainButton from '../../../components/button/ContainButton';
 import {appStyles} from '../../../styles/styles';
 import {getUserInitials} from '../../../utils/utils';
-import {setData} from "../../../utils/storage";
+import {setStoredData} from "../../../utils/storage";
+import {useSelector} from "react-redux";
 
 /**
  * Component to render form in add new address screen
@@ -30,7 +24,7 @@ import {setData} from "../../../utils/storage";
  * @constructor
  * @returns {JSX.Element}
  */
-const AddDefaultAddress = ({navigation, theme}) => {
+const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
   const {t} = useTranslation();
   const validationSchema = Yup.object({
     name: Yup.string().trim().required(t('errors.required')),
@@ -52,9 +46,7 @@ const AddDefaultAddress = ({navigation, theme}) => {
     street: Yup.string().trim().required(t('errors.required')),
   });
 
-  const {
-    state: {token, name, emailId, photoURL},
-  } = useContext(AuthContext);
+  const {token, name, emailId, photoURL} = useSelector(({authReducer}) => authReducer);
 
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -76,7 +68,7 @@ const AddDefaultAddress = ({navigation, theme}) => {
     street: '',
   };
 
-  const getState = async (e, setFieldValue, setFieldError) => {
+  const getState = async (e, setFieldValue) => {
     try {
       setRequestInProgress(true);
       const {data} = await getData(`${BASE_URL}${GET_GPS_CORDS}${e}`);
@@ -134,10 +126,12 @@ const AddDefaultAddress = ({navigation, theme}) => {
       setApiInProgress(true);
       let url = `${SERVER_URL}${ADD_ADDRESS}`;
 
-      await postData(url, payload, options);
+      const {data} = await postData(url, payload, options);
+      if (!params) {
+        await setStoredData('address', JSON.stringify(data));
+      }
       setApiInProgress(false);
 
-      await setData('address', JSON.stringify(payload));
       navigation.reset({
         index: 0,
         routes: [{name: 'Dashboard'}],

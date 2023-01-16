@@ -1,9 +1,6 @@
-import React, {memo, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import Collapsible from 'react-native-collapsible';
-import Accordion from 'react-native-collapsible/Accordion';
 import {Card, withTheme} from 'react-native-elements';
-import {keyExtractor} from '../../../utils/utils';
 import OrderCard from './OrderCard';
 import ShippingDetails from './ShippingDetails';
 

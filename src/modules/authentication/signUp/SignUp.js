@@ -1,6 +1,6 @@
 import auth from '@react-native-firebase/auth';
 import {Formik} from 'formik';
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
@@ -9,12 +9,13 @@ import SignUpIcon from '../../../assets/signup_icon.svg';
 import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
 import PasswordField from '../../../components/input/PasswordField';
-import {Context as AuthContext} from '../../../context/Auth';
 import {showToastWithGravity} from '../../../utils/utils';
 import {appStyles} from '../../../styles/styles';
 import {Text} from 'react-native-elements';
 import SocialMediaLogin from '../common/SocialMediaLogin';
 import {theme} from '../../../utils/theme';
+import {useDispatch} from 'react-redux';
+import {storeLoginDetails} from "../../../redux/auth/actions";
 
 const userInfo = {
   email: '',
@@ -29,6 +30,7 @@ const userInfo = {
  */
 const SignUp = ({navigation}) => {
   const {t} = useTranslation();
+  const dispatch = useDispatch();
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -41,8 +43,6 @@ const SignUp = ({navigation}) => {
       .required(t('errors.required')),
     name: Yup.string().trim().required(t('errors.required')),
   });
-
-  const {storeLoginDetails} = useContext(AuthContext);
 
   const [apiInProgress, setApiInProgress] = useState(false);
 
@@ -63,15 +63,13 @@ const SignUp = ({navigation}) => {
 
       const idTokenResult = await auth().currentUser.getIdTokenResult();
 
-      const loginDetails = {
+      await storeLoginDetails(dispatch, {
         token: idTokenResult.token,
         uid: response.user.uid,
         emailId: response.user.email,
         name: values.name,
-        photoURL: 'Unknown',
-      };
-
-      await storeLoginDetails(loginDetails);
+        photoURL: '',
+      });
 
       navigation.reset({
         index: 0,

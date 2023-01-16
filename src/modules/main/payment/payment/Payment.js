@@ -1,5 +1,5 @@
 import HyperSdkReact from 'hyper-sdk-react';
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
@@ -11,13 +11,12 @@ import {
   View,
 } from 'react-native';
 import Config from 'react-native-config';
-import {Card, CheckBox, Divider} from 'react-native-elements';
-import {Text, withTheme} from 'react-native-elements';
+import {Card, CheckBox, Divider, Text, withTheme} from 'react-native-elements';
 import RNEventSource from 'react-native-event-source';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
 import ContainButton from '../../../../components/button/ContainButton';
-import {Context as AuthContext} from '../../../../context/Auth';
+
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {clearAllData} from '../../../../redux/actions';
 import {clearFilters} from '../../../../redux/filter/actions';
@@ -25,15 +24,14 @@ import {appStyles} from '../../../../styles/styles';
 import {alertWithOneButton} from '../../../../utils/alerts';
 import {getData, postData} from '../../../../utils/api';
 import {
-  SERVER_URL,
   CONFIRM_ORDER,
   INITIALIZE_ORDER,
   ON_CONFIRM_ORDER,
   ON_INITIALIZE_ORDER,
+  SERVER_URL,
   SIGN_PAYLOAD,
 } from '../../../../utils/apiUtilities';
-import {PAYMENT_METHODS} from '../../../../utils/Constants';
-import {PAYMENT_OPTIONS} from '../../../../utils/Constants';
+import {PAYMENT_METHODS, PAYMENT_OPTIONS} from '../../../../utils/Constants';
 import {showToastWithGravity} from '../../../../utils/utils';
 import Header from '../addressPicker/Header';
 import PaymentSkeleton from './PaymentSkeleton';
@@ -52,9 +50,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const dispatch = useDispatch();
   const {selectedAddress, selectedBillingAddress, confirmationList} = params;
   const error = useRef(null);
-  const {
-    state: {token, uid},
-  } = useContext(AuthContext);
+  const {token, uid} = useSelector(({authReducer}) => authReducer);
   const [selectedPaymentOption, setSelectedPaymentOption] = useState(null);
   const [initializeOrderRequested, setInitializeOrderRequested] =
     useState(false);

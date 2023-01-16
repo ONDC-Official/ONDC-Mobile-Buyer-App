@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Text, withTheme } from 'react-native-elements';
+import {StyleSheet, View} from 'react-native';
+import {Text, withTheme} from 'react-native-elements';
 
 const Chip = ({ name, color, backgroundColor }) => {
   return (

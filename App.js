@@ -2,7 +2,6 @@ import React from 'react';
 import {Provider as StoreProvider} from 'react-redux';
 import {ThemeProvider} from 'react-native-elements';
 
-import {Provider as AuthProvider} from './src/context/Auth';
 import Toast, {ErrorToast} from 'react-native-toast-message';
 import Navigation from './src/navigation/Navigation';
 import {theme} from './src/utils/theme';
@@ -15,12 +14,10 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <StoreProvider store={store}>
-          <Navigation />
-          <Toast config={toastConfig} />
-        </StoreProvider>
-      </AuthProvider>
+      <StoreProvider store={store}>
+        <Navigation />
+        <Toast config={toastConfig} />
+      </StoreProvider>
     </ThemeProvider>
   );
 };

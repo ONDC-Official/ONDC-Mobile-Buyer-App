@@ -1,8 +1,4 @@
-import {CLEAR_CART} from '../../actions';
-import {UPDATE_PRODUCT_CART} from '../../actions';
-import {REMOVE_PRODUCT_CART} from '../../actions';
-import {ADD_PRODUCT_CART} from '../../actions';
-import {CLEAR_DATA} from '../../actions';
+import {ADD_PRODUCT_CART, CLEAR_CART, CLEAR_DATA, REMOVE_PRODUCT_CART, UPDATE_PRODUCT_CART} from '../../actions';
 import {SAVE_PRODUCTS} from '../actions';
 
 const initialState = {

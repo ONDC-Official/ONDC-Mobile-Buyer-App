@@ -1,12 +1,12 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import {Text, withTheme} from 'react-native-elements';
-import {Context as AuthContext} from '../../../../../../context/Auth';
 import useNetworkErrorHandling from '../../../../../../hooks/useNetworkErrorHandling';
 import {getData} from '../../../../../../utils/api';
 import {BASE_URL, GET_LOCATION} from '../../../../../../utils/apiUtilities';
+import {useSelector} from "react-redux";
 
 /**
  * Component to show searchbar to select location in addresspicker
@@ -27,10 +27,7 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
   const [selectedValue, setSelectedValue] = useState(null);
 
   const {handleApiError} = useNetworkErrorHandling();
-
-  const {
-    state: {token},
-  } = useContext(AuthContext);
+  const {token} = useSelector(({authReducer}) => authReducer);
 
   /**
    * Function is used to get list of location

@@ -1,35 +1,29 @@
-import { useIsFocused } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { FlatList, Linking, StyleSheet, View } from 'react-native';
-import { Divider, Text, withTheme } from 'react-native-elements';
+import {useIsFocused} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {FlatList, Linking, StyleSheet, View} from 'react-native';
+import {Divider, Text, withTheme} from 'react-native-elements';
 import RNEventSource from 'react-native-event-source';
 import ClearButton from '../../../components/button/ClearButton';
-import { Context as AuthContext } from '../../../context/Auth';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import { appStyles } from '../../../styles/styles';
-import { alertWithOneButton } from '../../../utils/alerts';
-import { getData, postData } from '../../../utils/api';
+import {appStyles} from '../../../styles/styles';
+import {getData, postData} from '../../../utils/api';
 import {
-  GET_STATUS,
+  ON_CANCEL_ORDER,
   ON_GET_STATUS,
   ON_SUPPORT,
-  SERVER_URL,
-} from '../../../utils/apiUtilities';
-import { SUPPORT } from '../../../utils/apiUtilities';
-import {
-  CANCEL_ORDER,
-  ON_CANCEL_ORDER,
   ON_TRACK_ORDER,
-  TRACK_ORDER,
   ON_UPDATE_ORDER,
+  SERVER_URL,
+  SUPPORT,
 } from '../../../utils/apiUtilities';
-import { FAQS, ORDER_STATUS, UPDATE_TYPE } from '../../../utils/Constants';
-import { showToastWithGravity } from '../../../utils/utils';
-import { getStatus, trackOrder } from './OrderHistoryUtils';
+import {FAQS, ORDER_STATUS, UPDATE_TYPE} from '../../../utils/Constants';
+import {showToastWithGravity} from '../../../utils/utils';
+import {getStatus, trackOrder} from './OrderHistoryUtils';
 import Overlay from './Overlay';
 import StatusContainer from './StatusContainer';
 import Support from './Support';
+import {useSelector} from "react-redux";
 
 /**
  * Component is used to display shipping details to the user when card is expanded
@@ -39,14 +33,12 @@ import Support from './Support';
  * @returns {JSX.Element}
  * @constructor
  */
-const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
-  const { colors } = theme;
-  const { t } = useTranslation();
+const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
+  const {colors} = theme;
+  const {t} = useTranslation();
   const isFocused = useIsFocused();
-  const {
-    state: { token },
-  } = useContext(AuthContext);
-  const { handleApiError } = useNetworkErrorHandling();
+  const {token} = useSelector(({authReducer}) => authReducer);
+  const {handleApiError} = useNetworkErrorHandling();
   const [cancelInProgress, setCancelInProgress] = useState(false);
   const [callInProgress, setCallInProgress] = useState(false);
   const [trackInProgress, setTrackInProgress] = useState(false);
@@ -77,7 +69,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
    * @returns {JSX.Element}
    * @constructor
    */
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
       <>
         <View style={[styles.rowContainer, styles.priceContainer]}>
@@ -87,7 +79,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
           <Text style={styles.price}>₹{item.product?.price?.value}</Text>
         </View>
         <>
-          <Text style={[styles.quantity, { color: colors.greyOutline }]}>
+          <Text style={[styles.quantity, {color: colors.greyOutline}]}>
             QTY:{item.product?.quantity}
           </Text>
           <StatusContainer product={item} />
@@ -113,7 +105,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
       ],
       options,
     )
-      .then(({ data }) => {
+      .then(({data}) => {
         console.log(JSON.stringify(data, undefined, 4));
         if (data[0].message.ack.status === 'ACK') {
           setSupportMessageId(data[0].context.message_id);
@@ -132,7 +124,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
    */
   const onGetSupport = async messageId => {
     try {
-      const { data } = await getData(
+      const {data} = await getData(
         `${SERVER_URL}${ON_SUPPORT}messageIds=${messageId}`,
         options,
       );
@@ -148,7 +140,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
 
   const onTrackOrder = async messageId => {
     try {
-      const { data } = await getData(
+      const {data} = await getData(
         `${SERVER_URL}${ON_TRACK_ORDER}messageIds=${messageId}`,
         options,
       );
@@ -166,14 +158,14 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
 
   const onGetStatus = async id => {
     try {
-      const { data } = await getData(`${SERVER_URL}${ON_GET_STATUS}${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const {data} = await getData(`${SERVER_URL}${ON_GET_STATUS}${id}`, {
+        headers: {Authorization: `Bearer ${token}`},
       });
       console.log(JSON.stringify(data, undefined, 4));
       setStatusInProgress(false);
       getOrderList(1)
-        .then(() => { })
-        .catch(() => { });
+        .then(() => {})
+        .catch(() => {});
     } catch (error) {
       console.log(error);
       handleApiError(error);
@@ -183,14 +175,14 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
 
   const onCancel = async id => {
     try {
-      const { data } = await getData(
+      const {data} = await getData(
         `${SERVER_URL}${ON_CANCEL_ORDER}messageId=${id}`,
         options,
       );
       if (data.message) {
         getOrderList(1)
-          .then(() => { })
-          .catch(() => { });
+          .then(() => {})
+          .catch(() => {});
       } else {
         showToastWithGravity(t('network_error.something_went_wrong'));
       }
@@ -204,15 +196,15 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
 
   const onUpdate = async id => {
     try {
-      const { data } = await getData(
+      const {data} = await getData(
         `${SERVER_URL}${ON_UPDATE_ORDER}messageId=${id}`,
         options,
       );
       console.log(data);
       if (data.message) {
         getOrderList(1)
-          .then(() => { })
-          .catch(() => { });
+          .then(() => {})
+          .catch(() => {});
       } else {
         showToastWithGravity(t('network_error.something_went_wrong'));
       }
@@ -244,7 +236,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
       eventSource = new RNEventSource(
         `${SERVER_URL}/clientApis/events?messageId=${supportMessageId}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         },
       );
 
@@ -255,8 +247,8 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
       eventSource.addEventListener('on_support', event => {
         const data = JSON.parse(event.data);
         onGetSupport(data.messageId)
-          .then(() => { })
-          .catch(() => { });
+          .then(() => {})
+          .catch(() => {});
       });
     }
 
@@ -272,7 +264,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
       eventSource = new RNEventSource(
         `${SERVER_URL}/clientApis/events?messageId=${updateMessageId}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         },
       );
 
@@ -284,8 +276,8 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
         const data = JSON.parse(event.data);
         console.log(data);
         onUpdate(data.messageId)
-          .then(() => { })
-          .catch(() => { });
+          .then(() => {})
+          .catch(() => {});
       });
     }
 
@@ -302,7 +294,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
       eventSource = new RNEventSource(
         `${SERVER_URL}/clientApis/events?messageId=${statusMessageId}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         },
       );
 
@@ -313,8 +305,8 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
       eventSource.addEventListener('on_status', event => {
         const data = JSON.parse(event.data);
         onGetStatus(data.messageId)
-          .then(() => { })
-          .catch(() => { });
+          .then(() => {})
+          .catch(() => {});
       });
     }
 
@@ -331,7 +323,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
       eventSource = new RNEventSource(
         `${SERVER_URL}/clientApis/events?messageId=${cancelMessageId}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         },
       );
       if (!timer) {
@@ -341,8 +333,8 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
         const data = JSON.parse(event.data);
         console.log(data);
         onCancel(data.messageId)
-          .then(() => { })
-          .catch(() => { });
+          .then(() => {})
+          .catch(() => {});
       });
     }
     return () => {
@@ -358,7 +350,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
       eventSource = new RNEventSource(
         `${SERVER_URL}/clientApis/events?messageId=${trackMessageId}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         },
       );
       if (!timer) {
@@ -367,8 +359,8 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
       eventSource.addEventListener('on_track', event => {
         const data = JSON.parse(event.data);
         onTrackOrder(data.messageId)
-          .then(() => { })
-          .catch(() => { });
+          .then(() => {})
+          .catch(() => {});
       });
     }
     return () => {
@@ -382,7 +374,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
         <Divider />
         <FlatList data={order?.items} renderItem={renderItem} />
         <View style={styles.addressContainer}>
-          <Text style={{ color: colors.grey }}>{t('main.order.shipped_to')}</Text>
+          <Text style={{color: colors.grey}}>{t('main.order.shipped_to')}</Text>
           <Text style={styles.name}>{shippingAddress?.name}</Text>
           <Text style={styles.address}>{contact?.email}</Text>
           <Text style={styles.address}>{contact?.phone}</Text>
@@ -396,7 +388,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
           </Text>
         </View>
         <View style={styles.addressContainer}>
-          <Text style={{ color: colors.grey }}>{t('main.order.billed_to')}</Text>
+          <Text style={{color: colors.grey}}>{t('main.order.billed_to')}</Text>
           <Text style={styles.name}>{order?.billing?.name}</Text>
           <Text style={styles.address}>{order?.billing?.email}</Text>
           <Text style={styles.address}>{order?.billing?.phone}</Text>
@@ -439,7 +431,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
                         order,
                         options,
                       )
-                        .then(() => { })
+                        .then(() => {})
                         .catch(e => {
                           handleApiError(e);
                         });
@@ -456,7 +448,7 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
                         order,
                         options,
                       )
-                        .then(() => { })
+                        .then(() => {})
                         .catch(e => handleApiError(e));
                     }}
                     textColor={colors.accentColor}
@@ -506,13 +498,13 @@ const ShippingDetails = ({ order, getOrderList, activeSections, theme }) => {
 export default withTheme(ShippingDetails);
 
 const styles = StyleSheet.create({
-  addressContainer: { marginTop: 20, flexShrink: 1 },
+  addressContainer: {marginTop: 20, flexShrink: 1},
   subContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
-  space: { margin: 5 },
-  actionContainer: { paddingTop: 10 },
+  space: {margin: 5},
+  actionContainer: {paddingTop: 10},
   container: {
     paddingTop: 8,
   },
@@ -524,13 +516,13 @@ const styles = StyleSheet.create({
   priceContainer: {
     marginTop: 10,
   },
-  name: { fontSize: 18, fontWeight: '500', marginVertical: 4, flexShrink: 1 },
-  title: { fontSize: 16, marginRight: 10, flexShrink: 1 },
-  price: { fontSize: 16, marginLeft: 10 },
-  address: { marginBottom: 4 },
-  icon: { paddingVertical: 8, paddingHorizontal: 10, borderRadius: 50 },
-  divider: { marginTop: 10 },
-  Button: { width: 90 },
-  cancelledButton: { width: 110 },
-  quantity: { fontWeight: '700' },
+  name: {fontSize: 18, fontWeight: '500', marginVertical: 4, flexShrink: 1},
+  title: {fontSize: 16, marginRight: 10, flexShrink: 1},
+  price: {fontSize: 16, marginLeft: 10},
+  address: {marginBottom: 4},
+  icon: {paddingVertical: 8, paddingHorizontal: 10, borderRadius: 50},
+  divider: {marginTop: 10},
+  Button: {width: 90},
+  cancelledButton: {width: 110},
+  quantity: {fontWeight: '700'},
 });

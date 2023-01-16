@@ -1,10 +1,5 @@
 import {postData} from '../../../utils/api';
-import {
-  SERVER_URL,
-  CANCEL_ORDER,
-  TRACK_ORDER,
-  GET_STATUS,
-} from '../../../utils/apiUtilities';
+import {CANCEL_ORDER, GET_STATUS, SERVER_URL, TRACK_ORDER,} from '../../../utils/apiUtilities';
 import {alertWithOneButton} from '../../../utils/alerts';
 import i18n from '../../../locales/i18next';
 
