@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
-import {Divider, Text, withTheme} from 'react-native-elements';
+import {Divider, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
@@ -67,7 +67,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backIcon}>
-          <Icon name="arrow-left" size={16} color={colors.accentColor} />
+          <Icon name="arrow-left" size={16} color={colors.primary}/>
         </TouchableOpacity>
         <View
           style={[
@@ -89,7 +89,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 
             <Text style={styles.descriptorName}>{item.descriptor.name}</Text>
             <Text style={[styles.provider, {color: colors.gray}]}>
-              {t('main.product.product_details.ordering_from')}{' '}
+              Ordering from
               <Text
                 style={[
                   styles.provider,
@@ -109,41 +109,41 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
               ₹{item.price.value ? item.price.value : item.price.maximum_value}
             </Text>
           </View>
-          <Divider width={1} style={styles.divider} />
+          <Divider width={1} style={styles.divider}/>
 
           <>
-            <Details style={styles.divider} item={item} />
-            <Divider />
+            <Details style={styles.divider} item={item}/>
+            <Divider/>
           </>
 
           <View style={styles.addButton}>
             {item.quantity < 1 ? (
               <TouchableOpacity
-                style={[styles.button, {borderColor: colors.accentColor}]}
+                style={[styles.button, {borderColor: colors.primary}]}
                 onPress={() => {
-                  showInfoToast(t('main.product.add_to_cart'));
+                  showInfoToast('Added to Cart');
                   addItem(item);
                 }}>
-                <Text style={{color: colors.accentColor}}>
-                  {t('main.product.add_button_title')}
+                <Text style={{color: colors.primary}}>
+                  Add
                 </Text>
               </TouchableOpacity>
             ) : (
               <View
                 style={[
                   styles.quantityDisplayButton,
-                  {backgroundColor: colors.accentColor},
+                  {backgroundColor: colors.primary},
                 ]}>
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => updateQuantity(false)}>
-                  <Icon name="minus" size={16} color={colors.white} />
+                  <Icon name="minus" size={16} color={colors.white}/>
                 </TouchableOpacity>
                 <Text style={{color: colors.white}}>{item.quantity}</Text>
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => updateQuantity(true)}>
-                  <Icon name="plus" color={colors.white} size={16} />
+                  <Icon name="plus" color={colors.white} size={16}/>
                 </TouchableOpacity>
               </View>
             )}

@@ -1,15 +1,28 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {ActivityIndicator, FlatList, SafeAreaView, StyleSheet, View,} from 'react-native';
-import {Card, Text, withTheme} from 'react-native-elements';
+import {
+  ActivityIndicator,
+  FlatList,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import {Button, Card, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
-import ContainButton from '../../../../components/button/ContainButton';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {GET_SELECT, ON_GET_SELECT, SERVER_URL,} from '../../../../utils/apiUtilities';
-import {maskAmount, showToastWithGravity, skeletonList,} from '../../../../utils/utils';
+import {
+  GET_SELECT,
+  ON_GET_SELECT,
+  SERVER_URL,
+} from '../../../../utils/apiUtilities';
+import {
+  maskAmount,
+  showToastWithGravity,
+  skeletonList,
+} from '../../../../utils/utils';
 import ProductCard from '../../product/list/component/ProductCard';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 import Header from '../addressPicker/Header';
@@ -113,7 +126,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           };
           payload[index].message.cart.items.push(itemObj);
         } else {
-          console.log(JSON.stringify(item, undefined, 4));
           let payloadObj = {
             context: {
               transaction_id: transactionId,
@@ -156,8 +168,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           providerIdArray.push(item.provider_details.id);
         }
       });
-
-      console.log(payload);
 
       const {data} = await postData(`${SERVER_URL}${GET_SELECT}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
@@ -267,7 +277,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={t('main.cart.update_cart')} navigation={navigation} />
+        <Header title={'Update Cart'} navigation={navigation} />
 
         <FlatList
           keyExtractor={(item, index) => {
@@ -279,7 +289,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           ListEmptyComponent={() => {
             return (
               <View style={styles.emptyListComponent}>
-                <Text>{t('main.order.list_empty_message')}</Text>
+                <Text>No data found</Text>
               </View>
             );
           }}
@@ -287,7 +297,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         {total.current && !apiInProgress && (
           <Card containerStyle={styles.card}>
             <View style={styles.priceContainer}>
-              <Text style={styles.title}>{t('main.cart.sub_total_label')}</Text>
+              <Text style={styles.title}>Subtotal:</Text>
               <Text style={styles.title}>₹{maskAmount(total.current)}</Text>
             </View>
           </Card>
@@ -297,21 +307,22 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           {confirmation.current &&
           confirmation.current.length > 0 &&
           !apiInProgress ? (
-            <ContainButton
-              title={t('main.cart.proceed_to_pay')}
+            <Button
+              mode="contained"
               onPress={() =>
                 navigation.navigate('Payment', {
                   selectedAddress: params.selectedAddress,
                   selectedBillingAddress: params.selectedBillingAddress,
                   confirmationList: confirmation.current,
                 })
-              }
-            />
+              }>
+              Proceed to Pay
+            </Button>
           ) : (
             <>
               {apiInProgress && (
                 <ActivityIndicator
-                  color={colors.accentColor}
+                  color={colors.primary}
                   style={styles.activityIndicator}
                   size={26}
                 />

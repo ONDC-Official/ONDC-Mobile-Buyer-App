@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const IconField = ({name, theme, icon}) => {
@@ -12,9 +12,9 @@ const IconField = ({name, theme, icon}) => {
           styles.iconContainer,
           {backgroundColor: colors.statusBackground},
         ]}>
-        <Icon name={icon} size={25} color={colors.accentColor}/>
+        <Icon name={icon} size={25} color={colors.primary}/>
       </View>
-      <Text style={[styles.text, {color: colors.accentColor}]}>{name}</Text>
+      <Text style={[styles.text, {color: colors.primary}]}>{name}</Text>
     </View>
   );
 };

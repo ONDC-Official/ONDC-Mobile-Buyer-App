@@ -1,21 +1,18 @@
 import auth from '@react-native-firebase/auth';
 import {Formik} from 'formik';
 import React, {useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import * as Yup from 'yup';
+import {useDispatch} from 'react-redux';
+import {Button, Text, withTheme} from 'react-native-paper';
 
 import SignUpIcon from '../../../assets/signup_icon.svg';
-import ContainButton from '../../../components/button/ContainButton';
 import InputField from '../../../components/input/InputField';
 import PasswordField from '../../../components/input/PasswordField';
 import {showToastWithGravity} from '../../../utils/utils';
 import {appStyles} from '../../../styles/styles';
-import {Text} from 'react-native-elements';
 import SocialMediaLogin from '../common/SocialMediaLogin';
-import {theme} from '../../../utils/theme';
-import {useDispatch} from 'react-redux';
-import {storeLoginDetails} from "../../../redux/auth/actions";
+import {storeLoginDetails} from '../../../redux/auth/actions';
 
 const userInfo = {
   email: '',
@@ -28,20 +25,19 @@ const userInfo = {
  * @param theme
  * @param navigation: application navigation object
  */
-const SignUp = ({navigation}) => {
-  const {t} = useTranslation();
+const SignUp = ({navigation, theme}) => {
   const dispatch = useDispatch();
 
   const validationSchema = Yup.object({
     email: Yup.string()
       .trim()
-      .email(t('errors.invalid_email'))
-      .required(t('errors.required')),
+      .email('Please enter valid email address')
+      .required('This field is required'),
     password: Yup.string()
       .trim()
-      .min(8, t('errors.short_password'))
-      .required(t('errors.required')),
-    name: Yup.string().trim().required(t('errors.required')),
+      .min(8, 'Password is too short')
+      .required('This field is required'),
+    name: Yup.string().trim().required('This field is required'),
   });
 
   const [apiInProgress, setApiInProgress] = useState(false);
@@ -113,22 +109,22 @@ const SignUp = ({navigation}) => {
                   <>
                     <View style={appStyles.inputContainer}>
                       <InputField
+                        name="name"
                         value={values.name}
                         onBlur={handleBlur('name')}
-                        placeholder={t(
-                          'authentication.signup.name_placeholder',
-                        )}
+                        label="Full Name"
+                        placeholder={'Full Name'}
                         errorMessage={touched.name ? errors.name : null}
                         onChangeText={handleChange('name')}
                       />
                     </View>
                     <View style={appStyles.inputContainer}>
                       <InputField
+                        name="email"
                         value={values.email}
                         onBlur={handleBlur('email')}
-                        placeholder={t(
-                          'authentication.login.email_placeholder',
-                        )}
+                        label="Email"
+                        placeholder="Email"
                         errorMessage={touched.email ? errors.email : null}
                         onChangeText={handleChange('email')}
                       />
@@ -137,9 +133,8 @@ const SignUp = ({navigation}) => {
                       <PasswordField
                         value={values.password}
                         onBlur={handleBlur('password')}
-                        placeholder={t(
-                          'authentication.login.password_placeholder',
-                        )}
+                        label="Password"
+                        placeholder="Password"
                         secureTextEntry
                         errorMessage={touched.password ? errors.password : null}
                         onChangeText={handleChange('password')}
@@ -147,23 +142,24 @@ const SignUp = ({navigation}) => {
                     </View>
 
                     <View style={styles.inputContainer}>
-                      <ContainButton
-                        title={t('authentication.signup.button_title')}
+                      <Button
+                        mode="contained"
                         onPress={handleSubmit}
                         loading={apiInProgress}
-                        disabled={apiInProgress}
-                      />
+                        disabled={apiInProgress}>
+                        Sign up
+                      </Button>
                     </View>
 
                     <SocialMediaLogin />
 
                     <View style={styles.loginMessage}>
                       <Text>Already have an account?</Text>
-                      <TouchableOpacity
-                        style={styles.loginButton}
+                      <Button
+                        mode="text"
                         onPress={() => navigation.navigate('Login')}>
-                        <Text style={styles.terms}>Login</Text>
-                      </TouchableOpacity>
+                        Login
+                      </Button>
                     </View>
                   </>
                 );
@@ -176,17 +172,13 @@ const SignUp = ({navigation}) => {
         <Text style={styles.textCenter}>
           By Log In to Mobile App. I accept all the applicable
         </Text>
-        <TouchableOpacity>
-          <Text style={{color: theme.colors.accentColor, textAlign: 'center'}}>
-            Terms and Conditions
-          </Text>
-        </TouchableOpacity>
+        <Button mode="text">Terms and condition</Button>
       </View>
     </View>
   );
 };
 
-export default SignUp;
+export default withTheme(SignUp);
 
 const styles = StyleSheet.create({
   imageContainer: {
@@ -214,9 +206,7 @@ const styles = StyleSheet.create({
   loginMessage: {
     flexDirection: 'row',
     justifyContent: 'center',
-  },
-  loginButton: {
-    paddingHorizontal: 8,
+    alignItems: 'center',
   },
   footerContainer: {
     paddingBottom: 20,
@@ -224,5 +214,4 @@ const styles = StyleSheet.create({
   textCenter: {
     textAlign: 'center',
   },
-  terms: {color: theme.colors.accentColor, textAlign: 'center'},
 });

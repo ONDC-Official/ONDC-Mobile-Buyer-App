@@ -1,21 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
+import {ActivityIndicator, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {Avatar} from 'react-native-elements';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
+import {Avatar, Text, withTheme} from 'react-native-paper';
 
 import {appStyles} from '../../../styles/styles';
-import {theme} from '../../../utils/theme';
 import {getUserInitials} from '../../../utils/utils';
 import {getStoredData} from '../../../utils/storage';
 import ProductSearch from '../product/list/component/header/ProductSearch';
 import Products from '../product/list/Products';
+import useProductList from '../product/hook/useProductList';
 
-const Dashboard = ({navigation}) => {
+const Dashboard = ({navigation, theme}) => {
   const isFocused = useIsFocused();
   const [address, setAddress] = useState(null);
   const {name, photoURL} = useSelector(({authReducer}) => authReducer);
+
+  const {onSearch} = useProductList();
 
   useEffect(() => {
     getStoredData('address').then(response => {
@@ -26,35 +28,37 @@ const Dashboard = ({navigation}) => {
   }, [isFocused]);
 
   return (
-    <SafeAreaView style={appStyles.container}>
-      <View style={styles.searchContainer}>
+    <SafeAreaView
+      style={[appStyles.container, {backgroundColor: theme.colors.surface}]}>
+      <View>
         <View style={styles.header}>
           {address ? (
             <TouchableOpacity
               style={styles.addressContainer}
               onPress={() => navigation.navigate('AddressList')}>
-              <Text style={styles.address}>{address?.descriptor?.name}</Text>
-              <Icon name={'chevron-down'} color={theme.colors.accentColor} />
+              <Text style={[styles.address, {color: theme.colors.primary}]}>
+                {address?.descriptor?.name}
+              </Text>
+              <Icon name={'chevron-down'} color={theme.colors.primary} />
             </TouchableOpacity>
           ) : (
             <ActivityIndicator
               size={'small'}
-              color={theme.colors.accentColor}
+              color={theme.colors.primary}
             />
           )}
 
           {photoURL ? (
-            <Avatar size={32} rounded source={{uri: photoURL}} />
+            <Avatar.Image size={32} rounded source={{uri: photoURL}} />
           ) : (
-            <Avatar
+            <Avatar.Text
               size={32}
               rounded
-              title={getUserInitials(name ?? '')}
-              containerStyle={{backgroundColor: theme.colors.accentColor}}
+              label={getUserInitials(name ?? '')}
             />
           )}
         </View>
-        <ProductSearch />
+        <ProductSearch onSearch={onSearch} />
       </View>
       <Products />
     </SafeAreaView>
@@ -62,9 +66,7 @@ const Dashboard = ({navigation}) => {
 };
 
 const styles = StyleSheet.create({
-  searchContainer: {
-    backgroundColor: 'white',
-  },
+  search: {backgroundColor: 'white'},
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -75,9 +77,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   address: {
-    color: theme.colors.accentColor,
     marginEnd: 8,
   },
 });
 
-export default Dashboard;
+export default withTheme(Dashboard);

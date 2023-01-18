@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
-import {CheckBox, Dialog, Text, withTheme} from 'react-native-elements';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import ContainButton from '../../../components/button/ContainButton';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
 import {SERVER_URL, UPDATE_ORDER} from '../../../utils/apiUtilities';
@@ -11,21 +9,22 @@ import {reasons} from './reasons';
 import {postData} from '../../../utils/api';
 import {cancelOrder} from './OrderHistoryUtils';
 import {useSelector} from 'react-redux';
+import {Button, Checkbox, Dialog} from 'react-native-paper';
 
 const Overlay = ({
-  theme,
-  setUpdateMessageId,
-  order,
-  showOverlay,
-  setShowOverlay,
-  breakup,
-  updateType,
-  setUpdateInProgress,
-  updateInProgress,
-  cancelInProgress,
-  setCancelInProgress,
-  setCancelMessageId,
-}) => {
+                   theme,
+                   setUpdateMessageId,
+                   order,
+                   showOverlay,
+                   setShowOverlay,
+                   breakup,
+                   updateType,
+                   setUpdateInProgress,
+                   updateInProgress,
+                   cancelInProgress,
+                   setCancelInProgress,
+                   setCancelMessageId,
+                 }) => {
   const {colors} = theme;
   const [selectedItem, setSelectedItem] = useState([]);
   const [selectedReason, setSelectedReason] = useState(null);
@@ -48,6 +47,7 @@ const Overlay = ({
     index > -1 ? items.splice(index, 1) : items.push(item);
     setSelectedItem(items);
   };
+
   /**
    * Component is used to display single item with title and cost
    * @param item:single ordered item
@@ -59,12 +59,12 @@ const Overlay = ({
     if (item && item.product['@ondc/org/cancellable']) {
       return (
         <View style={[appStyles.container, styles.itemContainer]}>
-          <CheckBox
+          <Checkbox
             containerStyle={[
               styles.containerStyle,
               {backgroundColor: colors.white},
             ]}
-            checkedColor={colors.accentColor}
+            checkedColor={colors.primary}
             checked={index > -1}
             onPress={() => onPressHandler(item, index)}
           />
@@ -188,7 +188,7 @@ const Overlay = ({
             dropdownStyle={styles.dropdownStyle}
             buttonStyle={buttonStyles}
             buttonTextStyle={buttonTextStyles}
-            renderDropdownIcon={() => <Icon name="menu-down" size={28} />}
+            renderDropdownIcon={() => <Icon name="menu-down" size={28}/>}
             renderCustomizedRowChild={value => (
               <Text style={styles.label}>{value}</Text>
             )}
@@ -203,16 +203,13 @@ const Overlay = ({
       )}
       <View style={styles.buttonContainer}>
         <View style={styles.button}>
-          <ContainButton
-            title={'Go Back'}
-            backgroundColor={colors.greyOutline}
-            color={colors.black}
-            onPress={onGoBack}
-          />
+          <Button mode="contained" onPress={onGoBack}>
+            Go Back
+          </Button>
         </View>
         {selectedReason && (
           <>
-            <View style={styles.space} />
+            <View style={styles.space}/>
             <View style={styles.button}>
               <ContainButton
                 title={'Confirm'}

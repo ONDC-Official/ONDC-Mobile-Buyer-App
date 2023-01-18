@@ -1,33 +1,31 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import {withTheme} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
-import i18n from '../../../locales/i18next';
 import {clearAllData} from '../../../redux/actions';
 import {appStyles} from '../../../styles/styles';
 import {alertWithTwoButtons} from '../../../utils/alerts';
 import {OPTIONS} from '../../../utils/Constants';
 import OptionCard from './OptionCard';
-import {logoutUser} from "../../../redux/auth/actions";
+import {logoutUser} from '../../../redux/auth/actions';
+import {withTheme} from 'react-native-paper';
 
 const list = [
   {
     id: OPTIONS.PROFILE,
     name: OPTIONS.PROFILE,
-    string: i18n.t('main.more.profile'),
+    string: 'Profile',
     icon: 'user',
   },
   {
     id: OPTIONS.SUPPORT,
     name: OPTIONS.SUPPORT,
-    string: i18n.t('main.more.support'),
+    string: 'Support',
     icon: 'question',
   },
   {
     id: OPTIONS.LOG_OUT,
     name: OPTIONS.LOG_OUT,
-    string: i18n.t('main.more.log_out'),
+    string: 'Logout',
     icon: 'sign-out',
   },
 ];
@@ -38,7 +36,6 @@ const list = [
  * @returns {JSX.Element}
  */
 const More = ({navigation}) => {
-  const {t} = useTranslation();
   const dispatch = useDispatch();
 
   /**
@@ -48,8 +45,8 @@ const More = ({navigation}) => {
     if (option === OPTIONS.LOG_OUT) {
       alertWithTwoButtons(
         null,
-        t('main.more.log_out_message'),
-        t('main.product.ok_label'),
+        'Are you sure you want to log out?',
+        'Ok',
         () => {
           logoutUser(dispatch);
           dispatch(clearAllData());
@@ -58,7 +55,7 @@ const More = ({navigation}) => {
             routes: [{name: 'Login'}],
           });
         },
-        t('main.product.cancel_label'),
+        'Cancel',
         () => {},
       );
     } else if (option === OPTIONS.PROFILE) {

@@ -1,18 +1,73 @@
-export const theme = {
-  colors: {
-    accentColor: '#1c75bc',
-    background: '#f0f0f0',
-    primary: '#606161',
-    secondary: '#606161',
-    error: '#FF5959',
-    success: '#2EB086',
-    warning: '#F9C132',
-    white: '#ffffff',
-    cancelledBackground: '#FFE8E7',
-    statusBackground: '#E9F1F8',
-    tabColor: '#606161',
-    shippedBackground: '#FFC132',
-    deliveredBackground: '#2EB086',
-    cardBackground: '#f5d9d3',
+import {configureFonts, DefaultTheme} from 'react-native-paper';
+
+const fontConfig = {
+  ios: {
+    regular: {
+      fontFamily: 'Lato-Regular',
+      fontWeight: 'normal',
+    },
+    medium: {
+      fontFamily: 'Lato-Medium',
+      fontWeight: '500',
+    },
+    light: {
+      fontFamily: 'Lato-Light',
+      fontWeight: 'normal',
+    },
+    thin: {
+      fontFamily: 'Lato-Thin',
+      fontWeight: 'normal',
+    },
+    bold: {
+      fontFamily: 'Lato-Bold',
+      fontWeight: 'bold',
+    },
+    black: {
+      fontFamily: 'Lato-Black',
+      fontWeight: '900',
+    },
   },
+  android: {
+    regular: {
+      fontFamily: 'Lato-Regular',
+      fontWeight: 'normal',
+    },
+    medium: {
+      fontFamily: 'Lato-Medium',
+      fontWeight: '500',
+    },
+    light: {
+      fontFamily: 'Lato-Light',
+      fontWeight: 'normal',
+    },
+    thin: {
+      fontFamily: 'Lato-Thin',
+      fontWeight: 'normal',
+    },
+    bold: {
+      fontFamily: 'Lato-Bold',
+      fontWeight: 'bold',
+    },
+    black: {
+      fontFamily: 'Lato-Black',
+      fontWeight: '900',
+    },
+  },
+};
+
+export const theme = {
+  ...DefaultTheme,
+  roundness: 5,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#1C75BC',
+    accent: '#00AEEF',
+    opposite: '#F29C49',
+    background: 'white',
+    surface: '#FFF',
+    error: '#B00020',
+    text: '#333',
+    pageBackground: '#f0f0f0',
+  },
+  fonts: configureFonts(fontConfig),
 };

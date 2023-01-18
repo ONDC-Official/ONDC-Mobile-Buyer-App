@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {ActivityIndicator, StyleSheet, TouchableOpacity, View,} from 'react-native';
-import {Card, Text, withTheme} from 'react-native-elements';
+import {Card, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
@@ -21,13 +21,13 @@ const image = require('../../../../../assets/noImage.png');
  * @returns {JSX.Element}
  */
 const ProductCard = ({
-  theme,
-  navigation,
-  item,
-  cancellable,
-  confirmed,
-  apiInProgress,
-}) => {
+                       theme,
+                       navigation,
+                       item,
+                       cancellable,
+                       confirmed,
+                       apiInProgress,
+                     }) => {
   const {colors} = theme;
 
   const dispatch = useDispatch();
@@ -76,9 +76,9 @@ const ProductCard = ({
   const cost = item.price.value ? item.price.value : item.price.maximum_value;
   const cardStyles = !confirmed
     ? [
-        styles.card,
-        {backgroundColor: colors.cardBackground, borderColor: colors.error},
-      ]
+      styles.card,
+      {backgroundColor: colors.cardBackground, borderColor: colors.error},
+    ]
     : styles.card;
   return (
     <Card containerStyle={cardStyles}>
@@ -104,7 +104,7 @@ const ProductCard = ({
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={() => cancelItem(item)}>
-                  <Icon name="close" size={20} />
+                  <Icon name="close" size={20}/>
                 </TouchableOpacity>
               )}
             </View>
@@ -119,31 +119,31 @@ const ProductCard = ({
               </Text>
               {item.quantity < 1 ? (
                 <TouchableOpacity
-                  style={[styles.button, {borderColor: colors.accentColor}]}
+                  style={[styles.button, {borderColor: colors.primary}]}
                   onPress={() => {
-                    showInfoToast(t('main.product.add_to_cart'));
+                    showInfoToast('Added to cart');
                     addItem(item);
                   }}>
-                  <Text style={{color: colors.accentColor}}>
-                    {t('main.product.add_button_title')}
+                  <Text style={{color: colors.primary}}>
+                    Add
                   </Text>
                 </TouchableOpacity>
               ) : (
                 <View
                   style={[
                     styles.quantityDisplayButton,
-                    {backgroundColor: colors.accentColor},
+                    {backgroundColor: colors.primary},
                   ]}>
                   <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => updateQuantity(false)}>
-                    <Icon name="minus" size={16} color={colors.white} />
+                    <Icon name="minus" size={16} color={colors.white}/>
                   </TouchableOpacity>
                   <Text style={{color: colors.white}}>{item.quantity}</Text>
                   <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => updateQuantity(true)}>
-                    <Icon name="plus" color={colors.white} size={16} />
+                    <Icon name="plus" color={colors.white} size={16}/>
                   </TouchableOpacity>
                 </View>
               )}
@@ -157,7 +157,7 @@ const ProductCard = ({
               alignSelf: alignment,
             }}>
             {!apiInProgress && 'Cannot fetch details for this product'}
-            {apiInProgress && <ActivityIndicator color={colors.error} />}
+            {apiInProgress && <ActivityIndicator color={colors.error}/>}
           </Text>
         )}
       </TouchableOpacity>

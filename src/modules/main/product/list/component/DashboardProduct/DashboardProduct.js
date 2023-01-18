@@ -1,12 +1,14 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
+import {Button, Card, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 
-import {addItemToCart, removeItemFromCart, updateItemInCart,} from '../../../../../../redux/actions';
+import {
+  addItemToCart,
+  removeItemFromCart,
+  updateItemInCart,
+} from '../../../../../../redux/actions';
 import {appStyles} from '../../../../../../styles/styles';
 import {showInfoToast} from '../../../../../../utils/utils';
 
@@ -25,7 +27,6 @@ const DashboardProduct = ({theme, navigation, item}) => {
   const {colors} = theme;
 
   const dispatch = useDispatch();
-  const {t} = useTranslation();
 
   /**
    * function handles click event add button
@@ -39,11 +40,10 @@ const DashboardProduct = ({theme, navigation, item}) => {
    * function handles click event of increase and decrease buttons
    */
   const updateQuantity = (increase = true) => {
-    let product = increase
-      ? Object.assign({}, item, {quantity: item.quantity + 1})
-      : Object.assign({}, item, {quantity: item.quantity - 1});
+    const newQuantity = increase ? item.quantity + 1 : item.quantity - 1;
+    let product = Object.assign({}, item, {quantity: newQuantity});
 
-    if (product.quantity === 0) {
+    if (newQuantity === 0) {
       dispatch(removeItemFromCart(product));
     } else {
       dispatch(updateItemInCart(product));
@@ -64,60 +64,58 @@ const DashboardProduct = ({theme, navigation, item}) => {
         navigation.navigate('ProductDetails', {
           product: item,
         })
-      }
-      style={styles.container}>
-      <FastImage
-        source={uri ? {uri} : image}
-        style={styles.image}
-        resizeMode={'contain'}
-      />
-      <View style={appStyles.container}>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title} numberOfLines={1}>
-            {item?.descriptor?.name}
-          </Text>
-        </View>
-        <View style={styles.organizationNameContainer}>
-          <Text numberOfLines={1}>
-            {item?.provider_details?.descriptor?.name}
-          </Text>
-        </View>
-        <View style={styles.priceContainer}>
-          <Text>
-            ₹{Number.isInteger(cost) ? cost : parseFloat(cost).toFixed(2)}
-          </Text>
-          {item.quantity < 1 ? (
-            <TouchableOpacity
-              style={[styles.button, {borderColor: colors.accentColor}]}
-              onPress={() => {
-                showInfoToast(t('main.product.add_to_cart'));
-                addItem(item);
-              }}>
-              <Text style={{color: colors.accentColor}}>
-                {t('main.product.add_button_title')}
+      }>
+      <Card style={styles.container}>
+        <View style={styles.row}>
+          <FastImage
+            source={uri ? {uri} : image}
+            style={styles.image}
+            resizeMode={'contain'}
+          />
+          <View style={[appStyles.container, styles.details]}>
+            <Text style={styles.title} numberOfLines={1}>
+              {item?.descriptor?.name}
+            </Text>
+            <View style={styles.organizationNameContainer}>
+              <Text numberOfLines={1}>
+                {item?.provider_details?.descriptor?.name}
               </Text>
-            </TouchableOpacity>
-          ) : (
-            <View
-              style={[
-                styles.quantityDisplayButton,
-                {backgroundColor: colors.accentColor},
-              ]}>
-              <TouchableOpacity
-                style={styles.actionButton}
-                onPress={() => updateQuantity(false)}>
-                <Icon name="minus" size={16} color={colors.white} />
-              </TouchableOpacity>
-              <Text style={{color: colors.white}}>{item.quantity}</Text>
-              <TouchableOpacity
-                style={styles.actionButton}
-                onPress={() => updateQuantity(true)}>
-                <Icon name="plus" color={colors.white} size={16} />
-              </TouchableOpacity>
             </View>
-          )}
+            <View style={styles.priceContainer}>
+              <Text style={styles.amount}>
+                ₹{Number.isInteger(cost) ? cost : parseFloat(cost).toFixed(2)}
+              </Text>
+              {item.quantity < 1 ? (
+                <Button
+                  mode="outlined"
+                  style={{width: 100}}
+                  onPress={() => {
+                    showInfoToast('Added to cart');
+                    addItem(item);
+                  }}>
+                  Add
+                </Button>
+              ) : (
+                <View style={[styles.quantityDisplayButton]}>
+                  <IconButton
+                    icon="minus"
+                    iconColor="white"
+                    style={{backgroundColor: colors.primary}}
+                    onPress={() => updateQuantity(false)}
+                  />
+                  <Text>{item.quantity}</Text>
+                  <IconButton
+                    icon="plus"
+                    iconColor="white"
+                    style={{backgroundColor: colors.primary}}
+                    onPress={() => updateQuantity(true)}
+                  />
+                </View>
+              )}
+            </View>
+          </View>
         </View>
-      </View>
+      </Card>
     </TouchableOpacity>
   );
 };
@@ -126,27 +124,24 @@ export default withTheme(DashboardProduct);
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    padding: 16,
     backgroundColor: 'white',
+    margin: 8,
   },
-  image: {height: 80, width: 80, marginRight: 10},
+  row: {
+    flexDirection: 'row',
+  },
+  details: {
+    padding: 12,
+  },
+  image: {height: '100%', width: 100, marginRight: 10},
   priceContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
   },
-  button: {
-    paddingHorizontal: 26,
-    paddingVertical: 6,
-    borderRadius: 15,
-    borderWidth: 1,
-  },
   quantityDisplayButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 5,
-    borderRadius: 15,
   },
   actionButton: {
     width: 24,
@@ -155,8 +150,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 5,
   },
+  amount: {
+    fontWeight: '700',
+  },
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
-  title: {fontSize: 16, fontWeight: '600', flex: 1},
+  title: {fontSize: 16, fontWeight: '700', flex: 1},
   iconContainer: {marginRight: 12},
-  titleContainer: {flexDirection: 'row', justifyContent: 'space-between'},
 });

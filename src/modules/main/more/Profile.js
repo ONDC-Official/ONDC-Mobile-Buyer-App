@@ -1,10 +1,6 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-elements';
-import AvatarImage from '../../../components/avatar/AvatarImage';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import {appStyles} from '../../../styles/styles';
-import {AVATAR_SIZES} from '../../../utils/Constants';
 import Header from '../payment/addressPicker/Header';
 import {useSelector} from 'react-redux';
 
@@ -15,15 +11,13 @@ import {useSelector} from 'react-redux';
  * @returns {JSX.Element}
  */
 const Profile = ({navigation}) => {
-  const {t} = useTranslation();
-  const {name, emailId, photoURL} = useSelector(({authReducer}) => authReducer);
+  const {name, emailId} = useSelector(({authReducer}) => authReducer);
 
   return (
     <SafeAreaView style={appStyles.container}>
       <View style={appStyles.container}>
-        <Header title={t('main.more.profile')} navigation={navigation} />
+        <Header title={'Profile'} navigation={navigation}/>
         <View style={styles.container}>
-          <AvatarImage uri={photoURL} dimension={AVATAR_SIZES.LARGE} />
           <View style={styles.profileDetailsContainer}>
             {name !== 'Unknown' ? (
               <Text style={styles.name}>{name}</Text>

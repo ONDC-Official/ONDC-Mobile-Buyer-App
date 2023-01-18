@@ -2,7 +2,6 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, Linking, StyleSheet, View} from 'react-native';
-import {Divider, Text, withTheme} from 'react-native-elements';
 import RNEventSource from 'react-native-event-source';
 import ClearButton from '../../../components/button/ClearButton';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
@@ -23,7 +22,8 @@ import {getStatus, trackOrder} from './OrderHistoryUtils';
 import Overlay from './Overlay';
 import StatusContainer from './StatusContainer';
 import Support from './Support';
-import {useSelector} from "react-redux";
+import {useSelector} from 'react-redux';
+import {Divider, Text, withTheme} from 'react-native-paper';
 
 /**
  * Component is used to display shipping details to the user when card is expanded
@@ -106,7 +106,6 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
       options,
     )
       .then(({data}) => {
-        console.log(JSON.stringify(data, undefined, 4));
         if (data[0].message.ack.status === 'ACK') {
           setSupportMessageId(data[0].context.message_id);
         }
@@ -161,7 +160,6 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
       const {data} = await getData(`${SERVER_URL}${ON_GET_STATUS}${id}`, {
         headers: {Authorization: `Bearer ${token}`},
       });
-      console.log(JSON.stringify(data, undefined, 4));
       setStatusInProgress(false);
       getOrderList(1)
         .then(() => {})
@@ -184,7 +182,9 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
           .then(() => {})
           .catch(() => {});
       } else {
-        showToastWithGravity(t('network_error.something_went_wrong'));
+        showToastWithGravity(
+          'Something went wrong, please try again after some time.',
+        );
       }
       setShowOverlay(false);
       setCancelInProgress(false);
@@ -200,13 +200,14 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
         `${SERVER_URL}${ON_UPDATE_ORDER}messageId=${id}`,
         options,
       );
-      console.log(data);
       if (data.message) {
         getOrderList(1)
           .then(() => {})
           .catch(() => {});
       } else {
-        showToastWithGravity(t('network_error.something_went_wrong'));
+        showToastWithGravity(
+          'Something went wrong, please try again after some time.',
+        );
       }
       setUpdateInProgress(false);
       setShowOverlay(false);
@@ -274,7 +275,6 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
 
       eventSource.addEventListener('on_update', event => {
         const data = JSON.parse(event.data);
-        console.log(data);
         onUpdate(data.messageId)
           .then(() => {})
           .catch(() => {});
@@ -319,7 +319,6 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
     let eventSource;
     let timer;
     if (cancelMessageId) {
-      console.log(cancelMessageId);
       eventSource = new RNEventSource(
         `${SERVER_URL}/clientApis/events?messageId=${cancelMessageId}`,
         {
@@ -346,7 +345,6 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
     let eventSource;
     let timer;
     if (trackMessageId) {
-      console.log(trackMessageId);
       eventSource = new RNEventSource(
         `${SERVER_URL}/clientApis/events?messageId=${trackMessageId}`,
         {
@@ -374,7 +372,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
         <Divider />
         <FlatList data={order?.items} renderItem={renderItem} />
         <View style={styles.addressContainer}>
-          <Text style={{color: colors.grey}}>{t('main.order.shipped_to')}</Text>
+          <Text style={{color: colors.grey}}>Shipped To</Text>
           <Text style={styles.name}>{shippingAddress?.name}</Text>
           <Text style={styles.address}>{contact?.email}</Text>
           <Text style={styles.address}>{contact?.phone}</Text>
@@ -388,7 +386,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
           </Text>
         </View>
         <View style={styles.addressContainer}>
-          <Text style={{color: colors.grey}}>{t('main.order.billed_to')}</Text>
+          <Text style={{color: colors.grey}}>Billed To</Text>
           <Text style={styles.name}>{order?.billing?.name}</Text>
           <Text style={styles.address}>{order?.billing?.email}</Text>
           <Text style={styles.address}>{order?.billing?.phone}</Text>
@@ -407,9 +405,9 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
 
         <View style={[styles.rowContainer, styles.actionContainer]}>
           <ClearButton
-            title={t('main.order.call')}
+            title={'Call'}
             onPress={() => getSupport()}
-            textColor={colors.accentColor}
+            textColor={colors.primary}
             disabled={callInProgress}
             loading={callInProgress}
           />
@@ -417,8 +415,8 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
             <>
               {order.state === ORDER_STATUS.DELIVERED ? (
                 <ClearButton
-                  textColor={colors.accentColor}
-                  title={t('main.order.return')}
+                  textColor={colors.primary}
+                  title={"Return"}
                 />
               ) : (
                 <>
@@ -436,11 +434,11 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
                           handleApiError(e);
                         });
                     }}
-                    textColor={colors.accentColor}
+                    textColor={colors.primary}
                     loading={statusInProgress}
                   />
                   <ClearButton
-                    title={t('main.order.track')}
+                    title={"Track"}
                     onPress={() => {
                       trackOrder(
                         setTrackInProgress,
@@ -451,19 +449,19 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
                         .then(() => {})
                         .catch(e => handleApiError(e));
                     }}
-                    textColor={colors.accentColor}
+                    textColor={colors.primary}
                     loading={trackInProgress}
                   />
                 </>
               )}
 
               <ClearButton
-                title={t('main.order.cancel')}
+                title={"Cancel"}
                 onPress={() => {
                   setShowOverlay(true);
                   setUpdateType(UPDATE_TYPE.CANCEL);
                 }}
-                textColor={colors.accentColor}
+                textColor={colors.primary}
               />
             </>
           )}

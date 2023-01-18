@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Card} from 'react-native-elements';
+import {Card} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {appStyles} from '../../../../styles/styles';
 
@@ -12,12 +12,12 @@ const ConfirmationCardSkeleton = () => (
   <Card>
     <SkeletonPlaceholder>
       <View style={styles.container}>
-        <View style={styles.image} />
+        <View style={styles.image}/>
         <View style={appStyles.container}>
-          <View style={styles.name} />
-          <View style={styles.description} />
+          <View style={styles.name}/>
+          <View style={styles.description}/>
           <View style={styles.priceContainer}>
-            <View style={styles.price} />
+            <View style={styles.price}/>
           </View>
         </View>
       </View>

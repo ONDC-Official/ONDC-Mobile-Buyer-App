@@ -36,12 +36,6 @@ const filterReducer = (state = initialState, action) => {
         providers = state.filters?.providers.concat(payload.providers);
         categories = state.filters?.categories.concat(payload.categories);
       }
-      console.log({
-        providers: providers,
-        categories: categories,
-        minPrice: minPrice,
-        maxPrice: maxPrice,
-      });
       return Object.assign({}, state, {
         filters: {
           providers: providers,

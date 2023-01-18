@@ -1,7 +1,7 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-paper';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {appStyles} from '../../../styles/styles';
 
@@ -13,19 +13,18 @@ import {appStyles} from '../../../styles/styles';
 const EmptyComponent = ({theme, navigation}) => {
   const {colors} = theme;
 
-  const {t} = useTranslation();
-
   return (
     <View style={[appStyles.container, styles.container]}>
-      <Icon name="folder-open" size={60} color={colors.accentColor}/>
-      <Text style={styles.title}>{t('main.cart.empty_cart')}</Text>
-      <Text style={styles.subTitle}>{t('main.cart.message')}</Text>
+      <Icon name="folder-open" size={60} color={colors.primary} />
+      <Text style={styles.title}>Your cart is empty</Text>
+      <Text style={styles.subTitle}>
+        looks like your shopping cart is empty, you can shop now by clicking
+        button below
+      </Text>
       <TouchableOpacity
-        style={[styles.button, {borderColor: colors.accentColor}]}
+        style={[styles.button, {borderColor: colors.primary}]}
         onPress={() => navigation.navigate('Dashboard', {screen: 'Products'})}>
-        <Text style={{color: colors.accentColor}}>
-          {t('main.cart.shop_now')}
-        </Text>
+        <Text style={{color: colors.primary}}>Shop Now</Text>
       </TouchableOpacity>
     </View>
   );

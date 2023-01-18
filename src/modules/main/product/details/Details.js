@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-paper';
 
 /**
  * Component to display product details
@@ -39,46 +39,42 @@ const Details = ({item, theme}) => {
       <View style={[styles.container, styles.productDetailsContainer]}>
         <View style={styles.productDetailsTitleContainer}>
           {item.hasOwnProperty('@ondc/org/returnable') && (
-            <Text style={[styles.title, {color: colors.gray}]}>
-              {t('main.product.product_details.returnable')}
-            </Text>
+            <Text style={[styles.title, {color: colors.gray}]}>Returnable</Text>
           )}
           {item.hasOwnProperty('@ondc/org/cancellable') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {t('main.product.product_details.cancellable')}
+              Cancellable
             </Text>
           )}
           {item.hasOwnProperty('@ondc/org/available_on_cod') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {t('main.product.product_details.cash_on_delivery')}
+              Cash On Delivery
             </Text>
           )}
           {item.hasOwnProperty('AvailableQuantity') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {t('main.product.product_details.available_quantity')}
+              Available Quantity
             </Text>
           )}
         </View>
         <View>
           {item.hasOwnProperty('@ondc/org/returnable') && (
             <Text style={[styles.title, {color: colors.gray}]}>
-              {item['@ondc/org/returnable']
-                ? t('main.product.product_details.yes')
-                : t('main.product.product_details.no')}
+              {item['@ondc/org/returnable'] ? 'Yes' : 'No'}
             </Text>
           )}
           {item.hasOwnProperty('@ondc/org/cancellable') && (
             <Text style={[styles.title, {color: colors.gray}]}>
               {item['@ondc/org/cancellable']
-                ? t('main.product.product_details.yes')
-                : t('main.product.product_details.no')}
+                ? 'Yes'
+                : 'No'}
             </Text>
           )}
           {item.hasOwnProperty('@ondc/org/available_on_cod') && (
             <Text style={[styles.title, {color: colors.gray}]}>
               {item['@ondc/org/available_on_cod']
-                ? t('main.product.product_details.yes')
-                : t('main.product.product_details.no')}
+                ? 'Yes'
+                : 'No'}
             </Text>
           )}
           {item.hasOwnProperty('AvailableQuantity') && (
@@ -91,30 +87,30 @@ const Details = ({item, theme}) => {
       {packageCommodity && (
         <View style={styles.container}>
           <Text style={[styles.heading, {color: colors.gray}]}>
-            {t('main.product.product_details.title')}
+            Product Details
           </Text>
           <View style={styles.productDetailsContainer}>
             <View style={styles.productDetailsTitleContainer}>
               <>
                 {manufactureName && (
                   <Text style={[styles.title, {color: colors.gray}]}>
-                    {t('main.product.product_details.manufacture_name')}
+                    Manufacture Name
                   </Text>
                 )}
                 {netQuantity && (
                   <Text style={[styles.title, {color: colors.gray}]}>
-                    {t('main.product.product_details.net_quantity')}
+                    Net Quantity
                   </Text>
                 )}
 
                 {manufacturingDate && (
                   <Text style={[styles.title, {color: colors.gray}]}>
-                    {t('main.product.product_details.manufacture_date')}
+                    Manufacture Date
                   </Text>
                 )}
                 {country && (
                   <Text style={[styles.title, {color: colors.gray}]}>
-                    {t('main.product.product_details.country_of_origin')}
+                    Country of Origin
                   </Text>
                 )}
               </>

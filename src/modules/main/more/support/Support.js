@@ -1,8 +1,12 @@
 import React from 'react';
 import {FlatList, SafeAreaView, View} from 'react-native';
-import i18n from '../../../../locales/i18next';
 import {appStyles} from '../../../../styles/styles';
-import {CONTACT_US, FAQS, ONDC_POLICY, POLICY_URL,} from '../../../../utils/Constants';
+import {
+  CONTACT_US,
+  FAQS,
+  ONDC_POLICY,
+  POLICY_URL,
+} from '../../../../utils/Constants';
 import {keyExtractor} from '../../../../utils/utils';
 import Header from '../../payment/addressPicker/Header';
 import SupportCard from './SupportCard';
@@ -12,29 +16,30 @@ const list = [
   {
     _id: 'bag-checked',
     icon: 'bag-checked',
-    title: i18n.t('main.more.our_policy'),
-    message: i18n.t('main.more.our_policy_message'),
+    title: 'Our Policy',
+    message:
+      "Read Abc's condition of Use & Sale, privacy policy and other applicable user's policy",
     url: POLICY_URL,
   },
   {
     _id: 'help-circle',
     icon: 'help-circle',
-    title: i18n.t('main.more.faqs'),
-    message: i18n.t('main.more.faqs_message'),
+    title: 'FAQs',
+    message: 'Browse through the questions frequently asked by users',
     url: FAQS,
   },
   {
     _id: 'ondc_policy',
     source: image,
-    title: i18n.t('main.more.ondc_policy'),
-    message: i18n.t('main.more.ondc_policy_message'),
+    title: 'ONDC Policy',
+    message: 'Read the policy and conditions of the ONDC network',
     url: ONDC_POLICY,
   },
   {
     _id: 'account',
     icon: 'account',
-    title: i18n.t('main.more.contact_us'),
-    message: i18n.t('main.more.contact_us_message'),
+    title: 'Contact Us',
+    message: 'Not Satisfied? You can reach out to Customer Care',
     url: CONTACT_US,
   },
 ];
@@ -48,7 +53,7 @@ const list = [
 const Support = ({navigation}) => (
   <SafeAreaView style={appStyles.container}>
     <View style={appStyles.container}>
-      <Header title={i18n.t('main.more.support')} navigation={navigation}/>
+      <Header title={'Support'} navigation={navigation} />
       <FlatList
         data={list}
         keyExtractor={keyExtractor}

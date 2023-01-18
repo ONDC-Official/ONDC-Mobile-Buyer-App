@@ -1,7 +1,7 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {appStyles} from '../../../../styles/styles';
 
@@ -29,7 +29,7 @@ const Header = ({theme, title, show, navigation}) => {
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}>
-        <Icon name="arrow-left" size={16} color={colors.accentColor}/>
+        <Icon name="arrow-left" size={16} color={colors.primary}/>
       </TouchableOpacity>
 
       <View style={appStyles.container}>
@@ -38,9 +38,9 @@ const Header = ({theme, title, show, navigation}) => {
 
       {show && (
         <TouchableOpacity
-          style={[styles.button, {borderColor: colors.accentColor}]}
+          style={[styles.button, {borderColor: colors.primary}]}
           onPress={onPressHandler}>
-          <Text style={{color: colors.accentColor}}>{t('main.cart.add')}</Text>
+          <Text style={{color: colors.primary}}>Add</Text>
         </TouchableOpacity>
       )}
     </View>

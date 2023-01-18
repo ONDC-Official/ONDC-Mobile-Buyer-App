@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Icon, Input, withTheme} from 'react-native-elements';
+import {HelperText, TextInput, withTheme} from 'react-native-paper';
 
 /**
  * Component to render input in screens
@@ -10,29 +10,28 @@ import {Icon, Input, withTheme} from 'react-native-elements';
  */
 const PasswordField = props => {
   const [hide, setHide] = useState(true);
-  const {colors} = props.theme;
-
-  /**
-   * Function is used to set visibility of password
-   */
-  const onPressHandler = () => setHide(!hide);
 
   return (
-    <Input
-      {...props}
-      placeholder={props.placeholder}
-      secureTextEntry={hide}
-      autoCapitalize={'none'}
-      rightIcon={
-        <Icon
-          type="font-awesome"
-          name={hide ? 'eye-slash' : 'eye'}
-          size={20}
-          color={colors.accentColor}
-          onPress={onPressHandler}
-        />
-      }
-    />
+    <>
+      <TextInput
+        mode="outlined"
+        {...props}
+        placeholder={props.placeholder}
+        secureTextEntry={hide}
+        autoCapitalize={'none'}
+        right={
+          <TextInput.Icon
+            icon={hide ? 'eye-off' : 'eye'}
+            onPress={() => setHide(!hide)}
+          />
+        }
+      />
+      {props.errorMessage && (
+        <HelperText type="error" visible={props.errorMessage}>
+          {props.errorMessage}
+        </HelperText>
+      )}
+    </>
   );
 };
 

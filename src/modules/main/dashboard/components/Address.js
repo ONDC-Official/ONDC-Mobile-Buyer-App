@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector} from 'react-redux';
 import {setStoredData} from '../../../../utils/storage';
 import {useNavigation} from '@react-navigation/native';
+import {IconButton, Text, withTheme} from 'react-native-paper';
 
 /**
  * Component to render single address card in select address screen
@@ -37,7 +37,7 @@ const Address = ({item, theme, isCurrentAddress, onEdit}) => {
       onPress={() => setDefaultAddress()}>
       <View style={styles.emptyCheckbox}>
         {isCurrentAddress && (
-          <Icon name={'check-circle'} color={colors.accentColor} size={24} />
+          <Icon name={'check-circle'} color={colors.primary} size={24} />
         )}
       </View>
 
@@ -62,9 +62,12 @@ const Address = ({item, theme, isCurrentAddress, onEdit}) => {
         </Text>
       </View>
       <View style={styles.editContainer}>
-        <TouchableOpacity onPress={onEdit}>
-          <Icon name="pencil" size={18} color={colors.accentColor} />
-        </TouchableOpacity>
+        <IconButton
+          onPress={onEdit}
+          icon="pencil"
+          size={18}
+          iconColor={colors.primary}
+        />
       </View>
     </TouchableOpacity>
   );
@@ -90,6 +93,7 @@ const styles = StyleSheet.create({
   editContainer: {
     width: 24,
     height: 24,
+    marginEnd: 8,
   },
   textContainer: {
     marginBottom: 8,

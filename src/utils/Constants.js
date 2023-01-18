@@ -10,11 +10,6 @@ export const OPTIONS = {
   SUPPORT: 'Support',
 };
 
-export const AVATAR_SIZES = {
-  NORMAL: 40,
-  LARGE: 64,
-};
-
 export const PAYMENT_OPTIONS = [
   {value: 'JUSPAY', label: 'Prepaid'},
   {value: 'COD', label: 'Cash on delivery'},
@@ -58,3 +53,5 @@ export const PRODUCT_SORTING = {
 };
 
 export const DELIVERY_CHARGES = 'Delivery charges';
+
+export const APPLICATION_VERSION = '1.0.1';

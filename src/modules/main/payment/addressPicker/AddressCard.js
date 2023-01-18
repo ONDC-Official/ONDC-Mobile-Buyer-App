@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Card, CheckBox, Text, withTheme} from 'react-native-elements';
+import {Card, Checkbox, Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {appStyles} from '../../../../styles/styles';
 
@@ -28,7 +28,6 @@ const AddressCard = ({
   const {colors} = theme;
 
   const isSelected = selectedAddress ? item.id === selectedAddress.id : null;
-  console.log(item);
 
   const {street, city, state} = item.address;
   /**
@@ -43,7 +42,7 @@ const AddressCard = ({
 
   return item.descriptor ? (
     <Card containerStyle={styles.card}>
-      <CheckBox
+      <Checkbox
         key={item.id}
         checked={isSelected}
         onPress={onPressHandler}
@@ -60,7 +59,7 @@ const AddressCard = ({
                 <Text style={styles.name}>{item.descriptor.name}</Text>
               ) : null}
               <TouchableOpacity onPress={onEdit}>
-                <Icon name="pencil" size={14} color={colors.accentColor} />
+                <Icon name="pencil" size={14} color={colors.primary} />
               </TouchableOpacity>
             </View>
             {item.descriptor.email ? (
@@ -83,7 +82,7 @@ const AddressCard = ({
     </Card>
   ) : (
     <Card containerStyle={styles.card}>
-      <CheckBox
+      <Checkbox
         key={item.id}
         checked={isSelected}
         onPress={onPressHandler}
@@ -98,7 +97,7 @@ const AddressCard = ({
             <View style={styles.iconContainer}>
               {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
               <TouchableOpacity onPress={onEdit}>
-                <Icon name="pencil" size={14} color={colors.accentColor} />
+                <Icon name="pencil" size={14} color={colors.primary} />
               </TouchableOpacity>
             </View>
 

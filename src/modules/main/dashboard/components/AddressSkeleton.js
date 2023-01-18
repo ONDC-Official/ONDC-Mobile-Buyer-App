@@ -25,8 +25,10 @@ export default AddressSkeleton;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    padding: 12,
+    backgroundColor: 'white',
   },
-  radioButton: {height: 20, width: 20, borderRadius: 20},
+  radioButton: {height: 24, width: 24, borderRadius: 20},
   name: {height: 15, width: 100, marginBottom: 5},
   email: {height: 15, width: 200, marginBottom: 5},
   address: {height: 15, width: '90%', marginBottom: 5},

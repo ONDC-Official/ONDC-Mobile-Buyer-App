@@ -1,10 +1,11 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
-import {Icon, Text} from 'react-native-elements';
+import {Text} from 'react-native-paper';
 import Logo from '../../../../../assets/map_my_india.svg';
 import {appStyles} from '../../../../../styles/styles';
 import SearchBar from './header/SearchBar';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 /**
  * Component to show address picker screen when user wants to select location
@@ -20,7 +21,7 @@ const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={appStyles.container}>
-          <Text>{t('main.product.select_location_label')}</Text>
+          <Text>Select a location</Text>
         </View>
         <Icon
           type="material-community"

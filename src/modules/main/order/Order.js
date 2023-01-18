@@ -1,7 +1,7 @@
 import React, {memo, useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-elements';
+import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {useSelector} from 'react-redux';
+
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
 import {getData} from '../../../utils/api';
@@ -10,7 +10,6 @@ import {keyExtractor, skeletonList} from '../../../utils/utils';
 import ListFooter from './ListFooter';
 import OrderAccordion from './OrderAccordion';
 import OrderCardSkeleton from './OrderCardSkeleton';
-import {useSelector} from "react-redux";
 
 /**
  * Component to render orders screen
@@ -19,8 +18,6 @@ import {useSelector} from "react-redux";
  */
 const Order = () => {
   const {token} = useSelector(({authReducer}) => authReducer);
-
-  const {t} = useTranslation();
 
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -55,7 +52,6 @@ const Order = () => {
       setOrders(number === 1 ? data.orders : [...orders, ...data.orders]);
       setPageNumber(pageNumber + 1);
     } catch (error) {
-      console.log(JSON.stringify(error, undefined, 4));
       if (error.response) {
         if (error.response.status === 404) {
           setOrders([]);
@@ -122,9 +118,9 @@ const Order = () => {
         <FlatList
           data={listData}
           renderItem={renderItem}
-          ListEmptyComponent={() => {
-            return <Text>{t('main.order.list_empty_message')}</Text>;
-          }}
+          ListEmptyComponent={() => (
+            <Text>No data found</Text>
+          )}
           refreshing={refreshInProgress}
           keyExtractor={keyExtractor}
           onRefresh={onRefreshHandler}

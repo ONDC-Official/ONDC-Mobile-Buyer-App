@@ -2,17 +2,15 @@ import {Formik} from 'formik';
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Dialog, Text, withTheme} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Yup from 'yup';
-import ContainButton from '../../../components/button/ContainButton';
-import OutlineButton from '../../../components/button/OutlineButton';
 import InputField from '../../../components/input/InputField';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {postData} from '../../../utils/api';
 import {CALL, SERVER_URL} from '../../../utils/apiUtilities';
 import {showToastWithGravity} from '../../../utils/utils';
 import {useSelector} from 'react-redux';
+import {Button, Text} from 'react-native-paper';
 
 const userInfo = {
   number: '',
@@ -38,8 +36,8 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
   const validationSchema = Yup.object({
     number: Yup.string()
       .trim()
-      .matches(/^[6-9]{1}[0-9]{9}$/, t('errors.invalid_number'))
-      .required(t('errors.required')),
+      .matches(/^[6-9]{1}[0-9]{9}$/, 'Invalid number')
+      .required('This field is required'),
   });
 
   /**
@@ -69,7 +67,7 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
       } else {
         setCallInProgress(false);
         setModalVisible(false);
-        showToastWithGravity(t('support.call_is_placed'));
+        showToastWithGravity('Call is placed');
       }
     } catch (error) {
       console.log('requestCall', error);
@@ -87,10 +85,12 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
             style={styles.close}>
-            <Icon name="close-thick" color={colors.accentColor} size={16} />
+            <Icon name="close-thick" color={colors.primary} size={16} />
           </TouchableOpacity>
         </View>
-        <Text style={styles.messageContainer}>{t('main.order.message')}</Text>
+        <Text style={styles.messageContainer}>
+          Enter the phone number on which you want us to call
+        </Text>
 
         <Formik
           initialValues={userInfo}
@@ -116,27 +116,28 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
                   numberOfLines={1}
                   value={values.number}
                   onBlur={handleBlur('number')}
-                  placeholder={t('main.order.placeholder')}
+                  placeholder={'Enter the phone number'}
                   errorMessage={touched.number ? errors.number : null}
                   onChangeText={handleChange('number')}
                   disabled={callInProgress}
                 />
                 <View style={styles.buttonContainer}>
                   <View style={styles.button}>
-                    <OutlineButton
-                      title={t('main.order.cancel')}
+                    <Button
+                      mode="outlined"
                       onPress={() => setModalVisible(false)}
-                      color={colors.error}
-                      disabled={callInProgress}
-                    />
+                      disabled={callInProgress}>
+                      Cancel
+                    </Button>
                   </View>
                   <View style={styles.button}>
-                    <ContainButton
-                      title={t('main.order.call_me')}
+                    <Button
+                      mode="contained"
                       onPress={handleSubmit}
                       loading={callInProgress}
-                      disabled={callInProgress}
-                    />
+                      disabled={callInProgress}>
+                      Call me
+                    </Button>
                   </View>
                 </View>
               </>

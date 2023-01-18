@@ -1,6 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {Button} from 'react-native-elements';
+import {Button, withTheme} from 'react-native-paper';
 
 /**
  * Component to render clear button in the screens
@@ -12,22 +11,10 @@ import {Button} from 'react-native-elements';
  */
 const ClearButton = props => {
   return (
-    <Button
-      title={props.title}
-      onPress={props.onPress}
-      type="clear"
-      titleStyle={[styles.titleStyle, {color: props.textColor}]}
-      buttonStyle={styles.buttonStyle}
-      loading={props.loading}
-    />
+    <Button onPress={props.onPress} mode="text" loading={props.loading}>
+      {props.title}
+    </Button>
   );
 };
 
-export default ClearButton;
-
-const styles = StyleSheet.create({
-  buttonStyle: {
-    padding: 0,
-  },
-  titleStyle: {fontSize: 14},
-});
+export default withTheme(ClearButton);

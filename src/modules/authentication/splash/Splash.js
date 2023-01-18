@@ -1,13 +1,13 @@
 import React, {useEffect} from 'react';
-import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-elements';
 import {useDispatch} from 'react-redux';
+import {Text} from 'react-native-paper';
 
 import {appStyles} from '../../../styles/styles';
 import ONDCLogo from '../../../assets/ondc.svg';
 import AppLogo from '../../../assets/app_logo.svg';
 import {tryLocalSignIn} from '../../../redux/auth/actions';
+import {APPLICATION_VERSION} from '../../../utils/Constants';
 
 /**
  * Component to render splash screen
@@ -16,7 +16,6 @@ import {tryLocalSignIn} from '../../../redux/auth/actions';
  * @returns {JSX.Element}
  */
 const Splash = ({navigation}) => {
-  const {t} = useTranslation();
   const dispatch = useDispatch();
 
   /**
@@ -47,7 +46,7 @@ const Splash = ({navigation}) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <Text>{t('global.version_label')}</Text>
+        <Text>Version: {APPLICATION_VERSION}</Text>
       </View>
     </View>
   );

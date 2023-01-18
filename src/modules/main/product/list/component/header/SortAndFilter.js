@@ -1,9 +1,8 @@
-import React, {useRef, useState} from 'react';
-import {useTranslation} from 'react-i18next';
+import React, {useRef} from 'react';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Divider, Text, withTheme} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-paper';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
 
 import Filters from '../Filters';
@@ -12,49 +11,84 @@ import {PRODUCT_SORTING} from '../../../../../../utils/Constants';
 
 const sortOptions = [
   {
-    name: 'main.product.filters.price_high_to_low',
+    name: 'Price: High To Low',
     value: PRODUCT_SORTING.PRICE_HIGH_TO_LOW,
   },
   {
-    name: 'main.product.filters.price_low_to_high',
+    name: 'Price: Low To High',
     value: PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
   },
   {
-    name: 'main.product.filters.ratings_high_to_low',
+    name: 'Ratings: High To Low',
     value: PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
   },
   {
-    name: 'main.product.filters.ratings_low_to_high',
+    name: 'Ratings: Low To High',
     value: PRODUCT_SORTING.RATINGS_LOW_TO_HIGH,
   },
 ];
 
 const windowHeight = Dimensions.get('window').height;
 
+const SortIcon = ({value, color}) => {
+  switch (value) {
+    case PRODUCT_SORTING.RATINGS_HIGH_TO_LOW:
+      return (
+        <>
+          <Text style={[styles.text, {color: color}]}>Rating</Text>
+          <Icon name="sort-amount-up-alt" size={14} color={color} />
+        </>
+      );
+
+    case PRODUCT_SORTING.RATINGS_LOW_TO_HIGH:
+      return (
+        <>
+          <Text style={[styles.text, {color: color}]}>Rating</Text>
+          <Icon name="sort-amount-down" size={14} color={color} />
+        </>
+      );
+
+    case PRODUCT_SORTING.PRICE_LOW_TO_HIGH:
+      return (
+        <>
+          <Text style={[styles.text, {color: color}]}>Price</Text>
+          <Icon name="sort-numeric-down" size={14} color={color} />
+        </>
+      );
+
+    case PRODUCT_SORTING.PRICE_HIGH_TO_LOW:
+      return (
+        <>
+          <Text style={[styles.text, {color: color}]}>Price</Text>
+          <Icon name="sort-numeric-up-alt" size={14} color={color} />
+        </>
+      );
+
+    default:
+      return (
+        <>
+          <Text style={[styles.text, {color: color}]}>Sort</Text>
+          <Icon name="sort" size={14} color={color} />
+        </>
+      );
+  }
+};
+
 /**
  * Component to show sort and filter on header of products screen
  * @param theme
  * @param setCount:function to set items count
- * @param filters:object containing filter parameters
  * @constructor
  * @returns {JSX.Element}
  */
-const SortAndFilter = ({theme, setCount, appliedFilters, getProductsList}) => {
+const SortAndFilter = ({theme}) => {
   const {colors} = theme;
-  const {t} = useTranslation();
-
-  const [apiInProgress, setApiInProgress] = useState(false);
 
   const refRBSheet = useRef();
   const refSortSheet = useRef();
 
-  const {messageId, transactionId, filters, selectedSortOption} = useSelector(
-    ({filterReducer}) => filterReducer,
-  );
-
-  const filtersLength = appliedFilters
-    ? Object.keys(appliedFilters).length
-    : null;
+  const {filters, selectedSortOption, selectedProviders, selectedCategories} =
+    useSelector(({filterReducer}) => filterReducer);
 
   /**
    * function to close sort sheet
@@ -76,59 +110,34 @@ const SortAndFilter = ({theme, setCount, appliedFilters, getProductsList}) => {
    */
   const openRBSheet = () => refRBSheet.current.open();
 
-  /**
-   * function handles click event of apply button
-   * it request list of products with selected filter params
-   * @returns {Promise<void>}
-   */
-  const onApply = async () => {
-    setApiInProgress(true);
-    getProductsList(messageId, transactionId)
-      .then(() => {
-        setApiInProgress(false);
-        closeRBSheet();
-        closeSortSheet();
-      })
-      .catch(() => {
-        setApiInProgress(false);
-        closeRBSheet();
-        closeSortSheet();
-      });
-  };
-
   let sheetHeight =
-    (filters.providers.length + filters.categories.length) * 40 + 350;
+    (filters?.providers?.length + filters?.categories?.length) * 40 + 350;
 
   if (windowHeight < sheetHeight) {
     sheetHeight = windowHeight - 100;
   }
 
+  const appliedFilters = selectedProviders.length + selectedCategories.length;
   return (
     <>
-      <Divider width={1} />
       <View
-        style={[styles.sortFilterContainer, {backgroundColor: colors.white}]}>
-        <TouchableOpacity onPress={openSortSheet}>
-          <View style={styles.row}>
-            <Text style={[styles.text, {color: colors.accentColor}]}>
-              {selectedSortOption
-                ? selectedSortOption
-                : t('main.product.sort_products_label')}
-            </Text>
-            <Icon name="sort" size={14} color={colors.accentColor} />
-          </View>
+        style={[styles.sortFilterContainer, {backgroundColor: colors.surface}]}>
+        <TouchableOpacity
+          style={[
+            {borderColor: appliedFilters > 0 ? colors.primary : colors.accent},
+            styles.row,
+          ]}
+          onPress={openRBSheet}>
+          <Text style={[styles.text, {color: colors.primary}]}>Filters</Text>
+          <Icon name="filter" size={14} color={colors.primary} />
         </TouchableOpacity>
-        <Divider orientation="vertical" width={1} />
-        <TouchableOpacity onPress={openRBSheet}>
-          <View style={styles.row}>
-            <Text style={[styles.text, {color: colors.accentColor}]}>
-              {t('main.product.filters.filter')}
-              {filtersLength && filtersLength > 1
-                ? `(${filtersLength - 1})`
-                : null}
-            </Text>
-            <Icon name="filter" size={14} color={colors.accentColor} />
-          </View>
+        <TouchableOpacity
+          style={[
+            {borderColor: selectedSortOption ? colors.primary : colors.accent},
+            styles.row,
+          ]}
+          onPress={openSortSheet}>
+          <SortIcon value={selectedSortOption} color={colors.primary} />
         </TouchableOpacity>
       </View>
 
@@ -138,12 +147,7 @@ const SortAndFilter = ({theme, setCount, appliedFilters, getProductsList}) => {
         customStyles={{
           container: styles.rbSheet,
         }}>
-        <SortMenu
-          sortOptions={sortOptions}
-          closeSortSheet={closeSortSheet}
-          apiInProgress={apiInProgress}
-          setCount={setCount}
-        />
+        <SortMenu sortOptions={sortOptions} closeSortSheet={closeSortSheet} />
       </RBSheet>
       <RBSheet
         ref={refRBSheet}
@@ -151,10 +155,7 @@ const SortAndFilter = ({theme, setCount, appliedFilters, getProductsList}) => {
         customStyles={{
           container: styles.rbSheet,
         }}>
-        <Filters
-          closeRBSheet={closeRBSheet}
-          apiInProgress={apiInProgress}
-        />
+        <Filters closeRBSheet={closeRBSheet} />
       </RBSheet>
     </>
   );
@@ -164,11 +165,21 @@ export default withTheme(SortAndFilter);
 
 const styles = StyleSheet.create({
   rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
-  sortFilterContainer: {flexDirection: 'row', justifyContent: 'space-evenly'},
+  sortFilterContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    paddingTop: 32,
+    paddingBottom: 16,
+  },
   text: {paddingVertical: 8, fontWeight: '700', marginRight: 8},
   row: {
+    paddingHorizontal: 8,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginEnd: 12,
+    width: 100,
   },
 });

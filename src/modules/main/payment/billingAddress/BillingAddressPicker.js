@@ -2,8 +2,7 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
-import ContainButton from '../../../../components/button/ContainButton';
+import {Button, Text, withTheme} from 'react-native-paper';
 
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
@@ -13,7 +12,7 @@ import {skeletonList} from '../../../../utils/utils';
 import AddressCard from '../addressPicker/AddressCard';
 import AddressCardSkeleton from '../addressPicker/AddressCardSkeleton';
 import Header from '../addressPicker/Header';
-import {useSelector} from "react-redux";
+import {useSelector} from 'react-redux';
 
 /**
  * Component to render list of address
@@ -84,7 +83,7 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
       });
     };
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item} />
+      <AddressCardSkeleton item={item}/>
     ) : (
       <AddressCard
         item={item}
@@ -99,8 +98,10 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
     if (isFocused) {
       setSelectedBillingAddress(null);
       getAddressList()
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {
+        })
+        .catch(() => {
+        });
     }
   }, [isFocused]);
 
@@ -115,7 +116,7 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
           {backgroundColor: colors.backgroundColor},
         ]}>
         <Header
-          title={t('main.cart.billing_address')}
+          title={'Billing Address'}
           show={selectedAddress}
           navigation={navigation}
         />
@@ -125,10 +126,10 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
           ListEmptyComponent={() => {
             return (
               <TouchableOpacity
-                style={[styles.button, {borderColor: colors.accentColor}]}
+                style={[styles.button, {borderColor: colors.primary}]}
                 onPress={onAdd}>
-                <Text style={{color: colors.accentColor}}>
-                  {t('main.cart.add_billing_address')}
+                <Text style={{color: colors.primary}}>
+                  Add Billing Address
                 </Text>
               </TouchableOpacity>
             );
@@ -142,10 +143,9 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
 
         {selectedBillingAddress !== null && (
           <View style={styles.buttonContainer}>
-            <ContainButton
-              title={t('main.cart.save')}
-              onPress={onPressHandler}
-            />
+            <Button mode="contained" onPress={onPressHandler}>
+              Save
+            </Button>
           </View>
         )}
       </View>

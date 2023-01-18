@@ -1,26 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Divider, withTheme} from 'react-native-elements';
+import {Button, Divider, withTheme} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 
 import ClearButton from '../../../../../../components/button/ClearButton';
-import ContainButton from '../../../../../../components/button/ContainButton';
-import {theme} from '../../../../../../utils/theme';
 import {updateSortOption} from '../../../../../../redux/filter/actions';
-import OutlineButton from '../../../../../../components/button/OutlineButton';
 
 /**
  * Component to render filters screen
- * @param setCount:function to set items count
+ * @param theme
+ * @param sortOptions
  * @param closeSortSheet:function used to close sort sheet
+ * @param apiInProgress
  * @constructor
  * @returns {JSX.Element}
  */
 const SortMenu = ({theme, sortOptions, closeSortSheet, apiInProgress}) => {
   const dispatch = useDispatch();
   const {colors} = theme;
-  const {t} = useTranslation();
   const {selectedSortOption} = useSelector(({filterReducer}) => filterReducer);
 
   const [sortingMethod, setSortingMethod] = useState(null);
@@ -43,9 +40,9 @@ const SortMenu = ({theme, sortOptions, closeSortSheet, apiInProgress}) => {
     <View>
       <View style={styles.header}>
         <ClearButton
-          title={t('main.product.filters.close')}
+          title={'Close'}
           onPress={closeSortSheet}
-          textColor={colors.accentColor}
+          textColor={colors.primary}
         />
       </View>
       <Divider style={styles.divider} />
@@ -61,7 +58,7 @@ const SortMenu = ({theme, sortOptions, closeSortSheet, apiInProgress}) => {
                   : styles.normal,
               ]}
               onPress={() => setSortingMethod(item.value)}>
-              <Text>{t(item.name)}</Text>
+              <Text>{item.name}</Text>
             </TouchableOpacity>
           );
         })}
@@ -70,22 +67,24 @@ const SortMenu = ({theme, sortOptions, closeSortSheet, apiInProgress}) => {
       <View style={styles.actionContainer}>
         {(sortingMethod || selectedSortOption) && (
           <View style={styles.buttonContainer}>
-            <OutlineButton
+            <Button
+              mode="outlined"
               disabled={apiInProgress}
-              onPress={clearFilter}
-              title={t('main.product.filters.clear')}
-            />
+              onPress={clearFilter}>
+              Clear
+            </Button>
           </View>
         )}
 
         {sortingMethod && (
           <View style={styles.buttonContainer}>
-            <ContainButton
+            <Button
+              mode="contained"
               disabled={apiInProgress}
-              title={t('main.product.filters.apply_title')}
               loading={apiInProgress}
-              onPress={applyFilters}
-            />
+              onPress={applyFilters}>
+              Apply
+            </Button>
           </View>
         )}
       </View>
@@ -114,7 +113,7 @@ const styles = StyleSheet.create({
   button: {
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: theme.colors.accentColor,
+    borderColor: '#fff',
     padding: 12,
     marginBottom: 12,
     marginHorizontal: 8,

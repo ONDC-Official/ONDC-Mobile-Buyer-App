@@ -1,9 +1,8 @@
 import moment from 'moment';
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {StyleSheet, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
+import {StyleSheet, Text, View} from 'react-native';
 import {appStyles} from '../../../styles/styles';
+import {withTheme} from 'react-native-paper';
 
 const ORDER_STATUS = {
   created: 'Created',
@@ -23,10 +22,8 @@ const ORDER_STATUS = {
  * @constructor
  * @returns {JSX.Element}
  */
-const OrderCard = ({ item, theme }) => {
-  const { colors } = theme;
-
-  const { t } = useTranslation();
+const OrderCard = ({item, theme}) => {
+  const {colors} = theme;
 
   const getOrderStatus = status => {
     const orderStatus = status ? status : null;
@@ -37,13 +34,11 @@ const OrderCard = ({ item, theme }) => {
             style={[
               styles.orderStatus,
               {
-                borderColor: colors.accentColor,
+                borderColor: colors.primary,
                 backgroundColor: colors.statusBackground,
               },
             ]}>
-            <Text style={{ color: colors.accentColor }}>
-              {t('main.order.status.created')}
-            </Text>
+            <Text style={{color: colors.primary}}>Created</Text>
           </View>
         );
 
@@ -57,9 +52,7 @@ const OrderCard = ({ item, theme }) => {
                 backgroundColor: colors.shippedBackground,
               },
             ]}>
-            <Text style={{ color: colors.white }}>
-              {t('main.order.status.shipped')}
-            </Text>
+            <Text style={{color: colors.white}}>Shipped</Text>
           </View>
         );
 
@@ -73,9 +66,7 @@ const OrderCard = ({ item, theme }) => {
                 backgroundColor: colors.deliveredBackground,
               },
             ]}>
-            <Text style={{ color: colors.white }}>
-              {t('main.order.status.delivered')}
-            </Text>
+            <Text style={{color: colors.white}}>Delivered</Text>
           </View>
         );
 
@@ -89,9 +80,7 @@ const OrderCard = ({ item, theme }) => {
                 backgroundColor: colors.deliveredBackground,
               },
             ]}>
-            <Text style={{ color: colors.white }}>
-              {t('main.order.status.active')}
-            </Text>
+            <Text style={{color: colors.white}}>Active</Text>
           </View>
         );
 
@@ -105,9 +94,7 @@ const OrderCard = ({ item, theme }) => {
                 backgroundColor: colors.cancelledBackground,
               },
             ]}>
-            <Text style={{ color: colors.error }}>
-              {t('main.order.status.cancelled')}
-            </Text>
+            <Text style={{color: colors.error}}>Cancelled</Text>
           </View>
         );
 
@@ -121,9 +108,7 @@ const OrderCard = ({ item, theme }) => {
                 backgroundColor: colors.cancelledBackground,
               },
             ]}>
-            <Text style={{ color: colors.error }}>
-              {t('main.order.status.returned')}
-            </Text>
+            <Text style={{color: colors.error}}>Returned</Text>
           </View>
         );
 
@@ -137,7 +122,7 @@ const OrderCard = ({ item, theme }) => {
                 backgroundColor: colors.cancelledBackground,
               },
             ]}>
-            <Text style={{ color: colors.error }}>
+            <Text style={{color: colors.error}}>
               {t(`main.order.status.${orderStatus}`)}
             </Text>
           </View>
@@ -153,9 +138,7 @@ const OrderCard = ({ item, theme }) => {
                 backgroundColor: colors.shippedBackground,
               },
             ]}>
-            <Text style={{ color: colors.white }}>
-              {t('main.order.status.updated')}
-            </Text>
+            <Text style={{color: colors.white}}>Updated</Text>
           </View>
         );
 
@@ -165,13 +148,11 @@ const OrderCard = ({ item, theme }) => {
             style={[
               styles.orderStatus,
               {
-                borderColor: colors.accentColor,
+                borderColor: colors.primary,
                 backgroundColor: colors.statusBackground,
               },
             ]}>
-            <Text style={{ color: colors.accentColor }}>
-              {t('main.order.status.ordered')}
-            </Text>
+            <Text style={{color: colors.primary}}>Ordered</Text>
           </View>
         );
     }
@@ -181,10 +162,10 @@ const OrderCard = ({ item, theme }) => {
     <View style={styles.container}>
       <View style={appStyles.container}>
         <Text numberOfLines={1} style={styles.itemName}>
-          {item.id ? item.id : t('main.order.na')}
+          {item.id ? item.id : 'NA'}
         </Text>
-        <Text style={{ color: colors.grey }}>
-          {t('main.order.ordered_on_label')}
+        <Text style={{color: colors.grey}}>
+          Ordered on
           {moment(item.createdAt).format('Do MMMM YYYY')}
         </Text>
       </View>
@@ -201,7 +182,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
   },
-  price: { fontSize: 16, fontWeight: 'bold' },
+  price: {fontSize: 16, fontWeight: 'bold'},
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import {Card, withTheme} from 'react-native-elements';
+import {Card, withTheme} from 'react-native-paper';
+
 import OrderCard from './OrderCard';
 import ShippingDetails from './ShippingDetails';
 
@@ -19,7 +20,7 @@ const OrderAccordion = ({item, theme, getOrderList}) => {
     const isActive = activeSections.find(one => one === section.id);
 
     return isActive ? (
-      <ShippingDetails order={section} getOrderList={getOrderList} />
+      <ShippingDetails order={section} getOrderList={getOrderList}/>
     ) : null;
   };
 
@@ -39,7 +40,7 @@ const OrderAccordion = ({item, theme, getOrderList}) => {
   return (
     <Card containerStyle={styles.card}>
       <TouchableOpacity onPress={() => onPressHandler(item)}>
-        <OrderCard item={item} />
+        <OrderCard item={item}/>
       </TouchableOpacity>
       {renderContent(item)}
     </Card>

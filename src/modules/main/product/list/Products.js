@@ -1,25 +1,23 @@
 import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {withTheme} from 'react-native-elements';
+import {Button, withTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
-import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 
 import {appStyles} from '../../../../styles/styles';
 import ListPlaceholder from './component/placeholder/ListPlaceholder';
 import ProductCardSkeleton from './component/ProductCardSkeleton';
 import DashboardProduct from './component/DashboardProduct/DashboardProduct';
-import {theme} from '../../../../utils/theme';
-import ContainButton from '../../../../components/button/ContainButton';
+import SortAndFilter from './component/header/SortAndFilter';
+import filters from './component/Filters';
 
 /**
  * Component to show list of requested products
  * @constructor
  * @returns {JSX.Element}
  */
-const Products = () => {
+const Products = ({theme}) => {
   const navigation = useNavigation();
-  const {t} = useTranslation();
   const {products} = useSelector(({productReducer}) => productReducer);
   const {cartItems, subTotal} = useSelector(({cartReducer}) => cartReducer);
 
@@ -40,25 +38,28 @@ const Products = () => {
 
   const cartLength = cartItems.length;
   return (
-    <View style={appStyles.container}>
+    <View
+      style={[
+        appStyles.container,
+        {backgroundColor: theme.colors.pageBackground},
+      ]}>
+      {filters && products.length > 0 && <SortAndFilter />}
       <FlatList
         data={products}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id}
         ListEmptyComponent={() => <ListPlaceholder />}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        contentContainerStyle={styles.contentContainerStyle}
+        contentContainerStyle={
+          products.length > 0
+            ? styles.contentContainerStyle
+            : appStyles.container
+        }
       />
       {cartLength > 0 && (
         <View style={styles.footer}>
-          <ContainButton
-            title={t('main.product.view_products_in_cart', {
-              count: cartLength,
-              total: subTotal,
-            })}
-            style={styles.row}
-            onPress={() => navigation.navigate('Cart')}
-          />
+          <Button mode="contained" onPress={() => navigation.navigate('Cart')}>
+            {cartLength} Item | ₹{subTotal} View Cart
+          </Button>
         </View>
       )}
     </View>
@@ -66,12 +67,7 @@ const Products = () => {
 };
 
 const styles = StyleSheet.create({
-  contentContainerStyle: {paddingVertical: 16},
-  separator: {
-    height: 0.5,
-    width: '100%',
-    backgroundColor: theme.colors.primary,
-  },
+  contentContainerStyle: {paddingVertical: 8},
   footer: {
     padding: 16,
   },

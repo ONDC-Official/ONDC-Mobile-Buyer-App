@@ -16,7 +16,6 @@ export const tryLocalSignIn = (dispatch, navigation) => {
         dispatch({type: 'save_user', payload});
         getStoredData('address').then(address => {
           if (address) {
-
             navigation.reset({
               index: 0,
               routes: [{name: 'Dashboard'}],
@@ -36,7 +35,10 @@ export const tryLocalSignIn = (dispatch, navigation) => {
       }
     })
     .catch(error => {
-      dispatch({type: 'hide_loader', payload});
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'SignUp'}],
+      });
     });
 };
 

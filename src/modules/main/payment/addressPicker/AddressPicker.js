@@ -2,8 +2,7 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
-import ContainButton from '../../../../components/button/ContainButton';
+import {Button, Text, withTheme} from 'react-native-paper';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
@@ -12,7 +11,7 @@ import {skeletonList} from '../../../../utils/utils';
 import AddressCard from './AddressCard';
 import AddressCardSkeleton from './AddressCardSkeleton';
 import Header from './Header';
-import {useSelector} from "react-redux";
+import {useSelector} from 'react-redux';
 
 /**
  * Component to render list of address
@@ -99,7 +98,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
       });
     };
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item} />
+      <AddressCardSkeleton item={item}/>
     ) : (
       <AddressCard
         item={item}
@@ -115,8 +114,10 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
   useEffect(() => {
     if (isFocused) {
       getAddressList()
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {
+        })
+        .catch(() => {
+        });
     }
   }, [isFocused]);
 
@@ -131,7 +132,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
           {backgroundColor: colors.backgroundColor},
         ]}>
         <Header
-          title={t('main.cart.select_address_title')}
+          title={"Address"}
           show="address"
           navigation={navigation}
         />
@@ -139,9 +140,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
         <FlatList
           data={listData}
           renderItem={renderItem}
-          ListEmptyComponent={() => {
-            return <Text>{t('main.order.list_empty_message')}</Text>;
-          }}
+          ListEmptyComponent={() => <Text>No data found</Text>}
           contentContainerStyle={
             listData.length > 0
               ? styles.contentContainerStyle
@@ -151,7 +150,7 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
 
         {billingAddress !== null && (
           <View style={[styles.container, {backgroundColor: colors.white}]}>
-            <Text style={styles.name}>{t('main.cart.billing_address')}</Text>
+            <Text style={styles.name}>Billing Address</Text>
             <View style={styles.subContainer}>
               <View style={styles.title}>
                 <Text style={styles.address}>
@@ -181,20 +180,19 @@ const AddressPicker = ({navigation, theme, route: {params}}) => {
                 </Text>
               </View>
               <TouchableOpacity
-                style={[styles.button, {borderColor: colors.accentColor}]}
+                style={[styles.button, {borderColor: colors.primary}]}
                 onPress={onEditHandler}>
-                <Text style={{color: colors.accentColor}}>
-                  {t('main.cart.edit')}
+                <Text style={{color: colors.primary}}>
+                  Edit
                 </Text>
               </TouchableOpacity>
             </View>
 
             {selectedAddress !== null && (
               <View style={styles.buttonContainer}>
-                <ContainButton
-                  title={t('main.cart.next')}
-                  onPress={onPressHandler}
-                />
+                <Button mode="contained" onPress={onPressHandler}>
+                  Next
+                </Button>
               </View>
             )}
           </View>

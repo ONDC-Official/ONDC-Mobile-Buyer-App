@@ -1,5 +1,10 @@
 import {postData} from '../../../utils/api';
-import {CANCEL_ORDER, GET_STATUS, SERVER_URL, TRACK_ORDER,} from '../../../utils/apiUtilities';
+import {
+  CANCEL_ORDER,
+  GET_STATUS,
+  SERVER_URL,
+  TRACK_ORDER,
+} from '../../../utils/apiUtilities';
 import {alertWithOneButton} from '../../../utils/alerts';
 import i18n from '../../../locales/i18next';
 
@@ -91,14 +96,13 @@ export const getStatus = async (
       payload,
       options,
     );
-    console.log(data);
     if (data[0]?.message?.ack?.status === 'ACK') {
       setStatusMessageId(data[0].context.message_id);
     } else {
       alertWithOneButton(
-        i18n.t('main.order.cant_call_title'),
-        i18n.t('main.order.cant_call_message'),
-        i18n.t('global.ok_label'),
+        'Unable to Call',
+        'Unable to place your call currently, please try again',
+        'Ok',
         () => {},
       );
     }

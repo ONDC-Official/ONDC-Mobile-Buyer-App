@@ -1,6 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
 import SlangRetailAssistant from '@slanglabs/slang-conva-react-native-retail-assistant';
-import {useTranslation} from 'react-i18next';
 import {useDispatch} from 'react-redux';
 import {clearAllData} from '../redux/actions';
 import {clearFilters} from '../redux/filter/actions';
@@ -13,7 +12,6 @@ let sessionExpiredMessageShown = false;
 export default () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {t} = useTranslation();
 
   const clearDataAndLogout = () => {
     logoutUser(dispatch);
@@ -34,9 +32,9 @@ export default () => {
         if (!sessionExpiredMessageShown) {
           sessionExpiredMessageShown = true;
           alertWithOneButton(
-            t('network_error.session_expired_title'),
-            t('network_error.session_expired_message'),
-            t('network_error.session_expired_button_label'),
+            'Session Expired',
+            'Session expired, please login again to continue',
+            'Logout',
             () => {
               sessionExpiredMessageShown = false;
               clearDataAndLogout();
@@ -45,9 +43,9 @@ export default () => {
         }
       } else if (error.response.status === 426) {
         alertWithOneButton(
-          t('network_error.version_mismatch_title'),
-          t('network_error.version_mismatch_message'),
-          t('global.ok_label'),
+          'Version mismatch',
+          'Please upgrade your application to the latest version',
+          'Ok',
           () => {},
         );
       } else {
@@ -59,15 +57,21 @@ export default () => {
       }
     } else if (error.request) {
       if (setError !== null) {
-        setError(t('network_error.network_connection_error'));
+        setError(
+          'Internet connection not available. Please check internet connection.',
+        );
       } else {
-        showToastWithGravity(t('network_error.network_connection_error'));
+        showToastWithGravity(
+          'Internet connection not available. Please check internet connection.',
+        );
       }
     } else {
       if (setError !== null) {
-        setError(t('network_error.something_went_wrong'));
+        setError('Something went wrong, please try again after some time.');
       } else {
-        showToastWithGravity(t('network_error.something_went_wrong'));
+        showToastWithGravity(
+          'Something went wrong, please try again after some time.',
+        );
       }
     }
   };

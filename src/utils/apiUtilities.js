@@ -1,7 +1,7 @@
 import Config from 'react-native-config';
 
-export const BASE_URL = Config.BASE_URL;
-export const SERVER_URL = Config.SERVER_URL;
+export const BASE_URL = 'https://buyer-ref-app-stage.ondc.org';
+export const SERVER_URL = 'https://buyer-ref-app-stage.ondc.org';
 export const UPDATE_ORDER = '/clientApis/v1/update';
 export const GET_MESSAGE_ID = '/clientApis/v1/search';
 export const GET_PRODUCTS = '/clientApis/v1/on_search?messageId=';

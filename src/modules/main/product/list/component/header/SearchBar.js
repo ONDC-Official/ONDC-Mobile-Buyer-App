@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
-import {Text, withTheme} from 'react-native-elements';
+import {Text, withTheme} from 'react-native-paper';
 import useNetworkErrorHandling from '../../../../../../hooks/useNetworkErrorHandling';
 import {getData} from '../../../../../../utils/api';
 import {BASE_URL, GET_LOCATION} from '../../../../../../utils/apiUtilities';
-import {useSelector} from "react-redux";
+import {useSelector} from 'react-redux';
 
 /**
  * Component to show searchbar to select location in addresspicker
@@ -51,7 +51,7 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
   };
 
   return (
-    <View style={[styles.container, {borderColor: colors.accentColor}]}>
+    <View style={[styles.container, {borderColor: colors.primary}]}>
       <Autocomplete
         data={filteredLocations ? filteredLocations : []}
         icon="camera"
@@ -60,7 +60,7 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
           keyboardShouldPersistTaps: 'always',
           style: {
             margin: 5,
-            borderColor: colors.accentColor,
+            borderColor: colors.primary,
             maxHeight: 350,
           },
           keyExtractor: (_, id) => id,
@@ -93,7 +93,7 @@ const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
             .catch(() => {});
           setSelectedValue(value);
         }}
-        placeholder={t('main.product.search_label')}
+        placeholder={'Search'}
       />
     </View>
   );

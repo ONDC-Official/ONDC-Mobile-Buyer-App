@@ -1,18 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {getData} from '../../../../utils/api';
 import {GET_ADDRESS, SERVER_URL} from '../../../../utils/apiUtilities';
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import {theme} from '../../../../utils/theme';
 import Address from './Address';
-import {Divider} from 'react-native-elements';
 import {getStoredData} from '../../../../utils/storage';
 import {skeletonList} from '../../../../utils/utils';
 import AddressSkeleton from './AddressSkeleton';
+import {Divider, IconButton, withTheme} from 'react-native-paper';
 
-const AddressList = ({navigation}) => {
+const AddressList = ({navigation, theme}) => {
   const {token} = useSelector(({authReducer}) => authReducer);
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState(true);
@@ -48,17 +46,14 @@ const AddressList = ({navigation}) => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity
+        <IconButton
+          icon={'plus-circle'}
+          iconColor={theme.colors.primary}
           style={styles.addButton}
           onPress={() =>
             navigation.navigate('AddDefaultAddress', {setDefault: false})
-          }>
-          <Icon
-            size={18}
-            name={'plus-circle'}
-            color={theme.colors.accentColor}
-          />
-        </TouchableOpacity>
+          }
+        />
       ),
     });
 
@@ -115,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddressList;
+export default withTheme(AddressList);

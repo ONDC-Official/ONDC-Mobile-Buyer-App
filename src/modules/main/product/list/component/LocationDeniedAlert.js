@@ -1,7 +1,8 @@
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
-import {Dialog, Divider, Icon, withTheme} from 'react-native-elements';
+import {Dialog, Divider, withTheme} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 /**
  * Component to show dialog to select location
@@ -28,28 +29,28 @@ const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
           name="location-off"
           type="material"
           size={34}
-          color={colors.accentColor}
+          color={colors.primary}
         />
       </View>
       <Dialog.Title
-        title={t('main.product.location_denied_message')}
+        title={'Location permission not enabled'}
         titleStyle={styles.titleStyle}
       />
-      <Divider/>
+      <Divider />
       <Dialog.Button
         icon={{
           name: 'search',
           type: 'font-awesome',
           size: 14,
-          color: colors.accentColor,
+          color: colors.primary,
         }}
-        title={t('main.product.enter_location_message')}
+        title={'Enter location manually'}
         onPress={() => {
           setIsVisible(!isVisible);
           openSheet();
         }}
       />
-      <Divider/>
+      <Divider />
     </Dialog>
   );
 };

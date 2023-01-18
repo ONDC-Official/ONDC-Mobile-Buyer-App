@@ -1,5 +1,6 @@
 import React from 'react';
-import {Input} from 'react-native-elements';
+import {HelperText, TextInput} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
 
 /**
  * Component to render input in screens
@@ -9,7 +10,18 @@ import {Input} from 'react-native-elements';
  * @constructor
  */
 const InputField = props => (
-  <Input {...props} placeholder={props.placeholder} autoCapitalize={'none'} />
+  <View style={styles.container}>
+    <TextInput {...props} mode="outlined" />
+    {props.errorMessage && (
+      <HelperText padding="none" type="error" visible={props.errorMessage}>
+        {props.errorMessage}
+      </HelperText>
+    )}
+  </View>
 );
+
+const styles = StyleSheet.create({
+  container: {marginBottom: 12},
+});
 
 export default InputField;

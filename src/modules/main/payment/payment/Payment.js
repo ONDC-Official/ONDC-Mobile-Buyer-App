@@ -11,11 +11,17 @@ import {
   View,
 } from 'react-native';
 import Config from 'react-native-config';
-import {Card, CheckBox, Divider, Text, withTheme} from 'react-native-elements';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Divider,
+  Text,
+  withTheme,
+} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
-import ContainButton from '../../../../components/button/ContainButton';
 
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {clearAllData} from '../../../../redux/actions';
@@ -94,7 +100,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
           headers: {Authorization: `Bearer ${token}`},
         },
       );
-      console.log(JSON.stringify(data[0], undefined, 4));
       if (data[0].hasOwnProperty('error')) {
         error.current = data[0];
       } else {
@@ -102,7 +107,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         let price = [];
         breakups = breakups.concat(data[0].message.order.quote.breakup);
         breakup.current = breakups;
-        console.log(breakups);
         price.push(data[0].message.order.quote.price);
         total.current =
           total.current + Number(data[0].message.order.quote.price.value);
@@ -116,7 +120,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         }
       }
       setInitializeOrderRequested(false);
-      console.log(refOrders.current);
     } catch (err) {
       console.log(err);
       handleApiError(err);
@@ -136,8 +139,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
           headers: {Authorization: `Bearer ${token}`},
         },
       );
-      console.log('///confirm order/////');
-      console.log(JSON.stringify(data, undefined, 4));
     } catch (err) {
       handleApiError(err);
 
@@ -271,13 +272,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
         if (item.message.ack.status === 'ACK') {
           parentOrderId.current = item.context.parent_order_id;
           messageIds.push(item.context.message_id);
-          console.log(messageIds);
         }
       });
       if (messageIds.length > 0) {
         setInItMessageIds(messageIds);
       } else {
-        showToastWithGravity(t('error.no_data_found'));
+        showToastWithGravity('No data found');
         setInitializeOrderRequested(false);
       }
     } catch (err) {
@@ -359,34 +359,38 @@ const Payment = ({navigation, theme, route: {params}}) => {
               break;
 
             case 'AUTHENTICATION_FAILED':
-              showToastWithGravity(
-                t('main.cart.payment.authentication_failed'),
-              );
+              showToastWithGravity('Please verify the details and try again');
               setInitializeOrderRequested(false);
               break;
 
             case 'AUTHORIZATION_FAILED':
-              showToastWithGravity(t('main.cart.payment.authorization_failed'));
+              showToastWithGravity(
+                'Bank is unable to process your request at the moment',
+              );
               setInitializeOrderRequested(false);
               break;
 
             case 'JUSPAY_DECLINED':
-              showToastWithGravity(t('main.cart.payment.juspay_declined'));
+              showToastWithGravity(
+                'Unable to process your request at the moment please try again',
+              );
               setInitializeOrderRequested(false);
               break;
 
             case 'AUTHORIZING':
-              showToastWithGravity(t('main.cart.payment.authorizing'));
+              showToastWithGravity('Waiting for the bank to confirm');
               setInitializeOrderRequested(false);
               break;
 
             case 'PENDING_VBV':
-              showToastWithGravity(t('main.cart.payment.pending_vbv'));
+              showToastWithGravity('Transaction Pending');
               setInitializeOrderRequested(false);
               break;
           }
         } else {
-          showToastWithGravity(t('network_error.something_went_wrong'));
+          showToastWithGravity(
+            'Something went wrong, please try again after some time.',
+          );
         }
         break;
 
@@ -407,7 +411,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
         const errorObj = orderList.find(one => one.hasOwnProperty('error'));
 
         if (!errorObj) {
-          console.log(orderList);
           const payload = orderList.map(item => {
             const object = cartItems.find(
               one => one.id === item.message.order.items[0].id,
@@ -437,8 +440,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
             };
           });
 
-          console.log(JSON.stringify(payload, undefined, 4));
-
           const {data} = await postData(
             `${SERVER_URL}${CONFIRM_ORDER}`,
             payload,
@@ -456,10 +457,14 @@ const Payment = ({navigation, theme, route: {params}}) => {
             setConfirmMessageIds(messageIds);
           }
         } else {
-          showToastWithGravity(t('network_error.something_went_wrong'));
+          showToastWithGravity(
+            'Something went wrong, please try again after some time.',
+          );
         }
       } else {
-        showToastWithGravity(t('network_error.something_went_wrong'));
+        showToastWithGravity(
+          'Something went wrong, please try again after some time.',
+        );
       }
     } catch (err) {
       console.log(err);
@@ -546,8 +551,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
       setConfirmOrderRequested(false);
       alertWithOneButton(
         null,
-        t('main.cart.order_placed_message'),
-        t('main.product.ok_label'),
+        'Your order has been placed!',
+        'Ok',
         onOrderSuccess,
       );
       setConfirmMessageIds(null);
@@ -617,7 +622,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
     let sources = null;
     let timer = null;
     if (confirmMessageIds) {
-      console.log(confirmMessageIds);
       sources = confirmMessageIds.map(messageId => {
         return new RNEventSource(
           `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
@@ -650,7 +654,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       {!confirmOrderRequested ? (
         <View style={appStyles.container}>
           <Header
-            title={t('main.cart.payment.title')}
+            title={'Payment & Order Confirmation'}
             navigation={navigation}
           />
           {initializeOrderRequested ? (
@@ -677,14 +681,14 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
                     {total.current && (
                       <View style={styles.priceContainer}>
-                        <Text>{t('main.cart.total_payable')}</Text>
+                        <Text>Total Payable</Text>
                         <Text style={styles.fulfillment}>₹{total.current}</Text>
                       </View>
                     )}
                   </Card>
                 )}
                 <Card containerStyle={styles.addressCard}>
-                  <Text style={styles.text}>{t('main.cart.address')}</Text>
+                  <Text style={styles.text}>Address</Text>
 
                   <Text style={styles.titleStyle}>
                     {selectedAddress.address.street},{' '}
@@ -698,12 +702,12 @@ const Payment = ({navigation, theme, route: {params}}) => {
                 {!error.current && (
                   <Card containerStyle={styles.cardContainerStyle}>
                     <Text style={styles.text}>
-                      {t('main.cart.payment_options')}
+                      Payment Options
                     </Text>
 
                     <View style={styles.paymentOptions}>
                       {PAYMENT_OPTIONS.map((option, index) => (
-                        <CheckBox
+                        <Checkbox
                           key={option.value}
                           title={
                             <View style={styles.titleStyle}>
@@ -713,7 +717,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
                               {option.label === 'Prepaid' && (
                                 <View style={styles.juspayContainer}>
                                   <Text>
-                                    {t('main.product.powered_by_label')}
+                                    powered by
                                   </Text>
                                   <FastImage
                                     source={{
@@ -746,16 +750,16 @@ const Payment = ({navigation, theme, route: {params}}) => {
 
               {!error.current && (
                 <View style={styles.buttonContainer}>
-                  <ContainButton
-                    title={t('main.cart.payment.place_order')}
+                  <Button
                     onPress={() => {
                       removeInitEvent();
                       processPayment()
                         .then(() => {})
                         .catch(() => {});
                     }}
-                    loading={confirmOrderRequested}
-                  />
+                    loading={confirmOrderRequested}>
+                    Place Order
+                  </Button>
                 </View>
               )}
             </>
@@ -763,9 +767,9 @@ const Payment = ({navigation, theme, route: {params}}) => {
         </View>
       ) : (
         <View style={[appStyles.container, styles.processing]}>
-          <ActivityIndicator size={30} color={colors.accentColor} />
-          <Text style={[styles.processingText, {color: colors.accentColor}]}>
-            {t('main.cart.payment.processing_label')}{' '}
+          <ActivityIndicator size={30} color={colors.primary} />
+          <Text style={[styles.processingText, {color: colors.primary}]}>
+            Processing
           </Text>
         </View>
       )}

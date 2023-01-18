@@ -19,9 +19,12 @@ const ListPlaceholder = () => (
 export default ListPlaceholder;
 
 const styles = StyleSheet.create({
-  container: {alignItems: 'center', backgroundColor: '#fff'},
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    display: 'flex',
+  },
   image: {
-    flex: 1,
     width: screenWidth,
     height: screenWidth,
   },

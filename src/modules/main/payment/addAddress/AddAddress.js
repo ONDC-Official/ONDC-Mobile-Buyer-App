@@ -2,10 +2,8 @@ import {Formik} from 'formik';
 import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ActivityIndicator, SafeAreaView, StyleSheet, View} from 'react-native';
-import {Card, withTheme} from 'react-native-elements';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
-import ContainButton from '../../../../components/button/ContainButton';
 import InputField from '../../../../components/input/InputField';
 
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -23,6 +21,7 @@ import {
 } from '../../../../utils/apiUtilities';
 import Header from '../addressPicker/Header';
 import {useSelector} from 'react-redux';
+import {Button, Card, TextInput, withTheme} from 'react-native-paper';
 
 /**
  * Component to render form in add new address screen
@@ -51,23 +50,23 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
   const {selectedAddress, item} = params;
 
   const validationSchema = Yup.object({
-    name: Yup.string().trim().required(t('errors.required')),
+    name: Yup.string().trim().required('This field is required'),
     email: Yup.string()
       .trim()
-      .email(t('errors.invalid_email'))
-      .required(t('errors.required')),
+      .email('Please enter valid email address')
+      .required('This field is required'),
     number: Yup.string()
       .trim()
-      .matches(/^[6-9]{1}[0-9]{9}$/, t('errors.invalid_number'))
-      .required(t('errors.required')),
-    city: Yup.string().trim().required(t('errors.required')),
-    state: Yup.string().trim().required(t('errors.required')),
+      .matches(/^[6-9]{1}[0-9]{9}$/, 'Invalid number')
+      .required('This field is required'),
+    city: Yup.string().trim().required('This field is required'),
+    state: Yup.string().trim().required('This field is required'),
     pin: Yup.string()
       .trim()
-      .matches(/^[1-9]{1}[0-9]{5}$/, t('errors.invalid_pin'))
-      .required(t('errors.required')),
-    landMark: Yup.string().trim().required(t('errors.required')),
-    street: Yup.string().trim().required(t('errors.required')),
+      .matches(/^[1-9]{1}[0-9]{5}$/, 'Invalid pin code')
+      .required('This field is required'),
+    landMark: Yup.string().trim().required('This field is required'),
+    street: Yup.string().trim().required('This field is required'),
   });
 
   let userInfo = {
@@ -150,35 +149,35 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
     const payload =
       selectedAddress === 'address'
         ? {
-            descriptor: {
-              name: values.name,
-              email: values.email,
-              phone: values.number,
-            },
-            gps: `${latitude},${longitude}`,
-            defaultAddress: true,
-            address: {
-              areaCode: values.pin,
-              city: values.city,
-              locality: values.landMark,
-              state: values.state,
-              street: values.street,
-              country: 'IND',
-            },
-          }
-        : {
-            address: {
-              areaCode: values.pin,
-              city: values.city,
-              locality: values.landMark,
-              state: values.state,
-              street: values.street,
-              country: 'IND',
-            },
+          descriptor: {
             name: values.name,
             email: values.email,
             phone: values.number,
-          };
+          },
+          gps: `${latitude},${longitude}`,
+          defaultAddress: true,
+          address: {
+            areaCode: values.pin,
+            city: values.city,
+            locality: values.landMark,
+            state: values.state,
+            street: values.street,
+            country: 'IND',
+          },
+        }
+        : {
+          address: {
+            areaCode: values.pin,
+            city: values.city,
+            locality: values.landMark,
+            state: values.state,
+            street: values.street,
+            country: 'IND',
+          },
+          name: values.name,
+          email: values.email,
+          phone: values.number,
+        };
 
     try {
       setApiInProgress(true);
@@ -231,34 +230,37 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
               validationSchema={validationSchema}
               onSubmit={values => {
                 saveAddress(values)
-                  .then(() => {})
+                  .then(() => {
+                  })
                   .catch(err => {
                     console.log(err);
                   });
               }}>
               {({
-                values,
-                errors,
-                handleChange,
-                handleBlur,
-                touched,
-                handleSubmit,
-                setFieldValue,
-                setFieldError,
-              }) => {
+                  values,
+                  errors,
+                  handleChange,
+                  handleBlur,
+                  touched,
+                  handleSubmit,
+                  setFieldValue,
+                  setFieldError,
+                }) => {
                 return (
                   <>
                     <InputField
                       value={values.name}
                       onBlur={handleBlur('name')}
-                      placeholder={t('main.cart.name')}
+                      label={'Name'}
+                      placeholder={'Name'}
                       errorMessage={touched.name ? errors.name : null}
                       onChangeText={handleChange('name')}
                     />
                     <InputField
                       value={values.email}
                       onBlur={handleBlur('email')}
-                      placeholder={t('main.cart.email')}
+                      label={'Email'}
+                      placeholder={'Email'}
                       errorMessage={touched.email ? errors.email : null}
                       onChangeText={handleChange('email')}
                     />
@@ -267,7 +269,8 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                       maxLength={10}
                       value={values.number}
                       onBlur={handleBlur('number')}
-                      placeholder={t('main.cart.number')}
+                      label={'Mobile number'}
+                      placeholder={'Mobile number'}
                       errorMessage={touched.number ? errors.number : null}
                       onChangeText={handleChange('number')}
                     />
@@ -276,7 +279,8 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                       keyboardType={'numeric'}
                       maxLength={6}
                       onBlur={handleBlur('pin')}
-                      placeholder={t('main.cart.pin')}
+                      label={'Pin code'}
+                      placeholder={'Pin code'}
                       errorMessage={touched.pin ? errors.pin : null}
                       onChangeText={e => {
                         setFieldValue('pin', e);
@@ -291,49 +295,52 @@ const AddAddress = ({navigation, theme, route: {params}}) => {
                             });
                         }
                       }}
-                      rightIcon={
-                        requestInProgress ? <ActivityIndicator /> : null
+                      right={
+                        requestInProgress ? <TextInput.Icon icon="loading" /> : null
                       }
                     />
                     <InputField
                       value={values.street}
                       onBlur={handleBlur('street')}
-                      placeholder={t('main.cart.street')}
+                      label={'Street'}
+                      placeholder={'Street'}
                       errorMessage={touched.street ? errors.street : null}
                       onChangeText={handleChange('street')}
                     />
                     <InputField
                       value={values.landMark}
                       onBlur={handleBlur('landMark')}
-                      placeholder={t('main.cart.landMark')}
+                      label={'Landmark'}
+                      placeholder={'Landmark'}
                       errorMessage={touched.landMark ? errors.landMark : null}
                       onChangeText={handleChange('landMark')}
                     />
                     <InputField
                       value={values.city}
                       onBlur={handleBlur('city')}
-                      placeholder={t('main.cart.city')}
+                      label={'City'}
+                      placeholder={'City'}
                       errorMessage={touched.city ? errors.city : null}
                       onChangeText={handleChange('city')}
                     />
                     <InputField
                       value={values.state}
                       onBlur={handleBlur('state')}
-                      placeholder={t('main.cart.state')}
+                      label={'State'}
+                      placeholder={'State'}
                       errorMessage={touched.state ? errors.state : null}
                       onChangeText={handleChange('state')}
                       editable={false}
                     />
 
                     <View style={styles.buttonContainer}>
-                      <ContainButton
-                        title={
-                          item ? t('main.cart.update') : t('main.cart.next')
-                        }
+                      <Button
+                        mode="contained"
                         onPress={handleSubmit}
                         loading={apiInProgress}
-                        disabled={apiInProgress}
-                      />
+                        disabled={apiInProgress}>
+                        {item ? 'Update' : 'Next'}
+                      </Button>
                     </View>
                   </>
                 );

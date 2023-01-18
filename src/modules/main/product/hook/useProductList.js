@@ -2,17 +2,24 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useRef, useState} from 'react';
 
 import {saveProducts} from '../../../../redux/product/actions';
-import {clearFilters, saveFilters, saveIds,} from '../../../../redux/filter/actions';
+import {
+  clearFilters,
+  saveFilters,
+  saveIds,
+} from '../../../../redux/filter/actions';
 import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
 import {getData, postData} from '../../../../utils/api';
-import {GET_MESSAGE_ID, GET_PRODUCTS, SERVER_URL,} from '../../../../utils/apiUtilities';
+import {
+  GET_MESSAGE_ID,
+  GET_PRODUCTS,
+  SERVER_URL,
+} from '../../../../utils/apiUtilities';
 import {getStoredData} from '../../../../utils/storage';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
 
 export default () => {
   const listCount = useRef(0);
-  const pageNumber = useRef(1);
   const count = useRef(0);
 
   const dispatch = useDispatch();
@@ -84,16 +91,16 @@ export default () => {
         if (data.message.catalogs.length > 0) {
           const productsList = data.message.catalogs.map(item => {
             return Object.assign({}, item, {
+              quantityMeta: item?.quantity,
               quantity: 0,
               transaction_id: transId,
               city: currentAddress?.address?.city,
               state: currentAddress?.address?.state,
             });
           });
-
           listCount.current = productsList.length;
           count.current = data.message.count;
-
+          console.log(JSON.stringify(productsList, undefined, 4));
           dispatch(saveProducts(productsList));
         }
       } catch (error) {
@@ -107,6 +114,7 @@ export default () => {
     let eventSource = null;
 
     if (messageId) {
+      console.log(token);
       eventSource = new RNEventSource(
         `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
         {
@@ -137,7 +145,6 @@ export default () => {
         } else {
           count.current = data.totalCount;
           if (listCount.current < data.totalCount && listCount.current < 10) {
-            console.log('Get products');
             getProductsList(messageId, transactionId)
               .then(() => {})
               .catch(() => {});

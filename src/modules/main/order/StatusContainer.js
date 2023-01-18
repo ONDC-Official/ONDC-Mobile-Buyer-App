@@ -1,28 +1,28 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
+import {StyleSheet, Text, View} from 'react-native';
+import {withTheme} from 'react-native-paper';
 
-const Chip = ({ name, color, backgroundColor }) => {
+const Chip = ({name, color, backgroundColor}) => {
   return (
     <View
       style={[
         styles.chipContainer,
-        { backgroundColor: backgroundColor, borderColor: color },
+        {backgroundColor: backgroundColor, borderColor: color},
       ]}>
-      <Text style={[styles.text, { color: color }]}>{name}</Text>
+      <Text style={[styles.text, {color: color}]}>{name}</Text>
     </View>
   );
 };
 
-const StatusContainer = ({ product, theme }) => {
-  const { colors } = theme;
+const StatusContainer = ({product, theme}) => {
+  const {colors} = theme;
 
   return (
     <View style={styles.container}>
       {product.return_status ? (
         <Chip
           name={product.return_status}
-          color={colors.accentColor}
+          color={colors.primary}
           backgroundColor={colors.statusBackground}
         />
       ) : (
@@ -41,7 +41,7 @@ const StatusContainer = ({ product, theme }) => {
         <View style={styles.cancellContainer}>
           <Chip
             name={product.cancellation_status}
-            color={colors.accentColor}
+            color={colors.primary}
             backgroundColor={colors.statusBackground}
           />
         </View>
@@ -69,8 +69,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 5,
   },
-  cancellContainer: { paddingHorizontal: 10 },
-  text: { fontWeight: '700' },
+  cancellContainer: {paddingHorizontal: 10},
+  text: {fontWeight: '700'},
   chipContainer: {
     paddingVertical: 5,
     borderRadius: 15,

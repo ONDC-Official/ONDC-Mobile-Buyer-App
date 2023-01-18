@@ -1,8 +1,8 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
-import {Text, withTheme} from 'react-native-elements';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {Text, withTheme} from 'react-native-paper';
+
 import {clearCart} from '../../../redux/actions';
 import {appStyles} from '../../../styles/styles';
 import {alertWithTwoButtons} from '../../../utils/alerts';
@@ -19,8 +19,6 @@ import Footer from './Footer';
  */
 const Cart = ({navigation, theme}) => {
   const dispatch = useDispatch();
-
-  const {t} = useTranslation();
 
   const {colors} = theme;
 
@@ -40,10 +38,10 @@ const Cart = ({navigation, theme}) => {
   const onClearCart = () => {
     alertWithTwoButtons(
       null,
-      t('main.cart.clear_cart_message'),
-      t('main.product.ok_label'),
+      'Are you sure you want to clear cart?',
+      'Ok',
       emptyCart,
-      t('main.product.cancel_label'),
+      'Cancel',
       () => {},
     );
   };
@@ -63,48 +61,45 @@ const Cart = ({navigation, theme}) => {
   );
 
   return (
-    <SafeAreaView
-      style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <View
-        style={[
-          appStyles.container,
-          styles.container,
-          {backgroundColor: colors.backgroundColor},
-        ]}>
-        {cartItems.length !== 0 && (
-          <View style={[styles.header, {backgroundColor: colors.white}]}>
-            <View style={styles.row}>
-              <Text style={styles.text}>{t('main.cart.sub_total_label')}</Text>
-              <Text style={styles.price}>
-                ₹
-                {Number.isInteger(subTotal)
-                  ? subTotal
-                  : parseFloat(subTotal).toFixed(2)}
-              </Text>
-            </View>
-
-            <TouchableOpacity
-              style={[styles.button, {borderColor: colors.accentColor}]}
-              onPress={onClearCart}>
-              <Text style={{color: colors.accentColor}}>CLEAR CART</Text>
-            </TouchableOpacity>
+    <View
+      style={[
+        appStyles.container,
+        styles.container,
+        {backgroundColor: colors.backgroundColor},
+      ]}>
+      {cartItems.length !== 0 && (
+        <View style={[styles.header, {backgroundColor: colors.white}]}>
+          <View style={styles.row}>
+            <Text style={styles.text}>Subtotal:</Text>
+            <Text style={styles.price}>
+              ₹
+              {Number.isInteger(subTotal)
+                ? subTotal
+                : parseFloat(subTotal).toFixed(2)}
+            </Text>
           </View>
-        )}
-        <FlatList
-          data={cartItems}
-          renderItem={renderItem}
-          ListEmptyComponent={() => {
-            return <EmptyComponent navigation={navigation} />;
-          }}
-          contentContainerStyle={
-            cartItems.length === 0
-              ? appStyles.container
-              : styles.contentContainerStyle
-          }
-        />
-        {cartItems.length !== 0 && <Footer onCheckout={onCheckout} />}
-      </View>
-    </SafeAreaView>
+
+          <TouchableOpacity
+            style={[styles.button, {borderColor: colors.primary}]}
+            onPress={onClearCart}>
+            <Text style={{color: colors.primary}}>Clear</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+      <FlatList
+        data={cartItems}
+        renderItem={renderItem}
+        ListEmptyComponent={() => {
+          return <EmptyComponent navigation={navigation} />;
+        }}
+        contentContainerStyle={
+          cartItems.length === 0
+            ? appStyles.container
+            : styles.contentContainerStyle
+        }
+      />
+      {cartItems.length !== 0 && <Footer onCheckout={onCheckout} />}
+    </View>
   );
 };
 

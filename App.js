@@ -1,6 +1,6 @@
 import React from 'react';
 import {Provider as StoreProvider} from 'react-redux';
-import {ThemeProvider} from 'react-native-elements';
+import {Provider as PaperProvider} from 'react-native-paper';
 
 import Toast, {ErrorToast} from 'react-native-toast-message';
 import Navigation from './src/navigation/Navigation';
@@ -13,12 +13,12 @@ const App = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <StoreProvider store={store}>
+    <StoreProvider store={store}>
+      <PaperProvider theme={theme}>
         <Navigation />
         <Toast config={toastConfig} />
-      </StoreProvider>
-    </ThemeProvider>
+      </PaperProvider>
+    </StoreProvider>
   );
 };
 

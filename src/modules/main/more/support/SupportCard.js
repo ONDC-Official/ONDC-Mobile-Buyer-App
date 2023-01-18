@@ -1,11 +1,11 @@
 import React from 'react';
-import {Image, Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Card, Text, withTheme} from 'react-native-elements';
+import {Image, Linking, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {appStyles} from '../../../../styles/styles';
+import {Card, withTheme} from 'react-native-paper';
 
 /**
- * Component to render signle card on support   screen
+ * Component to render single card on support screen
  * @param theme
  * @param icon:icon to show in card
  * @param url:url
@@ -38,13 +38,13 @@ const SupportCard = ({theme, url, icon, title, message, source}) => {
       <View style={styles.container}>
         <View style={[styles.icon]}>
           {icon ? (
-            <Icon name={icon} color={colors.accentColor} size={40}/>
+            <Icon name={icon} color={colors.primary} size={40}/>
           ) : (
             <Image source={source} style={styles.image}/>
           )}
         </View>
         <View style={[appStyles.container, styles.textContainer]}>
-          <Text style={[styles.text, {color: colors.accentColor}]}>
+          <Text style={[styles.text, {color: colors.primary}]}>
             {title}
           </Text>
           <Text style={styles.message}>{message}</Text>
@@ -52,10 +52,12 @@ const SupportCard = ({theme, url, icon, title, message, source}) => {
         <TouchableOpacity
           onPress={() => {
             onPressHandler()
-              .then(() => {})
-              .catch(() => {});
+              .then(() => {
+              })
+              .catch(() => {
+              });
           }}>
-          <Icon name="chevron-right" color={colors.accentColor} size={24}/>
+          <Icon name="chevron-right" color={colors.primary} size={24}/>
         </TouchableOpacity>
       </View>
     </Card>

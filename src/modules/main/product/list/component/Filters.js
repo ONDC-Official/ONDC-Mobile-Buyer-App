@@ -1,24 +1,12 @@
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import React, {memo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {Divider, Text, useTheme} from 'react-native-elements';
+import {Dimensions, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {Button, Divider, Text, withTheme} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import ClearButton from '../../../../../components/button/ClearButton';
-import OutlineButton from '../../../../../components/button/OutlineButton';
 import {appStyles} from '../../../../../styles/styles';
-import {theme} from '../../../../../utils/theme';
-import {
-  clearFiltersOnly,
-  updateFilters,
-} from '../../../../../redux/filter/actions';
-import ContainButton from '../../../../../components/button/ContainButton';
+import {clearFiltersOnly, updateFilters,} from '../../../../../redux/filter/actions';
 
 /**
  * Component to render filters screen
@@ -26,8 +14,7 @@ import ContainButton from '../../../../../components/button/ContainButton';
  * @constructor
  * @returns {JSX.Element}
  */
-const Filters = ({closeRBSheet, apiInProgress}) => {
-  const {theme} = useTheme();
+const Filters = ({closeRBSheet, apiInProgress, theme}) => {
   const dispatch = useDispatch();
   const {colors} = theme;
   const {t} = useTranslation();
@@ -100,9 +87,9 @@ const Filters = ({closeRBSheet, apiInProgress}) => {
     <View style={appStyles.container}>
       <View style={styles.header}>
         <ClearButton
-          title={t('main.product.filters.close')}
+          title={'Close'}
           onPress={closeRBSheet}
-          textColor={colors.accentColor}
+          textColor={colors.primary}
         />
       </View>
       <Divider />
@@ -116,7 +103,7 @@ const Filters = ({closeRBSheet, apiInProgress}) => {
             {filters?.providers?.length > 0 && (
               <>
                 <Text style={styles.text}>
-                  {t('main.product.filters.providers')}
+                  Providers
                 </Text>
 
                 {filters?.providers?.map(item => {
@@ -139,7 +126,7 @@ const Filters = ({closeRBSheet, apiInProgress}) => {
             {filters?.categories?.length > 0 && (
               <>
                 <Text style={styles.text}>
-                  {t('main.product.filters.categories')}
+                  Categories
                 </Text>
                 {filters?.categories?.map(item => {
                   const index = categories.findIndex(one => one === item.id);
@@ -163,17 +150,17 @@ const Filters = ({closeRBSheet, apiInProgress}) => {
                 filters.minPrice !== filters.maxPrice && (
                   <>
                     <Text style={styles.price}>
-                      {t('main.product.filters.price_range')}
+                      Price Range
                     </Text>
 
                     <MultiSlider
                       selectedStyle={{
-                        backgroundColor: colors.accentColor,
+                        backgroundColor: colors.primary,
                       }}
                       containerStyle={styles.sliderContainer}
                       markerStyle={[
                         styles.markerStyle,
-                        {backgroundColor: colors.accentColor},
+                        {backgroundColor: colors.primary},
                       ]}
                       trackStyle={styles.trackStyle}
                       values={[rangeMin, rangeMax]}
@@ -195,33 +182,34 @@ const Filters = ({closeRBSheet, apiInProgress}) => {
           </ScrollView>
           <View style={styles.buttonContainer}>
             <View style={styles.amountContainer}>
-              <OutlineButton
-                title={t('main.product.filters.clear')}
+              <Button
+                mode="outlined"
                 disabled={apiInProgress}
-                onPress={clearFilter}
-                color={colors.accentColor}
-              />
+                onPress={clearFilter}>
+                Clear
+              </Button>
             </View>
             <View style={styles.amountContainer}>
-              <ContainButton
-                title={t('main.product.filters.apply_title')}
+              <Button
+                mode="contained"
                 loading={apiInProgress}
                 disabled={apiInProgress}
-                onPress={applyFilters}
-              />
+                onPress={applyFilters}>
+                Apply
+              </Button>
             </View>
           </View>
         </View>
       ) : (
         <View style={styles.emptyContainer}>
-          <Text>{t('main.product.filters.no_filters_message')}</Text>
+          <Text>No filters available</Text>
         </View>
       )}
     </View>
   );
 };
 
-export default memo(Filters);
+export default memo(withTheme(Filters));
 
 const styles = StyleSheet.create({
   header: {
@@ -267,7 +255,7 @@ const styles = StyleSheet.create({
   button: {
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: theme.colors.accentColor,
+    borderColor: '#fff',
     padding: 12,
     marginBottom: 12,
     marginHorizontal: 8,

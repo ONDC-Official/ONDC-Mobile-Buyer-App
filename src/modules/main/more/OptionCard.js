@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity} from 'react-native';
-import {Card, Icon, Text, withTheme} from 'react-native-elements';
+import {StyleSheet} from 'react-native';
+import {Button, Card, withTheme} from 'react-native-paper';
 
 /**
  * Component to render single option card in more screen
@@ -11,18 +11,11 @@ import {Card, Icon, Text, withTheme} from 'react-native-elements';
  * @returns {JSX.Element}
  */
 const OptionCard = ({theme, action, item}) => {
-  const {colors} = theme;
-
   return (
     <Card containerStyle={styles.card}>
-      <TouchableOpacity
-        style={styles.container}
-        onPress={() => action(item.name)}>
-        <Icon type="font-awesome" name={item.icon} color={colors.accentColor}/>
-        <Text style={[styles.text, {color: colors.accentColor}]}>
-          {item.string}
-        </Text>
-      </TouchableOpacity>
+      <Button icon={item.icon} onPress={() => action(item.name)}>
+        {item.string}
+      </Button>
     </Card>
   );
 };

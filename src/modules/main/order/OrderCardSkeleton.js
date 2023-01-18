@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Card} from 'react-native-elements';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {Card} from 'react-native-paper';
 
 /**
  * Component to show skeleton of order card
@@ -12,18 +12,18 @@ const OrderCardSkeleton = () => (
     <View style={styles.row}>
       <View style={styles.details}>
         <SkeletonPlaceholder>
-          <View style={styles.name} />
+          <View style={styles.name}/>
         </SkeletonPlaceholder>
         <SkeletonPlaceholder>
-          <View style={styles.date} />
+          <View style={styles.date}/>
         </SkeletonPlaceholder>
       </View>
       <View style={styles.statusContainer}>
         <SkeletonPlaceholder>
-          <View style={styles.label} />
+          <View style={styles.label}/>
         </SkeletonPlaceholder>
         <SkeletonPlaceholder>
-          <View style={styles.status} />
+          <View style={styles.status}/>
         </SkeletonPlaceholder>
       </View>
     </View>
