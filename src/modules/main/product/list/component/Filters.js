@@ -1,59 +1,74 @@
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import React, {memo, useEffect} from 'react';
+import React, {memo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
-import {CheckBox, Divider, Text, useTheme} from 'react-native-elements';
-import {useSelector} from 'react-redux';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Divider, Text, useTheme} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
 import ClearButton from '../../../../../components/button/ClearButton';
 import OutlineButton from '../../../../../components/button/OutlineButton';
-import InputField from '../../../../../components/input/InputField';
 import {appStyles} from '../../../../../styles/styles';
+import {theme} from '../../../../../utils/theme';
+import {
+  clearFiltersOnly,
+  updateFilters,
+} from '../../../../../redux/filter/actions';
+import ContainButton from '../../../../../components/button/ContainButton';
 
 /**
  * Component to render filters screen
  * @param setCount:function to set items count
- * @param closeRBSheet:function used to close filters sheet
- * @param providers:list of providers selected by user
- * @param setProviders:function to set providers selected by user
- * @param categories:list of providers selected by user
- * @param setCategories:function to set providers selected by user
  * @constructor
  * @returns {JSX.Element}
  */
-const Filters = ({
-  selectedSortMethod,
-  closeRBSheet,
-  apiInProgress,
-  providers,
-  setProviders,
-  categories,
-  setCategories,
-  min,
-  max,
-  setMin,
-  setMax,
-  onApply,
-  onClear,
-  clearInProgress,
-}) => {
+const Filters = ({closeRBSheet, apiInProgress}) => {
   const {theme} = useTheme();
-
+  const dispatch = useDispatch();
   const {colors} = theme;
-
   const {t} = useTranslation();
 
-  const {filters} = useSelector(({filterReducer}) => filterReducer);
+  const {filters, selectedProviders, selectedCategories, maxPrice, minPrice} =
+    useSelector(({filterReducer}) => filterReducer);
 
-  console.log(JSON.stringify(filters, undefined, 4));
+  const [providers, setProviders] = useState(selectedProviders);
+  const [categories, setCategories] = useState(selectedCategories);
+  const [rangeMax, setRangeMax] = useState(maxPrice);
+  const [rangeMin, setRangeMin] = useState(minPrice);
+
+  const applyFilters = () => {
+    const payload = {
+      selectedProviders: providers,
+      selectedCategories: categories,
+      maxPrice: rangeMax,
+      minPrice: rangeMin,
+    };
+
+    dispatch(updateFilters(payload));
+    closeRBSheet();
+  };
+
+  const clearFilter = () => {
+    dispatch(clearFiltersOnly());
+    closeRBSheet();
+  };
 
   /**
    * function handles click event of checkbox in providers list
    * @param item: selected provider
    * @param index:index of  selected provider
    */
-  const onProviderCheckBoxPress = (item, index) => {
+  const onProviderUpdated = (item, index) => {
     let providerList = providers.slice();
-    index > -1 ? providerList.splice(index, 1) : providerList.push(item.id);
+    if (index > -1) {
+      providerList.splice(index, 1);
+    } else {
+      providerList.push(item.id);
+    }
     setProviders(providerList);
   };
 
@@ -62,9 +77,13 @@ const Filters = ({
    * @param item: selected category
    * @param index:index of  selected category
    */
-  const onCategoryCheckBoxPress = (item, index) => {
+  const onCategoryUpdated = (item, index) => {
     let categoryList = categories.slice();
-    index > -1 ? categoryList.splice(index, 1) : categoryList.push(item.id);
+    if (index > -1) {
+      categoryList.splice(index, 1);
+    } else {
+      categoryList.push(item.id);
+    }
     setCategories(categoryList);
   };
 
@@ -73,18 +92,9 @@ const Filters = ({
    * @param val: selected range
    */
   const handleValueChange = val => {
-    setMax(val[1]);
-    setMin(val[0]);
+    setRangeMax(val[1]);
+    setRangeMin(val[0]);
   };
-
-  useEffect(() => {
-    if (filters) {
-      if (filters.minPrice && filters.maxPrice) {
-        setMax(max === 0 ? filters.maxPrice : max);
-        setMin(min === 0 ? filters.minPrice : min);
-      }
-    }
-  }, [filters]);
 
   return (
     <View style={appStyles.container}>
@@ -103,92 +113,59 @@ const Filters = ({
       filters.maxPrice ? (
         <View style={appStyles.container}>
           <ScrollView>
-            {filters.providers && filters.providers.length > 0 && (
+            {filters?.providers?.length > 0 && (
               <>
                 <Text style={styles.text}>
                   {t('main.product.filters.providers')}
                 </Text>
 
-                {filters.providers.map(item => {
+                {filters?.providers?.map(item => {
                   const index = providers.findIndex(one => one === item.id);
                   return (
-                    <CheckBox
+                    <TouchableOpacity
                       key={item.id}
-                      title={item.name}
-                      checked={index > -1}
-                      onPress={() => onProviderCheckBoxPress(item, index)}
-                      containerStyle={[
-                        styles.containerStyle,
-                        {
-                          backgroundColor: colors.backgroundColor,
-                        },
+                      style={[
+                        styles.button,
+                        index > -1 ? styles.buttonActive : styles.normal,
                       ]}
-                      wrapperStyle={styles.wrapperStyle}
-                    />
+                      onPress={() => onProviderUpdated(item, index)}>
+                      <Text>{item.name}</Text>
+                    </TouchableOpacity>
                   );
                 })}
               </>
             )}
 
-            {filters.categories && filters.categories.length > 0 && (
+            {filters?.categories?.length > 0 && (
               <>
                 <Text style={styles.text}>
                   {t('main.product.filters.categories')}
                 </Text>
-                {filters.categories.map(item => {
+                {filters?.categories?.map(item => {
                   const index = categories.findIndex(one => one === item.id);
                   return (
-                    <CheckBox
+                    <TouchableOpacity
                       key={item.id}
-                      title={item.name}
-                      checked={index > -1}
-                      onPress={() => onCategoryCheckBoxPress(item, index)}
-                    />
+                      style={[
+                        styles.button,
+                        index > -1 ? styles.buttonActive : styles.normal,
+                      ]}
+                      onPress={() => onCategoryUpdated(item, index)}>
+                      <Text>{item.name}</Text>
+                    </TouchableOpacity>
                   );
                 })}
               </>
             )}
             <View style={styles.container}>
-              {filters.minPrice &&
-                filters.maxPrice &&
+              {filters.hasOwnProperty('minPrice') &&
+                filters.hasOwnProperty('maxPrice') &&
                 filters.minPrice !== filters.maxPrice && (
                   <>
                     <Text style={styles.price}>
                       {t('main.product.filters.price_range')}
                     </Text>
 
-                    <View style={styles.applyButton}>
-                      <View style={styles.amountContainer}>
-                        <InputField
-                          label={t('main.product.filters.min')}
-                          value={`${min}`}
-                          onChangeText={value => {
-                            if (value > filters.minPrice) {
-                              setMin(Number(value));
-                            } else {
-                              setMin(0);
-                            }
-                          }}
-                          keyboardType={'numeric'}
-                          renderErrorMessage={false}
-                        />
-                      </View>
-                      <View style={styles.amountContainer}>
-                        <InputField
-                          label={t('main.product.filters.max')}
-                          value={`${max}`}
-                          onChangeText={value => {
-                            if (value < filters.maxPrice) {
-                              setMax(Number(value));
-                            } else {
-                              setMax(filters.maxPrice);
-                            }
-                          }}
-                          keyboardType={'numeric'}
-                          renderErrorMessage={false}
-                        />
-                      </View>
-                    </View>
                     <MultiSlider
                       selectedStyle={{
                         backgroundColor: colors.accentColor,
@@ -199,13 +176,19 @@ const Filters = ({
                         {backgroundColor: colors.accentColor},
                       ]}
                       trackStyle={styles.trackStyle}
-                      values={[min, max]}
-                      sliderLength={Dimensions.get('window').width - 40}
+                      values={[rangeMin, rangeMax]}
+                      sliderLength={Dimensions.get('window').width - 60}
                       onValuesChange={handleValueChange}
-                      min={filters.minPrice}
-                      max={filters.maxPrice}
-                      step={1}
+                      min={Math.floor(filters.minPrice)}
+                      max={Math.ceil(filters.maxPrice)}
+                      step={Math.round(
+                        (filters.maxPrice - filters.minPrice) / 100,
+                      )}
                     />
+                    <View style={styles.sliderText}>
+                      <Text>{rangeMin}</Text>
+                      <Text>{rangeMax}</Text>
+                    </View>
                   </>
                 )}
             </View>
@@ -214,21 +197,17 @@ const Filters = ({
             <View style={styles.amountContainer}>
               <OutlineButton
                 title={t('main.product.filters.clear')}
-                loading={clearInProgress}
-                onPress={() => {
-                  onClear(selectedSortMethod, setMax, setMin);
-                }}
+                disabled={apiInProgress}
+                onPress={clearFilter}
                 color={colors.accentColor}
               />
             </View>
             <View style={styles.amountContainer}>
-              <OutlineButton
+              <ContainButton
                 title={t('main.product.filters.apply_title')}
-                color={colors.accentColor}
                 loading={apiInProgress}
-                onPress={() => {
-                  onApply(selectedSortMethod);
-                }}
+                disabled={apiInProgress}
+                onPress={applyFilters}
               />
             </View>
           </View>
@@ -253,18 +232,19 @@ const styles = StyleSheet.create({
   },
   text: {fontSize: 18, fontWeight: '700', marginVertical: 8, marginLeft: 10},
   container: {padding: 10},
-  sortByContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-  },
   amountContainer: {
     width: 100,
   },
   emptyContainer: {alignItems: 'center', justifyContent: 'center'},
   price: {fontSize: 18, fontWeight: '700', marginVertical: 8},
-  amount: {fontSize: 16, fontWeight: '600', marginBottom: 8},
-  sliderContainer: {paddingHorizontal: 10, alignSelf: 'center'},
+  sliderText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  sliderContainer: {marginHorizontal: 24, alignSelf: 'center'},
   applyButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -285,6 +265,17 @@ const styles = StyleSheet.create({
   },
   markerStyle: {height: 21, width: 21},
   button: {
-    width: 150,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: theme.colors.accentColor,
+    padding: 12,
+    marginBottom: 12,
+    marginHorizontal: 8,
+  },
+  buttonActive: {
+    backgroundColor: '#C3E1F6FF',
+  },
+  normal: {
+    backgroundColor: 'white',
   },
 });

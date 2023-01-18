@@ -1,13 +1,35 @@
 import React, {useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Divider, Text, withTheme} from 'react-native-elements';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
-import {cleanFormData, half, threeForth} from '../../../../../../utils/utils';
+
 import Filters from '../Filters';
 import SortMenu from './SortMenu';
+import {PRODUCT_SORTING} from '../../../../../../utils/Constants';
+
+const sortOptions = [
+  {
+    name: 'main.product.filters.price_high_to_low',
+    value: PRODUCT_SORTING.PRICE_HIGH_TO_LOW,
+  },
+  {
+    name: 'main.product.filters.price_low_to_high',
+    value: PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
+  },
+  {
+    name: 'main.product.filters.ratings_high_to_low',
+    value: PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
+  },
+  {
+    name: 'main.product.filters.ratings_low_to_high',
+    value: PRODUCT_SORTING.RATINGS_LOW_TO_HIGH,
+  },
+];
+
+const windowHeight = Dimensions.get('window').height;
 
 /**
  * Component to show sort and filter on header of products screen
@@ -17,37 +39,16 @@ import SortMenu from './SortMenu';
  * @constructor
  * @returns {JSX.Element}
  */
-const SortAndFilter = ({
-  theme,
-  setCount,
-  appliedFilters,
-  setAppliedFilters,
-  pageNumber,
-  getProductsList,
-}) => {
+const SortAndFilter = ({theme, setCount, appliedFilters, getProductsList}) => {
   const {colors} = theme;
-
-  const [selectedSortMethod, setSelectedSortMethod] = useState(null);
-
   const {t} = useTranslation();
-
-  const [providers, setProviders] = useState([]);
-
-  const [min, setMin] = useState(0);
-
-  const [max, setMax] = useState(0);
-
-  const [categories, setCategories] = useState([]);
-
-  const refRBSheet = useRef();
-
-  const refSortSheet = useRef();
 
   const [apiInProgress, setApiInProgress] = useState(false);
 
-  const [clearInProgress, setClearInProgress] = useState(false);
+  const refRBSheet = useRef();
+  const refSortSheet = useRef();
 
-  const {messageId, transactionId, filters} = useSelector(
+  const {messageId, transactionId, filters, selectedSortOption} = useSelector(
     ({filterReducer}) => filterReducer,
   );
 
@@ -78,23 +79,13 @@ const SortAndFilter = ({
   /**
    * function handles click event of apply button
    * it request list of products with selected filter params
-   * @param sortMethod:selected sort method
    * @returns {Promise<void>}
    */
-  const onApply = async sortMethod => {
+  const onApply = async () => {
     setApiInProgress(true);
-    const filterObject = cleanFormData({
-      sortMethod: sortMethod,
-      range: {priceMin: min, priceMax: max},
-      providers: providers,
-      categories: categories,
-    });
-    setAppliedFilters(filterObject);
-    getProductsList(messageId, transactionId, 1, filterObject)
+    getProductsList(messageId, transactionId)
       .then(() => {
         setApiInProgress(false);
-        pageNumber.current = 1;
-        setAppliedFilters(filterObject);
         closeRBSheet();
         closeSortSheet();
       })
@@ -103,37 +94,14 @@ const SortAndFilter = ({
         closeRBSheet();
         closeSortSheet();
       });
-    setSelectedSortMethod(sortMethod);
   };
 
-  /**
-   * function handles click event of apply button
-   * it request list of products with selected filter params
-   * @param sortMethod:selected sort method
-   * @returns {Promise<void>}
-   */
-  const onClear = async sortMethod => {
-    setClearInProgress(true);
-    const filterObject = cleanFormData({
-      sortMethod: sortMethod,
-    });
-    getProductsList(messageId, transactionId, 1, filterObject)
-      .then(() => {
-        setClearInProgress(false);
-        pageNumber.current = 1;
-        setAppliedFilters(filterObject);
-        closeRBSheet();
-        setProviders([]);
-        setCategories([]);
-        setMax(filters.maxPrice);
-        setMin(filters.minPrice);
-      })
-      .catch(() => {
-        setClearInProgress(false);
-        closeRBSheet();
-      });
-    setSelectedSortMethod(sortMethod);
-  };
+  let sheetHeight =
+    (filters.providers.length + filters.categories.length) * 40 + 350;
+
+  if (windowHeight < sheetHeight) {
+    sheetHeight = windowHeight - 100;
+  }
 
   return (
     <>
@@ -143,27 +111,13 @@ const SortAndFilter = ({
         <TouchableOpacity onPress={openSortSheet}>
           <View style={styles.row}>
             <Text style={[styles.text, {color: colors.accentColor}]}>
-              {selectedSortMethod
-                ? selectedSortMethod
+              {selectedSortOption
+                ? selectedSortOption
                 : t('main.product.sort_products_label')}
             </Text>
-            <Icon name="pencil-square" size={14} color={colors.accentColor} />
+            <Icon name="sort" size={14} color={colors.accentColor} />
           </View>
         </TouchableOpacity>
-        <RBSheet
-          ref={refSortSheet}
-          height={half}
-          customStyles={{
-            container: styles.rbSheet,
-          }}>
-          <SortMenu
-            closeSortSheet={closeSortSheet}
-            apiInProgress={apiInProgress}
-            setCount={setCount}
-            selectedSortMethod={selectedSortMethod}
-            onApply={onApply}
-          />
-        </RBSheet>
         <Divider orientation="vertical" width={1} />
         <TouchableOpacity onPress={openRBSheet}>
           <View style={styles.row}>
@@ -176,30 +130,32 @@ const SortAndFilter = ({
             <Icon name="filter" size={14} color={colors.accentColor} />
           </View>
         </TouchableOpacity>
-        <RBSheet
-          ref={refRBSheet}
-          height={threeForth}
-          customStyles={{
-            container: styles.rbSheet,
-          }}>
-          <Filters
-            closeRBSheet={closeRBSheet}
-            providers={providers}
-            setProviders={setProviders}
-            setCategories={setCategories}
-            categories={categories}
-            selectedSortMethod={selectedSortMethod}
-            min={min}
-            setMin={setMin}
-            max={max}
-            setMax={setMax}
-            onApply={onApply}
-            onClear={onClear}
-            apiInProgress={apiInProgress}
-            clearInProgress={clearInProgress}
-          />
-        </RBSheet>
       </View>
+
+      <RBSheet
+        ref={refSortSheet}
+        height={sortOptions.length * 40 + 180}
+        customStyles={{
+          container: styles.rbSheet,
+        }}>
+        <SortMenu
+          sortOptions={sortOptions}
+          closeSortSheet={closeSortSheet}
+          apiInProgress={apiInProgress}
+          setCount={setCount}
+        />
+      </RBSheet>
+      <RBSheet
+        ref={refRBSheet}
+        height={sheetHeight}
+        customStyles={{
+          container: styles.rbSheet,
+        }}>
+        <Filters
+          closeRBSheet={closeRBSheet}
+          apiInProgress={apiInProgress}
+        />
+      </RBSheet>
     </>
   );
 };
@@ -207,45 +163,7 @@ const SortAndFilter = ({
 export default withTheme(SortAndFilter);
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-  },
-  subContainer: {flexDirection: 'row', alignItems: 'center'},
-  locationContainer: {paddingBottom: 10},
-  textContainer: {marginLeft: 8, flexShrink: 1},
-  inputContainerStyle: {
-    borderRightWidth: 1,
-    borderBottomWidth: 1,
-    borderTopWidth: 1,
-    borderRadius: 10,
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  containerStyle: {
-    backgroundColor: 'transparent',
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-    padding: 0,
-    zIndex: -1,
-  },
-  filter: {
-    paddingVertical: 8,
-    paddingHorizontal: 18,
-    borderWidth: 1,
-    borderRadius: 10,
-    marginLeft: 5,
-  },
   rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
-  inputStyle: {fontSize: 16},
-  menu: {
-    paddingHorizontal: 15,
-    paddingVertical: 11,
-    borderTopLeftRadius: 10,
-    borderBottomLeftRadius: 10,
-  },
   sortFilterContainer: {flexDirection: 'row', justifyContent: 'space-evenly'},
   text: {paddingVertical: 8, fontWeight: '700', marginRight: 8},
   row: {

@@ -1,56 +1,43 @@
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, View} from 'react-native';
-import {CheckBox, Divider, withTheme} from 'react-native-elements';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Divider, withTheme} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
+
 import ClearButton from '../../../../../../components/button/ClearButton';
 import ContainButton from '../../../../../../components/button/ContainButton';
-import {PRODUCT_SORTING} from '../../../../../../utils/Constants';
-
-const list = [
-  {
-    name: 'main.product.filters.price_high_to_low',
-    value: PRODUCT_SORTING.PRICE_HIGH_TO_LOW,
-  },
-  {
-    name: 'main.product.filters.price_low_to_high',
-    value: PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
-  },
-  {
-    name: 'main.product.filters.ratings_high_to_low',
-    value: PRODUCT_SORTING.RATINGS_HIGH_TO_LOW,
-  },
-  {
-    name: 'main.product.filters.ratings_low_to_high',
-    value: PRODUCT_SORTING.RATINGS_LOW_TO_HIGH,
-  },
-];
+import {theme} from '../../../../../../utils/theme';
+import {updateSortOption} from '../../../../../../redux/filter/actions';
+import OutlineButton from '../../../../../../components/button/OutlineButton';
 
 /**
  * Component to render filters screen
  * @param setCount:function to set items count
  * @param closeSortSheet:function used to close sort sheet
- * @param selectedSortMethod:sort method selected by user
  * @constructor
  * @returns {JSX.Element}
  */
-const SortMenu = ({
-                    theme,
-                    closeSortSheet,
-                    selectedSortMethod,
-                    apiInProgress,
-                    onApply,
-                  }) => {
+const SortMenu = ({theme, sortOptions, closeSortSheet, apiInProgress}) => {
+  const dispatch = useDispatch();
   const {colors} = theme;
-
   const {t} = useTranslation();
+  const {selectedSortOption} = useSelector(({filterReducer}) => filterReducer);
 
-  const [sortingMethod, setSortingMethod] = useState(
-    PRODUCT_SORTING.PRICE_LOW_TO_HIGH,
-  );
+  const [sortingMethod, setSortingMethod] = useState(null);
+
+  const applyFilters = () => {
+    dispatch(updateSortOption(sortingMethod));
+    closeSortSheet();
+  };
+
+  const clearFilter = () => {
+    dispatch(updateSortOption(null));
+    closeSortSheet();
+  };
 
   useEffect(() => {
-    setSortingMethod(selectedSortMethod);
-  }, []);
+    setSortingMethod(selectedSortOption);
+  }, [selectedSortOption]);
 
   return (
     <View>
@@ -61,37 +48,46 @@ const SortMenu = ({
           textColor={colors.accentColor}
         />
       </View>
-      <Divider style={styles.divider}/>
+      <Divider style={styles.divider} />
       <View>
-        {list.map(item => {
+        {sortOptions.map(item => {
           return (
-            <CheckBox
+            <TouchableOpacity
               key={item.value}
-              title={t(item.name)}
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              checked={item.value === sortingMethod}
-              containerStyle={[
-                styles.containerStyle,
-                {
-                  backgroundColor: colors.backgroundColor,
-                },
+              style={[
+                styles.button,
+                sortingMethod === item.value
+                  ? styles.buttonActive
+                  : styles.normal,
               ]}
-              onPress={() => {
-                setSortingMethod(item.value);
-              }}
-            />
+              onPress={() => setSortingMethod(item.value)}>
+              <Text>{t(item.name)}</Text>
+            </TouchableOpacity>
           );
         })}
       </View>
-      <View style={styles.buttonContainer}>
-        <ContainButton
-          title={t('main.product.filters.apply_title')}
-          loading={apiInProgress}
-          onPress={() => {
-            onApply(sortingMethod);
-          }}
-        />
+
+      <View style={styles.actionContainer}>
+        {(sortingMethod || selectedSortOption) && (
+          <View style={styles.buttonContainer}>
+            <OutlineButton
+              disabled={apiInProgress}
+              onPress={clearFilter}
+              title={t('main.product.filters.clear')}
+            />
+          </View>
+        )}
+
+        {sortingMethod && (
+          <View style={styles.buttonContainer}>
+            <ContainButton
+              disabled={apiInProgress}
+              title={t('main.product.filters.apply_title')}
+              loading={apiInProgress}
+              onPress={applyFilters}
+            />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -107,11 +103,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   divider: {marginBottom: 10},
+  actionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
   buttonContainer: {
-    alignSelf: 'flex-end',
-    marginVertical: 20,
     width: 120,
     marginHorizontal: 10,
   },
-  containerStyle: {borderWidth: 0, margin: 0},
+  button: {
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: theme.colors.accentColor,
+    padding: 12,
+    marginBottom: 12,
+    marginHorizontal: 8,
+  },
+  buttonActive: {
+    backgroundColor: '#C3E1F6FF',
+  },
+  normal: {
+    backgroundColor: 'white',
+  },
 });

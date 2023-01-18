@@ -2,22 +2,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useRef, useState} from 'react';
 
 import {saveProducts} from '../../../../redux/product/actions';
-import {
-  clearFilters,
-  saveFilters,
-  saveIds,
-} from '../../../../redux/filter/actions';
+import {clearFilters, saveFilters, saveIds,} from '../../../../redux/filter/actions';
 import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
 import {getData, postData} from '../../../../utils/api';
-import {
-  GET_MESSAGE_ID,
-  GET_PRODUCTS,
-  SERVER_URL,
-} from '../../../../utils/apiUtilities';
+import {GET_MESSAGE_ID, GET_PRODUCTS, SERVER_URL,} from '../../../../utils/apiUtilities';
 import {getStoredData} from '../../../../utils/storage';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
-import {cleanFormData} from '../../../../utils/utils';
 
 export default () => {
   const listCount = useRef(0);
@@ -30,98 +21,85 @@ export default () => {
   const [currentAddress, setCurrentAddress] = useState(null);
   const [apiInProgress, setApiInProgress] = useState(false);
   const {token} = useSelector(({authReducer}) => authReducer);
-  const {messageId, transactionId} = useSelector(
-    ({filterReducer}) => filterReducer,
-  );
+  const {
+    messageId,
+    transactionId,
+    selectedSortOption,
+    selectedProviders,
+    selectedCategories,
+    maxPrice,
+    minPrice,
+  } = useSelector(({filterReducer}) => filterReducer);
 
   /**
    * function request products list with given message id and transaction id
    * @param id:message id of search result
    * @param transId:transaction id of search result
    * @param page
-   * @param filters
    */
-  const getProductsList = async (
-    id,
-    transId,
-    page = pageNumber.current,
-    filters,
-  ) => {
-    try {
-      let url = null;
+  const getProductsList = async (id, transId, page = 1) => {
+    if (id) {
+      try {
+        let url = `${SERVER_URL}${GET_PRODUCTS}${id}&pageNumber=${page}&limit=10`;
 
-      if (filters) {
-        const {sortMethod, providers, categories, range} = filters;
-        let sortField = 'price';
-        let sortOrder = 'desc';
-
-        switch (sortMethod) {
+        switch (selectedSortOption) {
           case PRODUCT_SORTING.RATINGS_HIGH_TO_LOW:
-            sortOrder = 'desc';
-            sortField = 'rating';
+            url = `${url}&sortField=rating&sortOrder=desc`;
             break;
 
           case PRODUCT_SORTING.RATINGS_LOW_TO_HIGH:
-            sortOrder = 'asc';
-            sortField = 'rating';
+            url = `${url}&sortField=rating&sortOrder=asc`;
             break;
 
           case PRODUCT_SORTING.PRICE_LOW_TO_HIGH:
-            sortOrder = 'asc';
-            sortField = 'price';
+            url = `${url}&sortField=price&sortOrder=asc`;
+            break;
+
+          case PRODUCT_SORTING.PRICE_HIGH_TO_LOW:
+            url = `${url}&sortField=price&sortOrder=desc`;
+            break;
+
+          default:
             break;
         }
 
-        let params = '';
-        if (range) {
-          const filterData = cleanFormData({
-            priceMin: range.priceMin ? range.priceMin : null,
-            priceMax: range.priceMax ? range.priceMax : null,
-          });
-
-          let filterParams = Object.keys(filterData).map(
-            key => `&${key}=${filterData[key]}`,
-          );
-          params = filterParams.toString().replace(/,/g, '');
+        if (selectedProviders.length > 0) {
+          url = `${url}&providerIds=${selectedProviders.toString()}`;
         }
 
-        if (providers && providers.length > 0) {
-          params = params + `&providerIds=${providers.toString()}`;
+        if (selectedCategories.length > 0) {
+          url = `${url}&categoryIds=${selectedCategories.toString()}`;
         }
 
-        if (categories && categories.length > 0) {
-          params = params + `&categoryIds=${categories.toString()}`;
+        if (maxPrice !== 0) {
+          url = `${url}&priceMin=${minPrice}&priceMax=${maxPrice}`;
         }
 
-        url = params
-          ? `${SERVER_URL}${GET_PRODUCTS}${id}${params}&sortField=${sortField}&sortOrder=${sortOrder}&pageNumber=${page}&limit=10`
-          : `${SERVER_URL}${GET_PRODUCTS}${id}&sortField=${sortField}&sortOrder=${sortOrder}&pageNumber=${page}&limit=10`;
-      } else {
-        url = `${SERVER_URL}${GET_PRODUCTS}${id}&pageNumber=${page}&limit=10`;
-      }
-      const {data} = await getData(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (data.message.catalogs.length > 0) {
-        const productsList = data.message.catalogs.map(item => {
-          return Object.assign({}, item, {
-            quantity: 0,
-            transaction_id: transId,
-            city: currentAddress?.address?.city,
-            state: currentAddress?.address?.state,
-          });
+        const {data} = await getData(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
-        listCount.current = productsList.length;
-        count.current = data.message.count;
+        if (data.message.catalogs.length > 0) {
+          const productsList = data.message.catalogs.map(item => {
+            return Object.assign({}, item, {
+              quantity: 0,
+              transaction_id: transId,
+              city: currentAddress?.address?.city,
+              state: currentAddress?.address?.state,
+            });
+          });
 
-        dispatch(saveProducts(productsList));
+          listCount.current = productsList.length;
+          count.current = data.message.count;
+
+          dispatch(saveProducts(productsList));
+        }
+      } catch (error) {
+        handleApiError(error);
+        throw error;
       }
-    } catch (error) {
-      handleApiError(error);
     }
   };
 
@@ -178,6 +156,16 @@ export default () => {
       }
     };
   }, [messageId]);
+
+  useEffect(() => {
+    getProductsList(messageId, transactionId).then(r => {});
+  }, [
+    selectedProviders,
+    selectedCategories,
+    selectedSortOption,
+    maxPrice,
+    minPrice,
+  ]);
 
   /**
    * Function is used to handle onEndEditing event of searchbar
@@ -239,7 +227,8 @@ export default () => {
   };
 
   return {
-    onSearch,
     apiInProgress,
+    onSearch,
+    getProductsList,
   };
 };

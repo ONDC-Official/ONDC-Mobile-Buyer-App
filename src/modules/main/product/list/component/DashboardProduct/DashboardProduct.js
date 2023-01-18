@@ -9,6 +9,7 @@ import {useDispatch} from 'react-redux';
 import {addItemToCart, removeItemFromCart, updateItemInCart,} from '../../../../../../redux/actions';
 import {appStyles} from '../../../../../../styles/styles';
 import {showInfoToast} from '../../../../../../utils/utils';
+
 const image = require('../../../../../../assets/noImage.png');
 
 /**

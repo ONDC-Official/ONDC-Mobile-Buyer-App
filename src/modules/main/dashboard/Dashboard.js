@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, SafeAreaView, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Avatar} from 'react-native-elements';
 import {useSelector} from 'react-redux';
@@ -71,7 +64,6 @@ const Dashboard = ({navigation}) => {
 const styles = StyleSheet.create({
   searchContainer: {
     backgroundColor: 'white',
-    paddingBottom: 16,
   },
   header: {
     flexDirection: 'row',
