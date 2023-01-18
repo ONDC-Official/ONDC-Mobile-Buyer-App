@@ -23,7 +23,7 @@ const image = require('../../../../../../assets/noImage.png');
  * @constructor
  * @returns {JSX.Element}
  */
-const DashboardProduct = ({theme, navigation, item}) => {
+const DashboardProduct = ({theme, navigation, item, imageBackgroundColor}) => {
   const {colors} = theme;
 
   const dispatch = useDispatch();
@@ -32,8 +32,17 @@ const DashboardProduct = ({theme, navigation, item}) => {
    * function handles click event add button
    */
   const addItem = () => {
-    const product = Object.assign({}, item, {quantity: 1});
-    dispatch(addItemToCart(product));
+    let product = Object.assign({}, item, {quantity: 1});
+
+    if (item?.hasOwnProperty('quantityMeta')) {
+      if (item?.quantityMeta?.available?.count > 1) {
+        dispatch(addItemToCart(product));
+      } else {
+        showInfoToast('Product not available at the moment please try again');
+      }
+    } else {
+      dispatch(addItemToCart(product));
+    }
   };
 
   /**
@@ -43,10 +52,20 @@ const DashboardProduct = ({theme, navigation, item}) => {
     const newQuantity = increase ? item.quantity + 1 : item.quantity - 1;
     let product = Object.assign({}, item, {quantity: newQuantity});
 
-    if (newQuantity === 0) {
-      dispatch(removeItemFromCart(product));
+    if (newQuantity > item?.quantityMeta?.available?.count) {
+      showInfoToast(
+        `Only ${item?.quantityMeta?.available?.count} unit(s) of this product are available at the moment`,
+      );
+    } else if (newQuantity > item?.quantityMeta?.maximum?.count) {
+      showInfoToast(
+        `Only ${item?.quantityMeta?.maximum?.count} unit(s) of this product can be added per order`,
+      );
     } else {
-      dispatch(updateItemInCart(product));
+      if (newQuantity === 0) {
+        dispatch(removeItemFromCart(product));
+      } else {
+        dispatch(updateItemInCart(product));
+      }
     }
   };
 
@@ -56,6 +75,8 @@ const DashboardProduct = ({theme, navigation, item}) => {
       : null;
 
   const cost = item.price.value ? item.price.value : item.price.maximum_value;
+
+  const outOfStock = item?.quantityMeta?.available?.count === 0;
 
   return (
     <TouchableOpacity
@@ -69,7 +90,7 @@ const DashboardProduct = ({theme, navigation, item}) => {
         <View style={styles.row}>
           <FastImage
             source={uri ? {uri} : image}
-            style={styles.image}
+            style={[styles.image, {backgroundColor: imageBackgroundColor}]}
             resizeMode={'contain'}
           />
           <View style={[appStyles.container, styles.details]}>
@@ -85,36 +106,49 @@ const DashboardProduct = ({theme, navigation, item}) => {
               <Text style={styles.amount}>
                 ₹{Number.isInteger(cost) ? cost : parseFloat(cost).toFixed(2)}
               </Text>
-              {item.quantity < 1 ? (
-                <Button
-                  mode="outlined"
-                  style={{width: 100}}
-                  onPress={() => {
-                    showInfoToast('Added to cart');
-                    addItem(item);
-                  }}>
-                  Add
-                </Button>
-              ) : (
-                <View style={[styles.quantityDisplayButton]}>
-                  <IconButton
-                    icon="minus"
-                    iconColor="white"
-                    style={{backgroundColor: colors.primary}}
-                    onPress={() => updateQuantity(false)}
-                  />
-                  <Text>{item.quantity}</Text>
-                  <IconButton
-                    icon="plus"
-                    iconColor="white"
-                    style={{backgroundColor: colors.primary}}
-                    onPress={() => updateQuantity(true)}
-                  />
-                </View>
-              )}
+              {!outOfStock &&
+                (item.quantity < 1 ? (
+                  <Button
+                    mode="outlined"
+                    style={{width: 100}}
+                    onPress={() => {
+                      showInfoToast('Added to cart');
+                      addItem(item);
+                    }}>
+                    Add
+                  </Button>
+                ) : (
+                  <View style={[styles.quantityDisplayButton]}>
+                    <IconButton
+                      icon="minus"
+                      iconColor="white"
+                      style={{backgroundColor: colors.primary}}
+                      onPress={() => updateQuantity(false)}
+                    />
+                    <Text>{item.quantity}</Text>
+                    <IconButton
+                      icon="plus"
+                      iconColor="white"
+                      style={{backgroundColor: colors.primary}}
+                      onPress={() => updateQuantity(true)}
+                    />
+                  </View>
+                ))}
             </View>
           </View>
         </View>
+        {outOfStock && (
+          <View style={styles.outOfStock}>
+            <Text
+              style={{
+                color: theme.colors.error,
+                fontSize: 16,
+                fontWeight: 'bold',
+              }}>
+              Out of stock
+            </Text>
+          </View>
+        )}
       </Card>
     </TouchableOpacity>
   );
@@ -156,4 +190,14 @@ const styles = StyleSheet.create({
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
   title: {fontSize: 16, fontWeight: '700', flex: 1},
   iconContainer: {marginRight: 12},
+  outOfStock: {
+    position: 'absolute',
+    height: '100%',
+    width: 100,
+    backgroundColor: '#fff',
+    opacity: 0.8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
 });

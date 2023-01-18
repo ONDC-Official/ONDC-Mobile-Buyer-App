@@ -16,7 +16,7 @@ import filters from './component/Filters';
  * @constructor
  * @returns {JSX.Element}
  */
-const Products = ({theme}) => {
+const Products = ({theme, imageBackgroundColor}) => {
   const navigation = useNavigation();
   const {products} = useSelector(({productReducer}) => productReducer);
   const {cartItems, subTotal} = useSelector(({cartReducer}) => cartReducer);
@@ -32,7 +32,11 @@ const Products = ({theme}) => {
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <ProductCardSkeleton item={item} />
     ) : (
-      <DashboardProduct item={item} navigation={navigation} confirmed={true} />
+      <DashboardProduct
+        imageBackgroundColor={imageBackgroundColor}
+        item={item}
+        navigation={navigation}
+      />
     );
   };
 

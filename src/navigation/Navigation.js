@@ -9,6 +9,7 @@ import AddDefaultAddress from '../modules/main/profile/AddDefaultAddress';
 import Dashboard from '../modules/main/dashboard/Dashboard';
 import AddressList from '../modules/main/dashboard/components/AddressList';
 import Cart from "../modules/main/cart/Cart";
+import SearchProductList from "../modules/main/product/list/SearchProductList";
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,11 @@ const Navigation = () => {
         <Stack.Screen
           name="Dashboard"
           component={Dashboard}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SearchProductList"
+          component={SearchProductList}
           options={{headerShown: false}}
         />
         <Stack.Screen name="Cart" component={Cart} />

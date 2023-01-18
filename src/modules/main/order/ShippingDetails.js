@@ -330,7 +330,6 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
       }
       eventSource.addEventListener('on_cancel', event => {
         const data = JSON.parse(event.data);
-        console.log(data);
         onCancel(data.messageId)
           .then(() => {})
           .catch(() => {});

@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Searchbar, Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/native';
 
 import {SEARCH_QUERY} from '../../../../../../utils/Constants';
 
-const ProductSearch = ({theme, onSearch}) => {
+const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
+  const navigation = useNavigation();
   const [query, setQuery] = useState('');
   const [searchType, setSearchType] = useState(SEARCH_QUERY.PRODUCT);
   const [visible, setVisible] = useState(false);
@@ -20,6 +22,39 @@ const ProductSearch = ({theme, onSearch}) => {
     hideMenu();
   };
 
+  if (viewOnly) {
+    return (
+      <Pressable
+        style={styles.container}
+        onPress={() => {
+          navigation.navigate('SearchProductList');
+        }}>
+        <Menu
+          anchor={
+            <View
+              style={[styles.menu, {backgroundColor: theme.colors.primary}]}
+              activeOpacity={0.8}>
+              <Text style={{color: theme.colors.surface}}>
+                {searchType} <Icon name="angle-down" size={14} />
+              </Text>
+            </View>
+          }
+        />
+        <View style={styles.searchContainer}>
+          <Searchbar
+            editable={false}
+            round={false}
+            lightTheme
+            placeholder={`Search ${searchType}`}
+            style={styles.search}
+            inputContainerStyle={styles.inputContainerStyle}
+            clearIcon={null}
+            closeIcon={null}
+          />
+        </View>
+      </Pressable>
+    );
+  }
   return (
     <View style={styles.container}>
       <Menu
@@ -45,14 +80,6 @@ const ProductSearch = ({theme, onSearch}) => {
           pressColor={theme.colors.primary}>
           Provider
         </MenuItem>
-        <MenuDivider />
-
-        <MenuItem
-          onPress={() => onSearchTypeChange(SEARCH_QUERY.CATEGORY)}
-          pressColor={theme.colors.primary}>
-          Category
-        </MenuItem>
-        <MenuDivider />
       </Menu>
 
       <View style={styles.searchContainer}>

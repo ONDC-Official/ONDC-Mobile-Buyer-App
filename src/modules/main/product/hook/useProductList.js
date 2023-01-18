@@ -18,7 +18,7 @@ import {getStoredData} from '../../../../utils/storage';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
 
-export default () => {
+export default (category = null) => {
   const listCount = useRef(0);
   const count = useRef(0);
 
@@ -100,7 +100,6 @@ export default () => {
           });
           listCount.current = productsList.length;
           count.current = data.message.count;
-          console.log(JSON.stringify(productsList, undefined, 4));
           dispatch(saveProducts(productsList));
         }
       } catch (error) {
@@ -114,7 +113,6 @@ export default () => {
     let eventSource = null;
 
     if (messageId) {
-      console.log(token);
       eventSource = new RNEventSource(
         `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
         {
@@ -199,16 +197,14 @@ export default () => {
     };
 
     try {
-      switch (selectedSearchOption) {
-        case SEARCH_QUERY.PRODUCT:
-          requestParameters.message.criteria.search_string = query;
-          break;
-        case SEARCH_QUERY.PROVIDER:
-          requestParameters.message.criteria.provider_id = query;
-          break;
-        default:
-          requestParameters.message.criteria.category_id = query;
-          break;
+      if (selectedSearchOption === SEARCH_QUERY.PRODUCT) {
+        requestParameters.message.criteria.search_string = query;
+      } else if (selectedSearchOption === SEARCH_QUERY.PROVIDER) {
+        requestParameters.message.criteria.provider_id = query;
+      }
+
+      if (category) {
+        requestParameters.message.criteria.category_id = category;
       }
 
       const response = await postData(

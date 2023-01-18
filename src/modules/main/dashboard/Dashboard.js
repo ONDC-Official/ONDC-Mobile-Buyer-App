@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -9,15 +15,12 @@ import {appStyles} from '../../../styles/styles';
 import {getUserInitials} from '../../../utils/utils';
 import {getStoredData} from '../../../utils/storage';
 import ProductSearch from '../product/list/component/header/ProductSearch';
-import Products from '../product/list/Products';
-import useProductList from '../product/hook/useProductList';
+import Home from './components/Home';
 
 const Dashboard = ({navigation, theme}) => {
   const isFocused = useIsFocused();
   const [address, setAddress] = useState(null);
   const {name, photoURL} = useSelector(({authReducer}) => authReducer);
-
-  const {onSearch} = useProductList();
 
   useEffect(() => {
     getStoredData('address').then(response => {
@@ -42,10 +45,7 @@ const Dashboard = ({navigation, theme}) => {
               <Icon name={'chevron-down'} color={theme.colors.primary} />
             </TouchableOpacity>
           ) : (
-            <ActivityIndicator
-              size={'small'}
-              color={theme.colors.primary}
-            />
+            <ActivityIndicator size={'small'} color={theme.colors.primary} />
           )}
 
           {photoURL ? (
@@ -58,9 +58,9 @@ const Dashboard = ({navigation, theme}) => {
             />
           )}
         </View>
-        <ProductSearch onSearch={onSearch} />
+        <ProductSearch viewOnly />
       </View>
-      <Products />
+      <Home />
     </SafeAreaView>
   );
 };

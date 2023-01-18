@@ -68,6 +68,8 @@ export const theme = {
     error: '#B00020',
     text: '#333',
     pageBackground: '#f0f0f0',
+    foodAndBeverages: '#E8F0EA',
+    grocery: '#FFF7C0',
   },
   fonts: configureFonts(fontConfig),
 };
