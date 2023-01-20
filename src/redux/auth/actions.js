@@ -23,7 +23,7 @@ export const tryLocalSignIn = (dispatch, navigation) => {
           } else {
             navigation.reset({
               index: 0,
-              routes: [{name: 'AddDefaultAddress'}],
+              routes: [{name: 'AddressList', params: {navigateToDashboard: true}}],
             });
           }
         });

@@ -1,15 +1,11 @@
-import Config from 'react-native-config';
-
-export const BASE_URL = 'https://buyer-ref-app-stage.ondc.org';
-export const SERVER_URL = 'https://buyer-ref-app-stage.ondc.org';
+export const BASE_URL = 'https://buyer-app-preprod.ondc.org';
 export const UPDATE_ORDER = '/clientApis/v1/update';
 export const GET_MESSAGE_ID = '/clientApis/v1/search';
 export const GET_PRODUCTS = '/clientApis/v1/on_search?messageId=';
 export const GET_LOCATION = '/mmi/api/mmi_query?query=';
 export const GET_LOCATION_FROM_LAT_LONG = '/mmi/api/mmi_latlong_info?';
 export const GET_LATLONG = '/mmi/api/mmi_place_info?eloc=';
-export const GET_ADDRESS = '/clientApis/v1/delivery_address';
-export const ADD_ADDRESS = '/clientApis/v1/delivery_address';
+export const DELIVERY_ADDRESS = '/clientApis/v1/delivery_address';
 export const UPDATE_ADDRESS = '/clientApis/v1/update_delivery_address/';
 export const BILLING_ADDRESS = '/clientApis/v1/billing_details';
 export const UPDATE_BILLING_ADDRESS = '/clientApis/v1/update_billing_details/';

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {getData} from '../../../../utils/api';
-import {GET_ADDRESS, SERVER_URL} from '../../../../utils/apiUtilities';
+import {DELIVERY_ADDRESS, BASE_URL} from '../../../../utils/apiUtilities';
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import Address from './Address';
@@ -10,7 +10,7 @@ import {skeletonList} from '../../../../utils/utils';
 import AddressSkeleton from './AddressSkeleton';
 import {Divider, IconButton, withTheme} from 'react-native-paper';
 
-const AddressList = ({navigation, theme}) => {
+const AddressList = ({navigation, theme, route: {params}}) => {
   const {token} = useSelector(({authReducer}) => authReducer);
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState(true);
@@ -24,7 +24,7 @@ const AddressList = ({navigation, theme}) => {
   const getAddressList = async () => {
     try {
       setApiInProgress(true);
-      const {data} = await getData(`${SERVER_URL}${GET_ADDRESS}`, {
+      const {data} = await getData(`${BASE_URL}${DELIVERY_ADDRESS}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -81,7 +81,7 @@ const AddressList = ({navigation, theme}) => {
     return item.hasOwnProperty('isSkeleton') ? (
       <AddressSkeleton />
     ) : (
-      <Address item={item} isCurrentAddress={isSelected} />
+      <Address item={item} isCurrentAddress={isSelected} params={params} />
     );
   };
 

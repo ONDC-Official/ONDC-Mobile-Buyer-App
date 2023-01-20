@@ -1,6 +1,5 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useEffect, useRef, useState} from 'react';
-import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   BackHandler,
@@ -11,14 +10,7 @@ import {
   View,
 } from 'react-native';
 import Config from 'react-native-config';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Divider,
-  Text,
-  withTheme,
-} from 'react-native-paper';
+import {Button, Card, Checkbox, Divider, Text, withTheme,} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
@@ -34,7 +26,7 @@ import {
   INITIALIZE_ORDER,
   ON_CONFIRM_ORDER,
   ON_INITIALIZE_ORDER,
-  SERVER_URL,
+  BASE_URL,
   SIGN_PAYLOAD,
 } from '../../../../utils/apiUtilities';
 import {PAYMENT_METHODS, PAYMENT_OPTIONS} from '../../../../utils/Constants';
@@ -52,7 +44,6 @@ import PaymentSkeleton from './PaymentSkeleton';
  */
 const Payment = ({navigation, theme, route: {params}}) => {
   const {colors} = theme;
-  const {t} = useTranslation();
   const dispatch = useDispatch();
   const {selectedAddress, selectedBillingAddress, confirmationList} = params;
   const error = useRef(null);
@@ -95,7 +86,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const onInitializeOrder = async id => {
     try {
       const {data} = await getData(
-        `${SERVER_URL}${ON_INITIALIZE_ORDER}messageIds=${id}`,
+        `${BASE_URL}${ON_INITIALIZE_ORDER}messageIds=${id}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },
@@ -134,7 +125,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const onConfirmOrder = async id => {
     try {
       const {data} = await getData(
-        `${SERVER_URL}${ON_CONFIRM_ORDER}messageIds=${id}`,
+        `${BASE_URL}${ON_CONFIRM_ORDER}messageIds=${id}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },
@@ -259,7 +250,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       });
 
       const {data} = await postData(
-        `${SERVER_URL}${INITIALIZE_ORDER}`,
+        `${BASE_URL}${INITIALIZE_ORDER}`,
         payload,
         {
           headers: {Authorization: `Bearer ${token}`},
@@ -441,7 +432,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           });
 
           const {data} = await postData(
-            `${SERVER_URL}${CONFIRM_ORDER}`,
+            `${BASE_URL}${CONFIRM_ORDER}`,
             payload,
             {
               headers: {Authorization: `Bearer ${token}`},
@@ -496,7 +487,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       });
 
       const {data} = await postData(
-        `${SERVER_URL}${SIGN_PAYLOAD}`,
+        `${BASE_URL}${SIGN_PAYLOAD}`,
         {payload: payload},
         options,
       );
@@ -589,7 +580,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
       }
       let sources = inItMessageIds.map(messageId => {
         return new RNEventSource(
-          `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
+          `${BASE_URL}/clientApis/events?messageId=${messageId}`,
           {
             headers: {Authorization: `Bearer ${token}`},
           },
@@ -624,7 +615,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
     if (confirmMessageIds) {
       sources = confirmMessageIds.map(messageId => {
         return new RNEventSource(
-          `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
+          `${BASE_URL}/clientApis/events?messageId=${messageId}`,
           {
             headers: {Authorization: `Bearer ${token}`},
           },

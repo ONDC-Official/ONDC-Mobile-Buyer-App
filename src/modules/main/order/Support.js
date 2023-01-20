@@ -1,13 +1,12 @@
 import {Formik} from 'formik';
 import React, {useState} from 'react';
-import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Yup from 'yup';
 import InputField from '../../../components/input/InputField';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {postData} from '../../../utils/api';
-import {CALL, SERVER_URL} from '../../../utils/apiUtilities';
+import {CALL, BASE_URL} from '../../../utils/apiUtilities';
 import {showToastWithGravity} from '../../../utils/utils';
 import {useSelector} from 'react-redux';
 import {Button, Text} from 'react-native-paper';
@@ -28,7 +27,6 @@ const userInfo = {
 const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
   const {colors} = theme;
   const {handleApiError} = useNetworkErrorHandling();
-  const {t} = useTranslation();
   const {token} = useSelector(({authReducer}) => authReducer);
 
   const [callInProgress, setCallInProgress] = useState(false);
@@ -54,7 +52,7 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
       };
       setCallInProgress(true);
       const {data} = await postData(
-        `${SERVER_URL}${CALL}`,
+        `${BASE_URL}${CALL}`,
 
         {
           customer_phone_number: `+91${number}`,

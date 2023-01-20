@@ -1,5 +1,4 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-paper';
 
@@ -12,8 +11,6 @@ import {Text, withTheme} from 'react-native-paper';
  */
 const Details = ({item, theme}) => {
   const {colors} = theme;
-
-  const {t} = useTranslation();
 
   const packageCommodity =
     item['@ondc/org/statutory_reqs_packaged_commodities'];

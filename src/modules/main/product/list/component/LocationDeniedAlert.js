@@ -1,5 +1,4 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Dialog, Divider, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -15,8 +14,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
  */
 const LocationDeniedAlert = ({theme, isVisible, setIsVisible, openSheet}) => {
   const {colors} = theme;
-
-  const {t} = useTranslation();
 
   return (
     <Dialog isVisible={isVisible} overlayStyle={styles.overlayStyle}>

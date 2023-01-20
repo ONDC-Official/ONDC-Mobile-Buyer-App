@@ -73,7 +73,7 @@ const Login = ({navigation, theme}) => {
       } else {
         navigation.reset({
           index: 0,
-          routes: [{name: 'AddDefaultAddress'}],
+          routes: [{name: 'AddressList', params: {navigateToDashboard: true}}],
         });
       }
 

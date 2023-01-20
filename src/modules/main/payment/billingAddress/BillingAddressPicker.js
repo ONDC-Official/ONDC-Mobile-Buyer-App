@@ -1,60 +1,61 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
-import {Button, Text, withTheme} from 'react-native-paper';
+import {FlatList, StyleSheet, View} from 'react-native';
+import {Button, withTheme} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {BILLING_ADDRESS, SERVER_URL} from '../../../../utils/apiUtilities';
+import {BILLING_ADDRESS, BASE_URL} from '../../../../utils/apiUtilities';
 import {skeletonList} from '../../../../utils/utils';
-import AddressCard from '../addressPicker/AddressCard';
-import AddressCardSkeleton from '../addressPicker/AddressCardSkeleton';
-import Header from '../addressPicker/Header';
-import {useSelector} from 'react-redux';
+import {getStoredData} from '../../../../utils/storage';
+import AddressSkeleton from '../../dashboard/components/AddressSkeleton';
+import BillingAddress from './components/BillingAddress';
 
 /**
- * Component to render list of address
+ * Component to render addresses of address
  * @param navigation: required: to navigate to the respective screen
  * @param theme:application theme
  * @param params
  * @constructor
  * @returns {JSX.Element}
  */
-const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
-  const {colors} = theme;
-  const {t} = useTranslation();
-  const [list, setList] = useState(null);
-  const [selectedBillingAddress, setSelectedBillingAddress] = useState(null);
+const BillingAddressPicker = ({navigation, theme}) => {
+  const [apiInProgress, setApiInProgress] = useState(true);
+  const [addresses, setAddresses] = useState(null);
+  const [deliveryAddress, setDeliveryAddress] = useState(null);
+  const [billingAddress, setBillingAddress] = useState(null);
+
   const isFocused = useIsFocused();
   const {token} = useSelector(({authReducer}) => authReducer);
   const {handleApiError} = useNetworkErrorHandling();
-  const {selectedAddress} = params;
 
   /**
    * function handles click event of add billing address button
    */
-  const onAdd = () =>
-    navigation.navigate('AddAddress', {selectedAddress: selectedAddress});
+  const onAdd = () => navigation.navigate('AddBillingAddress');
 
   /**
-   * function to get list of address from server
+   * function to get addresses of address from server
    * @returns {Promise<void>}
    */
   const getAddressList = async () => {
     try {
-      const {data} = await getData(`${SERVER_URL}${BILLING_ADDRESS}`, {
+      setApiInProgress(true);
+      const {data} = await getData(`${BASE_URL}${BILLING_ADDRESS}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      setList(data);
+      setAddresses(data);
+      setApiInProgress(false);
     } catch (error) {
+      setApiInProgress(false);
       if (error.response) {
         if (error.response.status === 404) {
-          setList([]);
+          setAddresses([]);
         } else {
           handleApiError(error);
         }
@@ -63,104 +64,113 @@ const BillingAddressPicker = ({navigation, theme, route: {params}}) => {
   };
 
   /**
-   * function handles click event of next button
-   */
-  const onPressHandler = () =>
-    navigation.navigate('AddressPicker', {
-      billingAddress: selectedBillingAddress,
-    });
-
-  /**
-   * Function is used to render single address card in the list
-   * @param item: single object from address list
+   * Function is used to render single address card in the addresses
+   * @param item: single object from address addresses
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => {
     const onEdit = () => {
-      navigation.navigate('AddAddress', {
-        selectedAddress: selectedAddress,
-        item: item,
-      });
+      // navigation.navigate('AddAddress', {
+      //   selectedAddress: selectedAddress,
+      //   item: item,
+      // });
     };
-    return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <AddressCardSkeleton item={item}/>
+
+    const isSelected = billingAddress?.id === item?.id;
+    return item.hasOwnProperty('isSkeleton') ? (
+      <AddressSkeleton item={item} />
     ) : (
-      <AddressCard
+      <BillingAddress
         item={item}
-        selectedAddress={selectedBillingAddress}
-        setSelectedAddress={setSelectedBillingAddress}
+        isCurrentAddress={isSelected}
         onEdit={onEdit}
+        setBillingAddress={setBillingAddress}
       />
     );
   };
 
   useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          mode="outlined"
+          style={{marginEnd: 10}}
+          labelStyle={[appStyles.containedButtonLabel]}
+          onPress={onAdd}>
+          Add
+        </Button>
+      ),
+    });
+  }, [navigation]);
+
+  useEffect(() => {
     if (isFocused) {
-      setSelectedBillingAddress(null);
+      getStoredData('address').then(response => {
+        if (response) {
+          setDeliveryAddress(JSON.parse(response));
+        }
+      });
+      setBillingAddress(null);
       getAddressList()
-        .then(() => {
-        })
-        .catch(() => {
-        });
+        .then(() => {})
+        .catch(() => {});
     }
   }, [isFocused]);
 
-  const listData = list ? list : skeletonList;
-
+  const list = apiInProgress ? skeletonList : addresses;
   return (
-    <SafeAreaView
-      style={[appStyles.container, {backgroundColor: colors.backgroundColor}]}>
-      <View
-        style={[
-          appStyles.container,
-          {backgroundColor: colors.backgroundColor},
-        ]}>
-        <Header
-          title={'Billing Address'}
-          show={selectedAddress}
-          navigation={navigation}
-        />
-        <FlatList
-          data={listData}
-          renderItem={renderItem}
-          ListEmptyComponent={() => {
-            return (
-              <TouchableOpacity
-                style={[styles.button, {borderColor: colors.primary}]}
+    <View style={appStyles.container}>
+      <FlatList
+        style={appStyles.container}
+        data={list}
+        renderItem={renderItem}
+        ListEmptyComponent={() => {
+          return (
+            <View style={[appStyles.container, appStyles.centerContainer]}>
+              <Button
+                labelStyle={appStyles.containedButtonLabel}
+                contentStyle={appStyles.containedButtonContainer}
+                mode="outlined"
                 onPress={onAdd}>
-                <Text style={{color: colors.primary}}>
-                  Add Billing Address
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
-          contentContainerStyle={
-            listData.length > 0
-              ? styles.contentContainerStyle
-              : [appStyles.container, styles.emptyContainer]
-          }
-        />
+                Add Billing Address
+              </Button>
+            </View>
+          );
+        }}
+        contentContainerStyle={
+          list.length > 0 ? styles.contentContainerStyle : appStyles.container
+        }
+      />
 
-        {selectedBillingAddress !== null && (
-          <View style={styles.buttonContainer}>
-            <Button mode="contained" onPress={onPressHandler}>
-              Save
-            </Button>
-          </View>
-        )}
-      </View>
-    </SafeAreaView>
+      {billingAddress !== null && (
+        <View style={styles.buttonContainer}>
+          <Button
+            labelStyle={appStyles.containedButtonLabel}
+            contentStyle={appStyles.containedButtonContainer}
+            mode="contained"
+            onPress={() =>
+              navigation.navigate('Confirmation', {
+                billingAddress,
+                deliveryAddress,
+              })
+            }>
+            Next
+          </Button>
+        </View>
+      )}
+    </View>
   );
 };
 
 export default withTheme(BillingAddressPicker);
+
 const styles = StyleSheet.create({
   buttonContainer: {
     width: 300,
     marginVertical: 10,
     alignSelf: 'center',
   },
-  contentContainerStyle: {paddingHorizontal: 10, paddingBottom: 10},
+  contentContainerStyle: {marginVertical: 16},
   emptyContainer: {justifyContent: 'center', alignItems: 'center'},
   button: {
     marginTop: 5,

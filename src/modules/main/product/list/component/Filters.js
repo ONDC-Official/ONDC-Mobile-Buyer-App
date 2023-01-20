@@ -1,12 +1,20 @@
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import React, {memo, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {Dimensions, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Button, Divider, Text, withTheme} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import ClearButton from '../../../../../components/button/ClearButton';
 import {appStyles} from '../../../../../styles/styles';
-import {clearFiltersOnly, updateFilters,} from '../../../../../redux/filter/actions';
+import {
+  clearFiltersOnly,
+  updateFilters,
+} from '../../../../../redux/filter/actions';
 
 /**
  * Component to render filters screen
@@ -14,10 +22,9 @@ import {clearFiltersOnly, updateFilters,} from '../../../../../redux/filter/acti
  * @constructor
  * @returns {JSX.Element}
  */
-const Filters = ({closeRBSheet, apiInProgress, theme}) => {
+const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
   const dispatch = useDispatch();
   const {colors} = theme;
-  const {t} = useTranslation();
 
   const {filters, selectedProviders, selectedCategories, maxPrice, minPrice} =
     useSelector(({filterReducer}) => filterReducer);
@@ -36,11 +43,13 @@ const Filters = ({closeRBSheet, apiInProgress, theme}) => {
     };
 
     dispatch(updateFilters(payload));
+    updateFilterCount();
     closeRBSheet();
   };
 
   const clearFilter = () => {
     dispatch(clearFiltersOnly());
+    updateFilterCount();
     closeRBSheet();
   };
 
@@ -102,9 +111,7 @@ const Filters = ({closeRBSheet, apiInProgress, theme}) => {
           <ScrollView>
             {filters?.providers?.length > 0 && (
               <>
-                <Text style={styles.text}>
-                  Providers
-                </Text>
+                <Text style={styles.text}>Providers</Text>
 
                 {filters?.providers?.map(item => {
                   const index = providers.findIndex(one => one === item.id);
@@ -125,9 +132,7 @@ const Filters = ({closeRBSheet, apiInProgress, theme}) => {
 
             {filters?.categories?.length > 0 && (
               <>
-                <Text style={styles.text}>
-                  Categories
-                </Text>
+                <Text style={styles.text}>Categories</Text>
                 {filters?.categories?.map(item => {
                   const index = categories.findIndex(one => one === item.id);
                   return (
@@ -149,9 +154,7 @@ const Filters = ({closeRBSheet, apiInProgress, theme}) => {
                 filters.hasOwnProperty('maxPrice') &&
                 filters.minPrice !== filters.maxPrice && (
                   <>
-                    <Text style={styles.price}>
-                      Price Range
-                    </Text>
+                    <Text style={styles.price}>Price Range</Text>
 
                     <MultiSlider
                       selectedStyle={{

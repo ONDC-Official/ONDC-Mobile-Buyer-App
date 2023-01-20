@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useRef, useState} from 'react';
 
-import {saveProducts} from '../../../../redux/product/actions';
+import {clearProducts, saveProducts} from '../../../../redux/product/actions';
 import {
   clearFilters,
   saveFilters,
@@ -12,7 +12,7 @@ import {getData, postData} from '../../../../utils/api';
 import {
   GET_MESSAGE_ID,
   GET_PRODUCTS,
-  SERVER_URL,
+  BASE_URL,
 } from '../../../../utils/apiUtilities';
 import {getStoredData} from '../../../../utils/storage';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -21,12 +21,15 @@ import RNEventSource from 'react-native-event-source';
 export default (category = null) => {
   const listCount = useRef(0);
   const count = useRef(0);
+  const currentPage = useRef(1);
+  const filterCount = useRef(0);
 
   const dispatch = useDispatch();
   const {handleApiError} = useNetworkErrorHandling();
 
   const [currentAddress, setCurrentAddress] = useState(null);
   const [apiInProgress, setApiInProgress] = useState(false);
+  const [productsRequested, setProductsRequested] = useState(false);
   const {token} = useSelector(({authReducer}) => authReducer);
   const {
     messageId,
@@ -46,8 +49,10 @@ export default (category = null) => {
    */
   const getProductsList = async (id, transId, page = 1) => {
     if (id) {
+      console.log(listCount.current, count.current);
       try {
-        let url = `${SERVER_URL}${GET_PRODUCTS}${id}&pageNumber=${page}&limit=10`;
+        setProductsRequested(true);
+        let url = `${BASE_URL}${GET_PRODUCTS}${id}&pageNumber=${page}&limit=10`;
 
         switch (selectedSortOption) {
           case PRODUCT_SORTING.RATINGS_HIGH_TO_LOW:
@@ -102,75 +107,27 @@ export default (category = null) => {
           count.current = data.message.count;
           dispatch(saveProducts(productsList));
         }
+        setProductsRequested(false);
       } catch (error) {
         handleApiError(error);
+        setProductsRequested(false);
         throw error;
       }
     }
   };
 
-  useEffect(() => {
-    let eventSource = null;
-
-    if (messageId) {
-      eventSource = new RNEventSource(
-        `${SERVER_URL}/clientApis/events?messageId=${messageId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      eventSource.addEventListener('on_search', event => {
-        const data = JSON.parse(event.data);
-
-        if (data.hasOwnProperty('count')) {
-          count.current = data.count;
-          const filterData = Object.assign({}, data.filters, {
-            message_id: data.messageId,
-          });
-
-          dispatch(saveFilters(filterData));
-
-          if (listCount.current < data.count && listCount.current < 10) {
-            getProductsList(messageId, transactionId)
-              .then(() => {})
-              .catch(() => {});
-          } else {
-            setApiInProgress(false);
-          }
-        } else {
-          count.current = data.totalCount;
-          if (listCount.current < data.totalCount && listCount.current < 10) {
-            getProductsList(messageId, transactionId)
-              .then(() => {})
-              .catch(() => {});
-          } else {
-            setApiInProgress(false);
-          }
-        }
-      });
+  const loadMore = () => {
+    if (
+      listCount.current >= 10 &&
+      listCount.current < count.current &&
+      !productsRequested
+    ) {
+      currentPage.current = currentPage.current + 1;
+      getProductsList(messageId, transactionId, currentPage.current)
+        .then(r => {})
+        .catch(() => {});
     }
-
-    return () => {
-      if (eventSource) {
-        eventSource.removeAllListeners();
-        eventSource.close();
-        eventSource = null;
-      }
-    };
-  }, [messageId]);
-
-  useEffect(() => {
-    getProductsList(messageId, transactionId).then(r => {});
-  }, [
-    selectedProviders,
-    selectedCategories,
-    selectedSortOption,
-    maxPrice,
-    minPrice,
-  ]);
+  };
 
   /**
    * Function is used to handle onEndEditing event of searchbar
@@ -180,8 +137,11 @@ export default (category = null) => {
    **/
   const onSearch = async (query, selectedSearchOption) => {
     listCount.current = 0;
+    currentPage.current = 1;
     const addressString = await getStoredData('address');
     const address = JSON.parse(addressString);
+
+    dispatch(clearProducts());
 
     setCurrentAddress(address);
     setApiInProgress(true);
@@ -208,7 +168,7 @@ export default (category = null) => {
       }
 
       const response = await postData(
-        `${SERVER_URL}${GET_MESSAGE_ID}`,
+        `${BASE_URL}${GET_MESSAGE_ID}`,
         requestParameters,
         {
           headers: {
@@ -229,9 +189,84 @@ export default (category = null) => {
     }
   };
 
+  const updateFilterCount = () => {
+    filterCount.current += 1;
+  };
+
+  useEffect(() => {
+    let eventSource = null;
+
+    if (messageId) {
+      eventSource = new RNEventSource(
+        `${BASE_URL}/clientApis/events?messageId=${messageId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      eventSource.addEventListener('on_search', event => {
+        const data = JSON.parse(event.data);
+
+        if (data.hasOwnProperty('count')) {
+          if (count.current < data.count) {
+            count.current = data.count;
+          }
+          const filterData = Object.assign({}, data.filters, {
+            message_id: data.messageId,
+          });
+
+          dispatch(saveFilters(filterData));
+
+          if (listCount.current < data.count && listCount.current < 10) {
+            getProductsList(messageId, transactionId)
+              .then(() => {})
+              .catch(() => {});
+          } else {
+            setApiInProgress(false);
+          }
+        } else {
+          if (count.current < data.totalCount) {
+            count.current = data.totalCount;
+          }
+
+          if (listCount.current < data.totalCount && listCount.current < 10) {
+            getProductsList(messageId, transactionId)
+              .then(() => {})
+              .catch(() => {});
+          } else {
+            setApiInProgress(false);
+          }
+        }
+      });
+    }
+
+    return () => {
+      if (eventSource) {
+        eventSource.removeAllListeners();
+        eventSource.close();
+        eventSource = null;
+      }
+    };
+  }, [messageId]);
+
+  useEffect(() => {
+    if (filterCount.current > 0) {
+      console.log('Filters updated');
+      currentPage.current = 1;
+      dispatch(clearProducts());
+      getProductsList(messageId, transactionId)
+        .then(() => {})
+        .catch(() => {});
+    }
+  }, [filterCount.current]);
+
   return {
     apiInProgress,
     onSearch,
     getProductsList,
+    loadMore,
+    updateFilterCount,
   };
 };

@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {getData, postData} from '../../../utils/api';
-import {ADD_ADDRESS, BASE_URL, GET_GPS_CORDS, GET_LATLONG, SERVER_URL,} from '../../../utils/apiUtilities';
+import {DELIVERY_ADDRESS, BASE_URL, GET_GPS_CORDS, GET_LATLONG} from '../../../utils/apiUtilities';
 import InputField from '../../../components/input/InputField';
 import {getUserInitials} from '../../../utils/utils';
 import {setStoredData} from '../../../utils/storage';
@@ -122,9 +122,11 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
 
     try {
       setApiInProgress(true);
-      let url = `${SERVER_URL}${ADD_ADDRESS}`;
-
-      const {data} = await postData(url, payload, options);
+      const {data} = await postData(
+        `${BASE_URL}${DELIVERY_ADDRESS}`,
+        payload,
+        options,
+      );
       if (!params) {
         await setStoredData('address', JSON.stringify(data));
       }

@@ -4,7 +4,7 @@ import SelectDropdown from 'react-native-select-dropdown';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
-import {SERVER_URL, UPDATE_ORDER} from '../../../utils/apiUtilities';
+import {BASE_URL, UPDATE_ORDER} from '../../../utils/apiUtilities';
 import {reasons} from './reasons';
 import {postData} from '../../../utils/api';
 import {cancelOrder} from './OrderHistoryUtils';
@@ -12,19 +12,19 @@ import {useSelector} from 'react-redux';
 import {Button, Checkbox, Dialog} from 'react-native-paper';
 
 const Overlay = ({
-                   theme,
-                   setUpdateMessageId,
-                   order,
-                   showOverlay,
-                   setShowOverlay,
-                   breakup,
-                   updateType,
-                   setUpdateInProgress,
-                   updateInProgress,
-                   cancelInProgress,
-                   setCancelInProgress,
-                   setCancelMessageId,
-                 }) => {
+  theme,
+  setUpdateMessageId,
+  order,
+  showOverlay,
+  setShowOverlay,
+  breakup,
+  updateType,
+  setUpdateInProgress,
+  updateInProgress,
+  cancelInProgress,
+  setCancelInProgress,
+  setCancelMessageId,
+}) => {
   const {colors} = theme;
   const [selectedItem, setSelectedItem] = useState([]);
   const [selectedReason, setSelectedReason] = useState(null);
@@ -122,7 +122,7 @@ const Overlay = ({
       ];
 
       const {data} = await postData(
-        `${SERVER_URL}${UPDATE_ORDER}`,
+        `${BASE_URL}${UPDATE_ORDER}`,
         payload,
         options,
       );
@@ -188,7 +188,7 @@ const Overlay = ({
             dropdownStyle={styles.dropdownStyle}
             buttonStyle={buttonStyles}
             buttonTextStyle={buttonTextStyles}
-            renderDropdownIcon={() => <Icon name="menu-down" size={28}/>}
+            renderDropdownIcon={() => <Icon name="menu-down" size={28} />}
             renderCustomizedRowChild={value => (
               <Text style={styles.label}>{value}</Text>
             )}
@@ -209,7 +209,7 @@ const Overlay = ({
         </View>
         {selectedReason && (
           <>
-            <View style={styles.space}/>
+            <View style={styles.space} />
             <View style={styles.button}>
               <ContainButton
                 title={'Confirm'}

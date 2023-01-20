@@ -1,6 +1,5 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
 import {FlatList, Linking, StyleSheet, View} from 'react-native';
 import RNEventSource from 'react-native-event-source';
 import ClearButton from '../../../components/button/ClearButton';
@@ -13,7 +12,7 @@ import {
   ON_SUPPORT,
   ON_TRACK_ORDER,
   ON_UPDATE_ORDER,
-  SERVER_URL,
+  BASE_URL,
   SUPPORT,
 } from '../../../utils/apiUtilities';
 import {FAQS, ORDER_STATUS, UPDATE_TYPE} from '../../../utils/Constants';
@@ -35,7 +34,6 @@ import {Divider, Text, withTheme} from 'react-native-paper';
  */
 const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
   const {colors} = theme;
-  const {t} = useTranslation();
   const isFocused = useIsFocused();
   const {token} = useSelector(({authReducer}) => authReducer);
   const {handleApiError} = useNetworkErrorHandling();
@@ -91,7 +89,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
   const getSupport = () => {
     setCallInProgress(true);
     postData(
-      `${SERVER_URL}${SUPPORT}`,
+      `${BASE_URL}${SUPPORT}`,
       [
         {
           context: {
@@ -124,7 +122,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
   const onGetSupport = async messageId => {
     try {
       const {data} = await getData(
-        `${SERVER_URL}${ON_SUPPORT}messageIds=${messageId}`,
+        `${BASE_URL}${ON_SUPPORT}messageIds=${messageId}`,
         options,
       );
 
@@ -140,7 +138,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
   const onTrackOrder = async messageId => {
     try {
       const {data} = await getData(
-        `${SERVER_URL}${ON_TRACK_ORDER}messageIds=${messageId}`,
+        `${BASE_URL}${ON_TRACK_ORDER}messageIds=${messageId}`,
         options,
       );
 
@@ -157,7 +155,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
 
   const onGetStatus = async id => {
     try {
-      const {data} = await getData(`${SERVER_URL}${ON_GET_STATUS}${id}`, {
+      const {data} = await getData(`${BASE_URL}${ON_GET_STATUS}${id}`, {
         headers: {Authorization: `Bearer ${token}`},
       });
       setStatusInProgress(false);
@@ -174,7 +172,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
   const onCancel = async id => {
     try {
       const {data} = await getData(
-        `${SERVER_URL}${ON_CANCEL_ORDER}messageId=${id}`,
+        `${BASE_URL}${ON_CANCEL_ORDER}messageId=${id}`,
         options,
       );
       if (data.message) {
@@ -197,7 +195,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
   const onUpdate = async id => {
     try {
       const {data} = await getData(
-        `${SERVER_URL}${ON_UPDATE_ORDER}messageId=${id}`,
+        `${BASE_URL}${ON_UPDATE_ORDER}messageId=${id}`,
         options,
       );
       if (data.message) {
@@ -235,7 +233,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
 
     if (supportMessageId && isFocused) {
       eventSource = new RNEventSource(
-        `${SERVER_URL}/clientApis/events?messageId=${supportMessageId}`,
+        `${BASE_URL}/clientApis/events?messageId=${supportMessageId}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },
@@ -263,7 +261,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
     let timer;
     if (updateMessageId && isFocused) {
       eventSource = new RNEventSource(
-        `${SERVER_URL}/clientApis/events?messageId=${updateMessageId}`,
+        `${BASE_URL}/clientApis/events?messageId=${updateMessageId}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },
@@ -292,7 +290,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
 
     if (statusMessageId && isFocused) {
       eventSource = new RNEventSource(
-        `${SERVER_URL}/clientApis/events?messageId=${statusMessageId}`,
+        `${BASE_URL}/clientApis/events?messageId=${statusMessageId}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },
@@ -320,7 +318,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
     let timer;
     if (cancelMessageId) {
       eventSource = new RNEventSource(
-        `${SERVER_URL}/clientApis/events?messageId=${cancelMessageId}`,
+        `${BASE_URL}/clientApis/events?messageId=${cancelMessageId}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },
@@ -345,7 +343,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
     let timer;
     if (trackMessageId) {
       eventSource = new RNEventSource(
-        `${SERVER_URL}/clientApis/events?messageId=${trackMessageId}`,
+        `${BASE_URL}/clientApis/events?messageId=${trackMessageId}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },

@@ -1,14 +1,13 @@
-import React from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
-import {Text, withTheme} from 'react-native-paper';
+import {Button, Text, withTheme} from 'react-native-paper';
 
 import {clearCart} from '../../../redux/actions';
 import {appStyles} from '../../../styles/styles';
 import {alertWithTwoButtons} from '../../../utils/alerts';
-import ProductCard from '../product/list/component/ProductCard';
 import EmptyComponent from './EmptyComponent';
-import Footer from './Footer';
+import DashboardProduct from '../product/list/component/DashboardProduct/DashboardProduct';
 
 /**
  * Component to render list of items added in cart
@@ -22,12 +21,7 @@ const Cart = ({navigation, theme}) => {
 
   const {colors} = theme;
 
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
-
-  const subTotal = cartItems.reduce((total, item) => {
-    total += item.price.value * item.quantity;
-    return total;
-  }, 0);
+  const {cartItems, subTotal} = useSelector(({cartReducer}) => cartReducer);
 
   const emptyCart = () => dispatch(clearCart());
 
@@ -47,19 +41,34 @@ const Cart = ({navigation, theme}) => {
   };
 
   /**
-   * function handles click event of checkout button
-   */
-  const onCheckout = () => navigation.navigate('AddressPicker');
-
-  /**
    * Function is used to render single product card in the list
    * @param item:single object from cart list
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => (
-    <ProductCard item={item} navigation={navigation} confirmed={true} />
+    <DashboardProduct item={item} navigation={navigation} />
   );
 
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      navigation.setOptions({
+        headerRight: () => (
+          <Button
+            mode="text"
+            labelStyle={appStyles.containedButtonLabel}
+            onPress={onClearCart}>
+            Empty Cart
+          </Button>
+        ),
+      });
+    } else {
+      navigation.setOptions({
+        headerRight: null,
+      });
+    }
+  }, [navigation, cartItems]);
+
+  const cartLength = cartItems.length;
   return (
     <View
       style={[
@@ -67,25 +76,6 @@ const Cart = ({navigation, theme}) => {
         styles.container,
         {backgroundColor: colors.backgroundColor},
       ]}>
-      {cartItems.length !== 0 && (
-        <View style={[styles.header, {backgroundColor: colors.white}]}>
-          <View style={styles.row}>
-            <Text style={styles.text}>Subtotal:</Text>
-            <Text style={styles.price}>
-              ₹
-              {Number.isInteger(subTotal)
-                ? subTotal
-                : parseFloat(subTotal).toFixed(2)}
-            </Text>
-          </View>
-
-          <TouchableOpacity
-            style={[styles.button, {borderColor: colors.primary}]}
-            onPress={onClearCart}>
-            <Text style={{color: colors.primary}}>Clear</Text>
-          </TouchableOpacity>
-        </View>
-      )}
       <FlatList
         data={cartItems}
         renderItem={renderItem}
@@ -93,12 +83,26 @@ const Cart = ({navigation, theme}) => {
           return <EmptyComponent navigation={navigation} />;
         }}
         contentContainerStyle={
-          cartItems.length === 0
-            ? appStyles.container
-            : styles.contentContainerStyle
+          cartLength === 0 ? appStyles.container : styles.contentContainerStyle
         }
       />
-      {cartItems.length !== 0 && <Footer onCheckout={onCheckout} />}
+      {cartLength > 0 && (
+        <View style={[styles.footer, {backgroundColor: theme.colors.footer}]}>
+          <View style={appStyles.container}>
+            <Text>Subtotal</Text>
+            <Text style={styles.totalAmount}>₹{subTotal}</Text>
+          </View>
+          <View style={appStyles.container}>
+            <Button
+              mode="contained"
+              contentStyle={appStyles.containedButtonContainer}
+              labelStyle={appStyles.containedButtonLabel}
+              onPress={() => navigation.navigate('BillingAddressPicker')}>
+              Checkout
+            </Button>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -106,31 +110,15 @@ const Cart = ({navigation, theme}) => {
 export default withTheme(Cart);
 
 const styles = StyleSheet.create({
-  container: {paddingBottom: 10},
-  text: {fontSize: 20},
-  clearCartButton: {
-    padding: 10,
-    borderRadius: 15,
-    borderWidth: 1,
-    alignSelf: 'center',
-  },
   contentContainerStyle: {paddingBottom: 10},
-  row: {
+  footer: {
+    padding: 16,
     flexDirection: 'row',
+    alignSelf: 'center',
+    justifyContent: 'space-evenly',
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 15,
-    elevation: 1,
+  totalAmount: {
+    fontWeight: 'bold',
+    fontSize: 18,
   },
-  button: {
-    marginTop: 5,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderRadius: 8,
-  },
-  price: {fontWeight: '700', fontSize: 20, marginLeft: 8},
 });

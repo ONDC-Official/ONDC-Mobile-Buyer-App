@@ -7,22 +7,28 @@ import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
  * @returns {JSX.Element}
  */
 const AddressSkeleton = () => (
-  <SkeletonPlaceholder>
-    <View style={styles.container}>
-      <View style={styles.radioButton} />
-      <View>
-        <View style={styles.name} />
-        <View style={styles.email} />
-        <View style={styles.address} />
-        <View style={styles.pin} />
+  <View style={styles.skeletonContainer}>
+    <SkeletonPlaceholder>
+      <View style={styles.container}>
+        <View style={styles.radioButton} />
+        <View>
+          <View style={styles.name} />
+          <View style={styles.email} />
+          <View style={styles.address} />
+          <View style={styles.pin} />
+        </View>
       </View>
-    </View>
-  </SkeletonPlaceholder>
+    </SkeletonPlaceholder>
+  </View>
 );
 
 export default AddressSkeleton;
 
 const styles = StyleSheet.create({
+  skeletonContainer: {
+    padding: 12,
+    backgroundColor: 'white',
+  },
   container: {
     flexDirection: 'row',
     padding: 12,

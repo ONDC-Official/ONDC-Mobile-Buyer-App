@@ -2,11 +2,10 @@ import {postData} from '../../../utils/api';
 import {
   CANCEL_ORDER,
   GET_STATUS,
-  SERVER_URL,
+  BASE_URL,
   TRACK_ORDER,
 } from '../../../utils/apiUtilities';
 import {alertWithOneButton} from '../../../utils/alerts';
-import i18n from '../../../locales/i18next';
 
 /**
  * function used to request tracking details of order
@@ -30,7 +29,7 @@ export const trackOrder = async (
       },
     ];
     const {data} = await postData(
-      `${SERVER_URL}${TRACK_ORDER}`,
+      `${BASE_URL}${TRACK_ORDER}`,
       payload,
       options,
     );
@@ -64,7 +63,7 @@ export const cancelOrder = async (
       message: {order_id: order.id, cancellation_reason_id: id},
     };
     const {data} = await postData(
-      `${SERVER_URL}${CANCEL_ORDER}`,
+      `${BASE_URL}${CANCEL_ORDER}`,
       payload,
       options,
     );
@@ -92,7 +91,7 @@ export const getStatus = async (
       },
     ];
     const {data} = await postData(
-      `${SERVER_URL}${GET_STATUS}`,
+      `${BASE_URL}${GET_STATUS}`,
       payload,
       options,
     );

@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, withTheme} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {Button, Text, withTheme} from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {appStyles} from '../../../styles/styles';
@@ -21,11 +21,12 @@ const EmptyComponent = ({theme, navigation}) => {
         looks like your shopping cart is empty, you can shop now by clicking
         button below
       </Text>
-      <TouchableOpacity
-        style={[styles.button, {borderColor: colors.primary}]}
-        onPress={() => navigation.navigate('Dashboard', {screen: 'Products'})}>
-        <Text style={{color: colors.primary}}>Shop Now</Text>
-      </TouchableOpacity>
+      <Button
+        mode="outlined"
+        labelStyle={appStyles.containedButtonLabel}
+        onPress={() => navigation.navigate('Dashboard')}>
+        Shop Now
+      </Button>
     </View>
   );
 };
@@ -36,11 +37,4 @@ const styles = StyleSheet.create({
   container: {alignItems: 'center', justifyContent: 'center'},
   title: {fontSize: 18, fontWeight: '600', marginVertical: 10},
   subTitle: {textAlign: 'center', lineHeight: 22},
-  button: {
-    paddingHorizontal: 20,
-    paddingVertical: 5,
-    borderRadius: 15,
-    borderWidth: 1,
-    marginVertical: 20,
-  },
 });

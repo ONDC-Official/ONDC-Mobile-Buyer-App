@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
 import {getData} from '../../../utils/api';
-import {GET_ORDERS, SERVER_URL} from '../../../utils/apiUtilities';
+import {GET_ORDERS, BASE_URL} from '../../../utils/apiUtilities';
 import {keyExtractor, skeletonList} from '../../../utils/utils';
 import ListFooter from './ListFooter';
 import OrderAccordion from './OrderAccordion';
@@ -39,7 +39,7 @@ const Order = () => {
   const getOrderList = async number => {
     try {
       const {data} = await getData(
-        `${SERVER_URL}${GET_ORDERS}?pageNumber=${number}&limit=10`,
+        `${BASE_URL}${GET_ORDERS}?pageNumber=${number}&limit=10`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

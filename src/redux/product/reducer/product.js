@@ -1,5 +1,11 @@
-import {ADD_PRODUCT_CART, CLEAR_CART, CLEAR_DATA, REMOVE_PRODUCT_CART, UPDATE_PRODUCT_CART} from '../../actions';
-import {SAVE_PRODUCTS} from '../actions';
+import {
+  ADD_PRODUCT_CART,
+  CLEAR_CART,
+  CLEAR_DATA,
+  REMOVE_PRODUCT_CART,
+  UPDATE_PRODUCT_CART,
+} from '../../actions';
+import {CLEAR_PRODUCTS, SAVE_PRODUCTS} from '../actions';
 
 const initialState = {
   products: [],
@@ -10,7 +16,19 @@ const productReducer = (state = initialState, action) => {
 
   switch (type) {
     case SAVE_PRODUCTS:
-      return Object.assign({}, state, {products: payload});
+      const products = state.products.concat(
+        payload.filter(
+          item => state.products.findIndex(one => one.id === item.id) < 0,
+        ),
+      );
+      return Object.assign({}, state, {
+        products,
+      });
+
+    case CLEAR_PRODUCTS:
+      return Object.assign({}, state, {
+        products: [],
+      });
 
     case ADD_PRODUCT_CART:
       const addIndex = state.products.findIndex(

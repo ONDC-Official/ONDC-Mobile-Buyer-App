@@ -11,4 +11,10 @@ export const appStyles = StyleSheet.create({
   inputContainer: {
     marginVertical: 8,
   },
+  containedButtonLabel: {
+    fontSize: 16,
+  },
+  containedButtonContainer: {
+    height: 50,
+  },
 });

@@ -1,16 +1,24 @@
-import React from 'react';
-import {useTranslation} from 'react-i18next';
-import {SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
-import {Divider, Text, withTheme} from 'react-native-paper';
+import React, {useEffect} from 'react';
+import {
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Button, Divider, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useDispatch, useSelector} from 'react-redux';
-import {addItemToCart, removeItemFromCart, updateItemInCart} from '../../../../redux/actions';
+
 import {appStyles} from '../../../../styles/styles';
 import {showInfoToast} from '../../../../utils/utils';
 import Details from './Details';
+import useProductQuantity from '../hook/useProductQuantity';
+import PagerView from 'react-native-pager-view';
 
 const image = require('../../../../assets/noImage.png');
+const imageSize = Dimensions.get('window').width;
 
 /**
  * Component to display product details
@@ -22,141 +30,103 @@ const image = require('../../../../assets/noImage.png');
 const ProductDetails = ({theme, navigation, route: {params}}) => {
   const {colors} = theme;
 
-  const {t} = useTranslation();
-
-  const {products} = useSelector(({productReducer}) => productReducer);
-
   const {product} = params;
 
-  const item = products.find(one => one.id === product.id);
+  const {addItem, updateQuantity} = useProductQuantity(product);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: product?.descriptor?.name,
+    });
+  }, [navigation]);
 
-  /**
-   * function handles click event add button
-   */
-  const addItem = () => {
-    const updatedProduct = Object.assign({}, item, {quantity: 1});
-    dispatch(addItemToCart(updatedProduct));
-  };
-
-  /**
-   * function handles click event of increase and decrease buttons
-   */
-  const updateQuantity = (increase = true) => {
-    let updatedProduct = null;
-    if (increase) {
-      updatedProduct = Object.assign({}, item, {quantity: item.quantity + 1});
-      dispatch(updateItemInCart(updatedProduct));
-    } else {
-      updatedProduct = Object.assign({}, item, {quantity: item.quantity - 1});
-      if (updatedProduct.quantity === 0) {
-        dispatch(removeItemFromCart(updatedProduct));
-      } else {
-        dispatch(updateItemInCart(updatedProduct));
-      }
-    }
-  };
-
-  const uri = item.descriptor.images ? item.descriptor.images[0] : null;
-
+  console.log(JSON.stringify(product, undefined, 4));
   return (
-    <SafeAreaView
-      style={[appStyles.container, {backgroundColor: colors.white}]}>
-      <View style={[appStyles.container, {backgroundColor: colors.white}]}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backIcon}>
-          <Icon name="arrow-left" size={16} color={colors.primary}/>
-        </TouchableOpacity>
-        <View
-          style={[
-            styles.container,
-            {
-              borderColor: colors.greyOutline,
-            },
-          ]}>
-          <FastImage
-            source={uri ? {uri} : image}
-            style={styles.image}
-            resizeMode={'contain'}
-          />
-        </View>
+    <View style={[appStyles.container, {backgroundColor: colors.white}]}>
+      {product.descriptor.images?.length > 0 ? (
+        <PagerView style={[styles.pager, {height: imageSize}]} initialPage={0}>
+          {product.descriptor.images?.map(uri => (
+            <FastImage
+              source={{uri}}
+              style={styles.image}
+              resizeMode={'contain'}
+            />
+          ))}
+        </PagerView>
+      ) : (
+        <FastImage source={image} style={styles.image} resizeMode={'contain'} />
+      )}
 
-        <ScrollView>
-          <View style={styles.imageContainer}>
-            {/* <Text style={styles.descriptorName}>{item.id}</Text> */}
-
-            <Text style={styles.descriptorName}>{item.descriptor.name}</Text>
+      <ScrollView style={styles.details}>
+        <View style={styles.imageContainer}>
+          <Text style={styles.descriptorName}>{product?.descriptor?.name}</Text>
+          <Text style={[styles.provider, {color: colors.gray}]}>
+            Seller: {product?.provider_details?.descriptor?.name}
+          </Text>
+          {product.descriptor.short_desc && (
             <Text style={[styles.provider, {color: colors.gray}]}>
-              Ordering from
-              <Text
-                style={[
-                  styles.provider,
-                  styles.priceContainer,
-                  {color: colors.gray},
-                ]}>
-                {item.provider_details.descriptor.name}
-              </Text>
+              {product.descriptor.short_desc}
             </Text>
-            {item.descriptor.short_desc && (
-              <Text style={[styles.provider, {color: colors.gray}]}>
-                {item.descriptor.short_desc}
-              </Text>
-            )}
+          )}
 
-            <Text style={styles.descriptorName}>
-              ₹{item.price.value ? item.price.value : item.price.maximum_value}
-            </Text>
-          </View>
-          <Divider width={1} style={styles.divider}/>
+          <Text style={styles.descriptorName}>
+            ₹
+            {product.price.value
+              ? product.price.value
+              : product.price.maximum_value}
+          </Text>
+        </View>
+        <Divider width={1} style={styles.divider} />
 
-          <>
-            <Details style={styles.divider} item={item}/>
-            <Divider/>
-          </>
+        <>
+          <Details style={styles.divider} item={product} />
+          <Divider />
+        </>
 
-          <View style={styles.addButton}>
-            {item.quantity < 1 ? (
+        <View style={styles.addButton}>
+          {product.quantity < 1 ? (
+            <TouchableOpacity
+              style={[styles.button, {borderColor: colors.primary}]}
+              onPress={() => {
+                showInfoToast('Added to Cart');
+                addItem(product);
+              }}>
+              <Text style={{color: colors.primary}}>Add</Text>
+            </TouchableOpacity>
+          ) : (
+            <View
+              style={[
+                styles.quantityDisplayButton,
+                {backgroundColor: colors.primary},
+              ]}>
               <TouchableOpacity
-                style={[styles.button, {borderColor: colors.primary}]}
-                onPress={() => {
-                  showInfoToast('Added to Cart');
-                  addItem(item);
-                }}>
-                <Text style={{color: colors.primary}}>
-                  Add
-                </Text>
+                style={styles.actionButton}
+                onPress={() => updateQuantity(false)}>
+                <Icon name="minus" size={16} color={colors.white} />
               </TouchableOpacity>
-            ) : (
-              <View
-                style={[
-                  styles.quantityDisplayButton,
-                  {backgroundColor: colors.primary},
-                ]}>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => updateQuantity(false)}>
-                  <Icon name="minus" size={16} color={colors.white}/>
-                </TouchableOpacity>
-                <Text style={{color: colors.white}}>{item.quantity}</Text>
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={() => updateQuantity(true)}>
-                  <Icon name="plus" color={colors.white} size={16}/>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+              <Text style={{color: colors.white}}>{product.quantity}</Text>
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={() => updateQuantity(true)}>
+                <Icon name="plus" color={colors.white} size={16} />
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
 export default withTheme(ProductDetails);
 
 const styles = StyleSheet.create({
+  details: {
+    marginTop: 16,
+    backgroundColor: 'white',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
   descriptorName: {fontSize: 18, fontWeight: '700', marginBottom: 4},
   provider: {fontSize: 14, marginBottom: 4, flexShrink: 1},
   imageContainer: {padding: 10},
@@ -187,8 +157,8 @@ const styles = StyleSheet.create({
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
   title: {fontSize: 18, fontWeight: '600'},
   image: {
-    height: 190,
-    width: 250,
+    height: imageSize,
+    width: imageSize,
     alignSelf: 'center',
   },
   container: {
@@ -199,4 +169,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   addButton: {alignItems: 'flex-start', padding: 10},
+  pager: {
+    zIndex: 999,
+    backgroundColor: 'white',
+  },
 });

@@ -1,9 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useSelector} from 'react-redux';
-import {setStoredData} from '../../../../utils/storage';
-import {useNavigation} from '@react-navigation/native';
 import {IconButton, Text, withTheme} from 'react-native-paper';
 
 /**
@@ -15,33 +12,20 @@ import {IconButton, Text, withTheme} from 'react-native-paper';
  * @constructor
  * @returns {JSX.Element}
  */
-const Address = ({item, theme, isCurrentAddress, onEdit, params}) => {
-  const navigation = useNavigation();
+const BillingAddress = ({
+  item,
+  theme,
+  isCurrentAddress,
+  setBillingAddress,
+  onEdit,
+}) => {
   const {colors} = theme;
   const {street, landmark, city, state, areaCode} = item.address;
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
-
-  const setDefaultAddress = () => {
-    if (cartItems.length > 0 && !isCurrentAddress) {
-      alert('Confirm if you want update the address?');
-    } else {
-      setStoredData('address', JSON.stringify(item)).then(response => {
-        if (params?.navigateToDashboard) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'Dashboard'}],
-          });
-        } else {
-          navigation.goBack();
-        }
-      });
-    }
-  };
 
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => setDefaultAddress()}>
+      onPress={() => setBillingAddress(item)}>
       <View style={styles.emptyCheckbox}>
         {isCurrentAddress && (
           <Icon name={'check-circle'} color={colors.primary} size={24} />
@@ -49,21 +33,15 @@ const Address = ({item, theme, isCurrentAddress, onEdit, params}) => {
       </View>
 
       <View style={styles.addressContainer}>
-        {item?.descriptor?.name && (
-          <View style={styles.textContainer}>
-            <Text>{item?.descriptor?.name}</Text>
-          </View>
-        )}
-        {item?.descriptor?.email && (
-          <View style={styles.textContainer}>
-            <Text>{item?.descriptor?.email}</Text>
-          </View>
-        )}
-        {item?.descriptor?.phone && (
-          <View style={styles.textContainer}>
-            <Text>{item?.descriptor?.phone}</Text>
-          </View>
-        )}
+        <View style={styles.textContainer}>
+          <Text>{item?.name}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text>{item?.email}</Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text>{item?.phone}</Text>
+        </View>
         <Text>
           {street} {landmark} {city} {state} {areaCode}
         </Text>
@@ -80,7 +58,7 @@ const Address = ({item, theme, isCurrentAddress, onEdit, params}) => {
   );
 };
 
-export default withTheme(Address);
+export default withTheme(BillingAddress);
 
 const styles = StyleSheet.create({
   container: {

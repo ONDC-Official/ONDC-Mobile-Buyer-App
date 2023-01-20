@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {useTranslation} from 'react-i18next';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import {Text, withTheme} from 'react-native-paper';
@@ -19,8 +18,6 @@ import {useSelector} from 'react-redux';
  */
 const SearchBar = ({theme, setLocation, closeSheet, setEloc}) => {
   const {colors} = theme;
-
-  const {t} = useTranslation();
 
   const [filteredLocations, setFilteredLocations] = useState(null);
 

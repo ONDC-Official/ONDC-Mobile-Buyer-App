@@ -18,13 +18,19 @@ import useProductList from '../hook/useProductList';
 import ProductSearch from './component/header/ProductSearch';
 import Products from './Products';
 import {SEARCH_QUERY} from '../../../../utils/Constants';
+import SortAndFilter from './component/header/SortAndFilter';
 
 const SearchProductList = ({navigation, theme, route: {params}}) => {
   const isFocused = useIsFocused();
   const [address, setAddress] = useState(null);
-  const {name, photoURL} = useSelector(({authReducer}) => authReducer);
 
-  const {onSearch} = useProductList(params?.category);
+  const {name, photoURL} = useSelector(({authReducer}) => authReducer);
+  const {products} = useSelector(({productReducer}) => productReducer);
+  const {filters} = useSelector(({filterReducer}) => filterReducer);
+
+  const {onSearch, loadMore, updateFilterCount} = useProductList(
+    params?.category,
+  );
 
   useEffect(() => {
     getStoredData('address').then(response => {
@@ -89,10 +95,16 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
           </Text>
         )}
       </View>
+
+      {filters && products.length > 0 && (
+        <SortAndFilter updateFilterCount={updateFilterCount} />
+      )}
+
       <Products
         imageBackgroundColor={
           params ? theme.colors[params.category] : theme.colors.grocery
         }
+        loadMore={loadMore}
       />
     </SafeAreaView>
   );

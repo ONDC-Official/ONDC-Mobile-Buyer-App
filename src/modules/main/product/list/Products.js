@@ -1,6 +1,6 @@
 import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Button, withTheme} from 'react-native-paper';
+import {Button, Text, withTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
@@ -8,18 +8,16 @@ import {appStyles} from '../../../../styles/styles';
 import ListPlaceholder from './component/placeholder/ListPlaceholder';
 import ProductCardSkeleton from './component/ProductCardSkeleton';
 import DashboardProduct from './component/DashboardProduct/DashboardProduct';
-import SortAndFilter from './component/header/SortAndFilter';
-import filters from './component/Filters';
 
 /**
  * Component to show list of requested products
  * @constructor
  * @returns {JSX.Element}
  */
-const Products = ({theme, imageBackgroundColor}) => {
+const Products = ({theme, imageBackgroundColor, loadMore}) => {
   const navigation = useNavigation();
-  const {products} = useSelector(({productReducer}) => productReducer);
   const {cartItems, subTotal} = useSelector(({cartReducer}) => cartReducer);
+  const {products} = useSelector(({productReducer}) => productReducer);
 
   /**
    * Function is used to render single product card in the list
@@ -47,7 +45,6 @@ const Products = ({theme, imageBackgroundColor}) => {
         appStyles.container,
         {backgroundColor: theme.colors.pageBackground},
       ]}>
-      {filters && products.length > 0 && <SortAndFilter />}
       <FlatList
         data={products}
         renderItem={renderItem}
@@ -58,12 +55,24 @@ const Products = ({theme, imageBackgroundColor}) => {
             ? styles.contentContainerStyle
             : appStyles.container
         }
+        onEndReachedThreshold={5}
+        onEndReached={loadMore}
       />
       {cartLength > 0 && (
-        <View style={styles.footer}>
-          <Button mode="contained" onPress={() => navigation.navigate('Cart')}>
-            {cartLength} Item | ₹{subTotal} View Cart
-          </Button>
+        <View style={[styles.footer, {backgroundColor: theme.colors.footer}]}>
+          <View style={appStyles.container}>
+            <Text>{cartLength} Item</Text>
+            <Text style={styles.totalAmount}>₹{subTotal}</Text>
+          </View>
+          <View style={appStyles.container}>
+            <Button
+              mode="contained"
+              contentStyle={appStyles.containedButtonContainer}
+              labelStyle={appStyles.containedButtonLabel}
+              onPress={() => navigation.navigate('Cart')}>
+              View Cart
+            </Button>
+          </View>
         </View>
       )}
     </View>
@@ -74,6 +83,13 @@ const styles = StyleSheet.create({
   contentContainerStyle: {paddingVertical: 8},
   footer: {
     padding: 16,
+    flexDirection: 'row',
+    alignSelf: 'center',
+    justifyContent: 'space-evenly',
+  },
+  totalAmount: {
+    fontWeight: 'bold',
+    fontSize: 18,
   },
 });
 

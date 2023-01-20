@@ -1,5 +1,4 @@
 import React from 'react';
-import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Logo from '../../../../../assets/map_my_india.svg';
@@ -16,7 +15,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
  * @returns {JSX.Element}
  */
 const AddressPicker = ({closeSheet, setLocation, setEloc}) => {
-  const {t} = useTranslation();
   return (
     <View style={styles.container}>
       <View style={styles.header}>

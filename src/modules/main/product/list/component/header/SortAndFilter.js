@@ -81,7 +81,7 @@ const SortIcon = ({value, color}) => {
  * @constructor
  * @returns {JSX.Element}
  */
-const SortAndFilter = ({theme}) => {
+const SortAndFilter = ({theme, updateFilterCount}) => {
   const {colors} = theme;
 
   const refRBSheet = useRef();
@@ -118,6 +118,7 @@ const SortAndFilter = ({theme}) => {
   }
 
   const appliedFilters = selectedProviders.length + selectedCategories.length;
+
   return (
     <>
       <View
@@ -155,7 +156,7 @@ const SortAndFilter = ({theme}) => {
         customStyles={{
           container: styles.rbSheet,
         }}>
-        <Filters closeRBSheet={closeRBSheet} />
+        <Filters closeRBSheet={closeRBSheet} updateFilterCount={updateFilterCount} />
       </RBSheet>
     </>
   );
