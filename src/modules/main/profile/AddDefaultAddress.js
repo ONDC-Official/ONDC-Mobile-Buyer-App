@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {getData, postData} from '../../../utils/api';
-import {DELIVERY_ADDRESS, BASE_URL, GET_GPS_CORDS, GET_LATLONG} from '../../../utils/apiUtilities';
+import {BASE_URL, DELIVERY_ADDRESS, GET_GPS_CORDS, GET_LATLONG} from '../../../utils/apiUtilities';
 import InputField from '../../../components/input/InputField';
 import {getUserInitials} from '../../../utils/utils';
 import {setStoredData} from '../../../utils/storage';

@@ -7,11 +7,7 @@ import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  GET_SELECT,
-  ON_GET_SELECT,
-} from '../../../../utils/apiUtilities';
+import {BASE_URL, GET_SELECT, ON_GET_SELECT,} from '../../../../utils/apiUtilities';
 import {showToastWithGravity, skeletonList} from '../../../../utils/utils';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 import Product from './Product';
@@ -292,8 +288,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 labelStyle={appStyles.containedButtonLabel}
                 onPress={() =>
                   navigation.navigate('Payment', {
-                    selectedAddress: params.selectedAddress,
-                    selectedBillingAddress: params.selectedBillingAddress,
+                    deliveryAddress: params.deliveryAddress,
+                    billingAddress: params.billingAddress,
                     confirmationList: confirmation.current,
                   })
                 }>

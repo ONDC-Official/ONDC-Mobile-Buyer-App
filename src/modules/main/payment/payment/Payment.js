@@ -5,12 +5,12 @@ import {
   BackHandler,
   FlatList,
   NativeEventEmitter,
-  SafeAreaView,
   StyleSheet,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import Config from 'react-native-config';
-import {Button, Card, Checkbox, Divider, Text, withTheme,} from 'react-native-paper';
+import {Button, Card, Divider, Text, withTheme,} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
@@ -22,17 +22,17 @@ import {appStyles} from '../../../../styles/styles';
 import {alertWithOneButton} from '../../../../utils/alerts';
 import {getData, postData} from '../../../../utils/api';
 import {
+  BASE_URL,
   CONFIRM_ORDER,
   INITIALIZE_ORDER,
   ON_CONFIRM_ORDER,
   ON_INITIALIZE_ORDER,
-  BASE_URL,
   SIGN_PAYLOAD,
 } from '../../../../utils/apiUtilities';
-import {PAYMENT_METHODS, PAYMENT_OPTIONS} from '../../../../utils/Constants';
+import {PAYMENT_METHODS} from '../../../../utils/Constants';
 import {showToastWithGravity} from '../../../../utils/utils';
-import Header from '../addressPicker/Header';
 import PaymentSkeleton from './PaymentSkeleton';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 /**
  * Component to payment screen in application
@@ -42,10 +42,15 @@ import PaymentSkeleton from './PaymentSkeleton';
  * @constructor
  * @returns {JSX.Element}
  */
-const Payment = ({navigation, theme, route: {params}}) => {
+const Payment = ({
+  navigation,
+  theme,
+  route: {
+    params: {deliveryAddress, billingAddress, confirmationList},
+  },
+}) => {
   const {colors} = theme;
   const dispatch = useDispatch();
-  const {selectedAddress, selectedBillingAddress, confirmationList} = params;
   const error = useRef(null);
   const {token, uid} = useSelector(({authReducer}) => authReducer);
   const [selectedPaymentOption, setSelectedPaymentOption] = useState(null);
@@ -58,9 +63,6 @@ const Payment = ({navigation, theme, route: {params}}) => {
   const eventSources = useRef(null);
   const [requestInProgress, setRequestInProgress] = useState(false);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
-  const {latitude, longitude, pinCode} = useSelector(
-    ({locationReducer}) => locationReducer,
-  );
   const refOrders = useRef();
   const total = useRef(0);
   const breakup = useRef(null);
@@ -155,7 +157,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
         );
         const object = cartItems.find(one => one.id === item.id);
         if (index > -1) {
-          let itemObj = {
+          payload[index].message.items.push({
             id: item.id,
             quantity: {
               count: object.quantity,
@@ -166,36 +168,35 @@ const Payment = ({navigation, theme, route: {params}}) => {
               id: item.provider.id,
               locations: item.provider.locations,
             },
-          };
-          payload[index].message.items.push(itemObj);
+          });
         } else {
           let billingInfo = {};
 
-          if (selectedBillingAddress.descriptor) {
-            billingInfo.phone = selectedBillingAddress.descriptor.phone;
-            billingInfo.name = selectedBillingAddress.descriptor.name;
-            billingInfo.email = selectedBillingAddress.descriptor.email;
+          if (billingAddress.descriptor) {
+            billingInfo.phone = billingAddress.descriptor.phone;
+            billingInfo.name = billingAddress.descriptor.name;
+            billingInfo.email = billingAddress.descriptor.email;
           } else {
-            billingInfo.phone = selectedBillingAddress.phone;
-            billingInfo.name = selectedBillingAddress.name;
-            billingInfo.email = selectedBillingAddress.email;
+            billingInfo.phone = billingAddress.phone;
+            billingInfo.name = billingAddress.name;
+            billingInfo.email = billingAddress.email;
           }
 
           billingInfo.address = {
-            door: selectedBillingAddress.address.door
-              ? selectedBillingAddress.address.door
-              : selectedBillingAddress.address.street,
+            door: billingAddress.address.door
+              ? billingAddress.address.door
+              : billingAddress.address.street,
             country: 'IND',
-            city: selectedBillingAddress.address.city,
-            street: selectedBillingAddress.address.street,
-            areaCode: selectedBillingAddress.address.areaCode,
-            state: selectedBillingAddress.address.state,
-            building: selectedBillingAddress.address.building
-              ? selectedBillingAddress.address.building
-              : selectedBillingAddress.address.street,
+            city: billingAddress.address.city,
+            street: billingAddress.address.street,
+            areaCode: billingAddress.address.areaCode,
+            state: billingAddress.address.state,
+            building: billingAddress.address.building
+              ? billingAddress.address.building
+              : billingAddress.address.street,
           };
 
-          let payloadObj = {
+          payload.push({
             context: {
               transaction_id: item.transaction_id,
               city: object.city,
@@ -219,43 +220,37 @@ const Payment = ({navigation, theme, route: {params}}) => {
               billing_info: billingInfo,
               delivery_info: {
                 type: 'Delivery',
-                name: selectedAddress.descriptor.name,
-                phone: selectedAddress.descriptor.phone,
-                email: selectedAddress.descriptor.email,
+                name: deliveryAddress.descriptor.name,
+                phone: deliveryAddress.descriptor.phone,
+                email: deliveryAddress.descriptor.email,
                 location: {
-                  gps: selectedAddress.gps,
+                  gps: deliveryAddress.gps,
                   address: {
-                    door: selectedAddress.address.door
-                      ? selectedAddress.address.door
-                      : selectedAddress.address.street,
+                    door: deliveryAddress.address.door
+                      ? deliveryAddress.address.door
+                      : deliveryAddress.address.street,
                     country: 'IND',
-                    city: selectedAddress.address.city,
-                    street: selectedAddress.address.street,
-                    areaCode: selectedAddress.address.areaCode,
-                    state: selectedAddress.address.state,
-                    building: selectedAddress.address.building
-                      ? selectedAddress.address.building
-                      : selectedAddress.address.street,
+                    city: deliveryAddress.address.city,
+                    street: deliveryAddress.address.street,
+                    areaCode: deliveryAddress.address.areaCode,
+                    state: deliveryAddress.address.state,
+                    building: deliveryAddress.address.building
+                      ? deliveryAddress.address.building
+                      : deliveryAddress.address.street,
                   },
                 },
               },
 
               payment: {type: 'POST-FULFILLMENT'},
             },
-          };
-
-          payload.push(payloadObj);
+          });
           providerIdArray.push(item.provider.id);
         }
       });
 
-      const {data} = await postData(
-        `${BASE_URL}${INITIALIZE_ORDER}`,
-        payload,
-        {
-          headers: {Authorization: `Bearer ${token}`},
-        },
-      );
+      const {data} = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
+        headers: {Authorization: `Bearer ${token}`},
+      });
 
       let messageIds = [];
 
@@ -291,8 +286,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
         merchant_id: Config.MERCHANT_ID.toUpperCase(),
         customer_id: uid,
         order_id: parentOrderId.current,
-        customer_phone: selectedAddress.descriptor.phone,
-        customer_email: selectedAddress.descriptor.email,
+        customer_phone: deliveryAddress.descriptor.phone,
+        customer_email: deliveryAddress.descriptor.email,
         amount: Config.ENV === 'dev' ? String(9) : String(9),
         timestamp: timeStamp.current,
         return_url: 'https://sandbox.juspay.in/end',
@@ -308,8 +303,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
           orderId: parentOrderId.current,
           amount: Config.ENV === 'dev' ? String(9) : String(9),
           customerId: uid,
-          customerEmail: selectedAddress.descriptor.email,
-          customerMobile: selectedAddress.descriptor.phone,
+          customerEmail: deliveryAddress.descriptor.email,
+          customerMobile: deliveryAddress.descriptor.phone,
           orderDetails: JSON.stringify(orderDetails),
           signature: signedPayload.current,
           merchantKeyId: Config.MERCHANT_KEY_ID,
@@ -479,8 +474,8 @@ const Payment = ({navigation, theme, route: {params}}) => {
         merchant_id: Config.MERCHANT_ID.toUpperCase(),
         customer_id: uid,
         order_id: parentOrderId.current,
-        customer_phone: selectedAddress.descriptor.phone,
-        customer_email: selectedAddress.descriptor.email,
+        customer_phone: deliveryAddress.descriptor.phone,
+        customer_email: deliveryAddress.descriptor.email,
         amount: Config.ENV === 'dev' ? String(9) : String(9),
         timestamp: timeStamp.current,
         return_url: 'https://sandbox.juspay.in/end',
@@ -641,107 +636,137 @@ const Payment = ({navigation, theme, route: {params}}) => {
   }, [confirmMessageIds]);
 
   return (
-    <SafeAreaView style={appStyles.container}>
+    <View style={[appStyles.container, styles.container]}>
       {!confirmOrderRequested ? (
-        <View style={appStyles.container}>
-          <Header
-            title={'Payment & Order Confirmation'}
-            navigation={navigation}
-          />
+        <View>
           {initializeOrderRequested ? (
             <PaymentSkeleton />
           ) : (
             <>
-              <View style={styles.container}>
+              <View>
                 {breakup.current && (
-                  <Card containerStyle={styles.itemsContainerStyle}>
-                    <FlatList
-                      data={breakup.current}
-                      renderItem={({item}) => {
-                        return (
-                          <>
-                            <View style={styles.priceContainer}>
-                              <Text style={styles.price}>{item.title}</Text>
-                              <Text>₹{item.price.value}</Text>
-                            </View>
-                            <Divider />
-                          </>
-                        );
-                      }}
-                    />
-
-                    {total.current && (
-                      <View style={styles.priceContainer}>
-                        <Text>Total Payable</Text>
-                        <Text style={styles.fulfillment}>₹{total.current}</Text>
-                      </View>
-                    )}
-                  </Card>
-                )}
-                <Card containerStyle={styles.addressCard}>
-                  <Text style={styles.text}>Address</Text>
-
-                  <Text style={styles.titleStyle}>
-                    {selectedAddress.address.street},{' '}
-                    {selectedAddress.address.locality},{' '}
-                    {selectedAddress.address.city},{' '}
-                    {selectedAddress.address.state} -{' '}
-                    {selectedAddress.address.areaCode}
-                  </Text>
-                </Card>
-
-                {!error.current && (
-                  <Card containerStyle={styles.cardContainerStyle}>
-                    <Text style={styles.text}>
-                      Payment Options
-                    </Text>
-
-                    <View style={styles.paymentOptions}>
-                      {PAYMENT_OPTIONS.map((option, index) => (
-                        <Checkbox
-                          key={option.value}
-                          title={
-                            <View style={styles.titleStyle}>
-                              <Text style={styles.textStyle}>
-                                {option.label}
-                              </Text>
-                              {option.label === 'Prepaid' && (
-                                <View style={styles.juspayContainer}>
-                                  <Text>
-                                    powered by
-                                  </Text>
-                                  <FastImage
-                                    source={{
-                                      uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
-                                    }}
-                                    style={styles.image}
-                                    resizeMode={'contain'}
-                                  />
-                                </View>
-                              )}
-                            </View>
-                          }
-                          checkedIcon="dot-circle-o"
-                          uncheckedIcon="circle-o"
-                          containerStyle={[
-                            styles.checkBoxcontainerStyle,
-                            {
-                              backgroundColor: colors.backgroundColor,
-                            },
-                          ]}
-                          wrapperStyle={styles.wrapperStyle}
-                          checked={option.value === selectedPaymentOption}
-                          onPress={() => setSelectedPaymentOption(option.value)}
-                        />
-                      ))}
+                  <Card>
+                    <View style={styles.itemsContainerStyle}>
+                      <FlatList
+                        data={breakup.current}
+                        renderItem={({item}) => (
+                          <View style={styles.priceContainer}>
+                            <Text style={styles.price}>{item.title}</Text>
+                            <Text>₹{item.price.value}</Text>
+                          </View>
+                        )}
+                        keyExtractor={item => item.title}
+                        ItemSeparatorComponent={() => <Divider />}
+                      />
+                      {total.current && (
+                        <View style={styles.priceContainer}>
+                          <Text>Total Payable</Text>
+                          <Text style={styles.fulfillment}>
+                            ₹{total.current}
+                          </Text>
+                        </View>
+                      )}
                     </View>
                   </Card>
+                )}
+
+                <View style={styles.addressContainer}>
+                  <Card>
+                    <View style={styles.itemsContainerStyle}>
+                      <Text style={styles.text}>Address</Text>
+
+                      <Text>
+                        {deliveryAddress.address.street},{' '}
+                        {deliveryAddress.address.locality},{' '}
+                        {deliveryAddress.address.city},{' '}
+                        {deliveryAddress.address.state} -{' '}
+                        {deliveryAddress.address.areaCode}
+                      </Text>
+                    </View>
+                  </Card>
+                </View>
+
+                {!error.current && (
+                  <View style={styles.addressContainer}>
+                    <Card>
+                      <View style={styles.itemsContainerStyle}>
+                        <Text style={styles.text}>Payment Options</Text>
+
+                        <View style={styles.paymentOptions}>
+                          <TouchableOpacity
+                            style={[
+                              styles.paymentOption,
+                              {
+                                borderColor:
+                                  selectedPaymentOption === 'JUSPAY'
+                                    ? theme.colors.primary
+                                    : theme.colors.accent,
+                              },
+                            ]}
+                            onPress={() => setSelectedPaymentOption('JUSPAY')}>
+                            <View style={styles.emptyCheckbox}>
+                              {selectedPaymentOption === 'JUSPAY' && (
+                                <Icon
+                                  name={'check-circle'}
+                                  color={colors.primary}
+                                  size={24}
+                                />
+                              )}
+                            </View>
+                            <View style={styles.paymentOptionDetails}>
+                              <Text style={styles.paymentOptionText}>
+                                Prepaid
+                              </Text>
+                              <View>
+                                <Text>Powered By</Text>
+                                <FastImage
+                                  source={{
+                                    uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
+                                  }}
+                                  style={styles.image}
+                                  resizeMode={'contain'}
+                                />
+                              </View>
+                            </View>
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            style={[
+                              styles.paymentOption,
+                              {
+                                borderColor:
+                                  selectedPaymentOption === 'COD'
+                                    ? theme.colors.primary
+                                    : theme.colors.accent,
+                              },
+                            ]}
+                            onPress={() => setSelectedPaymentOption('COD')}>
+                            <View style={styles.emptyCheckbox}>
+                              {selectedPaymentOption === 'COD' && (
+                                <Icon
+                                  name={'check-circle'}
+                                  color={colors.primary}
+                                  size={24}
+                                />
+                              )}
+                            </View>
+                            <View style={styles.paymentOptionDetails}>
+                              <Text style={styles.paymentOptionText}>COD</Text>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </Card>
+                  </View>
                 )}
               </View>
 
               {!error.current && (
                 <View style={styles.buttonContainer}>
                   <Button
+                    mode="contained"
+                    contentStyle={appStyles.containedButtonContainer}
+                    labelStyle={appStyles.containedButtonLabel}
                     onPress={() => {
                       removeInitEvent();
                       processPayment()
@@ -764,7 +789,7 @@ const Payment = ({navigation, theme, route: {params}}) => {
           </Text>
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -773,29 +798,16 @@ export default withTheme(Payment);
 const styles = StyleSheet.create({
   container: {padding: 10},
   text: {fontSize: 18, fontWeight: '600', paddingLeft: 10},
-  buttonContainer: {width: 300, alignSelf: 'center'},
+  buttonContainer: {width: 300, alignSelf: 'center', marginTop: 16},
   paymentOptions: {marginVertical: 10},
-  labelStyle: {fontSize: 16, fontWeight: '400'},
-  buttonStyle: {marginBottom: 10},
-  titleStyle: {marginLeft: 8},
-  textStyle: {fontSize: 16, fontWeight: '700'},
-  juspayContainer: {flexDirection: 'row', alignItems: 'center'},
   image: {height: 15, width: 80},
   itemsContainerStyle: {
-    marginHorizontal: 0,
-    marginVertical: 0,
     borderRadius: 10,
-    marginBottom: 10,
-    paddingVertical: 0,
+    paddingVertical: 10,
     paddingHorizontal: 10,
+    backgroundColor: 'white',
   },
-  cardContainerStyle: {
-    marginHorizontal: 0,
-    marginVertical: 0,
-    borderRadius: 10,
-    marginBottom: 10,
-    paddingHorizontal: 0,
-  },
+
   priceContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
@@ -803,20 +815,27 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   price: {flexShrink: 1},
-  wrapperStyle: {margin: 0},
-  checkBoxcontainerStyle: {
-    borderWidth: 0,
-    padding: 0,
-    marginHorizontal: 0,
-  },
   processing: {alignItems: 'center', justifyContent: 'center'},
   processingText: {fontSize: 18, fontWeight: '700', marginTop: 20},
-  addressCard: {
-    paddingVertical: 10,
-    marginHorizontal: 0,
-    marginVertical: 0,
+  addressContainer: {
+    marginTop: 12,
+  },
+  paymentOption: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    padding: 8,
     borderRadius: 10,
+    borderWidth: 1,
     marginBottom: 10,
-    paddingHorizontal: 0,
+  },
+  paymentOptionText: {
+    fontSize: 18,
+  },
+  paymentOptionDetails: {
+    marginStart: 12,
+  },
+  emptyCheckbox: {
+    width: 24,
+    height: 24,
   },
 });

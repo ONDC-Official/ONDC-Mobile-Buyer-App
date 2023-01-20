@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Card, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

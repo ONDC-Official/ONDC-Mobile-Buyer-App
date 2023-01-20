@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
 import {getData} from '../../../utils/api';
-import {GET_ORDERS, BASE_URL} from '../../../utils/apiUtilities';
+import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';
 import {keyExtractor, skeletonList} from '../../../utils/utils';
 import ListFooter from './ListFooter';
 import OrderAccordion from './OrderAccordion';

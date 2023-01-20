@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {getData} from '../../../../utils/api';
-import {DELIVERY_ADDRESS, BASE_URL} from '../../../../utils/apiUtilities';
+import {BASE_URL, DELIVERY_ADDRESS} from '../../../../utils/apiUtilities';
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import Address from './Address';

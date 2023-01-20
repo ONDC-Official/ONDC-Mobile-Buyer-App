@@ -1,10 +1,4 @@
-import {
-  ADD_PRODUCT_CART,
-  CLEAR_CART,
-  CLEAR_DATA,
-  REMOVE_PRODUCT_CART,
-  UPDATE_PRODUCT_CART,
-} from '../../actions';
+import {ADD_PRODUCT_CART, CLEAR_CART, CLEAR_DATA, REMOVE_PRODUCT_CART, UPDATE_PRODUCT_CART,} from '../../actions';
 import {CLEAR_PRODUCTS, SAVE_PRODUCTS} from '../actions';
 
 const initialState = {

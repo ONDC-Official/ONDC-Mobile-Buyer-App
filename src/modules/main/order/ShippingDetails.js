@@ -7,12 +7,12 @@ import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {
+  BASE_URL,
   ON_CANCEL_ORDER,
   ON_GET_STATUS,
   ON_SUPPORT,
   ON_TRACK_ORDER,
   ON_UPDATE_ORDER,
-  BASE_URL,
   SUPPORT,
 } from '../../../utils/apiUtilities';
 import {FAQS, ORDER_STATUS, UPDATE_TYPE} from '../../../utils/Constants';

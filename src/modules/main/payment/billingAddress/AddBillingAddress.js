@@ -10,11 +10,7 @@ import InputField from '../../../../components/input/InputField';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  BILLING_ADDRESS,
-  GET_GPS_CORDS,
-} from '../../../../utils/apiUtilities';
+import {BASE_URL, BILLING_ADDRESS, GET_GPS_CORDS,} from '../../../../utils/apiUtilities';
 
 /**
  * Component to render form in add new address screen

@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import InputField from '../../../components/input/InputField';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {postData} from '../../../utils/api';
-import {CALL, BASE_URL} from '../../../utils/apiUtilities';
+import {BASE_URL, CALL} from '../../../utils/apiUtilities';
 import {showToastWithGravity} from '../../../utils/utils';
 import {useSelector} from 'react-redux';
 import {Button, Text} from 'react-native-paper';

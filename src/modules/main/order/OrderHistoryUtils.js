@@ -1,10 +1,5 @@
 import {postData} from '../../../utils/api';
-import {
-  CANCEL_ORDER,
-  GET_STATUS,
-  BASE_URL,
-  TRACK_ORDER,
-} from '../../../utils/apiUtilities';
+import {BASE_URL, CANCEL_ORDER, GET_STATUS, TRACK_ORDER,} from '../../../utils/apiUtilities';
 import {alertWithOneButton} from '../../../utils/alerts';
 
 /**

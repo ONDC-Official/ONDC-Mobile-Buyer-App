@@ -1,20 +1,11 @@
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import React, {memo, useState} from 'react';
-import {
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Button, Divider, Text, withTheme} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import ClearButton from '../../../../../components/button/ClearButton';
 import {appStyles} from '../../../../../styles/styles';
-import {
-  clearFiltersOnly,
-  updateFilters,
-} from '../../../../../redux/filter/actions';
+import {clearFiltersOnly, updateFilters,} from '../../../../../redux/filter/actions';
 
 /**
  * Component to render filters screen

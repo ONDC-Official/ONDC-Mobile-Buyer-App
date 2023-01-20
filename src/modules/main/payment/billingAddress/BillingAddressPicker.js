@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {BILLING_ADDRESS, BASE_URL} from '../../../../utils/apiUtilities';
+import {BASE_URL, BILLING_ADDRESS} from '../../../../utils/apiUtilities';
 import {skeletonList} from '../../../../utils/utils';
 import {getStoredData} from '../../../../utils/storage';
 import AddressSkeleton from '../../dashboard/components/AddressSkeleton';

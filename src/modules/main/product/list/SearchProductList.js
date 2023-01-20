@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';

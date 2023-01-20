@@ -14,6 +14,7 @@ import BillingAddressPicker from '../modules/main/payment/billingAddress/Billing
 import AddBillingAddress from '../modules/main/payment/billingAddress/AddBillingAddress';
 import Confirmation from '../modules/main/payment/confirmation/Confirmation';
 import ProductDetails from '../modules/main/product/details/ProductDetails';
+import Payment from '../modules/main/payment/payment/Payment';
 
 const Stack = createStackNavigator();
 
@@ -86,11 +87,7 @@ const Navigation = () => {
         />
 
         <Stack.Screen name="Confirmation" component={Confirmation} />
-        {/*<Stack.Screen*/}
-        {/*  name="Payment"*/}
-        {/*  component={Payment}*/}
-        {/*  options={{headerShown: false}}*/}
-        {/*/>*/}
+        <Stack.Screen name="Payment" component={Payment} />
         {/*<Stack.Screen name="Profile" component={Profile}/>*/}
         {/*<Stack.Screen*/}
         {/*  name="Support"*/}

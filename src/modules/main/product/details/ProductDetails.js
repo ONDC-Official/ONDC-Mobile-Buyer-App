@@ -1,13 +1,6 @@
 import React, {useEffect} from 'react';
-import {
-  Dimensions,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {Button, Divider, Text, withTheme} from 'react-native-paper';
+import {Dimensions, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {Divider, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
