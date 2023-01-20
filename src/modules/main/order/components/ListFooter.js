@@ -1,4 +1,5 @@
 import React from 'react';
+
 import OrderCardSkeleton from './OrderCardSkeleton';
 
 /**
@@ -7,6 +8,7 @@ import OrderCardSkeleton from './OrderCardSkeleton';
  * @constructor
  * @returns {JSX.Element}
  */
-const ListFooter = ({moreRequested}) => moreRequested ? <OrderCardSkeleton/> : null;
+const ListFooter = ({moreRequested}) =>
+  moreRequested ? <OrderCardSkeleton /> : null;
 
 export default ListFooter;

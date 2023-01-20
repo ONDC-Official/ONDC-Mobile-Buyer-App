@@ -16,5 +16,8 @@ export const theme = {
     pageBackground: '#f0f0f0',
     foodAndBeverages: '#E8F0EA',
     grocery: '#FFF7C0',
+    shippedBackground: '#FFC132',
+    deliveredBackground: '#2EB086',
+    cardBackground: '#f5d9d3',
   },
 };

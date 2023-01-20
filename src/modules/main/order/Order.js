@@ -1,5 +1,5 @@
-import React, {memo, useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import React, {memo, useEffect, useRef, useState} from 'react';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
@@ -7,9 +7,9 @@ import {appStyles} from '../../../styles/styles';
 import {getData} from '../../../utils/api';
 import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';
 import {keyExtractor, skeletonList} from '../../../utils/utils';
-import ListFooter from './ListFooter';
-import OrderAccordion from './OrderAccordion';
-import OrderCardSkeleton from './OrderCardSkeleton';
+import ListFooter from './components/ListFooter';
+import OrderAccordion from './components/OrderAccordion';
+import OrderCardSkeleton from './components/OrderCardSkeleton';
 
 /**
  * Component to render orders screen
@@ -21,14 +21,11 @@ const Order = () => {
 
   const {handleApiError} = useNetworkErrorHandling();
 
+  const totalOrders = useRef(null);
+  const pageNumber = useRef(1);
+
   const [orders, setOrders] = useState(null);
-
-  const [totalOrders, setTotalOrders] = useState(null);
-
-  const [pageNumber, setPageNumber] = useState(1);
-
   const [moreListRequested, setMoreListRequested] = useState(false);
-
   const [refreshInProgress, setRefreshInProgress] = useState(false);
 
   /**
@@ -47,10 +44,10 @@ const Order = () => {
         },
       );
 
-      setTotalOrders(data.totalCount);
+      totalOrders.current = data.totalCount;
 
       setOrders(number === 1 ? data.orders : [...orders, ...data.orders]);
-      setPageNumber(pageNumber + 1);
+      pageNumber.current = pageNumber.current + 1;
     } catch (error) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -67,9 +64,9 @@ const Order = () => {
    */
   const loadMoreList = () => {
     if (orders) {
-      if (totalOrders > orders.length) {
+      if (totalOrders.current > orders.length) {
         setMoreListRequested(true);
-        getOrderList(pageNumber)
+        getOrderList(pageNumber.current)
           .then(() => {
             setMoreListRequested(false);
           })
@@ -81,7 +78,7 @@ const Order = () => {
   };
 
   useEffect(() => {
-    getOrderList(pageNumber)
+    getOrderList(pageNumber.current)
       .then(() => {})
       .catch(() => {});
   }, []);
@@ -113,28 +110,24 @@ const Order = () => {
   const listData = orders ? orders : skeletonList;
 
   return (
-    <SafeAreaView style={appStyles.container}>
-      <View style={appStyles.container}>
-        <FlatList
-          data={listData}
-          renderItem={renderItem}
-          ListEmptyComponent={() => (
-            <Text>No data found</Text>
-          )}
-          refreshing={refreshInProgress}
-          keyExtractor={keyExtractor}
-          onRefresh={onRefreshHandler}
-          onEndReachedThreshold={0.2}
-          onEndReached={loadMoreList}
-          contentContainerStyle={
-            listData.length > 0
-              ? styles.contentContainerStyle
-              : [appStyles.container, styles.emptyContainer]
-          }
-          ListFooterComponent={<ListFooter moreRequested={moreListRequested} />}
-        />
-      </View>
-    </SafeAreaView>
+    <View style={appStyles.container}>
+      <FlatList
+        data={listData}
+        renderItem={renderItem}
+        ListEmptyComponent={() => <Text>No data found</Text>}
+        refreshing={refreshInProgress}
+        keyExtractor={keyExtractor}
+        onRefresh={onRefreshHandler}
+        onEndReachedThreshold={0.2}
+        onEndReached={loadMoreList}
+        contentContainerStyle={
+          listData.length > 0
+            ? styles.contentContainerStyle
+            : [appStyles.container, styles.emptyContainer]
+        }
+        ListFooterComponent={<ListFooter moreRequested={moreListRequested} />}
+      />
+    </View>
   );
 };
 

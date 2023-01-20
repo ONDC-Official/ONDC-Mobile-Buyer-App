@@ -1,6 +1,11 @@
-import {postData} from '../../../utils/api';
-import {BASE_URL, CANCEL_ORDER, GET_STATUS, TRACK_ORDER,} from '../../../utils/apiUtilities';
-import {alertWithOneButton} from '../../../utils/alerts';
+import {postData} from '../../../../utils/api';
+import {
+  BASE_URL,
+  CANCEL_ORDER,
+  GET_STATUS,
+  TRACK_ORDER,
+} from '../../../../utils/apiUtilities';
+import {alertWithOneButton} from '../../../../utils/alerts';
 
 /**
  * function used to request tracking details of order
@@ -85,11 +90,7 @@ export const getStatus = async (
         message: {order_id: order.id},
       },
     ];
-    const {data} = await postData(
-      `${BASE_URL}${GET_STATUS}`,
-      payload,
-      options,
-    );
+    const {data} = await postData(`${BASE_URL}${GET_STATUS}`, payload, options);
     if (data[0]?.message?.ack?.status === 'ACK') {
       setStatusMessageId(data[0].context.message_id);
     } else {

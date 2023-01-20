@@ -1,8 +1,16 @@
 import React from 'react';
-import {Image, Linking, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
+import {
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {appStyles} from '../../../../styles/styles';
-import {Card, withTheme} from 'react-native-paper';
+import {IconButton, withTheme} from 'react-native-paper';
+
+import {appStyles} from '../../../styles/styles';
 
 /**
  * Component to render single card on support screen
@@ -22,7 +30,7 @@ const SupportCard = ({theme, url, icon, title, message, source}) => {
    * function handles click event of next arrow and navigates to the given url
    * @returns {Promise<void>}
    */
-  const onPressHandler = async () => {
+  const openSupportLink = async () => {
     try {
       const supported = await Linking.canOpenURL(url);
       if (supported) {
@@ -34,33 +42,20 @@ const SupportCard = ({theme, url, icon, title, message, source}) => {
   };
 
   return (
-    <Card containerStyle={styles.card}>
-      <View style={styles.container}>
-        <View style={[styles.icon]}>
-          {icon ? (
-            <Icon name={icon} color={colors.primary} size={40}/>
-          ) : (
-            <Image source={source} style={styles.image}/>
-          )}
-        </View>
-        <View style={[appStyles.container, styles.textContainer]}>
-          <Text style={[styles.text, {color: colors.primary}]}>
-            {title}
-          </Text>
-          <Text style={styles.message}>{message}</Text>
-        </View>
-        <TouchableOpacity
-          onPress={() => {
-            onPressHandler()
-              .then(() => {
-              })
-              .catch(() => {
-              });
-          }}>
-          <Icon name="chevron-right" color={colors.primary} size={24}/>
-        </TouchableOpacity>
+    <TouchableOpacity style={styles.container} onPress={openSupportLink}>
+      <View style={styles.icon}>
+        {icon ? (
+          <Icon name={icon} color={colors.primary} size={40} />
+        ) : (
+          <Image source={source} style={styles.image} />
+        )}
       </View>
-    </Card>
+      <View style={[appStyles.container, styles.textContainer]}>
+        <Text style={[styles.text, {color: colors.primary}]}>{title}</Text>
+        <Text style={styles.message}>{message}</Text>
+      </View>
+      <IconButton icon="chevron-right" iconColor={colors.primary} style={24} />
+    </TouchableOpacity>
   );
 };
 
@@ -71,10 +66,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+    backgroundColor: 'white',
+    margin: 10,
+    padding: 10,
   },
   image: {height: 30, width: 100},
   icon: {alignItems: 'center', width: 90},
   text: {fontSize: 20, flexShrink: 1},
   textContainer: {flexShrink: 1, marginHorizontal: 8},
-  card: {margin: 10, borderRadius: 8},
 });

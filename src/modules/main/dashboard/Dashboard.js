@@ -10,11 +10,11 @@ import {getUserInitials} from '../../../utils/utils';
 import {getStoredData} from '../../../utils/storage';
 import ProductSearch from '../product/list/component/header/ProductSearch';
 import Home from './components/Home';
+import HeaderMenu from "../../../components/headerMenu/HeaderMenu";
 
 const Dashboard = ({navigation, theme}) => {
   const isFocused = useIsFocused();
   const [address, setAddress] = useState(null);
-  const {name, photoURL} = useSelector(({authReducer}) => authReducer);
 
   useEffect(() => {
     getStoredData('address').then(response => {
@@ -42,15 +42,7 @@ const Dashboard = ({navigation, theme}) => {
             <ActivityIndicator size={'small'} color={theme.colors.primary} />
           )}
 
-          {photoURL ? (
-            <Avatar.Image size={32} rounded source={{uri: photoURL}} />
-          ) : (
-            <Avatar.Text
-              size={32}
-              rounded
-              label={getUserInitials(name ?? '')}
-            />
-          )}
+          <HeaderMenu />
         </View>
         <ProductSearch viewOnly />
       </View>

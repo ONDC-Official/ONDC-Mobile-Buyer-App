@@ -2,10 +2,10 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {FlatList, Linking, StyleSheet, View} from 'react-native';
 import RNEventSource from 'react-native-event-source';
-import ClearButton from '../../../components/button/ClearButton';
-import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {appStyles} from '../../../styles/styles';
-import {getData, postData} from '../../../utils/api';
+import ClearButton from '../../../../components/button/ClearButton';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {appStyles} from '../../../../styles/styles';
+import {getData, postData} from '../../../../utils/api';
 import {
   BASE_URL,
   ON_CANCEL_ORDER,
@@ -14,15 +14,38 @@ import {
   ON_TRACK_ORDER,
   ON_UPDATE_ORDER,
   SUPPORT,
-} from '../../../utils/apiUtilities';
-import {FAQS, ORDER_STATUS, UPDATE_TYPE} from '../../../utils/Constants';
-import {showToastWithGravity} from '../../../utils/utils';
-import {getStatus, trackOrder} from './OrderHistoryUtils';
+} from '../../../../utils/apiUtilities';
+import {FAQS, ORDER_STATUS, UPDATE_TYPE} from '../../../../utils/Constants';
+import {showToastWithGravity} from '../../../../utils/utils';
+import {getStatus, trackOrder} from '../utils/orderHistoryUtils';
 import Overlay from './Overlay';
 import StatusContainer from './StatusContainer';
 import Support from './Support';
 import {useSelector} from 'react-redux';
 import {Divider, Text, withTheme} from 'react-native-paper';
+
+/**
+ * Component is used to display single item with title and cost
+ * @param item:single ordered item
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const renderItem = ({item}) => {
+  return (
+    <>
+      <View style={[styles.rowContainer, styles.priceContainer]}>
+        <Text style={styles.title} numberOfLines={1}>
+          {item.product?.descriptor?.name}
+        </Text>
+        <Text style={styles.price}>₹{item.product?.price?.value}</Text>
+      </View>
+      <>
+        <Text style={styles.quantity}>QTY:&nbsp;{item.product?.quantity}</Text>
+        <StatusContainer product={item} />
+      </>
+    </>
+  );
+};
 
 /**
  * Component is used to display shipping details to the user when card is expanded
@@ -32,7 +55,7 @@ import {Divider, Text, withTheme} from 'react-native-paper';
  * @returns {JSX.Element}
  * @constructor
  */
-const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
+const ShippingDetails = ({order, getOrderList, theme}) => {
   const {colors} = theme;
   const isFocused = useIsFocused();
   const {token} = useSelector(({authReducer}) => authReducer);
@@ -61,31 +84,6 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
     },
   };
 
-  /**
-   * Component is used to display single item with title and cost
-   * @param item:single ordered item
-   * @returns {JSX.Element}
-   * @constructor
-   */
-  const renderItem = ({item}) => {
-    return (
-      <>
-        <View style={[styles.rowContainer, styles.priceContainer]}>
-          <Text style={styles.title} numberOfLines={1}>
-            {item.product?.descriptor?.name}
-          </Text>
-          <Text style={styles.price}>₹{item.product?.price?.value}</Text>
-        </View>
-        <>
-          <Text style={[styles.quantity, {color: colors.greyOutline}]}>
-            QTY:{item.product?.quantity}
-          </Text>
-          <StatusContainer product={item} />
-        </>
-      </>
-    );
-  };
-
   const getSupport = () => {
     setCallInProgress(true);
     postData(
@@ -110,7 +108,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
       })
       .catch(error => {
         handleApiError(error);
-        setCallInProgress(true);
+        setCallInProgress(false);
       });
   };
 
@@ -227,6 +225,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
       setUpdateInProgress(false);
     }
   };
+
   useEffect(() => {
     let eventSource;
     let timer;
@@ -373,7 +372,6 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
           <Text style={styles.name}>{shippingAddress?.name}</Text>
           <Text style={styles.address}>{contact?.email}</Text>
           <Text style={styles.address}>{contact?.phone}</Text>
-
           <Text style={styles.address}>
             {shippingAddress?.street}, {shippingAddress?.city},{' '}
             {shippingAddress?.state}
@@ -382,12 +380,12 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
             {shippingAddress?.areaCode ? shippingAddress?.areaCode : null}
           </Text>
         </View>
+
         <View style={styles.addressContainer}>
           <Text style={{color: colors.grey}}>Billed To</Text>
           <Text style={styles.name}>{order?.billing?.name}</Text>
           <Text style={styles.address}>{order?.billing?.email}</Text>
           <Text style={styles.address}>{order?.billing?.phone}</Text>
-
           <Text style={styles.address}>
             {order?.billing?.address.street}, {order?.billing?.address.city},{' '}
             {order?.billing?.address.state}
@@ -411,10 +409,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
           {order.state !== ORDER_STATUS.CANCELLED && (
             <>
               {order.state === ORDER_STATUS.DELIVERED ? (
-                <ClearButton
-                  textColor={colors.primary}
-                  title={"Return"}
-                />
+                <ClearButton textColor={colors.primary} title={'Return'} />
               ) : (
                 <>
                   <ClearButton
@@ -435,7 +430,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
                     loading={statusInProgress}
                   />
                   <ClearButton
-                    title={"Track"}
+                    title={'Track'}
                     onPress={() => {
                       trackOrder(
                         setTrackInProgress,
@@ -453,7 +448,7 @@ const ShippingDetails = ({order, getOrderList, activeSections, theme}) => {
               )}
 
               <ClearButton
-                title={"Cancel"}
+                title={'Cancel'}
                 onPress={() => {
                   setShowOverlay(true);
                   setUpdateType(UPDATE_TYPE.CANCEL);
@@ -494,11 +489,6 @@ export default withTheme(ShippingDetails);
 
 const styles = StyleSheet.create({
   addressContainer: {marginTop: 20, flexShrink: 1},
-  subContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  space: {margin: 5},
   actionContainer: {paddingTop: 10},
   container: {
     paddingTop: 8,
@@ -515,9 +505,6 @@ const styles = StyleSheet.create({
   title: {fontSize: 16, marginRight: 10, flexShrink: 1},
   price: {fontSize: 16, marginLeft: 10},
   address: {marginBottom: 4},
-  icon: {paddingVertical: 8, paddingHorizontal: 10, borderRadius: 50},
   divider: {marginTop: 10},
-  Button: {width: 90},
-  cancelledButton: {width: 110},
   quantity: {fontWeight: '700'},
 });

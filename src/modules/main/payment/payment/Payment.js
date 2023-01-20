@@ -77,7 +77,7 @@ const Payment = ({
   const onOrderSuccess = () => {
     dispatch(clearAllData());
     dispatch(clearFilters());
-    navigation.navigate('Dashboard', {screen: 'Orders'});
+    navigation.replace('Orders');
   };
 
   /**
