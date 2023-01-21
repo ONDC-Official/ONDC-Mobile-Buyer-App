@@ -1,8 +1,8 @@
 import moment from 'moment';
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {appStyles} from '../../../../styles/styles';
-import {withTheme} from 'react-native-paper';
+import {Text, withTheme} from 'react-native-paper';
 import OrderStatus from './OrderStatus';
 
 /**

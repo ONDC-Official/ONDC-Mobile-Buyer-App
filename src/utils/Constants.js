@@ -4,17 +4,6 @@ export const SEARCH_QUERY = {
   CATEGORY: 'Category',
 };
 
-export const OPTIONS = {
-  PROFILE: 'Profile',
-  LOG_OUT: 'Log Out',
-  SUPPORT: 'Support',
-};
-
-export const PAYMENT_OPTIONS = [
-  {value: 'JUSPAY', label: 'Prepaid'},
-  {value: 'COD', label: 'Cash on delivery'},
-];
-
 export const UPDATE_TYPE = {
   RETURN: 'return',
   CANCEL: 'cancel',
@@ -51,7 +40,5 @@ export const PRODUCT_SORTING = {
   PRICE_HIGH_TO_LOW: 'Price: High To Low',
   PRICE_LOW_TO_HIGH: 'Price: Low To High',
 };
-
-export const DELIVERY_CHARGES = 'Delivery charges';
 
 export const APPLICATION_VERSION = '1.0.1';

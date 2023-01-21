@@ -20,6 +20,8 @@ export default item => {
     } else {
       dispatch(addItemToCart(product));
     }
+
+    return product;
   };
 
   /**
@@ -44,6 +46,8 @@ export default item => {
         dispatch(updateItemInCart(product));
       }
     }
+
+    return product;
   };
 
   return {

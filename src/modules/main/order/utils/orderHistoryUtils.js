@@ -1,46 +1,5 @@
 import {postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  CANCEL_ORDER,
-  GET_STATUS,
-  TRACK_ORDER,
-} from '../../../../utils/apiUtilities';
-import {alertWithOneButton} from '../../../../utils/alerts';
-
-/**
- * function used to request tracking details of order
- * @returns {Promise<void>}
- */
-export const trackOrder = async (
-  setTrackInProgress,
-  setTrackMessageId,
-  order,
-  options,
-) => {
-  try {
-    setTrackInProgress(true);
-    const payload = [
-      {
-        context: {
-          transaction_id: order.transactionId,
-          bpp_id: order.bppId,
-        },
-        message: {order_id: order.id},
-      },
-    ];
-    const {data} = await postData(
-      `${BASE_URL}${TRACK_ORDER}`,
-      payload,
-      options,
-    );
-
-    if (data[0].message.ack.status === 'ACK') {
-      setTrackMessageId(data[0].context.message_id);
-    }
-  } catch (e) {
-    throw e;
-  }
-};
+import {BASE_URL, CANCEL_ORDER} from '../../../../utils/apiUtilities';
 
 /**
  * function used to request cancel order
@@ -68,39 +27,6 @@ export const cancelOrder = async (
       options,
     );
     setCancelMessageId(data.context.message_id);
-  } catch (e) {
-    throw e;
-  }
-};
-
-export const getStatus = async (
-  setStatusInProgress,
-  setStatusMessageId,
-  order,
-  options,
-) => {
-  try {
-    setStatusInProgress(true);
-    const payload = [
-      {
-        context: {
-          bpp_id: order.bppId,
-          transaction_id: order.transactionId,
-        },
-        message: {order_id: order.id},
-      },
-    ];
-    const {data} = await postData(`${BASE_URL}${GET_STATUS}`, payload, options);
-    if (data[0]?.message?.ack?.status === 'ACK') {
-      setStatusMessageId(data[0].context.message_id);
-    } else {
-      alertWithOneButton(
-        'Unable to Call',
-        'Unable to place your call currently, please try again',
-        'Ok',
-        () => {},
-      );
-    }
   } catch (e) {
     throw e;
   }

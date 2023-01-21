@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Image,
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, Linking, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {IconButton, withTheme} from 'react-native-paper';
 

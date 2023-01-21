@@ -1,28 +1,23 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {FlatList, Linking, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import RNEventSource from 'react-native-event-source';
 import ClearButton from '../../../../components/button/ClearButton';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
-import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  ON_CANCEL_ORDER,
-  ON_GET_STATUS,
-  ON_SUPPORT,
-  ON_TRACK_ORDER,
-  ON_UPDATE_ORDER,
-  SUPPORT,
-} from '../../../../utils/apiUtilities';
-import {FAQS, ORDER_STATUS, UPDATE_TYPE} from '../../../../utils/Constants';
+import {getData} from '../../../../utils/api';
+import {BASE_URL, ON_CANCEL_ORDER, ON_UPDATE_ORDER,} from '../../../../utils/apiUtilities';
+import {ORDER_STATUS, UPDATE_TYPE} from '../../../../utils/Constants';
 import {showToastWithGravity} from '../../../../utils/utils';
-import {getStatus, trackOrder} from '../utils/orderHistoryUtils';
-import Overlay from './Overlay';
+import CancelDialog from './dialogs/CancelDialog';
 import StatusContainer from './StatusContainer';
-import Support from './Support';
+import Support from './dialogs/Support';
 import {useSelector} from 'react-redux';
 import {Divider, Text, withTheme} from 'react-native-paper';
+import CallSeller from './actions/CallSeller';
+import Address from './Address';
+import GetOrderStatus from './actions/GetOrderStatus';
+import TrackOrder from './actions/TrackOrder';
 
 /**
  * Component is used to display single item with title and cost
@@ -61,15 +56,11 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
   const {token} = useSelector(({authReducer}) => authReducer);
   const {handleApiError} = useNetworkErrorHandling();
   const [cancelInProgress, setCancelInProgress] = useState(false);
-  const [callInProgress, setCallInProgress] = useState(false);
-  const [trackInProgress, setTrackInProgress] = useState(false);
-  const [statusInProgress, setStatusInProgress] = useState(false);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [sellerInfo, setSellerInfo] = useState(null);
   const [cancelMessageId, setCancelMessageId] = useState(null);
-  const [trackMessageId, setTrackMessageId] = useState(null);
-  const [supportMessageId, setSupportMessageId] = useState(null);
-  const [statusMessageId, setStatusMessageId] = useState(null);
+
   const [showOverlay, setShowOverlay] = useState(false);
   const [updateInProgress, setUpdateInProgress] = useState(false);
   const [updateMessageId, setUpdateMessageId] = useState(null);
@@ -82,89 +73,6 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  };
-
-  const getSupport = () => {
-    setCallInProgress(true);
-    postData(
-      `${BASE_URL}${SUPPORT}`,
-      [
-        {
-          context: {
-            bpp_id: order.bppId,
-            transaction_id: order.transactionId,
-          },
-          message: {
-            ref_id: order.id,
-          },
-        },
-      ],
-      options,
-    )
-      .then(({data}) => {
-        if (data[0].message.ack.status === 'ACK') {
-          setSupportMessageId(data[0].context.message_id);
-        }
-      })
-      .catch(error => {
-        handleApiError(error);
-        setCallInProgress(false);
-      });
-  };
-
-  /**
-   * function request support info
-   * @param messageId:message id received in get support API
-   * @returns {Promise<void>}
-   */
-  const onGetSupport = async messageId => {
-    try {
-      const {data} = await getData(
-        `${BASE_URL}${ON_SUPPORT}messageIds=${messageId}`,
-        options,
-      );
-
-      if (data[0].message.hasOwnProperty('phone')) {
-        setSellerInfo(data[0].message);
-      }
-      setModalVisible(true);
-    } catch (error) {
-      handleApiError(error);
-    }
-  };
-
-  const onTrackOrder = async messageId => {
-    try {
-      const {data} = await getData(
-        `${BASE_URL}${ON_TRACK_ORDER}messageIds=${messageId}`,
-        options,
-      );
-
-      if (data[0].message.tracking.status === 'active') {
-        const supported = await Linking.canOpenURL(FAQS);
-        if (supported) {
-          await Linking.openURL(FAQS);
-        }
-      }
-    } catch (e) {
-      handleApiError(e);
-    }
-  };
-
-  const onGetStatus = async id => {
-    try {
-      const {data} = await getData(`${BASE_URL}${ON_GET_STATUS}${id}`, {
-        headers: {Authorization: `Bearer ${token}`},
-      });
-      setStatusInProgress(false);
-      getOrderList(1)
-        .then(() => {})
-        .catch(() => {});
-    } catch (error) {
-      console.log(error);
-      handleApiError(error);
-      setStatusInProgress(false);
-    }
   };
 
   const onCancel = async id => {
@@ -218,42 +126,10 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
     if (eventSource) {
       eventSource.removeAllListeners();
       eventSource.close();
-      setTrackInProgress(false);
       setCancelInProgress(false);
-      setStatusInProgress(false);
-      setCallInProgress(false);
       setUpdateInProgress(false);
     }
   };
-
-  useEffect(() => {
-    let eventSource;
-    let timer;
-
-    if (supportMessageId && isFocused) {
-      eventSource = new RNEventSource(
-        `${BASE_URL}/clientApis/events?messageId=${supportMessageId}`,
-        {
-          headers: {Authorization: `Bearer ${token}`},
-        },
-      );
-
-      if (!timer) {
-        timer = setTimeout(removeEvents, 20000, eventSource);
-      }
-
-      eventSource.addEventListener('on_support', event => {
-        const data = JSON.parse(event.data);
-        onGetSupport(data.messageId)
-          .then(() => {})
-          .catch(() => {});
-      });
-    }
-
-    return () => {
-      removeEvents(eventSource);
-    };
-  }, [supportMessageId]);
 
   useEffect(() => {
     let eventSource;
@@ -286,35 +162,6 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
   useEffect(() => {
     let eventSource;
     let timer;
-
-    if (statusMessageId && isFocused) {
-      eventSource = new RNEventSource(
-        `${BASE_URL}/clientApis/events?messageId=${statusMessageId}`,
-        {
-          headers: {Authorization: `Bearer ${token}`},
-        },
-      );
-
-      if (!timer) {
-        timer = setTimeout(removeEvents, 20000, eventSource);
-      }
-
-      eventSource.addEventListener('on_status', event => {
-        const data = JSON.parse(event.data);
-        onGetStatus(data.messageId)
-          .then(() => {})
-          .catch(() => {});
-      });
-    }
-
-    return () => {
-      removeEvents(eventSource);
-    };
-  }, [statusMessageId]);
-
-  useEffect(() => {
-    let eventSource;
-    let timer;
     if (cancelMessageId) {
       eventSource = new RNEventSource(
         `${BASE_URL}/clientApis/events?messageId=${cancelMessageId}`,
@@ -337,74 +184,40 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
     };
   }, [cancelMessageId]);
 
-  useEffect(() => {
-    let eventSource;
-    let timer;
-    if (trackMessageId) {
-      eventSource = new RNEventSource(
-        `${BASE_URL}/clientApis/events?messageId=${trackMessageId}`,
-        {
-          headers: {Authorization: `Bearer ${token}`},
-        },
-      );
-      if (!timer) {
-        timer = setTimeout(removeEvents, 20000, eventSource);
-      }
-      eventSource.addEventListener('on_track', event => {
-        const data = JSON.parse(event.data);
-        onTrackOrder(data.messageId)
-          .then(() => {})
-          .catch(() => {});
-      });
-    }
-    return () => {
-      removeEvents(eventSource);
-    };
-  }, [trackMessageId]);
-
   return (
     <>
       <View style={[appStyles.container, styles.container]}>
         <Divider />
-        <FlatList data={order?.items} renderItem={renderItem} />
-        <View style={styles.addressContainer}>
-          <Text style={{color: colors.grey}}>Shipped To</Text>
-          <Text style={styles.name}>{shippingAddress?.name}</Text>
-          <Text style={styles.address}>{contact?.email}</Text>
-          <Text style={styles.address}>{contact?.phone}</Text>
-          <Text style={styles.address}>
-            {shippingAddress?.street}, {shippingAddress?.city},{' '}
-            {shippingAddress?.state}
-          </Text>
-          <Text>
-            {shippingAddress?.areaCode ? shippingAddress?.areaCode : null}
-          </Text>
-        </View>
-
-        <View style={styles.addressContainer}>
-          <Text style={{color: colors.grey}}>Billed To</Text>
-          <Text style={styles.name}>{order?.billing?.name}</Text>
-          <Text style={styles.address}>{order?.billing?.email}</Text>
-          <Text style={styles.address}>{order?.billing?.phone}</Text>
-          <Text style={styles.address}>
-            {order?.billing?.address.street}, {order?.billing?.address.city},{' '}
-            {order?.billing?.address.state}
-          </Text>
-          <Text>
-            {order?.billing?.address.areaCode
-              ? order?.billing?.address.areaCode
-              : null}
-          </Text>
-        </View>
+        <FlatList
+          data={order?.items}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+        />
+        <Divider style={styles.divider} />
+        <Address
+          title="Shipped To"
+          name={shippingAddress?.name}
+          email={contact?.email}
+          phone={contact?.phone}
+          address={shippingAddress}
+        />
+        <Divider style={styles.divider} />
+        <Address
+          title="Billed To"
+          name={shippingAddress?.name}
+          email={contact?.email}
+          phone={contact?.phone}
+          address={order?.billing?.address}
+        />
         <Divider style={styles.divider} />
 
         <View style={[styles.rowContainer, styles.actionContainer]}>
-          <ClearButton
-            title={'Call'}
-            onPress={() => getSupport()}
-            textColor={colors.primary}
-            disabled={callInProgress}
-            loading={callInProgress}
+          <CallSeller
+            bppId={order.bppId}
+            orderId={order.id}
+            transactionId={order.transactionId}
+            updateSellerInfo={setSellerInfo}
+            setModalVisible={setModalVisible}
           />
           {order.state !== ORDER_STATUS.CANCELLED && (
             <>
@@ -412,37 +225,17 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
                 <ClearButton textColor={colors.primary} title={'Return'} />
               ) : (
                 <>
-                  <ClearButton
-                    title={'Get Status'}
-                    onPress={() => {
-                      getStatus(
-                        setStatusInProgress,
-                        setStatusMessageId,
-                        order,
-                        options,
-                      )
-                        .then(() => {})
-                        .catch(e => {
-                          handleApiError(e);
-                        });
-                    }}
-                    textColor={colors.primary}
-                    loading={statusInProgress}
+                  <GetOrderStatus
+                    bppId={order.bppId}
+                    orderId={order.id}
+                    transactionId={order.transactionId}
+                    getOrderList={getOrderList}
                   />
-                  <ClearButton
-                    title={'Track'}
-                    onPress={() => {
-                      trackOrder(
-                        setTrackInProgress,
-                        setTrackMessageId,
-                        order,
-                        options,
-                      )
-                        .then(() => {})
-                        .catch(e => handleApiError(e));
-                    }}
-                    textColor={colors.primary}
-                    loading={trackInProgress}
+
+                  <TrackOrder
+                    bppId={order.bppId}
+                    orderId={order.id}
+                    transactionId={order.transactionId}
                   />
                 </>
               )}
@@ -467,7 +260,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
         />
       )}
       {showOverlay && (
-        <Overlay
+        <CancelDialog
           showOverlay={showOverlay}
           breakup={order.items}
           setShowOverlay={setShowOverlay}

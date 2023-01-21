@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-import {Avatar, Text, withTheme} from 'react-native-paper';
+import {Text, withTheme} from 'react-native-paper';
 
 import {appStyles} from '../../../styles/styles';
-import {getUserInitials} from '../../../utils/utils';
 import {getStoredData} from '../../../utils/storage';
 import ProductSearch from '../product/list/component/header/ProductSearch';
 import Home from './components/Home';

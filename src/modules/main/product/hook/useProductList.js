@@ -41,7 +41,6 @@ export default (category = null) => {
    */
   const getProductsList = async (id, transId, page = 1) => {
     if (id) {
-      console.log(listCount.current, count.current);
       try {
         setProductsRequested(true);
         let url = `${BASE_URL}${GET_PRODUCTS}${id}&pageNumber=${page}&limit=10`;
@@ -245,7 +244,6 @@ export default (category = null) => {
 
   useEffect(() => {
     if (filterCount.current > 0) {
-      console.log('Filters updated');
       currentPage.current = 1;
       dispatch(clearProducts());
       getProductsList(messageId, transactionId)

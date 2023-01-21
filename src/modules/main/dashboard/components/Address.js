@@ -1,10 +1,12 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {setStoredData} from '../../../../utils/storage';
 import {useNavigation} from '@react-navigation/native';
 import {IconButton, Text, withTheme} from 'react-native-paper';
+import {alertWithTwoButtons} from "../../../../utils/alerts";
+import {clearCart} from "../../../../redux/actions";
 
 /**
  * Component to render single address card in select address screen
@@ -16,6 +18,7 @@ import {IconButton, Text, withTheme} from 'react-native-paper';
  * @returns {JSX.Element}
  */
 const Address = ({item, theme, isCurrentAddress, onEdit, params}) => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const {colors} = theme;
   const {street, landmark, city, state, areaCode} = item.address;
@@ -23,7 +26,14 @@ const Address = ({item, theme, isCurrentAddress, onEdit, params}) => {
 
   const setDefaultAddress = () => {
     if (cartItems.length > 0 && !isCurrentAddress) {
-      alert('Confirm if you want update the address?');
+      alertWithTwoButtons(
+        'Address Updated',
+        'You want update the address, it will clear your existing cart. Please confirm if you want to go ahead with this?',
+        'Yes',
+        () => dispatch(clearCart()),
+        'No',
+        () => {},
+      );
     } else {
       setStoredData('address', JSON.stringify(item)).then(response => {
         if (params?.navigateToDashboard) {
@@ -65,7 +75,7 @@ const Address = ({item, theme, isCurrentAddress, onEdit, params}) => {
           </View>
         )}
         <Text>
-          {street} {landmark} {city} {state} {areaCode}
+          {street}, {landmark ? `${landmark},` : ''} {city}, {state}, {areaCode}
         </Text>
       </View>
       <View style={styles.editContainer}>
