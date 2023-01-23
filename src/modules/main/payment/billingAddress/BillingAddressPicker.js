@@ -59,6 +59,8 @@ const BillingAddressPicker = ({navigation, theme}) => {
         } else {
           handleApiError(error);
         }
+      } else {
+        handleApiError(error);
       }
     }
   };
@@ -93,9 +95,10 @@ const BillingAddressPicker = ({navigation, theme}) => {
     navigation.setOptions({
       headerRight: () => (
         <Button
+          contentStyle={appStyles.containedButtonContainer}
+          labelStyle={appStyles.containedButtonLabel}
           mode="outlined"
           style={{marginEnd: 10}}
-          labelStyle={[appStyles.containedButtonLabel]}
           onPress={onAdd}>
           Add
         </Button>
@@ -124,19 +127,17 @@ const BillingAddressPicker = ({navigation, theme}) => {
         style={appStyles.container}
         data={list}
         renderItem={renderItem}
-        ListEmptyComponent={() => {
-          return (
-            <View style={[appStyles.container, appStyles.centerContainer]}>
-              <Button
-                labelStyle={appStyles.containedButtonLabel}
-                contentStyle={appStyles.containedButtonContainer}
-                mode="outlined"
-                onPress={onAdd}>
-                Add Billing Address
-              </Button>
-            </View>
-          );
-        }}
+        ListEmptyComponent={() => (
+          <View style={[appStyles.container, appStyles.centerContainer]}>
+            <Button
+              labelStyle={appStyles.containedButtonLabel}
+              contentStyle={appStyles.containedButtonContainer}
+              mode="outlined"
+              onPress={onAdd}>
+              Add Billing Address
+            </Button>
+          </View>
+        )}
         contentContainerStyle={
           list.length > 0 ? styles.contentContainerStyle : appStyles.container
         }

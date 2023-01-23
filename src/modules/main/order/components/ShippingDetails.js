@@ -2,18 +2,23 @@ import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import RNEventSource from 'react-native-event-source';
+import {useSelector} from 'react-redux';
+import {Divider, Text, withTheme} from 'react-native-paper';
+
 import ClearButton from '../../../../components/button/ClearButton';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData} from '../../../../utils/api';
-import {BASE_URL, ON_CANCEL_ORDER, ON_UPDATE_ORDER,} from '../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  ON_CANCEL_ORDER,
+  ON_UPDATE_ORDER,
+} from '../../../../utils/apiUtilities';
 import {ORDER_STATUS, UPDATE_TYPE} from '../../../../utils/Constants';
 import {showToastWithGravity} from '../../../../utils/utils';
 import CancelDialog from './dialogs/CancelDialog';
 import StatusContainer from './StatusContainer';
 import Support from './dialogs/Support';
-import {useSelector} from 'react-redux';
-import {Divider, Text, withTheme} from 'react-native-paper';
 import CallSeller from './actions/CallSeller';
 import Address from './Address';
 import GetOrderStatus from './actions/GetOrderStatus';
@@ -211,7 +216,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
         />
         <Divider style={styles.divider} />
 
-        <View style={[styles.rowContainer, styles.actionContainer]}>
+        <View style={styles.actionContainer}>
           <CallSeller
             bppId={order.bppId}
             orderId={order.id}
@@ -282,7 +287,11 @@ export default withTheme(ShippingDetails);
 
 const styles = StyleSheet.create({
   addressContainer: {marginTop: 20, flexShrink: 1},
-  actionContainer: {paddingTop: 10},
+  actionContainer: {
+    paddingVertical: 10,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
   container: {
     paddingTop: 8,
   },

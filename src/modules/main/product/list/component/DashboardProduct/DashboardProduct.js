@@ -6,6 +6,7 @@ import FastImage from 'react-native-fast-image';
 import {appStyles} from '../../../../../../styles/styles';
 import {showInfoToast} from '../../../../../../utils/utils';
 import useProductQuantity from '../../../hook/useProductQuantity';
+import moment from "moment";
 
 const image = require('../../../../../../assets/noImage.png');
 
@@ -52,6 +53,14 @@ const DashboardProduct = ({
             resizeMode={'contain'}
           />
           <View style={[appStyles.container, styles.details]}>
+            {item?.hasOwnProperty('storeOpenTillDate') && (
+              <View style={styles.storeTime}>
+                <Text style={{color: colors.opposite}}>
+                  Open until{' '}
+                  {moment(item.storeOpenTillDate).format('DD-MM-YYYY hh:mm a')}
+                </Text>
+              </View>
+            )}
             <Text style={styles.title} numberOfLines={1}>
               {item?.descriptor?.name}
             </Text>
@@ -68,7 +77,8 @@ const DashboardProduct = ({
                 (item.quantity < 1 ? (
                   <Button
                     mode="outlined"
-                    style={{width: 100}}
+                    contentStyle={appStyles.containedButtonContainer}
+                    labelStyle={appStyles.containedButtonLabel}
                     onPress={() => {
                       showInfoToast('Added to cart');
                       addItem(item);
@@ -157,5 +167,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+  },
+  storeTime: {
+    alignItems: 'flex-end',
+    marginBottom: 8,
   },
 });

@@ -1,5 +1,6 @@
 import React from 'react';
-import {Button, withTheme} from 'react-native-paper';
+import {Text, withTheme} from 'react-native-paper';
+import {ActivityIndicator, TouchableOpacity, StyleSheet} from 'react-native';
 
 /**
  * Component to render clear button in the screens
@@ -11,10 +12,21 @@ import {Button, withTheme} from 'react-native-paper';
  */
 const ClearButton = props => {
   return (
-    <Button onPress={props.onPress} mode="text" loading={props.loading}>
-      {props.title}
-    </Button>
+    <TouchableOpacity
+      onPress={props.onPress}
+      disabled={props.loading}
+      style={styles.container}>
+      {props.loading && (
+        <ActivityIndicator color={props.theme.colors.primary} />
+      )}
+      <Text style={{color: props.theme.colors.primary}}>{props.title}</Text>
+    </TouchableOpacity>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+  },
+});
 export default withTheme(ClearButton);

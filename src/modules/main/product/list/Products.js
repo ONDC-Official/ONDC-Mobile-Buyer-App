@@ -53,7 +53,7 @@ const Products = ({theme, imageBackgroundColor, loadMore}) => {
         contentContainerStyle={
           products.length > 0
             ? styles.contentContainerStyle
-            : appStyles.container
+            : [appStyles.container, styles.emptyContainer]
         }
         onEndReachedThreshold={5}
         onEndReached={loadMore}
@@ -91,6 +91,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
   },
+  emptyContainer: {
+    backgroundColor: 'white',
+  }
 });
 
 export default withTheme(Products);

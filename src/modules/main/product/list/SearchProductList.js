@@ -1,24 +1,29 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, SafeAreaView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-import {Avatar, IconButton, Text, withTheme} from 'react-native-paper';
+import {IconButton, Text, withTheme} from 'react-native-paper';
 
 import {appStyles} from '../../../../styles/styles';
-import {getUserInitials} from '../../../../utils/utils';
 import {getStoredData} from '../../../../utils/storage';
 import useProductList from '../hook/useProductList';
 import ProductSearch from './component/header/ProductSearch';
 import Products from './Products';
 import {SEARCH_QUERY} from '../../../../utils/Constants';
 import SortAndFilter from './component/header/SortAndFilter';
+import HeaderMenu from '../../../../components/headerMenu/HeaderMenu';
 
 const SearchProductList = ({navigation, theme, route: {params}}) => {
   const isFocused = useIsFocused();
   const [address, setAddress] = useState(null);
 
-  const {name, photoURL} = useSelector(({authReducer}) => authReducer);
   const {products} = useSelector(({productReducer}) => productReducer);
   const {filters} = useSelector(({filterReducer}) => filterReducer);
 
@@ -64,27 +69,19 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
             )}
           </View>
 
-          {photoURL ? (
-            <Avatar.Image size={32} rounded source={{uri: photoURL}} />
-          ) : (
-            <Avatar.Text
-              size={32}
-              rounded
-              label={getUserInitials(name ?? '')}
-            />
-          )}
+          <HeaderMenu />
         </View>
         <ProductSearch onSearch={onSearch} />
       </View>
       <View>
         {!!params && (
           <Text
-            style={{
-              color: theme.colors.accent,
-              textAlign: 'center',
-              marginVertical: 16,
-              fontSize: 20,
-            }}>
+            style={[
+              {
+                color: theme.colors.accent,
+              },
+              styles.category,
+            ]}>
             You are now viewing {params.categoryName}
           </Text>
         )}
@@ -119,6 +116,11 @@ const styles = StyleSheet.create({
   },
   address: {
     marginEnd: 8,
+  },
+  category: {
+    textAlign: 'center',
+    marginVertical: 16,
+    fontSize: 20,
   },
 });
 

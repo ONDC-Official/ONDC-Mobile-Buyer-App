@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import ClearButton from '../../../../../../components/button/ClearButton';
 import {updateSortOption} from '../../../../../../redux/filter/actions';
+import {appStyles} from "../../../../../../styles/styles";
 
 /**
  * Component to render filters screen
@@ -68,6 +69,8 @@ const SortMenu = ({theme, sortOptions, closeSortSheet, apiInProgress}) => {
         {(sortingMethod || selectedSortOption) && (
           <View style={styles.buttonContainer}>
             <Button
+              contentStyle={appStyles.containedButtonContainer}
+              labelStyle={appStyles.containedButtonLabel}
               mode="outlined"
               disabled={apiInProgress}
               onPress={clearFilter}>
@@ -79,6 +82,8 @@ const SortMenu = ({theme, sortOptions, closeSortSheet, apiInProgress}) => {
         {sortingMethod && (
           <View style={styles.buttonContainer}>
             <Button
+              contentStyle={appStyles.containedButtonContainer}
+              labelStyle={appStyles.containedButtonLabel}
               mode="contained"
               disabled={apiInProgress}
               loading={apiInProgress}

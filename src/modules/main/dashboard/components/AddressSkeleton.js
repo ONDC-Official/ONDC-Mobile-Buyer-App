@@ -1,42 +1,45 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {Card} from 'react-native-paper';
 
 /**
  * Component to show skeleton of address card
  * @returns {JSX.Element}
  */
 const AddressSkeleton = () => (
-  <View style={styles.skeletonContainer}>
-    <SkeletonPlaceholder>
-      <View style={styles.container}>
+  <Card style={styles.container}>
+    <View style={styles.skeletonContainer}>
+      <SkeletonPlaceholder>
         <View style={styles.radioButton} />
-        <View>
-          <View style={styles.name} />
-          <View style={styles.email} />
-          <View style={styles.address} />
-          <View style={styles.pin} />
-        </View>
+      </SkeletonPlaceholder>
+      <View style={styles.details}>
+        <SkeletonPlaceholder>
+          <View style={styles.text} />
+          <View style={styles.text} />
+          <View style={styles.text} />
+          <View style={styles.text} />
+        </SkeletonPlaceholder>
       </View>
-    </SkeletonPlaceholder>
-  </View>
+    </View>
+  </Card>
 );
 
 export default AddressSkeleton;
 
 const styles = StyleSheet.create({
-  skeletonContainer: {
-    padding: 12,
-    backgroundColor: 'white',
-  },
   container: {
-    flexDirection: 'row',
-    padding: 12,
+    margin: 8,
     backgroundColor: 'white',
   },
-  radioButton: {height: 24, width: 24, borderRadius: 20},
-  name: {height: 15, width: 100, marginBottom: 5},
-  email: {height: 15, width: 200, marginBottom: 5},
-  address: {height: 15, width: '90%', marginBottom: 5},
-  pin: {height: 15, width: 100, marginBottom: 5},
+  skeletonContainer: {
+    flexDirection: 'row',
+    padding: 8,
+  },
+  details: {
+    flexGrow: 1,
+    marginLeft: 10,
+  },
+  radioButton: {height: 24, width: 24, borderRadius: 12},
+  text: {height: 15, width: '90%', marginBottom: 5},
 });

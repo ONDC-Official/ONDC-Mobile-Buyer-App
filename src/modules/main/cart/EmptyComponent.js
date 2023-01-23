@@ -22,8 +22,9 @@ const EmptyComponent = ({theme, navigation}) => {
         button below
       </Text>
       <Button
-        mode="outlined"
+        contentStyle={appStyles.containedButtonContainer}
         labelStyle={appStyles.containedButtonLabel}
+        mode="outlined"
         onPress={() => navigation.navigate('Dashboard')}>
         Shop Now
       </Button>

@@ -1,6 +1,6 @@
 import {Formik} from 'formik';
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
 import {useSelector} from 'react-redux';
@@ -10,7 +10,11 @@ import InputField from '../../../../components/input/InputField';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {BASE_URL, BILLING_ADDRESS, GET_GPS_CORDS,} from '../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  BILLING_ADDRESS,
+  GET_GPS_CORDS,
+} from '../../../../utils/apiUtilities';
 
 /**
  * Component to render form in add new address screen
@@ -159,31 +163,45 @@ const AddBillingAddress = ({navigation, theme}) => {
                   errorMessage={touched.number ? errors.number : null}
                   onChangeText={handleChange('number')}
                 />
-                <InputField
-                  value={values.pin}
-                  keyboardType={'numeric'}
-                  maxLength={6}
-                  onBlur={handleBlur('pin')}
-                  label={'Pin code'}
-                  placeholder={'Pin code'}
-                  errorMessage={touched.pin ? errors.pin : null}
-                  onChangeText={e => {
-                    setFieldValue('pin', e);
-                    if (e.length === 6 && e.match(/^[1-9]{1}[0-9]{5}$/)) {
-                      setRequestInProgress(true);
-                      getState(e, setFieldValue, setFieldError)
-                        .then(() => {
-                          setRequestInProgress(false);
-                        })
-                        .catch(() => {
-                          setRequestInProgress(false);
-                        });
-                    }
-                  }}
-                  right={
-                    requestInProgress ? <TextInput.Icon icon="loading" /> : null
-                  }
-                />
+                <View style={styles.row}>
+                  <View style={styles.inputContainer}>
+                    <InputField
+                      value={values.pin}
+                      keyboardType={'numeric'}
+                      maxLength={6}
+                      onBlur={handleBlur('pin')}
+                      label={'Pin code'}
+                      placeholder={'Pin code'}
+                      errorMessage={touched.pin ? errors.pin : null}
+                      onChangeText={e => {
+                        setFieldValue('pin', e);
+                        if (e.length === 6 && e.match(/^[1-9]{1}[0-9]{5}$/)) {
+                          setRequestInProgress(true);
+                          getState(e, setFieldValue, setFieldError)
+                            .then(() => {
+                              setRequestInProgress(false);
+                            })
+                            .catch(() => {
+                              setRequestInProgress(false);
+                            });
+                        }
+                      }}
+                      right={
+                        requestInProgress ? (
+                          <TextInput.Icon icon="loading" />
+                        ) : null
+                      }
+                    />
+                    {requestInProgress && (
+                      <View style={styles.indicator}>
+                        <ActivityIndicator
+                          size="small"
+                          color={theme.colors.primary}
+                        />
+                      </View>
+                    )}
+                  </View>
+                </View>
                 <InputField
                   value={values.street}
                   onBlur={handleBlur('street')}
@@ -241,6 +259,16 @@ const AddBillingAddress = ({navigation, theme}) => {
 export default withTheme(AddBillingAddress);
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  indicator: {
+    width: 30,
+  },
+  inputContainer: {
+    flexGrow: 1,
+  },
   buttonContainer: {
     alignSelf: 'center',
     width: 300,

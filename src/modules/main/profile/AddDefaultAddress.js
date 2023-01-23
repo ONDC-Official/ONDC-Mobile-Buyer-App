@@ -1,17 +1,24 @@
 import {Formik} from 'formik';
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Avatar, Button, TextInput, withTheme} from 'react-native-paper';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {Button, Chip, Text, withTheme} from 'react-native-paper';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
+import {useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {getData, postData} from '../../../utils/api';
-import {BASE_URL, DELIVERY_ADDRESS, GET_GPS_CORDS, GET_LATLONG} from '../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  DELIVERY_ADDRESS,
+  GET_GPS_CORDS,
+  GET_LATLONG,
+} from '../../../utils/apiUtilities';
 import InputField from '../../../components/input/InputField';
-import {getUserInitials} from '../../../utils/utils';
 import {setStoredData} from '../../../utils/storage';
-import {useSelector} from 'react-redux';
+import {appStyles} from '../../../styles/styles';
+
+const tags = ['Home', 'Office', 'Other'];
 
 /**
  * Component to render form in add new address screen
@@ -40,11 +47,10 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
       .required('This field is required'),
     landMark: Yup.string().trim().required('This field is required'),
     street: Yup.string().trim().required('This field is required'),
+    tag: Yup.string().trim().required('This field is required'),
   });
 
-  const {token, name, emailId, photoURL} = useSelector(
-    ({authReducer}) => authReducer,
-  );
+  const {token, name, emailId} = useSelector(({authReducer}) => authReducer);
 
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -117,6 +123,7 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
         state: values.state,
         street: values.street,
         country: 'IND',
+        tag: values.tag,
       },
     };
 
@@ -144,13 +151,6 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
 
   return (
     <KeyboardAwareScrollView>
-      <View style={styles.imageContainer}>
-        {photoURL ? (
-          <Avatar.Image size={64} source={{uri: photoURL}} />
-        ) : (
-          <Avatar.Text size={64} label={getUserInitials(name ?? '')} />
-        )}
-      </View>
       <Formik
         initialValues={userInfo}
         validationSchema={validationSchema}
@@ -199,31 +199,41 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
                 errorMessage={touched.number ? errors.number : null}
                 onChangeText={handleChange('number')}
               />
-              <InputField
-                value={values.pin}
-                keyboardType={'numeric'}
-                maxLength={6}
-                onBlur={handleBlur('pin')}
-                label={'Pin code'}
-                placeholder={'Pin code'}
-                errorMessage={touched.pin ? errors.pin : null}
-                onChangeText={e => {
-                  setFieldValue('pin', e);
-                  if (e.length === 6 && e.match(/^[1-9]{1}[0-9]{5}$/)) {
-                    setRequestInProgress(true);
-                    getState(e, setFieldValue, setFieldError)
-                      .then(() => {
-                        setRequestInProgress(false);
-                      })
-                      .catch(() => {
-                        setRequestInProgress(false);
-                      });
-                  }
-                }}
-                right={
-                  requestInProgress ? <TextInput.Icon icon="loading" /> : null
-                }
-              />
+
+              <View style={styles.row}>
+                <View style={styles.inputContainer}>
+                  <InputField
+                    value={values.pin}
+                    keyboardType={'numeric'}
+                    maxLength={6}
+                    onBlur={handleBlur('pin')}
+                    label={'Pin code'}
+                    placeholder={'Pin code'}
+                    errorMessage={touched.pin ? errors.pin : null}
+                    onChangeText={e => {
+                      setFieldValue('pin', e);
+                      if (e.length === 6 && e.match(/^[1-9]{1}[0-9]{5}$/)) {
+                        setRequestInProgress(true);
+                        getState(e, setFieldValue, setFieldError)
+                          .then(() => {
+                            setRequestInProgress(false);
+                          })
+                          .catch(() => {
+                            setRequestInProgress(false);
+                          });
+                      }
+                    }}
+                  />
+                </View>
+                {requestInProgress && (
+                  <View style={styles.indicator}>
+                    <ActivityIndicator
+                      size="small"
+                      color={theme.colors.primary}
+                    />
+                  </View>
+                )}
+              </View>
               <InputField
                 value={values.street}
                 onBlur={handleBlur('street')}
@@ -258,9 +268,27 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
                 editable={false}
               />
 
+              <Text>Select address type</Text>
+              <View style={styles.tagContainer}>
+                {tags.map(tag => (
+                  <Chip
+                    key={tag}
+                    selectedColor={
+                      values.tag === tag
+                        ? theme.colors.opposite
+                        : theme.colors.primary
+                    }
+                    mode="outlined"
+                    onPress={() => setFieldValue('tag', tag)}>
+                    {tag}
+                  </Chip>
+                ))}
+              </View>
               <View style={styles.buttonContainer}>
                 <Button
                   mode="contained"
+                  contentStyle={appStyles.containedButtonContainer}
+                  labelStyle={appStyles.containedButtonLabel}
                   onPress={handleSubmit}
                   loading={apiInProgress}
                   disabled={apiInProgress}>
@@ -278,6 +306,16 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
 export default withTheme(AddDefaultAddress);
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  indicator: {
+    width: 30,
+  },
+  inputContainer: {
+    flexGrow: 1,
+  },
   buttonContainer: {
     alignSelf: 'center',
     width: 300,
@@ -292,5 +330,11 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     width: 300,
     alignSelf: 'center',
+  },
+  tagContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+    marginTop: 10,
+    justifyContent: 'space-between',
   },
 });

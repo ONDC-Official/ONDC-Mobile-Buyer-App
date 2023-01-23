@@ -119,26 +119,23 @@ const SortAndFilter = ({theme, updateFilterCount}) => {
 
   const appliedFilters = selectedProviders.length + selectedCategories.length;
 
+  const filterColor = appliedFilters > 0 ? colors.opposite : colors.primary;
+  const sortColor = selectedSortOption ? colors.opposite : colors.primary;
+
   return (
     <>
       <View
         style={[styles.sortFilterContainer, {backgroundColor: colors.surface}]}>
         <TouchableOpacity
-          style={[
-            {borderColor: appliedFilters > 0 ? colors.primary : colors.accent},
-            styles.row,
-          ]}
+          style={[{borderColor: filterColor}, styles.row]}
           onPress={openRBSheet}>
-          <Text style={[styles.text, {color: colors.primary}]}>Filters</Text>
-          <Icon name="filter" size={14} color={colors.primary} />
+          <Text style={[styles.text, {color: filterColor}]}>Filters</Text>
+          <Icon name="filter" size={14} color={filterColor} />
         </TouchableOpacity>
         <TouchableOpacity
-          style={[
-            {borderColor: selectedSortOption ? colors.primary : colors.accent},
-            styles.row,
-          ]}
+          style={[{borderColor: sortColor}, styles.row]}
           onPress={openSortSheet}>
-          <SortIcon value={selectedSortOption} color={colors.primary} />
+          <SortIcon value={selectedSortOption} color={sortColor} />
         </TouchableOpacity>
       </View>
 
@@ -156,7 +153,10 @@ const SortAndFilter = ({theme, updateFilterCount}) => {
         customStyles={{
           container: styles.rbSheet,
         }}>
-        <Filters closeRBSheet={closeRBSheet} updateFilterCount={updateFilterCount} />
+        <Filters
+          closeRBSheet={closeRBSheet}
+          updateFilterCount={updateFilterCount}
+        />
       </RBSheet>
     </>
   );

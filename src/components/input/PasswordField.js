@@ -25,12 +25,11 @@ const PasswordField = props => {
             onPress={() => setHide(!hide)}
           />
         }
+        dense
       />
-      {props.errorMessage && (
-        <HelperText type="error" visible={props.errorMessage}>
-          {props.errorMessage}
-        </HelperText>
-      )}
+      <HelperText padding="none" type="error" visible={props.errorMessage}>
+        {props.errorMessage}
+      </HelperText>
     </>
   );
 };

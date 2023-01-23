@@ -19,7 +19,7 @@ const Home = ({theme}) => {
         <Pressable
           onPress={() =>
             navigation.navigate('SearchProductList', {
-              category: 'foodAndBeverage',
+              category: 'F&B',
               categoryName: 'Food & Beverage',
             })
           }>

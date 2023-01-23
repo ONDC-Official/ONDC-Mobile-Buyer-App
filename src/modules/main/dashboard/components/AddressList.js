@@ -8,7 +8,8 @@ import Address from './Address';
 import {getStoredData} from '../../../../utils/storage';
 import {skeletonList} from '../../../../utils/utils';
 import AddressSkeleton from './AddressSkeleton';
-import {Divider, IconButton, withTheme} from 'react-native-paper';
+import {Button, Divider, IconButton, withTheme} from 'react-native-paper';
+import {appStyles} from '../../../../styles/styles';
 
 const AddressList = ({navigation, theme, route: {params}}) => {
   const {token} = useSelector(({authReducer}) => authReducer);
@@ -32,6 +33,7 @@ const AddressList = ({navigation, theme, route: {params}}) => {
       setAddresses(data);
       setApiInProgress(false);
     } catch (error) {
+      console.log(error);
       setApiInProgress(false);
       if (error.response) {
         if (error.response.status === 404) {
@@ -39,6 +41,8 @@ const AddressList = ({navigation, theme, route: {params}}) => {
         } else {
           handleApiError(error);
         }
+      } else {
+        handleApiError(error);
       }
     }
   };
@@ -47,6 +51,7 @@ const AddressList = ({navigation, theme, route: {params}}) => {
     navigation.setOptions({
       headerRight: () => (
         <IconButton
+          size={24}
           icon={'plus-circle'}
           iconColor={theme.colors.primary}
           style={styles.addButton}
@@ -85,17 +90,29 @@ const AddressList = ({navigation, theme, route: {params}}) => {
     );
   };
 
+  const list = apiInProgress ? skeletonList : addresses;
+
   return (
-    <View>
+    <View style={appStyles.container}>
       <FlatList
-        data={apiInProgress ? skeletonList : addresses}
+        style={appStyles.container}
+        data={list}
         renderItem={renderItem}
         keyExtractor={item => item.id}
-        ListEmptyComponent={() => {
-          return <View />;
-        }}
-        contentContainerStyle={styles.containerStyle}
-        ItemSeparatorComponent={() => <Divider />}
+        ListEmptyComponent={() => (
+          <View style={[appStyles.container, appStyles.centerContainer]}>
+            <Button
+              labelStyle={appStyles.containedButtonLabel}
+              contentStyle={appStyles.containedButtonContainer}
+              mode="outlined"
+              onPress={() => navigation.navigate('AddDefaultAddress')}>
+              Add Address
+            </Button>
+          </View>
+        )}
+        contentContainerStyle={
+          list.length > 0 ? styles.contentContainerStyle : appStyles.container
+        }
       />
     </View>
   );

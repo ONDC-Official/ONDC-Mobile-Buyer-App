@@ -9,6 +9,7 @@ import {BASE_URL, CALL} from '../../../../../utils/apiUtilities';
 import {showToastWithGravity} from '../../../../../utils/utils';
 import {useSelector} from 'react-redux';
 import {Button, Dialog, Text, withTheme} from 'react-native-paper';
+import {appStyles} from "../../../../../styles/styles";
 
 const userInfo = {
   number: '',
@@ -111,6 +112,8 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
               <View style={styles.buttonContainer}>
                 <View style={styles.button}>
                   <Button
+                    contentStyle={appStyles.containedButtonContainer}
+                    labelStyle={appStyles.containedButtonLabel}
                     mode="outlined"
                     onPress={() => setModalVisible(false)}
                     disabled={callInProgress}>
@@ -119,6 +122,8 @@ const Support = ({modalVisible, setModalVisible, sellerInfo, theme}) => {
                 </View>
                 <View style={styles.button}>
                   <Button
+                    contentStyle={appStyles.containedButtonContainer}
+                    labelStyle={appStyles.containedButtonLabel}
                     mode="contained"
                     onPress={handleSubmit}
                     loading={callInProgress}

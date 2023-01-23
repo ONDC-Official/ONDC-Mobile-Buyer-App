@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import {Formik} from 'formik';
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
 import {Button, Text, withTheme} from 'react-native-paper';
@@ -139,6 +139,8 @@ const Login = ({navigation, theme}) => {
 
                     <View style={styles.inputContainer}>
                       <Button
+                        contentStyle={appStyles.containedButtonContainer}
+                        labelStyle={appStyles.containedButtonLabel}
                         mode="contained"
                         onPress={handleSubmit}
                         loading={apiInProgress}
@@ -151,11 +153,12 @@ const Login = ({navigation, theme}) => {
 
                     <View style={styles.loginMessage}>
                       <Text>Dont have an account?</Text>
-                      <Button
-                        mode="text"
+                      <TouchableOpacity
                         onPress={() => navigation.navigate('SignUp')}>
-                        Sign up
-                      </Button>
+                        <Text style={{color: theme.colors.primary, paddingLeft: 8}}>
+                          Sign up
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                   </>
                 );

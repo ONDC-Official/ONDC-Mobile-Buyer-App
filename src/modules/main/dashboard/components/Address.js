@@ -4,9 +4,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {setStoredData} from '../../../../utils/storage';
 import {useNavigation} from '@react-navigation/native';
-import {IconButton, Text, withTheme} from 'react-native-paper';
-import {alertWithTwoButtons} from "../../../../utils/alerts";
-import {clearCart} from "../../../../redux/actions";
+import {Card, Text, withTheme} from 'react-native-paper';
+import {alertWithTwoButtons} from '../../../../utils/alerts';
+import {clearCart} from '../../../../redux/actions';
 
 /**
  * Component to render single address card in select address screen
@@ -21,7 +21,7 @@ const Address = ({item, theme, isCurrentAddress, onEdit, params}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {colors} = theme;
-  const {street, landmark, city, state, areaCode} = item.address;
+  const {street, landmark, city, state, areaCode, tag} = item.address;
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
   const setDefaultAddress = () => {
@@ -49,55 +49,61 @@ const Address = ({item, theme, isCurrentAddress, onEdit, params}) => {
   };
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => setDefaultAddress()}>
-      <View style={styles.emptyCheckbox}>
-        {isCurrentAddress && (
-          <Icon name={'check-circle'} color={colors.primary} size={24} />
-        )}
-      </View>
+    <Card style={styles.card} onPress={setDefaultAddress}>
+      <View style={styles.container}>
+        <View style={styles.emptyCheckbox}>
+          {isCurrentAddress && (
+            <Icon name={'check-circle'} color={colors.primary} size={24} />
+          )}
+        </View>
 
-      <View style={styles.addressContainer}>
-        {item?.descriptor?.name && (
-          <View style={styles.textContainer}>
-            <Text>{item?.descriptor?.name}</Text>
-          </View>
-        )}
-        {item?.descriptor?.email && (
-          <View style={styles.textContainer}>
-            <Text>{item?.descriptor?.email}</Text>
-          </View>
-        )}
-        {item?.descriptor?.phone && (
-          <View style={styles.textContainer}>
-            <Text>{item?.descriptor?.phone}</Text>
-          </View>
-        )}
-        <Text>
-          {street}, {landmark ? `${landmark},` : ''} {city}, {state}, {areaCode}
-        </Text>
+        <View style={styles.addressContainer}>
+          {tag && (
+            <View style={styles.textContainer}>
+              <Text variant="titleMedium">{tag}</Text>
+            </View>
+          )}
+          {item?.descriptor?.name && (
+            <View style={styles.textContainer}>
+              <Text variant="titleMedium">{item?.descriptor?.name}</Text>
+            </View>
+          )}
+          {item?.descriptor?.email && (
+            <View style={styles.textContainer}>
+              <Text>{item?.descriptor?.email}</Text>
+            </View>
+          )}
+          {item?.descriptor?.phone && (
+            <View style={styles.textContainer}>
+              <Text>{item?.descriptor?.phone}</Text>
+            </View>
+          )}
+          <Text>
+            {street}, {landmark ? `${landmark},` : ''} {city}, {state},{' '}
+            {areaCode}
+          </Text>
+        </View>
+        <View style={styles.editContainer}>
+          <TouchableOpacity onPress={onEdit}>
+            <Icon name="pencil-outline" size={24} color={colors.primary} />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.editContainer}>
-        <IconButton
-          onPress={onEdit}
-          icon="pencil"
-          size={18}
-          iconColor={colors.primary}
-        />
-      </View>
-    </TouchableOpacity>
+    </Card>
   );
 };
 
 export default withTheme(Address);
 
 const styles = StyleSheet.create({
+  card: {
+    backgroundColor: 'white',
+    margin: 8,
+  },
   container: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: 8,
-    backgroundColor: 'white',
   },
   addressContainer: {
     flexGrow: 1,

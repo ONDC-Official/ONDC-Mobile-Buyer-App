@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Dimensions, ScrollView, StyleSheet, View,} from 'react-native';
-import {Button, Chip, IconButton, Text, withTheme,} from 'react-native-paper';
+import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
+import {Button, Chip, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 
 import {appStyles} from '../../../../styles/styles';
 import {showInfoToast} from '../../../../utils/utils';
 import useProductQuantity from '../hook/useProductQuantity';
 import ProductImages from './components/ProductImages';
+import moment from 'moment';
 
 const image = require('../../../../assets/noImage.png');
 const imageSize = Dimensions.get('window').width;
@@ -26,7 +27,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: product?.descriptor?.name,
+      headerTitle: params.product?.descriptor?.name,
     });
   }, [navigation]);
 
@@ -53,25 +54,47 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 
         <View style={styles.details}>
           <View style={styles.row}>
-            <Text style={styles.descriptorName}>
-              {product?.descriptor?.name}
-            </Text>
-            <Text style={[styles.descriptorName, {color: colors.opposite}]}>
-              ₹
-              {product?.price.value
-                ? product?.price.value
-                : product?.price.maximum_value}
-            </Text>
-          </View>
-          <View style={styles.detailsContainer}>
-            <Text style={[styles.provider, {color: colors.gray}]}>
-              Seller: {product?.provider_details?.descriptor?.name}
-            </Text>
-            {product?.descriptor.short_desc && (
-              <Text style={[styles.provider, {color: colors.gray}]}>
-                {product?.descriptor.short_desc}
+            <View>
+              <Text style={styles.descriptorName}>
+                {product?.descriptor?.name}
               </Text>
-            )}
+
+              <Text style={[styles.provider, {color: colors.gray}]}>
+                Seller: {product?.provider_details?.descriptor?.name}
+              </Text>
+              {product?.descriptor.short_desc && (
+                <Text style={[styles.provider, {color: colors.gray}]}>
+                  {product?.descriptor.short_desc}
+                </Text>
+              )}
+            </View>
+            <View>
+              <Text variant="titleLarge" style={{color: colors.opposite}}>
+                ₹
+                {product?.price.value
+                  ? product?.price.value
+                  : product?.price.maximum_value}
+              </Text>
+              {product?.hasOwnProperty('@ondc/org/time_to_ship') && (
+                <View
+                  style={[styles.timeRequired, {backgroundColor: colors.red}]}>
+                  <View>
+                    <Text
+                      variant="titleMedium"
+                      style={styles.timeRequiredLabel}>
+                      {moment
+                        .duration(product['@ondc/org/time_to_ship'])
+                        .asMinutes()}
+                    </Text>
+                    <Text
+                      variant="titleMedium"
+                      style={styles.timeRequiredLabel}>
+                      min
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </View>
           </View>
 
           <View style={styles.chipContainer}>
@@ -111,6 +134,54 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             </Text>
           </View>
 
+          {product?.hasOwnProperty(
+            '@ondc/org/statutory_reqs_packaged_commodities',
+          ) && (
+            <View style={styles.detailsContainer}>
+              <Text style={{color: colors.accent}}>
+                Statutory Reqs Packaged Commodities
+              </Text>
+              <Text style={styles.longDescription}>
+                Manufacturer/Packer Name:{' '}
+                {
+                  product['@ondc/org/statutory_reqs_packaged_commodities']
+                    .manufacturer_or_packer_name
+                }
+              </Text>
+              <Text style={styles.longDescription}>
+                Manufacturer/Packer Address:{' '}
+                {
+                  product['@ondc/org/statutory_reqs_packaged_commodities']
+                    .manufacturer_or_packer_address
+                }
+              </Text>
+              <Text style={styles.longDescription}>
+                Generic name of commodity:{' '}
+                {
+                  product['@ondc/org/statutory_reqs_packaged_commodities']
+                    .common_or_generic_name_of_commodity
+                }
+              </Text>
+              {product['@ondc/org/statutory_reqs_packaged_commodities']
+                ?.net_quantity_or_measure_of_commodity_in_pkg && (
+                <Text style={styles.longDescription}>
+                  Net. Quantity:{' '}
+                  {
+                    product['@ondc/org/statutory_reqs_packaged_commodities']
+                      .net_quantity_or_measure_of_commodity_in_pkg
+                  }
+                </Text>
+              )}
+              <Text style={styles.longDescription}>
+                Month Year of Manufacturer/Packing:{' '}
+                {
+                  product['@ondc/org/statutory_reqs_packaged_commodities']
+                    .month_year_of_manufacture_packing_import
+                }
+              </Text>
+            </View>
+          )}
+
           <View style={styles.sectionContainer}>
             <Text style={{color: colors.accent}}>Provider</Text>
             <Text>{product?.provider_details?.descriptor?.name}</Text>
@@ -123,8 +194,9 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             {!outOfStock &&
               (product?.quantity < 1 ? (
                 <Button
+                  contentStyle={appStyles.containedButtonContainer}
+                  labelStyle={appStyles.containedButtonLabel}
                   mode="outlined"
-                  style={{width: 100}}
                   onPress={() => {
                     showInfoToast('Added to cart');
                     let item = addItem(product);
@@ -170,6 +242,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
+  },
+  timeRequired: {
+    marginTop: 8,
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  timeRequiredLabel: {
+    color: 'white',
+    lineHeight: 16,
+    textAlign: 'center',
+    padding: 0,
+    margin: 0,
   },
   descriptorName: {fontSize: 18, fontWeight: '700', marginBottom: 4},
   provider: {fontSize: 14, marginBottom: 4, flexShrink: 1},

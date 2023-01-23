@@ -6,21 +6,23 @@ const StatusContainer = ({product, theme}) => {
   return (
     <View style={styles.container}>
       {product.return_status ? (
-        <Chip selectedColor={theme.colors.primary} mode="outlined">
-          {product.return_status}
-        </Chip>
+        <View style={styles.chipContainer}>
+          <Chip selectedColor={theme.colors.primary} mode="outlined">
+            {product.return_status}
+          </Chip>
+        </View>
       ) : (
-        <>
+        <View style={styles.chipContainer}>
           {product.product['@ondc/org/returnable'] && (
             <Chip selectedColor={theme.colors.primary} mode="outlined">
               Returnable
             </Chip>
           )}
-        </>
+        </View>
       )}
 
       {product.cancellation_status ? (
-        <View style={styles.cancelContainer}>
+        <View style={styles.chipContainer}>
           <Chip selectedColor={theme.colors.primary} mode="outlined">
             {product.cancellation_status}
           </Chip>
@@ -28,7 +30,7 @@ const StatusContainer = ({product, theme}) => {
       ) : (
         <>
           {product.product['@ondc/org/cancellable'] && (
-            <View style={styles.cancelContainer}>
+            <View style={styles.chipContainer}>
               <Chip selectedColor={theme.colors.primary} mode="outlined">
                 Cancellable
               </Chip>
@@ -48,5 +50,5 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 10,
   },
-  cancelContainer: {paddingHorizontal: 10},
+  chipContainer: {paddingEnd: 10},
 });
