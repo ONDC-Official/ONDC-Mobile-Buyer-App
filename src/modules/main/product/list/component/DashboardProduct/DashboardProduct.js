@@ -4,9 +4,9 @@ import {Button, Card, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 
 import {appStyles} from '../../../../../../styles/styles';
-import {showInfoToast} from '../../../../../../utils/utils';
+import {showInfoToast, stringToDecimal} from '../../../../../../utils/utils';
 import useProductQuantity from '../../../hook/useProductQuantity';
-import moment from "moment";
+import moment from 'moment';
 
 const image = require('../../../../../../assets/noImage.png');
 
@@ -70,9 +70,7 @@ const DashboardProduct = ({
               </Text>
             </View>
             <View style={styles.priceContainer}>
-              <Text style={styles.amount}>
-                ₹{Number.isInteger(cost) ? cost : parseFloat(cost).toFixed(2)}
-              </Text>
+              <Text style={styles.amount}>₹{stringToDecimal(cost)}</Text>
               {!outOfStock &&
                 (item.quantity < 1 ? (
                   <Button

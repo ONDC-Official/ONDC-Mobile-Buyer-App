@@ -116,6 +116,7 @@ export default (category = null) => {
   };
 
   const loadMore = () => {
+    console.log('Load more');
     if (
       listCount.current >= 10 &&
       listCount.current < count.current &&

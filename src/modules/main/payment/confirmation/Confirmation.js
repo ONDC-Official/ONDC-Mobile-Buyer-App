@@ -7,8 +7,16 @@ import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {BASE_URL, GET_SELECT, ON_GET_SELECT,} from '../../../../utils/apiUtilities';
-import {showToastWithGravity, skeletonList} from '../../../../utils/utils';
+import {
+  BASE_URL,
+  GET_SELECT,
+  ON_GET_SELECT,
+} from '../../../../utils/apiUtilities';
+import {
+  showToastWithGravity,
+  skeletonList,
+  stringToDecimal,
+} from '../../../../utils/utils';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 import Product from './Product';
 
@@ -43,13 +51,30 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       if (!data[0].error) {
         if (data[0].context.bpp_id) {
           data[0].message.quote.items.forEach(element => {
-            const object = cartItems.find(one => one.id === element.id);
-            if (object) {
+            const product = cartItems.find(one => one.id === element.id);
+            const productPrice = data[0].message.quote.quote.breakup.find(
+              one => one['@ondc/org/item_id'] === product.id,
+            );
+
+            const cost = product.price.value
+              ? product.price.value
+              : product.price.maximum_value;
+
+            if (
+              stringToDecimal(productPrice.price.value) !==
+              stringToDecimal(cost)
+            ) {
+              element.message = 'Price of this product has been updated';
+            }
+            if (product) {
               element.provider = {
-                id: object.provider_details.id,
-                descriptor: object.provider_details.descriptor,
-                locations: [object.location_details.id],
+                id: product.provider_details.id,
+                descriptor: product.provider_details.descriptor,
+                locations: [product.location_details.id],
               };
+              element.fulfillment = data[0].message.quote.fulfillments.find(
+                one => one.id === element.fulfillment_id,
+              );
               element.transaction_id = data[0].context.transaction_id;
               element.bpp_id = data[0].context.bpp_id;
               if (confirmation.current) {
@@ -70,7 +95,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         isAllPresent ? setApiInProgress(false) : setApiInProgress(true);
       }
     } catch (error) {
-      console.log(error);
       handleApiError(error);
     }
   };
@@ -235,9 +259,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   }, [messageIds]);
 
   const renderItem = ({item}) => {
-    const element = confirmation.current
-      ? confirmation.current.findIndex(one => one.id === item.id) > -1
-      : false;
+    let element = null;
+
+    if (confirmation.current) {
+      element = confirmation.current.find(one => one.id === item.id);
+    }
 
     return item.hasOwnProperty('isSkeleton') ? (
       <ProductCardSkeleton item={item} />
@@ -245,7 +271,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       <Product
         item={item}
         navigation={navigation}
-        confirmed={element}
+        confirmation={element}
         apiInProgress={apiInProgress}
       />
     );

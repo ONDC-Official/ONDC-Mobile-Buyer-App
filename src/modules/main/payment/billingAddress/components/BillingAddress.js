@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {IconButton, Text, withTheme} from 'react-native-paper';
+import {Card, IconButton, Text, withTheme} from 'react-native-paper';
 
 /**
  * Component to render single address card in select address screen
@@ -23,49 +23,50 @@ const BillingAddress = ({
   const {street, landmark, city, state, areaCode} = item.address;
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => setBillingAddress(item)}>
-      <View style={styles.emptyCheckbox}>
-        {isCurrentAddress && (
-          <Icon name={'check-circle'} color={colors.primary} size={24} />
-        )}
-      </View>
+    <Card style={styles.card} onPress={() => setBillingAddress(item)}>
+      <View style={styles.container}>
+        <View style={styles.emptyCheckbox}>
+          {isCurrentAddress && (
+            <Icon name={'check-circle'} color={colors.primary} size={24} />
+          )}
+        </View>
 
-      <View style={styles.addressContainer}>
-        <View style={styles.textContainer}>
-          <Text>{item?.name}</Text>
+        <View style={styles.addressContainer}>
+          <View style={styles.textContainer}>
+            <Text variant="titleSmall">{item?.name}</Text>
+          </View>
+          <View style={styles.textContainer}>
+            <Text>{item?.email}</Text>
+          </View>
+          <View style={styles.textContainer}>
+            <Text>{item?.phone}</Text>
+          </View>
+          <Text>
+            {street}, {landmark ? `${landmark},` : ''} {city}, {state},{' '}
+            {areaCode}
+          </Text>
         </View>
-        <View style={styles.textContainer}>
-          <Text>{item?.email}</Text>
+        <View style={styles.editContainer}>
+          <TouchableOpacity onPress={onEdit}>
+            <Icon name="pencil-outline" size={24} color={colors.primary} />
+          </TouchableOpacity>
         </View>
-        <View style={styles.textContainer}>
-          <Text>{item?.phone}</Text>
-        </View>
-        <Text>
-          {street} {landmark} {city} {state} {areaCode}
-        </Text>
       </View>
-      <View style={styles.editContainer}>
-        <IconButton
-          onPress={onEdit}
-          icon="pencil"
-          size={18}
-          iconColor={colors.primary}
-        />
-      </View>
-    </TouchableOpacity>
+    </Card>
   );
 };
 
 export default withTheme(BillingAddress);
 
 const styles = StyleSheet.create({
+  card: {
+    backgroundColor: 'white',
+    margin: 8,
+  },
   container: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     padding: 8,
-    backgroundColor: 'white',
   },
   addressContainer: {
     flexGrow: 1,

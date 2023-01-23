@@ -7,7 +7,14 @@ import {reasons} from '../../utils/reasons';
 import {postData} from '../../../../../utils/api';
 import {cancelOrder} from '../../utils/orderHistoryUtils';
 import {useSelector} from 'react-redux';
-import {Button, Checkbox, Dialog, Menu, Text, withTheme,} from 'react-native-paper';
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  Menu,
+  Text,
+  withTheme,
+} from 'react-native-paper';
 
 const CancelDialog = ({
   theme,
@@ -61,12 +68,10 @@ const CancelDialog = ({
             onPress={() => onPressHandler(item, index)}
           />
           <View style={styles.container}>
-            <Text style={[appStyles.container, styles.title]} numberOfLines={1}>
-              {item.product?.descriptor?.name}
-            </Text>
+            <Text variant="titleSmall">{item.product?.descriptor?.name}</Text>
             <Text>QTY: {item.product?.quantity}</Text>
           </View>
-          <Text style={styles.price}>₹{item.product?.price?.value}</Text>
+          <Text variant="titleSmall">₹{item.product?.price?.value}</Text>
         </View>
       );
     }
@@ -120,7 +125,9 @@ const CancelDialog = ({
       if (data[0].message.ack.status === 'ACK') {
         setUpdateMessageId(data[0].context.message_id);
       }
+      setUpdateInProgress(false);
     } catch (e) {
+      setUpdateInProgress(false);
       console.log(e);
       handleApiError(e);
     }
@@ -189,7 +196,9 @@ const CancelDialog = ({
                 </TouchableOpacity>
               }>
               {reasons.map(reason => (
-                <TouchableOpacity style={styles.dropdownRow} onPress={() => onSelect(reason)}>
+                <TouchableOpacity
+                  style={styles.dropdownRow}
+                  onPress={() => onSelect(reason)}>
                   <Text>{reason.reason}</Text>
                 </TouchableOpacity>
               ))}
@@ -211,6 +220,7 @@ const CancelDialog = ({
             contentStyle={appStyles.containedButtonContainer}
             labelStyle={appStyles.containedButtonLabel}
             mode={'contained'}
+            disabled={cancelInProgress || updateInProgress}
             loading={cancelInProgress || updateInProgress}
             onPress={onConfirm}>
             Confirm
@@ -240,14 +250,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 10,
   },
-  price: {fontSize: 16, marginLeft: 10},
-  title: {fontSize: 16, marginRight: 10, flexShrink: 1},
   buttonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
-    marginTop: 30,
-    marginBottom: 16,
+    marginVertical: 12,
   },
   menu: {
     marginTop: 50,

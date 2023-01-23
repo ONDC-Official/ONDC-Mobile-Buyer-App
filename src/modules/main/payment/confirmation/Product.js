@@ -1,12 +1,19 @@
 import React from 'react';
-import {ActivityIndicator, StyleSheet, TouchableOpacity, View,} from 'react-native';
-import {Card, IconButton, Text, withTheme} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Button, Card, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import {removeItemFromCart, updateItemInCart} from '../../../../redux/actions';
 import {appStyles} from '../../../../styles/styles';
 import useProductQuantity from '../../product/hook/useProductQuantity';
+import moment from 'moment';
+import {stringToDecimal} from "../../../../utils/utils";
 
 const image = require('../../../../assets/noImage.png');
 
@@ -21,7 +28,9 @@ const image = require('../../../../assets/noImage.png');
  * @constructor
  * @returns {JSX.Element}
  */
-const Product = ({theme, navigation, item, confirmed, apiInProgress}) => {
+const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
+  const confirmed = !!confirmation;
+
   const {colors} = theme;
   const dispatch = useDispatch();
   const {updateQuantity} = useProductQuantity(item);
@@ -43,81 +52,109 @@ const Product = ({theme, navigation, item, confirmed, apiInProgress}) => {
   const outOfStock = item?.quantityMeta?.available?.count === 0;
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
+    <Card
       onPress={() => {
         navigation.navigate('ProductDetails', {
           product: item,
         });
-      }}>
-      <Card
-        style={[
-          confirmed
-            ? {backgroundColor: 'white'}
-            : {backgroundColor: colors.surface, borderColor: colors.error},
-          styles.container]
-        }>
-        <View style={styles.row}>
-          <FastImage
-            source={uri ? {uri} : image}
-            style={styles.image}
-            resizeMode={'contain'}
-          />
-          <View style={[appStyles.container, styles.details]}>
-            <Text style={styles.title} numberOfLines={1}>
+      }}
+      style={[confirmed ? {} : {borderColor: colors.error}, styles.container]}>
+      <View style={styles.row}>
+        <FastImage
+          source={uri ? {uri} : image}
+          style={styles.image}
+          resizeMode={'contain'}
+        />
+        <View style={[appStyles.container, styles.details]}>
+          <View style={styles.priceContainer}>
+            <Text variant="titleSmall" style={styles.title}>
               {item?.descriptor?.name}
             </Text>
-            <View style={styles.organizationNameContainer}>
-              <Text numberOfLines={1}>
-                {item?.provider_details?.descriptor?.name}
-              </Text>
-            </View>
-            <View style={styles.priceContainer}>
-              <Text>
-                ₹{Number.isInteger(cost) ? cost : parseFloat(cost).toFixed(2)}
-              </Text>
-              {!outOfStock && (
-                <View style={[styles.quantityDisplayButton]}>
-                  <IconButton
-                    icon="minus"
-                    iconColor="white"
-                    style={{backgroundColor: colors.primary}}
-                    onPress={() => updateQuantity(false)}
-                  />
-                  <Text>{item.quantity}</Text>
-                  <IconButton
-                    icon="plus"
-                    iconColor="white"
-                    style={{backgroundColor: colors.primary}}
-                    onPress={() => updateQuantity(true)}
-                  />
-                </View>
-              )}
-            </View>
+            <Text style={{color: colors.opposite}} variant="titleMedium">
+              ₹{stringToDecimal(cost)}
+            </Text>
           </View>
-          <View>
-            <IconButton
-              icon={'close'}
-              iconColor={colors.error}
+          <View style={styles.organizationNameContainer}>
+            <Text numberOfLines={1}>
+              {item?.provider_details?.descriptor?.name}
+            </Text>
+          </View>
+
+          {confirmation?.hasOwnProperty('fulfillment') && (
+            <View>
+              <View style={styles.row}>
+                <Text>Provider name:&nbsp;</Text>
+                <Text variant="titleSmall">
+                  {confirmation?.fulfillment['@ondc/org/provider_name']}
+                </Text>
+              </View>
+              <View style={styles.row}>
+                <Text>Category:&nbsp;</Text>
+                <Text variant="titleSmall">
+                  {confirmation?.fulfillment['@ondc/org/category']}
+                </Text>
+              </View>
+              <View style={styles.row}>
+                <Text>Turnaround Time:&nbsp;</Text>
+                <Text variant="titleSmall">
+                  {moment
+                    .duration(confirmation?.fulfillment['@ondc/org/TAT'])
+                    .asMinutes()}{' '}
+                  min
+                </Text>
+              </View>
+            </View>
+          )}
+          <View style={styles.priceContainer}>
+            <Button
+              style={{borderColor: colors.red}}
+              labelStyle={{color: colors.red}}
+              mode="outlined"
               onPress={() => cancelItem(item)}>
-              <Icon name="close" size={20} />
-            </IconButton>
+              Remove
+            </Button>
+            {!outOfStock && (
+              <View style={[styles.quantityDisplayButton]}>
+                <IconButton
+                  icon="minus"
+                  iconColor="white"
+                  style={{backgroundColor: colors.primary}}
+                  onPress={() => updateQuantity(false)}
+                />
+                <Text>{item.quantity}</Text>
+                <IconButton
+                  icon="plus"
+                  iconColor="white"
+                  style={{backgroundColor: colors.primary}}
+                  onPress={() => updateQuantity(true)}
+                />
+              </View>
+            )}
           </View>
         </View>
-        {!confirmed &&
-          (apiInProgress ? (
-            <ActivityIndicator color={colors.error} />
-          ) : (
+      </View>
+
+      {confirmation?.hasOwnProperty('message') && (
+        <View>
+          <Text style={{color: colors.opposite}}>{confirmation.message}</Text>
+        </View>
+      )}
+      {!confirmed &&
+        (apiInProgress ? (
+          <ActivityIndicator color={colors.error} />
+        ) : (
+          <View style={styles.messageContainer}>
             <Text
               style={{
                 color: colors.error,
                 alignSelf: alignment,
-              }}>
+              }}
+              variant="titleSmall">
               Cannot fetch details for this product
             </Text>
-          ))}
-      </Card>
-    </TouchableOpacity>
+          </View>
+        ))}
+    </Card>
   );
 };
 
@@ -126,6 +163,7 @@ export default withTheme(Product);
 const styles = StyleSheet.create({
   container: {
     margin: 8,
+    backgroundColor: 'white',
   },
   row: {
     flexDirection: 'row',
@@ -133,37 +171,20 @@ const styles = StyleSheet.create({
   details: {
     padding: 12,
   },
+  title: {flexShrink: 1},
   image: {height: '100%', width: 100, marginRight: 10},
   priceContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 12,
   },
   quantityDisplayButton: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  actionButton: {
-    width: 24,
-    height: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 5,
-  },
-  amount: {
-    fontWeight: '700',
-  },
   organizationNameContainer: {marginTop: 4, marginBottom: 8},
-  title: {fontSize: 16, fontWeight: '700', flex: 1},
-  iconContainer: {marginRight: 12},
-  outOfStock: {
-    position: 'absolute',
-    height: '100%',
-    width: 100,
-    backgroundColor: '#fff',
-    opacity: 0.8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
+  messageContainer: {
+    padding: 8,
   },
 });

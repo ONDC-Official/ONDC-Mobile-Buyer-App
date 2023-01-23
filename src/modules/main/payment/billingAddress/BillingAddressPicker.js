@@ -97,7 +97,7 @@ const BillingAddressPicker = ({navigation, theme}) => {
         <Button
           contentStyle={appStyles.containedButtonContainer}
           labelStyle={appStyles.containedButtonLabel}
-          mode="outlined"
+          mode="text"
           style={{marginEnd: 10}}
           onPress={onAdd}>
           Add
@@ -127,6 +127,7 @@ const BillingAddressPicker = ({navigation, theme}) => {
         style={appStyles.container}
         data={list}
         renderItem={renderItem}
+        keyExtractor={item => item.id}
         ListEmptyComponent={() => (
           <View style={[appStyles.container, appStyles.centerContainer]}>
             <Button
@@ -139,7 +140,7 @@ const BillingAddressPicker = ({navigation, theme}) => {
           </View>
         )}
         contentContainerStyle={
-          list.length > 0 ? styles.contentContainerStyle : appStyles.container
+          list?.length > 0 ? styles.contentContainerStyle : appStyles.container
         }
       />
 

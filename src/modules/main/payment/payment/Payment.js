@@ -3,14 +3,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   BackHandler,
-  FlatList,
   NativeEventEmitter,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
 import Config from 'react-native-config';
-import {Button, Card, Divider, Text, withTheme,} from 'react-native-paper';
+import {Button, Card, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
 import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
@@ -77,7 +77,7 @@ const Payment = ({
   const onOrderSuccess = () => {
     dispatch(clearAllData());
     dispatch(clearFilters());
-    navigation.replace('Orders');
+    navigation.navigate('Orders');
   };
 
   /**
@@ -332,7 +332,6 @@ const Payment = ({
         break;
 
       case 'initiate_result':
-        const payload = data.payload || {};
         break;
 
       case 'process_result':
@@ -642,124 +641,118 @@ const Payment = ({
           {initializeOrderRequested ? (
             <PaymentSkeleton />
           ) : (
-            <>
-              <View>
-                {breakup.current && (
-                  <Card>
-                    <View style={styles.itemsContainerStyle}>
-                      <FlatList
-                        data={breakup.current}
-                        renderItem={({item}) => (
-                          <View style={styles.priceContainer}>
-                            <Text style={styles.price}>{item.title}</Text>
-                            <Text>₹{item.price.value}</Text>
-                          </View>
-                        )}
-                        keyExtractor={item => item.title}
-                        ItemSeparatorComponent={() => <Divider />}
-                      />
-                      {total.current && (
-                        <View style={styles.priceContainer}>
-                          <Text>Total Payable</Text>
-                          <Text style={styles.fulfillment}>
-                            ₹{total.current}
-                          </Text>
-                        </View>
-                      )}
-                    </View>
-                  </Card>
-                )}
-
-                <View style={styles.addressContainer}>
-                  <Card>
-                    <View style={styles.itemsContainerStyle}>
-                      <Text style={styles.text}>Address</Text>
-
-                      <Text>
-                        {deliveryAddress.address.street},{' '}
-                        {deliveryAddress.address.locality},{' '}
-                        {deliveryAddress.address.city},{' '}
-                        {deliveryAddress.address.state} -{' '}
-                        {deliveryAddress.address.areaCode}
-                      </Text>
-                    </View>
-                  </Card>
-                </View>
-
-                {!error.current && (
-                  <View style={styles.addressContainer}>
-                    <Card>
-                      <View style={styles.itemsContainerStyle}>
-                        <Text style={styles.text}>Payment Options</Text>
-
-                        <View style={styles.paymentOptions}>
-                          <TouchableOpacity
-                            style={[
-                              styles.paymentOption,
-                              {
-                                borderColor:
-                                  selectedPaymentOption === 'JUSPAY'
-                                    ? theme.colors.primary
-                                    : theme.colors.accent,
-                              },
-                            ]}
-                            onPress={() => setSelectedPaymentOption('JUSPAY')}>
-                            <View style={styles.emptyCheckbox}>
-                              {selectedPaymentOption === 'JUSPAY' && (
-                                <Icon
-                                  name={'check-circle'}
-                                  color={colors.primary}
-                                  size={24}
-                                />
-                              )}
-                            </View>
-                            <View style={styles.paymentOptionDetails}>
-                              <Text style={styles.paymentOptionText}>
-                                Prepaid
-                              </Text>
-                              <View>
-                                <Text>Powered By</Text>
-                                <FastImage
-                                  source={{
-                                    uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
-                                  }}
-                                  style={styles.image}
-                                  resizeMode={'contain'}
-                                />
-                              </View>
-                            </View>
-                          </TouchableOpacity>
-
-                          <TouchableOpacity
-                            style={[
-                              styles.paymentOption,
-                              {
-                                borderColor:
-                                  selectedPaymentOption === 'COD'
-                                    ? theme.colors.primary
-                                    : theme.colors.accent,
-                              },
-                            ]}
-                            onPress={() => setSelectedPaymentOption('COD')}>
-                            <View style={styles.emptyCheckbox}>
-                              {selectedPaymentOption === 'COD' && (
-                                <Icon
-                                  name={'check-circle'}
-                                  color={colors.primary}
-                                  size={24}
-                                />
-                              )}
-                            </View>
-                            <View style={styles.paymentOptionDetails}>
-                              <Text style={styles.paymentOptionText}>COD</Text>
-                            </View>
-                          </TouchableOpacity>
-                        </View>
+            <ScrollView>
+              {breakup.current && (
+                <Card>
+                  <View style={styles.itemsContainerStyle}>
+                    {breakup.current.map((item, index) => (
+                      <View
+                        key={`${item['@ondc/org/item_id']}${index}`}
+                        style={styles.priceContainer}>
+                        <Text style={styles.price}>{item.title}</Text>
+                        <Text variant="titleSmall">₹{item.price.value}</Text>
                       </View>
-                    </Card>
+                    ))}
+                    {total.current && (
+                      <View style={styles.priceContainer}>
+                        <Text
+                          variant="titleMedium"
+                          style={{color: colors.opposite}}>
+                          Total Payable
+                        </Text>
+                        <Text
+                          variant="titleMedium"
+                          style={{color: colors.opposite}}>
+                          ₹{total.current}
+                        </Text>
+                      </View>
+                    )}
                   </View>
-                )}
-              </View>
+                </Card>
+              )}
+              <Card style={styles.addressContainer}>
+                <View style={styles.itemsContainerStyle}>
+                  <Text variant="titleMedium">Address</Text>
+
+                  <Text>
+                    {deliveryAddress.address.street},{' '}
+                    {deliveryAddress.address.locality},{' '}
+                    {deliveryAddress.address.city},{' '}
+                    {deliveryAddress.address.state} -{' '}
+                    {deliveryAddress.address.areaCode}
+                  </Text>
+                </View>
+              </Card>
+
+              {!error.current && (
+                <Card style={styles.addressContainer}>
+                  <View style={styles.itemsContainerStyle}>
+                    <Text variant="titleMedium">Payment Options</Text>
+
+                    <View style={styles.paymentOptions}>
+                      <TouchableOpacity
+                        style={[
+                          styles.paymentOption,
+                          {
+                            borderColor:
+                              selectedPaymentOption === 'JUSPAY'
+                                ? theme.colors.primary
+                                : theme.colors.accent,
+                          },
+                        ]}
+                        onPress={() => setSelectedPaymentOption('JUSPAY')}>
+                        <View style={styles.emptyCheckbox}>
+                          {selectedPaymentOption === 'JUSPAY' && (
+                            <Icon
+                              name={'check-circle'}
+                              color={colors.primary}
+                              size={24}
+                            />
+                          )}
+                        </View>
+                        <View style={styles.paymentOptionDetails}>
+                          <Text style={styles.paymentOptionText}>Prepaid</Text>
+                          <View>
+                            <Text>Powered By</Text>
+                            <FastImage
+                              source={{
+                                uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
+                              }}
+                              style={styles.image}
+                              resizeMode={'contain'}
+                            />
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        style={[
+                          styles.paymentOption,
+                          {
+                            borderColor:
+                              selectedPaymentOption === 'COD'
+                                ? theme.colors.primary
+                                : theme.colors.accent,
+                          },
+                        ]}
+                        onPress={() => setSelectedPaymentOption('COD')}>
+                        <View style={styles.emptyCheckbox}>
+                          {selectedPaymentOption === 'COD' && (
+                            <Icon
+                              name={'check-circle'}
+                              color={colors.primary}
+                              size={24}
+                            />
+                          )}
+                        </View>
+                        <View style={styles.paymentOptionDetails}>
+                          <Text style={styles.paymentOptionText}>COD</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </Card>
+              )}
 
               {!error.current && (
                 <View style={styles.buttonContainer}>
@@ -778,7 +771,7 @@ const Payment = ({
                   </Button>
                 </View>
               )}
-            </>
+            </ScrollView>
           )}
         </View>
       ) : (

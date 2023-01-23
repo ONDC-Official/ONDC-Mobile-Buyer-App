@@ -17,9 +17,9 @@ const ProductImages = ({theme, images}) => {
         }
         style={[styles.pager, {height: imageSize}]}
         initialPage={0}>
-        {images?.map(uri => (
+        {images?.map((uri, index) => (
           <FastImage
-            key={uri}
+            key={`${index}image`}
             source={{uri}}
             style={styles.image}
             resizeMode={'contain'}

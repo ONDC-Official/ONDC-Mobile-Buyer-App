@@ -123,3 +123,8 @@ export const cleanFormData = initialObject => {
 
   return object;
 };
+
+export const stringToDecimal = value => {
+  const number = Number(value);
+  return number % 1 !== 0 ? number.toFixed(2) : number;
+};

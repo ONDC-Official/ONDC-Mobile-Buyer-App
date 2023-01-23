@@ -54,7 +54,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 
         <View style={styles.details}>
           <View style={styles.row}>
-            <View>
+            <View style={styles.metaContainer}>
               <Text style={styles.descriptorName}>
                 {product?.descriptor?.name}
               </Text>
@@ -137,48 +137,59 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
           {product?.hasOwnProperty(
             '@ondc/org/statutory_reqs_packaged_commodities',
           ) && (
-            <View style={styles.detailsContainer}>
+            <View style={styles.sectionContainer}>
               <Text style={{color: colors.accent}}>
                 Statutory Reqs Packaged Commodities
               </Text>
-              <Text style={styles.longDescription}>
-                Manufacturer/Packer Name:{' '}
-                {
-                  product['@ondc/org/statutory_reqs_packaged_commodities']
-                    .manufacturer_or_packer_name
-                }
-              </Text>
-              <Text style={styles.longDescription}>
-                Manufacturer/Packer Address:{' '}
-                {
-                  product['@ondc/org/statutory_reqs_packaged_commodities']
-                    .manufacturer_or_packer_address
-                }
-              </Text>
-              <Text style={styles.longDescription}>
-                Generic name of commodity:{' '}
-                {
-                  product['@ondc/org/statutory_reqs_packaged_commodities']
-                    .common_or_generic_name_of_commodity
-                }
-              </Text>
-              {product['@ondc/org/statutory_reqs_packaged_commodities']
-                ?.net_quantity_or_measure_of_commodity_in_pkg && (
-                <Text style={styles.longDescription}>
-                  Net. Quantity:{' '}
+              <View style={[styles.reqsRow, styles.longDescription]}>
+                <Text>Manufacturer/Packer Name:&nbsp;</Text>
+                <Text variant="titleSmall">
                   {
                     product['@ondc/org/statutory_reqs_packaged_commodities']
-                      .net_quantity_or_measure_of_commodity_in_pkg
+                      .manufacturer_or_packer_name
                   }
                 </Text>
+              </View>
+
+              <View style={[styles.reqsRow, styles.longDescription]}>
+                <Text>Manufacturer/Packer Address:&nbsp;</Text>
+                <Text variant="titleSmall">
+                  {
+                    product['@ondc/org/statutory_reqs_packaged_commodities']
+                      .manufacturer_or_packer_address
+                  }
+                </Text>
+              </View>
+              <View style={[styles.reqsRow, styles.longDescription]}>
+                <Text>Generic name of commodity:&nbsp;</Text>
+                <Text variant="titleSmall">
+                  {
+                    product['@ondc/org/statutory_reqs_packaged_commodities']
+                      .common_or_generic_name_of_commodity
+                  }
+                </Text>
+              </View>
+              {product['@ondc/org/statutory_reqs_packaged_commodities']
+                ?.net_quantity_or_measure_of_commodity_in_pkg && (
+                <View style={[styles.reqsRow, styles.longDescription]}>
+                  <Text>Net. Quantity:&nbsp;</Text>
+                  <Text variant="titleSmall">
+                    {
+                      product['@ondc/org/statutory_reqs_packaged_commodities']
+                        .net_quantity_or_measure_of_commodity_in_pkg
+                    }
+                  </Text>
+                </View>
               )}
-              <Text style={styles.longDescription}>
-                Month Year of Manufacturer/Packing:{' '}
-                {
-                  product['@ondc/org/statutory_reqs_packaged_commodities']
-                    .month_year_of_manufacture_packing_import
-                }
-              </Text>
+              <View style={[styles.reqsRow, styles.longDescription]}>
+                <Text>Month Year of Manufacturer/Packing:&nbsp;&nbsp;</Text>
+                <Text variant="titleSmall">
+                  {
+                    product['@ondc/org/statutory_reqs_packaged_commodities']
+                      .month_year_of_manufacture_packing_import
+                  }
+                </Text>
+              </View>
             </View>
           )}
 
@@ -262,6 +273,9 @@ const styles = StyleSheet.create({
   provider: {fontSize: 14, marginBottom: 4, flexShrink: 1},
   detailsContainer: {paddingHorizontal: 16},
   sectionContainer: {paddingHorizontal: 16, paddingTop: 24},
+  reqsRow: {
+    flexDirection: 'row',
+  },
   quantityDisplayButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -300,5 +314,7 @@ const styles = StyleSheet.create({
   },
   longDescription: {
     marginTop: 8,
+    flexWrap: 'wrap',
   },
+  metaContainer: {flexShrink: 1, marginEnd: 8},
 });

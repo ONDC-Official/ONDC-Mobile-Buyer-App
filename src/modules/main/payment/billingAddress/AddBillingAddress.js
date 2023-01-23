@@ -186,21 +186,16 @@ const AddBillingAddress = ({navigation, theme}) => {
                             });
                         }
                       }}
-                      right={
-                        requestInProgress ? (
-                          <TextInput.Icon icon="loading" />
-                        ) : null
-                      }
                     />
-                    {requestInProgress && (
-                      <View style={styles.indicator}>
-                        <ActivityIndicator
-                          size="small"
-                          color={theme.colors.primary}
-                        />
-                      </View>
-                    )}
                   </View>
+                  {requestInProgress && (
+                    <View style={styles.indicator}>
+                      <ActivityIndicator
+                        size="small"
+                        color={theme.colors.primary}
+                      />
+                    </View>
+                  )}
                 </View>
                 <InputField
                   value={values.street}
