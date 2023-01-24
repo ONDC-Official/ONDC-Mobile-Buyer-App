@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     height: 20,
     width: 100,
   },
-  address: {height: 15, width: 300},
+  address: {height: 15, width: 300, marginTop: 10},
   paymentOption: {flexDirection: 'row', marginBottom: 10, alignItems: 'center'},
   radioButton: {height: 20, width: 20, borderRadius: 20, marginRight: 20},
   label: {height: 15, width: 200},

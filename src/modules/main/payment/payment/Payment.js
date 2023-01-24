@@ -31,8 +31,10 @@ import {
 } from '../../../../utils/apiUtilities';
 import {PAYMENT_METHODS} from '../../../../utils/Constants';
 import {showToastWithGravity} from '../../../../utils/utils';
-import PaymentSkeleton from './PaymentSkeleton';
+import PaymentSkeleton from './components/PaymentSkeleton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import BreakDown from './components/BreakDown';
+import Address from '../../order/components/Address';
 
 /**
  * Component to payment screen in application
@@ -65,8 +67,7 @@ const Payment = ({
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const refOrders = useRef();
   const total = useRef(0);
-  const breakup = useRef(null);
-  const [quote, setQuote] = useState(null);
+  const products = useRef([]);
   const signedPayload = useRef(null);
   const timeStamp = useRef(null);
   const parentOrderId = useRef(null);
@@ -93,21 +94,90 @@ const Payment = ({
           headers: {Authorization: `Bearer ${token}`},
         },
       );
+
       if (data[0].hasOwnProperty('error')) {
         error.current = data[0];
       } else {
-        let breakups = breakup.current ? breakup.current.slice() : [];
-        let price = [];
-        breakups = breakups.concat(data[0].message.order.quote.breakup);
-        breakup.current = breakups;
-        price.push(data[0].message.order.quote.price);
+        data[0].message.order.quote.breakup.forEach(item => {
+          const productIndex = products.current.findIndex(
+            one => one.id === item['@ondc/org/item_id'],
+          );
+          if (productIndex > -1) {
+            const product = products.current[productIndex];
+            switch (item['@ondc/org/title_type']) {
+              case 'tax':
+                if (product.hasOwnProperty('taxes')) {
+                  product.taxes.push(item);
+                } else {
+                  product.taxes = [item];
+                }
+                break;
+
+              case 'item':
+                if (product.hasOwnProperty('items')) {
+                  product.items.push(item);
+                } else {
+                  product.items = [item];
+                }
+                break;
+
+              case 'discount':
+                if (product.hasOwnProperty('discounts')) {
+                  product.discounts.push(item);
+                } else {
+                  product.discounts = [item];
+                }
+                break;
+
+              case 'packing':
+                product.packings = [item];
+                break;
+
+              case 'delivery':
+                product.deliveries = [item];
+                break;
+
+              case 'misc':
+                product.misces = [item];
+                break;
+            }
+          } else {
+            const product = {
+              id: item['@ondc/org/item_id'],
+            };
+            switch (item['@ondc/org/title_type']) {
+              case 'tax':
+                product.taxes = [item];
+                break;
+
+              case 'item':
+                product.items = [item];
+                break;
+
+              case 'discount':
+                product.discounts = [item];
+                break;
+
+              case 'packing':
+                product.packings = [item];
+                break;
+
+              case 'delivery':
+                product.deliveries = [item];
+                break;
+
+              case 'misc':
+                product.misces = [item];
+                break;
+            }
+            products.current.push(product);
+          }
+        });
+
         total.current =
           total.current + Number(data[0].message.order.quote.price.value);
-        setQuote({price});
         if (refOrders.current) {
-          let newArray = refOrders.current.slice();
-          newArray.push(data[0]);
-          refOrders.current = newArray;
+          refOrders.current.push(data[0]);
         } else {
           refOrders.current = data;
         }
@@ -126,15 +196,11 @@ const Payment = ({
    */
   const onConfirmOrder = async id => {
     try {
-      const {data} = await getData(
-        `${BASE_URL}${ON_CONFIRM_ORDER}messageIds=${id}`,
-        {
-          headers: {Authorization: `Bearer ${token}`},
-        },
-      );
+      await getData(`${BASE_URL}${ON_CONFIRM_ORDER}messageIds=${id}`, {
+        headers: {Authorization: `Bearer ${token}`},
+      });
     } catch (err) {
       handleApiError(err);
-
       setConfirmOrderRequested(false);
     }
   };
@@ -145,7 +211,7 @@ const Payment = ({
    */
   const initializeOrder = async () => {
     try {
-      breakup.current = null;
+      products.current = [];
       total.current = 0;
       setInitializeOrderRequested(true);
       let payload = [];
@@ -258,6 +324,8 @@ const Payment = ({
         if (item.message.ack.status === 'ACK') {
           parentOrderId.current = item.context.parent_order_id;
           messageIds.push(item.context.message_id);
+        } else {
+          console.log('Ack status', item.message.ack);
         }
       });
       if (messageIds.length > 0) {
@@ -635,153 +703,114 @@ const Payment = ({
   }, [confirmMessageIds]);
 
   return (
-    <View style={[appStyles.container, styles.container]}>
-      {!confirmOrderRequested ? (
-        <View>
-          {initializeOrderRequested ? (
-            <PaymentSkeleton />
-          ) : (
-            <ScrollView>
-              {breakup.current && (
-                <Card>
-                  <View style={styles.itemsContainerStyle}>
-                    {breakup.current.map((item, index) => (
-                      <View
-                        key={`${item['@ondc/org/item_id']}${index}`}
-                        style={styles.priceContainer}>
-                        <Text style={styles.price}>{item.title}</Text>
-                        <Text variant="titleSmall">₹{item.price.value}</Text>
-                      </View>
-                    ))}
-                    {total.current && (
-                      <View style={styles.priceContainer}>
-                        <Text
-                          variant="titleMedium"
-                          style={{color: colors.opposite}}>
-                          Total Payable
-                        </Text>
-                        <Text
-                          variant="titleMedium"
-                          style={{color: colors.opposite}}>
-                          ₹{total.current}
-                        </Text>
-                      </View>
-                    )}
-                  </View>
-                </Card>
-              )}
-              <Card style={styles.addressContainer}>
-                <View style={styles.itemsContainerStyle}>
-                  <Text variant="titleMedium">Address</Text>
+    <View style={appStyles.container}>
+      <View pointerEvents={confirmOrderRequested ? 'none' : 'auto'}>
+        {initializeOrderRequested ? (
+          <PaymentSkeleton />
+        ) : (
+          <ScrollView>
+            <BreakDown products={products.current} />
 
-                  <Text>
-                    {deliveryAddress.address.street},{' '}
-                    {deliveryAddress.address.locality},{' '}
-                    {deliveryAddress.address.city},{' '}
-                    {deliveryAddress.address.state} -{' '}
-                    {deliveryAddress.address.areaCode}
-                  </Text>
+            <Card style={styles.card}>
+              <Address
+                title="Shipped To"
+                name={deliveryAddress?.descriptor?.name}
+                email={deliveryAddress?.descriptor?.email}
+                phone={deliveryAddress?.descriptor?.phone}
+                address={deliveryAddress.address}
+              />
+            </Card>
+
+            {!error.current && (
+              <Card style={styles.card}>
+                <View style={styles.itemsContainerStyle}>
+                  <Text variant="titleMedium">Payment Options</Text>
+
+                  <View style={styles.paymentOptions}>
+                    <TouchableOpacity
+                      style={[
+                        styles.paymentOption,
+                        {
+                          borderColor:
+                            selectedPaymentOption === 'JUSPAY'
+                              ? theme.colors.primary
+                              : theme.colors.accent,
+                        },
+                      ]}
+                      onPress={() => setSelectedPaymentOption('JUSPAY')}>
+                      <View style={styles.emptyCheckbox}>
+                        {selectedPaymentOption === 'JUSPAY' && (
+                          <Icon
+                            name={'check-circle'}
+                            color={colors.primary}
+                            size={24}
+                          />
+                        )}
+                      </View>
+                      <View style={styles.paymentOptionDetails}>
+                        <Text style={styles.paymentOptionText}>Prepaid</Text>
+                        <View>
+                          <Text>Powered By</Text>
+                          <FastImage
+                            source={{
+                              uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
+                            }}
+                            style={styles.image}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[
+                        styles.paymentOption,
+                        {
+                          borderColor:
+                            selectedPaymentOption === 'COD'
+                              ? theme.colors.primary
+                              : theme.colors.accent,
+                        },
+                      ]}
+                      onPress={() => setSelectedPaymentOption('COD')}>
+                      <View style={styles.emptyCheckbox}>
+                        {selectedPaymentOption === 'COD' && (
+                          <Icon
+                            name={'check-circle'}
+                            color={colors.primary}
+                            size={24}
+                          />
+                        )}
+                      </View>
+                      <View style={styles.paymentOptionDetails}>
+                        <Text style={styles.paymentOptionText}>COD</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </Card>
+            )}
 
-              {!error.current && (
-                <Card style={styles.addressContainer}>
-                  <View style={styles.itemsContainerStyle}>
-                    <Text variant="titleMedium">Payment Options</Text>
-
-                    <View style={styles.paymentOptions}>
-                      <TouchableOpacity
-                        style={[
-                          styles.paymentOption,
-                          {
-                            borderColor:
-                              selectedPaymentOption === 'JUSPAY'
-                                ? theme.colors.primary
-                                : theme.colors.accent,
-                          },
-                        ]}
-                        onPress={() => setSelectedPaymentOption('JUSPAY')}>
-                        <View style={styles.emptyCheckbox}>
-                          {selectedPaymentOption === 'JUSPAY' && (
-                            <Icon
-                              name={'check-circle'}
-                              color={colors.primary}
-                              size={24}
-                            />
-                          )}
-                        </View>
-                        <View style={styles.paymentOptionDetails}>
-                          <Text style={styles.paymentOptionText}>Prepaid</Text>
-                          <View>
-                            <Text>Powered By</Text>
-                            <FastImage
-                              source={{
-                                uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
-                              }}
-                              style={styles.image}
-                              resizeMode={'contain'}
-                            />
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={[
-                          styles.paymentOption,
-                          {
-                            borderColor:
-                              selectedPaymentOption === 'COD'
-                                ? theme.colors.primary
-                                : theme.colors.accent,
-                          },
-                        ]}
-                        onPress={() => setSelectedPaymentOption('COD')}>
-                        <View style={styles.emptyCheckbox}>
-                          {selectedPaymentOption === 'COD' && (
-                            <Icon
-                              name={'check-circle'}
-                              color={colors.primary}
-                              size={24}
-                            />
-                          )}
-                        </View>
-                        <View style={styles.paymentOptionDetails}>
-                          <Text style={styles.paymentOptionText}>COD</Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </Card>
-              )}
-
-              {!error.current && (
-                <View style={styles.buttonContainer}>
-                  <Button
-                    mode="contained"
-                    contentStyle={appStyles.containedButtonContainer}
-                    labelStyle={appStyles.containedButtonLabel}
-                    onPress={() => {
-                      removeInitEvent();
-                      processPayment()
-                        .then(() => {})
-                        .catch(() => {});
-                    }}
-                    loading={confirmOrderRequested}>
-                    Place Order
-                  </Button>
-                </View>
-              )}
-            </ScrollView>
-          )}
-        </View>
-      ) : (
-        <View style={[appStyles.container, styles.processing]}>
-          <ActivityIndicator size={30} color={colors.primary} />
-          <Text style={[styles.processingText, {color: colors.primary}]}>
-            Processing
-          </Text>
-        </View>
-      )}
+            {!error.current && (
+              <View style={styles.buttonContainer}>
+                <Button
+                  mode="contained"
+                  contentStyle={appStyles.containedButtonContainer}
+                  labelStyle={appStyles.containedButtonLabel}
+                  onPress={() => {
+                    removeInitEvent();
+                    processPayment()
+                      .then(() => {})
+                      .catch(() => {});
+                  }}
+                  loading={confirmOrderRequested}>
+                  Place Order
+                </Button>
+              </View>
+            )}
+          </ScrollView>
+        )}
+      </View>
     </View>
   );
 };
@@ -789,7 +818,11 @@ const Payment = ({
 export default withTheme(Payment);
 
 const styles = StyleSheet.create({
-  container: {padding: 10},
+  card: {
+    backgroundColor: 'white',
+    padding: 8,
+    margin: 8,
+  },
   text: {fontSize: 18, fontWeight: '600', paddingLeft: 10},
   buttonContainer: {width: 300, alignSelf: 'center', marginTop: 16},
   paymentOptions: {marginVertical: 10},

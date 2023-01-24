@@ -93,7 +93,7 @@ export default (category = null) => {
         });
 
         if (data.message.catalogs.length > 0) {
-          const productsList = data.message.catalogs.map(item => {
+          let productsList = data.message.catalogs.map(item => {
             return Object.assign({}, item, {
               quantityMeta: item?.quantity,
               quantity: 0,
@@ -102,6 +102,10 @@ export default (category = null) => {
               state: currentAddress?.address?.state,
             });
           });
+          productsList = productsList.filter(
+            (value, index, self) =>
+              index === self.findIndex(one => one.id === value.id),
+          );
           listCount.current = productsList.length;
           count.current = data.message.count;
           dispatch(saveProducts(productsList));
@@ -116,7 +120,6 @@ export default (category = null) => {
   };
 
   const loadMore = () => {
-    console.log('Load more');
     if (
       listCount.current >= 10 &&
       listCount.current < count.current &&

@@ -112,7 +112,6 @@ const CancelOrder = ({navigation, route: {params}}) => {
         },
       });
 
-      console.log(JSON.stringify(data, undefined, 4));
       if (data[0].message.ack.status === 'ACK') {
         setUpdateMessageId(data[0].context.message_id);
       }
@@ -172,7 +171,6 @@ const CancelOrder = ({navigation, route: {params}}) => {
           },
         },
       );
-      console.log(data);
       setUpdateInProgress(false);
       if (data.message) {
         navigation.navigate('Orders');
@@ -222,7 +220,6 @@ const CancelOrder = ({navigation, route: {params}}) => {
   }, [cancelMessageId, isFocused]);
 
   useEffect(() => {
-    console.log('Update use effect');
     let eventSource;
     let timer;
     if (updateMessageId) {
