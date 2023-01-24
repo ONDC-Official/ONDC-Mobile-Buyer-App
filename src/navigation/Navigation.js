@@ -21,6 +21,7 @@ import Order from '../modules/main/order/Order';
 import OrderDetails from '../modules/main/order/OrderDetails';
 import CallSeller from '../modules/main/order/CallSeller';
 import CancelOrder from '../modules/main/order/CancelOrder';
+import ReturnOrder from '../modules/main/order/ReturnOrder';
 
 const Stack = createStackNavigator();
 
@@ -121,6 +122,14 @@ const Navigation = () => {
           component={CancelOrder}
           options={{
             title: 'Cancel Order',
+          }}
+        />
+
+        <Stack.Screen
+          name="ReturnOrder"
+          component={ReturnOrder}
+          options={{
+            title: 'Return Order',
           }}
         />
 

@@ -90,7 +90,19 @@ const ShippingDetails = ({order, theme}) => {
 
         {order.state !== ORDER_STATUS.CANCELLED &&
           (order.state === ORDER_STATUS.DELIVERED ? (
-            <TouchableOpacity disabled={buttonDisabled}>
+            <TouchableOpacity
+              disabled={buttonDisabled}
+              onPress={() =>
+                navigation.navigate('CancelOrder', {
+                  items: order.items,
+                  bppId: order.bppId,
+                  transactionId: order.transactionId,
+                  orderId: order.id,
+                  updateType: UPDATE_TYPE.RETURN,
+                  updateId: order._id,
+                  providerId: order.provider.id,
+                })
+              }>
               <Divider />
               <View style={[styles.rowContainer, styles.helpButton]}>
                 <Text style={[{color: buttonColor}, styles.helpLabel]}>
