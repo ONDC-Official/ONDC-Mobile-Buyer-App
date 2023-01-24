@@ -18,6 +18,9 @@ import Payment from '../modules/main/payment/payment/Payment';
 import Profile from '../modules/main/profile/Profile';
 import Support from '../modules/main/support/Support';
 import Order from '../modules/main/order/Order';
+import OrderDetails from '../modules/main/order/OrderDetails';
+import CallSeller from '../modules/main/order/CallSeller';
+import CancelOrder from '../modules/main/order/CancelOrder';
 
 const Stack = createStackNavigator();
 
@@ -96,6 +99,30 @@ const Navigation = () => {
         <Stack.Screen name="Profile" component={Profile} />
 
         <Stack.Screen name="Orders" component={Order} />
+
+        <Stack.Screen
+          name="OrderDetails"
+          component={OrderDetails}
+          options={{
+            title: '',
+          }}
+        />
+
+        <Stack.Screen
+          name="CallSeller"
+          component={CallSeller}
+          options={{
+            title: 'Call Support',
+          }}
+        />
+
+        <Stack.Screen
+          name="CancelOrder"
+          component={CancelOrder}
+          options={{
+            title: 'Cancel Order',
+          }}
+        />
 
         <Stack.Screen name="Support" component={Support} />
 

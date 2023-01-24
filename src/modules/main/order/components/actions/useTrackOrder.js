@@ -1,17 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {withTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import RNEventSource from 'react-native-event-source';
 import {Linking} from 'react-native';
 
-import ClearButton from '../../../../../components/button/ClearButton';
 import {getData, postData} from '../../../../../utils/api';
-import {BASE_URL, ON_TRACK_ORDER, TRACK_ORDER,} from '../../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  ON_TRACK_ORDER,
+  TRACK_ORDER,
+} from '../../../../../utils/apiUtilities';
 import {useIsFocused} from '@react-navigation/native';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {FAQS} from '../../../../../utils/Constants';
 
-const TrackOrder = ({theme, bppId, transactionId, orderId}) => {
+export default (bppId, transactionId, orderId) => {
   const isFocused = useIsFocused();
   const {handleApiError} = useNetworkErrorHandling();
   const {token} = useSelector(({authReducer}) => authReducer);
@@ -76,6 +78,7 @@ const TrackOrder = ({theme, bppId, transactionId, orderId}) => {
       }
     } catch (e) {
       handleApiError(e);
+      setTrackInProgress(false);
     }
   };
 
@@ -104,14 +107,8 @@ const TrackOrder = ({theme, bppId, transactionId, orderId}) => {
     };
   }, [trackMessageId, isFocused]);
 
-  return (
-    <ClearButton
-      title={'Track'}
-      onPress={trackOrder}
-      textColor={theme.colors.primary}
-      loading={trackInProgress}
-    />
-  );
+  return {
+    trackOrder,
+    trackInProgress,
+  };
 };
-
-export default withTheme(TrackOrder);

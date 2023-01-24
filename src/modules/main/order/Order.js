@@ -8,8 +8,8 @@ import {getData} from '../../../utils/api';
 import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';
 import {keyExtractor, skeletonList} from '../../../utils/utils';
 import ListFooter from './components/ListFooter';
-import OrderAccordion from './components/OrderAccordion';
 import OrderCardSkeleton from './components/OrderCardSkeleton';
+import OrderHeader from './components/OrderHeader';
 
 /**
  * Component to render orders screen
@@ -104,7 +104,7 @@ const Order = () => {
     item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <OrderCardSkeleton item={item} />
     ) : (
-      <OrderAccordion item={item} getOrderList={getOrderList} />
+      <OrderHeader item={item} />
     );
 
   const listData = orders ? orders : skeletonList;

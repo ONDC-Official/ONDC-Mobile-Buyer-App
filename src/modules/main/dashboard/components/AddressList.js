@@ -8,7 +8,7 @@ import Address from './Address';
 import {getStoredData} from '../../../../utils/storage';
 import {skeletonList} from '../../../../utils/utils';
 import AddressSkeleton from './AddressSkeleton';
-import {Button, Divider, IconButton, withTheme} from 'react-native-paper';
+import {Button, IconButton, withTheme} from 'react-native-paper';
 import {appStyles} from '../../../../styles/styles';
 
 const AddressList = ({navigation, theme, route: {params}}) => {

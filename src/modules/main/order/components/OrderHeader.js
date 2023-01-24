@@ -2,8 +2,9 @@ import moment from 'moment';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {appStyles} from '../../../../styles/styles';
-import {Text, withTheme} from 'react-native-paper';
+import {Card, Text, withTheme} from 'react-native-paper';
 import OrderStatus from './OrderStatus';
+import {useNavigation} from '@react-navigation/native';
 
 /**
  * Component to render single card on orders screen
@@ -14,43 +15,44 @@ import OrderStatus from './OrderStatus';
  */
 const OrderHeader = ({item, theme}) => {
   const {colors} = theme;
+  const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
-      <View style={appStyles.container}>
-        <Text numberOfLines={1} style={styles.itemName}>
-          Order id:&nbsp;{item.id ? item.id : 'NA'}
-        </Text>
-        <Text style={{color: colors.grey}}>
-          Ordered on&nbsp;
-          {moment(item.createdAt).format('Do MMMM YYYY')}
-        </Text>
+    <Card
+      style={styles.container}
+      onPress={() => navigation.navigate('OrderDetails', {order: item})}>
+      <View style={styles.row}>
+        <View style={appStyles.container}>
+          <Text numberOfLines={1} style={styles.itemName}>
+            Order id:&nbsp;{item.id ? item.id : 'NA'}
+          </Text>
+          <Text style={{color: colors.grey}}>
+            Ordered on&nbsp;
+            {moment(item.createdAt).format('Do MMMM YYYY')}
+          </Text>
+        </View>
+        {item.state && <OrderStatus status={item.state} />}
       </View>
-      {item.state && <OrderStatus status={item.state} />}
-    </View>
+    </Card>
   );
 };
 
 export default withTheme(OrderHeader);
 
 const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 8,
+  },
   itemName: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 4,
   },
-  price: {fontSize: 16, fontWeight: 'bold'},
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  orderStatus: {
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    marginLeft: 10,
-    paddingVertical: 5,
-    borderWidth: 1,
-    borderRadius: 15,
+    margin: 8,
+    backgroundColor: 'white',
   },
 });

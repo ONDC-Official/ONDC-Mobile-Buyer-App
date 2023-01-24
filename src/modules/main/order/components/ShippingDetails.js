@@ -1,51 +1,20 @@
-import {useIsFocused} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
-import RNEventSource from 'react-native-event-source';
-import {useSelector} from 'react-redux';
-import {Divider, Text, withTheme} from 'react-native-paper';
-
-import ClearButton from '../../../../components/button/ClearButton';
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {appStyles} from '../../../../styles/styles';
-import {getData} from '../../../../utils/api';
+import {useNavigation} from '@react-navigation/native';
+import React from 'react';
 import {
-  BASE_URL,
-  ON_CANCEL_ORDER,
-  ON_UPDATE_ORDER,
-} from '../../../../utils/apiUtilities';
-import {ORDER_STATUS, UPDATE_TYPE} from '../../../../utils/Constants';
-import {showToastWithGravity} from '../../../../utils/utils';
-import CancelDialog from './dialogs/CancelDialog';
-import StatusContainer from './StatusContainer';
-import Support from './dialogs/Support';
-import CallSeller from './actions/CallSeller';
-import Address from './Address';
-import GetOrderStatus from './actions/GetOrderStatus';
-import TrackOrder from './actions/TrackOrder';
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {Card, Divider, Text, withTheme} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-/**
- * Component is used to display single item with title and cost
- * @param item:single ordered item
- * @returns {JSX.Element}
- * @constructor
- */
-const renderItem = ({item}) => {
-  return (
-    <>
-      <View style={[styles.rowContainer, styles.priceContainer]}>
-        <Text style={styles.title} numberOfLines={1}>
-          {item.product?.descriptor?.name}
-        </Text>
-        <Text style={styles.price}>₹{item.product?.price?.value}</Text>
-      </View>
-      <>
-        <Text style={styles.quantity}>QTY:&nbsp;{item.product?.quantity}</Text>
-        <StatusContainer product={item} />
-      </>
-    </>
-  );
-};
+import {ORDER_STATUS, UPDATE_TYPE} from '../../../../utils/Constants';
+import Address from './Address';
+import useGetOrderStatus from './actions/useGetOrderStatus';
+import useTrackOrder from './actions/useTrackOrder';
+import Product from './Product';
 
 /**
  * Component is used to display shipping details to the user when card is expanded
@@ -55,150 +24,32 @@ const renderItem = ({item}) => {
  * @returns {JSX.Element}
  * @constructor
  */
-const ShippingDetails = ({order, getOrderList, theme}) => {
+const ShippingDetails = ({order, theme}) => {
+  const navigation = useNavigation();
   const {colors} = theme;
-  const isFocused = useIsFocused();
-  const {token} = useSelector(({authReducer}) => authReducer);
-  const {handleApiError} = useNetworkErrorHandling();
-  const [cancelInProgress, setCancelInProgress] = useState(false);
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const [sellerInfo, setSellerInfo] = useState(null);
-  const [cancelMessageId, setCancelMessageId] = useState(null);
-
-  const [showOverlay, setShowOverlay] = useState(false);
-  const [updateInProgress, setUpdateInProgress] = useState(false);
-  const [updateMessageId, setUpdateMessageId] = useState(null);
-  const [updateType, setUpdateType] = useState(null);
+  const {getStatus, statusInProgress} = useGetOrderStatus(
+    order.bppId,
+    order.transactionId,
+    order.id,
+  );
+  const {trackOrder, trackInProgress} = useTrackOrder(
+    order.bppId,
+    order.transactionId,
+    order.id,
+  );
 
   const shippingAddress = order?.fulfillments[0]?.end?.location?.address;
   const contact = order?.fulfillments[0]?.end?.contact;
 
-  const options = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  const onCancel = async id => {
-    try {
-      const {data} = await getData(
-        `${BASE_URL}${ON_CANCEL_ORDER}messageId=${id}`,
-        options,
-      );
-      if (data.message) {
-        getOrderList(1)
-          .then(() => {})
-          .catch(() => {});
-      } else {
-        showToastWithGravity(
-          'Something went wrong, please try again after some time.',
-        );
-      }
-      setShowOverlay(false);
-      setCancelInProgress(false);
-    } catch (e) {
-      handleApiError(e);
-      setCancelInProgress(false);
-    }
-  };
-
-  const onUpdate = async id => {
-    try {
-      const {data} = await getData(
-        `${BASE_URL}${ON_UPDATE_ORDER}messageId=${id}`,
-        options,
-      );
-      if (data.message) {
-        getOrderList(1)
-          .then(() => {})
-          .catch(() => {});
-      } else {
-        showToastWithGravity(
-          'Something went wrong, please try again after some time.',
-        );
-      }
-      setUpdateInProgress(false);
-      setShowOverlay(false);
-    } catch (e) {
-      console.log(e);
-      handleApiError(e);
-      setUpdateInProgress(false);
-    }
-  };
-
-  const removeEvents = eventSource => {
-    if (eventSource) {
-      eventSource.removeAllListeners();
-      eventSource.close();
-      setCancelInProgress(false);
-      setUpdateInProgress(false);
-    }
-  };
-
-  useEffect(() => {
-    let eventSource;
-    let timer;
-    if (updateMessageId && isFocused) {
-      eventSource = new RNEventSource(
-        `${BASE_URL}/clientApis/events?messageId=${updateMessageId}`,
-        {
-          headers: {Authorization: `Bearer ${token}`},
-        },
-      );
-
-      if (!timer) {
-        timer = setTimeout(removeEvents, 20000, eventSource);
-      }
-
-      eventSource.addEventListener('on_update', event => {
-        const data = JSON.parse(event.data);
-        onUpdate(data.messageId)
-          .then(() => {})
-          .catch(() => {});
-      });
-    }
-
-    return () => {
-      removeEvents(eventSource);
-    };
-  }, [updateMessageId]);
-
-  useEffect(() => {
-    let eventSource;
-    let timer;
-    if (cancelMessageId) {
-      eventSource = new RNEventSource(
-        `${BASE_URL}/clientApis/events?messageId=${cancelMessageId}`,
-        {
-          headers: {Authorization: `Bearer ${token}`},
-        },
-      );
-      if (!timer) {
-        timer = setTimeout(removeEvents, 20000, eventSource);
-      }
-      eventSource.addEventListener('on_cancel', event => {
-        const data = JSON.parse(event.data);
-        onCancel(data.messageId)
-          .then(() => {})
-          .catch(() => {});
-      });
-    }
-    return () => {
-      removeEvents(eventSource);
-    };
-  }, [cancelMessageId]);
-
+  const buttonDisabled = statusInProgress || trackInProgress;
+  const buttonColor =
+    statusInProgress || trackInProgress ? 'grey' : colors.primary;
   return (
-    <>
-      <View style={[appStyles.container, styles.container]}>
-        <Divider />
-        <FlatList
-          data={order?.items}
-          keyExtractor={item => item.id}
-          renderItem={renderItem}
-        />
-        <Divider style={styles.divider} />
+    <ScrollView>
+      <Card style={styles.card}>
+        {order?.items?.map(product => (
+          <Product key={product.id} item={product} />
+        ))}
         <Address
           title="Shipped To"
           name={shippingAddress?.name}
@@ -206,7 +57,7 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
           phone={contact?.phone}
           address={shippingAddress}
         />
-        <Divider style={styles.divider} />
+        <Divider />
         <Address
           title="Billed To"
           name={shippingAddress?.name}
@@ -214,83 +65,116 @@ const ShippingDetails = ({order, getOrderList, theme}) => {
           phone={contact?.phone}
           address={order?.billing?.address}
         />
-        <Divider style={styles.divider} />
+      </Card>
 
-        <View style={styles.actionContainer}>
-          <CallSeller
-            bppId={order.bppId}
-            orderId={order.id}
-            transactionId={order.transactionId}
-            updateSellerInfo={setSellerInfo}
-            setModalVisible={setModalVisible}
-          />
-          {order.state !== ORDER_STATUS.CANCELLED && (
-            <>
-              {order.state === ORDER_STATUS.DELIVERED ? (
-                <ClearButton textColor={colors.primary} title={'Return'} />
-              ) : (
-                <>
-                  <GetOrderStatus
-                    bppId={order.bppId}
-                    orderId={order.id}
-                    transactionId={order.transactionId}
-                    getOrderList={getOrderList}
-                  />
-
-                  <TrackOrder
-                    bppId={order.bppId}
-                    orderId={order.id}
-                    transactionId={order.transactionId}
-                  />
-                </>
-              )}
-
-              <ClearButton
-                title={'Cancel'}
-                onPress={() => {
-                  setShowOverlay(true);
-                  setUpdateType(UPDATE_TYPE.CANCEL);
-                }}
-                textColor={colors.primary}
-              />
-            </>
-          )}
+      <Card style={styles.card}>
+        <View style={styles.helpContainer}>
+          <Text variant="titleMedium">Need help with your item?</Text>
         </View>
-      </View>
-      {modalVisible && (
-        <Support
-          setModalVisible={setModalVisible}
-          modalVisible={modalVisible}
-          sellerInfo={sellerInfo}
-        />
-      )}
-      {showOverlay && (
-        <CancelDialog
-          showOverlay={showOverlay}
-          breakup={order.items}
-          setShowOverlay={setShowOverlay}
-          order={order}
-          setCancelInProgress={setCancelInProgress}
-          setCancelMessageId={setCancelMessageId}
-          setUpdateMessageId={setUpdateMessageId}
-          cancelInProgress={cancelInProgress}
-          updateInProgress={updateInProgress}
-          setUpdateInProgress={setUpdateInProgress}
-          updateType={updateType}
-        />
-      )}
-    </>
+
+        <TouchableOpacity
+          disabled={buttonDisabled}
+          onPress={() =>
+            navigation.navigate('CallSeller', {
+              bppId: order.bppId,
+              transactionId: order.transactionId,
+              orderId: order.id,
+            })
+          }>
+          <Divider />
+          <View style={[styles.rowContainer, styles.helpButton]}>
+            <Text style={[{color: buttonColor}, styles.helpLabel]}>Call</Text>
+            <Icon name="chevron-right" size={24} color={buttonColor} />
+          </View>
+        </TouchableOpacity>
+
+        {order.state !== ORDER_STATUS.CANCELLED &&
+          (order.state === ORDER_STATUS.DELIVERED ? (
+            <TouchableOpacity disabled={buttonDisabled}>
+              <Divider />
+              <View style={[styles.rowContainer, styles.helpButton]}>
+                <Text style={[{color: buttonColor}, styles.helpLabel]}>
+                  Return items
+                </Text>
+                <Icon name="chevron-right" size={24} color={buttonColor} />
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <>
+              {!!order.id && (
+                <TouchableOpacity onPress={getStatus} disabled={buttonDisabled}>
+                  <Divider />
+                  <View style={[styles.rowContainer, styles.helpButton]}>
+                    <Text style={[{color: buttonColor}, styles.helpLabel]}>
+                      Get Order Status
+                    </Text>
+                    {statusInProgress ? (
+                      <ActivityIndicator size={24} color={colors.primary} />
+                    ) : (
+                      <Icon
+                        name="chevron-right"
+                        size={24}
+                        color={buttonColor}
+                      />
+                    )}
+                  </View>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity onPress={trackOrder} disabled={buttonDisabled}>
+                <Divider />
+                <View style={[styles.rowContainer, styles.helpButton]}>
+                  <Text style={[{color: buttonColor}, styles.helpLabel]}>
+                    Track Order
+                  </Text>
+                  {trackInProgress ? (
+                    <ActivityIndicator size={24} color={colors.primary} />
+                  ) : (
+                    <Icon name="chevron-right" size={24} color={buttonColor} />
+                  )}
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                disabled={buttonDisabled}
+                onPress={() =>
+                  navigation.navigate('CancelOrder', {
+                    items: order.items,
+                    bppId: order.bppId,
+                    transactionId: order.transactionId,
+                    orderId: order.id,
+                    updateType: UPDATE_TYPE.CANCEL,
+                    updateId: order._id,
+                    providerId: order.provider.id,
+                  })
+                }>
+                <Divider />
+                <View style={[styles.rowContainer, styles.helpButton]}>
+                  <Text style={[{color: buttonColor}, styles.helpLabel]}>
+                    Cancel Items
+                  </Text>
+                  <Icon name="chevron-right" size={24} color={buttonColor} />
+                </View>
+              </TouchableOpacity>
+            </>
+          ))}
+      </Card>
+    </ScrollView>
   );
 };
 
 export default withTheme(ShippingDetails);
 
 const styles = StyleSheet.create({
-  addressContainer: {marginTop: 20, flexShrink: 1},
+  card: {
+    margin: 8,
+    backgroundColor: 'white',
+  },
   actionContainer: {
     paddingVertical: 10,
     justifyContent: 'space-between',
     flexDirection: 'row',
+  },
+  helpContainer: {
+    padding: 8,
   },
   container: {
     paddingTop: 8,
@@ -300,6 +184,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  helpButton: {
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+  },
+  helpLabel: {
+    fontSize: 18,
+  },
   priceContainer: {
     marginTop: 10,
   },
@@ -307,6 +198,5 @@ const styles = StyleSheet.create({
   title: {fontSize: 16, marginRight: 10, flexShrink: 1},
   price: {fontSize: 16, marginLeft: 10},
   address: {marginBottom: 4},
-  divider: {marginTop: 10},
   quantity: {fontWeight: '700'},
 });

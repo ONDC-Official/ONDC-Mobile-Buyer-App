@@ -1,22 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {useIsFocused} from '@react-navigation/native';
 import RNEventSource from 'react-native-event-source';
-import {withTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 
-import ClearButton from '../../../../../components/button/ClearButton';
 import {getData, postData} from '../../../../../utils/api';
-import {BASE_URL, GET_STATUS, ON_GET_STATUS,} from '../../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  GET_STATUS,
+  ON_GET_STATUS,
+} from '../../../../../utils/apiUtilities';
 import {alertWithOneButton} from '../../../../../utils/alerts';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 
-const GetOrderStatus = ({
-  theme,
-  bppId,
-  transactionId,
-  orderId,
-  getOrderList,
-}) => {
+export default (bppId, transactionId, orderId) => {
   const isFocused = useIsFocused();
   const {handleApiError} = useNetworkErrorHandling();
   const {token} = useSelector(({authReducer}) => authReducer);
@@ -51,6 +47,7 @@ const GetOrderStatus = ({
         );
       }
     } catch (e) {
+      setStatusInProgress(false);
       handleApiError(e);
     }
   };
@@ -61,7 +58,6 @@ const GetOrderStatus = ({
         headers: {Authorization: `Bearer ${token}`},
       });
       setStatusInProgress(false);
-      getOrderList(1);
     } catch (error) {
       console.log(error);
       handleApiError(error);
@@ -106,14 +102,8 @@ const GetOrderStatus = ({
     };
   }, [statusMessageId, isFocused]);
 
-  return (
-    <ClearButton
-      title="Get Status"
-      onPress={getStatus}
-      textColor={theme.colors.primary}
-      loading={statusInProgress}
-    />
-  );
+  return {
+    getStatus,
+    statusInProgress,
+  };
 };
-
-export default withTheme(GetOrderStatus);
