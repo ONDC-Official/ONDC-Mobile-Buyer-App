@@ -1,6 +1,6 @@
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import Login from '../modules/authentication/login/Login';
 import SignUp from '../modules/authentication/signUp/SignUp';
@@ -23,7 +23,7 @@ import CallSeller from '../modules/main/order/CallSeller';
 import CancelOrder from '../modules/main/order/CancelOrder';
 import ReturnOrder from '../modules/main/order/ReturnOrder';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 /**
  * Component for stack navigation

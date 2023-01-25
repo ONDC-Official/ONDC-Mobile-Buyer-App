@@ -15,6 +15,7 @@ import {getStoredData} from '../../../utils/storage';
 import ProductSearch from '../product/list/component/header/ProductSearch';
 import Home from './components/Home';
 import HeaderMenu from '../../../components/headerMenu/HeaderMenu';
+import AddressTag from "./components/AddressTag";
 
 const Dashboard = ({navigation, theme}) => {
   const isFocused = useIsFocused();
@@ -41,20 +42,7 @@ const Dashboard = ({navigation, theme}) => {
       style={[appStyles.container, {backgroundColor: theme.colors.surface}]}>
       <View>
         <View style={styles.header}>
-          {address ? (
-            <TouchableOpacity
-              style={styles.addressContainer}
-              onPress={() => navigation.navigate('AddressList')}>
-              <Text style={[styles.address, {color: theme.colors.primary}]}>
-                {address?.address?.tag
-                  ? address?.address?.tag
-                  : address?.descriptor?.city}
-              </Text>
-              <Icon name={'chevron-down'} color={theme.colors.primary} />
-            </TouchableOpacity>
-          ) : (
-            <ActivityIndicator size={'small'} color={theme.colors.primary} />
-          )}
+          <AddressTag address={address} />
 
           <HeaderMenu />
         </View>
@@ -71,13 +59,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 16,
-  },
-  addressContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  address: {
-    marginEnd: 8,
   },
 });
 

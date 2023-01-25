@@ -2,11 +2,11 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Card, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import moment from 'moment';
 
 import {appStyles} from '../../../../../../styles/styles';
 import {showInfoToast, stringToDecimal} from '../../../../../../utils/utils';
 import useProductQuantity from '../../../hook/useProductQuantity';
-import moment from 'moment';
 
 const image = require('../../../../../../assets/noImage.png');
 
@@ -57,7 +57,7 @@ const DashboardProduct = ({
               <View style={styles.storeTime}>
                 <Text style={{color: colors.opposite}}>
                   Open until{' '}
-                  {moment(item.storeOpenTillDate).format('DD-MM-YYYY hh:mm a')}
+                  {moment(item.storeOpenTillDate).format('hh:mm a')}
                 </Text>
               </View>
             )}
@@ -75,7 +75,6 @@ const DashboardProduct = ({
                 (item.quantity < 1 ? (
                   <Button
                     mode="outlined"
-                    contentStyle={appStyles.containedButtonContainer}
                     labelStyle={appStyles.containedButtonLabel}
                     onPress={() => {
                       showInfoToast('Added to cart');

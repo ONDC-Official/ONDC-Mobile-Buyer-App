@@ -127,12 +127,14 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
               )}
           </View>
 
-          <View style={styles.detailsContainer}>
-            <Text style={{color: colors.accent}}>Product Description</Text>
-            <Text style={styles.longDescription}>
-              {product?.descriptor?.long_desc}
-            </Text>
-          </View>
+          {!!product?.descriptor?.long_desc && (
+            <View style={styles.detailsContainer}>
+              <Text style={{color: colors.accent}}>Product Description</Text>
+              <Text style={styles.longDescription}>
+                {product?.descriptor?.long_desc}
+              </Text>
+            </View>
+          )}
 
           {product?.hasOwnProperty(
             '@ondc/org/statutory_reqs_packaged_commodities',

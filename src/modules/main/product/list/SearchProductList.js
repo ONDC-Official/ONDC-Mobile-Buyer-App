@@ -19,6 +19,7 @@ import Products from './Products';
 import {SEARCH_QUERY} from '../../../../utils/Constants';
 import SortAndFilter from './component/header/SortAndFilter';
 import HeaderMenu from '../../../../components/headerMenu/HeaderMenu';
+import AddressTag from "../../dashboard/components/AddressTag";
 
 const SearchProductList = ({navigation, theme, route: {params}}) => {
   const isFocused = useIsFocused();
@@ -55,18 +56,7 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
               icon={'arrow-left'}
               onPress={() => navigation.goBack()}
             />
-            {address ? (
-              <TouchableOpacity
-                style={styles.addressContainer}
-                onPress={() => navigation.navigate('AddressList')}>
-                <Text style={[styles.address, {color: theme.colors.primary}]}>
-                  {address?.descriptor?.name}
-                </Text>
-                <Icon name={'chevron-down'} color={theme.colors.primary} />
-              </TouchableOpacity>
-            ) : (
-              <ActivityIndicator size={'small'} color={theme.colors.primary} />
-            )}
+            <AddressTag address={address} />
           </View>
 
           <HeaderMenu />
