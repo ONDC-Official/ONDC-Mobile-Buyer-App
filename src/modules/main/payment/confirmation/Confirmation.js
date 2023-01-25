@@ -51,22 +51,24 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       if (!data[0].error) {
         if (data[0].context.bpp_id) {
           data[0].message.quote.items.forEach(element => {
-            const product = cartItems.find(one => one.id === element.id);
-            const productPrice = data[0].message.quote.quote.breakup.find(
-              one => one['@ondc/org/item_id'] === product.id,
-            );
+            const product = cartItems.find(one => String(one.id) === String(element.id));
 
-            const cost = product.price.value
-              ? product.price.value
-              : product.price.maximum_value;
-
-            if (
-              stringToDecimal(productPrice.price.value) !==
-              stringToDecimal(cost)
-            ) {
-              element.message = 'Price of this product has been updated';
-            }
             if (product) {
+              const productPrice = data[0].message.quote.quote.breakup.find(
+                one => one['@ondc/org/item_id'] === String(product.id),
+              );
+
+              const cost = product.price.value
+                ? product.price.value
+                : product.price.maximum_value;
+
+              if (
+                stringToDecimal(productPrice.price.value) !==
+                stringToDecimal(cost)
+              ) {
+                element.message = 'Price of this product has been updated';
+              }
+
               element.provider = {
                 id: product.provider_details.id,
                 descriptor: product.provider_details.descriptor,
@@ -90,11 +92,12 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             : Number(data[0].message.quote.quote.price.value);
         }
         setApiInProgress(1);
-        const ids = confirmation.current.map(one => one.id);
-        const isAllPresent = cartItems.every(one => ids.includes(one.id));
+        const ids = confirmation.current?.map(one => one.id);
+        const isAllPresent = cartItems.every(one => ids?.includes(one.id));
         isAllPresent ? setApiInProgress(false) : setApiInProgress(true);
       }
     } catch (error) {
+      console.log(error);
       handleApiError(error);
     }
   };
@@ -262,7 +265,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     let element = null;
 
     if (confirmation.current) {
-      element = confirmation.current.find(one => one.id === item.id);
+      element = confirmation.current.find(one => String(one.id) === String(item.id));
     }
 
     return item.hasOwnProperty('isSkeleton') ? (

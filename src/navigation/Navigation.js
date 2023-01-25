@@ -23,6 +23,7 @@ import CallSeller from '../modules/main/order/CallSeller';
 import CancelOrder from '../modules/main/order/CancelOrder';
 import ReturnOrder from '../modules/main/order/ReturnOrder';
 import UpdateAddress from "../modules/main/dashboard/components/UpdateAddress";
+import RaiseComplaint from "../modules/main/order/RaiseComplaint";
 
 const Stack = createNativeStackNavigator();
 
@@ -138,6 +139,14 @@ const Navigation = () => {
           component={ReturnOrder}
           options={{
             title: 'Return Order',
+          }}
+        />
+
+        <Stack.Screen
+          name="RaiseComplaint"
+          component={RaiseComplaint}
+          options={{
+            title: 'Raise Complaint',
           }}
         />
 

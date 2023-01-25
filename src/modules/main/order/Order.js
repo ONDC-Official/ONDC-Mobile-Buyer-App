@@ -84,6 +84,7 @@ const Order = () => {
   }, []);
 
   const onRefreshHandler = () => {
+    pageNumber.current = 1;
     setRefreshInProgress(true);
     getOrderList(1)
       .then(() => {

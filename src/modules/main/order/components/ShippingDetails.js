@@ -166,6 +166,21 @@ const ShippingDetails = ({order, theme}) => {
                   <Icon name="chevron-right" size={24} color={buttonColor} />
                 </View>
               </TouchableOpacity>
+              <TouchableOpacity
+                disabled={buttonDisabled}
+                onPress={() =>
+                  navigation.navigate('RaiseComplaint', {
+                    orderId: order.id,
+                  })
+                }>
+                <Divider />
+                <View style={[styles.rowContainer, styles.helpButton]}>
+                  <Text style={[{color: buttonColor}, styles.helpLabel]}>
+                    Raise Complaint
+                  </Text>
+                  <Icon name="chevron-right" size={24} color={buttonColor} />
+                </View>
+              </TouchableOpacity>
             </>
           ))}
       </Card>

@@ -200,6 +200,7 @@ const Payment = ({
         headers: {Authorization: `Bearer ${token}`},
       });
     } catch (err) {
+      console.log(err);
       handleApiError(err);
       setConfirmOrderRequested(false);
     }
@@ -221,14 +222,14 @@ const Payment = ({
         const index = providerIdArray.findIndex(
           one => one === item.provider.id,
         );
-        const object = cartItems.find(one => one.id === item.id);
+        const product = cartItems.find(one => String(one.id) === String(item.id));
         if (index > -1) {
           payload[index].message.items.push({
             id: item.id,
             quantity: {
-              count: object.quantity,
+              count: product.quantity,
             },
-            product: object,
+            product: product,
             bpp_id: item.bpp_id,
             provider: {
               id: item.provider.id,
@@ -265,17 +266,17 @@ const Payment = ({
           payload.push({
             context: {
               transaction_id: item.transaction_id,
-              city: object.city,
-              state: object.state,
+              city: product.city,
+              state: product.state,
             },
             message: {
               items: [
                 {
                   id: item.id,
                   quantity: {
-                    count: object.quantity,
+                    count: product.quantity,
                   },
-                  product: object,
+                  product: product,
                   bpp_id: item.bpp_id,
                   provider: {
                     id: item.provider ? item.provider.id : item.id,
@@ -335,6 +336,7 @@ const Payment = ({
         setInitializeOrderRequested(false);
       }
     } catch (err) {
+      console.log(err);
       error.current = err;
       handleApiError(err);
       setInitializeOrderRequested(false);
@@ -461,19 +463,19 @@ const Payment = ({
     try {
       const orderList = refOrders.current;
       if (orderList && orderList.length > 0) {
-        const errorObj = orderList.find(one => one.hasOwnProperty('error'));
+        const error = orderList.find(one => one.hasOwnProperty('error'));
 
-        if (!errorObj) {
+        if (!error) {
           const payload = orderList.map(item => {
-            const object = cartItems.find(
-              one => one.id === item.message.order.items[0].id,
+            const product = cartItems.find(
+              one => String(one.id) === String(item.message.order.items[0].id),
             );
             return {
               context: {
                 transaction_id: item.context.parent_order_id,
                 parent_order_id: item.context.parent_order_id,
-                city: object.city,
-                state: object.state,
+                city: product.city,
+                state: product.state,
               },
               message: {
                 quote: item.message.order.quote,
@@ -557,6 +559,7 @@ const Payment = ({
       signedPayload.current = data.signedPayload;
       initializeJusPaySdk(payload);
     } catch (err) {
+      console.log(err);
       handleApiError(err);
     }
   };
