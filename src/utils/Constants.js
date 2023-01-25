@@ -16,7 +16,7 @@ export const PAYMENT_METHODS = {
   },
   COD: {
     name: 'COD',
-    orderType: 'POST-FULFILLMENT',
+    orderType: 'ON-FULFILLMENT',
   },
 };
 

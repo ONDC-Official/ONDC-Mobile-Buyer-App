@@ -24,6 +24,7 @@ import CancelOrder from '../modules/main/order/CancelOrder';
 import ReturnOrder from '../modules/main/order/ReturnOrder';
 import UpdateAddress from "../modules/main/dashboard/components/UpdateAddress";
 import RaiseComplaint from "../modules/main/order/RaiseComplaint";
+import UpdateBillingAddress from "../modules/main/payment/billingAddress/UpdateBillingAddress";
 
 const Stack = createNativeStackNavigator();
 
@@ -99,6 +100,14 @@ const Navigation = () => {
           component={AddBillingAddress}
           options={{
             title: 'Add Billing Address',
+          }}
+        />
+
+        <Stack.Screen
+          name="UpdateBillingAddress"
+          component={UpdateBillingAddress}
+          options={{
+            title: 'Update Billing Address',
           }}
         />
 

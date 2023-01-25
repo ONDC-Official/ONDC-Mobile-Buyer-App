@@ -1,7 +1,6 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  ActivityIndicator,
   BackHandler,
   NativeEventEmitter,
   ScrollView,
@@ -325,8 +324,6 @@ const Payment = ({
         if (item.message.ack.status === 'ACK') {
           parentOrderId.current = item.context.parent_order_id;
           messageIds.push(item.context.message_id);
-        } else {
-          console.log('Ack status', item.message.ack);
         }
       });
       if (messageIds.length > 0) {

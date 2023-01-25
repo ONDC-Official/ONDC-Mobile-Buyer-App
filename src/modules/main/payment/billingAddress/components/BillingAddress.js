@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Card, IconButton, Text, withTheme} from 'react-native-paper';
+import {useNavigation} from "@react-navigation/native";
 
 /**
  * Component to render single address card in select address screen
@@ -17,8 +18,8 @@ const BillingAddress = ({
   theme,
   isCurrentAddress,
   setBillingAddress,
-  onEdit,
 }) => {
+  const navigation = useNavigation();
   const {colors} = theme;
   const {street, landmark, city, state, areaCode} = item.address;
 
@@ -47,7 +48,9 @@ const BillingAddress = ({
           </Text>
         </View>
         <View style={styles.editContainer}>
-          <TouchableOpacity onPress={onEdit}>
+          <TouchableOpacity onPress={() => navigation.navigate('UpdateBillingAddress', {
+            address: item
+          })}>
             <Icon name="pencil-outline" size={24} color={colors.primary} />
           </TouchableOpacity>
         </View>
