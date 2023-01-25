@@ -9,7 +9,7 @@ import {
 } from 'react-native-paper';
 import React, {useEffect, useState} from 'react';
 
-import {reasons} from './utils/reasons';
+import {cancelReasons} from './utils/reasons';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
 import {
@@ -315,7 +315,7 @@ const CancelOrder = ({navigation, route: {params}}) => {
           <View style={styles.reasonMessage}>
             <Text variant="titleSmall">Cancellation Reason</Text>
           </View>
-          {reasons.map(reason => (
+          {cancelReasons.map(reason => (
             <View key={reason.id} style={styles.row}>
               <RadioButton.Android
                 disabled={disabled}

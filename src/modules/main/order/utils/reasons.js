@@ -1,4 +1,4 @@
-export const reasons = [
+export const cancelReasons = [
   {
     id: '001',
     reason:
@@ -55,5 +55,29 @@ export const reasons = [
   {
     id: '018',
     reason: 'Delivery pin code not serviceable',
+  },
+];
+
+export const returnReasons = [
+  {
+    id: '001',
+    reason:
+      'Buyer does not want product any more',
+  },
+  {
+    id: '002',
+    reason: 'Product available at lower than order price',
+  },
+  {
+    id: '003',
+    reason: 'Product damaged or not in usable state',
+  },
+  {
+    id: '004',
+    reason: 'Product is of incorrect quantity or size',
+  },
+  {
+    id: '005',
+    reason: 'Product delivered is different from what was shown and ordered',
   },
 ];
