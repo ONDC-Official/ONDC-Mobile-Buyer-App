@@ -5,18 +5,13 @@ import {Button, Chip, Text, withTheme} from 'react-native-paper';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useSelector} from 'react-redux';
 
-import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {getData, postData} from '../../../utils/api';
-import {
-  BASE_URL,
-  DELIVERY_ADDRESS,
-  GET_GPS_CORDS,
-  GET_LATLONG,
-} from '../../../utils/apiUtilities';
-import InputField from '../../../components/input/InputField';
-import {setStoredData} from '../../../utils/storage';
-import {appStyles} from '../../../styles/styles';
-import {addressTags, validationSchema} from "../dashboard/utils/addValidationSchema";
+import useNetworkErrorHandling from "../../../../hooks/useNetworkErrorHandling";
+import {addressTags, validationSchema} from "../utils/addValidationSchema";
+import InputField from "../../../../components/input/InputField";
+import {appStyles} from "../../../../styles/styles";
+import {BASE_URL, UPDATE_DELIVERY_ADDRESS} from "../../../../utils/apiUtilities";
+import {postData} from "../../../../utils/api";
+
 
 /**
  * Component to render form in add new address screen
@@ -26,8 +21,7 @@ import {addressTags, validationSchema} from "../dashboard/utils/addValidationSch
  * @constructor
  * @returns {JSX.Element}
  */
-const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
-
+const UpdateAddress = ({navigation, theme, route: {params}}) => {
   const {token, name, emailId} = useSelector(({authReducer}) => authReducer);
 
   const {handleApiError} = useNetworkErrorHandling();
@@ -40,14 +34,17 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
   const [longitude, setLongitude] = useState(null);
 
   let userInfo = {
-    email: emailId,
-    name: name,
-    number: '',
-    city: '',
-    state: '',
-    pin: '',
-    landMark: '',
-    street: '',
+    email: params.address.descriptor.email,
+    name: params.address.descriptor.name,
+    number: params.address.descriptor.phone,
+    city: params.address.address.city,
+    state: params.address.address.state,
+    pin: params.address.address.areaCode,
+    landMark: params.address.address.locality,
+    street: params.address.address.street,
+    tag: params.address.address.tag,
+    defaultAddress: params.address.defaultAddress,
+    gps: params.address.gps,
   };
 
   const getState = async (e, setFieldValue) => {
@@ -86,14 +83,15 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
         Authorization: `Bearer ${token}`,
       },
     };
+
     const payload = {
       descriptor: {
         name: values.name,
         email: values.email,
         phone: values.number,
       },
-      gps: `${latitude},${longitude}`,
-      defaultAddress: true,
+      gps: latitude === null ? values.gps : `${latitude},${longitude}`,
+      defaultAddress: values.defaultAddress,
       address: {
         areaCode: values.pin,
         city: values.city,
@@ -107,20 +105,13 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
 
     try {
       setApiInProgress(true);
-      const {data} = await postData(
-        `${BASE_URL}${DELIVERY_ADDRESS}`,
+      await postData(
+        `${BASE_URL}${UPDATE_DELIVERY_ADDRESS}${params.address.id}`,
         payload,
         options,
       );
-      if (!params) {
-        await setStoredData('address', JSON.stringify(data));
-      }
       setApiInProgress(false);
-
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Dashboard'}],
-      });
+      navigation.goBack();
     } catch (error) {
       handleApiError(error);
       setApiInProgress(false);
@@ -140,15 +131,15 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
             });
         }}>
         {({
-          values,
-          errors,
-          handleChange,
-          handleBlur,
-          touched,
-          handleSubmit,
-          setFieldValue,
-          setFieldError,
-        }) => {
+            values,
+            errors,
+            handleChange,
+            handleBlur,
+            touched,
+            handleSubmit,
+            setFieldValue,
+            setFieldError,
+          }) => {
           return (
             <View style={styles.formContainer}>
               <InputField
@@ -281,7 +272,7 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
   );
 };
 
-export default withTheme(AddDefaultAddress);
+export default withTheme(UpdateAddress);
 
 const styles = StyleSheet.create({
   row: {

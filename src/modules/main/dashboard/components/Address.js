@@ -13,11 +13,10 @@ import {clearCart} from '../../../../redux/actions';
  * @param theme
  * @param selectedAddress:address selected by user
  * @param item:object which contains address details
- * @param onEdit:function handles click event of edit
  * @constructor
  * @returns {JSX.Element}
  */
-const Address = ({item, theme, isCurrentAddress, onEdit, params}) => {
+const Address = ({item, theme, isCurrentAddress, params}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {colors} = theme;
@@ -84,7 +83,7 @@ const Address = ({item, theme, isCurrentAddress, onEdit, params}) => {
           </Text>
         </View>
         <View style={styles.editContainer}>
-          <TouchableOpacity onPress={onEdit}>
+          <TouchableOpacity onPress={() => navigation.navigate('UpdateAddress', {address: item})}>
             <Icon name="pencil-outline" size={24} color={colors.primary} />
           </TouchableOpacity>
         </View>

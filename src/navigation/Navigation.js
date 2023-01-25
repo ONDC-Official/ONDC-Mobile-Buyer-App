@@ -22,6 +22,7 @@ import OrderDetails from '../modules/main/order/OrderDetails';
 import CallSeller from '../modules/main/order/CallSeller';
 import CancelOrder from '../modules/main/order/CancelOrder';
 import ReturnOrder from '../modules/main/order/ReturnOrder';
+import UpdateAddress from "../modules/main/dashboard/components/UpdateAddress";
 
 const Stack = createNativeStackNavigator();
 
@@ -66,6 +67,13 @@ const Navigation = () => {
           component={AddDefaultAddress}
           options={{
             title: 'Add Delivery Address',
+          }}
+        />
+        <Stack.Screen
+          name="UpdateAddress"
+          component={UpdateAddress}
+          options={{
+            title: 'Update Delivery Address',
           }}
         />
 

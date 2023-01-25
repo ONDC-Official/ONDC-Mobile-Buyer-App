@@ -6,7 +6,7 @@ export const GET_LOCATION = '/mmi/api/mmi_query?query=';
 export const GET_LOCATION_FROM_LAT_LONG = '/mmi/api/mmi_latlong_info?';
 export const GET_LATLONG = '/mmi/api/mmi_place_info?eloc=';
 export const DELIVERY_ADDRESS = '/clientApis/v1/delivery_address';
-export const UPDATE_ADDRESS = '/clientApis/v1/update_delivery_address/';
+export const UPDATE_DELIVERY_ADDRESS = '/clientApis/v1/update_delivery_address/';
 export const BILLING_ADDRESS = '/clientApis/v1/billing_details';
 export const UPDATE_BILLING_ADDRESS = '/clientApis/v1/update_billing_details/';
 export const GET_ORDERS = '/clientApis/v1/orders';
