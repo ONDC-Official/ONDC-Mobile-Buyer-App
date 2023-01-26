@@ -36,6 +36,8 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
   useEffect(() => {
     if (params) {
       onSearch(params.category, SEARCH_QUERY.CATEGORY);
+    } else {
+      onSearch('', SEARCH_QUERY.UNKNOWN);
     }
   }, []);
 

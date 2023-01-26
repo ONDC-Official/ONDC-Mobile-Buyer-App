@@ -85,9 +85,7 @@ const ShippingDetails = ({order, theme}) => {
           disabled={buttonDisabled}
           onPress={() =>
             navigation.navigate('CallSeller', {
-              bppId: order.bppId,
-              transactionId: order.transactionId,
-              orderId: order.id,
+             items: order.items
             })
           }>
           <Divider />

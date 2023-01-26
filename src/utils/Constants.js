@@ -2,6 +2,7 @@ export const SEARCH_QUERY = {
   PRODUCT: 'Product',
   PROVIDER: 'Provider',
   CATEGORY: 'Category',
+  UNKNOWN: 'Unknown',
 };
 
 export const UPDATE_TYPE = {

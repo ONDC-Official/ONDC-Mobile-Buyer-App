@@ -55,7 +55,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 : product.price.maximum_value;
 
               if (
-                stringToDecimal(productPrice.price.value) !==
+                stringToDecimal(productPrice.item.price.value) !==
                 stringToDecimal(cost)
               ) {
                 element.message = 'Price of this product has been updated';

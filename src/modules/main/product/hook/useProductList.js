@@ -143,7 +143,10 @@ export default (category = null) => {
     dispatch(saveProducts([]));
     dispatch(clearFilters());
     let requestParameters = {
-      context: {},
+      context: {
+        city: address?.address?.city,
+        state: address?.address?.state,
+      },
       message: {
         criteria: {
           delivery_location: address?.gps,
