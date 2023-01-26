@@ -2,18 +2,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useRef, useState} from 'react';
 
 import {clearProducts, saveProducts} from '../../../../redux/product/actions';
-import {
-  clearFilters,
-  saveFilters,
-  saveIds,
-} from '../../../../redux/filter/actions';
+import {clearFilters, saveFilters, saveIds,} from '../../../../redux/filter/actions';
 import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
 import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  GET_MESSAGE_ID,
-  GET_PRODUCTS,
-} from '../../../../utils/apiUtilities';
+import {BASE_URL, GET_MESSAGE_ID, GET_PRODUCTS,} from '../../../../utils/apiUtilities';
 import {getStoredData} from '../../../../utils/storage';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';

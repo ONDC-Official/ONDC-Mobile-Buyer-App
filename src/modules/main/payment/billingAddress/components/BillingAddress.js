@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Card, IconButton, Text, withTheme} from 'react-native-paper';
+import {Card, Text, withTheme} from 'react-native-paper';
 import {useNavigation} from "@react-navigation/native";
 
 /**

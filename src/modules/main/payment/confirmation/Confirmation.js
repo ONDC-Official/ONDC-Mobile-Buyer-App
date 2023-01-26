@@ -7,16 +7,8 @@ import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  GET_SELECT,
-  ON_GET_SELECT,
-} from '../../../../utils/apiUtilities';
-import {
-  showToastWithGravity,
-  skeletonList,
-  stringToDecimal,
-} from '../../../../utils/utils';
+import {BASE_URL, GET_SELECT, ON_GET_SELECT,} from '../../../../utils/apiUtilities';
+import {showToastWithGravity, skeletonList, stringToDecimal,} from '../../../../utils/utils';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 import Product from './Product';
 

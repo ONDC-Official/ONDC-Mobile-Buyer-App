@@ -7,14 +7,14 @@ const StatusContainer = ({product, theme}) => {
     <View style={styles.container}>
       {product.return_status ? (
         <View style={styles.chipContainer}>
-          <Chip selectedColor={theme.colors.primary} mode="outlined">
+          <Chip selectedColor={theme.colors.primary} mode="flat">
             {product.return_status}
           </Chip>
         </View>
       ) : (
         <View style={styles.chipContainer}>
           {product.product['@ondc/org/returnable'] && (
-            <Chip selectedColor={theme.colors.primary} mode="outlined">
+            <Chip selectedColor={theme.colors.primary} mode="flat">
               Returnable
             </Chip>
           )}
@@ -23,7 +23,7 @@ const StatusContainer = ({product, theme}) => {
 
       {product.cancellation_status ? (
         <View style={styles.chipContainer}>
-          <Chip selectedColor={theme.colors.primary} mode="outlined">
+          <Chip selectedColor={theme.colors.primary} mode="flat">
             {product.cancellation_status}
           </Chip>
         </View>
@@ -31,7 +31,7 @@ const StatusContainer = ({product, theme}) => {
         <>
           {product.product['@ondc/org/cancellable'] && (
             <View style={styles.chipContainer}>
-              <Chip selectedColor={theme.colors.primary} mode="outlined">
+              <Chip selectedColor={theme.colors.primary} mode="flat">
                 Cancellable
               </Chip>
             </View>

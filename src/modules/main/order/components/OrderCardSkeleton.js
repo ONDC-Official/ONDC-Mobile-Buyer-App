@@ -8,7 +8,7 @@ import {Card} from 'react-native-paper';
  * @returns {JSX.Element}
  */
 const OrderCardSkeleton = () => (
-  <Card containerStyle={styles.card}>
+  <Card style={styles.card}>
     <View style={styles.row}>
       <View style={styles.details}>
         <SkeletonPlaceholder>
@@ -22,9 +22,6 @@ const OrderCardSkeleton = () => (
         <SkeletonPlaceholder>
           <View style={styles.label} />
         </SkeletonPlaceholder>
-        <SkeletonPlaceholder>
-          <View style={styles.status} />
-        </SkeletonPlaceholder>
       </View>
     </View>
   </Card>
@@ -35,10 +32,9 @@ export default OrderCardSkeleton;
 const styles = StyleSheet.create({
   row: {flexDirection: 'row', flex: 1},
   details: {flex: 1},
-  statusContainer: {width: 100},
-  label: {width: 100, height: 15, marginBottom: 5},
-  status: {width: 100, height: 25},
+  statusContainer: {width: 100, justifyContent: 'center'},
+  label: {width: 100, height: 30, marginBottom: 5},
   name: {height: 25, width: 180, marginBottom: 5},
   date: {height: 15, width: 180},
-  card: {elevation: 4, borderRadius: 10},
+  card: {elevation: 4, borderRadius: 10, margin: 8, backgroundColor: 'white', padding: 8},
 });

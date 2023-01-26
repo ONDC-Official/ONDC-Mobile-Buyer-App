@@ -101,7 +101,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             {product?.hasOwnProperty('@ondc/org/returnable') &&
               product['@ondc/org/returnable'] && (
                 <Chip
-                  mode="outlined"
+                  mode="flat"
                   style={styles.chip}
                   selectedColor={theme.colors.opposite}>
                   Returnable
@@ -110,7 +110,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             {product?.hasOwnProperty('@ondc/org/cancellable') &&
               product['@ondc/org/cancellable'] && (
                 <Chip
-                  mode="outlined"
+                  mode="flat"
                   style={styles.chip}
                   selectedColor={theme.colors.opposite}>
                   Cancellable
@@ -119,7 +119,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             {product?.hasOwnProperty('@ondc/org/available_on_cod') &&
               product['@ondc/org/available_on_cod'] && (
                 <Chip
-                  mode="outlined"
+                  mode="flat"
                   style={styles.chip}
                   selectedColor={theme.colors.opposite}>
                   COD

@@ -1,13 +1,6 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  BackHandler,
-  NativeEventEmitter,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {BackHandler, NativeEventEmitter, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import Config from 'react-native-config';
 import {Button, Card, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';

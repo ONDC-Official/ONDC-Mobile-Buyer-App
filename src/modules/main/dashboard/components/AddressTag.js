@@ -15,7 +15,7 @@ const AddressTag = ({address, theme}) => {
         <Text variant="titleMedium" style={[styles.address, {color: theme.colors.primary}]}>
           {address?.address?.tag
             ? address?.address?.tag
-            : address?.descriptor?.city}
+            : address?.address?.city}
         </Text>
         <Icon name={'chevron-down'} color={theme.colors.primary} />
       </TouchableOpacity>

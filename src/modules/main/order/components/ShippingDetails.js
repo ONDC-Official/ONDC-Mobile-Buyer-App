@@ -1,12 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Card, Divider, Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -15,6 +9,7 @@ import Address from './Address';
 import useGetOrderStatus from './actions/useGetOrderStatus';
 import useTrackOrder from './actions/useTrackOrder';
 import Product from './Product';
+import OrderStatus from "./OrderStatus";
 
 /**
  * Component is used to display shipping details to the user when card is expanded
@@ -44,25 +39,39 @@ const ShippingDetails = ({order, theme}) => {
   const buttonDisabled = statusInProgress || trackInProgress;
   const buttonColor =
     statusInProgress || trackInProgress ? 'grey' : colors.primary;
+
   return (
     <ScrollView>
       <Card style={styles.card}>
+
+        <View style={styles.orderStatus}>
+          {order?.state && <OrderStatus status={order?.state} />}
+        </View>
+
+        <Divider />
         {order?.items?.map(product => (
           <Product key={product.id} item={product} />
         ))}
-        <Address
-          title="Shipped To"
-          name={shippingAddress?.name}
-          email={contact?.email}
-          phone={contact?.phone}
-          address={shippingAddress}
-        />
+        {shippingAddress ? (
+          <Address
+            title="Shipped To"
+            name={shippingAddress?.name}
+            email={contact?.email}
+            phone={contact?.phone}
+            address={shippingAddress}
+          />
+        ) :  (
+          <View style={styles.addressContainer}>
+            <Text>Shipped To</Text>
+            <Text>NA</Text>
+          </View>
+        )}
         <Divider />
         <Address
           title="Billed To"
-          name={shippingAddress?.name}
-          email={contact?.email}
-          phone={contact?.phone}
+          name={order?.billing?.name}
+          email={order?.billing?.email}
+          phone={order?.billing?.phone}
           address={order?.billing?.address}
         />
       </Card>
@@ -195,6 +204,11 @@ const styles = StyleSheet.create({
     margin: 8,
     backgroundColor: 'white',
   },
+  orderStatus: {
+    justifyContent: 'flex-end',
+    padding: 12,
+    flexDirection: 'row',
+  },
   actionContainer: {
     paddingVertical: 10,
     justifyContent: 'space-between',
@@ -226,4 +240,5 @@ const styles = StyleSheet.create({
   price: {fontSize: 16, marginLeft: 10},
   address: {marginBottom: 4},
   quantity: {fontWeight: '700'},
+  addressContainer: {paddingHorizontal: 12, marginTop: 20, flexShrink: 1},
 });

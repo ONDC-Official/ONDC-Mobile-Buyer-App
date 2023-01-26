@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, withTheme} from 'react-native-paper';
-import {ActivityIndicator, TouchableOpacity, StyleSheet} from 'react-native';
+import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
 
 /**
  * Component to render clear button in the screens

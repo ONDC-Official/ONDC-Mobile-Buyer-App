@@ -4,11 +4,7 @@ import RNEventSource from 'react-native-event-source';
 import {Linking} from 'react-native';
 
 import {getData, postData} from '../../../../../utils/api';
-import {
-  BASE_URL,
-  ON_TRACK_ORDER,
-  TRACK_ORDER,
-} from '../../../../../utils/apiUtilities';
+import {BASE_URL, ON_TRACK_ORDER, TRACK_ORDER,} from '../../../../../utils/apiUtilities';
 import {useIsFocused} from '@react-navigation/native';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {FAQS} from '../../../../../utils/Constants';
@@ -46,6 +42,7 @@ export default (bppId, transactionId, orderId) => {
         setTrackMessageId(data[0].context.message_id);
       }
     } catch (e) {
+      setTrackInProgress(false);
       handleApiError(e);
     }
   };

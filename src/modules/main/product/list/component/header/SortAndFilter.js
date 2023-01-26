@@ -168,9 +168,7 @@ const styles = StyleSheet.create({
   rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
   sortFilterContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
-    paddingTop: 32,
-    paddingBottom: 16,
+    padding: 16,
   },
   text: {paddingVertical: 8, fontWeight: '700', marginRight: 8},
   row: {

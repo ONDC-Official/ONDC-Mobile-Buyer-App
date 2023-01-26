@@ -50,6 +50,7 @@ const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
             inputContainerStyle={styles.inputContainerStyle}
             clearIcon={null}
             closeIcon={null}
+            inputStyle={styles.inputStyle}
           />
         </View>
       </Pressable>
@@ -95,6 +96,7 @@ const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
               onSearch(query, searchType);
             }
           }}
+          inputStyle={styles.inputStyle}
           onChangeText={setQuery}
           value={query}
           clearIcon={null}
@@ -128,6 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  inputStyle: {paddingLeft: 12},
   menu: {
     paddingHorizontal: 15,
     paddingVertical: 16,

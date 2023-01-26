@@ -1,24 +1,11 @@
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Divider,
-  RadioButton,
-  Text,
-} from 'react-native-paper';
-import React, {useEffect, useState} from 'react';
+import {Button, Card, Checkbox, Divider, RadioButton, Text,} from 'react-native-paper';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {cancelReasons} from './utils/reasons';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
-import {
-  BASE_URL,
-  CANCEL_ORDER,
-  ON_CANCEL_ORDER,
-  ON_UPDATE_ORDER,
-  UPDATE_ORDER,
-} from '../../../utils/apiUtilities';
+import {BASE_URL, CANCEL_ORDER, ON_CANCEL_ORDER, ON_UPDATE_ORDER, UPDATE_ORDER,} from '../../../utils/apiUtilities';
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
@@ -37,6 +24,7 @@ const CancelOrder = ({navigation, route: {params}}) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [cancelMessageId, setCancelMessageId] = useState(null);
   const [updateMessageId, setUpdateMessageId] = useState(null);
+  const orderProcessed = useRef(false);
 
   const cancelOrder = async () => {
     try {
@@ -134,6 +122,11 @@ const CancelOrder = ({navigation, route: {params}}) => {
       eventSource.close();
       setCancelInProgress(false);
       setUpdateInProgress(false);
+
+      if (!orderProcessed.current) {
+        showToastWithGravity('We are unable to complete your request at the moment. Please try again');
+      }
+
     }
   };
 
@@ -148,6 +141,7 @@ const CancelOrder = ({navigation, route: {params}}) => {
         },
       );
       setCancelInProgress(false);
+      orderProcessed.current = true;
       if (data.message) {
         navigation.navigate('Orders');
       } else {
@@ -188,9 +182,11 @@ const CancelOrder = ({navigation, route: {params}}) => {
 
   useEffect(() => {
     if (params.items) {
-      setProducts(
-        params.items.filter(one => one.product['@ondc/org/cancellable']),
-      );
+      const list = params.items.filter(one => one.product['@ondc/org/cancellable']);
+      setProducts(list);
+      if (list.length === 1 ) {
+        setCancellationType('complete');
+      }
     }
   }, [params]);
 
@@ -251,27 +247,28 @@ const CancelOrder = ({navigation, route: {params}}) => {
   return (
     <ScrollView>
       <Card style={styles.card}>
-        <View style={styles.cancellationType}>
-          <View style={styles.row}>
-            <RadioButton.Android
-              disabled={disabled}
-              value="first"
-              status={cancellationType === 'complete' ? 'checked' : 'unchecked'}
-              onPress={() => setCancellationType('complete')}
-            />
-            <Text>Complete</Text>
+        {products?.length !== 1 && (
+          <View style={styles.cancellationType}>
+            <View style={styles.row}>
+              <RadioButton.Android
+                disabled={disabled}
+                value="first"
+                status={cancellationType === 'complete' ? 'checked' : 'unchecked'}
+                onPress={() => setCancellationType('complete')}
+              />
+              <Text>Complete</Text>
+            </View>
+            <View style={styles.row}>
+              <RadioButton.Android
+                disabled={disabled}
+                value="first"
+                status={cancellationType === 'partial' ? 'checked' : 'unchecked'}
+                onPress={() => setCancellationType('partial')}
+              />
+              <Text>Partial</Text>
+            </View>
           </View>
-          <View style={styles.row}>
-            <RadioButton.Android
-              disabled={disabled}
-              value="first"
-              status={cancellationType === 'partial' ? 'checked' : 'unchecked'}
-              onPress={() => setCancellationType('partial')}
-            />
-            <Text>Partial</Text>
-          </View>
-        </View>
-
+        )}
         {cancellationType === 'partial' && (
           <>
             <Text variant="titleSmall" style={styles.reasonMessage}>
@@ -336,14 +333,6 @@ const CancelOrder = ({navigation, route: {params}}) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <Button
-            contentStyle={appStyles.containedButtonContainer}
-            labelStyle={appStyles.containedButtonLabel}
-            mode="outlined"
-            disabled={cancelInProgress || updateInProgress}
-            onPress={() => navigation.goBack()}>
-            Go Back
-          </Button>
           {cancellationType === 'complete' && selectedReason && (
             <Button
               contentStyle={appStyles.containedButtonContainer}
@@ -352,7 +341,7 @@ const CancelOrder = ({navigation, route: {params}}) => {
               disabled={cancelInProgress}
               loading={cancelInProgress}
               onPress={cancelOrder}>
-              Confirm
+              Cancel Order
             </Button>
           )}
           {cancellationType === 'partial' &&
@@ -365,7 +354,7 @@ const CancelOrder = ({navigation, route: {params}}) => {
                 disabled={updateInProgress}
                 loading={updateInProgress}
                 onPress={updateOrder}>
-                Confirm
+                Cancel Order
               </Button>
             )}
         </View>

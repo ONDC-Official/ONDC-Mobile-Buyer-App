@@ -1,9 +1,10 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Button, Text, withTheme} from 'react-native-paper';
+import {Text, withTheme} from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {appStyles} from '../../../styles/styles';
+import OutlineButton from "../../../components/button/OutlineButton";
 
 /**
  * Component to render list empty component
@@ -21,13 +22,7 @@ const EmptyComponent = ({theme, navigation}) => {
         looks like your shopping cart is empty, you can shop now by clicking
         button below
       </Text>
-      <Button
-        contentStyle={appStyles.containedButtonContainer}
-        labelStyle={appStyles.containedButtonLabel}
-        mode="outlined"
-        onPress={() => navigation.navigate('Dashboard')}>
-        Shop Now
-      </Button>
+      <OutlineButton onPress={() => navigation.navigate('Dashboard')} label={'Shop Now'} />
     </View>
   );
 };

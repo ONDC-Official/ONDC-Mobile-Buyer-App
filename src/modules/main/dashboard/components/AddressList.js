@@ -54,7 +54,6 @@ const AddressList = ({navigation, theme, route: {params}}) => {
           size={24}
           icon={'plus-circle'}
           iconColor={theme.colors.primary}
-          style={styles.addButton}
           onPress={() =>
             navigation.navigate('AddDefaultAddress', {setDefault: false})
           }
@@ -119,9 +118,6 @@ const AddressList = ({navigation, theme, route: {params}}) => {
 };
 
 const styles = StyleSheet.create({
-  addButton: {
-    marginEnd: 16,
-  },
   containerStyle: {
     marginVertical: 16,
   },

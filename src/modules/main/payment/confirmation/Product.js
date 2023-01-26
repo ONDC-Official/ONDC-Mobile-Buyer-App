@@ -1,13 +1,7 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, StyleSheet, View,} from 'react-native';
 import {Button, Card, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
 import {removeItemFromCart, updateItemInCart} from '../../../../redux/actions';
 import {appStyles} from '../../../../styles/styles';
@@ -82,27 +76,21 @@ const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
 
           {confirmation?.hasOwnProperty('fulfillment') && (
             <View>
-              <View style={styles.row}>
-                <Text>Provider name:&nbsp;</Text>
+              <Text>Fulfilled By:&nbsp;
                 <Text variant="titleSmall">
                   {confirmation?.fulfillment['@ondc/org/provider_name']}
                 </Text>
-              </View>
-              <View style={styles.row}>
-                <Text>Category:&nbsp;</Text>
+              </Text>
+              <Text>Type of Delivery:&nbsp;
                 <Text variant="titleSmall">
                   {confirmation?.fulfillment['@ondc/org/category']}
                 </Text>
-              </View>
-              <View style={styles.row}>
-                <Text>Turnaround Time:&nbsp;</Text>
+              </Text>
+              <Text>Estimated Delivery Time:&nbsp;
                 <Text variant="titleSmall">
-                  {moment
-                    .duration(confirmation?.fulfillment['@ondc/org/TAT'])
-                    .asMinutes()}{' '}
-                  min
+                  {moment.duration(confirmation?.fulfillment['@ondc/org/TAT']).asMinutes()}{' '}min
                 </Text>
-              </View>
+              </Text>
             </View>
           )}
           <View style={styles.priceContainer}>
@@ -141,7 +129,7 @@ const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
       )}
       {!confirmed &&
         (apiInProgress ? (
-          <ActivityIndicator color={colors.error} />
+          <ActivityIndicator color={colors.error}/>
         ) : (
           <View style={styles.messageContainer}>
             <Text

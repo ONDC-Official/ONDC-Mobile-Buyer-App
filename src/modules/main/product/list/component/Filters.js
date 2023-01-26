@@ -1,20 +1,12 @@
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import React, {memo, useState} from 'react';
-import {
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Button, Divider, Text, withTheme} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import ClearButton from '../../../../../components/button/ClearButton';
 import {appStyles} from '../../../../../styles/styles';
-import {
-  clearFiltersOnly,
-  updateFilters,
-} from '../../../../../redux/filter/actions';
+import {clearFiltersOnly, updateFilters,} from '../../../../../redux/filter/actions';
+import OutlineButton from "../../../../../components/button/OutlineButton";
 
 /**
  * Component to render filters screen
@@ -184,17 +176,10 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
             </View>
           </ScrollView>
           <View style={styles.buttonContainer}>
+            <OutlineButton onPress={clearFilter} disabled={apiInProgress} label='Clear' />
             <Button
-              contentStyle={appStyles.containedButtonContainer}
-              labelStyle={appStyles.containedButtonLabel}
-              mode="outlined"
-              disabled={apiInProgress}
-              onPress={clearFilter}>
-              Clear
-            </Button>
-            <Button
-              contentStyle={appStyles.containedButtonContainer}
-              labelStyle={appStyles.containedButtonLabel}
+              // contentStyle={appStyles.containedButtonContainer}
+              // labelStyle={appStyles.containedButtonLabel}
               mode="contained"
               loading={apiInProgress}
               disabled={apiInProgress}

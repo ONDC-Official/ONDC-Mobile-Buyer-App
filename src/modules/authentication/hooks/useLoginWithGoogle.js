@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 
 import {storeLoginDetails} from '../../../redux/auth/actions';
+import {getStoredData} from "../../../utils/storage";
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_CLIENT_ID,
@@ -35,10 +36,18 @@ export default () => {
         photoURL: idTokenResult.claims.picture,
       });
 
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Dashboard'}],
-      });
+      const address = await getStoredData('address');
+      if (address) {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Dashboard'}],
+        });
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'AddressList', params: {navigateToDashboard: true}}],
+        });
+      }
     } catch (error) {
       console.log(error);
     }

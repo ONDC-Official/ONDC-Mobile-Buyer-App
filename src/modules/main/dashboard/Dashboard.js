@@ -1,14 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {
-  ActivityIndicator,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import {SafeAreaView, StyleSheet, View,} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
-import {Text, withTheme} from 'react-native-paper';
+import {withTheme} from 'react-native-paper';
 
 import {appStyles} from '../../../styles/styles';
 import {getStoredData} from '../../../utils/storage';
@@ -58,7 +51,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 16,
+    padding: 12,
   },
 });
 

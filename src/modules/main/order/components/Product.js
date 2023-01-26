@@ -3,7 +3,6 @@ import {Divider, Text} from 'react-native-paper';
 import StatusContainer from './StatusContainer';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
-import {appStyles} from '../../../../styles/styles';
 
 const image = require('../../../../assets/noImage.png');
 
@@ -25,7 +24,7 @@ const Product = ({item}) => {
         <View style={styles.rightPane}>
           <View style={styles.details}>
             <Text style={styles.title}>{item.product?.descriptor?.name}</Text>
-            <Text variant="titleSmall">₹{item.product?.price?.value}</Text>
+            <Text variant="titleSmall" style={styles.price}>₹{item.product?.price?.value}</Text>
           </View>
           <Text style={styles.quantity}>
             QTY:&nbsp;{item.product?.quantity}
@@ -56,6 +55,10 @@ const styles = StyleSheet.create({
   title: {marginRight: 10, flexShrink: 1},
   address: {marginBottom: 4},
   divider: {marginTop: 10},
+  price: {
+    width: 50,
+    textAlign: 'right',
+  }
 });
 
 export default Product;

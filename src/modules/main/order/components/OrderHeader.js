@@ -23,7 +23,7 @@ const OrderHeader = ({item, theme}) => {
       onPress={() => navigation.navigate('OrderDetails', {order: item})}>
       <View style={styles.row}>
         <View style={appStyles.container}>
-          <Text numberOfLines={1} style={styles.itemName}>
+          <Text numberOfLines={1} variant="titleMedium">
             Order id:&nbsp;{item.id ? item.id : 'NA'}
           </Text>
           <Text style={{color: colors.grey}}>
@@ -31,7 +31,9 @@ const OrderHeader = ({item, theme}) => {
             {moment(item.createdAt).format('Do MMMM YYYY')}
           </Text>
         </View>
-        {item.state && <OrderStatus status={item.state} />}
+        <View>
+          {item.state && <OrderStatus status={item.state} />}
+        </View>
       </View>
     </Card>
   );
@@ -45,11 +47,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 8,
-  },
-  itemName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 4,
   },
   container: {
     margin: 8,

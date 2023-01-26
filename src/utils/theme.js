@@ -20,5 +20,8 @@ export const theme = {
     shippedBackground: '#FFC132',
     deliveredBackground: '#2EB086',
     cardBackground: '#f5d9d3',
+    cancelledBackground: '#FFE8E7',
+    statusBackground: '#E9F1F8',
+    tabColor: '#606161',
   },
 };
