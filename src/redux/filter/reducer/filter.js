@@ -1,4 +1,11 @@
-import {CLEAR_FILTERS, CLEAR_FILTERS_ONLY, SAVE_FILTERS, SAVE_IDS, SORT_OPTION, UPDATE_FILTERS,} from '../actions';
+import {
+  CLEAR_FILTERS,
+  CLEAR_FILTERS_ONLY,
+  SAVE_FILTERS,
+  SAVE_IDS,
+  SORT_OPTION,
+  UPDATE_FILTERS,
+} from '../actions';
 
 const initialState = {
   filters: null,
@@ -33,8 +40,19 @@ const filterReducer = (state = initialState, action) => {
       let providers = [];
       let categories = [];
       if (state.filters?.providers) {
-        providers = state.filters?.providers.concat(payload.providers);
-        categories = state.filters?.categories.concat(payload.categories);
+        providers = state.filters?.providers.concat(
+          payload.providers.filter(
+            item =>
+              state.filters?.providers.findIndex(one => one.id === item.id) < 0,
+          ),
+        );
+        categories = state.filters?.categories.concat(
+          payload.categories.filter(
+            item =>
+              state.filters?.categories.findIndex(one => one.id === item.id) <
+              0,
+          ),
+        );
       }
       return Object.assign({}, state, {
         filters: {

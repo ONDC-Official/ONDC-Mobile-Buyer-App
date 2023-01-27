@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     height: 12,
     borderRadius: 10,
     marginHorizontal: 7,
-  }
+  },
 });
 
 export default withTheme(ProductImages);

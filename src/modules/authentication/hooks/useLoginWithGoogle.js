@@ -5,7 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 
 import {storeLoginDetails} from '../../../redux/auth/actions';
-import {getStoredData} from "../../../utils/storage";
+import {getStoredData} from '../../../utils/storage';
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_CLIENT_ID,

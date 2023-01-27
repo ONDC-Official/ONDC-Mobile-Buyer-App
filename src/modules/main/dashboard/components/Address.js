@@ -83,7 +83,10 @@ const Address = ({item, theme, isCurrentAddress, params}) => {
           </Text>
         </View>
         <View style={styles.editContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('UpdateAddress', {address: item})}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('UpdateAddress', {address: item})
+            }>
             <Icon name="pencil-outline" size={24} color={colors.primary} />
           </TouchableOpacity>
         </View>

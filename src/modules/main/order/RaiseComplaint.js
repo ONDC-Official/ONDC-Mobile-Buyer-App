@@ -4,14 +4,14 @@ import {StyleSheet, View} from 'react-native';
 import {Button, withTheme} from 'react-native-paper';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useSelector} from 'react-redux';
-import * as Yup from "yup";
+import * as Yup from 'yup';
 
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {postData} from '../../../utils/api';
-import {BASE_URL, RAISE_COMPLAINT,} from '../../../utils/apiUtilities';
+import {BASE_URL, RAISE_COMPLAINT} from '../../../utils/apiUtilities';
 import InputField from '../../../components/input/InputField';
 import {appStyles} from '../../../styles/styles';
-import {showInfoToast} from "../../../utils/utils";
+import {showInfoToast} from '../../../utils/utils';
 
 const validationSchema = Yup.object({
   firstName: Yup.string().trim().required('This field is required'),
@@ -29,7 +29,6 @@ const validationSchema = Yup.object({
   issueDescription: Yup.string().trim().required('This field is required'),
 });
 
-
 /**
  * Component to render form in add new address screen
  * @param navigation: required: to navigate to the respective screen
@@ -39,7 +38,6 @@ const validationSchema = Yup.object({
  * @returns {JSX.Element}
  */
 const RaiseComplaint = ({navigation, theme, route: {params}}) => {
-
   const {token} = useSelector(({authReducer}) => authReducer);
 
   const {handleApiError} = useNetworkErrorHandling();
@@ -65,15 +63,11 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
   const raiseComplaint = async values => {
     try {
       setApiInProgress(true);
-      await postData(
-        `${BASE_URL}${RAISE_COMPLAINT}`,
-        values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      await postData(`${BASE_URL}${RAISE_COMPLAINT}`, values, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
       showInfoToast('Complaint raised successfully');
       setApiInProgress(false);
       navigation.goBack();
@@ -96,13 +90,13 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
             });
         }}>
         {({
-            values,
-            errors,
-            handleChange,
-            handleBlur,
-            touched,
-            handleSubmit,
-          }) => {
+          values,
+          errors,
+          handleChange,
+          handleBlur,
+          touched,
+          handleSubmit,
+        }) => {
           return (
             <View style={styles.formContainer}>
               <InputField
@@ -144,7 +138,9 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
                 onBlur={handleBlur('contactNumber')}
                 label={'Mobile number'}
                 placeholder={'Mobile number'}
-                errorMessage={touched.contactNumber ? errors.contactNumber : null}
+                errorMessage={
+                  touched.contactNumber ? errors.contactNumber : null
+                }
                 onChangeText={handleChange('contactNumber')}
               />
 
@@ -161,7 +157,9 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
                 onBlur={handleBlur('issueDescription')}
                 label={'Issue Description'}
                 placeholder={'Issue description'}
-                errorMessage={touched.issueDescription ? errors.issueDescription : null}
+                errorMessage={
+                  touched.issueDescription ? errors.issueDescription : null
+                }
                 onChangeText={handleChange('issueDescription')}
               />
 

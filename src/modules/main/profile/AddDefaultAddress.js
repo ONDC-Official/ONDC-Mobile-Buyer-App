@@ -4,9 +4,9 @@ import {useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {postData} from '../../../utils/api';
-import {BASE_URL, DELIVERY_ADDRESS,} from '../../../utils/apiUtilities';
+import {BASE_URL, DELIVERY_ADDRESS} from '../../../utils/apiUtilities';
 import {setStoredData} from '../../../utils/storage';
-import AddressForm from "../dashboard/components/AddressForm";
+import AddressForm from '../dashboard/components/AddressForm';
 
 /**
  * Component to render form in add new address screen
@@ -17,7 +17,6 @@ import AddressForm from "../dashboard/components/AddressForm";
  * @returns {JSX.Element}
  */
 const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
-
   const {token, name, emailId} = useSelector(({authReducer}) => authReducer);
 
   const {handleApiError} = useNetworkErrorHandling();
@@ -90,7 +89,6 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
     }
   };
 
-
   return (
     <AddressForm
       addressInfo={addressInfo}
@@ -99,7 +97,7 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
       setLatitude={setLatitude}
       setLongitude={setLongitude}
     />
-  )
+  );
 };
 
 export default withTheme(AddDefaultAddress);

@@ -1,4 +1,9 @@
-import {clearMultiple, getMultipleData, getStoredData, saveMultipleData,} from '../../utils/storage';
+import {
+  clearMultiple,
+  getMultipleData,
+  getStoredData,
+  saveMultipleData,
+} from '../../utils/storage';
 
 export const tryLocalSignIn = (dispatch, navigation) => {
   const payload = {};
@@ -23,7 +28,9 @@ export const tryLocalSignIn = (dispatch, navigation) => {
           } else {
             navigation.reset({
               index: 0,
-              routes: [{name: 'AddressList', params: {navigateToDashboard: true}}],
+              routes: [
+                {name: 'AddressList', params: {navigateToDashboard: true}},
+              ],
             });
           }
         });

@@ -1,5 +1,6 @@
 import {Dimensions, Platform} from 'react-native';
 import Toast from 'react-native-toast-message';
+import moment, {min} from 'moment/moment';
 
 export const isIOS = Platform.OS === 'ios';
 
@@ -28,11 +29,11 @@ export const getUserInitials = name => {
     .toUpperCase();
 };
 
-export const showInfoToast = message => {
+export const showInfoToast = (message, position = 'top') => {
   Toast.show({
     type: 'info',
     text1: message,
-    position: 'top',
+    position: position,
   });
 };
 
@@ -127,4 +128,20 @@ export const cleanFormData = initialObject => {
 export const stringToDecimal = value => {
   const number = Number(value);
   return number % 1 !== 0 ? number.toFixed(2) : number;
+};
+
+export const durationToHumanReadable = value => {
+  const duration = moment.duration(value);
+  const minutes = duration.asMinutes();
+  if (minutes > 60) {
+    const hours = duration.asHours();
+    if (hours > 24) {
+      const days = duration.asDays();
+      return {timeDuration: days, unit: 'days'};
+    } else {
+      return {timeDuration: hours, unit: 'hrs'};
+    }
+  } else {
+    return {timeDuration: minutes, unit: 'min'};
+  }
 };

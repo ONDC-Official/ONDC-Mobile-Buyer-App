@@ -1,13 +1,25 @@
-import React from "react";
-import {StyleSheet, TouchableOpacity} from "react-native";
-import {Text, withTheme} from "react-native-paper";
+import React from 'react';
+import {StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, withTheme} from 'react-native-paper';
 
-const OutlineButton = ({theme, label, onPress, textColor, disabled = false}) => {
+const OutlineButton = ({
+  theme,
+  label,
+  onPress,
+  textColor,
+  disabled = false,
+}) => {
   return (
-    <TouchableOpacity disabled={disabled} onPress={onPress} style={[styles.button, {borderColor: textColor ? textColor : theme.colors.primary}]}>
+    <TouchableOpacity
+      disabled={disabled}
+      onPress={onPress}
+      style={[
+        styles.button,
+        {borderColor: textColor ? textColor : theme.colors.primary},
+      ]}>
       <Text>{label}</Text>
     </TouchableOpacity>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
@@ -17,7 +29,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
 });
 
 export default withTheme(OutlineButton);

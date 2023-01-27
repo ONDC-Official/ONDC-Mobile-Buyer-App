@@ -1,6 +1,13 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useEffect, useRef, useState} from 'react';
-import {BackHandler, NativeEventEmitter, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  BackHandler,
+  NativeEventEmitter,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Config from 'react-native-config';
 import {Button, Card, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
@@ -214,7 +221,9 @@ const Payment = ({
         const index = providerIdArray.findIndex(
           one => one === item.provider.id,
         );
-        const product = cartItems.find(one => String(one.id) === String(item.id));
+        const product = cartItems.find(
+          one => String(one.id) === String(item.id),
+        );
         if (index > -1) {
           payload[index].message.items.push({
             id: item.id,
@@ -300,7 +309,7 @@ const Payment = ({
                 },
               },
 
-              payment: {type: 'POST-FULFILLMENT'},
+              payment: {type: 'ON-FULFILLMENT'},
             },
           });
           providerIdArray.push(item.provider.id);
@@ -496,6 +505,8 @@ const Payment = ({
           data.forEach(item => {
             if (item.message.ack.status === 'ACK') {
               messageIds.push(item.context.message_id);
+            } else {
+              console.log(item.message.ack);
             }
           });
           if (messageIds.length > 0) {

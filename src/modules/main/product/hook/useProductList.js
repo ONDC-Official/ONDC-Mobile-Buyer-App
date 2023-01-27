@@ -2,10 +2,18 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useRef, useState} from 'react';
 
 import {clearProducts, saveProducts} from '../../../../redux/product/actions';
-import {clearFilters, saveFilters, saveIds,} from '../../../../redux/filter/actions';
+import {
+  clearFilters,
+  saveFilters,
+  saveIds,
+} from '../../../../redux/filter/actions';
 import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
 import {getData, postData} from '../../../../utils/api';
-import {BASE_URL, GET_MESSAGE_ID, GET_PRODUCTS,} from '../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  GET_MESSAGE_ID,
+  GET_PRODUCTS,
+} from '../../../../utils/apiUtilities';
 import {getStoredData} from '../../../../utils/storage';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
@@ -113,6 +121,7 @@ export default (category = null) => {
   };
 
   const loadMore = () => {
+    console.log(listCount.current, count.current, productsRequested);
     if (
       listCount.current >= 10 &&
       listCount.current < count.current &&
@@ -216,12 +225,22 @@ export default (category = null) => {
       eventSource.current.addEventListener('on_search', event => {
         const data = JSON.parse(event.data);
 
+        console.log(JSON.stringify(data, undefined, 4));
+
         if (data.hasOwnProperty('count')) {
           if (count.current < data.count) {
             count.current = data.count;
           }
           const filterData = Object.assign({}, data.filters, {
             message_id: data.messageId,
+            providers: data.filters.providers.filter(
+              (value, index, self) =>
+                index === self.findIndex(one => one.id === value.id),
+            ),
+            categories: data.filters.categories.filter(
+              (value, index, self) =>
+                index === self.findIndex(one => one.id === value.id),
+            ),
           });
 
           dispatch(saveFilters(filterData));
@@ -266,6 +285,7 @@ export default (category = null) => {
 
   return {
     apiInProgress,
+    productsRequested,
     onSearch,
     getProductsList,
     loadMore,

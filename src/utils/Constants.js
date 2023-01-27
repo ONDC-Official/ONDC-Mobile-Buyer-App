@@ -42,4 +42,4 @@ export const PRODUCT_SORTING = {
   PRICE_LOW_TO_HIGH: 'Price: Low To High',
 };
 
-export const APPLICATION_VERSION = '1.0.1';
+export const APPLICATION_VERSION = '1.0.2';

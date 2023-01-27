@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 
 import ClearButton from '../../../../../../components/button/ClearButton';
 import {updateSortOption} from '../../../../../../redux/filter/actions';
-import {appStyles} from "../../../../../../styles/styles";
+import {appStyles} from '../../../../../../styles/styles';
 
 /**
  * Component to render filters screen

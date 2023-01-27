@@ -1,4 +1,4 @@
-import * as Yup from "yup";
+import * as Yup from 'yup';
 
 export const billingAddressValidationSchema = Yup.object({
   name: Yup.string().trim().required('This field is required'),

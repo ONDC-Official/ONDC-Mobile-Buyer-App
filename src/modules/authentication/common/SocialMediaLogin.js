@@ -15,8 +15,10 @@ const SocialMediaLogin = ({theme}) => {
           style={[styles.button, {borderColor: theme.colors.primary}]}
           mode="outlined"
           onPress={loginWithGoogle}>
-          <Icon size={18} name='google' color={theme.colors.primary} />
-          <Text style={[styles.buttonLabel, {color: theme.colors.primary}]}>Continue with google</Text>
+          <Icon size={18} name="google" color={theme.colors.primary} />
+          <Text style={[styles.buttonLabel, {color: theme.colors.primary}]}>
+            Continue with google
+          </Text>
         </TouchableOpacity>
       </View>
     </>
@@ -25,10 +27,17 @@ const SocialMediaLogin = ({theme}) => {
 
 const styles = StyleSheet.create({
   buttonContainer: {width: 300, marginTop: 12, marginBottom: 8},
-  button: { borderRadius: 24, borderWidth: 1, padding: 12,flexDirection: 'row', justifyContent: 'center', alignItems: 'center'},
+  button: {
+    borderRadius: 24,
+    borderWidth: 1,
+    padding: 12,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   buttonLabel: {
     marginStart: 12,
-  }
+  },
 });
 
 export default withTheme(SocialMediaLogin);

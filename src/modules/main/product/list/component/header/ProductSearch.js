@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
 import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Searchbar, Text, TextInput, withTheme} from 'react-native-paper';
+import {Text, TextInput, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 

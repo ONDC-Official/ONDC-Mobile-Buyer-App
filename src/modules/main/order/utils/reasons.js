@@ -61,8 +61,7 @@ export const cancelReasons = [
 export const returnReasons = [
   {
     id: '001',
-    reason:
-      'Buyer does not want product any more',
+    reason: 'Buyer does not want product any more',
   },
   {
     id: '002',

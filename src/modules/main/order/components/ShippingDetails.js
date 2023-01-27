@@ -1,6 +1,12 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Card, Divider, Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -9,7 +15,7 @@ import Address from './Address';
 import useGetOrderStatus from './actions/useGetOrderStatus';
 import useTrackOrder from './actions/useTrackOrder';
 import Product from './Product';
-import OrderStatus from "./OrderStatus";
+import OrderStatus from './OrderStatus';
 
 /**
  * Component is used to display shipping details to the user when card is expanded
@@ -43,7 +49,6 @@ const ShippingDetails = ({order, theme}) => {
   return (
     <ScrollView>
       <Card style={styles.card}>
-
         <View style={styles.orderStatus}>
           {order?.state && <OrderStatus status={order?.state} />}
         </View>
@@ -60,7 +65,7 @@ const ShippingDetails = ({order, theme}) => {
             phone={contact?.phone}
             address={shippingAddress}
           />
-        ) :  (
+        ) : (
           <View style={styles.addressContainer}>
             <Text>Shipped To</Text>
             <Text>NA</Text>
@@ -85,12 +90,14 @@ const ShippingDetails = ({order, theme}) => {
           disabled={buttonDisabled}
           onPress={() =>
             navigation.navigate('CallSeller', {
-             items: order.items
+              items: order.items,
             })
           }>
           <Divider />
           <View style={[styles.rowContainer, styles.helpButton]}>
-            <Text style={[{color: buttonColor}, styles.helpLabel]}>Call</Text>
+            <Text style={[{color: buttonColor}, styles.helpLabel]}>
+              Support
+            </Text>
             <Icon name="chevron-right" size={24} color={buttonColor} />
           </View>
         </TouchableOpacity>

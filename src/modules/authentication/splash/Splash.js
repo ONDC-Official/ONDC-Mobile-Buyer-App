@@ -34,7 +34,9 @@ const Splash = ({navigation}) => {
   };
 
   useEffect(() => {
-    checkIfUserIsLoggedIn().then(() => {});
+    setTimeout(() => {
+      checkIfUserIsLoggedIn().then(() => {});
+    }, 3000);
   }, []);
 
   return (

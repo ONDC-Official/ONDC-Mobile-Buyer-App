@@ -7,8 +7,16 @@ import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {BASE_URL, GET_SELECT, ON_GET_SELECT,} from '../../../../utils/apiUtilities';
-import {showToastWithGravity, skeletonList, stringToDecimal,} from '../../../../utils/utils';
+import {
+  BASE_URL,
+  GET_SELECT,
+  ON_GET_SELECT,
+} from '../../../../utils/apiUtilities';
+import {
+  showToastWithGravity,
+  skeletonList,
+  stringToDecimal,
+} from '../../../../utils/utils';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 import Product from './Product';
 
@@ -43,7 +51,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       if (!data[0].error) {
         if (data[0].context.bpp_id) {
           data[0].message.quote.items.forEach(element => {
-            const product = cartItems.find(one => String(one.id) === String(element.id));
+            const product = cartItems.find(
+              one => String(one.id) === String(element.id),
+            );
 
             if (product) {
               const productPrice = data[0].message.quote.quote.breakup.find(
@@ -257,7 +267,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     let element = null;
 
     if (confirmation.current) {
-      element = confirmation.current.find(one => String(one.id) === String(item.id));
+      element = confirmation.current.find(
+        one => String(one.id) === String(item.id),
+      );
     }
 
     return item.hasOwnProperty('isSkeleton') ? (

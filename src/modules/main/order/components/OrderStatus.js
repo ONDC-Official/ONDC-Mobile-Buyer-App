@@ -5,7 +5,10 @@ const OrderStatus = ({status, theme}) => {
   switch (status) {
     case 'Created':
       return (
-        <Chip mode="flat" selectedColor={theme.colors.primary} style={{backgroundColor: theme.colors.statusBackground}}>
+        <Chip
+          mode="flat"
+          selectedColor={theme.colors.primary}
+          style={{backgroundColor: theme.colors.statusBackground}}>
           {status}
         </Chip>
       );
@@ -13,7 +16,10 @@ const OrderStatus = ({status, theme}) => {
     case 'Shipped':
     case 'Updated':
       return (
-        <Chip mode="flat" selectedColor={theme.colors.primary} style={{backgroundColor: theme.colors.shippedBackground}}>
+        <Chip
+          mode="flat"
+          selectedColor={theme.colors.primary}
+          style={{backgroundColor: theme.colors.shippedBackground}}>
           {status}
         </Chip>
       );
@@ -21,7 +27,10 @@ const OrderStatus = ({status, theme}) => {
     case 'Delivered':
     case 'Active':
       return (
-        <Chip mode="flat" selectedColor={theme.colors.primary} style={{backgroundColor: theme.colors.deliveredBackground}}>
+        <Chip
+          mode="flat"
+          selectedColor={theme.colors.primary}
+          style={{backgroundColor: theme.colors.deliveredBackground}}>
           {status}
         </Chip>
       );
@@ -29,14 +38,20 @@ const OrderStatus = ({status, theme}) => {
     case 'Returned':
     case 'Cancelled':
       return (
-        <Chip mode="flat" selectedColor={theme.colors.primary} style={{backgroundColor: theme.colors.cancelledBackground}}>
+        <Chip
+          mode="flat"
+          selectedColor={theme.colors.primary}
+          style={{backgroundColor: theme.colors.cancelledBackground}}>
           {status}
         </Chip>
       );
 
     default:
       return (
-        <Chip mode="flat" selectedColor={theme.colors.primary} style={{backgroundColor: theme.colors.statusBackground}}>
+        <Chip
+          mode="flat"
+          selectedColor={theme.colors.primary}
+          style={{backgroundColor: theme.colors.statusBackground}}>
           {status}
         </Chip>
       );

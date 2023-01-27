@@ -1,11 +1,24 @@
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Card, Checkbox, Divider, RadioButton, Text,} from 'react-native-paper';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Divider,
+  RadioButton,
+  Text,
+} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 
 import {cancelReasons} from './utils/reasons';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
-import {BASE_URL, CANCEL_ORDER, ON_CANCEL_ORDER, ON_UPDATE_ORDER, UPDATE_ORDER,} from '../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  CANCEL_ORDER,
+  ON_CANCEL_ORDER,
+  ON_UPDATE_ORDER,
+  UPDATE_ORDER,
+} from '../../../utils/apiUtilities';
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
@@ -124,9 +137,10 @@ const CancelOrder = ({navigation, route: {params}}) => {
       setUpdateInProgress(false);
 
       if (!orderProcessed.current) {
-        showToastWithGravity('We are unable to complete your request at the moment. Please try again');
+        showToastWithGravity(
+          'We are unable to complete your request at the moment. Please try again',
+        );
       }
-
     }
   };
 
@@ -182,9 +196,11 @@ const CancelOrder = ({navigation, route: {params}}) => {
 
   useEffect(() => {
     if (params.items) {
-      const list = params.items.filter(one => one.product['@ondc/org/cancellable']);
+      const list = params.items.filter(
+        one => one.product['@ondc/org/cancellable'],
+      );
       setProducts(list);
-      if (list.length === 1 ) {
+      if (list.length === 1) {
         setCancellationType('complete');
       }
     }
@@ -253,7 +269,9 @@ const CancelOrder = ({navigation, route: {params}}) => {
               <RadioButton.Android
                 disabled={disabled}
                 value="first"
-                status={cancellationType === 'complete' ? 'checked' : 'unchecked'}
+                status={
+                  cancellationType === 'complete' ? 'checked' : 'unchecked'
+                }
                 onPress={() => setCancellationType('complete')}
               />
               <Text>Complete</Text>
@@ -262,7 +280,9 @@ const CancelOrder = ({navigation, route: {params}}) => {
               <RadioButton.Android
                 disabled={disabled}
                 value="first"
-                status={cancellationType === 'partial' ? 'checked' : 'unchecked'}
+                status={
+                  cancellationType === 'partial' ? 'checked' : 'unchecked'
+                }
                 onPress={() => setCancellationType('partial')}
               />
               <Text>Partial</Text>

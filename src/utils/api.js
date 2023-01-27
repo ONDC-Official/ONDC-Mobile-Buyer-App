@@ -7,10 +7,9 @@ import axios from 'axios';
  */
 export const getData = async (url, options) => {
   try {
-    console.log('Get url', url);
     return await axios.get(url, options);
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     throw error;
   }
 };
@@ -23,8 +22,6 @@ export const getData = async (url, options) => {
  */
 export const postData = async (url, payload, options) => {
   try {
-    console.log('Post url', url);
-    console.log('Post payload', payload);
     return await axios.post(url, payload, options);
   } catch (error) {
     console.log(error);

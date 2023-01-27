@@ -4,7 +4,11 @@ import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 
 import {getData, postData} from '../../../../../utils/api';
-import {BASE_URL, GET_STATUS, ON_GET_STATUS,} from '../../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  GET_STATUS,
+  ON_GET_STATUS,
+} from '../../../../../utils/apiUtilities';
 import {alertWithOneButton} from '../../../../../utils/alerts';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 

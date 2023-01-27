@@ -2,7 +2,12 @@ import React from 'react';
 import {FlatList, View} from 'react-native';
 
 import {appStyles} from '../../../styles/styles';
-import {CONTACT_US, FAQS, ONDC_POLICY, POLICY_URL,} from '../../../utils/Constants';
+import {
+  CONTACT_US,
+  FAQS,
+  ONDC_POLICY,
+  POLICY_URL,
+} from '../../../utils/Constants';
 import {keyExtractor} from '../../../utils/utils';
 import SupportCard from './SupportCard';
 

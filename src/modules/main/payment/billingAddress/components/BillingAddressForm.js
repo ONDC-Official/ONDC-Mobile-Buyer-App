@@ -1,16 +1,22 @@
-import {ActivityIndicator, StyleSheet, View} from "react-native";
-import {appStyles} from "../../../../../styles/styles";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-import {Formik} from "formik";
-import InputField from "../../../../../components/input/InputField";
-import {Button, withTheme} from "react-native-paper";
-import React, {useState} from "react";
-import {getData} from "../../../../../utils/api";
-import {BASE_URL, GET_GPS_CORDS} from "../../../../../utils/apiUtilities";
-import {useSelector} from "react-redux";
-import useNetworkErrorHandling from "../../../../../hooks/useNetworkErrorHandling";
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import {appStyles} from '../../../../../styles/styles';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Formik} from 'formik';
+import InputField from '../../../../../components/input/InputField';
+import {Button, withTheme} from 'react-native-paper';
+import React, {useState} from 'react';
+import {getData} from '../../../../../utils/api';
+import {BASE_URL, GET_GPS_CORDS} from '../../../../../utils/apiUtilities';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 
-const  BillingAddressForm = ({theme, addressInfo, validationSchema, apiInProgress, buttonLabel, saveAddress}) => {
+const BillingAddressForm = ({
+  theme,
+  addressInfo,
+  validationSchema,
+  apiInProgress,
+  buttonLabel,
+  saveAddress,
+}) => {
   const [requestInProgress, setRequestInProgress] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -41,15 +47,15 @@ const  BillingAddressForm = ({theme, addressInfo, validationSchema, apiInProgres
               });
           }}>
           {({
-              values,
-              errors,
-              handleChange,
-              handleBlur,
-              touched,
-              handleSubmit,
-              setFieldValue,
-              setFieldError,
-            }) => {
+            values,
+            errors,
+            handleChange,
+            handleBlur,
+            touched,
+            handleSubmit,
+            setFieldValue,
+            setFieldError,
+          }) => {
             return (
               <View style={styles.formContainer}>
                 <InputField

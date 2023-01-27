@@ -3,9 +3,9 @@ import {useSelector} from 'react-redux';
 import {withTheme} from 'react-native-paper';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {postData} from '../../../../utils/api';
-import {BASE_URL, UPDATE_BILLING_ADDRESS,} from '../../../../utils/apiUtilities';
-import BillingAddressForm from "./components/BillingAddressForm";
-import {billingAddressValidationSchema} from "./utils/validations";
+import {BASE_URL, UPDATE_BILLING_ADDRESS} from '../../../../utils/apiUtilities';
+import BillingAddressForm from './components/BillingAddressForm';
+import {billingAddressValidationSchema} from './utils/validations';
 
 /**
  * Component to render form in add new address screen
@@ -60,7 +60,11 @@ const UpdateBillingAddress = ({navigation, theme, route: {params}}) => {
 
     try {
       setApiInProgress(true);
-      await postData(`${BASE_URL}${UPDATE_BILLING_ADDRESS}${params.address.id}`, payload, options);
+      await postData(
+        `${BASE_URL}${UPDATE_BILLING_ADDRESS}${params.address.id}`,
+        payload,
+        options,
+      );
       navigation.goBack();
       setApiInProgress(false);
     } catch (error) {
@@ -75,9 +79,9 @@ const UpdateBillingAddress = ({navigation, theme, route: {params}}) => {
       saveAddress={saveAddress}
       apiInProgress={apiInProgress}
       validationSchema={billingAddressValidationSchema}
-      buttonLabel={'Update Address'}/>
+      buttonLabel={'Update Address'}
+    />
   );
-
 };
 
 export default withTheme(UpdateBillingAddress);

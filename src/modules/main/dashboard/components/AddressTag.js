@@ -1,8 +1,8 @@
-import {ActivityIndicator, StyleSheet, TouchableOpacity} from "react-native";
-import {Text, withTheme} from "react-native-paper";
-import Icon from "react-native-vector-icons/FontAwesome5";
-import React from "react";
-import {useNavigation} from "@react-navigation/native";
+import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, withTheme} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import React from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 const AddressTag = ({address, theme}) => {
   const navigation = useNavigation();
@@ -12,16 +12,18 @@ const AddressTag = ({address, theme}) => {
       <TouchableOpacity
         style={styles.addressContainer}
         onPress={() => navigation.navigate('AddressList')}>
-        <Text variant="titleMedium" style={[styles.address, {color: theme.colors.primary}]}>
+        <Text
+          variant="titleMedium"
+          style={[styles.address, {color: theme.colors.primary}]}>
           {address?.address?.tag
             ? address?.address?.tag
             : address?.address?.city}
         </Text>
         <Icon name={'chevron-down'} color={theme.colors.primary} />
       </TouchableOpacity>
-    )
+    );
   } else {
-    return <ActivityIndicator size={'small'} color={theme.colors.primary} />
+    return <ActivityIndicator size={'small'} color={theme.colors.primary} />;
   }
 };
 

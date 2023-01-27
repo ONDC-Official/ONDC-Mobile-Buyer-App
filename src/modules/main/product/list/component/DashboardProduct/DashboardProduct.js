@@ -19,12 +19,7 @@ const image = require('../../../../../../assets/noImage.png');
  * @constructor
  * @returns {JSX.Element}
  */
-const DashboardProduct = ({
-  theme,
-  navigation,
-  item,
-  imageBackgroundColor = '#FFF7C0',
-}) => {
+const DashboardProduct = ({theme, navigation, item}) => {
   const {colors} = theme;
   const {addItem, updateQuantity} = useProductQuantity(item);
 
@@ -49,15 +44,14 @@ const DashboardProduct = ({
         <View style={styles.row}>
           <FastImage
             source={uri ? {uri} : image}
-            style={[styles.image, {backgroundColor: imageBackgroundColor}]}
+            style={styles.image}
             resizeMode={'contain'}
           />
           <View style={[appStyles.container, styles.details]}>
             {item?.hasOwnProperty('storeOpenTillDate') && (
               <View style={styles.storeTime}>
                 <Text style={{color: colors.opposite}}>
-                  Open until{' '}
-                  {moment(item.storeOpenTillDate).format('hh:mm a')}
+                  Open until {moment(item.storeOpenTillDate).format('hh:mm a')}
                 </Text>
               </View>
             )}

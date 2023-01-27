@@ -14,62 +14,69 @@ const BreakDown = ({products}) => {
                   key={`${item['@ondc/org/item_id']}Item`}
                   style={styles.priceContainer}>
                   <Text style={styles.price}>{item.title}</Text>
-                  <Text variant="titleSmall" style={styles.productPrice}>₹{item.price.value}</Text>
+                  <Text variant="titleSmall" style={styles.productPrice}>
+                    ₹{item.price.value}
+                  </Text>
                 </View>
               ))
             ) : (
               <></>
             )}
-            {product.hasOwnProperty('discounts') && (
+            {product.hasOwnProperty('discounts') &&
               product.discounts.map(item => (
                 <View
                   key={`${item['@ondc/org/item_id']}Discount`}
                   style={styles.priceContainer}>
                   <Text style={styles.price}>{item.title}</Text>
-                  <Text variant="titleSmall" style={styles.productPrice}>₹{item.price.value}</Text>
+                  <Text variant="titleSmall" style={styles.productPrice}>
+                    ₹{item.price.value}
+                  </Text>
                 </View>
-              ))
-            )}
-            {product.hasOwnProperty('taxes') && (
+              ))}
+            {product.hasOwnProperty('taxes') &&
               product.taxes.map(item => (
                 <View
                   key={`${item['@ondc/org/item_id']}Tax`}
                   style={styles.priceContainer}>
                   <Text style={styles.price}>{item.title}</Text>
-                  <Text variant="titleSmall" style={styles.productPrice}>₹{item.price.value}</Text>
+                  <Text variant="titleSmall" style={styles.productPrice}>
+                    ₹{item.price.value}
+                  </Text>
                 </View>
-              ))
-            )}
-            {product.hasOwnProperty('packings') && (
+              ))}
+            {product.hasOwnProperty('packings') &&
               product.packings.map(item => (
                 <View
                   key={`${item['@ondc/org/item_id']}Packing`}
                   style={styles.priceContainer}>
                   <Text style={styles.price}>{item.title}</Text>
-                  <Text variant="titleSmall" style={styles.productPrice}>₹{item.price.value}</Text>
+                  <Text variant="titleSmall" style={styles.productPrice}>
+                    ₹{item.price.value}
+                  </Text>
                 </View>
-              ))
-            )}
-            {product.hasOwnProperty('deliveries') && (
+              ))}
+            {product.hasOwnProperty('deliveries') &&
               product.deliveries.map(item => (
                 <View
                   key={`${item['@ondc/org/item_id']}Delivery`}
                   style={styles.priceContainer}>
                   <Text style={styles.price}>{item.title}</Text>
-                  <Text variant="titleSmall" style={styles.productPrice}>₹{item.price.value}</Text>
+                  <Text variant="titleSmall" style={styles.productPrice}>
+                    ₹{item.price.value}
+                  </Text>
                 </View>
-              ))
-            )}
-            {product.hasOwnProperty('misces') && (
+              ))}
+            {product.hasOwnProperty('misces') &&
               product.misces.map(item => (
                 <View
                   key={`${item['@ondc/org/item_id']}misc`}
                   style={styles.priceContainer}>
                   <Text style={styles.price}>{item.title}</Text>
-                  <Text variant="titleSmall" style={styles.productPrice}>₹{item.price.value}</Text>
+                  <Text variant="titleSmall" style={styles.productPrice}>
+                    ₹{item.price.value}
+                  </Text>
                 </View>
-              ))
-            )}
+              ))}
             <Divider />
           </View>
         );
@@ -94,7 +101,7 @@ const styles = StyleSheet.create({
   productPrice: {
     width: 70,
     textAlign: 'right',
-  }
+  },
 });
 
 export default BreakDown;

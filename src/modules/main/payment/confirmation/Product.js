@@ -1,5 +1,5 @@
 import React from 'react';
-import {ActivityIndicator, StyleSheet, View,} from 'react-native';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {Button, Card, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useDispatch} from 'react-redux';
@@ -7,7 +7,7 @@ import {removeItemFromCart, updateItemInCart} from '../../../../redux/actions';
 import {appStyles} from '../../../../styles/styles';
 import useProductQuantity from '../../product/hook/useProductQuantity';
 import moment from 'moment';
-import {stringToDecimal} from "../../../../utils/utils";
+import {stringToDecimal} from '../../../../utils/utils';
 
 const image = require('../../../../assets/noImage.png');
 
@@ -76,19 +76,25 @@ const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
 
           {confirmation?.hasOwnProperty('fulfillment') && (
             <View>
-              <Text>Fulfilled By:&nbsp;
+              <Text>
+                Fulfilled By:&nbsp;
                 <Text variant="titleSmall">
                   {confirmation?.fulfillment['@ondc/org/provider_name']}
                 </Text>
               </Text>
-              <Text>Type of Delivery:&nbsp;
+              <Text>
+                Type of Delivery:&nbsp;
                 <Text variant="titleSmall">
                   {confirmation?.fulfillment['@ondc/org/category']}
                 </Text>
               </Text>
-              <Text>Estimated Delivery Time:&nbsp;
+              <Text>
+                Estimated Delivery Time:&nbsp;
                 <Text variant="titleSmall">
-                  {moment.duration(confirmation?.fulfillment['@ondc/org/TAT']).asMinutes()}{' '}min
+                  {moment
+                    .duration(confirmation?.fulfillment['@ondc/org/TAT'])
+                    .asMinutes()}{' '}
+                  min
                 </Text>
               </Text>
             </View>
@@ -129,7 +135,7 @@ const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
       )}
       {!confirmed &&
         (apiInProgress ? (
-          <ActivityIndicator color={colors.error}/>
+          <ActivityIndicator color={colors.error} />
         ) : (
           <View style={styles.messageContainer}>
             <Text

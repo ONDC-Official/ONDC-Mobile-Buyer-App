@@ -36,5 +36,11 @@ const styles = StyleSheet.create({
   label: {width: 100, height: 30, marginBottom: 5},
   name: {height: 25, width: 180, marginBottom: 5},
   date: {height: 15, width: 180},
-  card: {elevation: 4, borderRadius: 10, margin: 8, backgroundColor: 'white', padding: 8},
+  card: {
+    elevation: 4,
+    borderRadius: 10,
+    margin: 8,
+    backgroundColor: 'white',
+    padding: 8,
+  },
 });

@@ -3,9 +3,9 @@ import {useSelector} from 'react-redux';
 import {withTheme} from 'react-native-paper';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {postData} from '../../../../utils/api';
-import {BASE_URL, BILLING_ADDRESS,} from '../../../../utils/apiUtilities';
-import BillingAddressForm from "./components/BillingAddressForm";
-import {billingAddressValidationSchema} from "./utils/validations";
+import {BASE_URL, BILLING_ADDRESS} from '../../../../utils/apiUtilities';
+import BillingAddressForm from './components/BillingAddressForm';
+import {billingAddressValidationSchema} from './utils/validations';
 
 /**
  * Component to render form in add new address screen
@@ -75,9 +75,9 @@ const AddBillingAddress = ({navigation, theme}) => {
       saveAddress={saveAddress}
       apiInProgress={apiInProgress}
       validationSchema={billingAddressValidationSchema}
-      buttonLabel={'Add Address'}/>
+      buttonLabel={'Add Address'}
+    />
   );
 };
 
 export default withTheme(AddBillingAddress);
-

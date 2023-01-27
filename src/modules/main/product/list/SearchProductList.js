@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, View,} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {IconButton, Text, withTheme} from 'react-native-paper';
@@ -12,7 +12,7 @@ import Products from './Products';
 import {SEARCH_QUERY} from '../../../../utils/Constants';
 import SortAndFilter from './component/header/SortAndFilter';
 import HeaderMenu from '../../../../components/headerMenu/HeaderMenu';
-import AddressTag from "../../dashboard/components/AddressTag";
+import AddressTag from '../../dashboard/components/AddressTag';
 
 const SearchProductList = ({navigation, theme, route: {params}}) => {
   const isFocused = useIsFocused();
@@ -21,9 +21,8 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
   const {products} = useSelector(({productReducer}) => productReducer);
   const {filters} = useSelector(({filterReducer}) => filterReducer);
 
-  const {onSearch, loadMore, updateFilterCount} = useProductList(
-    params?.category,
-  );
+  const {onSearch, loadMore, updateFilterCount, productsRequested} =
+    useProductList(params?.category);
 
   useEffect(() => {
     getStoredData('address').then(response => {
@@ -58,36 +57,17 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
         </View>
         <ProductSearch onSearch={onSearch} />
       </View>
-      <View>
-        {!!params && (
-          <Text
-            style={[
-              {
-                color: theme.colors.accent,
-              },
-              styles.category,
-            ]}>
-            You are now viewing {params.categoryName}
-          </Text>
-        )}
-      </View>
 
       {filters && products.length > 0 && (
         <SortAndFilter updateFilterCount={updateFilterCount} />
       )}
 
-      <Products
-        imageBackgroundColor={
-          params ? theme.colors[params.category] : theme.colors.grocery
-        }
-        loadMore={loadMore}
-      />
+      <Products loadMore={loadMore} productsRequested={productsRequested} />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  search: {backgroundColor: 'white'},
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -101,11 +81,6 @@ const styles = StyleSheet.create({
   },
   address: {
     marginEnd: 8,
-  },
-  category: {
-    textAlign: 'center',
-    marginVertical: 16,
-    fontSize: 20,
   },
 });
 

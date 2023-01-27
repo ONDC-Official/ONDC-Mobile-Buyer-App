@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, View,} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {withTheme} from 'react-native-paper';
 
@@ -8,7 +8,7 @@ import {getStoredData} from '../../../utils/storage';
 import ProductSearch from '../product/list/component/header/ProductSearch';
 import Home from './components/Home';
 import HeaderMenu from '../../../components/headerMenu/HeaderMenu';
-import AddressTag from "./components/AddressTag";
+import AddressTag from './components/AddressTag';
 
 const Dashboard = ({navigation, theme}) => {
   const isFocused = useIsFocused();

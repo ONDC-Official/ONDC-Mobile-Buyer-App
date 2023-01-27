@@ -24,7 +24,9 @@ const Product = ({item}) => {
         <View style={styles.rightPane}>
           <View style={styles.details}>
             <Text style={styles.title}>{item.product?.descriptor?.name}</Text>
-            <Text variant="titleSmall" style={styles.price}>₹{item.product?.price?.value}</Text>
+            <Text variant="titleSmall" style={styles.price}>
+              ₹{item.product?.price?.value}
+            </Text>
           </View>
           <Text style={styles.quantity}>
             QTY:&nbsp;{item.product?.quantity}
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
   price: {
     width: 50,
     textAlign: 'right',
-  }
+  },
 });
 
 export default Product;

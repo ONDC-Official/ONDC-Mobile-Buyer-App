@@ -1,4 +1,8 @@
-import {addItemToCart, removeItemFromCart, updateItemInCart,} from '../../../../redux/actions';
+import {
+  addItemToCart,
+  removeItemFromCart,
+  updateItemInCart,
+} from '../../../../redux/actions';
 import {showInfoToast} from '../../../../utils/utils';
 import {useDispatch} from 'react-redux';
 
@@ -35,19 +39,20 @@ export default item => {
       showInfoToast(
         `Only ${item?.quantityMeta?.available?.count} unit(s) of this product are available at the moment`,
       );
+      return item;
     } else if (newQuantity > item?.quantityMeta?.maximum?.count) {
       showInfoToast(
         `Only ${item?.quantityMeta?.maximum?.count} unit(s) of this product can be added per order`,
       );
+      return item;
     } else {
       if (newQuantity === 0) {
         dispatch(removeItemFromCart(product));
       } else {
         dispatch(updateItemInCart(product));
       }
+      return product;
     }
-
-    return product;
   };
 
   return {

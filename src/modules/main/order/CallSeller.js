@@ -7,19 +7,26 @@ const CallSeller = ({
     params: {items},
   },
 }) => {
-    return (
-      <Card style={styles.card}>
-        {items?.map(item => (
-          <>
-            <View key={item.id} style={styles.row}>
-              <Text variant="titleMedium">{item?.product?.descriptor?.name}</Text>
-              <Text>Contact Details:&nbsp;{item?.product?.hasOwnProperty('@ondc/org/contact_details_consumer_care') ? item?.product['@ondc/org/contact_details_consumer_care'] : 'N/A'}</Text>
-            </View>
-            <Divider />
-          </>
-        ))}
-      </Card>
-    );
+  return (
+    <Card style={styles.card}>
+      {items?.map(item => (
+        <>
+          <View key={item.id} style={styles.row}>
+            <Text variant="titleMedium">{item?.product?.descriptor?.name}</Text>
+            <Text>
+              Contact Details:&nbsp;
+              {item?.product?.hasOwnProperty(
+                '@ondc/org/contact_details_consumer_care',
+              )
+                ? item?.product['@ondc/org/contact_details_consumer_care']
+                : 'N/A'}
+            </Text>
+          </View>
+          <Divider />
+        </>
+      ))}
+    </Card>
+  );
 };
 
 const styles = StyleSheet.create({

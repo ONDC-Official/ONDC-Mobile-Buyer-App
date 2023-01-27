@@ -11,10 +11,6 @@ const Home = ({theme}) => {
   const navigation = useNavigation();
   return (
     <View style={appStyles.container}>
-      <Text style={[styles.header, {color: theme.colors.accent}]}>
-        Explore By Subdomains
-      </Text>
-
       <View style={styles.categories}>
         <Pressable
           onPress={() =>
@@ -63,11 +59,6 @@ const Home = ({theme}) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    fontSize: 20,
-    textAlign: 'center',
-    marginTop: 32,
-  },
   cardContainer: {
     padding: 16,
   },

@@ -1,17 +1,28 @@
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-import {Formik} from "formik";
-import {addressTags, validationSchema} from "../utils/addValidationSchema";
-import {ActivityIndicator, StyleSheet, View} from "react-native";
-import InputField from "../../../../components/input/InputField";
-import {Button, Chip, Text, withTheme} from "react-native-paper";
-import {appStyles} from "../../../../styles/styles";
-import React, {useState} from "react";
-import {BASE_URL, GET_GPS_CORDS, GET_LATLONG} from "../../../../utils/apiUtilities";
-import useNetworkErrorHandling from "../../../../hooks/useNetworkErrorHandling";
-import {getData} from "../../../../utils/api";
-import {useSelector} from "react-redux";
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Formik} from 'formik';
+import {addressTags, validationSchema} from '../utils/addValidationSchema';
+import {ActivityIndicator, StyleSheet, View} from 'react-native';
+import InputField from '../../../../components/input/InputField';
+import {Button, Chip, Text, withTheme} from 'react-native-paper';
+import {appStyles} from '../../../../styles/styles';
+import React, {useState} from 'react';
+import {
+  BASE_URL,
+  GET_GPS_CORDS,
+  GET_LATLONG,
+} from '../../../../utils/apiUtilities';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {getData} from '../../../../utils/api';
+import {useSelector} from 'react-redux';
 
-const AddressForm = ({theme, addressInfo, apiInProgress, saveAddress, setLatitude, setLongitude}) => {
+const AddressForm = ({
+  theme,
+  addressInfo,
+  apiInProgress,
+  saveAddress,
+  setLatitude,
+  setLongitude,
+}) => {
   const {token} = useSelector(({authReducer}) => authReducer);
   const [requestInProgress, setRequestInProgress] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
@@ -55,15 +66,15 @@ const AddressForm = ({theme, addressInfo, apiInProgress, saveAddress, setLatitud
             });
         }}>
         {({
-            values,
-            errors,
-            handleChange,
-            handleBlur,
-            touched,
-            handleSubmit,
-            setFieldValue,
-            setFieldError,
-          }) => {
+          values,
+          errors,
+          handleChange,
+          handleBlur,
+          touched,
+          handleSubmit,
+          setFieldValue,
+          setFieldError,
+        }) => {
           return (
             <View style={styles.formContainer}>
               <InputField
@@ -195,7 +206,6 @@ const AddressForm = ({theme, addressInfo, apiInProgress, saveAddress, setLatitud
       </Formik>
     </KeyboardAwareScrollView>
   );
-
 };
 
 const styles = StyleSheet.create({

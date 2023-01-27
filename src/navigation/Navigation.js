@@ -22,9 +22,9 @@ import OrderDetails from '../modules/main/order/OrderDetails';
 import CallSeller from '../modules/main/order/CallSeller';
 import CancelOrder from '../modules/main/order/CancelOrder';
 import ReturnOrder from '../modules/main/order/ReturnOrder';
-import UpdateAddress from "../modules/main/dashboard/components/UpdateAddress";
-import RaiseComplaint from "../modules/main/order/RaiseComplaint";
-import UpdateBillingAddress from "../modules/main/payment/billingAddress/UpdateBillingAddress";
+import UpdateAddress from '../modules/main/dashboard/components/UpdateAddress';
+import RaiseComplaint from '../modules/main/order/RaiseComplaint';
+import UpdateBillingAddress from '../modules/main/payment/billingAddress/UpdateBillingAddress';
 
 const Stack = createNativeStackNavigator();
 
@@ -68,7 +68,7 @@ const Navigation = () => {
           name="AddDefaultAddress"
           component={AddDefaultAddress}
           options={{
-            title: 'Add Delivery Address',
+            title: 'Add Address',
           }}
         />
         <Stack.Screen

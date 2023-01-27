@@ -2,11 +2,13 @@ import React, {useState} from 'react';
 import {withTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 
-import useNetworkErrorHandling from "../../../../hooks/useNetworkErrorHandling";
-import {BASE_URL, UPDATE_DELIVERY_ADDRESS} from "../../../../utils/apiUtilities";
-import {postData} from "../../../../utils/api";
-import AddressForm from "./AddressForm";
-
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {
+  BASE_URL,
+  UPDATE_DELIVERY_ADDRESS,
+} from '../../../../utils/apiUtilities';
+import {postData} from '../../../../utils/api';
+import AddressForm from './AddressForm';
 
 /**
  * Component to render form in add new address screen
@@ -94,7 +96,7 @@ const UpdateAddress = ({navigation, theme, route: {params}}) => {
       setLatitude={setLatitude}
       setLongitude={setLongitude}
     />
-  )
+  );
 };
 
 export default withTheme(UpdateAddress);
