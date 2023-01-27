@@ -6,10 +6,15 @@ import InputField from "../../../../components/input/InputField";
 import {Button, Chip, Text, withTheme} from "react-native-paper";
 import {appStyles} from "../../../../styles/styles";
 import React, {useState} from "react";
-import {BASE_URL} from "../../../../utils/apiUtilities";
+import {BASE_URL, GET_GPS_CORDS, GET_LATLONG} from "../../../../utils/apiUtilities";
+import useNetworkErrorHandling from "../../../../hooks/useNetworkErrorHandling";
+import {getData} from "../../../../utils/api";
+import {useSelector} from "react-redux";
 
 const AddressForm = ({theme, addressInfo, apiInProgress, saveAddress, setLatitude, setLongitude}) => {
+  const {token} = useSelector(({authReducer}) => authReducer);
   const [requestInProgress, setRequestInProgress] = useState(false);
+  const {handleApiError} = useNetworkErrorHandling();
 
   const getState = async (e, setFieldValue) => {
     try {
@@ -29,10 +34,11 @@ const AddressForm = ({theme, addressInfo, apiInProgress, saveAddress, setLatitud
       }
       setFieldValue('state', data.copResults.state);
       setFieldValue('city', data.copResults.city);
-      setApiInProgress(false);
+      setRequestInProgress(false);
     } catch (error) {
+      console.log(error);
       handleApiError(error);
-      setApiInProgress(false);
+      setRequestInProgress(false);
     }
   };
 
@@ -99,6 +105,7 @@ const AddressForm = ({theme, addressInfo, apiInProgress, saveAddress, setLatitud
                     errorMessage={touched.pin ? errors.pin : null}
                     onChangeText={e => {
                       setFieldValue('pin', e);
+                      console.log(e);
                       if (e.length === 6 && e.match(/^[1-9]{1}[0-9]{5}$/)) {
                         setRequestInProgress(true);
                         getState(e, setFieldValue, setFieldError)

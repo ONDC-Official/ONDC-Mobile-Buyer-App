@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
 import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Searchbar, Text, withTheme} from 'react-native-paper';
+import {Searchbar, Text, TextInput, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 
@@ -17,8 +17,11 @@ const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
 
   const showMenu = () => setVisible(true);
 
-  const onSearchTypeChange = card => {
-    setSearchType(card);
+  const onSearchTypeChange = type => {
+    if (query && query.trim().length > 0) {
+      onSearch(query, type);
+    }
+    setSearchType(type);
     hideMenu();
   };
 
@@ -41,16 +44,22 @@ const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
           }
         />
         <View style={styles.searchContainer}>
-          <Searchbar
+          <TextInput
             editable={false}
+            mode="outlined"
             round={false}
             lightTheme
             placeholder={`Search ${searchType}`}
             style={styles.search}
-            inputContainerStyle={styles.inputContainerStyle}
-            clearIcon={null}
-            closeIcon={null}
+            outlineStyle={styles.inputContainerStyle}
+            onSubmitEditing={() => {
+              if (query && query.trim().length > 0) {
+                onSearch(query, searchType);
+              }
+            }}
             inputStyle={styles.inputStyle}
+            onChangeText={setQuery}
+            value={query}
           />
         </View>
       </Pressable>
@@ -84,13 +93,13 @@ const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
       </Menu>
 
       <View style={styles.searchContainer}>
-        <Searchbar
+        <TextInput
+          mode="outlined"
           round={false}
           lightTheme
           placeholder={`Search ${searchType}`}
           style={styles.search}
-          inputContainerStyle={styles.inputContainerStyle}
-          loadingProps={{color: theme.colors.primary}}
+          outlineStyle={styles.inputContainerStyle}
           onSubmitEditing={() => {
             if (query && query.trim().length > 0) {
               onSearch(query, searchType);
@@ -99,8 +108,6 @@ const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
           inputStyle={styles.inputStyle}
           onChangeText={setQuery}
           value={query}
-          clearIcon={null}
-          closeIcon={null}
         />
       </View>
     </View>
@@ -117,7 +124,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexGrow: 1,
   },
-  search: {backgroundColor: 'white'},
+  search: {backgroundColor: 'white', marginTop: -5, marginStart: -2},
   inputContainerStyle: {
     borderRightWidth: 1,
     borderBottomWidth: 1,
@@ -126,11 +133,13 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
+  },
+  inputStyle: {
+    paddingLeft: 12,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  inputStyle: {paddingLeft: 12},
   menu: {
     paddingHorizontal: 15,
     paddingVertical: 16,

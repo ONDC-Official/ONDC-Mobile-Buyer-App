@@ -15,6 +15,7 @@ export default (category = null) => {
   const count = useRef(0);
   const currentPage = useRef(1);
   const filterCount = useRef(0);
+  const eventSource = useRef(null);
 
   const dispatch = useDispatch();
   const {handleApiError} = useNetworkErrorHandling();
@@ -191,11 +192,19 @@ export default (category = null) => {
     filterCount.current += 1;
   };
 
-  useEffect(() => {
-    let eventSource = null;
+  const clearEventSource = () => {
+    if (eventSource.current) {
+      eventSource.current.removeAllListeners();
+      eventSource.current.close();
+      eventSource.current = null;
+    }
+  };
 
+  useEffect(() => {
     if (messageId) {
-      eventSource = new RNEventSource(
+      clearEventSource();
+
+      eventSource.current = new RNEventSource(
         `${BASE_URL}/clientApis/events?messageId=${messageId}`,
         {
           headers: {
@@ -204,7 +213,7 @@ export default (category = null) => {
         },
       );
 
-      eventSource.addEventListener('on_search', event => {
+      eventSource.current.addEventListener('on_search', event => {
         const data = JSON.parse(event.data);
 
         if (data.hasOwnProperty('count')) {
@@ -241,11 +250,7 @@ export default (category = null) => {
     }
 
     return () => {
-      if (eventSource) {
-        eventSource.removeAllListeners();
-        eventSource.close();
-        eventSource = null;
-      }
+      clearEventSource();
     };
   }, [messageId]);
 

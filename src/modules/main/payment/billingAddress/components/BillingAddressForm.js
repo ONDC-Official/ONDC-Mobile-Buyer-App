@@ -7,9 +7,12 @@ import {Button, withTheme} from "react-native-paper";
 import React, {useState} from "react";
 import {getData} from "../../../../../utils/api";
 import {BASE_URL, GET_GPS_CORDS} from "../../../../../utils/apiUtilities";
+import {useSelector} from "react-redux";
+import useNetworkErrorHandling from "../../../../../hooks/useNetworkErrorHandling";
 
 const  BillingAddressForm = ({theme, addressInfo, validationSchema, apiInProgress, buttonLabel, saveAddress}) => {
   const [requestInProgress, setRequestInProgress] = useState(false);
+  const {handleApiError} = useNetworkErrorHandling();
 
   const getState = async (e, setFieldValue) => {
     try {
@@ -17,10 +20,10 @@ const  BillingAddressForm = ({theme, addressInfo, validationSchema, apiInProgres
       const {data} = await getData(`${BASE_URL}${GET_GPS_CORDS}${e}`);
       setFieldValue('state', data.copResults.state);
       setFieldValue('city', data.copResults.city);
-      setApiInProgress(false);
+      setRequestInProgress(false);
     } catch (error) {
       handleApiError(error);
-      setApiInProgress(false);
+      setRequestInProgress(false);
     }
   };
 
