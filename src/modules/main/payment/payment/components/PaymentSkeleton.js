@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
   heading: {
     height: 20,
     width: 100,
+    marginBottom: 10,
   },
   address: {height: 15, width: 300, marginTop: 10},
   paymentOption: {flexDirection: 'row', marginBottom: 10, alignItems: 'center'},

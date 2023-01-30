@@ -34,6 +34,7 @@ import PaymentSkeleton from './components/PaymentSkeleton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BreakDown from './components/BreakDown';
 import Address from '../../order/components/Address';
+import useConfirmOrder from './hooks/useConfirmOrder';
 
 /**
  * Component to payment screen in application
@@ -54,31 +55,23 @@ const Payment = ({
   const dispatch = useDispatch();
   const error = useRef(null);
   const {token, uid} = useSelector(({authReducer}) => authReducer);
+  const {confirmOrder, confirmOrderRequested} = useConfirmOrder();
   const [selectedPaymentOption, setSelectedPaymentOption] = useState(null);
   const [initializeOrderRequested, setInitializeOrderRequested] =
     useState(false);
-  const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
   const [inItMessageIds, setInItMessageIds] = useState(null);
-  const [confirmMessageIds, setConfirmMessageIds] = useState(null);
   const {handleApiError} = useNetworkErrorHandling();
   const eventSources = useRef(null);
-  const [requestInProgress, setRequestInProgress] = useState(false);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const refOrders = useRef();
   const total = useRef(0);
   const products = useRef([]);
+  const [breakDown, setBreakDown] = useState([]);
   const signedPayload = useRef(null);
   const timeStamp = useRef(null);
   const parentOrderId = useRef(null);
-
-  /**
-   * function gets executes when order get placed
-   */
-  const onOrderSuccess = () => {
-    dispatch(clearAllData());
-    dispatch(clearFilters());
-    navigation.navigate('Orders');
-  };
+  const totalMessagesExpected = useRef(0);
+  const totalMessagesReceived = useRef(0);
 
   /**
    * function request initialize order
@@ -93,16 +86,18 @@ const Payment = ({
           headers: {Authorization: `Bearer ${token}`},
         },
       );
+      totalMessagesReceived.current += 1;
 
       if (data[0].hasOwnProperty('error')) {
         error.current = data[0];
       } else {
+        const productList = products.current.concat([]);
         data[0].message.order.quote.breakup.forEach(item => {
-          const productIndex = products.current.findIndex(
+          const productIndex = productList.findIndex(
             one => one.id === item['@ondc/org/item_id'],
           );
           if (productIndex > -1) {
-            const product = products.current[productIndex];
+            const product = productList[productIndex];
             switch (item['@ondc/org/title_type']) {
               case 'tax':
                 if (product.hasOwnProperty('taxes')) {
@@ -169,9 +164,10 @@ const Payment = ({
                 product.misces = [item];
                 break;
             }
-            products.current.push(product);
+            productList.push(product);
           }
         });
+        setProducts(productList);
 
         total.current =
           total.current + Number(data[0].message.order.quote.price.value);
@@ -189,29 +185,12 @@ const Payment = ({
   };
 
   /**
-   * function request confirm order
-   * @param id:message id
-   * @returns {Promise<void>}
-   */
-  const onConfirmOrder = async id => {
-    try {
-      await getData(`${BASE_URL}${ON_CONFIRM_ORDER}messageIds=${id}`, {
-        headers: {Authorization: `Bearer ${token}`},
-      });
-    } catch (err) {
-      console.log(err);
-      handleApiError(err);
-      setConfirmOrderRequested(false);
-    }
-  };
-
-  /**
    * function request initialize order
    * @returns {Promise<void>}
    */
   const initializeOrder = async () => {
     try {
-      products.current = [];
+      setProducts([]);
       total.current = 0;
       setInitializeOrderRequested(true);
       let payload = [];
@@ -322,10 +301,13 @@ const Payment = ({
 
       let messageIds = [];
 
+      totalMessagesExpected.current = data.length;
       data.forEach(item => {
         if (item.message.ack.status === 'ACK') {
           parentOrderId.current = item.context.parent_order_id;
           messageIds.push(item.context.message_id);
+        } else {
+          console.log(item.message.ack);
         }
       });
       if (messageIds.length > 0) {
@@ -347,9 +329,8 @@ const Payment = ({
    * @returns {Promise<void>}
    */
   const processPayment = async () => {
-    setConfirmOrderRequested(true);
     if (selectedPaymentOption === PAYMENT_METHODS.COD.name) {
-      await confirmOrder(PAYMENT_METHODS.COD);
+      await confirmOrder(PAYMENT_METHODS.COD, refOrders.current, total.current);
     } else {
       const orderDetails = {
         merchant_id: Config.MERCHANT_ID.toUpperCase(),
@@ -407,7 +388,11 @@ const Payment = ({
         if (data.payload.hasOwnProperty('status')) {
           switch (data.payload.status.toUpperCase()) {
             case 'CHARGED':
-              confirmOrder(PAYMENT_METHODS.JUSPAY)
+              confirmOrder(
+                PAYMENT_METHODS.JUSPAY,
+                refOrders.current,
+                total.current,
+              )
                 .then(() => {})
                 .catch(() => {});
               break;
@@ -450,82 +435,6 @@ const Payment = ({
 
       default:
         console.log('Unknown Event', data);
-    }
-  };
-
-  /**
-   * function request confirm order
-   * @param method:payment method selected by user
-   * @returns {Promise<void>}
-   */
-  const confirmOrder = async method => {
-    try {
-      const orderList = refOrders.current;
-      if (orderList && orderList.length > 0) {
-        const error = orderList.find(one => one.hasOwnProperty('error'));
-
-        if (!error) {
-          const payload = orderList.map(item => {
-            const product = cartItems.find(
-              one => String(one.id) === String(item.message.order.items[0].id),
-            );
-            return {
-              context: {
-                transaction_id: item.context.parent_order_id,
-                parent_order_id: item.context.parent_order_id,
-                city: product.city,
-                state: product.state,
-              },
-              message: {
-                quote: item.message.order.quote,
-                payment: {
-                  ...{
-                    paid_amount: total.current,
-                    transaction_id: item.context.transaction_id,
-                  },
-                  ...method,
-                },
-
-                providers: {
-                  id: item.message?.order?.provider?.id,
-                  locations: [item.message?.order?.provider_location?.id],
-                },
-              },
-            };
-          });
-
-          const {data} = await postData(
-            `${BASE_URL}${CONFIRM_ORDER}`,
-            payload,
-            {
-              headers: {Authorization: `Bearer ${token}`},
-            },
-          );
-          let messageIds = [];
-          data.forEach(item => {
-            if (item.message.ack.status === 'ACK') {
-              messageIds.push(item.context.message_id);
-            } else {
-              console.log(item.message.ack);
-            }
-          });
-          if (messageIds.length > 0) {
-            setConfirmMessageIds(messageIds);
-          }
-        } else {
-          showToastWithGravity(
-            'Something went wrong, please try again after some time.',
-          );
-        }
-      } else {
-        showToastWithGravity(
-          'Something went wrong, please try again after some time.',
-        );
-      }
-    } catch (err) {
-      console.log(err);
-      handleApiError(err);
-      setConfirmOrderRequested(false);
     }
   };
 
@@ -591,28 +500,21 @@ const Payment = ({
       eventSources.current.forEach(eventSource => {
         eventSource.removeAllListeners();
         eventSource.close();
-        setRequestInProgress(false);
       });
       eventSources.current = null;
-      setRequestInProgress(false);
     }
-  };
-
-  const removeEvent = sources => {
-    if (sources) {
-      sources.forEach(source => {
-        source.removeAllListeners();
-        source.close();
-      });
-      sources = null;
-      setConfirmOrderRequested(false);
+    if (
+      totalMessagesReceived.current.length <
+      totalMessagesExpected.current.length
+    ) {
       alertWithOneButton(
-        null,
-        'Your order has been placed!',
+        'Request Failed',
+        'Unable to process your request at the moment. Please try again after some time',
         'Ok',
-        onOrderSuccess,
+        () => {
+          navigation.goBack();
+        },
       );
-      setConfirmMessageIds(null);
     }
   };
 
@@ -653,7 +555,6 @@ const Payment = ({
         );
       });
       eventSources.current = sources;
-      setRequestInProgress(true);
       sources.forEach(eventSource => {
         eventSource.addEventListener('on_init', event => {
           const data = JSON.parse(event.data);
@@ -675,37 +576,6 @@ const Payment = ({
     };
   }, [inItMessageIds]);
 
-  useEffect(() => {
-    let sources = null;
-    let timer = null;
-    if (confirmMessageIds) {
-      sources = confirmMessageIds.map(messageId => {
-        return new RNEventSource(
-          `${BASE_URL}/clientApis/events?messageId=${messageId}`,
-          {
-            headers: {Authorization: `Bearer ${token}`},
-          },
-        );
-      });
-      if (!timer) {
-        timer = setTimeout(removeEvent, 20000, sources);
-      }
-      sources.forEach(eventSource => {
-        eventSource.addEventListener('on_confirm', event => {
-          const data = JSON.parse(event.data);
-          onConfirmOrder(data.messageId)
-            .then(() => {})
-            .catch(() => {});
-        });
-      });
-    }
-
-    return () => {
-      removeEvent(sources);
-      clearTimeout(timer);
-    };
-  }, [confirmMessageIds]);
-
   return (
     <View style={appStyles.container}>
       <View pointerEvents={confirmOrderRequested ? 'none' : 'auto'}>
@@ -713,7 +583,7 @@ const Payment = ({
           <PaymentSkeleton />
         ) : (
           <ScrollView>
-            <BreakDown products={products.current} />
+            <BreakDown products={products} />
 
             <Card style={styles.card}>
               <Address

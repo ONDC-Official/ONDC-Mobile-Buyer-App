@@ -93,6 +93,7 @@ export default (category = null) => {
           },
         });
 
+        console.log('Get product list', url);
         if (data.message.catalogs.length > 0) {
           let productsList = data.message.catalogs.map(item => {
             return Object.assign({}, item, {
@@ -113,6 +114,7 @@ export default (category = null) => {
         }
         setProductsRequested(false);
       } catch (error) {
+        console.log(error);
         handleApiError(error);
         setProductsRequested(false);
         throw error;
@@ -121,7 +123,6 @@ export default (category = null) => {
   };
 
   const loadMore = () => {
-    console.log(listCount.current, count.current, productsRequested);
     if (
       listCount.current >= 10 &&
       listCount.current < count.current &&
@@ -224,7 +225,6 @@ export default (category = null) => {
 
       eventSource.current.addEventListener('on_search', event => {
         const data = JSON.parse(event.data);
-
         console.log(JSON.stringify(data, undefined, 4));
 
         if (data.hasOwnProperty('count')) {

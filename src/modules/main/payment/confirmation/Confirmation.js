@@ -18,7 +18,7 @@ import {
   stringToDecimal,
 } from '../../../../utils/utils';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
-import Product from './Product';
+import Product from './components/Product';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
   const {token} = useSelector(({authReducer}) => authReducer);

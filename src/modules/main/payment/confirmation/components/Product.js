@@ -3,13 +3,14 @@ import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import {Button, Card, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useDispatch} from 'react-redux';
-import {removeItemFromCart, updateItemInCart} from '../../../../redux/actions';
-import {appStyles} from '../../../../styles/styles';
-import useProductQuantity from '../../product/hook/useProductQuantity';
+import {removeItemFromCart, updateItemInCart} from '../../../../../redux/actions';
+import {appStyles} from '../../../../../styles/styles';
+import useProductQuantity from '../../../product/hook/useProductQuantity';
 import moment from 'moment';
-import {stringToDecimal} from '../../../../utils/utils';
+import {stringToDecimal} from '../../../../../utils/utils';
+import Tat from "./Tat";
 
-const image = require('../../../../assets/noImage.png');
+const image = require('../../../../../assets/noImage.png');
 
 /**
  * Component to render single product card on product screen
@@ -88,15 +89,7 @@ const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
                   {confirmation?.fulfillment['@ondc/org/category']}
                 </Text>
               </Text>
-              <Text>
-                Estimated Delivery Time:&nbsp;
-                <Text variant="titleSmall">
-                  {moment
-                    .duration(confirmation?.fulfillment['@ondc/org/TAT'])
-                    .asMinutes()}{' '}
-                  min
-                </Text>
-              </Text>
+              <Tat duration={confirmation?.fulfillment['@ondc/org/TAT']} />
             </View>
           )}
           <View style={styles.priceContainer}>
