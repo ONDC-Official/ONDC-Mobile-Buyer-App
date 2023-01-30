@@ -9,6 +9,8 @@ import useProductQuantity from '../hook/useProductQuantity';
 import ProductImages from './components/ProductImages';
 import TimeToShip from './components/TimeToShip';
 import CartFooter from '../list/component/CartFooter/CartFooter';
+import ReturnWindow from './components/ReturnWindow';
+import {TAGS} from '../../../../utils/Constants';
 
 const image = require('../../../../assets/noImage.png');
 const imageSize = Dimensions.get('window').width;
@@ -40,6 +42,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 
   const outOfStock = product?.quantityMeta?.available?.count === 0;
 
+  console.log(JSON.stringify(product, undefined, 4));
   return (
     <View style={appStyles.container}>
       <ScrollView style={appStyles.container}>
@@ -60,10 +63,15 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                 <Text style={styles.descriptorName}>
                   {product?.descriptor?.name}
                 </Text>
-
-                <Text style={[styles.provider, {color: colors.gray}]}>
-                  Seller: {product?.provider_details?.descriptor?.name}
-                </Text>
+                {product?.hasOwnProperty('tags') &&
+                  Object.entries(product?.tags).map(([key, value]) => (
+                    <View
+                      key={key}
+                      style={[styles.reqsRow, styles.longDescription]}>
+                      <Text>{TAGS[key]}:&nbsp;</Text>
+                      <Text variant="titleSmall">{value.toUpperCase()}</Text>
+                    </View>
+                  ))}
                 {product?.descriptor.short_desc && (
                   <Text style={[styles.provider, {color: colors.gray}]}>
                     {product?.descriptor.short_desc}
@@ -112,6 +120,10 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                   </Chip>
                 )}
             </View>
+
+            {product?.hasOwnProperty('@ondc/org/return_window') && (
+              <ReturnWindow duration={product['@ondc/org/return_window']} />
+            )}
 
             {!!product?.descriptor?.long_desc && (
               <View style={styles.detailsContainer}>

@@ -77,3 +77,8 @@ export const SUB_CATEGORY_CATEGORY = {
   'Beverages (MTO)': 'Food & Beverage',
   'F&B': 'Food & Beverage',
 };
+
+export const TAGS = {
+  'non_veg': 'Non-Veg',
+  'veg': 'Veg',
+}
