@@ -1,5 +1,6 @@
-import {Text} from 'react-native-paper';
 import React from 'react';
+import {Text} from 'react-native-paper';
+
 import {durationToHumanReadable} from '../../../../../utils/utils';
 
 const Tat = ({duration}) => {
@@ -8,7 +9,9 @@ const Tat = ({duration}) => {
   return (
     <Text>
       Estimated Delivery Time:&nbsp;
-      <Text variant="titleSmall">{timeDuration} {unit}</Text>
+      <Text variant="titleSmall">
+        {timeDuration} {unit}
+      </Text>
     </Text>
   );
 };
