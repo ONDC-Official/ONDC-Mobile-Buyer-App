@@ -63,7 +63,6 @@ const Order = () => {
    * Function is called when to get next list of elements on infinite scroll
    */
   const loadMoreList = () => {
-    console.log(totalOrders.current, orders.length);
     if (totalOrders.current > orders.length && !moreListRequested) {
       setMoreListRequested(true);
       getOrderList(pageNumber.current)

@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Button, Card, Divider, Text, withTheme} from 'react-native-paper';
+import {Button, Card, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 
@@ -102,7 +102,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                       product.knowCharges = [breakup];
                     }
                   }
-                } else {
+                } else if (breakup['@ondc/org/title_type'] !== 'item') {
                   if (provider.hasOwnProperty('additionCharges')) {
                     provider.additionCharges.push(breakup);
                   } else {
