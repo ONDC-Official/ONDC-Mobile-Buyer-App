@@ -71,7 +71,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 : product.price.maximum_value;
 
               if (
-                stringToDecimal(productPrice.item.price.value) !==
+                stringToDecimal(productPrice?.item?.price?.value) !==
                 stringToDecimal(cost)
               ) {
                 element.message = 'Price of this product has been updated';
@@ -111,6 +111,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 }
               });
               product.dataReceived = true;
+              product.confirmation = element;
             }
           });
           setProviders(providerList);

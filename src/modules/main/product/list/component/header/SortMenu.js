@@ -13,10 +13,17 @@ import {appStyles} from '../../../../../../styles/styles';
  * @param sortOptions
  * @param closeSortSheet:function used to close sort sheet
  * @param apiInProgress
+ * @param updateFilterCount
  * @constructor
  * @returns {JSX.Element}
  */
-const SortMenu = ({theme, sortOptions, closeSortSheet, apiInProgress}) => {
+const SortMenu = ({
+  theme,
+  sortOptions,
+  closeSortSheet,
+  apiInProgress,
+  updateFilterCount,
+}) => {
   const dispatch = useDispatch();
   const {colors} = theme;
   const {selectedSortOption} = useSelector(({filterReducer}) => filterReducer);
@@ -25,6 +32,7 @@ const SortMenu = ({theme, sortOptions, closeSortSheet, apiInProgress}) => {
 
   const applyFilters = () => {
     dispatch(updateSortOption(sortingMethod));
+    updateFilterCount();
     closeSortSheet();
   };
 

@@ -1,14 +1,24 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {Button, Card, Divider, IconButton, Text, withTheme} from 'react-native-paper';
+import {
+  Button,
+  Card,
+  Divider,
+  IconButton,
+  Text,
+  withTheme,
+} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useDispatch} from 'react-redux';
-import {removeItemFromCart, updateItemInCart} from '../../../../../redux/actions';
+import {
+  removeItemFromCart,
+  updateItemInCart,
+} from '../../../../../redux/actions';
 import {appStyles} from '../../../../../styles/styles';
 import useProductQuantity from '../../../product/hook/useProductQuantity';
 import moment from 'moment';
 import {stringToDecimal} from '../../../../../utils/utils';
-import Tat from "./Tat";
+import Tat from './Tat';
 
 const image = require('../../../../../assets/noImage.png');
 
@@ -18,14 +28,11 @@ const image = require('../../../../../assets/noImage.png');
  * @param navigation
  * @param item: object which contains product details
  * @param cancellable:boolean which indicates visibility of close icon
- * @param confirmed
  * @param apiInProgress
  * @constructor
  * @returns {JSX.Element}
  */
-const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
-  const confirmed = !!confirmation;
-
+const Product = ({theme, navigation, item, apiInProgress}) => {
   const {colors} = theme;
   const dispatch = useDispatch();
   const {updateQuantity} = useProductQuantity(item);
@@ -53,7 +60,10 @@ const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
           product: item,
         });
       }}
-      style={[confirmed ? {} : {borderColor: colors.error}, styles.container]}>
+      style={[
+        item?.confirmation ? {} : {borderColor: colors.error},
+        styles.container,
+      ]}>
       <View style={styles.row}>
         <FastImage
           source={uri ? {uri} : image}
@@ -75,21 +85,23 @@ const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
             </Text>
           </View>
 
-          {confirmation?.hasOwnProperty('fulfillment') && (
+          {item?.confirmation?.hasOwnProperty('fulfillment') && (
             <View>
               <Text>
                 Fulfilled By:&nbsp;
                 <Text variant="titleSmall">
-                  {confirmation?.fulfillment['@ondc/org/provider_name']}
+                  {item?.confirmation?.fulfillment['@ondc/org/provider_name']}
                 </Text>
               </Text>
               <Text>
                 Type of Delivery:&nbsp;
                 <Text variant="titleSmall">
-                  {confirmation?.fulfillment['@ondc/org/category']}
+                  {item?.confirmation?.fulfillment['@ondc/org/category']}
                 </Text>
               </Text>
-              <Tat duration={confirmation?.fulfillment['@ondc/org/TAT']} />
+              <Tat
+                duration={item?.confirmation?.fulfillment['@ondc/org/TAT']}
+              />
             </View>
           )}
           <View style={styles.priceContainer}>
@@ -135,9 +147,11 @@ const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
         </>
       ))}
 
-      {confirmation?.hasOwnProperty('message') && (
-        <View>
-          <Text style={{color: colors.opposite}}>{confirmation.message}</Text>
+      {item?.confirmation?.hasOwnProperty('message') && (
+        <View style={styles.messageContainer}>
+          <Text style={{color: colors.opposite}}>
+            {item?.confirmation?.message}
+          </Text>
         </View>
       )}
       {item.hasOwnProperty('dataReceived') && !item.dataReceived && (
