@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Button, Text, withTheme} from 'react-native-paper';
+import {Button, Card, Divider, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 
@@ -27,8 +27,10 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
   const {handleApiError} = useNetworkErrorHandling();
   const confirmation = useRef(null);
-  const total = useRef(null);
+  const totalAmount = useRef(0);
+  const [total, setTotal] = useState(0);
 
+  const [providers, setProviders] = useState([]);
   const [messageIds, setMessageIds] = useState(null);
   const [apiInProgress, setApiInProgress] = useState(false);
 
@@ -39,8 +41,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
    */
   const onGetQuote = async id => {
     try {
-      setApiInProgress(true);
-
       const {data} = await getData(
         `${BASE_URL}${ON_GET_SELECT}messageIds=${id}`,
         {
@@ -50,14 +50,20 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
       if (!data[0].error) {
         if (data[0].context.bpp_id) {
+          const providerList = providers.concat([]);
+          const provider = providerList.find(
+            one => one.provider.id === data[0].message.quote.provider.id,
+          );
           data[0].message.quote.items.forEach(element => {
-            const product = cartItems.find(
+            const product = provider.items.find(
               one => String(one.id) === String(element.id),
             );
 
             if (product) {
               const productPrice = data[0].message.quote.quote.breakup.find(
-                one => one['@ondc/org/item_id'] === String(product.id),
+                one =>
+                  one['@ondc/org/item_id'] === String(product.id) &&
+                  one['@ondc/org/title_type'] === 'item',
               );
 
               const cost = product.price.value
@@ -86,14 +92,33 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               } else {
                 confirmation.current = [element];
               }
+
+              data[0].message.quote.quote.breakup.forEach(breakup => {
+                if (breakup['@ondc/org/item_id'] === String(product.id)) {
+                  if (breakup['@ondc/org/title_type'] !== 'item') {
+                    if (product.hasOwnProperty('knowCharges')) {
+                      product.knowCharges.push(breakup);
+                    } else {
+                      product.knowCharges = [breakup];
+                    }
+                  }
+                } else {
+                  if (provider.hasOwnProperty('additionCharges')) {
+                    provider.additionCharges.push(breakup);
+                  } else {
+                    provider.additionCharges = [breakup];
+                  }
+                }
+              });
+              product.dataReceived = true;
             }
           });
-
-          total.current = total.current
-            ? total.current + Number(data[0].message.quote.quote.price.value)
-            : Number(data[0].message.quote.quote.price.value);
+          setProviders(providerList);
+          totalAmount.current =
+            totalAmount.current +
+            Number(data[0].message.quote.quote.price.value);
+          setTotal(totalAmount.current);
         }
-        setApiInProgress(1);
         const ids = confirmation.current?.map(one => one.id);
         const isAllPresent = cartItems.every(one => ids?.includes(one.id));
         isAllPresent ? setApiInProgress(false) : setApiInProgress(true);
@@ -110,11 +135,13 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
    */
   const getQuote = async () => {
     try {
-      total.current = null;
-      confirmation.current = null;
       setApiInProgress(true);
+      totalAmount.current = 0;
+      setTotal(0);
+      confirmation.current = null;
       let payload = [];
       let providerIdArray = [];
+      let confirmationProducts = [];
       cartItems.forEach(item => {
         const index = providerIdArray.findIndex(
           one => one === item.provider_details.id,
@@ -132,6 +159,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               locations: [item.location_details.id],
             },
           });
+          confirmationProducts[index].items.push(item);
         } else {
           payload.push({
             context: {
@@ -171,8 +199,13 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             },
           });
           providerIdArray.push(item.provider_details.id);
+          confirmationProducts.push({
+            provider: item.provider_details,
+            items: [item],
+          });
         }
       });
+      setProviders(confirmationProducts);
 
       const {data} = await postData(`${BASE_URL}${GET_SELECT}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
@@ -197,7 +230,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       } else {
         showToastWithGravity(fulfillmentMissingItem.message);
         confirmation.current = [];
-
         setApiInProgress(false);
       }
     } catch (error) {
@@ -214,6 +246,15 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         eventSource.close();
       });
       eventSources = null;
+      const list = providers.concat([]);
+      list.forEach(provider => {
+        provider.items?.forEach(one => {
+          if (!one.hasOwnProperty('dataReceived')) {
+            one.dataReceived = false;
+          }
+        });
+      });
+      setProviders(list);
       setApiInProgress(false);
     }
   };
@@ -242,9 +283,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           },
         );
       });
-      if (!timer) {
-        timer = setTimeout(removeEvent, 20000, eventSources);
-      }
+      timer = setTimeout(removeEvent, 20000, eventSources);
       eventSources.forEach(eventSource => {
         eventSource.addEventListener('on_select', event => {
           const data = JSON.parse(event.data);
@@ -264,28 +303,33 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   }, [messageIds]);
 
   const renderItem = ({item}) => {
-    let element = null;
-
-    if (confirmation.current) {
-      element = confirmation.current.find(
-        one => String(one.id) === String(item.id),
-      );
-    }
-
     return item.hasOwnProperty('isSkeleton') ? (
       <ProductCardSkeleton item={item} />
     ) : (
-      <Product
-        item={item}
-        navigation={navigation}
-        confirmation={element}
-        apiInProgress={apiInProgress}
-      />
+      <Card style={styles.cardContainer}>
+        <Text variant="titleSmall">{item?.provider?.descriptor?.name}</Text>
+        {item?.items.map(one => (
+          <Product key={one.id} item={one} navigation={navigation} />
+        ))}
+        <Card style={styles.cardContainer}>
+          {item?.additionCharges?.map((charge, index) => (
+            <View key={`${index}Charge`} style={styles.priceContainer}>
+              <Text variant="titleSmall" style={styles.title}>
+                {charge?.title}
+              </Text>
+              <Text
+                style={{color: theme.colors.opposite}}
+                variant="titleMedium">
+                ₹{stringToDecimal(charge?.price?.value)}
+              </Text>
+            </View>
+          ))}
+        </Card>
+      </Card>
     );
   };
 
-  const listData = apiInProgress ? skeletonList : cartItems;
-
+  const listData = apiInProgress ? skeletonList : providers;
   return (
     <View style={appStyles.container}>
       <FlatList
@@ -306,12 +350,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       ) : (
         <View style={[styles.footer, {backgroundColor: theme.colors.footer}]}>
           <View style={appStyles.container}>
-            {total.current && (
-              <>
-                <Text>Subtotal</Text>
-                <Text style={styles.totalAmount}>₹{total.current}</Text>
-              </>
-            )}
+            <Text>Subtotal</Text>
+            <Text style={styles.totalAmount}>₹{total}</Text>
           </View>
           <View style={appStyles.container}>
             {confirmation.current && confirmation.current.length > 0 && (
@@ -350,5 +390,16 @@ const styles = StyleSheet.create({
   totalAmount: {
     fontWeight: 'bold',
     fontSize: 18,
+  },
+  priceContainer: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  cardContainer: {
+    margin: 8,
+    padding: 8,
+    backgroundColor: 'white',
   },
 });

@@ -6,55 +6,59 @@ import {useNavigation} from '@react-navigation/native';
 import {appStyles} from '../../../../styles/styles';
 import BurgerImage from '../../../../assets/burger.svg';
 import GroceryImage from '../../../../assets/grocery.svg';
+import CartFooter from '../../product/list/component/CartFooter/CartFooter';
 
 const Home = ({theme}) => {
   const navigation = useNavigation();
   return (
-    <View style={appStyles.container}>
-      <View style={styles.categories}>
-        <Pressable
-          onPress={() =>
-            navigation.navigate('SearchProductList', {
-              category: 'F&B',
-              categoryName: 'Food & Beverage',
-            })
-          }>
-          <Card style={{backgroundColor: theme.colors.surface}}>
-            <View style={styles.cardContainer}>
-              <View
-                style={[
-                  styles.imageContainer,
-                  {backgroundColor: theme.colors.foodAndBeverages},
-                ]}>
-                <BurgerImage width={110} height={110} />
+    <>
+      <View style={appStyles.container}>
+        <View style={styles.categories}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate('SearchProductList', {
+                category: 'F&B',
+                categoryName: 'Food & Beverage',
+              })
+            }>
+            <Card style={{backgroundColor: theme.colors.surface}}>
+              <View style={styles.cardContainer}>
+                <View
+                  style={[
+                    styles.imageContainer,
+                    {backgroundColor: theme.colors.foodAndBeverages},
+                  ]}>
+                  <BurgerImage width={110} height={110} />
+                </View>
+                <Text style={styles.categoryName}>Food & Beverage</Text>
               </View>
-              <Text style={styles.categoryName}>Food & Beverage</Text>
-            </View>
-          </Card>
-        </Pressable>
+            </Card>
+          </Pressable>
 
-        <Pressable
-          onPress={() =>
-            navigation.navigate('SearchProductList', {
-              category: 'grocery',
-              categoryName: 'Grocery',
-            })
-          }>
-          <Card style={{backgroundColor: theme.colors.surface}}>
-            <View style={styles.cardContainer}>
-              <View
-                style={[
-                  styles.imageContainer,
-                  {backgroundColor: theme.colors.grocery},
-                ]}>
-                <GroceryImage width={110} height={110} />
+          <Pressable
+            onPress={() =>
+              navigation.navigate('SearchProductList', {
+                category: 'grocery',
+                categoryName: 'Grocery',
+              })
+            }>
+            <Card style={{backgroundColor: theme.colors.surface}}>
+              <View style={styles.cardContainer}>
+                <View
+                  style={[
+                    styles.imageContainer,
+                    {backgroundColor: theme.colors.grocery},
+                  ]}>
+                  <GroceryImage width={110} height={110} />
+                </View>
+                <Text style={styles.categoryName}>Grocery</Text>
               </View>
-              <Text style={styles.categoryName}>Grocery</Text>
-            </View>
-          </Card>
-        </Pressable>
+            </Card>
+          </Pressable>
+        </View>
       </View>
-    </View>
+      <CartFooter />
+    </>
   );
 };
 

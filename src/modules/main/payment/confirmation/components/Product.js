@@ -1,6 +1,6 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {Button, Card, IconButton, Text, withTheme} from 'react-native-paper';
+import {Button, Card, Divider, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useDispatch} from 'react-redux';
 import {removeItemFromCart, updateItemInCart} from '../../../../../redux/actions';
@@ -121,26 +121,37 @@ const Product = ({theme, navigation, item, confirmation, apiInProgress}) => {
         </View>
       </View>
 
+      {item?.knowCharges?.map(charge => (
+        <>
+          <Divider />
+          <View style={styles.priceContainer}>
+            <Text variant="titleSmall" style={styles.title}>
+              {charge?.title}
+            </Text>
+            <Text style={{color: colors.opposite}} variant="titleMedium">
+              ₹{stringToDecimal(charge?.price?.value)}
+            </Text>
+          </View>
+        </>
+      ))}
+
       {confirmation?.hasOwnProperty('message') && (
         <View>
           <Text style={{color: colors.opposite}}>{confirmation.message}</Text>
         </View>
       )}
-      {!confirmed &&
-        (apiInProgress ? (
-          <ActivityIndicator color={colors.error} />
-        ) : (
-          <View style={styles.messageContainer}>
-            <Text
-              style={{
-                color: colors.error,
-                alignSelf: alignment,
-              }}
-              variant="titleSmall">
-              Cannot fetch details for this product
-            </Text>
-          </View>
-        ))}
+      {item.hasOwnProperty('dataReceived') && !item.dataReceived && (
+        <View style={styles.messageContainer}>
+          <Text
+            style={{
+              color: colors.error,
+              alignSelf: alignment,
+            }}
+            variant="titleSmall">
+            Cannot fetch details for this product
+          </Text>
+        </View>
+      )}
     </Card>
   );
 };
