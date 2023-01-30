@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
   package="org.ondc.buyer">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,8 +10,9 @@
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
+        tools:replace="android:allowBackup"
       android:roundIcon="@mipmap/ic_launcher_round"
-      android:allowBackup="true"
+      android:allowBackup="false"
       android:theme="@style/AppTheme">
       <activity
         android:exported="true"
