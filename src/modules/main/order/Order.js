@@ -50,7 +50,7 @@ const Order = () => {
       pageNumber.current = pageNumber.current + 1;
     } catch (error) {
       if (error.response) {
-        if (error.response.status === 404) {
+        if (error.response.status === 404 && orders.length === 0) {
           setOrders([]);
         } else {
           handleApiError(error);
@@ -63,17 +63,16 @@ const Order = () => {
    * Function is called when to get next list of elements on infinite scroll
    */
   const loadMoreList = () => {
-    if (orders) {
-      if (totalOrders.current > orders.length) {
-        setMoreListRequested(true);
-        getOrderList(pageNumber.current)
-          .then(() => {
-            setMoreListRequested(false);
-          })
-          .catch(() => {
-            setMoreListRequested(false);
-          });
-      }
+    console.log(totalOrders.current, orders.length);
+    if (totalOrders.current > orders.length && !moreListRequested) {
+      setMoreListRequested(true);
+      getOrderList(pageNumber.current)
+        .then(() => {
+          setMoreListRequested(false);
+        })
+        .catch(() => {
+          setMoreListRequested(false);
+        });
     }
   };
 
@@ -119,7 +118,6 @@ const Order = () => {
         refreshing={refreshInProgress}
         keyExtractor={keyExtractor}
         onRefresh={onRefreshHandler}
-        onEndReachedThreshold={0.2}
         onEndReached={loadMoreList}
         contentContainerStyle={
           listData.length > 0

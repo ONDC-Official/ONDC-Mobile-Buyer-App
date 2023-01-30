@@ -7,6 +7,7 @@ import moment from 'moment';
 import {appStyles} from '../../../../../../styles/styles';
 import {showInfoToast, stringToDecimal} from '../../../../../../utils/utils';
 import useProductQuantity from '../../../hook/useProductQuantity';
+import {SUB_CATEGORY_CATEGORY} from "../../../../../../utils/Constants";
 
 const image = require('../../../../../../assets/noImage.png');
 
@@ -61,6 +62,11 @@ const DashboardProduct = ({theme, navigation, item}) => {
             <View style={styles.organizationNameContainer}>
               <Text numberOfLines={1}>
                 {item?.provider_details?.descriptor?.name}
+              </Text>
+            </View>
+            <View style={styles.organizationNameContainer}>
+              <Text numberOfLines={1}>
+                {SUB_CATEGORY_CATEGORY[item?.category_id]}
               </Text>
             </View>
             <View style={styles.priceContainer}>

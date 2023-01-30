@@ -43,3 +43,37 @@ export const PRODUCT_SORTING = {
 };
 
 export const APPLICATION_VERSION = '1.0.2';
+
+export const SUB_CATEGORY_CATEGORY = {
+  'Fruits and Vegetables': 'Grocery',
+  'Masala & Seasoning': 'Grocery',
+  'Oil & Ghee': 'Grocery',
+  'Gourmet & World Foods': 'Grocery',
+  Foodgrains: 'Grocery',
+  'Eggs, Meat & Fish': 'Grocery',
+  'Cleaning & Household': 'Grocery',
+  Beverages: 'Grocery',
+  'Beauty & Hygiene': 'Grocery',
+  'Bakery, Cakes & Dairy': 'Grocery',
+  'Kitchen Accessories': 'Grocery',
+  'Baby Care': 'Grocery',
+  'Snacks & Branded Foods': 'Grocery',
+  'Pet Care': 'Grocery',
+  Stationery: 'Grocery',
+  'Packaged Commodities': 'Grocery',
+  'Packaged Foods': 'Grocery',
+  Continental: 'Food & Beverage',
+  'Middle Eastern': 'Food & Beverage',
+  'North Indian': 'Food & Beverage',
+  'Pan-Asian': 'Food & Beverage',
+  'Regional Indian': 'Food & Beverage',
+  'South Indian': 'Food & Beverage',
+  'Tex-Mexican': 'Food & Beverage',
+  'World Cuisines': 'Food & Beverage',
+  'Healthy Food': 'Food & Beverage',
+  'Fast Food': 'Food & Beverage',
+  Desserts: 'Food & Beverage',
+  'Bakery, Cakes & Dairy (MTO)': 'Food & Beverage',
+  'Beverages (MTO)': 'Food & Beverage',
+  'F&B': 'Food & Beverage',
+};
