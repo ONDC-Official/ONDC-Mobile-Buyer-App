@@ -44,15 +44,16 @@ import Address from '../../order/components/Address';
  * @returns {JSX.Element}
  */
 const Payment = ({
-                   navigation,
-                   theme,
-                   route: {
-                     params: {deliveryAddress, billingAddress, confirmationList},
-                   },
-                 }) => {
+  navigation,
+  theme,
+  route: {
+    params: {deliveryAddress, billingAddress, confirmationList},
+  },
+}) => {
   const {colors} = theme;
   const dispatch = useDispatch();
   const error = useRef(null);
+  const providers = useRef([]);
   const {token, uid} = useSelector(({authReducer}) => authReducer);
   const [selectedPaymentOption, setSelectedPaymentOption] = useState(null);
   const [initializeOrderRequested, setInitializeOrderRequested] =
@@ -502,15 +503,32 @@ const Payment = ({
             },
           );
           let messageIds = [];
-          data.forEach(item => {
+          data.forEach((item, index) => {
             if (item.message.ack.status === 'ACK') {
               messageIds.push(item.context.message_id);
+              providers.current.push({
+                id: payload[index].message.providers.id,
+                ack: true,
+              });
             } else {
               console.log(item.message.ack);
+              providers.current.push({
+                id: payload[index].message.providers.id,
+                ack: false,
+              });
             }
           });
           if (messageIds.length > 0) {
             setConfirmMessageIds(messageIds);
+          } else {
+            alertWithOneButton(
+              'Order Confirmation Failed',
+              'We are unable to process your order at the moment. Please try with other payment option or try again after some time',
+              'Ok',
+              () => {
+                setConfirmOrderRequested(false);
+              },
+            );
           }
         } else {
           showToastWithGravity(
@@ -606,12 +624,21 @@ const Payment = ({
       });
       sources = null;
       setConfirmOrderRequested(false);
-      alertWithOneButton(
-        null,
-        'Your order has been placed!',
-        'Ok',
-        onOrderSuccess,
-      );
+      if (providers.current.findIndex(one => one.ack === false) < 0) {
+        alertWithOneButton(
+          null,
+          'Your order has been placed!',
+          'Ok',
+          onOrderSuccess,
+        );
+      } else {
+        alertWithOneButton(
+          null,
+          'Your order has been partially placed, please check order details for more information',
+          'Ok',
+          onOrderSuccess,
+        );
+      }
       setConfirmMessageIds(null);
     }
   };

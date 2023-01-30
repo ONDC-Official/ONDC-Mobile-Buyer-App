@@ -141,11 +141,15 @@ const SortAndFilter = ({theme, updateFilterCount}) => {
 
       <RBSheet
         ref={refSortSheet}
-        height={sortOptions.length * 40 + 180}
+        height={sortOptions.length * 40 + 200}
         customStyles={{
           container: styles.rbSheet,
         }}>
-        <SortMenu sortOptions={sortOptions} closeSortSheet={closeSortSheet} />
+        <SortMenu
+          sortOptions={sortOptions}
+          closeSortSheet={closeSortSheet}
+          updateFilterCount={updateFilterCount}
+        />
       </RBSheet>
       <RBSheet
         ref={refRBSheet}

@@ -191,8 +191,6 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
               label="Clear"
             />
             <Button
-              // contentStyle={appStyles.containedButtonContainer}
-              // labelStyle={appStyles.containedButtonLabel}
               mode="contained"
               loading={apiInProgress}
               disabled={apiInProgress}

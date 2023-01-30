@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import ClearButton from '../../../../../../components/button/ClearButton';
 import {updateSortOption} from '../../../../../../redux/filter/actions';
 import {appStyles} from '../../../../../../styles/styles';
+import OutlineButton from '../../../../../../components/button/OutlineButton';
 
 /**
  * Component to render filters screen
@@ -73,32 +74,23 @@ const SortMenu = ({
         })}
       </View>
 
-      <View style={styles.actionContainer}>
+      <View style={styles.buttonContainer}>
         {(sortingMethod || selectedSortOption) && (
-          <View style={styles.buttonContainer}>
-            <Button
-              contentStyle={appStyles.containedButtonContainer}
-              labelStyle={appStyles.containedButtonLabel}
-              mode="outlined"
-              disabled={apiInProgress}
-              onPress={clearFilter}>
-              Clear
-            </Button>
-          </View>
+          <OutlineButton
+            onPress={clearFilter}
+            disabled={apiInProgress}
+            label="Clear"
+          />
         )}
 
         {sortingMethod && (
-          <View style={styles.buttonContainer}>
-            <Button
-              contentStyle={appStyles.containedButtonContainer}
-              labelStyle={appStyles.containedButtonLabel}
-              mode="contained"
-              disabled={apiInProgress}
-              loading={apiInProgress}
-              onPress={applyFilters}>
-              Apply
-            </Button>
-          </View>
+          <Button
+            mode="contained"
+            disabled={apiInProgress}
+            loading={apiInProgress}
+            onPress={applyFilters}>
+            Apply
+          </Button>
         )}
       </View>
     </View>
@@ -115,12 +107,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   divider: {marginBottom: 10},
-  actionContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
   buttonContainer: {
-    width: 120,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 20,
     marginHorizontal: 10,
   },
   button: {
