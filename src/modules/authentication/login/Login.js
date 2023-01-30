@@ -152,7 +152,7 @@ const Login = ({navigation, theme}) => {
                     <SocialMediaLogin />
 
                     <View style={styles.loginMessage}>
-                      <Text>Dont have an account?</Text>
+                      <Text>Don't have an account?</Text>
                       <TouchableOpacity
                         onPress={() => navigation.navigate('SignUp')}>
                         <Text

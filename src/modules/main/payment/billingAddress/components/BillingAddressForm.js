@@ -121,8 +121,8 @@ const BillingAddressForm = ({
                 <InputField
                   value={values.street}
                   onBlur={handleBlur('street')}
-                  label={'Street'}
-                  placeholder={'Street'}
+                  label={'Address Line 1'}
+                  placeholder={'Address line 1'}
                   errorMessage={touched.street ? errors.street : null}
                   onChangeText={handleChange('street')}
                 />

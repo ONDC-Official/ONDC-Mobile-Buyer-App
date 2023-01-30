@@ -5,9 +5,9 @@ import {Text} from 'react-native-paper';
 
 import {appStyles} from '../../../styles/styles';
 import ONDCLogo from '../../../assets/ondc.svg';
-import AppLogo from '../../../assets/app_logo.svg';
 import {tryLocalSignIn} from '../../../redux/auth/actions';
 import {APPLICATION_VERSION} from '../../../utils/Constants';
+import auth from "@react-native-firebase/auth";
 
 /**
  * Component to render splash screen
@@ -42,8 +42,9 @@ const Splash = ({navigation}) => {
   return (
     <View style={[appStyles.container, appStyles.backgroundWhite]}>
       <View style={[appStyles.container, styles.container]}>
-        <AppLogo width={256} height={86} />
+        <Text style={styles.appName}>Reference Buyer App</Text>
         <View style={styles.ondcContainer}>
+          <Text style={styles.poweredBy}>Powered By</Text>
           <ONDCLogo width={240} height={95} />
         </View>
       </View>
@@ -57,8 +58,14 @@ const Splash = ({navigation}) => {
 export default Splash;
 
 const styles = StyleSheet.create({
+  appName: {color: '#06038D', fontSize: 28, fontWeight: '500'},
   ondcContainer: {
     marginTop: 50,
+  },
+  poweredBy: {
+    color: '#00AEEF',
+    marginBottom: 16,
+    textAlign: 'center',
   },
   container: {alignItems: 'center', justifyContent: 'center'},
   footer: {alignItems: 'center', marginBottom: 20},

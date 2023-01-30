@@ -3,7 +3,7 @@ import {Formik} from 'formik';
 import {addressTags, validationSchema} from '../utils/addValidationSchema';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
 import InputField from '../../../../components/input/InputField';
-import {Button, Chip, Text, withTheme} from 'react-native-paper';
+import {Button, Chip, HelperText, Text, withTheme} from 'react-native-paper';
 import {appStyles} from '../../../../styles/styles';
 import React, {useState} from 'react';
 import {
@@ -142,8 +142,8 @@ const AddressForm = ({
               <InputField
                 value={values.street}
                 onBlur={handleBlur('street')}
-                label={'Street'}
-                placeholder={'Street'}
+                label={'Address Line 1'}
+                placeholder={'Address line 1'}
                 errorMessage={touched.street ? errors.street : null}
                 onChangeText={handleChange('street')}
               />
@@ -173,21 +173,26 @@ const AddressForm = ({
                 editable={false}
               />
 
-              <Text>Select address type</Text>
-              <View style={styles.tagContainer}>
-                {addressTags.map(tag => (
-                  <Chip
-                    key={tag}
-                    selectedColor={
-                      values.tag === tag
-                        ? theme.colors.opposite
-                        : theme.colors.primary
-                    }
-                    mode="outlined"
-                    onPress={() => setFieldValue('tag', tag)}>
-                    {tag}
-                  </Chip>
-                ))}
+              <View style={styles.addressTagContainer}>
+                <Text>Select address type</Text>
+                <View style={styles.tagContainer}>
+                  {addressTags.map(tag => (
+                    <Chip
+                      key={tag}
+                      selectedColor={
+                        values.tag === tag
+                          ? theme.colors.opposite
+                          : theme.colors.primary
+                      }
+                      mode="outlined"
+                      onPress={() => setFieldValue('tag', tag)}>
+                      {tag}
+                    </Chip>
+                  ))}
+                </View>
+                <HelperText padding="none" type="error" visible={!!errors?.tag}>
+                  {errors?.tag ? errors?.tag : ''}
+                </HelperText>
               </View>
               <View style={styles.buttonContainer}>
                 <Button
@@ -231,9 +236,11 @@ const styles = StyleSheet.create({
   },
   tagContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
     marginTop: 10,
     justifyContent: 'space-between',
+  },
+  addressTagContainer: {
+    marginBottom: 20,
   },
 });
 
