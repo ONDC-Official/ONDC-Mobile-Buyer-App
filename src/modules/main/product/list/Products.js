@@ -55,7 +55,11 @@ const Products = ({theme, loadMore, productsRequested}) => {
             : [appStyles.container, styles.emptyContainer]
         }
         onEndReached={loadMore}
-        ListFooterComponent={<ListFooter moreRequested={productsRequested} />}
+        ListFooterComponent={
+          <ListFooter
+            moreRequested={productsRequested && products.length > 0}
+          />
+        }
       />
       <CartFooter />
     </View>

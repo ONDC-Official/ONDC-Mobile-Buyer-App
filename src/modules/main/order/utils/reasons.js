@@ -2,7 +2,7 @@ export const cancelReasons = [
   {
     id: '001',
     reason:
-      'Price of one or more items have changed due to which buyer was asked to make additional payment',
+      'Price of one or more items have changed due to which buyer was asked to make additional payment ',
   },
   {
     id: '002',
@@ -17,44 +17,16 @@ export const cancelReasons = [
     reason: 'Order in pending shipment / delivery state for too long',
   },
   {
-    id: '005',
-    reason: 'Merchant rejected the order',
+    id: '006',
+    reason: 'Order not shipped as per buyer app SLA',
+  },
+  {
+    id: '009',
+    reason: 'Wrong product delivered',
   },
   {
     id: '010',
     reason: 'Buyer wants to modify details',
-  },
-  {
-    id: '011',
-    reason: 'Buyer not found or cannot be contacted',
-  },
-  {
-    id: '012',
-    reason: 'Buyer does not want product any more',
-  },
-  {
-    id: '013',
-    reason: 'Buyer refused to accept delivery',
-  },
-  {
-    id: '014',
-    reason: 'Address not found',
-  },
-  {
-    id: '015',
-    reason: 'Buyer not available at location',
-  },
-  {
-    id: '016',
-    reason: 'Accident / rain / strike / vehicle issues',
-  },
-  {
-    id: '017',
-    reason: 'Order delivery delayed or not possible',
-  },
-  {
-    id: '018',
-    reason: 'Delivery pin code not serviceable',
   },
 ];
 
