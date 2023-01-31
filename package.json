@@ -33,7 +33,6 @@
     "react": "17.0.2",
     "react-native": "0.67.4",
     "react-native-android-location-enabler": "^1.2.2",
-    "react-native-autocomplete-input": "^5.1.0",
     "react-native-collapsible": "^1.6.0",
     "react-native-config": "^1.4.5",
     "react-native-event-source": "^1.1.0",
