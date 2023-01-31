@@ -331,26 +331,31 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         <Text variant="titleMedium" style={{paddingHorizontal: 12}}>
           {item?.provider?.descriptor?.name}
         </Text>
-        {item?.items.map(one => (
-          <Product
-            key={`${one.id}Product`}
-            item={one}
-            navigation={navigation}
-          />
-        ))}
         <Card style={styles.cardContainer}>
-          {item?.additionCharges?.map((charge, index) => (
-            <View key={`${index}Charge`} style={styles.priceContainer}>
-              <Text variant="titleSmall" style={styles.title}>
-                {charge?.title}
-              </Text>
-              <Text
-                style={{color: theme.colors.opposite}}
-                variant="titleMedium">
-                ₹{stringToDecimal(charge?.price?.value)}
-              </Text>
-            </View>
+          {item?.items.map(one => (
+            <Product
+              key={`${one.id}Product`}
+              item={one}
+              navigation={navigation}
+            />
           ))}
+          {item?.additionCharges && item.additionCharges.length > 0 && (
+            <>
+              <Divider bold />
+              {item?.additionCharges?.map((charge, index) => (
+                <View key={`${index}Charge`} style={styles.priceContainer}>
+                  <Text variant="titleSmall" style={styles.title}>
+                    {charge?.title}
+                  </Text>
+                  <Text
+                    style={{color: theme.colors.opposite}}
+                    variant="titleMedium">
+                    ₹{stringToDecimal(charge?.price?.value)}
+                  </Text>
+                </View>
+              ))}
+            </>
+          )}
         </Card>
         <Divider bold />
       </View>
@@ -427,6 +432,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 12,
+    paddingHorizontal: 8,
   },
   cardContainer: {
     margin: 8,

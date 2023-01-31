@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {Button, Card, Divider, IconButton, Text, withTheme,} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useDispatch} from 'react-redux';
@@ -42,18 +42,14 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
   const cost = item.price.value ? item.price.value : item.price.maximum_value;
   const outOfStock = item?.quantityMeta?.available?.count === 0;
 
-  console.log(JSON.stringify(item, undefined,4));
   return (
-    <Card
+    <Pressable
       onPress={() => {
         navigation.navigate('ProductDetails', {
           product: item,
         });
       }}
-      style={[
-        item?.confirmation ? {} : {borderColor: colors.error},
-        styles.container,
-      ]}>
+      style={[item?.confirmation ? {} : {borderColor: colors.error}]}>
       <View style={styles.row}>
         <FastImage
           source={uri ? {uri} : image}
@@ -66,12 +62,12 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
               {item?.descriptor?.name}
             </Text>
             <Text style={{color: colors.opposite}} variant="titleMedium">
-              ₹{stringToDecimal(cost * item?.confirmation?.quantity?.count)}
+              ₹{stringToDecimal(cost * item?.quantity)}
             </Text>
           </View>
           <View style={styles.organizationNameContainer}>
             <Text numberOfLines={1}>
-              Qt:&nbsp;{item?.confirmation?.quantity?.count} *{' '}
+              Qt:&nbsp;{item?.quantity} *{' '}
               {stringToDecimal(cost)}
             </Text>
           </View>
@@ -162,17 +158,13 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
           </Text>
         </View>
       )}
-    </Card>
+    </Pressable>
   );
 };
 
 export default withTheme(Product);
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 8,
-    backgroundColor: 'white',
-  },
   row: {
     flexDirection: 'row',
   },

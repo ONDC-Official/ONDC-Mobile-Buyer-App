@@ -34,6 +34,7 @@ import PaymentSkeleton from './components/PaymentSkeleton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BreakDown from './components/BreakDown';
 import Address from '../../order/components/Address';
+import confirmation from '../confirmation/Confirmation';
 
 /**
  * Component to payment screen in application
@@ -67,7 +68,8 @@ const Payment = ({
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const refOrders = useRef();
   const total = useRef(0);
-  const products = useRef([]);
+  const [providerDetails, setProviderDetails] = useState([]);
+  const breakdown = useRef([]);
   const signedPayload = useRef(null);
   const timeStamp = useRef(null);
   const parentOrderId = useRef(null);
@@ -98,12 +100,23 @@ const Payment = ({
       if (data[0].hasOwnProperty('error')) {
         error.current = data[0];
       } else {
-        data[0].message.order.quote.breakup.forEach(item => {
-          const productIndex = products.current.findIndex(
+        const paymentData = data[0].message.order;
+
+        const provider = confirmationList.find(
+          one => one.providerId === paymentData.provider.id,
+        );
+
+        const providerBreakDown = {
+          provider: provider.items[0].provider,
+          items: [],
+        };
+
+        paymentData.quote.breakup.forEach(item => {
+          const productIndex = providerBreakDown.items.findIndex(
             one => one.id === item['@ondc/org/item_id'],
           );
           if (productIndex > -1) {
-            const product = products.current[productIndex];
+            const product = providerBreakDown.items[productIndex];
             switch (item['@ondc/org/title_type']) {
               case 'tax':
                 if (product.hasOwnProperty('taxes')) {
@@ -170,17 +183,18 @@ const Payment = ({
                 product.misces = [item];
                 break;
             }
-            products.current.push(product);
+            providerBreakDown.items.push(product);
           }
         });
 
-        total.current =
-          total.current + Number(data[0].message.order.quote.price.value);
+        total.current = total.current + Number(paymentData.quote.price.value);
         if (refOrders.current) {
           refOrders.current.push(data[0]);
         } else {
           refOrders.current = data;
         }
+        breakdown.current.push(providerBreakDown);
+        setProviderDetails(breakdown.current);
       }
       setInitializeOrderRequested(false);
     } catch (err) {
@@ -730,13 +744,13 @@ const Payment = ({
   }, [confirmMessageIds]);
 
   return (
-    <View style={appStyles.container}>
+    <View style={[appStyles.container, styles.container]}>
       <View pointerEvents={confirmOrderRequested ? 'none' : 'auto'}>
         {initializeOrderRequested ? (
           <PaymentSkeleton />
         ) : (
           <ScrollView>
-            <BreakDown products={products.current} />
+            <BreakDown providers={providerDetails} />
 
             <Card style={styles.card}>
               <Address
@@ -818,23 +832,24 @@ const Payment = ({
               </Card>
             )}
 
-            {!error.current && (
-              <View style={styles.buttonContainer}>
-                <Button
-                  mode="contained"
-                  contentStyle={appStyles.containedButtonContainer}
-                  labelStyle={appStyles.containedButtonLabel}
-                  onPress={() => {
-                    removeInitEvent();
-                    processPayment()
-                      .then(() => {})
-                      .catch(() => {});
-                  }}
-                  loading={confirmOrderRequested}>
-                  Place Order
-                </Button>
-              </View>
-            )}
+            {!error.current &&
+              providerDetails.length === confirmationList.length && (
+                <View style={styles.buttonContainer}>
+                  <Button
+                    mode="contained"
+                    contentStyle={appStyles.containedButtonContainer}
+                    labelStyle={appStyles.containedButtonLabel}
+                    onPress={() => {
+                      removeInitEvent();
+                      processPayment()
+                        .then(() => {})
+                        .catch(() => {});
+                    }}
+                    loading={confirmOrderRequested}>
+                    Place Order
+                  </Button>
+                </View>
+              )}
           </ScrollView>
         )}
       </View>
@@ -845,6 +860,9 @@ const Payment = ({
 export default withTheme(Payment);
 
 const styles = StyleSheet.create({
+  container: {
+    paddingBottom: 10,
+  },
   card: {
     backgroundColor: 'white',
     padding: 8,
