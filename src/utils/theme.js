@@ -23,5 +23,6 @@ export const theme = {
     cancelledBackground: '#FFE8E7',
     statusBackground: '#E9F1F8',
     tabColor: '#606161',
+    success: '#2EB086',
   },
 };

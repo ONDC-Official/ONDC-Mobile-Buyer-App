@@ -79,9 +79,16 @@ const Login = ({navigation, theme}) => {
 
       setApiInProgress(false);
     } catch (error) {
-      console.log(error);
-      const message = error.message.replace(/\[.*\]/, '');
-      showToastWithGravity(message);
+      if (error.hasOwnProperty('message')) {
+        const message = error.message.replace(/\[.*\]/, '');
+        if (message.length > 0) {
+          showToastWithGravity(message);
+        } else {
+          showToastWithGravity('Something went wrong, please try again');
+        }
+      } else {
+        showToastWithGravity('Something went wrong, please try again');
+      }
       setApiInProgress(false);
     }
   };

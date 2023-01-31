@@ -10,38 +10,10 @@ import ProductImages from './components/ProductImages';
 import TimeToShip from './components/TimeToShip';
 import CartFooter from '../list/component/CartFooter/CartFooter';
 import ReturnWindow from './components/ReturnWindow';
-import {TAGS} from '../../../../utils/Constants';
+import VegNonVegTags from '../list/component/VegNonVegTag';
 
 const image = require('../../../../assets/noImage.png');
 const imageSize = Dimensions.get('window').width;
-
-const Tags = ({list = null, colors}) => {
-  if (list) {
-    if (list.hasOwnProperty('veg') && list.veg === 'yes') {
-      return (
-        <View style={[styles.reqsRow, styles.longDescription]}>
-          <Text>{TAGS.veg}:&nbsp;</Text>
-          <Text variant="titleSmall" style={{color: colors.success}}>
-            {list.veg.toUpperCase()}
-          </Text>
-        </View>
-      );
-    } else if (list.hasOwnProperty('non_veg') && list.non_veg === 'yes') {
-      return (
-        <View style={[styles.reqsRow, styles.longDescription]}>
-          <Text>{TAGS.veg}:&nbsp;</Text>
-          <Text variant="titleSmall" style={{color: colors.success}}>
-            {list.non_veg.toUpperCase()}
-          </Text>
-        </View>
-      );
-    } else {
-      return <></>;
-    }
-  } else {
-    return <></>;
-  }
-};
 
 /**
  * Component to display product details
@@ -90,7 +62,16 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                 <Text style={styles.descriptorName}>
                   {product?.descriptor?.name}
                 </Text>
-                <Tags list={product?.tags} colors={colors} />
+                <View style={styles.typeContainer}>
+                  <VegNonVegTags list={product?.tags} />
+
+                  {product?.hasOwnProperty('fssai_license_no') && (
+                    <Text style={styles.fssaiLicense}>
+                      Fssai License No:{' '}
+                      <Text variant="titleSmall">{product?.fssai_license_no}</Text>
+                    </Text>
+                  )}
+                </View>
                 {product?.descriptor.short_desc && (
                   <Text style={[styles.provider, {color: colors.gray}]}>
                     {product?.descriptor.short_desc}
@@ -324,6 +305,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingTop: 16,
+  },
+  typeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  fssaiLicense: {
+    marginStart: 8,
   },
   chipContainer: {
     flexDirection: 'row',

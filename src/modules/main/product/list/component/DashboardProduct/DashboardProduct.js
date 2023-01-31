@@ -7,7 +7,8 @@ import moment from 'moment';
 import {appStyles} from '../../../../../../styles/styles';
 import {showInfoToast, stringToDecimal} from '../../../../../../utils/utils';
 import useProductQuantity from '../../../hook/useProductQuantity';
-import {SUB_CATEGORY_CATEGORY} from "../../../../../../utils/Constants";
+import {SUB_CATEGORY_CATEGORY} from '../../../../../../utils/Constants';
+import VegNonVegTags from '../VegNonVegTag';
 
 const image = require('../../../../../../assets/noImage.png');
 
@@ -64,10 +65,11 @@ const DashboardProduct = ({theme, navigation, item}) => {
                 {item?.provider_details?.descriptor?.name}
               </Text>
             </View>
-            <View style={styles.organizationNameContainer}>
-              <Text numberOfLines={1}>
+            <View style={[styles.categoryContainer]}>
+              <Text numberOfLines={1} style={styles.category}>
                 {SUB_CATEGORY_CATEGORY[item?.category_id]}
               </Text>
+              <VegNonVegTags list={item?.tags} />
             </View>
             <View style={styles.priceContainer}>
               <Text style={styles.amount}>₹{stringToDecimal(cost)}</Text>
@@ -137,6 +139,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  categoryContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  category: {
+    marginEnd: 12,
   },
   quantityDisplayButton: {
     flexDirection: 'row',
