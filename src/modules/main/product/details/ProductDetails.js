@@ -65,12 +65,12 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                 <View style={styles.typeContainer}>
                   <VegNonVegTags list={product?.tags} />
 
-                  {product?.hasOwnProperty('fssai_license_no') && (
-                    <Text style={styles.fssaiLicense}>
-                      Fssai License No:{' '}
-                      <Text variant="titleSmall">{product?.fssai_license_no}</Text>
+                  <Text style={styles.fssaiLicense}>
+                    Fssai License No:{' '}
+                    <Text variant="titleSmall">
+                      {product?.hasOwnProperty('@ondc/org/fssai_license_no') ? product['@ondc/org/fssai_license_no'] : 'NA'}
                     </Text>
-                  )}
+                  </Text>
                 </View>
                 {product?.descriptor.short_desc && (
                   <Text style={[styles.provider, {color: colors.gray}]}>

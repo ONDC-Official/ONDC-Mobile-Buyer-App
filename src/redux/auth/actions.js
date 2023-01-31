@@ -1,4 +1,5 @@
 import {
+  clearAll,
   clearMultiple,
   getMultipleData,
   getStoredData,
@@ -50,7 +51,7 @@ export const tryLocalSignIn = (dispatch, navigation) => {
 };
 
 export const logoutUser = dispatch => {
-  clearMultiple(['uid', 'emailId', 'token', 'name']).then(() => {
+  clearAll().then(() => {
     dispatch({
       type: 'logout_user',
     });
