@@ -211,112 +211,109 @@ const Payment = ({
    * @returns {Promise<void>}
    */
   const initializeOrder = async () => {
-    try {
-      products.current = [];
-      total.current = 0;
-      setInitializeOrderRequested(true);
-      let payload = [];
-      let providerIdArray = [];
+    const payload = [];
 
-      confirmationList.forEach(item => {
-        const index = providerIdArray.findIndex(
-          one => one === item.provider.id,
-        );
+    let billingInfo = {};
+
+    if (billingAddress.descriptor) {
+      billingInfo.phone = billingAddress.descriptor.phone;
+      billingInfo.name = billingAddress.descriptor.name;
+      billingInfo.email = billingAddress.descriptor.email;
+    } else {
+      billingInfo.phone = billingAddress.phone;
+      billingInfo.name = billingAddress.name;
+      billingInfo.email = billingAddress.email;
+    }
+
+    billingInfo.address = {
+      door: billingAddress.address.door
+        ? billingAddress.address.door
+        : billingAddress.address.street,
+      country: 'IND',
+      city: billingAddress.address.city,
+      street: billingAddress.address.street,
+      areaCode: billingAddress.address.areaCode,
+      state: billingAddress.address.state,
+      building: billingAddress.address.building
+        ? billingAddress.address.building
+        : billingAddress.address.street,
+    };
+
+    const deliveryInfo = {
+      type: 'Delivery',
+      name: deliveryAddress.descriptor.name,
+      phone: deliveryAddress.descriptor.phone,
+      email: deliveryAddress.descriptor.email,
+      location: {
+        gps: deliveryAddress.gps,
+        address: {
+          door: deliveryAddress.address.door
+            ? deliveryAddress.address.door
+            : deliveryAddress.address.street,
+          country: 'IND',
+          city: deliveryAddress.address.city,
+          street: deliveryAddress.address.street,
+          areaCode: deliveryAddress.address.areaCode,
+          state: deliveryAddress.address.state,
+          building: deliveryAddress.address.building
+            ? deliveryAddress.address.building
+            : deliveryAddress.address.street,
+        },
+      },
+    };
+
+    confirmationList.forEach(provider => {
+      const providerPayload = {
+        context: {
+          transaction_id: provider.items[0].transaction_id,
+          city: deliveryAddress.address.city,
+          state: deliveryAddress.address.state,
+        },
+        message: {
+          items: [],
+          fulfillments: provider.fulfillments,
+          billing_info: billingInfo,
+          delivery_info: deliveryInfo,
+          payment: {type: 'ON-FULFILLMENT'},
+        },
+      };
+
+      providerPayload.message.items = provider.items.map(item => {
         const product = cartItems.find(
           one => String(one.id) === String(item.id),
         );
-        if (index > -1) {
-          payload[index].message.items.push({
-            id: item.id,
-            quantity: {
-              count: product.quantity,
-            },
-            product: product,
-            bpp_id: item.bpp_id,
-            provider: {
-              id: item.provider.id,
-              locations: item.provider.locations,
-            },
-          });
-        } else {
-          let billingInfo = {};
 
-          if (billingAddress.descriptor) {
-            billingInfo.phone = billingAddress.descriptor.phone;
-            billingInfo.name = billingAddress.descriptor.name;
-            billingInfo.email = billingAddress.descriptor.email;
-          } else {
-            billingInfo.phone = billingAddress.phone;
-            billingInfo.name = billingAddress.name;
-            billingInfo.email = billingAddress.email;
-          }
+        const paramProduct = Object.assign({}, product, {
+          quantity: product.quantityMeta,
+        });
+        delete paramProduct.context;
+        delete paramProduct.quantityMeta;
+        delete paramProduct.transaction_id;
+        delete paramProduct.city;
+        delete paramProduct.state;
+        delete paramProduct.dataReceived;
+        delete paramProduct.confirmation;
 
-          billingInfo.address = {
-            door: billingAddress.address.door
-              ? billingAddress.address.door
-              : billingAddress.address.street,
-            country: 'IND',
-            city: billingAddress.address.city,
-            street: billingAddress.address.street,
-            areaCode: billingAddress.address.areaCode,
-            state: billingAddress.address.state,
-            building: billingAddress.address.building
-              ? billingAddress.address.building
-              : billingAddress.address.street,
-          };
-
-          payload.push({
-            context: {
-              transaction_id: item.transaction_id,
-              city: product.city,
-              state: product.state,
-            },
-            message: {
-              items: [
-                {
-                  id: item.id,
-                  quantity: {
-                    count: product.quantity,
-                  },
-                  product: product,
-                  bpp_id: item.bpp_id,
-                  provider: {
-                    id: item.provider ? item.provider.id : item.id,
-                    locations: item.provider.locations,
-                  },
-                },
-              ],
-              billing_info: billingInfo,
-              delivery_info: {
-                type: 'Delivery',
-                name: deliveryAddress.descriptor.name,
-                phone: deliveryAddress.descriptor.phone,
-                email: deliveryAddress.descriptor.email,
-                location: {
-                  gps: deliveryAddress.gps,
-                  address: {
-                    door: deliveryAddress.address.door
-                      ? deliveryAddress.address.door
-                      : deliveryAddress.address.street,
-                    country: 'IND',
-                    city: deliveryAddress.address.city,
-                    street: deliveryAddress.address.street,
-                    areaCode: deliveryAddress.address.areaCode,
-                    state: deliveryAddress.address.state,
-                    building: deliveryAddress.address.building
-                      ? deliveryAddress.address.building
-                      : deliveryAddress.address.street,
-                  },
-                },
-              },
-
-              payment: {type: 'ON-FULFILLMENT'},
-            },
-          });
-          providerIdArray.push(item.provider.id);
-        }
+        return {
+          id: item.id,
+          quantity: {
+            count: product.quantity,
+          },
+          product: paramProduct,
+          bpp_id: item.bpp_id,
+          bpp_uri: item.bpp_uri,
+          fulfillment_id: item.fulfillment_id,
+          provider: {
+            id: item.provider.id,
+            locations: item.provider.locations,
+          },
+        };
       });
+      payload.push(providerPayload);
+    });
 
+    try {
+      setInitializeOrderRequested(true);
       const {data} = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });

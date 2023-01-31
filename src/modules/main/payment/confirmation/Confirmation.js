@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Button, Card, Text, withTheme} from 'react-native-paper';
+import {Button, Card, Divider, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 
@@ -26,7 +26,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
   const {handleApiError} = useNetworkErrorHandling();
-  const confirmation = useRef(null);
+  const confirmation = useRef([]);
+  const availableProducts = useRef([]);
   const totalAmount = useRef(0);
   const [total, setTotal] = useState(0);
 
@@ -47,20 +48,20 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           headers: {Authorization: `Bearer ${token}`},
         },
       );
-
-      if (!data[0].error) {
-        if (data[0].context.bpp_id) {
+      const quoteData = data[0];
+      if (!quoteData.error) {
+        if (quoteData.context.bpp_id) {
           const providerList = providers.concat([]);
           const provider = providerList.find(
-            one => one.provider.id === data[0].message.quote.provider.id,
+            one => one.provider.id === quoteData.message.quote.provider.id,
           );
-          data[0].message.quote.items.forEach(element => {
+          quoteData.message.quote.items.forEach(element => {
             const product = provider.items.find(
               one => String(one.id) === String(element.id),
             );
 
             if (product) {
-              const productPrice = data[0].message.quote.quote.breakup.find(
+              const productPrice = quoteData.message.quote.quote.breakup.find(
                 one =>
                   one['@ondc/org/item_id'] === String(product.id) &&
                   one['@ondc/org/title_type'] === 'item',
@@ -82,18 +83,24 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 descriptor: product.provider_details.descriptor,
                 locations: [product.location_details.id],
               };
-              element.fulfillment = data[0].message.quote.fulfillments.find(
-                one => one.id === element.fulfillment_id,
+              element.transaction_id = quoteData.context.transaction_id;
+              element.bpp_id = quoteData.context.bpp_id;
+              element.bpp_uri = quoteData.context.bpp_uri;
+              availableProducts.current.push(element.id);
+              const providerIndex = confirmation.current.findIndex(
+                one => one.providerId === quoteData.message.quote.provider.id,
               );
-              element.transaction_id = data[0].context.transaction_id;
-              element.bpp_id = data[0].context.bpp_id;
-              if (confirmation.current) {
-                confirmation.current.push(element);
+              if (providerIndex > -1) {
+                confirmation.current[providerIndex].items.push(element);
               } else {
-                confirmation.current = [element];
+                confirmation.current.push({
+                  items: [element],
+                  providerId: quoteData.message.quote.provider.id,
+                  fulfillments: quoteData.message.quote.fulfillments,
+                });
               }
 
-              data[0].message.quote.quote.breakup.forEach(breakup => {
+              quoteData.message.quote.quote.breakup.forEach(breakup => {
                 if (breakup['@ondc/org/item_id'] === String(product.id)) {
                   if (breakup['@ondc/org/title_type'] !== 'item') {
                     if (product.hasOwnProperty('knowCharges')) {
@@ -117,11 +124,12 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           setProviders(providerList);
           totalAmount.current =
             totalAmount.current +
-            Number(data[0].message.quote.quote.price.value);
+            Number(quoteData.message.quote.quote.price.value);
           setTotal(totalAmount.current);
         }
-        const ids = confirmation.current?.map(one => one.id);
-        const isAllPresent = cartItems.every(one => ids?.includes(one.id));
+        const isAllPresent = cartItems.every(one =>
+          availableProducts.current?.includes(one.id),
+        );
         isAllPresent ? setApiInProgress(false) : setApiInProgress(true);
       }
     } catch (error) {
@@ -139,7 +147,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       setApiInProgress(true);
       totalAmount.current = 0;
       setTotal(0);
-      confirmation.current = null;
+      confirmation.current = [];
+      availableProducts.current = [];
       let payload = [];
       let providerIdArray = [];
       let confirmationProducts = [];
@@ -226,11 +235,13 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           setMessageIds(messageIdArray);
         } else {
           confirmation.current = [];
+          availableProducts.current = [];
           setApiInProgress(false);
         }
       } else {
         showToastWithGravity(fulfillmentMissingItem.message);
         confirmation.current = [];
+        availableProducts.current = [];
         setApiInProgress(false);
       }
     } catch (error) {
@@ -307,10 +318,16 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     return item.hasOwnProperty('isSkeleton') ? (
       <ProductCardSkeleton item={item} />
     ) : (
-      <Card style={styles.cardContainer}>
-        <Text variant="titleSmall">{item?.provider?.descriptor?.name}</Text>
+      <View style={styles.providerContainer}>
+        <Text variant="titleMedium" style={{paddingHorizontal: 12}}>
+          {item?.provider?.descriptor?.name}
+        </Text>
         {item?.items.map(one => (
-          <Product key={one.id} item={one} navigation={navigation} />
+          <Product
+            key={`${one.id}Product`}
+            item={one}
+            navigation={navigation}
+          />
         ))}
         <Card style={styles.cardContainer}>
           {item?.additionCharges?.map((charge, index) => (
@@ -326,7 +343,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             </View>
           ))}
         </Card>
-      </Card>
+        <Divider bold />
+      </View>
     );
   };
 
@@ -355,7 +373,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             <Text style={styles.totalAmount}>₹{total}</Text>
           </View>
           <View style={appStyles.container}>
-            {confirmation.current && confirmation.current.length > 0 && (
+            {availableProducts.current.length === cartItems.length && (
               <Button
                 mode="contained"
                 contentStyle={appStyles.containedButtonContainer}
@@ -380,6 +398,9 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 export default withTheme(Confirmation);
 
 const styles = StyleSheet.create({
+  providerContainer: {
+    paddingVertical: 10,
+  },
   contentContainerStyle: {paddingBottom: 10},
   emptyListComponent: {alignItems: 'center', justifyContent: 'center'},
   footer: {
