@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Menu, MenuDivider, MenuItem} from 'react-native-material-menu';
+import {Menu, MenuDivider} from 'react-native-material-menu';
 import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, TextInput, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -79,17 +79,17 @@ const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
             </Text>
           </TouchableOpacity>
         }>
-        <MenuItem
-          onPress={() => onSearchTypeChange(SEARCH_QUERY.PRODUCT)}
-          pressColor={theme.colors.primary}>
-          Product
-        </MenuItem>
+        <TouchableOpacity
+          style={styles.menuOption}
+          onPress={() => onSearchTypeChange(SEARCH_QUERY.PRODUCT)}>
+          <Text style={{color: theme.colors.primary}}>Product</Text>
+        </TouchableOpacity>
         <MenuDivider />
-        <MenuItem
-          onPress={() => onSearchTypeChange(SEARCH_QUERY.PROVIDER)}
-          pressColor={theme.colors.primary}>
-          Provider
-        </MenuItem>
+        <TouchableOpacity
+          style={styles.menuOption}
+          onPress={() => onSearchTypeChange(SEARCH_QUERY.PROVIDER)}>
+          <Text style={{color: theme.colors.primary}}>Provider</Text>
+        </TouchableOpacity>
       </Menu>
 
       <View style={styles.searchContainer}>
@@ -145,6 +145,10 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
+  },
+  menuOption: {
+    padding: 16,
+    width: 100,
   },
 });
 

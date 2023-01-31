@@ -508,7 +508,6 @@ const Payment = ({
                 ack: true,
               });
             } else {
-              console.log(item.message.ack);
               providers.current.push({
                 id: payload[index].message.providers.id,
                 ack: false,

@@ -28,9 +28,7 @@ const Product = ({item}) => {
               ₹{item.product?.price?.value}
             </Text>
           </View>
-          <Text style={styles.quantity}>
-            QTY:&nbsp;{item.product?.quantity}
-          </Text>
+          <Text style={styles.quantity}>QTY:&nbsp;{item?.quantity?.count}</Text>
           <StatusContainer product={item} />
         </View>
       </View>

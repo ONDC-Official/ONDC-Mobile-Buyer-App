@@ -1,15 +1,15 @@
-import {Text} from 'react-native-paper';
+import {Text, withTheme} from 'react-native-paper';
 import {View, StyleSheet} from 'react-native';
 import React from 'react';
 import {durationToHumanReadable} from '../../../../../utils/utils';
 
-const ReturnWindow = ({duration}) => {
+const ReturnWindow = ({duration, theme}) => {
   const {timeDuration, unit} = durationToHumanReadable(duration);
 
   return (
     <View style={styles.container}>
       <Text>Return Window:&nbsp;</Text>
-      <Text variant="titleSmall">
+      <Text variant="titleSmall" style={{color: theme.colors.opposite}}>
         {timeDuration} {unit}
       </Text>
     </View>
@@ -17,11 +17,13 @@ const ReturnWindow = ({duration}) => {
 };
 
 const styles = StyleSheet.create({
-  reqsRow: {
+  container: {
     flexDirection: 'row',
     marginTop: 8,
     flexWrap: 'wrap',
+    paddingBottom: 16,
+    paddingHorizontal: 16,
   },
 });
 
-export default ReturnWindow;
+export default withTheme(ReturnWindow);

@@ -79,6 +79,6 @@ export const SUB_CATEGORY_CATEGORY = {
 };
 
 export const TAGS = {
-  'non_veg': 'Non-Veg',
-  'veg': 'Veg',
-}
+  non_veg: 'Non-Veg',
+  veg: 'Veg',
+};

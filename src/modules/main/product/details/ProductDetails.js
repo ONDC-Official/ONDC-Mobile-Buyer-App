@@ -15,6 +15,34 @@ import {TAGS} from '../../../../utils/Constants';
 const image = require('../../../../assets/noImage.png');
 const imageSize = Dimensions.get('window').width;
 
+const Tags = ({list = null, colors}) => {
+  if (list) {
+    if (list.hasOwnProperty('veg') && list.veg === 'yes') {
+      return (
+        <View style={[styles.reqsRow, styles.longDescription]}>
+          <Text>{TAGS.veg}:&nbsp;</Text>
+          <Text variant="titleSmall" style={{color: colors.success}}>
+            {list.veg.toUpperCase()}
+          </Text>
+        </View>
+      );
+    } else if (list.hasOwnProperty('non_veg') && list.non_veg === 'yes') {
+      return (
+        <View style={[styles.reqsRow, styles.longDescription]}>
+          <Text>{TAGS.veg}:&nbsp;</Text>
+          <Text variant="titleSmall" style={{color: colors.success}}>
+            {list.non_veg.toUpperCase()}
+          </Text>
+        </View>
+      );
+    } else {
+      return <></>;
+    }
+  } else {
+    return <></>;
+  }
+};
+
 /**
  * Component to display product details
  * @param item: object containing product details
@@ -42,7 +70,6 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
 
   const outOfStock = product?.quantityMeta?.available?.count === 0;
 
-  console.log(JSON.stringify(product, undefined, 4));
   return (
     <View style={appStyles.container}>
       <ScrollView style={appStyles.container}>
@@ -63,15 +90,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                 <Text style={styles.descriptorName}>
                   {product?.descriptor?.name}
                 </Text>
-                {product?.hasOwnProperty('tags') &&
-                  Object.entries(product?.tags).map(([key, value]) => (
-                    <View
-                      key={key}
-                      style={[styles.reqsRow, styles.longDescription]}>
-                      <Text>{TAGS[key]}:&nbsp;</Text>
-                      <Text variant="titleSmall">{value.toUpperCase()}</Text>
-                    </View>
-                  ))}
+                <Tags list={product?.tags} colors={colors} />
                 {product?.descriptor.short_desc && (
                   <Text style={[styles.provider, {color: colors.gray}]}>
                     {product?.descriptor.short_desc}
