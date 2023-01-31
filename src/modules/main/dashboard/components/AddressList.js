@@ -10,8 +10,10 @@ import {skeletonList} from '../../../../utils/utils';
 import AddressSkeleton from './AddressSkeleton';
 import {Button, IconButton, withTheme} from 'react-native-paper';
 import {appStyles} from '../../../../styles/styles';
+import useRefreshToken from "../../../../hooks/useRefreshToken";
 
 const AddressList = ({navigation, theme, route: {params}}) => {
+  const {} = useRefreshToken();
   const {token} = useSelector(({authReducer}) => authReducer);
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState(true);

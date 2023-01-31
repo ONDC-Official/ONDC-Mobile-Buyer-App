@@ -7,6 +7,7 @@ import {postData} from '../../../utils/api';
 import {BASE_URL, DELIVERY_ADDRESS} from '../../../utils/apiUtilities';
 import {setStoredData} from '../../../utils/storage';
 import AddressForm from '../dashboard/components/AddressForm';
+import useRefreshToken from '../../../hooks/useRefreshToken';
 
 /**
  * Component to render form in add new address screen
@@ -17,6 +18,7 @@ import AddressForm from '../dashboard/components/AddressForm';
  * @returns {JSX.Element}
  */
 const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
+  const {} = useRefreshToken();
   const {token, name, emailId} = useSelector(({authReducer}) => authReducer);
 
   const {handleApiError} = useNetworkErrorHandling();

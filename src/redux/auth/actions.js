@@ -1,9 +1,9 @@
 import {
   clearAll,
-  clearMultiple,
   getMultipleData,
   getStoredData,
   saveMultipleData,
+  setStoredData,
 } from '../../utils/storage';
 
 export const tryLocalSignIn = (dispatch, navigation) => {
@@ -75,5 +75,11 @@ export const storeLoginDetails = (dispatch, data) => {
       photoURL: photoURL,
     };
     dispatch({type: 'set_login_details', payload});
+  });
+};
+
+export const updateToken = (dispatch, token) => {
+  setStoredData('token', token).then(r => {
+    dispatch({type: 'set_token', payload: token});
   });
 };

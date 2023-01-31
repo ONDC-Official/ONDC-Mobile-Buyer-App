@@ -35,6 +35,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BreakDown from './components/BreakDown';
 import Address from '../../order/components/Address';
 import confirmation from '../confirmation/Confirmation';
+import useRefreshToken from "../../../../hooks/useRefreshToken";
 
 /**
  * Component to payment screen in application
@@ -51,6 +52,7 @@ const Payment = ({
     params: {deliveryAddress, billingAddress, confirmationList},
   },
 }) => {
+  const {} = useRefreshToken();
   const {colors} = theme;
   const dispatch = useDispatch();
   const error = useRef(null);

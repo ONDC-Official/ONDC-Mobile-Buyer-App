@@ -6,6 +6,7 @@ import {postData} from '../../../../utils/api';
 import {BASE_URL, UPDATE_BILLING_ADDRESS} from '../../../../utils/apiUtilities';
 import BillingAddressForm from './components/BillingAddressForm';
 import {billingAddressValidationSchema} from './utils/validations';
+import useRefreshToken from "../../../../hooks/useRefreshToken";
 
 /**
  * Component to render form in add new address screen
@@ -16,6 +17,7 @@ import {billingAddressValidationSchema} from './utils/validations';
  * @returns {JSX.Element}
  */
 const UpdateBillingAddress = ({navigation, theme, route: {params}}) => {
+  const {} = useRefreshToken();
   const {handleApiError} = useNetworkErrorHandling();
 
   const {token} = useSelector(({authReducer}) => authReducer);

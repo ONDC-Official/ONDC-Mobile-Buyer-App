@@ -9,6 +9,7 @@ import {
 } from '../../../../utils/apiUtilities';
 import {postData} from '../../../../utils/api';
 import AddressForm from './AddressForm';
+import useRefreshToken from '../../../../hooks/useRefreshToken';
 
 /**
  * Component to render form in add new address screen
@@ -19,6 +20,7 @@ import AddressForm from './AddressForm';
  * @returns {JSX.Element}
  */
 const UpdateAddress = ({navigation, theme, route: {params}}) => {
+  const {} = useRefreshToken();
   const {token} = useSelector(({authReducer}) => authReducer);
 
   const {handleApiError} = useNetworkErrorHandling();

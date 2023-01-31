@@ -17,8 +17,10 @@ const authReducer = (state = initialState, action) => {
         photoURL: action.payload.photoURL,
       });
 
-    case 'save_token':
-      return action.payload;
+    case 'set_token':
+      return Object.assign({}, state, {
+        token: action.payload,
+      });
 
     case 'hide_loader':
       return {...state, isLoading: false};

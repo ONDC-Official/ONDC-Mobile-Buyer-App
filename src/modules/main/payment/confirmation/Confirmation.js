@@ -19,8 +19,10 @@ import {
 } from '../../../../utils/utils';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 import Product from './components/Product';
+import useRefreshToken from "../../../../hooks/useRefreshToken";
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
+  const {} = useRefreshToken();
   const {token} = useSelector(({authReducer}) => authReducer);
   const {transactionId} = useSelector(({filterReducer}) => filterReducer);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);

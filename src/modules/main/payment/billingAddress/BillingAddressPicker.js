@@ -12,6 +12,7 @@ import {skeletonList} from '../../../../utils/utils';
 import {getStoredData} from '../../../../utils/storage';
 import AddressSkeleton from '../../dashboard/components/AddressSkeleton';
 import BillingAddress from './components/BillingAddress';
+import useRefreshToken from "../../../../hooks/useRefreshToken";
 
 /**
  * Component to render addresses of address
@@ -22,6 +23,7 @@ import BillingAddress from './components/BillingAddress';
  * @returns {JSX.Element}
  */
 const BillingAddressPicker = ({navigation, theme}) => {
+  const {} = useRefreshToken();
   const [apiInProgress, setApiInProgress] = useState(true);
   const [addresses, setAddresses] = useState(null);
   const [deliveryAddress, setDeliveryAddress] = useState(null);

@@ -13,9 +13,11 @@ import {SEARCH_QUERY} from '../../../../utils/Constants';
 import SortAndFilter from './component/header/SortAndFilter';
 import HeaderMenu from '../../../../components/headerMenu/HeaderMenu';
 import AddressTag from '../../dashboard/components/AddressTag';
+import useRefreshToken from '../../../../hooks/useRefreshToken';
 
 const SearchProductList = ({navigation, theme, route: {params}}) => {
   const isFocused = useIsFocused();
+  const {} = useRefreshToken();
   const [address, setAddress] = useState(null);
 
   const {products} = useSelector(({productReducer}) => productReducer);

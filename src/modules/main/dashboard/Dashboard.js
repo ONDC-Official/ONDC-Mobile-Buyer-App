@@ -9,10 +9,12 @@ import ProductSearch from '../product/list/component/header/ProductSearch';
 import Home from './components/Home';
 import HeaderMenu from '../../../components/headerMenu/HeaderMenu';
 import AddressTag from './components/AddressTag';
+import useRefreshToken from '../../../hooks/useRefreshToken';
 
-const Dashboard = ({navigation, theme}) => {
+const Dashboard = ({theme}) => {
   const isFocused = useIsFocused();
   const [address, setAddress] = useState(null);
+  const {} = useRefreshToken();
 
   const getAddress = () => {
     getStoredData('address').then(response => {
