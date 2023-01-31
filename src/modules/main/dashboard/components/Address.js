@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   addressContainer: {
-    flexGrow: 1,
+    flex: 1,
     paddingHorizontal: 8,
   },
   emptyCheckbox: {

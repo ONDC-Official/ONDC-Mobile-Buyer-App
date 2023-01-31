@@ -1,22 +1,11 @@
 import React from 'react';
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {
-  Button,
-  Card,
-  Divider,
-  IconButton,
-  Text,
-  withTheme,
-} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {Button, Card, Divider, IconButton, Text, withTheme,} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useDispatch} from 'react-redux';
-import {
-  removeItemFromCart,
-  updateItemInCart,
-} from '../../../../../redux/actions';
+import {removeItemFromCart, updateItemInCart,} from '../../../../../redux/actions';
 import {appStyles} from '../../../../../styles/styles';
 import useProductQuantity from '../../../product/hook/useProductQuantity';
-import moment from 'moment';
 import {stringToDecimal} from '../../../../../utils/utils';
 import Tat from './Tat';
 
@@ -53,6 +42,7 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
   const cost = item.price.value ? item.price.value : item.price.maximum_value;
   const outOfStock = item?.quantityMeta?.available?.count === 0;
 
+  console.log(JSON.stringify(item, undefined,4));
   return (
     <Card
       onPress={() => {
@@ -76,7 +66,13 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
               {item?.descriptor?.name}
             </Text>
             <Text style={{color: colors.opposite}} variant="titleMedium">
-              ₹{stringToDecimal(cost)}
+              ₹{stringToDecimal(cost * item?.confirmation?.quantity?.count)}
+            </Text>
+          </View>
+          <View style={styles.organizationNameContainer}>
+            <Text numberOfLines={1}>
+              Qt:&nbsp;{item?.confirmation?.quantity?.count} *{' '}
+              {stringToDecimal(cost)}
             </Text>
           </View>
           <View style={styles.organizationNameContainer}>
@@ -133,8 +129,8 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
         </View>
       </View>
 
-      {item?.knowCharges?.map(charge => (
-        <>
+      {item?.knowCharges?.map((charge, index) => (
+        <View style={styles.messageContainer} key={`${charge?.title}${index}`}>
           <Divider />
           <View style={styles.priceContainer}>
             <Text variant="titleSmall" style={styles.title}>
@@ -144,7 +140,7 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
               ₹{stringToDecimal(charge?.price?.value)}
             </Text>
           </View>
-        </>
+        </View>
       ))}
 
       {item?.confirmation?.hasOwnProperty('message') && (
