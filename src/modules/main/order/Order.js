@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useRef, useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
@@ -10,6 +10,7 @@ import {keyExtractor, skeletonList} from '../../../utils/utils';
 import ListFooter from './components/ListFooter';
 import OrderCardSkeleton from './components/OrderCardSkeleton';
 import OrderHeader from './components/OrderHeader';
+import {Text} from "react-native-paper";
 
 /**
  * Component to render orders screen

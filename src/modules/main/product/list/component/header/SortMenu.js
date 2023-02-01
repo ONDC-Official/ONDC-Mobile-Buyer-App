@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Button, Divider, withTheme} from 'react-native-paper';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Button, Divider, Text, withTheme} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 
 import ClearButton from '../../../../../../components/button/ClearButton';
 import {updateSortOption} from '../../../../../../redux/filter/actions';
-import {appStyles} from '../../../../../../styles/styles';
 import OutlineButton from '../../../../../../components/button/OutlineButton';
 
 /**
