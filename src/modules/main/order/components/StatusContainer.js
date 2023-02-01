@@ -3,43 +3,46 @@ import {StyleSheet, View} from 'react-native';
 import {Chip, withTheme} from 'react-native-paper';
 
 const StatusContainer = ({product, theme}) => {
-  return (
-    <View style={styles.container}>
-      {product.return_status ? (
+  if (product.hasOwnProperty('return_status')) {
+    return (
+      <View style={styles.container}>
         <View style={styles.chipContainer}>
           <Chip selectedColor={theme.colors.primary} mode="flat">
             {product.return_status}
           </Chip>
         </View>
-      ) : (
-        <View style={styles.chipContainer}>
-          {product.product['@ondc/org/returnable'] && (
-            <Chip selectedColor={theme.colors.primary} mode="flat">
-              Returnable
-            </Chip>
-          )}
-        </View>
-      )}
-
-      {product.cancellation_status ? (
+      </View>
+    );
+  } else if (product.hasOwnProperty('cancellation_status')) {
+    return (
+      <View style={styles.container}>
         <View style={styles.chipContainer}>
           <Chip selectedColor={theme.colors.primary} mode="flat">
             {product.cancellation_status}
           </Chip>
         </View>
-      ) : (
-        <>
-          {product.product['@ondc/org/cancellable'] && (
-            <View style={styles.chipContainer}>
-              <Chip selectedColor={theme.colors.primary} mode="flat">
-                Cancellable
-              </Chip>
-            </View>
-          )}
-        </>
-      )}
-    </View>
-  );
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.container}>
+        {product.product['@ondc/org/returnable'] && (
+          <View style={styles.chipContainer}>
+            <Chip selectedColor={theme.colors.primary} mode="flat">
+              Returnable
+            </Chip>
+          </View>
+        )}
+        {product.product['@ondc/org/cancellable'] && (
+          <View style={styles.chipContainer}>
+            <Chip selectedColor={theme.colors.primary} mode="flat">
+              Cancellable
+            </Chip>
+          </View>
+        )}
+      </View>
+    );
+  }
 };
 
 export default withTheme(StatusContainer);

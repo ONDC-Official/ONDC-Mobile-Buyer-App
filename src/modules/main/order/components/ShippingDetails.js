@@ -115,6 +115,7 @@ const ShippingDetails = ({order, theme}) => {
                   updateType: UPDATE_TYPE.RETURN,
                   updateId: order._id,
                   providerId: order.provider.id,
+                  orderStatus: order.state,
                 })
               }>
               <Divider />
@@ -170,6 +171,7 @@ const ShippingDetails = ({order, theme}) => {
                     updateType: UPDATE_TYPE.CANCEL,
                     updateId: order._id,
                     providerId: order.provider.id,
+                    orderStatus: order.state,
                   })
                 }>
                 <Divider />

@@ -81,7 +81,9 @@ const CancelOrder = ({navigation, route: {params}}) => {
           tags: {
             update_type: params.updateType,
             reason_code: selectedReason.id,
-            ttl_approval: 'PT24H',
+            ttl_approval: element.hasOwnProperty('@ondc/org/return_window')
+              ? element['@ondc/org/return_window']
+              : '',
             ttl_reverseqc: 'P3D',
             image: '',
           },
@@ -97,7 +99,7 @@ const CancelOrder = ({navigation, route: {params}}) => {
             update_target: 'item',
             order: {
               id: params.orderId,
-              state: 'Delivered',
+              state: params.orderStatus,
               provider: {
                 id: params.providerId,
               },
@@ -135,12 +137,6 @@ const CancelOrder = ({navigation, route: {params}}) => {
       eventSource.close();
       setCancelInProgress(false);
       setUpdateInProgress(false);
-
-      if (!orderProcessed.current) {
-        showToastWithGravity(
-          'We are unable to complete your request at the moment. Please try again',
-        );
-      }
     }
   };
 
@@ -197,7 +193,9 @@ const CancelOrder = ({navigation, route: {params}}) => {
   useEffect(() => {
     if (params.items) {
       const list = params.items.filter(
-        one => one.product['@ondc/org/cancellable'],
+        one =>
+          one.product['@ondc/org/cancellable'] &&
+          one.cancellation_status !== 'Cancelled',
       );
       setProducts(list);
       if (list.length === 1) {

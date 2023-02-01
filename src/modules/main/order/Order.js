@@ -16,7 +16,7 @@ import OrderHeader from './components/OrderHeader';
  * @constructor
  * @returns {JSX.Element}
  */
-const Order = () => {
+const Order = ({navigation}) => {
   const {token} = useSelector(({authReducer}) => authReducer);
 
   const {handleApiError} = useNetworkErrorHandling();
@@ -74,6 +74,19 @@ const Order = () => {
         });
     }
   };
+
+  useEffect(() => {
+    const unsubscribeFocus = navigation.addListener('focus', () => {
+      pageNumber.current = 1;
+      getOrderList(pageNumber.current)
+        .then(() => {})
+        .catch(() => {});
+    });
+
+    return () => {
+      unsubscribeFocus();
+    };
+  }, [navigation]);
 
   useEffect(() => {
     getOrderList(pageNumber.current)

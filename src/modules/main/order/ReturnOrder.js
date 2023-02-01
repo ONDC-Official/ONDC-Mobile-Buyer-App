@@ -45,7 +45,9 @@ const ReturnOrder = ({navigation, route: {params}}) => {
           tags: {
             update_type: params.updateType,
             reason_code: selectedReason.id,
-            ttl_approval: 'PT24H',
+            ttl_approval: element.hasOwnProperty('@ondc/org/return_window')
+              ? element['@ondc/org/return_window']
+              : '',
             ttl_reverseqc: 'P3D',
             image: '',
           },
@@ -61,7 +63,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
             update_target: 'item',
             order: {
               id: params.orderId,
-              state: 'Delivered',
+              state: params.orderStatus,
               provider: {
                 id: params.providerId,
               },
@@ -129,7 +131,11 @@ const ReturnOrder = ({navigation, route: {params}}) => {
   useEffect(() => {
     if (params.items) {
       setProducts(
-        params.items.filter(one => one.product['@ondc/org/cancellable']),
+        params.items.filter(
+          one =>
+            one.product['@ondc/org/cancellable'] &&
+            one.return_status !== 'Cancelled',
+        ),
       );
     }
   }, [params]);
@@ -171,7 +177,9 @@ const ReturnOrder = ({navigation, route: {params}}) => {
         </Text>
         <View style={styles.productList}>
           {products?.map(item => {
-            const index = selectedProducts.findIndex(one => one.id === item?.id);
+            const index = selectedProducts.findIndex(
+              one => one.id === item?.id,
+            );
             return (
               <View style={styles.itemContainer}>
                 <Checkbox

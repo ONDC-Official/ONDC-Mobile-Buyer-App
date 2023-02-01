@@ -42,7 +42,7 @@ export const PRODUCT_SORTING = {
   PRICE_LOW_TO_HIGH: 'Price: Low To High',
 };
 
-export const APPLICATION_VERSION = '1.0.4';
+export const APPLICATION_VERSION = '1.0.5';
 
 export const SUB_CATEGORY_CATEGORY = {
   'Fruits and Vegetables': 'Grocery',
