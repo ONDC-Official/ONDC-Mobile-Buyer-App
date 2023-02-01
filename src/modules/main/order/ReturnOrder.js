@@ -171,7 +171,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
         </Text>
         <View style={styles.productList}>
           {products?.map(item => {
-            const index = selectedProducts.findIndex(one => one.id === item.id);
+            const index = selectedProducts.findIndex(one => one.id === item?.id);
             return (
               <View style={styles.itemContainer}>
                 <Checkbox
@@ -184,12 +184,12 @@ const ReturnOrder = ({navigation, route: {params}}) => {
                   style={styles.product}
                   onPress={() => onProductClicked(item, index)}>
                   <Text variant="titleSmall">
-                    {item.product?.descriptor?.name}
+                    {item?.product?.descriptor?.name}
                   </Text>
                   <View style={styles.productDetails}>
-                    <Text>QTY: {item.product?.quantity}</Text>
+                    <Text>QTY: {item?.quantity?.count}</Text>
                     <Text variant="titleSmall" style={styles.productAmount}>
-                      ₹{item.product?.price?.value}
+                      ₹{item?.product?.price?.value}
                     </Text>
                   </View>
                 </TouchableOpacity>

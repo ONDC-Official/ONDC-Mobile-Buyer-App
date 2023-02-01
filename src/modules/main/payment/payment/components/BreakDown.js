@@ -20,7 +20,7 @@ const BreakDown = ({providers, theme}) => {
                   <View key={product.id}>
                     {product.hasOwnProperty('items') ? (
                       product.items.map(item => {
-                        const price = stringToDecimal(item.price.value);
+                        const price = stringToDecimal(item?.price?.value);
                         total += price;
                         orderTotal += price;
                         return (
@@ -30,13 +30,16 @@ const BreakDown = ({providers, theme}) => {
                               <Text
                                 variant="titleSmall"
                                 style={styles.productPrice}>
-                                ₹{stringToDecimal(item.price.value)}
+                                ₹{stringToDecimal(item?.price?.value)}
                               </Text>
                             </View>
                             {item.hasOwnProperty('@ondc/org/item_quantity') && (
                               <Text>
                                 Qt: {item['@ondc/org/item_quantity'].count} *{' '}
-                                {stringToDecimal(item.item.price.value)}
+                                {item.item?.price
+                                  ? stringToDecimal(item.item?.price?.value)
+                                  : price /
+                                    item['@ondc/org/item_quantity'].count}
                               </Text>
                             )}
                           </View>
@@ -47,7 +50,7 @@ const BreakDown = ({providers, theme}) => {
                     )}
                     {product.hasOwnProperty('discounts') &&
                       product.discounts.map(item => {
-                        const price = stringToDecimal(item.price.value);
+                        const price = stringToDecimal(item?.price?.value);
                         total += price;
                         orderTotal += price;
                         return (
@@ -58,14 +61,14 @@ const BreakDown = ({providers, theme}) => {
                             <Text
                               variant="titleSmall"
                               style={styles.productPrice}>
-                              ₹{item.price.value}
+                              ₹{item?.price?.value}
                             </Text>
                           </View>
                         );
                       })}
                     {product.hasOwnProperty('taxes') &&
                       product.taxes.map(item => {
-                        const price = stringToDecimal(item.price.value);
+                        const price = stringToDecimal(item?.price?.value);
                         total += price;
                         orderTotal += price;
                         return (
@@ -76,14 +79,14 @@ const BreakDown = ({providers, theme}) => {
                             <Text
                               variant="titleSmall"
                               style={styles.productPrice}>
-                              ₹{item.price.value}
+                              ₹{item?.price?.value}
                             </Text>
                           </View>
                         );
                       })}
                     {product.hasOwnProperty('packings') &&
                       product.packings.map(item => {
-                        const price = stringToDecimal(item.price.value);
+                        const price = stringToDecimal(item?.price?.value);
                         total += price;
                         orderTotal += price;
                         return (
@@ -94,14 +97,14 @@ const BreakDown = ({providers, theme}) => {
                             <Text
                               variant="titleSmall"
                               style={styles.productPrice}>
-                              ₹{item.price.value}
+                              ₹{item?.price?.value}
                             </Text>
                           </View>
                         );
                       })}
                     {product.hasOwnProperty('deliveries') &&
                       product.deliveries.map(item => {
-                        const price = stringToDecimal(item.price.value);
+                        const price = stringToDecimal(item?.price?.value);
                         total += price;
                         orderTotal += price;
                         return (
@@ -112,14 +115,14 @@ const BreakDown = ({providers, theme}) => {
                             <Text
                               variant="titleSmall"
                               style={styles.productPrice}>
-                              ₹{item.price.value}
+                              ₹{item?.price?.value}
                             </Text>
                           </View>
                         );
                       })}
                     {product.hasOwnProperty('misces') &&
                       product.misces.map(item => {
-                        const price = stringToDecimal(item.price.value);
+                        const price = stringToDecimal(item?.price?.value);
                         total += price;
                         orderTotal += price;
                         return (
@@ -130,7 +133,7 @@ const BreakDown = ({providers, theme}) => {
                             <Text
                               variant="titleSmall"
                               style={styles.productPrice}>
-                              ₹{item.price.value}
+                              ₹{item?.price?.value}
                             </Text>
                           </View>
                         );

@@ -11,6 +11,7 @@ import TimeToShip from './components/TimeToShip';
 import CartFooter from '../list/component/CartFooter/CartFooter';
 import ReturnWindow from './components/ReturnWindow';
 import VegNonVegTags from '../list/component/VegNonVegTag';
+import StatutoryRequirements from './components/StatutoryRequirements';
 
 const image = require('../../../../assets/noImage.png');
 const imageSize = Dimensions.get('window').width;
@@ -134,64 +135,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
               </View>
             )}
 
-            {product?.hasOwnProperty(
-              '@ondc/org/statutory_reqs_packaged_commodities',
-            ) && (
-              <View style={styles.sectionContainer}>
-                <Text style={{color: colors.accent}}>
-                  Statutory Reqs Packaged Commodities
-                </Text>
-                <View style={[styles.reqsRow, styles.longDescription]}>
-                  <Text>Manufacturer/Packer Name:&nbsp;</Text>
-                  <Text variant="titleSmall">
-                    {
-                      product['@ondc/org/statutory_reqs_packaged_commodities']
-                        .manufacturer_or_packer_name
-                    }
-                  </Text>
-                </View>
-
-                <View style={[styles.reqsRow, styles.longDescription]}>
-                  <Text>Manufacturer/Packer Address:&nbsp;</Text>
-                  <Text variant="titleSmall">
-                    {
-                      product['@ondc/org/statutory_reqs_packaged_commodities']
-                        .manufacturer_or_packer_address
-                    }
-                  </Text>
-                </View>
-                <View style={[styles.reqsRow, styles.longDescription]}>
-                  <Text>Generic name of commodity:&nbsp;</Text>
-                  <Text variant="titleSmall">
-                    {
-                      product['@ondc/org/statutory_reqs_packaged_commodities']
-                        .common_or_generic_name_of_commodity
-                    }
-                  </Text>
-                </View>
-                {product['@ondc/org/statutory_reqs_packaged_commodities']
-                  ?.net_quantity_or_measure_of_commodity_in_pkg && (
-                  <View style={[styles.reqsRow, styles.longDescription]}>
-                    <Text>Net. Quantity:&nbsp;</Text>
-                    <Text variant="titleSmall">
-                      {
-                        product['@ondc/org/statutory_reqs_packaged_commodities']
-                          .net_quantity_or_measure_of_commodity_in_pkg
-                      }
-                    </Text>
-                  </View>
-                )}
-                <View style={[styles.reqsRow, styles.longDescription]}>
-                  <Text>Month Year of Manufacturer/Packing:&nbsp;&nbsp;</Text>
-                  <Text variant="titleSmall">
-                    {
-                      product['@ondc/org/statutory_reqs_packaged_commodities']
-                        .month_year_of_manufacture_packing_import
-                    }
-                  </Text>
-                </View>
-              </View>
-            )}
+            <StatutoryRequirements requirements={product?.hasOwnProperty('@ondc/org/statutory_reqs_packaged_commodities') ? product['@ondc/org/statutory_reqs_packaged_commodities'] : null} />
 
             <View style={styles.sectionContainer}>
               <Text style={{color: colors.accent}}>Provider</Text>
