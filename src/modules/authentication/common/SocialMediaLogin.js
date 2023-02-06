@@ -2,11 +2,21 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 import useLoginWithGoogle from '../hooks/useLoginWithGoogle';
+import {showToastWithGravity} from '../../../utils/utils';
 
 const SocialMediaLogin = ({theme}) => {
   const {loginWithGoogle} = useLoginWithGoogle();
+  const {isConnected, isInternetReachable} = useNetInfo();
+  const onLoginWithGooglePress = () => {
+    if (isConnected && isInternetReachable) {
+      loginWithGoogle();
+    } else {
+      showToastWithGravity('Please check your internet connection.');
+    }
+  };
 
   return (
     <>
@@ -14,7 +24,7 @@ const SocialMediaLogin = ({theme}) => {
         <TouchableOpacity
           style={[styles.button, {borderColor: theme.colors.primary}]}
           mode="outlined"
-          onPress={loginWithGoogle}>
+          onPress={onLoginWithGooglePress}>
           <Icon size={18} name="google" color={theme.colors.primary} />
           <Text style={[styles.buttonLabel, {color: theme.colors.primary}]}>
             Continue with google

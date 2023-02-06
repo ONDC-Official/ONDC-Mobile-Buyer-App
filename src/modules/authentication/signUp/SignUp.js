@@ -5,6 +5,7 @@ import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
 import {Button, Text, withTheme} from 'react-native-paper';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 import SignUpIcon from '../../../assets/signup_icon.svg';
 import InputField from '../../../components/input/InputField';
@@ -13,6 +14,7 @@ import {showToastWithGravity} from '../../../utils/utils';
 import {appStyles} from '../../../styles/styles';
 import SocialMediaLogin from '../common/SocialMediaLogin';
 import {storeLoginDetails} from '../../../redux/auth/actions';
+
 
 const userInfo = {
   email: '',
@@ -27,6 +29,7 @@ const userInfo = {
  */
 const SignUp = ({navigation, theme}) => {
   const dispatch = useDispatch();
+  const {isConnected, isInternetReachable} = useNetInfo();
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -48,34 +51,38 @@ const SignUp = ({navigation, theme}) => {
    * @returns {Promise<void>}
    */
   const createUser = async values => {
-    try {
-      setApiInProgress(true);
+    if (isConnected && isInternetReachable) {
+      try {
+        setApiInProgress(true);
 
-      const response = await auth().createUserWithEmailAndPassword(
-        values.email,
-        values.password,
-      );
-      await auth().currentUser.updateProfile({displayName: values.name});
+        const response = await auth().createUserWithEmailAndPassword(
+          values.email,
+          values.password,
+        );
+        await auth().currentUser.updateProfile({displayName: values.name});
 
-      const idTokenResult = await auth().currentUser.getIdTokenResult();
+        const idTokenResult = await auth().currentUser.getIdTokenResult();
 
-      await storeLoginDetails(dispatch, {
-        token: idTokenResult.token,
-        uid: response.user.uid,
-        emailId: response.user.email,
-        name: values.name,
-        photoURL: '',
-      });
+        await storeLoginDetails(dispatch, {
+          token: idTokenResult.token,
+          uid: response.user.uid,
+          emailId: response.user.email,
+          name: values.name,
+          photoURL: '',
+        });
 
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'AddDefaultAddress'}],
-      });
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'AddDefaultAddress'}],
+        });
 
-      setApiInProgress(false);
-    } catch (error) {
-      showToastWithGravity(error.message);
-      setApiInProgress(false);
+        setApiInProgress(false);
+      } catch (error) {
+        showToastWithGravity(error.message);
+        setApiInProgress(false);
+      }
+    } else {
+      showToastWithGravity('Please check your internet connection.');
     }
   };
 
