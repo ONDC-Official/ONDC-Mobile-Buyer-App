@@ -19,7 +19,7 @@ import {
 } from '../../../../utils/utils';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 import Product from './components/Product';
-import useRefreshToken from "../../../../hooks/useRefreshToken";
+import useRefreshToken from '../../../../hooks/useRefreshToken';
 
 const Confirmation = ({theme, navigation, route: {params}}) => {
   const {} = useRefreshToken();
@@ -386,7 +386,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         <View style={[styles.footer, {backgroundColor: theme.colors.footer}]}>
           <View style={appStyles.container}>
             <Text>Subtotal</Text>
-            <Text style={styles.totalAmount}>₹{total}</Text>
+            <Text style={styles.totalAmount}>₹{stringToDecimal(total)}</Text>
           </View>
           <View style={appStyles.container}>
             {availableProducts.current.length === cartItems.length && (
