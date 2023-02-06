@@ -38,7 +38,7 @@ target 'Buyer' do
 
   pod 'RNSVG', :path => '../node_modules/react-native-svg'
 
-  pod 'RNSlangRetailAssistant', :path => '../node_modules/@slanglabs/slang-conva-react-native-retail-assistant'
+  pod 'RNSlangRetailAssistant', :path => '../node_modules/@slanglabs/slang-conva-react-native-retail-assistant/ios'
 
   target 'BuyerTests' do
     inherit! :complete

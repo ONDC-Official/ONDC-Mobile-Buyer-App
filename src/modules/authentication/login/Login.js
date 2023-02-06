@@ -5,6 +5,7 @@ import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
 import {Button, Text, withTheme} from 'react-native-paper';
+import {useNetInfo} from '@react-native-community/netinfo';
 
 import SignUpIcon from '../../../assets/signup_icon.svg';
 import InputField from '../../../components/input/InputField';
@@ -40,56 +41,65 @@ const Login = ({navigation, theme}) => {
   });
 
   const [apiInProgress, setApiInProgress] = useState(false);
+  const {isConnected, isInternetReachable} = useNetInfo();
 
   /**
    * function checks whether the email and password is valid if it is valid it creates and store token in context
    * @returns {Promise<void>}
    */
   const login = async values => {
-    try {
-      setApiInProgress(true);
+    if (isConnected && isInternetReachable) {
+      try {
+        setApiInProgress(true);
 
-      const response = await auth().signInWithEmailAndPassword(
-        values.email,
-        values.password,
-      );
+        const response = await auth().signInWithEmailAndPassword(
+          values.email,
+          values.password,
+        );
 
-      const idTokenResult = await auth().currentUser.getIdTokenResult();
+        const idTokenResult = await auth().currentUser.getIdTokenResult();
 
-      await storeLoginDetails(dispatch, {
-        token: idTokenResult.token,
-        uid: response.user.uid,
-        emailId: response.user.email,
-        name: response.user.displayName ? response.user.displayName : 'Unknown',
-        photoURL: response.user.photoURL ? response.user.photoURL : '',
-      });
-
-      const address = await getStoredData('address');
-      if (address) {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Dashboard'}],
+        await storeLoginDetails(dispatch, {
+          token: idTokenResult.token,
+          uid: response.user.uid,
+          emailId: response.user.email,
+          name: response.user.displayName
+            ? response.user.displayName
+            : 'Unknown',
+          photoURL: response.user.photoURL ? response.user.photoURL : '',
         });
-      } else {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'AddressList', params: {navigateToDashboard: true}}],
-        });
-      }
 
-      setApiInProgress(false);
-    } catch (error) {
-      if (error.hasOwnProperty('message')) {
-        const message = error.message.replace(/\[.*\]/, '');
-        if (message.length > 0) {
-          showToastWithGravity(message);
+        const address = await getStoredData('address');
+        if (address) {
+          navigation.reset({
+            index: 0,
+            routes: [{name: 'Dashboard'}],
+          });
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [
+              {name: 'AddressList', params: {navigateToDashboard: true}},
+            ],
+          });
+        }
+
+        setApiInProgress(false);
+      } catch (error) {
+        if (error.hasOwnProperty('message')) {
+          const message = error.message.replace(/\[.*\]/, '');
+          if (message.length > 0) {
+            showToastWithGravity(message);
+          } else {
+            showToastWithGravity('Something went wrong, please try again');
+          }
         } else {
           showToastWithGravity('Something went wrong, please try again');
         }
-      } else {
-        showToastWithGravity('Something went wrong, please try again');
+        setApiInProgress(false);
       }
-      setApiInProgress(false);
+    } else {
+      showToastWithGravity('Please check your internet connection.');
     }
   };
 
