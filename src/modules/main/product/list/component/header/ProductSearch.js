@@ -108,6 +108,7 @@ const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
           inputStyle={styles.inputStyle}
           onChangeText={setQuery}
           value={query}
+          autoFocus={true}
         />
       </View>
     </View>
