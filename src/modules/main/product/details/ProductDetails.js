@@ -4,7 +4,7 @@ import {Button, Chip, IconButton, Text, withTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 
 import {appStyles} from '../../../../styles/styles';
-import {showInfoToast} from '../../../../utils/utils';
+import {showInfoToast, stringToDecimal} from '../../../../utils/utils';
 import useProductQuantity from '../hook/useProductQuantity';
 import ProductImages from './components/ProductImages';
 import TimeToShip from './components/TimeToShip';
@@ -69,7 +69,9 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                   <Text style={styles.fssaiLicense}>
                     Fssai License No:{' '}
                     <Text variant="titleSmall">
-                      {product?.hasOwnProperty('@ondc/org/fssai_license_no') ? product['@ondc/org/fssai_license_no'] : 'NA'}
+                      {product?.hasOwnProperty('@ondc/org/fssai_license_no')
+                        ? product['@ondc/org/fssai_license_no']
+                        : 'NA'}
                     </Text>
                   </Text>
                 </View>
@@ -83,8 +85,8 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                 <Text variant="titleLarge" style={{color: colors.opposite}}>
                   ₹
                   {product?.price.value
-                    ? product?.price.value
-                    : product?.price.maximum_value}
+                    ? stringToDecimal(product?.price.value)
+                    : stringToDecimal(product?.price.maximum_value)}
                 </Text>
                 {product?.hasOwnProperty('@ondc/org/time_to_ship') && (
                   <TimeToShip duration={product['@ondc/org/time_to_ship']} />
@@ -135,7 +137,15 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
               </View>
             )}
 
-            <StatutoryRequirements requirements={product?.hasOwnProperty('@ondc/org/statutory_reqs_packaged_commodities') ? product['@ondc/org/statutory_reqs_packaged_commodities'] : null} />
+            <StatutoryRequirements
+              requirements={
+                product?.hasOwnProperty(
+                  '@ondc/org/statutory_reqs_packaged_commodities',
+                )
+                  ? product['@ondc/org/statutory_reqs_packaged_commodities']
+                  : null
+              }
+            />
 
             <View style={styles.sectionContainer}>
               <Text style={{color: colors.accent}}>Provider</Text>

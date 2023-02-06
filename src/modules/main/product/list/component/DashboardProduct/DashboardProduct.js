@@ -5,7 +5,11 @@ import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 
 import {appStyles} from '../../../../../../styles/styles';
-import {showInfoToast, stringToDecimal} from '../../../../../../utils/utils';
+import {
+  maskAmount,
+  showInfoToast,
+  stringToDecimal,
+} from '../../../../../../utils/utils';
 import useProductQuantity from '../../../hook/useProductQuantity';
 import {SUB_CATEGORY_CATEGORY} from '../../../../../../utils/Constants';
 import VegNonVegTags from '../VegNonVegTag';
@@ -30,7 +34,11 @@ const DashboardProduct = ({theme, navigation, item}) => {
       ? item.descriptor.images[0]
       : null;
 
-  const cost = item.price.value ? item.price.value : item.price.maximum_value;
+  const costToConvert = item.price.value
+    ? item.price.value
+    : item.price.maximum_value;
+
+  const cost = stringToDecimal(costToConvert);
 
   const outOfStock = item?.quantityMeta?.available?.count === 0;
 

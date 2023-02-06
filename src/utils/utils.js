@@ -127,7 +127,7 @@ export const cleanFormData = initialObject => {
 
 export const stringToDecimal = value => {
   const number = Number(value);
-  return number % 1 !== 0 ? number.toFixed(2) : number;
+  return typeof number === 'number' ? number.toFixed(2) : number;
 };
 
 export const durationToHumanReadable = value => {

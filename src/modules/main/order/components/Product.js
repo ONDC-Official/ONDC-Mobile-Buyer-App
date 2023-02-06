@@ -3,6 +3,7 @@ import {Divider, Text} from 'react-native-paper';
 import StatusContainer from './StatusContainer';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
+import {stringToDecimal} from '../../../../utils/utils';
 
 const image = require('../../../../assets/noImage.png');
 
@@ -25,7 +26,7 @@ const Product = ({item}) => {
           <View style={styles.details}>
             <Text style={styles.title}>{item.product?.descriptor?.name}</Text>
             <Text variant="titleSmall" style={styles.price}>
-              ₹{item.product?.price?.value}
+              ₹{stringToDecimal(item.product?.price?.value)}
             </Text>
           </View>
           <Text style={styles.quantity}>QTY:&nbsp;{item?.quantity?.count}</Text>

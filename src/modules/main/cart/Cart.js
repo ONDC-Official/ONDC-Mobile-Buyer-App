@@ -8,6 +8,7 @@ import {appStyles} from '../../../styles/styles';
 import {alertWithTwoButtons} from '../../../utils/alerts';
 import EmptyComponent from './EmptyComponent';
 import DashboardProduct from '../product/list/component/DashboardProduct/DashboardProduct';
+import {stringToDecimal} from '../../../utils/utils';
 
 /**
  * Component to render list of items added in cart
@@ -90,7 +91,7 @@ const Cart = ({navigation, theme}) => {
         <View style={[styles.footer, {backgroundColor: theme.colors.footer}]}>
           <View style={appStyles.container}>
             <Text>Subtotal</Text>
-            <Text style={styles.totalAmount}>₹{subTotal}</Text>
+            <Text style={styles.totalAmount}>₹{stringToDecimal(subTotal)}</Text>
           </View>
           <View style={appStyles.container}>
             <Button
