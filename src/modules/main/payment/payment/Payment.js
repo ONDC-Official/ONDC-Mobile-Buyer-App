@@ -35,7 +35,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BreakDown from './components/BreakDown';
 import Address from '../../order/components/Address';
 import confirmation from '../confirmation/Confirmation';
-import useRefreshToken from "../../../../hooks/useRefreshToken";
+import useRefreshToken from '../../../../hooks/useRefreshToken';
 
 /**
  * Component to payment screen in application
@@ -429,6 +429,7 @@ const Payment = ({
             case 'AUTHENTICATION_FAILED':
               showToastWithGravity('Please verify the details and try again');
               setInitializeOrderRequested(false);
+              setConfirmOrderRequested(false);
               break;
 
             case 'AUTHORIZATION_FAILED':
@@ -436,6 +437,7 @@ const Payment = ({
                 'Bank is unable to process your request at the moment',
               );
               setInitializeOrderRequested(false);
+              setConfirmOrderRequested(false);
               break;
 
             case 'JUSPAY_DECLINED':
@@ -443,17 +445,26 @@ const Payment = ({
                 'Unable to process your request at the moment please try again',
               );
               setInitializeOrderRequested(false);
+              setConfirmOrderRequested(false);
               break;
 
             case 'AUTHORIZING':
               showToastWithGravity('Waiting for the bank to confirm');
               setInitializeOrderRequested(false);
+              setConfirmOrderRequested(false);
               break;
 
             case 'PENDING_VBV':
               showToastWithGravity('Transaction Pending');
+              setConfirmOrderRequested(false);
               setInitializeOrderRequested(false);
               break;
+            default:
+              setConfirmOrderRequested(false);
+              setInitializeOrderRequested(false);
+              showToastWithGravity(
+                'Something went wrong, please try again after some time.',
+              );
           }
         } else {
           showToastWithGravity(
@@ -592,6 +603,9 @@ const Payment = ({
     } catch (err) {
       console.log(err);
       handleApiError(err);
+    } finally {
+      setInitializeOrderRequested(false);
+      setConfirmOrderRequested(false);
     }
   };
 
