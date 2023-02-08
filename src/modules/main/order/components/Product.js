@@ -31,10 +31,15 @@ const Product = ({item}) => {
             />
 
             <Text variant="titleSmall" style={styles.price}>
-              ₹{stringToDecimal(item.product?.price?.value)}
+              ₹
+              {stringToDecimal(
+                item.product?.price?.value * item?.quantity?.count,
+              )}
             </Text>
           </View>
-          <Text style={styles.quantity}>QTY:&nbsp;{item?.quantity?.count}</Text>
+          <Text style={styles.quantity}>
+            QTY:{` ${item?.quantity?.count} * ${item.product?.price?.value}`}
+          </Text>
           <StatusContainer product={item} />
         </View>
       </View>
