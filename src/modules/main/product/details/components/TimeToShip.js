@@ -8,7 +8,7 @@ const TimeToShip = ({duration, theme}) => {
   const {timeDuration, unit} = durationToHumanReadable(duration);
 
   return (
-    <View style={[styles.timeRequired, {backgroundColor: theme.colors.red}]}>
+    <View style={[styles.timeRequired]}>
       <View>
         <Text variant="titleMedium" style={styles.timeRequiredLabel}>
           {timeDuration}
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   timeRequiredLabel: {
-    color: 'white',
+    color: 'black',
     lineHeight: 16,
     textAlign: 'center',
     padding: 0,

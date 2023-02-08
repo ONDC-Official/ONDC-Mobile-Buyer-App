@@ -4,6 +4,7 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {appStyles} from '../../../../../../styles/styles';
+import {stringToDecimal} from '../../../../../../utils/utils';
 
 const CartFooter = ({theme}) => {
   const navigation = useNavigation();
@@ -15,7 +16,7 @@ const CartFooter = ({theme}) => {
       <View style={[styles.footer, {backgroundColor: theme.colors.footer}]}>
         <View style={appStyles.container}>
           <Text>{cartLength} Item</Text>
-          <Text style={styles.totalAmount}>₹{subTotal}</Text>
+          <Text style={styles.totalAmount}>₹{stringToDecimal(subTotal)}</Text>
         </View>
         <View style={appStyles.container}>
           <Button
