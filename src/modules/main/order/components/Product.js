@@ -4,6 +4,7 @@ import StatusContainer from './StatusContainer';
 import React from 'react';
 import FastImage from 'react-native-fast-image';
 import {stringToDecimal} from '../../../../utils/utils';
+import TextViewWithMoreLess from '../../../../components/TextView/TextViewWithMoreLess';
 
 const image = require('../../../../assets/noImage.png');
 
@@ -24,7 +25,11 @@ const Product = ({item}) => {
         />
         <View style={styles.rightPane}>
           <View style={styles.details}>
-            <Text style={styles.title}>{item.product?.descriptor?.name}</Text>
+            <TextViewWithMoreLess
+              textContent={item.product?.descriptor?.name}
+              style={styles.title}
+            />
+
             <Text variant="titleSmall" style={styles.price}>
               ₹{stringToDecimal(item.product?.price?.value)}
             </Text>
@@ -52,8 +57,12 @@ const styles = StyleSheet.create({
   rightPane: {
     flexShrink: 1,
     paddingHorizontal: 8,
+    justifyContent: 'space-between',
   },
-  title: {marginRight: 10, flexShrink: 1},
+  title: {
+    marginRight: 10,
+    flexShrink: 1,
+  },
   address: {marginBottom: 4},
   divider: {marginTop: 10},
   price: {
