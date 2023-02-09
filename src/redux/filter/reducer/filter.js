@@ -16,6 +16,7 @@ const initialState = {
   selectedCategories: [],
   maxPrice: 0,
   minPrice: 0,
+  priceRangeSelected: false,
 };
 
 const filterReducer = (state = initialState, action) => {
@@ -74,6 +75,7 @@ const filterReducer = (state = initialState, action) => {
         selectedCategories: payload.selectedCategories,
         maxPrice: payload.maxPrice,
         minPrice: payload.minPrice,
+        priceRangeSelected: true,
       });
 
     case SAVE_IDS:
@@ -94,6 +96,7 @@ const filterReducer = (state = initialState, action) => {
         minPrice: rangeMinPrice,
         selectedProviders: [],
         selectedCategories: [],
+        priceRangeSelected: false,
       });
 
     case CLEAR_FILTERS:
