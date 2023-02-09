@@ -1,28 +1,23 @@
 import React, {useState} from 'react';
-import {Menu, MenuDivider} from 'react-native-material-menu';
-import {Pressable, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Menu} from 'react-native-material-menu';
+import {Pressable, StyleSheet, View} from 'react-native';
 import {Text, TextInput, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 
 import {SEARCH_QUERY} from '../../../../../../utils/Constants';
+import SearchTypeMenu from '../../../../../../components/headerMenu/SearchTypeMenu';
 
 const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
   const navigation = useNavigation();
   const [query, setQuery] = useState('');
   const [searchType, setSearchType] = useState(SEARCH_QUERY.PRODUCT);
-  const [visible, setVisible] = useState(false);
-
-  const hideMenu = () => setVisible(false);
-
-  const showMenu = () => setVisible(true);
 
   const onSearchTypeChange = type => {
     if (query && query.trim().length > 0) {
       onSearch(query, type);
     }
     setSearchType(type);
-    hideMenu();
   };
 
   if (viewOnly) {
@@ -67,30 +62,11 @@ const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
   }
   return (
     <View style={styles.container}>
-      <Menu
-        visible={visible}
-        anchor={
-          <TouchableOpacity
-            style={[styles.menu, {backgroundColor: theme.colors.primary}]}
-            activeOpacity={0.8}
-            onPress={showMenu}>
-            <Text style={{color: theme.colors.surface}}>
-              {searchType} <Icon name="angle-down" size={14} />
-            </Text>
-          </TouchableOpacity>
-        }>
-        <TouchableOpacity
-          style={styles.menuOption}
-          onPress={() => onSearchTypeChange(SEARCH_QUERY.PRODUCT)}>
-          <Text style={{color: theme.colors.primary}}>Product</Text>
-        </TouchableOpacity>
-        <MenuDivider />
-        <TouchableOpacity
-          style={styles.menuOption}
-          onPress={() => onSearchTypeChange(SEARCH_QUERY.PROVIDER)}>
-          <Text style={{color: theme.colors.primary}}>Provider</Text>
-        </TouchableOpacity>
-      </Menu>
+      <SearchTypeMenu
+        searchType={searchType}
+        onProductSelect={() => onSearchTypeChange(SEARCH_QUERY.PRODUCT)}
+        onProviderSelect={() => onSearchTypeChange(SEARCH_QUERY.PROVIDER)}
+      />
 
       <View style={styles.searchContainer}>
         <TextInput
