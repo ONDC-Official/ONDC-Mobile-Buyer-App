@@ -15,7 +15,6 @@ import {appStyles} from '../../../styles/styles';
 import SocialMediaLogin from '../common/SocialMediaLogin';
 import {storeLoginDetails} from '../../../redux/auth/actions';
 
-
 const userInfo = {
   email: '',
   password: '',
@@ -78,8 +77,12 @@ const SignUp = ({navigation, theme}) => {
 
         setApiInProgress(false);
       } catch (error) {
-        showToastWithGravity(error.message);
         setApiInProgress(false);
+        if (error?.code === 'auth/email-already-in-use') {
+          showToastWithGravity('Account already exist on this email-id');
+        } else {
+          showToastWithGravity(error.message);
+        }
       }
     } else {
       showToastWithGravity('Please check your internet connection.');
