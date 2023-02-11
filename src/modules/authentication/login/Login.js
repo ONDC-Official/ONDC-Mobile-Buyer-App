@@ -33,11 +33,8 @@ const Login = ({navigation, theme}) => {
     email: Yup.string()
       .trim()
       .email('Please enter valid email address')
-      .required('This field is required'),
-    password: Yup.string()
-      .trim()
-      .min(8, 'Password is too short')
-      .required('This field is required'),
+      .required('Please fill all mandatory fields'),
+    password: Yup.string().trim().required('Please fill all mandatory fields'),
   });
 
   const [apiInProgress, setApiInProgress] = useState(false);
@@ -86,15 +83,23 @@ const Login = ({navigation, theme}) => {
 
         setApiInProgress(false);
       } catch (error) {
-        if (error.hasOwnProperty('message')) {
-          const message = error.message.replace(/\[.*\]/, '');
-          if (message.length > 0) {
-            showToastWithGravity(message);
+        if (error.code === 'auth/wrong-password') {
+          showToastWithGravity('The password is incorrect.');
+        } else if (error.code === 'auth/user-not-found') {
+          showToastWithGravity(
+            'Email id not found, please check the filled id or register',
+          );
+        } else {
+          if (error.hasOwnProperty('message')) {
+            const message = error.message.replace(/\[.*\]/, '');
+            if (message.length > 0) {
+              showToastWithGravity(message);
+            } else {
+              showToastWithGravity('Something went wrong, please try again');
+            }
           } else {
             showToastWithGravity('Something went wrong, please try again');
           }
-        } else {
-          showToastWithGravity('Something went wrong, please try again');
         }
         setApiInProgress(false);
       }
@@ -136,6 +141,7 @@ const Login = ({navigation, theme}) => {
                         name="email"
                         value={values.email}
                         onBlur={handleBlur('email')}
+                        required={true}
                         label="Email"
                         placeholder="Email"
                         errorMessage={touched.email ? errors.email : null}
@@ -145,6 +151,7 @@ const Login = ({navigation, theme}) => {
                     <View style={appStyles.inputContainer}>
                       <PasswordField
                         value={values.password}
+                        required={true}
                         onBlur={handleBlur('password')}
                         label="Password"
                         placeholder="Password"

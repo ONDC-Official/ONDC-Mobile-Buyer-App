@@ -34,12 +34,12 @@ const SignUp = ({navigation, theme}) => {
     email: Yup.string()
       .trim()
       .email('Please enter valid email address')
-      .required('This field is required'),
+      .required('Please fill all mandatory fields'),
     password: Yup.string()
       .trim()
       .min(8, 'Password is too short')
-      .required('This field is required'),
-    name: Yup.string().trim().required('This field is required'),
+      .required('Please fill all mandatory fields'),
+    name: Yup.string().trim().required('Please fill all mandatory fields'),
   });
 
   const [apiInProgress, setApiInProgress] = useState(false);
@@ -123,6 +123,7 @@ const SignUp = ({navigation, theme}) => {
                         value={values.name}
                         onBlur={handleBlur('name')}
                         label="Full Name"
+                        required={true}
                         placeholder={'Full Name'}
                         errorMessage={touched.name ? errors.name : null}
                         onChangeText={handleChange('name')}
@@ -132,6 +133,7 @@ const SignUp = ({navigation, theme}) => {
                       <InputField
                         name="email"
                         value={values.email}
+                        required={true}
                         onBlur={handleBlur('email')}
                         label="Email"
                         placeholder="Email"
@@ -142,6 +144,7 @@ const SignUp = ({navigation, theme}) => {
                     <View style={appStyles.inputContainer}>
                       <PasswordField
                         value={values.password}
+                        required={true}
                         onBlur={handleBlur('password')}
                         label="Password"
                         placeholder="Password"

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {HelperText, TextInput, withTheme} from 'react-native-paper';
+import {HelperText, TextInput, withTheme, Text} from 'react-native-paper';
 
 /**
  * Component to render input in screens
@@ -8,7 +8,7 @@ import {HelperText, TextInput, withTheme} from 'react-native-paper';
  * @returns {JSX.Element}
  * @constructor
  */
-const PasswordField = props => {
+const PasswordField = ({required = false, label, theme, ...props}) => {
   const [hide, setHide] = useState(true);
 
   return (
@@ -16,6 +16,16 @@ const PasswordField = props => {
       <TextInput
         mode="outlined"
         {...props}
+        label={
+          required ? (
+            <Text style={{backgroundColor: 'white'}}>
+              {label}
+              <Text style={{color: theme.colors.red}}> *</Text>
+            </Text>
+          ) : (
+            label
+          )
+        }
         placeholder={props.placeholder}
         secureTextEntry={hide}
         autoCapitalize={'none'}
