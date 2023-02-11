@@ -16,7 +16,6 @@ export const validationSchema = Yup.object({
     .trim()
     .matches(/^[1-9]{1}[0-9]{5}$/, 'Invalid pin code')
     .required('This field is required'),
-  landMark: Yup.string().trim().required('This field is required'),
   street: Yup.string().trim().required('This field is required'),
   tag: Yup.string().trim().required('This field is required'),
 });

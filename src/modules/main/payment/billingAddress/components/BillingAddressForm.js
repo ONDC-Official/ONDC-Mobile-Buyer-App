@@ -63,12 +63,14 @@ const BillingAddressForm = ({
                   onBlur={handleBlur('name')}
                   label={'Name'}
                   placeholder={'Name'}
+                  required={true}
                   errorMessage={touched.name ? errors.name : null}
                   onChangeText={handleChange('name')}
                 />
                 <InputField
                   value={values.email}
                   onBlur={handleBlur('email')}
+                  required={true}
                   label={'Email'}
                   placeholder={'Email'}
                   errorMessage={touched.email ? errors.email : null}
@@ -78,6 +80,7 @@ const BillingAddressForm = ({
                   keyboardType={'numeric'}
                   maxLength={10}
                   value={values.number}
+                  required={true}
                   onBlur={handleBlur('number')}
                   label={'Mobile number'}
                   placeholder={'Mobile number'}
@@ -91,6 +94,7 @@ const BillingAddressForm = ({
                       keyboardType={'numeric'}
                       maxLength={6}
                       onBlur={handleBlur('pin')}
+                      required={true}
                       label={'Pin code'}
                       placeholder={'Pin code'}
                       errorMessage={touched.pin ? errors.pin : null}
@@ -121,8 +125,9 @@ const BillingAddressForm = ({
                 <InputField
                   value={values.street}
                   onBlur={handleBlur('street')}
-                  label={'Address Line 1'}
-                  placeholder={'Address line 1'}
+                  required={true}
+                  label={'Full Address'}
+                  placeholder={'Full Address'}
                   errorMessage={touched.street ? errors.street : null}
                   onChangeText={handleChange('street')}
                 />
@@ -137,6 +142,7 @@ const BillingAddressForm = ({
                 <InputField
                   value={values.city}
                   onBlur={handleBlur('city')}
+                  required={true}
                   label={'City'}
                   placeholder={'City'}
                   errorMessage={touched.city ? errors.city : null}
@@ -145,6 +151,7 @@ const BillingAddressForm = ({
                 <InputField
                   value={values.state}
                   onBlur={handleBlur('state')}
+                  required={true}
                   label={'State'}
                   placeholder={'State'}
                   errorMessage={touched.state ? errors.state : null}
