@@ -1,11 +1,11 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {Text, withTheme} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNetInfo} from '@react-native-community/netinfo';
 
 import useLoginWithGoogle from '../hooks/useLoginWithGoogle';
 import {showToastWithGravity} from '../../../utils/utils';
+import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
 
 const SocialMediaLogin = ({theme}) => {
   const {loginWithGoogle} = useLoginWithGoogle();
@@ -25,7 +25,18 @@ const SocialMediaLogin = ({theme}) => {
           style={[styles.button, {borderColor: theme.colors.primary}]}
           mode="outlined"
           onPress={onLoginWithGooglePress}>
-          <Icon size={18} name="google" color={theme.colors.primary} />
+          <GoogleSigninButton
+            style={{
+              height: 46,
+              width: 38,
+              borderWidth: 5,
+              borderRadius: 20,
+              borderColor: 'white',
+            }}
+            size={GoogleSigninButton.Size.Icon}
+            color={GoogleSigninButton.Color.Light}
+            onPress={onLoginWithGooglePress}
+          />
           <Text style={[styles.buttonLabel, {color: theme.colors.primary}]}>
             Continue with google
           </Text>
@@ -38,6 +49,7 @@ const SocialMediaLogin = ({theme}) => {
 const styles = StyleSheet.create({
   buttonContainer: {width: 300, marginTop: 12, marginBottom: 8},
   button: {
+    maxHeight: 48,
     borderRadius: 24,
     borderWidth: 1,
     padding: 12,

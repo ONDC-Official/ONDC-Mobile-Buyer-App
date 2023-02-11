@@ -81,14 +81,19 @@ const SortIcon = ({value, color}) => {
  * @constructor
  * @returns {JSX.Element}
  */
-const SortAndFilter = ({theme, updateFilterCount}) => {
+const SortAndFilter = ({theme, updateFilterCount, filterCount}) => {
   const {colors} = theme;
 
   const refRBSheet = useRef();
   const refSortSheet = useRef();
 
-  const {filters, selectedSortOption, selectedProviders, selectedCategories} =
-    useSelector(({filterReducer}) => filterReducer);
+  const {
+    filters,
+    selectedSortOption,
+    selectedProviders,
+    selectedCategories,
+    priceRangeSelected,
+  } = useSelector(({filterReducer}) => filterReducer);
 
   /**
    * function to close sort sheet
@@ -119,7 +124,8 @@ const SortAndFilter = ({theme, updateFilterCount}) => {
 
   const appliedFilters = selectedProviders.length + selectedCategories.length;
 
-  const filterColor = appliedFilters > 0 ? colors.opposite : colors.primary;
+  const filterColor =
+    appliedFilters > 0 || priceRangeSelected ? colors.opposite : colors.primary;
   const sortColor = selectedSortOption ? colors.opposite : colors.primary;
 
   return (

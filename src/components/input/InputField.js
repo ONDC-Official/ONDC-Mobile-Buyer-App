@@ -1,5 +1,5 @@
 import React from 'react';
-import {HelperText, TextInput} from 'react-native-paper';
+import {HelperText, TextInput, Text, withTheme} from 'react-native-paper';
 import {View} from 'react-native';
 
 /**
@@ -9,13 +9,27 @@ import {View} from 'react-native';
  * @returns {JSX.Element}
  * @constructor
  */
-const InputField = props => (
+const InputField = ({required = false, label, theme, ...props}) => (
   <View>
-    <TextInput {...props} mode="outlined" dense />
+    <TextInput
+      {...props}
+      mode="outlined"
+      dense
+      label={
+        required ? (
+          <Text style={{backgroundColor: 'white'}}>
+            {label}
+            <Text style={{color: theme.colors.red}}> *</Text>
+          </Text>
+        ) : (
+          label
+        )
+      }
+    />
     <HelperText padding="none" type="error" visible={props.errorMessage}>
       {props.errorMessage}
     </HelperText>
   </View>
 );
 
-export default InputField;
+export default withTheme(InputField);
