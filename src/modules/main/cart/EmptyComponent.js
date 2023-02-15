@@ -16,7 +16,7 @@ const EmptyComponent = ({theme, navigation}) => {
 
   return (
     <View style={[appStyles.container, styles.container]}>
-      <Icon name="folder-open" size={60} color={colors.primary} />
+      <Icon name="cart-outline" size={60} color={colors.primary} />
       <Text style={styles.title}>Your cart is empty</Text>
       <Text style={styles.subTitle}>
         looks like your shopping cart is empty, you can shop now by clicking
