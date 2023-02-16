@@ -28,7 +28,7 @@ const Splash = ({navigation}) => {
     } catch (error) {
       navigation.reset({
         index: 0,
-        routes: [{name: 'SignUp'}],
+        routes: [{name: 'Login'}],
       });
     }
   };

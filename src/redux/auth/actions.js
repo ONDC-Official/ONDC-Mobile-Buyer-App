@@ -38,14 +38,14 @@ export const tryLocalSignIn = (dispatch, navigation) => {
       } else {
         navigation.reset({
           index: 0,
-          routes: [{name: 'SignUp'}],
+          routes: [{name: 'Login'}],
         });
       }
     })
     .catch(error => {
       navigation.reset({
         index: 0,
-        routes: [{name: 'SignUp'}],
+        routes: [{name: 'Login'}],
       });
     });
 };
