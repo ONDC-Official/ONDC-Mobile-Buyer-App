@@ -3,7 +3,7 @@ import {
   removeItemFromCart,
   updateItemInCart,
 } from '../../../../redux/actions';
-import {showInfoToast} from '../../../../utils/utils';
+import {showInfoToast, showToastWithGravity} from '../../../../utils/utils';
 import {useDispatch} from 'react-redux';
 
 export default item => {
@@ -48,9 +48,13 @@ export default item => {
     } else {
       if (newQuantity === 0) {
         dispatch(removeItemFromCart(product));
+        showToastWithGravity(
+          `${item?.descriptor?.name} item removed from cart.`,
+        );
       } else {
         dispatch(updateItemInCart(product));
       }
+
       return product;
     }
   };
