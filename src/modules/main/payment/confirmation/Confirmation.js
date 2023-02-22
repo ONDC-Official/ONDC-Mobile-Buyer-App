@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Button, Card, Divider, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
@@ -12,6 +12,8 @@ import {
   GET_SELECT,
   ON_GET_SELECT,
 } from '../../../../utils/apiUtilities';
+import {removeItemFromCart, updateItemInCart} from '../../../../redux/actions';
+
 import {
   showToastWithGravity,
   skeletonList,
@@ -26,6 +28,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const {token} = useSelector(({authReducer}) => authReducer);
   const {transactionId} = useSelector(({filterReducer}) => filterReducer);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+
+  const dispatch = useDispatch();
 
   const {handleApiError} = useNetworkErrorHandling();
   const confirmation = useRef([]);
@@ -130,8 +134,36 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               });
               product.dataReceived = true;
               product.confirmation = element;
+
+              product.quantityMismatch = false;
+
+              // check wheather the element is out of stock
+              const remoteElement = quoteData.message.quote.quote.breakup.find(
+                one => String(one['@ondc/org/item_id']) === String(element.id),
+              );
+              const localElement = cartItems.find(
+                one => String(one.id) === String(element.id),
+              );
+              if (
+                remoteElement['@ondc/org/title_type'] === 'item' &&
+                remoteElement['@ondc/org/item_quantity']?.count === 0
+              ) {
+                product.itemOutOfStock = true;
+                product.quantity = 0;
+                dispatch(updateItemInCart(product));
+              } else if (
+                remoteElement['@ondc/org/title_type'] === 'item' &&
+                remoteElement['@ondc/org/item_quantity']?.count <
+                  localElement.quantity
+              ) {
+                product.quantityMismatch = true;
+                product.quantity =
+                  remoteElement['@ondc/org/item_quantity']?.count;
+                dispatch(updateItemInCart(product));
+              }
             }
           });
+
           setProviders(providerList);
           totalAmount.current =
             totalAmount.current +
