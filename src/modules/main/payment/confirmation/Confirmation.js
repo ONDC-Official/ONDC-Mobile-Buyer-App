@@ -134,11 +134,10 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               });
               product.dataReceived = true;
               product.confirmation = element;
-              // product.itemOutOfStock = false;
+
               product.quantityMismatch = false;
 
               // check wheather the element is out of stock
-
               const remoteElement = quoteData.message.quote.quote.breakup.find(
                 one => String(one['@ondc/org/item_id']) === String(element.id),
               );
@@ -147,7 +146,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               );
               if (
                 remoteElement['@ondc/org/title_type'] === 'item' &&
-                remoteElement['@ondc/org/item_quantity']?.count === 1
+                remoteElement['@ondc/org/item_quantity']?.count === 0
               ) {
                 product.itemOutOfStock = true;
                 product.quantity = 0;
