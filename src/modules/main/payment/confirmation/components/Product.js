@@ -1,9 +1,19 @@
 import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
-import {Button, Card, Divider, IconButton, Text, withTheme,} from 'react-native-paper';
+import {
+  Button,
+  Card,
+  Divider,
+  IconButton,
+  Text,
+  withTheme,
+} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useDispatch} from 'react-redux';
-import {removeItemFromCart, updateItemInCart,} from '../../../../../redux/actions';
+import {
+  removeItemFromCart,
+  updateItemInCart,
+} from '../../../../../redux/actions';
 import {appStyles} from '../../../../../styles/styles';
 import useProductQuantity from '../../../product/hook/useProductQuantity';
 import {stringToDecimal} from '../../../../../utils/utils';
@@ -42,6 +52,11 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
   const cost = item.price.value ? item.price.value : item.price.maximum_value;
   const outOfStock = item?.quantityMeta?.available?.count === 0;
 
+  const color = item.itemOutOfStock
+    ? colors.error
+    : item.quantityMismatch
+    ? colors.opposite
+    : colors.text;
   return (
     <Pressable
       onPress={() => {
@@ -58,7 +73,7 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
         />
         <View style={[appStyles.container, styles.details]}>
           <View style={styles.priceContainer}>
-            <Text variant="titleSmall" style={styles.title}>
+            <Text variant="titleSmall" style={[styles.title, {color: color}]}>
               {item?.descriptor?.name}
             </Text>
             <Text style={{color: colors.opposite}} variant="titleMedium">
@@ -66,13 +81,12 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
             </Text>
           </View>
           <View style={styles.organizationNameContainer}>
-            <Text numberOfLines={1}>
-              Qt:&nbsp;{item?.quantity} *{' '}
-              {stringToDecimal(cost)}
+            <Text numberOfLines={1} style={{color: color}}>
+              Qt:&nbsp;{item?.quantity} * {stringToDecimal(cost)}
             </Text>
           </View>
-          <View style={styles.organizationNameContainer}>
-            <Text numberOfLines={1}>
+          <View style={[styles.organizationNameContainer]}>
+            <Text numberOfLines={1} style={{color: color}}>
               {item?.provider_details?.descriptor?.name}
             </Text>
           </View>
