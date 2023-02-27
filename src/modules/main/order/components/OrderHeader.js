@@ -17,6 +17,12 @@ const OrderHeader = ({item, theme}) => {
   const {colors} = theme;
   const navigation = useNavigation();
 
+  item.state = item.items?.every(
+    element => element.cancellation_status === 'Cancelled',
+  )
+    ? 'Cancelled'
+    : item.state;
+
   return (
     <Card
       style={styles.container}

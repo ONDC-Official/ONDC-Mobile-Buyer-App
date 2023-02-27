@@ -20,8 +20,9 @@ const BreakDown = ({providers, theme}) => {
                   <View key={product.id}>
                     {product.hasOwnProperty('items') ? (
                       product.items.map(item => {
-                      
-                        const price = Number(stringToDecimal(item?.price?.value));
+                        const price = Number(
+                          stringToDecimal(item?.price?.value),
+                        );
                         total += Number(stringToDecimal(price));
                         orderTotal += Number(stringToDecimal(price));
                         return (
@@ -105,7 +106,9 @@ const BreakDown = ({providers, theme}) => {
                       })}
                     {product.hasOwnProperty('deliveries') &&
                       product.deliveries.map(item => {
-                        const price = Number(stringToDecimal(item?.price?.value));
+                        const price = Number(
+                          stringToDecimal(item?.price?.value),
+                        );
                         total += price;
                         orderTotal += price;
                         return (
@@ -151,7 +154,7 @@ const BreakDown = ({providers, theme}) => {
                 <Text
                   variant="titleSmall"
                   style={{color: theme.colors.opposite}}>
-                  ₹{stringToDecimal(total)}
+                  ₹{!isNaN(total) ? stringToDecimal(total) : total}
                 </Text>
               </View>
               <Divider bold />
@@ -164,7 +167,7 @@ const BreakDown = ({providers, theme}) => {
           Order Total
         </Text>
         <Text variant="titleMedium" style={{color: theme.colors.opposite}}>
-          ₹{stringToDecimal(orderTotal)}
+          ₹{!isNaN(orderTotal) ? stringToDecimal(orderTotal) : orderTotal}
         </Text>
       </View>
     </Card>
