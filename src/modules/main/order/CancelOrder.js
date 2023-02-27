@@ -23,7 +23,7 @@ import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
 import {useIsFocused} from '@react-navigation/native';
-import {showToastWithGravity} from '../../../utils/utils';
+import {showToastWithGravity, stringToDecimal} from '../../../utils/utils';
 
 const CancelOrder = ({navigation, route: {params}}) => {
   const isFocused = useIsFocused();
@@ -314,7 +314,7 @@ const CancelOrder = ({navigation, route: {params}}) => {
                       <View style={styles.productDetails}>
                         <Text>QTY: {item?.quantity?.count}</Text>
                         <Text variant="titleSmall" style={styles.productAmount}>
-                          ₹{item?.product?.price?.value}
+                          ₹{stringToDecimal(item?.product?.price?.value)}
                         </Text>
                       </View>
                     </TouchableOpacity>
