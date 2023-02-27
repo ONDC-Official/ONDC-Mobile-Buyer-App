@@ -248,7 +248,9 @@ const CancelOrder = ({navigation, route: {params}}) => {
         const data = JSON.parse(event.data);
         onUpdate(data.messageId)
           .then(() => {})
-          .catch(() => {});
+          .catch(err => {
+            console.error(err);
+          });
       });
     }
 
@@ -315,6 +317,11 @@ const CancelOrder = ({navigation, route: {params}}) => {
                         <Text>QTY: {item?.quantity?.count}</Text>
                         <Text variant="titleSmall" style={styles.productAmount}>
                           ₹{stringToDecimal(item?.product?.price?.value)}
+                        </Text>
+                        <Text variant="titleSmall" style={styles.productPrice}>
+                          {`Total: ₹${stringToDecimal(
+                            item.product?.price?.value * item?.quantity?.count,
+                          )}`}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -416,13 +423,18 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   product: {
-    marginEnd: 32,
+    marginEnd: 22,
+    justifyContent: 'center',
   },
   productDetails: {
     flexDirection: 'row',
   },
   productAmount: {
-    marginStart: 32,
+    marginStart: 20,
+  },
+  productPrice: {
+    marginStart: 20,
+    fontWeight: '800',
   },
   productList: {
     marginBottom: 12,
