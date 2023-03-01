@@ -15,7 +15,6 @@ import {showInfoToast} from '../../../utils/utils';
 
 const validationSchema = Yup.object({
   firstName: Yup.string().trim().required('This field is required'),
-  middleName: Yup.string().trim().required('This field is required'),
   lastName: Yup.string().trim().required('This field is required'),
   contactNumber: Yup.string()
     .trim()
@@ -102,6 +101,7 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
               <InputField
                 value={values.firstName}
                 onBlur={handleBlur('firstName')}
+                required={true}
                 label={'First Name'}
                 placeholder={'First name'}
                 errorMessage={touched.firstName ? errors.firstName : null}
@@ -118,6 +118,7 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
               <InputField
                 value={values.lastName}
                 onBlur={handleBlur('lastName')}
+                required={true}
                 label={'Last Name'}
                 placeholder={'Last name'}
                 errorMessage={touched.lastName ? errors.lastName : null}
@@ -126,6 +127,7 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
               <InputField
                 value={values.email}
                 onBlur={handleBlur('email')}
+                required={true}
                 label={'Email'}
                 placeholder={'Email'}
                 errorMessage={touched.email ? errors.email : null}
@@ -136,6 +138,7 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
                 maxLength={10}
                 value={values.contactNumber}
                 onBlur={handleBlur('contactNumber')}
+                required={true}
                 label={'Mobile number'}
                 placeholder={'Mobile number'}
                 errorMessage={
@@ -147,6 +150,7 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
               <InputField
                 value={values.street}
                 onBlur={handleBlur('issueType')}
+                required={true}
                 label={'Issue Type'}
                 placeholder={'Issue type'}
                 errorMessage={touched.issueType ? errors.issueType : null}
@@ -155,6 +159,7 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
               <InputField
                 value={values.street}
                 onBlur={handleBlur('issueDescription')}
+                required={true}
                 label={'Issue Description'}
                 placeholder={'Issue description'}
                 errorMessage={
@@ -171,7 +176,7 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
                   onPress={handleSubmit}
                   loading={apiInProgress}
                   disabled={apiInProgress}>
-                  Save
+                  Submit
                 </Button>
               </View>
             </View>
