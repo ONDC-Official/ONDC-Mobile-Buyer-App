@@ -29,22 +29,29 @@ const Address = ({item, theme, isCurrentAddress, params}) => {
         'Address Updated',
         'You want update the address, it will clear your existing cart. Please confirm if you want to go ahead with this?',
         'Yes',
-        () => dispatch(clearCart()),
+        () => {
+          dispatch(clearCart());
+          addAddressTostore();
+        },
         'No',
         () => {},
       );
     } else {
-      setStoredData('address', JSON.stringify(item)).then(response => {
-        if (params?.navigateToDashboard) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'Dashboard'}],
-          });
-        } else {
-          navigation.goBack();
-        }
-      });
+      addAddressTostore();
     }
+  };
+
+  const addAddressTostore = () => {
+    setStoredData('address', JSON.stringify(item)).then(response => {
+      if (params?.navigateToDashboard) {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Dashboard'}],
+        });
+      } else {
+        navigation.goBack();
+      }
+    });
   };
 
   return (
