@@ -855,6 +855,10 @@ const Payment = ({
                     mode="contained"
                     contentStyle={appStyles.containedButtonContainer}
                     labelStyle={appStyles.containedButtonLabel}
+                    disabled={
+                      selectedPaymentOption !== 'COD' &&
+                      selectedPaymentOption !== 'JUSPAY'
+                    }
                     onPress={() => {
                       removeInitEvent();
                       processPayment()
