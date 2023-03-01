@@ -16,6 +16,7 @@ import useGetOrderStatus from './actions/useGetOrderStatus';
 import useTrackOrder from './actions/useTrackOrder';
 import Product from './Product';
 import OrderStatus from './OrderStatus';
+import {stringToDecimal} from '../../../../utils/utils';
 
 /**
  * Component is used to display shipping details to the user when card is expanded
@@ -52,11 +53,43 @@ const ShippingDetails = ({order, theme}) => {
         <View style={styles.orderStatus}>
           {order?.state && <OrderStatus status={order?.state} />}
         </View>
-
         <Divider />
         {order?.items?.map(product => (
-          <Product key={product.id} item={product} />
+          <Product key={product.id} item={product} theme={theme} />
         ))}
+        {order?.quote?.breakup?.map(
+          breakup =>
+            breakup?.title === 'Delivery Charges' && (
+              <View style={styles.priceContainer}>
+                <Text
+                  variant="titleSmall"
+                  style={{color: theme.colors.opposite}}>
+                  {breakup?.title}
+                </Text>
+                <Text
+                  variant="titleSmall"
+                  style={{color: theme.colors.opposite}}>
+                  ₹ {stringToDecimal(breakup?.price?.value)}
+                </Text>
+              </View>
+            ),
+        )}
+        {order.quote?.price?.value && (
+          <>
+            <View style={styles.priceContainer}>
+              <Text variant="titleSmall" style={{color: theme.colors.opposite}}>
+                Total Amount:
+              </Text>
+              <Text variant="titleSmall" style={{color: theme.colors.opposite}}>
+                ₹
+                {!isNaN(order.quote?.price?.value)
+                  ? stringToDecimal(order.quote.price?.value)
+                  : order.quote.price?.value}
+              </Text>
+            </View>
+            <Divider />
+          </>
+        )}
         {shippingAddress ? (
           <Address
             title="Shipped To"
@@ -248,4 +281,10 @@ const styles = StyleSheet.create({
   address: {marginBottom: 4},
   quantity: {fontWeight: '700'},
   addressContainer: {paddingHorizontal: 12, marginTop: 20, flexShrink: 1},
+  priceContainer: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
+  },
 });
