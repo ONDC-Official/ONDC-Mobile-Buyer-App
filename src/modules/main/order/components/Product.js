@@ -49,29 +49,35 @@ const Product = ({item}) => {
 };
 
 const styles = StyleSheet.create({
-  image: {height: '100%', width: 100, marginRight: 10},
+  image: {
+    height: '100%',
+    width: 100,
+    marginRight: 10,
+  },
   container: {
+    flex: 1,
     flexDirection: 'row',
     paddingVertical: 8,
   },
   details: {
     justifyContent: 'space-between',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
   rightPane: {
-    flexShrink: 1,
+    flex: 1,
     paddingHorizontal: 8,
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   title: {
-    marginRight: 10,
+    marginRight: 8,
     flexShrink: 1,
   },
   address: {marginBottom: 4},
   divider: {marginTop: 10},
   price: {
-    width: 50,
+    width: 70,
     textAlign: 'right',
   },
 });
