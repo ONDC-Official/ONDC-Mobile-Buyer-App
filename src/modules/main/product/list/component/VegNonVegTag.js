@@ -1,6 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import {Text, withTheme} from 'react-native-paper';
-import {TAGS} from '../../../../../utils/Constants';
+import {withTheme} from 'react-native-paper';
 import React from 'react';
 
 const VegNonVegTags = ({list = null, theme}) => {
@@ -16,14 +15,13 @@ const VegNonVegTags = ({list = null, theme}) => {
               {
                 borderColor: colors.success,
               },
-            ]}
-          />
-          <Text
-            style={{
-              color: colors.success,
-            }}>
-            {TAGS.veg}
-          </Text>
+            ]}>
+            <View
+              style={[
+                styles.innerCircleStyle,
+                {backgroundColor: colors.success},
+              ]}></View>
+          </View>
         </View>
       );
     } else if (list.hasOwnProperty('non_veg') && list.non_veg === 'yes') {
@@ -35,14 +33,13 @@ const VegNonVegTags = ({list = null, theme}) => {
               {
                 borderColor: colors.error,
               },
-            ]}
-          />
-          <Text
-            style={{
-              color: colors.error,
-            }}>
-            {TAGS.non_veg}
-          </Text>
+            ]}>
+            <View
+              style={[
+                styles.innerCircleStyle,
+                {backgroundColor: colors.error},
+              ]}></View>
+          </View>
         </View>
       );
     } else {
@@ -61,10 +58,18 @@ const styles = StyleSheet.create({
   },
   tagCircle: {
     borderWidth: 2,
-    borderRadius: 5,
-    width: 14,
-    height: 14,
+    borderRadius: 1,
+    width: 16,
+    height: 16,
     marginEnd: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  innerCircleStyle: {
+    height: 8,
+    width: 8,
+    borderRadius: 4,
+    padding: 3,
   },
 });
 
