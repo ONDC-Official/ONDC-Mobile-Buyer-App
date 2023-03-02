@@ -3,6 +3,7 @@ import Toast from 'react-native-toast-message';
 import moment, {min} from 'moment/moment';
 
 export const isIOS = Platform.OS === 'ios';
+const TOAST_VISIBILITY_TIME = 3000;
 
 /**
  * Function is used to show toast on the screen
@@ -13,6 +14,7 @@ export const showToastWithGravity = message => {
     type: 'error',
     text1: message,
     position: 'top',
+    visibilityTime: TOAST_VISIBILITY_TIME,
   });
 };
 
@@ -29,11 +31,13 @@ export const getUserInitials = name => {
     .toUpperCase();
 };
 
-export const showInfoToast = (message, position = 'top') => {
+export const showInfoToast = (message, position = 'top', numberOfLines = 1) => {
   Toast.show({
     type: 'info',
     text1: message,
     position: position,
+    visibilityTime: TOAST_VISIBILITY_TIME,
+    text2NumberOfLines: numberOfLines,
   });
 };
 
