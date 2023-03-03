@@ -36,6 +36,7 @@
     "react-native-android-location-enabler": "^1.2.2",
     "react-native-collapsible": "^1.6.0",
     "react-native-config": "^1.4.5",
+    "react-native-device-info": "^10.4.0",
     "react-native-event-source": "^1.1.0",
     "react-native-fast-image": "^8.5.11",
     "react-native-gesture-handler": "^2.3.2",

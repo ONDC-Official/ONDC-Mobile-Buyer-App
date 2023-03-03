@@ -173,7 +173,7 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
                       min={Math.floor(filters.minPrice)}
                       max={Math.ceil(filters.maxPrice)}
                       step={Math.round(
-                        (filters.maxPrice - filters.minPrice) / 100,
+                        (filters.maxPrice - filters.minPrice) / 200,
                       )}
                     />
                     <View style={styles.sliderText}>

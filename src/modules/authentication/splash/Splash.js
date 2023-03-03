@@ -6,8 +6,8 @@ import {Text} from 'react-native-paper';
 import {appStyles} from '../../../styles/styles';
 import ONDCLogo from '../../../assets/ondc.svg';
 import {tryLocalSignIn} from '../../../redux/auth/actions';
-import {APPLICATION_VERSION} from '../../../utils/Constants';
-import auth from "@react-native-firebase/auth";
+import auth from '@react-native-firebase/auth';
+import {getBuildNumber, getVersion} from 'react-native-device-info';
 
 /**
  * Component to render splash screen
@@ -49,7 +49,7 @@ const Splash = ({navigation}) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <Text>Version: {APPLICATION_VERSION}</Text>
+        <Text>Version: {`${getVersion()}-(${getBuildNumber()})`}</Text>
       </View>
     </View>
   );

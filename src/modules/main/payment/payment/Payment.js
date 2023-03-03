@@ -459,6 +459,13 @@ const Payment = ({
               setConfirmOrderRequested(false);
               setInitializeOrderRequested(false);
               break;
+
+            case 'BACKPRESSED':
+              showToastWithGravity('Payment failed, please try again.');
+              setConfirmOrderRequested(false);
+              setInitializeOrderRequested(false);
+              break;
+
             default:
               setConfirmOrderRequested(false);
               setInitializeOrderRequested(false);
@@ -855,6 +862,10 @@ const Payment = ({
                     mode="contained"
                     contentStyle={appStyles.containedButtonContainer}
                     labelStyle={appStyles.containedButtonLabel}
+                    disabled={
+                      selectedPaymentOption !== 'COD' &&
+                      selectedPaymentOption !== 'JUSPAY'
+                    }
                     onPress={() => {
                       removeInitEvent();
                       processPayment()
