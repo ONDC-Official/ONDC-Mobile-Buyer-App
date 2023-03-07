@@ -38,7 +38,10 @@ const Product = ({item}) => {
             </Text>
           </View>
           <Text style={styles.quantity}>
-            QTY:{` ${item?.quantity?.count} * ${item.product?.price?.value}`}
+            QTY:
+            {` ${item?.quantity?.count} * ${stringToDecimal(
+              item.product?.price?.value,
+            )}`}
           </Text>
           <StatusContainer product={item} />
         </View>

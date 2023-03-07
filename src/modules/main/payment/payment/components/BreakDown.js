@@ -53,8 +53,8 @@ const BreakDown = ({providers, theme}) => {
                     {product.hasOwnProperty('discounts') &&
                       product.discounts.map(item => {
                         const price = stringToDecimal(item?.price?.value);
-                        total += price;
-                        orderTotal += price;
+                        total += Number(stringToDecimal(price));
+                        orderTotal += Number(stringToDecimal(price));
                         return (
                           <View
                             key={`${item['@ondc/org/item_id']}Discount`}
@@ -71,8 +71,8 @@ const BreakDown = ({providers, theme}) => {
                     {product.hasOwnProperty('taxes') &&
                       product.taxes.map(item => {
                         const price = stringToDecimal(item?.price?.value);
-                        total += price;
-                        orderTotal += price;
+                        total += Number(stringToDecimal(price));
+                        orderTotal += Number(stringToDecimal(price));
                         return (
                           <View
                             key={`${item['@ondc/org/item_id']}Tax`}
@@ -81,7 +81,7 @@ const BreakDown = ({providers, theme}) => {
                             <Text
                               variant="titleSmall"
                               style={styles.productPrice}>
-                              ₹{item?.price?.value}
+                              ₹{stringToDecimal(item?.price?.value)}
                             </Text>
                           </View>
                         );
@@ -89,8 +89,8 @@ const BreakDown = ({providers, theme}) => {
                     {product.hasOwnProperty('packings') &&
                       product.packings.map(item => {
                         const price = stringToDecimal(item?.price?.value);
-                        total += price;
-                        orderTotal += price;
+                        total += Number(stringToDecimal(price));
+                        orderTotal += Number(stringToDecimal(price));
                         return (
                           <View
                             key={`${item['@ondc/org/item_id']}Packing`}
@@ -99,7 +99,7 @@ const BreakDown = ({providers, theme}) => {
                             <Text
                               variant="titleSmall"
                               style={styles.productPrice}>
-                              ₹{item?.price?.value}
+                              ₹{stringToDecimal(item?.price?.value)}
                             </Text>
                           </View>
                         );
@@ -109,8 +109,8 @@ const BreakDown = ({providers, theme}) => {
                         const price = Number(
                           stringToDecimal(item?.price?.value),
                         );
-                        total += price;
-                        orderTotal += price;
+                        total += Number(stringToDecimal(price));
+                        orderTotal += Number(stringToDecimal(price));
                         return (
                           <View
                             key={`${item['@ondc/org/item_id']}Delivery`}
@@ -119,7 +119,7 @@ const BreakDown = ({providers, theme}) => {
                             <Text
                               variant="titleSmall"
                               style={styles.productPrice}>
-                              ₹{item?.price?.value}
+                              ₹{stringToDecimal(item?.price?.value)}
                             </Text>
                           </View>
                         );
@@ -127,8 +127,8 @@ const BreakDown = ({providers, theme}) => {
                     {product.hasOwnProperty('misces') &&
                       product.misces.map(item => {
                         const price = stringToDecimal(item?.price?.value);
-                        total += price;
-                        orderTotal += price;
+                        total += Number(stringToDecimal(price));
+                        orderTotal += Number(stringToDecimal(price));
                         return (
                           <View
                             key={`${item['@ondc/org/item_id']}misc`}
@@ -137,7 +137,7 @@ const BreakDown = ({providers, theme}) => {
                             <Text
                               variant="titleSmall"
                               style={styles.productPrice}>
-                              ₹{item?.price?.value}
+                              ₹{stringToDecimal(item?.price?.value)}
                             </Text>
                           </View>
                         );

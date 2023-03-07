@@ -42,6 +42,20 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
     }
   }, []);
 
+  useEffect(() => {
+    const searchOnAddressChange = async () => {
+      const newAddress = await getStoredData('address');
+      if (isFocused && newAddress !== address) {
+        if (params) {
+          onSearch(params.category, SEARCH_QUERY.CATEGORY);
+        } else {
+          onSearch('', SEARCH_QUERY.UNKNOWN);
+        }
+      }
+    };
+    searchOnAddressChange();
+  }, [address]);
+
   return (
     <SafeAreaView
       style={[appStyles.container, {backgroundColor: theme.colors.surface}]}>
