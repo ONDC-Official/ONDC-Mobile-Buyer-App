@@ -29,8 +29,8 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
   const [longitude, setLongitude] = useState(null);
 
   let addressInfo = {
-    email: emailId,
-    name: name,
+    email: emailId || '',
+    name: name || '',
     number: '',
     city: '',
     state: '',
