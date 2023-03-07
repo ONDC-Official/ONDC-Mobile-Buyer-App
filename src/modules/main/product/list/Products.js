@@ -9,6 +9,7 @@ import ListPlaceholder from './component/placeholder/ListPlaceholder';
 import ProductCardSkeleton from './component/ProductCardSkeleton';
 import DashboardProduct from './component/DashboardProduct/DashboardProduct';
 import CartFooter from './component/CartFooter/CartFooter';
+import {skeletonList} from '../../../../utils/utils';
 
 const ListFooter = ({moreRequested}) =>
   moreRequested ? <ProductCardSkeleton /> : null;
@@ -18,7 +19,7 @@ const ListFooter = ({moreRequested}) =>
  * @constructor
  * @returns {JSX.Element}
  */
-const Products = ({theme, loadMore, productsRequested}) => {
+const Products = ({theme, loadMore, productsRequested, loading = false}) => {
   const navigation = useNavigation();
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const {products} = useSelector(({productReducer}) => productReducer);
@@ -38,6 +39,8 @@ const Products = ({theme, loadMore, productsRequested}) => {
     );
   };
 
+  const productList = loading ? skeletonList : products;
+
   return (
     <View
       style={[
@@ -45,19 +48,19 @@ const Products = ({theme, loadMore, productsRequested}) => {
         {backgroundColor: theme.colors.pageBackground},
       ]}>
       <FlatList
-        data={products}
+        data={productList}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id}
         ListEmptyComponent={() => <ListPlaceholder />}
         contentContainerStyle={
-          products.length > 0
+          productList.length > 0
             ? styles.contentContainerStyle
             : [appStyles.container, styles.emptyContainer]
         }
         onEndReached={loadMore}
         ListFooterComponent={
           <ListFooter
-            moreRequested={productsRequested && products.length > 0}
+            moreRequested={productsRequested && productList.length > 0}
           />
         }
       />
