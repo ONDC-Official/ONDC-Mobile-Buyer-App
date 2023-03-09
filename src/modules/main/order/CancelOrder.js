@@ -4,8 +4,10 @@ import {
   Card,
   Checkbox,
   Divider,
+  IconButton,
   RadioButton,
   Text,
+  withTheme,
 } from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 
@@ -25,7 +27,8 @@ import RNEventSource from 'react-native-event-source';
 import {useIsFocused} from '@react-navigation/native';
 import {showToastWithGravity, stringToDecimal} from '../../../utils/utils';
 
-const CancelOrder = ({navigation, route: {params}}) => {
+const CancelOrder = ({theme, navigation, route: {params}}) => {
+  const {colors} = theme;
   const isFocused = useIsFocused();
   const {handleApiError} = useNetworkErrorHandling();
   const {token} = useSelector(({authReducer}) => authReducer);
@@ -67,6 +70,13 @@ const CancelOrder = ({navigation, route: {params}}) => {
     }
   };
 
+  useEffect(() => {
+    const productsWithCancelQuant = products.map(
+      element => (element.cancelQuantity = element.quantity?.count),
+    );
+    setProducts(productsWithCancelQuant);
+  }, []);
+
   /**
    * function used to request tracking details of order
    * @returns {Promise<void>}
@@ -77,7 +87,9 @@ const CancelOrder = ({navigation, route: {params}}) => {
       const items = selectedProducts.map(element => {
         return {
           id: element.id,
-          quantity: element.quantity,
+          quantity: element.cancelQuantity
+            ? element.cancelQuantity
+            : element.quantity,
           tags: {
             update_type: params.updateType,
             reason_code: selectedReason.id,
@@ -89,6 +101,7 @@ const CancelOrder = ({navigation, route: {params}}) => {
           },
         };
       });
+      console.log('Items to Cancel ===>>>', items);
       const payload = [
         {
           context: {
@@ -131,6 +144,20 @@ const CancelOrder = ({navigation, route: {params}}) => {
     setSelectedProducts(items);
   };
 
+  const updateQuantity = (item, addQuantity) => {
+    let cancelQuantity = item.hasOwnProperty('cancelQuantity')
+      ? item.cancelQuantity
+      : item.quantity?.count;
+    if (addQuantity & (cancelQuantity < item.quantity?.count)) {
+      item.cancelQuantity = cancelQuantity + 1;
+    } else if (!addQuantity && cancelQuantity > 0) {
+      item.cancelQuantity = cancelQuantity - 1;
+    }
+    const indexFound = products.findIndex(element => element.id === item.id);
+    if (indexFound > -1) products[indexFound] = item;
+
+    setProducts([...products]);
+  };
   const removeEvents = eventSource => {
     if (eventSource) {
       eventSource.removeAllListeners();
@@ -300,32 +327,66 @@ const CancelOrder = ({navigation, route: {params}}) => {
                   one => one.id === item?.id,
                 );
                 return (
-                  <View style={styles.itemContainer}>
-                    <Checkbox
-                      disabled={disabled}
-                      status={index > -1 ? 'checked' : 'unchecked'}
-                      onPress={() => onProductClicked(item, index)}
-                    />
-                    <TouchableOpacity
-                      disabled={disabled}
-                      style={styles.product}
-                      onPress={() => onProductClicked(item, index)}>
-                      <Text variant="titleSmall">
-                        {item?.product?.descriptor?.name}
-                      </Text>
-                      <View style={styles.productDetails}>
-                        <Text>QTY: {item?.quantity?.count}</Text>
-                        <Text variant="titleSmall" style={styles.productAmount}>
-                          ₹{stringToDecimal(item?.product?.price?.value)}
+                  <>
+                    <View style={styles.itemContainer}>
+                      <Checkbox
+                        disabled={disabled}
+                        status={index > -1 ? 'checked' : 'unchecked'}
+                        onPress={() => onProductClicked(item, index)}
+                      />
+                      <TouchableOpacity
+                        disabled={disabled}
+                        style={styles.product}
+                        onPress={() => onProductClicked(item, index)}>
+                        <Text variant="titleSmall">
+                          {item?.product?.descriptor?.name}
                         </Text>
-                        <Text variant="titleSmall" style={styles.productPrice}>
-                          {`Total: ₹${stringToDecimal(
-                            item.product?.price?.value * item?.quantity?.count,
-                          )}`}
+                        <View style={styles.productDetails}>
+                          <Text>QTY: {item?.quantity?.count}</Text>
+                          <Text
+                            variant="titleSmall"
+                            style={styles.productAmount}>
+                            ₹{stringToDecimal(item?.product?.price?.value)}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+
+                      <View style={[styles.quantityDisplayButton]}>
+                        <IconButton
+                          icon="minus"
+                          iconColor="white"
+                          style={{
+                            backgroundColor: colors.primary,
+                            height: 25,
+                            width: 25,
+                          }}
+                          onPress={() =>
+                            index > -1 && updateQuantity(item, false)
+                          }
+                        />
+                        <Text>
+                          {item.cancelQuantity || item.quantity?.count}
                         </Text>
+                        <IconButton
+                          icon="plus"
+                          iconColor="white"
+                          style={{
+                            backgroundColor: colors.primary,
+                            height: 25,
+                            width: 25,
+                          }}
+                          onPress={() =>
+                            index > -1 && updateQuantity(item, true)
+                          }
+                        />
                       </View>
-                    </TouchableOpacity>
-                  </View>
+                    </View>
+                    <Text variant="titleSmall" style={styles.productPrice}>
+                      {`Total: ₹${stringToDecimal(
+                        item.product?.price?.value * item?.quantity?.count,
+                      )}`}
+                    </Text>
+                  </>
                 );
               })}
             </View>
@@ -439,6 +500,10 @@ const styles = StyleSheet.create({
   productList: {
     marginBottom: 12,
   },
+  quantityDisplayButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });
 
-export default CancelOrder;
+export default withTheme(CancelOrder);
