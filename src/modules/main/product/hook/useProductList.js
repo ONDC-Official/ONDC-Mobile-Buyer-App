@@ -242,10 +242,11 @@ export default (category = null) => {
           });
 
           dispatch(saveFilters(filterData));
-
           if (listCount.current < data.count && listCount.current < 10) {
             getProductsList(messageId, transactionId)
-              .then(() => {})
+              .then(() => {
+                setApiInProgress(false);
+              })
               .catch(() => {});
           } else {
             setApiInProgress(false);
@@ -257,7 +258,9 @@ export default (category = null) => {
 
           if (listCount.current < data.totalCount && listCount.current < 10) {
             getProductsList(messageId, transactionId)
-              .then(() => {})
+              .then(() => {
+                setApiInProgress(false);
+              })
               .catch(() => {});
           } else {
             setApiInProgress(false);

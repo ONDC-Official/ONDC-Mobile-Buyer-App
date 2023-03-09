@@ -23,8 +23,13 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
   const {products} = useSelector(({productReducer}) => productReducer);
   const {filters} = useSelector(({filterReducer}) => filterReducer);
 
-  const {onSearch, loadMore, updateFilterCount, productsRequested} =
-    useProductList(params?.category);
+  const {
+    onSearch,
+    loadMore,
+    updateFilterCount,
+    productsRequested,
+    apiInProgress,
+  } = useProductList(params?.category);
 
   useEffect(() => {
     getStoredData('address').then(response => {
@@ -78,7 +83,11 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
         <SortAndFilter updateFilterCount={updateFilterCount} />
       )}
 
-      <Products loadMore={loadMore} productsRequested={productsRequested} />
+      <Products
+        loadMore={loadMore}
+        productsRequested={productsRequested}
+        loading={apiInProgress}
+      />
     </SafeAreaView>
   );
 };
