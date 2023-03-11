@@ -88,7 +88,9 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
         return {
           id: element.id,
           quantity: element.cancelQuantity
-            ? element.cancelQuantity
+            ? {
+                count: element.cancelQuantity,
+              }
             : element.quantity,
           tags: {
             update_type: params.updateType,
@@ -101,7 +103,6 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
           },
         };
       });
-      console.log('Items to Cancel ===>>>', items);
       const payload = [
         {
           context: {
@@ -148,16 +149,21 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
     let cancelQuantity = item.hasOwnProperty('cancelQuantity')
       ? item.cancelQuantity
       : item.quantity?.count;
-    if (addQuantity & (cancelQuantity < item.quantity?.count)) {
+    if (addQuantity && cancelQuantity < item.quantity?.count) {
       item.cancelQuantity = cancelQuantity + 1;
-    } else if (!addQuantity && cancelQuantity > 0) {
-      item.cancelQuantity = cancelQuantity - 1;
-    }
-    const indexFound = products.findIndex(element => element.id === item.id);
-    if (indexFound > -1) products[indexFound] = item;
+      const indexFound = products.findIndex(element => element.id === item.id);
+      if (indexFound > -1) products[indexFound] = item;
 
-    setProducts([...products]);
+      setProducts([...products]);
+    } else if (!addQuantity && cancelQuantity > 1) {
+      item.cancelQuantity = cancelQuantity - 1;
+      const indexFound = products.findIndex(element => element.id === item.id);
+      if (indexFound > -1) products[indexFound] = item;
+
+      setProducts([...products]);
+    }
   };
+
   const removeEvents = eventSource => {
     if (eventSource) {
       eventSource.removeAllListeners();
@@ -290,7 +296,7 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
   return (
     <ScrollView>
       <Card style={styles.card}>
-        {products?.length !== 1 && (
+        {products?.length > 0 && (
           <View style={styles.cancellationType}>
             <View style={styles.row}>
               <RadioButton.Android
