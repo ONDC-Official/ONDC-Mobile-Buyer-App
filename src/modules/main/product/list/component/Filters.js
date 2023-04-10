@@ -16,6 +16,7 @@ import {
   updateFilters,
 } from '../../../../../redux/filter/actions';
 import OutlineButton from '../../../../../components/button/OutlineButton';
+import InputField from '../../../../../components/input/InputField';
 
 /**
  * Component to render filters screen
@@ -36,6 +37,12 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
   const [rangeMin, setRangeMin] = useState(minPrice);
 
   const applyFilters = () => {
+    if (rangeMin > rangeMax) {
+      showToastWithGravity(
+        'Min price range should be smaller than Max price range',
+      );
+      return;
+    }
     const payload = {
       selectedProviders: providers,
       selectedCategories: categories,
@@ -82,6 +89,13 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
       categoryList.push(item.id);
     }
     setCategories(categoryList);
+  };
+
+  const handleMinPriceChange = minValue => {
+    if (minValue >= minPrice && minValue < rangeMax) setRangeMin(minValue);
+  };
+  const handleMaxPriceChange = maxValue => {
+    if (maxValue <= maxPrice) setRangeMax(maxValue);
   };
 
   /**
@@ -156,7 +170,24 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
                 filters.minPrice !== filters.maxPrice && (
                   <>
                     <Text style={styles.price}>Price Range</Text>
-
+                    <View style={styles.inputContainer}>
+                      <InputField
+                        style={{minWidth: 80}}
+                        keyboardType={'numeric'}
+                        value={`${rangeMin}`}
+                        label={'Min.'}
+                        placeholder={'Min.'}
+                        onChangeText={handleMinPriceChange}
+                      />
+                      <InputField
+                        style={{minWidth: 80}}
+                        keyboardType={'numeric'}
+                        value={`${rangeMax}`}
+                        label={'Max.'}
+                        placeholder={'Max.'}
+                        onChangeText={handleMaxPriceChange}
+                      />
+                    </View>
                     <MultiSlider
                       selectedStyle={{
                         backgroundColor: colors.primary,
@@ -261,5 +292,9 @@ const styles = StyleSheet.create({
   },
   normal: {
     backgroundColor: 'white',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
 });
