@@ -78,29 +78,29 @@ Keep in mind that if you do this, you'll have to **install and link** all depend
 
 To customize the splash screen (logo and background color) use the CLI provided in the [official docs](https://github.com/zoontek/react-native-bootsplash#assets-generation).
 
-## Steps to run the Mobile App in the Development environment
+## Steps to run the Mobile App
 
-● Install dependency packages using yarn install command.
+- Install dependency packages using `yarn install` command.
 
-● Generate the SHA1 key for the keystore with command "keytool -list -v -keystore "PATH TO debug.keystore" -alias androiddebugkey -storepass android -keypass android"
+- Generate the SHA1 key for the keystore with command `keytool -list -v -keystore "PATH TO debug.keystore" -alias androiddebugkey -storepass android -keypass android`
 
-● Create firebase project & add Android/IOS app with the help of App's package name (add .dev as suffix for Development environment) & SHA1 key.
+- Create firebase project & add Android/IOS app with the help of App's package name (add .dev as suffix for Development environment) & SHA1 key.
 
-● Add Sign-in providers as Google & Email/Password inside Firebase Sign-in method.
+- Add Sign-in providers as Google & Email/Password inside Firebase Sign-in method.
 
-● Download the firebase config file generated from firebase console & place it inside android/app. 
+- Download the firebase config file generated from firebase console & place it inside android/app. 
 
-● Create files named as: .env.development, .env.production.
+- Create files named as: .env.development, .env.production.
 
-● Copy paste sample.config.js files content and assign appropriate values to the keys.
+- Copy paste sample.config.js files content and assign appropriate values to the keys.
 
-● BASE_URL should be added directly to the apiUtilities.js file.
+- BASE_URL should be added directly to the apiUtilities.js file.
 
-● Use following commands to run the application in different environments
+- Use following commands to run the application in different environments
 
-a. react-native run-android --variant=devDebug --appIdSuffix=dev
+  - For Development environment run `react-native run-android --variant=devDebug --appIdSuffix=dev`
 
-b. react-native run-android --variant=prdDebug
+  - For Production environment run `react-native run-android --variant=prdDebug`
 
 ## Setup environments
 
