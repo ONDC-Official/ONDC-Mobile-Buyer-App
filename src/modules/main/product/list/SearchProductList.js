@@ -34,7 +34,9 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
   useEffect(() => {
     getStoredData('address').then(response => {
       if (response) {
-        setAddress(JSON.parse(response));
+        if (address?.id !== JSON.parse(response)?.id) {
+          setAddress(JSON.parse(response));
+        }
       }
     });
   }, [isFocused]);
