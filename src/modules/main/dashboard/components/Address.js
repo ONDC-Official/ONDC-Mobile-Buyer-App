@@ -23,8 +23,11 @@ const Address = ({item, theme, isCurrentAddress, params}) => {
   const {street, landmark, city, state, areaCode, tag} = item.address;
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
-  const setDefaultAddress = () => {
-    if (cartItems.length > 0 && !isCurrentAddress) {
+  const setDefaultAddress = async () => {
+    if (params?.navigateToNext) {
+      await setStoredData('address', JSON.stringify(item));
+      navigation.navigate(params.navigateToNext);
+    } else if (cartItems.length > 0 && !isCurrentAddress) {
       alertWithTwoButtons(
         'Address Updated',
         'You want update the address, it will clear your existing cart. Please confirm if you want to go ahead with this?',

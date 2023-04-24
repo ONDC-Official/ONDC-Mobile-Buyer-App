@@ -98,7 +98,11 @@ const Cart = ({navigation, theme}) => {
               mode="contained"
               contentStyle={appStyles.containedButtonContainer}
               labelStyle={appStyles.containedButtonLabel}
-              onPress={() => navigation.navigate('BillingAddressPicker')}>
+              onPress={() =>
+                navigation.navigate('AddressList', {
+                  navigateToNext: 'BillingAddressPicker',
+                })
+              }>
               Checkout
             </Button>
           </View>

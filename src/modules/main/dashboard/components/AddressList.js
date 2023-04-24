@@ -10,7 +10,7 @@ import {skeletonList} from '../../../../utils/utils';
 import AddressSkeleton from './AddressSkeleton';
 import {Button, IconButton, withTheme} from 'react-native-paper';
 import {appStyles} from '../../../../styles/styles';
-import useRefreshToken from "../../../../hooks/useRefreshToken";
+import useRefreshToken from '../../../../hooks/useRefreshToken';
 
 const AddressList = ({navigation, theme, route: {params}}) => {
   const {} = useRefreshToken();
@@ -115,6 +115,17 @@ const AddressList = ({navigation, theme, route: {params}}) => {
           list.length > 0 ? styles.contentContainerStyle : appStyles.container
         }
       />
+      {params?.navigateToNext && (
+        <View style={styles.buttonContainer}>
+          <Button
+            labelStyle={appStyles.containedButtonLabel}
+            contentStyle={appStyles.containedButtonContainer}
+            mode="contained"
+            onPress={() => navigation.navigate(params.navigateToNext)}>
+            Next
+          </Button>
+        </View>
+      )}
     </View>
   );
 };
@@ -122,6 +133,11 @@ const AddressList = ({navigation, theme, route: {params}}) => {
 const styles = StyleSheet.create({
   containerStyle: {
     marginVertical: 16,
+  },
+  buttonContainer: {
+    width: 300,
+    marginVertical: 10,
+    alignSelf: 'center',
   },
 });
 
