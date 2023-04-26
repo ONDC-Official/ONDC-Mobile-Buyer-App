@@ -16,7 +16,7 @@ import {clearCart} from '../../../../redux/actions';
  * @constructor
  * @returns {JSX.Element}
  */
-const Address = ({item, theme, isCurrentAddress, params}) => {
+const Address = ({item, theme, isCurrentAddress, params, onAddressSelect}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {colors} = theme;
@@ -25,8 +25,8 @@ const Address = ({item, theme, isCurrentAddress, params}) => {
 
   const setDefaultAddress = async () => {
     if (params?.navigateToNext) {
-      await setStoredData('address', JSON.stringify(item));
-      navigation.navigate(params.navigateToNext);
+      onAddressSelect(item);
+      // await setStoredData('address', JSON.stringify(item));
     } else if (cartItems.length > 0 && !isCurrentAddress) {
       alertWithTwoButtons(
         'Address Updated',

@@ -5,7 +5,7 @@ import {BASE_URL, DELIVERY_ADDRESS} from '../../../../utils/apiUtilities';
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import Address from './Address';
-import {getStoredData} from '../../../../utils/storage';
+import {getStoredData, setStoredData} from '../../../../utils/storage';
 import {skeletonList} from '../../../../utils/utils';
 import AddressSkeleton from './AddressSkeleton';
 import {Button, IconButton, withTheme} from 'react-native-paper';
@@ -82,12 +82,26 @@ const AddressList = ({navigation, theme, route: {params}}) => {
     });
   }, []);
 
+  const onAddressSelect = async item => {
+    setCurrentAddress(item);
+  };
+
+  const onNextButtonClick = async () => {
+    await setStoredData('address', JSON.stringify(currentAddress));
+    navigation.navigate(params.navigateToNext);
+  };
+
   const renderItem = ({item}) => {
     const isSelected = currentAddress?.id === item?.id;
     return item.hasOwnProperty('isSkeleton') ? (
       <AddressSkeleton />
     ) : (
-      <Address item={item} isCurrentAddress={isSelected} params={params} />
+      <Address
+        item={item}
+        isCurrentAddress={isSelected}
+        params={params}
+        onAddressSelect={onAddressSelect}
+      />
     );
   };
 
@@ -121,7 +135,7 @@ const AddressList = ({navigation, theme, route: {params}}) => {
             labelStyle={appStyles.containedButtonLabel}
             contentStyle={appStyles.containedButtonContainer}
             mode="contained"
-            onPress={() => navigation.navigate(params.navigateToNext)}>
+            onPress={onNextButtonClick}>
             Next
           </Button>
         </View>
