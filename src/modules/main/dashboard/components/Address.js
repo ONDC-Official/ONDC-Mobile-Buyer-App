@@ -26,7 +26,6 @@ const Address = ({item, theme, isCurrentAddress, params, onAddressSelect}) => {
   const setDefaultAddress = async () => {
     if (params?.navigateToNext) {
       onAddressSelect(item);
-      // await setStoredData('address', JSON.stringify(item));
     } else if (cartItems.length > 0 && !isCurrentAddress) {
       alertWithTwoButtons(
         'Address Updated',
