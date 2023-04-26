@@ -5,12 +5,12 @@ import {BASE_URL, DELIVERY_ADDRESS} from '../../../../utils/apiUtilities';
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import Address from './Address';
-import {getStoredData} from '../../../../utils/storage';
+import {getStoredData, setStoredData} from '../../../../utils/storage';
 import {skeletonList} from '../../../../utils/utils';
 import AddressSkeleton from './AddressSkeleton';
 import {Button, IconButton, withTheme} from 'react-native-paper';
 import {appStyles} from '../../../../styles/styles';
-import useRefreshToken from "../../../../hooks/useRefreshToken";
+import useRefreshToken from '../../../../hooks/useRefreshToken';
 
 const AddressList = ({navigation, theme, route: {params}}) => {
   const {} = useRefreshToken();
@@ -82,12 +82,26 @@ const AddressList = ({navigation, theme, route: {params}}) => {
     });
   }, []);
 
+  const onAddressSelect = async item => {
+    setCurrentAddress(item);
+  };
+
+  const onNextButtonClick = async () => {
+    await setStoredData('address', JSON.stringify(currentAddress));
+    navigation.navigate(params.navigateToNext);
+  };
+
   const renderItem = ({item}) => {
     const isSelected = currentAddress?.id === item?.id;
     return item.hasOwnProperty('isSkeleton') ? (
       <AddressSkeleton />
     ) : (
-      <Address item={item} isCurrentAddress={isSelected} params={params} />
+      <Address
+        item={item}
+        isCurrentAddress={isSelected}
+        params={params}
+        onAddressSelect={onAddressSelect}
+      />
     );
   };
 
@@ -115,6 +129,17 @@ const AddressList = ({navigation, theme, route: {params}}) => {
           list.length > 0 ? styles.contentContainerStyle : appStyles.container
         }
       />
+      {params?.navigateToNext && (
+        <View style={styles.buttonContainer}>
+          <Button
+            labelStyle={appStyles.containedButtonLabel}
+            contentStyle={appStyles.containedButtonContainer}
+            mode="contained"
+            onPress={onNextButtonClick}>
+            Next
+          </Button>
+        </View>
+      )}
     </View>
   );
 };
@@ -122,6 +147,11 @@ const AddressList = ({navigation, theme, route: {params}}) => {
 const styles = StyleSheet.create({
   containerStyle: {
     marginVertical: 16,
+  },
+  buttonContainer: {
+    width: 300,
+    marginVertical: 10,
+    alignSelf: 'center',
   },
 });
 

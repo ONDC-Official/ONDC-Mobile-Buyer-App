@@ -16,15 +16,17 @@ import {clearCart} from '../../../../redux/actions';
  * @constructor
  * @returns {JSX.Element}
  */
-const Address = ({item, theme, isCurrentAddress, params}) => {
+const Address = ({item, theme, isCurrentAddress, params, onAddressSelect}) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {colors} = theme;
   const {street, landmark, city, state, areaCode, tag} = item.address;
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
-  const setDefaultAddress = () => {
-    if (cartItems.length > 0 && !isCurrentAddress) {
+  const setDefaultAddress = async () => {
+    if (params?.navigateToNext) {
+      onAddressSelect(item);
+    } else if (cartItems.length > 0 && !isCurrentAddress) {
       alertWithTwoButtons(
         'Address Updated',
         'You want update the address, it will clear your existing cart. Please confirm if you want to go ahead with this?',
