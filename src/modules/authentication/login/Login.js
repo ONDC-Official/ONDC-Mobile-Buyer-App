@@ -33,8 +33,8 @@ const Login = ({navigation, theme}) => {
     email: Yup.string()
       .trim()
       .email('Please enter valid email address')
-      .required('Please fill all mandatory fields'),
-    password: Yup.string().trim().required('Please fill all mandatory fields'),
+      .required('Email cannot be empty.'),
+    password: Yup.string().trim().required('Password cannot be empty'),
   });
 
   const [apiInProgress, setApiInProgress] = useState(false);
