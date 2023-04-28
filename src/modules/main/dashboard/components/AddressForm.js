@@ -14,6 +14,7 @@ import {
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {getData} from '../../../../utils/api';
 import {useSelector} from 'react-redux';
+import {showToastWithGravity} from '../../../../utils/utils';
 
 const AddressForm = ({
   theme,
@@ -47,6 +48,9 @@ const AddressForm = ({
       setFieldValue('city', data.copResults.city);
       setRequestInProgress(false);
     } catch (error) {
+      setFieldValue('city', null);
+      setFieldValue('state', null);
+      showToastWithGravity('Pin code is invalid');
       console.log(error);
       handleApiError(error);
       setRequestInProgress(false);
@@ -82,7 +86,7 @@ const AddressForm = ({
               <InputField
                 value={values.name}
                 onBlur={handleBlur('name')}
-                required = {true}
+                required={true}
                 label={'Name'}
                 placeholder={'Name'}
                 errorMessage={touched.name ? errors.name : null}
@@ -91,7 +95,7 @@ const AddressForm = ({
               <InputField
                 value={values.email}
                 onBlur={handleBlur('email')}
-                required = {true}
+                required={true}
                 label={'Email'}
                 placeholder={'Email'}
                 errorMessage={touched.email ? errors.email : null}
@@ -101,7 +105,7 @@ const AddressForm = ({
                 keyboardType={'numeric'}
                 maxLength={10}
                 value={values.number}
-                required = {true}
+                required={true}
                 onBlur={handleBlur('number')}
                 label={'Mobile number'}
                 placeholder={'Mobile number'}
@@ -117,7 +121,7 @@ const AddressForm = ({
                     maxLength={6}
                     onBlur={handleBlur('pin')}
                     label={'Pin code'}
-                    required = {true}
+                    required={true}
                     placeholder={'Pin code'}
                     errorMessage={touched.pin ? errors.pin : null}
                     onChangeText={e => {
@@ -148,7 +152,7 @@ const AddressForm = ({
               <InputField
                 value={values.street}
                 onBlur={handleBlur('street')}
-                required = {true}
+                required={true}
                 label={'Full Address'}
                 placeholder={'Full Address'}
                 errorMessage={touched.street ? errors.street : null}
@@ -165,7 +169,7 @@ const AddressForm = ({
               <InputField
                 value={values.city}
                 onBlur={handleBlur('city')}
-                required = {true}
+                required={true}
                 label={'City'}
                 placeholder={'City'}
                 errorMessage={touched.city ? errors.city : null}
@@ -174,7 +178,7 @@ const AddressForm = ({
               <InputField
                 value={values.state}
                 onBlur={handleBlur('state')}
-                required = {true}
+                required={true}
                 label={'State'}
                 placeholder={'State'}
                 errorMessage={touched.state ? errors.state : null}
