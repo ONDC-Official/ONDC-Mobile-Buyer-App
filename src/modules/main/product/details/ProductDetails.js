@@ -33,7 +33,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
     navigation.setOptions({
       headerTitle: params.product?.descriptor?.name,
     });
-  }, [navigation]);
+  }, [navigation, params]);
 
   useEffect(() => {
     if (params.hasOwnProperty('product')) {
