@@ -34,12 +34,12 @@ const SignUp = ({navigation, theme}) => {
     email: Yup.string()
       .trim()
       .email('Please enter valid email address')
-      .required('Please fill all mandatory fields'),
+      .required('Email cannot be empty'),
     password: Yup.string()
       .trim()
       .min(8, 'Password is too short')
-      .required('Please fill all mandatory fields'),
-    name: Yup.string().trim().required('Please fill all mandatory fields'),
+      .required('Password cannot be empty'),
+    name: Yup.string().trim().required('Full Name cannot be empty'),
   });
 
   const [apiInProgress, setApiInProgress] = useState(false);

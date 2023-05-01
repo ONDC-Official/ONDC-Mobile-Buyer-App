@@ -19,8 +19,8 @@ const EmptyComponent = ({theme, navigation}) => {
       <Icon name="cart-outline" size={60} color={colors.primary} />
       <Text style={styles.title}>Your cart is empty</Text>
       <Text style={styles.subTitle}>
-        looks like your shopping cart is empty, you can shop now by clicking
-        button below
+        Looks like your shopping cart is empty, you can shop now by clicking
+        below button
       </Text>
       <OutlineButton
         onPress={() => navigation.navigate('Dashboard')}
