@@ -11,6 +11,7 @@ import {
 } from '../../../../../utils/apiUtilities';
 import {alertWithOneButton} from '../../../../../utils/alerts';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
+import { showToastWithGravity } from '../../../../../utils/utils';
 
 export default (bppId, transactionId, orderId) => {
   const isFocused = useIsFocused();
@@ -37,7 +38,7 @@ export default (bppId, transactionId, orderId) => {
         },
       });
       if (data[0]?.message?.ack?.status === 'ACK') {
-        setStatusMessageId(data[0].context.message_id);
+        setStatusMessageId(`${data[0].context.message_id}`);
       } else {
         alertWithOneButton(
           'Unable to Call',
@@ -54,10 +55,13 @@ export default (bppId, transactionId, orderId) => {
 
   const onGetStatus = async id => {
     try {
-      await getData(`${BASE_URL}${ON_GET_STATUS}${id}`, {
+      const statusResponse = await getData(`${BASE_URL}${ON_GET_STATUS}${id}`, {
         headers: {Authorization: `Bearer ${token}`},
       });
       setStatusInProgress(false);
+      const status = statusResponse.data[0]?.message.order?.state;
+      const statement = status ? `Your current order status is: ${status}`: `Sorry, we are not able to fetch the status at the moment, Please try after sometime.`;
+      showToastWithGravity(statement);
     } catch (error) {
       console.log(error);
       handleApiError(error);
