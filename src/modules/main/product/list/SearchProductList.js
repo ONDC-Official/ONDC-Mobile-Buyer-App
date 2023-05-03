@@ -78,7 +78,7 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
 
           <HeaderMenu />
         </View>
-        <ProductSearch onSearch={onSearch} />
+        <ProductSearch onSearch={onSearch} address={address} />
       </View>
 
       {filters && products.length > 0 && (

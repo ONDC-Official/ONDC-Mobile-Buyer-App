@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Menu} from 'react-native-material-menu';
 import {Pressable, StyleSheet, View} from 'react-native';
 import {Text, TextInput, withTheme} from 'react-native-paper';
@@ -8,10 +8,14 @@ import {useNavigation} from '@react-navigation/native';
 import {SEARCH_QUERY} from '../../../../../../utils/Constants';
 import SearchTypeMenu from '../../../../../../components/headerMenu/SearchTypeMenu';
 
-const ProductSearch = ({theme, onSearch, viewOnly = false}) => {
+const ProductSearch = ({theme, onSearch, viewOnly = false, address}) => {
   const navigation = useNavigation();
   const [query, setQuery] = useState('');
   const [searchType, setSearchType] = useState(SEARCH_QUERY.PRODUCT);
+
+  useEffect(() => {
+    address && setQuery('');
+  }, [address]);
 
   const onSearchTypeChange = type => {
     if (query && query.trim().length > 0) {
