@@ -29,6 +29,7 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
     updateFilterCount,
     productsRequested,
     apiInProgress,
+    resetProductList,
   } = useProductList(params?.category);
 
   useEffect(() => {
@@ -42,17 +43,19 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
   }, [isFocused]);
 
   useEffect(() => {
+    resetProductList();
+  }, []);
+
+  useEffect(() => {
     if (params) {
       onSearch(params.category, SEARCH_QUERY.CATEGORY);
-    } else {
-      onSearch('', SEARCH_QUERY.UNKNOWN);
     }
-  }, []);
+  }, [params]);
 
   useEffect(() => {
     const searchOnAddressChange = async () => {
       const newAddress = await getStoredData('address');
-      if (isFocused && newAddress !== address) {
+      if (isFocused && address && address?.id !== JSON.parse(newAddress)?.id) {
         if (params) {
           onSearch(params.category, SEARCH_QUERY.CATEGORY);
         } else {

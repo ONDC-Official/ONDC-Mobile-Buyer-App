@@ -42,6 +42,10 @@ export default (category = null) => {
     minPrice,
   } = useSelector(({filterReducer}) => filterReducer);
 
+  const resetProductList  = () => {
+    dispatch(clearProducts());
+  } 
+
   /**
    * function request products list with given message id and transaction id
    * @param id:message id of search result
@@ -92,7 +96,6 @@ export default (category = null) => {
             Authorization: `Bearer ${token}`,
           },
         });
-
         if (data.message.catalogs.length > 0) {
           let productsList = data.message.catalogs.map(item => {
             return Object.assign({}, item, {
@@ -291,5 +294,6 @@ export default (category = null) => {
     getProductsList,
     loadMore,
     updateFilterCount,
+    resetProductList,
   };
 };
