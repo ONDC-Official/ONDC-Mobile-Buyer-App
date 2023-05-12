@@ -40,6 +40,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const [providers, setProviders] = useState([]);
   const [messageIds, setMessageIds] = useState(null);
   const [apiInProgress, setApiInProgress] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   /**
    * function request  order confirmation
@@ -48,6 +50,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
    */
   const onGetQuote = async id => {
     try {
+      setIsError(false);
+      setErrorMessage(null);
       const {data} = await getData(
         `${BASE_URL}${ON_GET_SELECT}messageIds=${id}`,
         {
@@ -55,125 +59,131 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         },
       );
       const quoteData = data[0];
-      if (!quoteData.error) {
-        if (quoteData.context.bpp_id) {
-          const providerList = providers.concat([]);
-          const provider = providerList.find(
-            one => one.provider.id === quoteData.message.quote.provider.id,
+
+      if (quoteData.context.bpp_id) {
+        const providerList = providers?.concat([]);
+        const provider = providerList?.find(
+          one => one.provider.id === quoteData.message.quote.provider.id,
+        );
+        quoteData.message.quote.items.forEach(element => {
+          const product = provider.items.find(
+            one => String(one.id) === String(element.id),
           );
-          quoteData.message.quote.items.forEach(element => {
-            const product = provider.items.find(
-              one => String(one.id) === String(element.id),
+
+          if (product) {
+            const productPrice = quoteData.message.quote.quote.breakup.find(
+              one =>
+                one['@ondc/org/item_id'] === String(product.id) &&
+                one['@ondc/org/title_type'] === 'item',
             );
 
-            if (product) {
-              const productPrice = quoteData.message.quote.quote.breakup.find(
-                one =>
-                  one['@ondc/org/item_id'] === String(product.id) &&
-                  one['@ondc/org/title_type'] === 'item',
-              );
+            const cost = product.price.value
+              ? product.price.value
+              : product.price.maximum_value;
 
-              const cost = product.price.value
-                ? product.price.value
-                : product.price.maximum_value;
+            if (
+              stringToDecimal(productPrice?.item?.price?.value) !==
+              stringToDecimal(cost)
+            ) {
+              element.message = 'Price of this product has been updated';
+            }
 
-              if (
-                stringToDecimal(productPrice?.item?.price?.value) !==
-                stringToDecimal(cost)
-              ) {
-                element.message = 'Price of this product has been updated';
-              }
+            element.provider = {
+              id: product.provider_details.id,
+              descriptor: product.provider_details.descriptor,
+              locations: [product.location_details.id],
+            };
+            element.transaction_id = quoteData.context.transaction_id;
+            element.bpp_id = quoteData.context.bpp_id;
+            element.bpp_uri = quoteData.context.bpp_uri;
+            availableProducts.current.push(element.id);
+            const providerIndex = confirmation.current.findIndex(
+              one => one.providerId === quoteData.message.quote.provider.id,
+            );
+            if (providerIndex > -1) {
+              confirmation.current[providerIndex].items.push(element);
+            } else {
+              confirmation.current.push({
+                items: [element],
+                providerId: quoteData.message.quote.provider.id,
+                fulfillments: quoteData.message.quote.fulfillments,
+              });
+            }
 
-              element.provider = {
-                id: product.provider_details.id,
-                descriptor: product.provider_details.descriptor,
-                locations: [product.location_details.id],
-              };
-              element.transaction_id = quoteData.context.transaction_id;
-              element.bpp_id = quoteData.context.bpp_id;
-              element.bpp_uri = quoteData.context.bpp_uri;
-              availableProducts.current.push(element.id);
-              const providerIndex = confirmation.current.findIndex(
-                one => one.providerId === quoteData.message.quote.provider.id,
-              );
-              if (providerIndex > -1) {
-                confirmation.current[providerIndex].items.push(element);
-              } else {
-                confirmation.current.push({
-                  items: [element],
-                  providerId: quoteData.message.quote.provider.id,
-                  fulfillments: quoteData.message.quote.fulfillments,
-                });
-              }
-
-              quoteData.message.quote.quote.breakup.forEach(breakup => {
-                if (breakup['@ondc/org/item_id'] === String(product.id)) {
-                  if (breakup['@ondc/org/title_type'] !== 'item') {
-                    if (product.hasOwnProperty('knowCharges')) {
-                      product.knowCharges.push(breakup);
-                    } else {
-                      product.knowCharges = [breakup];
-                    }
-                  }
-                } else if (breakup['@ondc/org/title_type'] !== 'item') {
-                  if (provider.hasOwnProperty('additionCharges')) {
-                    if (
-                      provider.additionCharges.findIndex(
-                        one =>
-                          one['@ondc/org/item_id'] ===
-                            breakup['@ondc/org/item_id'] &&
-                          one.title === breakup.title,
-                      ) < 0
-                    ) {
-                      provider.additionCharges.push(breakup);
-                    }
+            quoteData.message.quote.quote.breakup.forEach(breakup => {
+              if (breakup['@ondc/org/item_id'] === String(product.id)) {
+                if (breakup['@ondc/org/title_type'] !== 'item') {
+                  if (product.hasOwnProperty('knowCharges')) {
+                    product.knowCharges.push(breakup);
                   } else {
-                    provider.additionCharges = [breakup];
+                    product.knowCharges = [breakup];
                   }
                 }
-              });
-              product.dataReceived = true;
-              product.confirmation = element;
-
-              product.quantityMismatch = false;
-
-              // check wheather the element is out of stock
-              const remoteElement = quoteData.message.quote.quote.breakup.find(
-                one => String(one['@ondc/org/item_id']) === String(element.id),
-              );
-              const localElement = cartItems.find(
-                one => String(one.id) === String(element.id),
-              );
-              if (
-                remoteElement['@ondc/org/title_type'] === 'item' &&
-                remoteElement['@ondc/org/item_quantity']?.count === 0
-              ) {
-                product.itemOutOfStock = true;
-                product.quantity = 0;
-                dispatch(updateItemInCart(product));
-              } else if (
-                remoteElement['@ondc/org/title_type'] === 'item' &&
-                remoteElement['@ondc/org/item_quantity']?.count <
-                  localElement.quantity
-              ) {
-                product.quantityMismatch = true;
-                product.quantity =
-                  remoteElement['@ondc/org/item_quantity']?.count;
-                dispatch(updateItemInCart(product));
+              } else if (breakup['@ondc/org/title_type'] !== 'item') {
+                if (provider.hasOwnProperty('additionCharges')) {
+                  if (
+                    provider.additionCharges.findIndex(
+                      one =>
+                        one['@ondc/org/item_id'] ===
+                          breakup['@ondc/org/item_id'] &&
+                        one.title === breakup.title,
+                    ) < 0
+                  ) {
+                    provider.additionCharges.push(breakup);
+                  }
+                } else {
+                  provider.additionCharges = [breakup];
+                }
               }
-            }
-          });
+            });
+            product.dataReceived = true;
+            product.confirmation = element;
 
-          setProviders(providerList);
-          totalAmount.current =
-            totalAmount.current +
-            Number(quoteData.message.quote.quote.price.value);
-          setTotal(totalAmount.current);
-        }
-        const isAllPresent = cartItems.every(one =>
-          availableProducts.current?.includes(one.id),
+            product.quantityMismatch = false;
+
+            // check wheather the element is out of stock
+            const remoteElement = quoteData.message.quote.quote.breakup.find(
+              one => String(one['@ondc/org/item_id']) === String(element.id),
+            );
+            const localElement = cartItems.find(
+              one => String(one.id) === String(element.id),
+            );
+            if (
+              remoteElement['@ondc/org/title_type'] === 'item' &&
+              remoteElement['@ondc/org/item_quantity']?.count === 0
+            ) {
+              product.itemOutOfStock = true;
+              product.quantity = 0;
+              dispatch(updateItemInCart(product));
+            } else if (
+              remoteElement['@ondc/org/title_type'] === 'item' &&
+              remoteElement['@ondc/org/item_quantity']?.count <
+                localElement.quantity
+            ) {
+              product.quantityMismatch = true;
+              product.quantity =
+                remoteElement['@ondc/org/item_quantity']?.count;
+              dispatch(updateItemInCart(product));
+            }
+          }
+        });
+
+        setProviders(providerList);
+        totalAmount.current =
+          totalAmount.current +
+          Number(quoteData.message.quote.quote.price.value);
+        setTotal(totalAmount.current);
+      }
+      const isAllPresent = cartItems.every(one =>
+        availableProducts.current?.includes(one.id),
+      );
+      isAllPresent ? setApiInProgress(false) : setApiInProgress(true);
+      if (quoteData?.error) {
+        setIsError(true);
+        setErrorMessage(
+          quoteData.error.message ||
+            'Something went wrong, please try again later.',
         );
-        isAllPresent ? setApiInProgress(false) : setApiInProgress(true);
       }
     } catch (error) {
       console.log(error);
@@ -236,19 +246,19 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                     },
                   },
                 ],
-                fulfillments: [
-                  {
-                    end: {
-                      location: {
-                        gps: params.deliveryAddress.gps,
-                        address: {
-                          area_code: params.deliveryAddress.address.areaCode,
-                        },
+              },
+              fulfillments: [
+                {
+                  end: {
+                    location: {
+                      gps: params.deliveryAddress.gps,
+                      address: {
+                        area_code: params.deliveryAddress.address.areaCode,
                       },
                     },
                   },
-                ],
-              },
+                },
+              ],
             },
           });
           providerIdArray.push(item.provider_details.id);
@@ -259,7 +269,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         }
       });
       setProviders(confirmationProducts);
-
       const {data} = await postData(`${BASE_URL}${GET_SELECT}`, payload, {
         headers: {Authorization: `Bearer ${token}`},
       });
@@ -301,15 +310,15 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         eventSource.close();
       });
       eventSources = null;
-      const list = providers.concat([]);
-      list.forEach(provider => {
+      const list = providers?.concat([]);
+      list?.forEach(provider => {
         provider.items?.forEach(one => {
           if (!one.hasOwnProperty('dataReceived')) {
             one.dataReceived = false;
           }
         });
       });
-      setProviders(list);
+      setProviders(list || []);
       setApiInProgress(false);
     }
   };
@@ -415,27 +424,33 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       {apiInProgress ? (
         <></>
       ) : (
-        <View style={[styles.footer, {backgroundColor: theme.colors.footer}]}>
-          <View style={appStyles.container}>
-            <Text>Subtotal</Text>
-            <Text style={styles.totalAmount}>₹{stringToDecimal(total)}</Text>
-          </View>
-          <View style={appStyles.container}>
-            {availableProducts.current.length === cartItems.length && (
-              <Button
-                mode="contained"
-                contentStyle={appStyles.containedButtonContainer}
-                labelStyle={appStyles.containedButtonLabel}
-                onPress={() =>
-                  navigation.navigate('Payment', {
-                    deliveryAddress: params.deliveryAddress,
-                    billingAddress: params.billingAddress,
-                    confirmationList: confirmation.current,
-                  })
-                }>
-                Checkout
-              </Button>
-            )}
+        <View style={[{backgroundColor: theme.colors.footer, padding: 8}]}>
+          {errorMessage && (
+            <Text style={{color: theme.colors.error}}>{errorMessage}</Text>
+          )}
+          <View style={[styles.footer, {backgroundColor: theme.colors.footer}]}>
+            <View style={appStyles.container}>
+              <Text>Subtotal</Text>
+              <Text style={styles.totalAmount}>₹{stringToDecimal(total)}</Text>
+            </View>
+            <View style={appStyles.container}>
+              {availableProducts.current.length === cartItems.length &&
+                !isError && (
+                  <Button
+                    mode="contained"
+                    contentStyle={appStyles.containedButtonContainer}
+                    labelStyle={appStyles.containedButtonLabel}
+                    onPress={() =>
+                      navigation.navigate('Payment', {
+                        deliveryAddress: params.deliveryAddress,
+                        billingAddress: params.billingAddress,
+                        confirmationList: confirmation.current,
+                      })
+                    }>
+                    Checkout
+                  </Button>
+                )}
+            </View>
           </View>
         </View>
       )}

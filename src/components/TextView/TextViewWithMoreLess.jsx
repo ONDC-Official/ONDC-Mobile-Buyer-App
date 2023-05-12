@@ -1,34 +1,45 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, withTheme} from 'react-native-paper';
 
 const TextViewWithMoreLess = ({textContent, theme, style}) => {
   const {colors} = theme;
+  const [showMoreButton, setShowMoreButton] = useState(false);
   const [textShown, setTextShown] = useState(false);
-  const [lengthMore, setLengthMore] = useState(false);
-  const toggleNumberOfLines = () => {
+  const [numLines, setNumLines] = useState(undefined);
+
+  const toggleTextShown = () => {
     setTextShown(!textShown);
   };
 
-  const onTextLayout = useCallback(e => {
-  console.log('Number of lines', e.nativeEvent.lines.length)
-    setLengthMore(e.nativeEvent.lines.length >= 2);
-  }, []);
+  useEffect(() => {
+    setNumLines(textShown ? undefined : 2);
+  }, [textShown]);
+
+  const onTextLayout = useCallback(
+    event => {
+      if (event.nativeEvent.lines.length > 2 && !textShown) {
+        setShowMoreButton(true);
+        setNumLines(2);
+      }
+    },
+    [textShown],
+  );
 
   return (
     <View style={[styles.mainContainer, style]}>
       <Text
         onTextLayout={onTextLayout}
-        numberOfLines={textShown ? undefined : 2}
+        numberOfLines={numLines}
         style={{lineHeight: 21}}>
         {textContent}
       </Text>
 
-      {lengthMore ? (
+      {showMoreButton ? (
         <Text
-          onPress={toggleNumberOfLines}
+          onPress={toggleTextShown}
           style={[{color: colors.primary}, styles.moreLessTextStyle]}>
-          {textShown ? 'less' : 'more'}
+          {textShown ? ' less' : ' more'}
         </Text>
       ) : null}
     </View>

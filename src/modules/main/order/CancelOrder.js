@@ -342,9 +342,12 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
                       />
                       <TouchableOpacity
                         disabled={disabled}
-                        style={styles.product}
+                        style={[styles.product]}
                         onPress={() => onProductClicked(item, index)}>
-                        <Text variant="titleSmall">
+                        <Text
+                          variant="titleSmall"
+                          numberOfLines={2}
+                          ellipsizeMode={'tail'}>
                           {item?.product?.descriptor?.name}
                         </Text>
                         <View style={styles.productDetails}>
@@ -490,6 +493,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   product: {
+    maxWidth: '60%',
     marginEnd: 22,
     justifyContent: 'center',
   },
