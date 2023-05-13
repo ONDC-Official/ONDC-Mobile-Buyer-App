@@ -337,7 +337,7 @@ const Payment = ({
       let messageIds = [];
 
       data.forEach(item => {
-        if (item.message.ack.status === 'ACK') {
+        if (item.message?.ack?.status === 'ACK' || item.message?.status === 'ACK') {
           parentOrderId.current = item.context.parent_order_id;
           messageIds.push(item.context.message_id);
         }
@@ -535,7 +535,7 @@ const Payment = ({
           );
           let messageIds = [];
           data.forEach((item, index) => {
-            if (item.message.ack.status === 'ACK') {
+            if (item.message?.ack?.status === 'ACK' || item.message?.status === 'ACK') {
               messageIds.push(item.context.message_id);
               providers.current.push({
                 id: payload[index].message.providers.id,
@@ -657,7 +657,7 @@ const Payment = ({
       });
       sources = null;
       setConfirmOrderRequested(false);
-      if (providers.current.findIndex(one => one.ack === false) < 0) {
+      if (providers.current.findIndex(one => one?.ack === false) < 0) {
         alertWithOneButton(
           null,
           'Your order has been placed!',

@@ -273,15 +273,18 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         headers: {Authorization: `Bearer ${token}`},
       });
 
-      const fulfillmentMissingItem = data.find(
-        item => !item.message.hasOwnProperty('ack'),
-      );
       let messageIdArray = [];
-      if (!fulfillmentMissingItem) {
+      const isNACK = data.find(
+        item => item.error && item.message.ack.status === 'NACK',
+      );
+      if (isNACK) {
+        showToastWithGravity(fulfillmentMissingItem.message);
+        confirmation.current = [];
+        availableProducts.current = [];
+        setApiInProgress(false);
+      } else {
         data.forEach(item => {
-          if (item.message.ack.status === 'ACK') {
-            messageIdArray.push(item.context.message_id);
-          }
+          messageIdArray.push(item.context.message_id);
         });
         if (messageIdArray.length > 0) {
           setMessageIds(messageIdArray);
@@ -290,11 +293,6 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           availableProducts.current = [];
           setApiInProgress(false);
         }
-      } else {
-        showToastWithGravity(fulfillmentMissingItem.message);
-        confirmation.current = [];
-        availableProducts.current = [];
-        setApiInProgress(false);
       }
     } catch (error) {
       console.log(error);
