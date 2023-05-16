@@ -10,6 +10,7 @@ buildscript {
         googlePlayServicesAuthVersion = "19.2.0"
         hyperSDKVersion = "2.0.4-rc.34"
         useDynamicAssets = true
+        kotlinVersion = "1.6.0"
     }
     repositories {
         google()
