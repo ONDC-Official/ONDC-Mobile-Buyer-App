@@ -26,14 +26,14 @@ export const ORDER_STATUS = {
   DELIVERED: 'DELIVERED',
 };
 
-export const POLICY_URL =
-  'https://github.com/Open-network-for-digital-commerce';
+const ONDC_URL = 'https://ondc.org/';
+export const POLICY_URL = ONDC_URL;
 
-export const FAQS = 'https://ondc.org/Bring-buyers-on-the-network.html';
+export const FAQS = ONDC_URL;
 
-export const ONDC_POLICY = 'https://ondc.org/index.html';
+export const ONDC_POLICY = ONDC_URL;
 
-export const CONTACT_US = 'https://ondc.org/contactus.html';
+export const CONTACT_US = ONDC_URL;
 
 export const PRODUCT_SORTING = {
   RATINGS_HIGH_TO_LOW: 'Rating: High To Low',
