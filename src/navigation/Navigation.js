@@ -131,7 +131,7 @@ const Navigation = () => {
           name="CallSeller"
           component={CallSeller}
           options={{
-            title: 'Call Support',
+            title: 'Provider Contact Details',
           }}
         />
 
