@@ -7,7 +7,7 @@ const StatusContainer = ({product, theme}) => {
     return (
       <View style={styles.container}>
         <View style={styles.chipContainer}>
-          <Chip selectedColor={theme.colors.primary} mode="flat">
+          <Chip selectedColor={theme.colors.red} mode="flat">
             {product.return_status}
           </Chip>
         </View>
@@ -17,7 +17,7 @@ const StatusContainer = ({product, theme}) => {
     return (
       <View style={styles.container}>
         <View style={styles.chipContainer}>
-          <Chip selectedColor={theme.colors.primary} mode="flat">
+          <Chip selectedColor={theme.colors.red} mode="flat">
             {product.cancellation_status}
           </Chip>
         </View>
