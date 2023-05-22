@@ -7,7 +7,7 @@ const StatusContainer = ({product, theme}) => {
     return (
       <View style={styles.container}>
         <View style={styles.chipContainer}>
-          <Chip selectedColor={theme.colors.primary} mode="flat">
+          <Chip selectedColor={theme.colors.red} mode="flat">
             {product.return_status}
           </Chip>
         </View>
@@ -17,7 +17,7 @@ const StatusContainer = ({product, theme}) => {
     return (
       <View style={styles.container}>
         <View style={styles.chipContainer}>
-          <Chip selectedColor={theme.colors.primary} mode="flat">
+          <Chip selectedColor={theme.colors.red} mode="flat">
             {product.cancellation_status}
           </Chip>
         </View>
@@ -26,18 +26,46 @@ const StatusContainer = ({product, theme}) => {
   } else {
     return (
       <View style={styles.container}>
-        {product.product['@ondc/org/returnable'] && (
+        {product.product.hasOwnProperty('@ondc/org/returnable') && (
           <View style={styles.chipContainer}>
-            <Chip selectedColor={theme.colors.primary} mode="flat">
-              Returnable
-            </Chip>
+            {product.product['@ondc/org/returnable'] ? (
+              <Chip
+                selectedColor={theme.colors.primary}
+                mode="flat"
+                style={styles.chipStyle}
+                textStyle={styles.chipTextStyle}>
+                Returnable
+              </Chip>
+            ) : (
+              <Chip
+                selectedColor={theme.colors.error}
+                mode="flat"
+                style={styles.chipStyle}
+                textStyle={styles.chipTextStyle}>
+                Non-Returnable
+              </Chip>
+            )}
           </View>
         )}
-        {product.product['@ondc/org/cancellable'] && (
+        {product.product.hasOwnProperty('@ondc/org/cancellable') && (
           <View style={styles.chipContainer}>
-            <Chip selectedColor={theme.colors.primary} mode="flat">
-              Cancellable
-            </Chip>
+            {product.product['@ondc/org/cancellable'] ? (
+              <Chip
+                selectedColor={theme.colors.primary}
+                mode="flat"
+                style={styles.chipStyle}>
+                Cancellable
+              </Chip>
+            ) : (
+              <Chip
+                selectedColor={theme.colors.error}
+                mode="flat"
+                compact
+                style={styles.chipStyle}
+                textStyle={styles.chipTextStyle}>
+                Non-Cancellable
+              </Chip>
+            )}
           </View>
         )}
       </View>
@@ -53,5 +81,17 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginTop: 10,
   },
-  chipContainer: {paddingEnd: 10},
+  chipContainer: {paddingEnd: 5},
+  chipStyle: {
+    width: 122,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  chipTextStyle: {
+    marginLeft: 8,
+    marginRight: 8,
+    minWidth: 105,
+    fontSize: 13,
+    textAlign: 'center',
+  },
 });

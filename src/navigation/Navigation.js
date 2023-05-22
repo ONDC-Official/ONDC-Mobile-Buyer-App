@@ -83,7 +83,7 @@ const Navigation = () => {
           name="AddressList"
           component={AddressList}
           options={{
-            title: 'Addresses',
+            title: 'Delivery Address',
           }}
         />
 
@@ -91,7 +91,7 @@ const Navigation = () => {
           name="BillingAddressPicker"
           component={BillingAddressPicker}
           options={{
-            title: 'Select Billing Address',
+            title: 'Billing Address',
           }}
         />
 
@@ -131,7 +131,7 @@ const Navigation = () => {
           name="CallSeller"
           component={CallSeller}
           options={{
-            title: 'Call Support',
+            title: 'Provider Contact Details',
           }}
         />
 
