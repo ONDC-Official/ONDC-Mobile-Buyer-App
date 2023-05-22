@@ -11,6 +11,8 @@ import {
   BASE_URL,
   GET_SELECT,
   ON_GET_SELECT,
+  GET_GPS_CORDS,
+  GET_LATLONG,
 } from '../../../../utils/apiUtilities';
 import {removeItemFromCart, updateItemInCart} from '../../../../redux/actions';
 
@@ -191,6 +193,23 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     }
   };
 
+  const getGPSCords = async pin => {
+    try {
+      const {data} = await getData(`${BASE_URL}${GET_GPS_CORDS}${pin}`);
+      const response = await getData(
+        `${BASE_URL}${GET_LATLONG}${data.copResults.eLoc}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      return `${response.data.latitude},${response.data.longitude}`;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   /**
    * function request  order confirmation
    * @returns {Promise<void>}
@@ -205,6 +224,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       let payload = [];
       let providerIdArray = [];
       let confirmationProducts = [];
+      let gpsParams = params.deliveryAddress.gps;
+      if (!gpsParams) {
+        gpsParams = await getGPSCords(params.deliveryAddress.address.areaCode);
+      }
+
       cartItems.forEach(item => {
         const index = providerIdArray.findIndex(
           one => one === item.provider_details.id,
@@ -251,7 +275,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 {
                   end: {
                     location: {
-                      gps: params.deliveryAddress.gps,
+                      gps: gpsParams,
                       address: {
                         area_code: params.deliveryAddress.address.areaCode,
                       },
@@ -278,7 +302,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         item => item.error && item.message.ack.status === 'NACK',
       );
       if (isNACK) {
-        showToastWithGravity(fulfillmentMissingItem.message);
+        showToastWithGravity(fulfillmentMissingItem?.message);
         confirmation.current = [];
         availableProducts.current = [];
         setApiInProgress(false);
