@@ -11,7 +11,7 @@ import {
 } from '../../../../../utils/apiUtilities';
 import {useIsFocused} from '@react-navigation/native';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
-import {FAQS} from '../../../../../utils/Constants';
+import {showToastWithGravity} from '../../../../../utils/utils';
 
 export default (bppId, transactionId, orderId) => {
   const isFocused = useIsFocused();
@@ -69,13 +69,18 @@ export default (bppId, transactionId, orderId) => {
           },
         },
       );
-
       if (data[0].message.tracking.status === 'active') {
-        const supported = await Linking.canOpenURL(FAQS);
+        const trackingUrl = data[0].message.tracking.url;
+        const supported = await Linking.canOpenURL(trackingUrl);
         if (supported) {
-          await Linking.openURL(FAQS);
+          await Linking.openURL(trackingUrl);
           setTrackInProgress(false);
         }
+      } else {
+        showToastWithGravity(
+          `The current tracking status for this order is ${data[0].message?.tracking?.status}`,
+        );
+        setTrackInProgress(false);
       }
     } catch (e) {
       handleApiError(e);
