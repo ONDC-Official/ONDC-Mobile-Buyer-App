@@ -227,6 +227,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       let gpsParams = params.deliveryAddress.gps;
       if (!gpsParams) {
         gpsParams = await getGPSCords(params.deliveryAddress.address.areaCode);
+        params.deliveryAddress.gps = gpsParams;
       }
 
       cartItems.forEach(item => {
@@ -275,7 +276,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 {
                   end: {
                     location: {
-                      gps: gpsParams,
+                      gps: params.deliveryAddress.gps,
                       address: {
                         area_code: params.deliveryAddress.address.areaCode,
                       },
