@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
 import {logoutUser} from '../../redux/auth/actions';
+import {alertWithTwoButtons} from '../../utils/alerts';
 
 const HeaderMenu = () => {
   const navigation = useNavigation();
@@ -25,6 +26,18 @@ const HeaderMenu = () => {
       index: 0,
       routes: [{name: 'Login'}],
     });
+  };
+
+  const onLogoutSelect = () => {
+    closeMenu();
+    alertWithTwoButtons(
+      'Logout',
+      'Are you sure want to end the session?',
+      'Yes',
+      logout,
+      'Cancel',
+      () => null,
+    );
   };
 
   const navigateToPage = page => {
@@ -79,7 +92,7 @@ const HeaderMenu = () => {
       </Button>
       <Divider />
       <Button
-        onPress={logout}
+        onPress={onLogoutSelect}
         labelStyle={styles.buttonLabel}
         contentStyle={styles.buttonContainer}
         icon="logout"
