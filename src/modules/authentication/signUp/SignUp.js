@@ -1,6 +1,7 @@
 import auth from '@react-native-firebase/auth';
+import {useFocusEffect} from '@react-navigation/native';
 import {Formik} from 'formik';
-import React, {useState} from 'react';
+import React, {useState, useCallback, useRef} from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
@@ -29,6 +30,7 @@ const userInfo = {
 const SignUp = ({navigation, theme}) => {
   const dispatch = useDispatch();
   const {isConnected, isInternetReachable} = useNetInfo();
+  const formikFormRef = useRef(null);
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -41,6 +43,15 @@ const SignUp = ({navigation, theme}) => {
       .required('Password cannot be empty'),
     name: Yup.string().trim().required('Full Name cannot be empty'),
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      if (formikFormRef?.current) {
+        formikFormRef.current.values = userInfo;
+        formikFormRef.current.setErrors({});
+      }
+    }, []),
+  );
 
   const [apiInProgress, setApiInProgress] = useState(false);
 

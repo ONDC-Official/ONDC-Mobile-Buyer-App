@@ -1,6 +1,7 @@
 import auth from '@react-native-firebase/auth';
+import {useFocusEffect} from '@react-navigation/native';
 import {Formik} from 'formik';
-import React, {useState} from 'react';
+import React, {useState, useRef, useCallback} from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
@@ -16,6 +17,7 @@ import SocialMediaLogin from '../common/SocialMediaLogin';
 import {getStoredData} from '../../../utils/storage';
 import {storeLoginDetails} from '../../../redux/auth/actions';
 
+
 const userInfo = {
   email: '',
   password: '',
@@ -28,6 +30,7 @@ const userInfo = {
  */
 const Login = ({navigation, theme}) => {
   const dispatch = useDispatch();
+  const formikFormRef = useRef(null);
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -39,6 +42,15 @@ const Login = ({navigation, theme}) => {
 
   const [apiInProgress, setApiInProgress] = useState(false);
   const {isConnected, isInternetReachable} = useNetInfo();
+
+  useFocusEffect(
+    useCallback(() => {
+      if (formikFormRef?.current) {
+        formikFormRef.current.values = userInfo;
+        formikFormRef.current.setErrors({});
+      }
+    }, []),
+  );
 
   /**
    * function checks whether the email and password is valid if it is valid it creates and store token in context
@@ -83,7 +95,10 @@ const Login = ({navigation, theme}) => {
 
         setApiInProgress(false);
       } catch (error) {
-        if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+        if (
+          error.code === 'auth/wrong-password' ||
+          error.code === 'auth/user-not-found'
+        ) {
           showToastWithGravity('Email Id or Password is Incorrect.');
         } else {
           if (error.hasOwnProperty('message')) {
@@ -119,6 +134,7 @@ const Login = ({navigation, theme}) => {
         <View style={styles.container}>
           <View style={styles.formContainer}>
             <Formik
+              innerRef={formikFormRef}
               initialValues={userInfo}
               validationSchema={validationSchema}
               onSubmit={login}>
