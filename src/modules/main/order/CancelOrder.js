@@ -128,8 +128,17 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      if (data[0].message.ack.status === 'ACK') {
+      if (data[0].message?.ack?.status === 'NACK') {
+        data[0].error.message
+          ? showToastWithGravity(data[0].error.message)
+          : showToastWithGravity(
+              'Not able to cancel/return the order, please try after sometime',
+            );
+        setUpdateInProgress(false);
+      } else if (
+        data[0].message?.ack?.status === 'ACK' ||
+        data[0].message?.status === 'ACK'
+      ) {
         setUpdateMessageId(data[0].context.message_id);
       }
     } catch (e) {
