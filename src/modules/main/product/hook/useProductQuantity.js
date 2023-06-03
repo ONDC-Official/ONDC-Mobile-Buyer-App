@@ -19,7 +19,9 @@ export default item => {
       if (item?.quantityMeta?.available?.count > 1) {
         dispatch(addItemToCart(product));
       } else {
-        showInfoToast('Product not available at the moment, please try after sometime');
+        showInfoToast(
+          'Product not available at the moment, please try after sometime',
+        );
       }
     } else {
       dispatch(addItemToCart(product));

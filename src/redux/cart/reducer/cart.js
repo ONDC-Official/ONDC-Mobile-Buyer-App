@@ -9,6 +9,7 @@ import {
 const initialState = {
   cartItems: [],
   subTotal: 0,
+  itemRemoved: null,
 };
 
 const cartReducer = (state = initialState, action) => {
@@ -25,12 +26,14 @@ const cartReducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         cartItems: addProducts,
         subTotal: subTotal,
+        itemRemoved: null,
       });
 
     case REMOVE_PRODUCT_CART:
       const removeIndex = state.cartItems.findIndex(
         product => product.id === payload.id,
       );
+      const itemNameRemoved = state.cartItems[removeIndex];
       if (removeIndex > -1) {
         const list = state.cartItems.filter(
           product => product.id !== payload.id,
@@ -42,6 +45,7 @@ const cartReducer = (state = initialState, action) => {
         return Object.assign({}, state, {
           cartItems: list,
           subTotal: removedCartTotal,
+          itemRemoved: itemNameRemoved?.descriptor?.name,
         });
       } else {
         return state;
@@ -61,6 +65,7 @@ const cartReducer = (state = initialState, action) => {
         return Object.assign({}, state, {
           cartItems: list,
           subTotal: updatedCartTotal,
+          itemRemoved: null,
         });
       } else {
         return state;

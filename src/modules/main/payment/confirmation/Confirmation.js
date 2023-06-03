@@ -29,7 +29,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const {} = useRefreshToken();
   const {token} = useSelector(({authReducer}) => authReducer);
   const {transactionId} = useSelector(({filterReducer}) => filterReducer);
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+  const {cartItems, itemRemoved} = useSelector(({cartReducer}) => cartReducer);
 
   const dispatch = useDispatch();
 
@@ -44,6 +44,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const [apiInProgress, setApiInProgress] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    itemRemoved &&
+      showToastWithGravity(`${itemRemoved} item removed from cart.`);
+  }, [itemRemoved]);
 
   /**
    * function request  order confirmation

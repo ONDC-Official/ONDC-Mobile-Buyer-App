@@ -125,6 +125,7 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
                   iconColor="white"
                   style={{backgroundColor: colors.primary}}
                   onPress={() => updateQuantity(false)}
+                  disabled={item?.quantity <= 1}
                 />
                 <Text>{item.quantity}</Text>
                 <IconButton
