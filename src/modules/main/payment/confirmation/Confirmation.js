@@ -117,6 +117,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               });
             }
             product.knowCharges = [];
+            provider.additionCharges = [];
             quoteData.message.quote.quote.breakup.forEach(breakup => {
               if (breakup['@ondc/org/item_id'] === String(product.id)) {
                 if (breakup['@ondc/org/title_type'] !== 'item') {
