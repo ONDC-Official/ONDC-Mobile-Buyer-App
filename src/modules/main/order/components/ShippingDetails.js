@@ -136,11 +136,12 @@ const ShippingDetails = ({order, theme}) => {
         </TouchableOpacity>
 
         {order.state !== ORDER_STATUS.CANCELLED &&
-          (order.state === ORDER_STATUS.DELIVERED || order.state === ORDER_STATUS.COMPLETED ? (
+          (order.state === ORDER_STATUS.DELIVERED ||
+          order.state === ORDER_STATUS.COMPLETED ? (
             <TouchableOpacity
               disabled={buttonDisabled}
               onPress={() =>
-                navigation.navigate('CancelOrder', {
+                navigation.navigate('ReturnOrder', {
                   items: order.items,
                   bppId: order.bppId,
                   transactionId: order.transactionId,

@@ -72,13 +72,19 @@ const ReturnOrder = ({navigation, route: {params}}) => {
           },
         },
       ];
-
       const {data} = await postData(`${BASE_URL}${UPDATE_ORDER}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+      if (data[0].message?.ack?.status === 'NACK') {
+        data[0].error.message
+          ? showToastWithGravity(data[0].error.message)
+          : showToastWithGravity(
+              'Not able to return the order, please try after sometime.',
+            );
+        setUpdateInProgress(false);
+      } else 
       if (data[0].message.ack.status === 'ACK') {
         setUpdateMessageId(data[0].context.message_id);
       }
