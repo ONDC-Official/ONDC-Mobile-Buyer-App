@@ -24,6 +24,7 @@ export const PAYMENT_METHODS = {
 export const ORDER_STATUS = {
   CANCELLED: 'Cancelled',
   DELIVERED: 'DELIVERED',
+  COMPLETED: 'Completed',
 };
 
 const ONDC_URL = 'https://ondc.org/';

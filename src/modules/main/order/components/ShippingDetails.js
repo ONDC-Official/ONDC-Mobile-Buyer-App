@@ -136,7 +136,7 @@ const ShippingDetails = ({order, theme}) => {
         </TouchableOpacity>
 
         {order.state !== ORDER_STATUS.CANCELLED &&
-          (order.state === ORDER_STATUS.DELIVERED ? (
+          (order.state === ORDER_STATUS.DELIVERED || order.state === ORDER_STATUS.COMPLETED ? (
             <TouchableOpacity
               disabled={buttonDisabled}
               onPress={() =>
