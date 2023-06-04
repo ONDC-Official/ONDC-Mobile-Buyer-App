@@ -129,18 +129,12 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 }
               } else if (breakup['@ondc/org/title_type'] !== 'item') {
                 if (provider.hasOwnProperty('additionCharges')) {
-                  if (
-                    provider.additionCharges.findIndex(
-                      one =>
-                        one['@ondc/org/item_id'] ===
-                          breakup['@ondc/org/item_id'] &&
-                        one.title === breakup.title,
-                    ) < 0
-                  ) {
+                  const indexFound = provider.items.findIndex(
+                    one => one.id == breakup['@ondc/org/item_id'],
+                  );
+                  if (indexFound < 0) {
                     provider.additionCharges.push(breakup);
                   }
-                } else {
-                  provider.additionCharges = [breakup];
                 }
               }
             });
