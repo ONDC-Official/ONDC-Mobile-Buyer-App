@@ -26,6 +26,7 @@ import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
 import {useIsFocused} from '@react-navigation/native';
 import {showToastWithGravity, stringToDecimal} from '../../../utils/utils';
+import TextViewWithMoreLess from '../../../components/TextView/TextViewWithMoreLess';
 
 const CancelOrder = ({theme, navigation, route: {params}}) => {
   const {colors} = theme;
@@ -353,12 +354,10 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
                         disabled={disabled}
                         style={[styles.product]}
                         onPress={() => onProductClicked(item, index)}>
-                        <Text
-                          variant="titleSmall"
-                          numberOfLines={2}
-                          ellipsizeMode={'tail'}>
-                          {item?.product?.descriptor?.name}
-                        </Text>
+                        <TextViewWithMoreLess
+                          textContent={item.product?.descriptor?.name}
+                          style={styles.title}
+                        />
                         <View style={styles.productDetails}>
                           <Text>QTY: {item?.quantity?.count}</Text>
                           <Text
@@ -522,6 +521,10 @@ const styles = StyleSheet.create({
   quantityDisplayButton: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  title: {
+    marginRight: 4,
+    flex: 1,
   },
 });
 
