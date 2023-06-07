@@ -26,10 +26,11 @@ const OrderStatus = ({status, theme}) => {
 
     case 'Delivered':
     case 'Active':
+    case 'Completed':
       return (
         <Chip
           mode="flat"
-          selectedColor={theme.colors.primary}
+          selectedColor={theme.colors.surface}
           style={{backgroundColor: theme.colors.deliveredBackground}}>
           {status}
         </Chip>

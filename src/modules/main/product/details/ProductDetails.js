@@ -95,24 +95,40 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             </View>
 
             <View style={styles.chipContainer}>
-              {product?.hasOwnProperty('@ondc/org/returnable') &&
-                product['@ondc/org/returnable'] && (
-                  <Chip
-                    mode="flat"
-                    style={styles.chip}
-                    selectedColor={theme.colors.opposite}>
-                    Returnable
-                  </Chip>
-                )}
-              {product?.hasOwnProperty('@ondc/org/cancellable') &&
-                product['@ondc/org/cancellable'] && (
-                  <Chip
-                    mode="flat"
-                    style={styles.chip}
-                    selectedColor={theme.colors.opposite}>
-                    Cancellable
-                  </Chip>
-                )}
+              {product?.hasOwnProperty('@ondc/org/returnable') ? (
+                <Chip
+                  selectedColor={theme.colors.primary}
+                  mode="flat"
+                  style={styles.chipStyle}
+                  textStyle={styles.chipTextStyle}>
+                  Returnable
+                </Chip>
+              ) : (
+                <Chip
+                  selectedColor={theme.colors.error}
+                  mode="flat"
+                  style={styles.chipStyle}
+                  textStyle={styles.chipTextStyle}>
+                  Non-Returnable
+                </Chip>
+              )}
+              {product?.hasOwnProperty('@ondc/org/cancellable') ? (
+                <Chip
+                  selectedColor={theme.colors.primary}
+                  mode="flat"
+                  style={styles.chipStyle}>
+                  Cancellable
+                </Chip>
+              ) : (
+                <Chip
+                  selectedColor={theme.colors.error}
+                  mode="flat"
+                  compact
+                  style={styles.chipStyle}
+                  textStyle={styles.chipTextStyle}>
+                  Non-Cancellable
+                </Chip>
+              )}
               {product?.hasOwnProperty('@ondc/org/available_on_cod') &&
                 product['@ondc/org/available_on_cod'] && (
                   <Chip
@@ -279,4 +295,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   metaContainer: {flexShrink: 1, marginEnd: 8},
+  chipStyle: {
+    width: 122,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginEnd: 5,
+  },
+  chipTextStyle: {
+    marginLeft: 8,
+    marginRight: 8,
+    minWidth: 105,
+    fontSize: 13,
+    textAlign: 'center',
+  },
 });
