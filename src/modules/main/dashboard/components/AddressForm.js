@@ -27,6 +27,7 @@ const AddressForm = ({
   const {token} = useSelector(({authReducer}) => authReducer);
   const [requestInProgress, setRequestInProgress] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
+  const [tagError, setTagError] = useState(false);
 
   const getState = async (e, setFieldValue) => {
     try {
@@ -65,6 +66,11 @@ const AddressForm = ({
         initialValues={addressInfo}
         validationSchema={validationSchema}
         onSubmit={values => {
+          if (!values.tag) {
+            setTagError(true);
+            return;
+          }
+          setTagError(false);
           saveAddress(values)
             .then(() => {})
             .catch(err => {
@@ -126,7 +132,6 @@ const AddressForm = ({
                     errorMessage={touched.pin ? errors.pin : null}
                     onChangeText={e => {
                       setFieldValue('pin', e);
-                      console.log(e);
                       if (e.length === 6 && e.match(/^[1-9]{1}[0-9]{5}$/)) {
                         setRequestInProgress(true);
                         getState(e, setFieldValue, setFieldError)
@@ -203,8 +208,8 @@ const AddressForm = ({
                     </Chip>
                   ))}
                 </View>
-                <HelperText padding="none" type="error" visible={!!errors?.tag}>
-                  {errors?.tag ? errors?.tag : ''}
+                <HelperText padding="none" type="error" visible={tagError}>
+                  {tagError && 'Please select Address Type'}
                 </HelperText>
               </View>
               <View style={styles.buttonContainer}>

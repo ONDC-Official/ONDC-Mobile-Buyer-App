@@ -24,6 +24,7 @@ export const PAYMENT_METHODS = {
 export const ORDER_STATUS = {
   CANCELLED: 'Cancelled',
   DELIVERED: 'DELIVERED',
+  COMPLETED: 'Completed',
 };
 
 const ONDC_URL = 'https://ondc.org/';
@@ -74,6 +75,7 @@ export const SUB_CATEGORY_CATEGORY = {
   'Fast Food': 'Food & Beverage',
   Desserts: 'Food & Beverage',
   'Bakery, Cakes & Dairy (MTO)': 'Food & Beverage',
+  'Bakes & Cakes': 'Food & Beverage',
   'Beverages (MTO)': 'Food & Beverage',
   'F&B': 'Food & Beverage',
 };

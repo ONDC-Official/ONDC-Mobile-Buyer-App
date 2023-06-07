@@ -29,7 +29,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const {} = useRefreshToken();
   const {token} = useSelector(({authReducer}) => authReducer);
   const {transactionId} = useSelector(({filterReducer}) => filterReducer);
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+  const {cartItems, itemRemoved} = useSelector(({cartReducer}) => cartReducer);
 
   const dispatch = useDispatch();
 
@@ -44,6 +44,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   const [apiInProgress, setApiInProgress] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  useEffect(() => {
+    itemRemoved &&
+      showToastWithGravity(`${itemRemoved} item removed from cart.`);
+  }, [itemRemoved]);
 
   /**
    * function request  order confirmation
@@ -112,6 +117,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               });
             }
             product.knowCharges = [];
+            provider.additionCharges = [];
             quoteData.message.quote.quote.breakup.forEach(breakup => {
               if (breakup['@ondc/org/item_id'] === String(product.id)) {
                 if (breakup['@ondc/org/title_type'] !== 'item') {
@@ -123,18 +129,12 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                 }
               } else if (breakup['@ondc/org/title_type'] !== 'item') {
                 if (provider.hasOwnProperty('additionCharges')) {
-                  if (
-                    provider.additionCharges.findIndex(
-                      one =>
-                        one['@ondc/org/item_id'] ===
-                          breakup['@ondc/org/item_id'] &&
-                        one.title === breakup.title,
-                    ) < 0
-                  ) {
+                  const indexFound = provider.items.findIndex(
+                    one => one.id == breakup['@ondc/org/item_id'],
+                  );
+                  if (indexFound < 0) {
                     provider.additionCharges.push(breakup);
                   }
-                } else {
-                  provider.additionCharges = [breakup];
                 }
               }
             });

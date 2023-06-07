@@ -14,18 +14,18 @@ import {appStyles} from '../../../styles/styles';
 import {showInfoToast} from '../../../utils/utils';
 
 const validationSchema = Yup.object({
-  firstName: Yup.string().trim().required('This field is required'),
-  lastName: Yup.string().trim().required('This field is required'),
+  firstName: Yup.string().trim().required('First Name is required'),
+  lastName: Yup.string().trim().required('Last Name is required'),
   contactNumber: Yup.string()
     .trim()
-    .matches(/^[6-9]{1}[0-9]{9}$/, 'Invalid number')
-    .required('This field is required'),
+    .matches(/^[6-9]{1}[0-9]{9}$/, 'Please enter a valid Mobile number')
+    .required('Mobile number is required'),
   email: Yup.string()
     .trim()
-    .email('Please enter valid email address')
-    .required('This field is required'),
-  issueType: Yup.string().trim().required('This field is required'),
-  issueDescription: Yup.string().trim().required('This field is required'),
+    .email('Please enter a valid Email')
+    .required('Email is required'),
+  issueType: Yup.string().trim().required('Issue Type is required'),
+  issueDescription: Yup.string().trim().required('Issue Description is required'),
 });
 
 /**
