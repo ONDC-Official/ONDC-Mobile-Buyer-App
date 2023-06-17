@@ -11,7 +11,8 @@
     "ios": "react-native run-ios --configuration Production --scheme Buyer",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.1.5",
@@ -31,6 +32,8 @@
     "formik": "^2.2.9",
     "hyper-sdk-react": "^2.1.1",
     "moment": "^2.29.3",
+    "patch-package": "^7.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "react": "17.0.2",
     "react-native": "0.67.4",
     "react-native-android-location-enabler": "^1.2.2",
