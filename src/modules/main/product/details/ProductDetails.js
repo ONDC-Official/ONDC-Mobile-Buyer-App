@@ -183,7 +183,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
               onPress={() => {
                 showInfoToast('Added to cart', 'bottom');
                 let item = addItem(product);
-                setProduct(item);
+                item && setProduct(item);
               }}>
               Add
             </Button>
