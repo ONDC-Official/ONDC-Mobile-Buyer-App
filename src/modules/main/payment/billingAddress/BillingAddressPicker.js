@@ -1,7 +1,7 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
-import {Button, withTheme} from 'react-native-paper';
+import {FlatList, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {Button, withTheme, RadioButton, Text} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -12,7 +12,7 @@ import {skeletonList} from '../../../../utils/utils';
 import {getStoredData} from '../../../../utils/storage';
 import AddressSkeleton from '../../dashboard/components/AddressSkeleton';
 import BillingAddress from './components/BillingAddress';
-import useRefreshToken from "../../../../hooks/useRefreshToken";
+import useRefreshToken from '../../../../hooks/useRefreshToken';
 
 /**
  * Component to render addresses of address
@@ -125,6 +125,18 @@ const BillingAddressPicker = ({navigation, theme}) => {
   const list = apiInProgress ? skeletonList : addresses;
   return (
     <View style={appStyles.container}>
+      <TouchableOpacity
+        style={styles.sameAsDeliverContainer}
+        onPress={() => setBillingAddress(deliveryAddress)}>
+        <RadioButton.Android
+          value="first"
+          status={
+            billingAddress?.id === deliveryAddress?.id ? 'checked' : 'unchecked'
+          }
+          onPress={() => setBillingAddress(deliveryAddress)}
+        />
+        <Text>Same as delivery address.</Text>
+      </TouchableOpacity>
       <FlatList
         style={appStyles.container}
         data={list}
@@ -181,6 +193,18 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 10,
     borderWidth: 1,
+    borderRadius: 8,
+  },
+  sameAsDeliverContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 10,
+    backgroundColor: 'white',
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 15,
+    borderWidth: 0.2,
     borderRadius: 8,
   },
 });
