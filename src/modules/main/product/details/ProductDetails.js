@@ -95,7 +95,8 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             </View>
 
             <View style={styles.chipContainer}>
-              {product?.hasOwnProperty('@ondc/org/returnable') ? (
+              {product?.hasOwnProperty('@ondc/org/returnable') &&
+              product['@ondc/org/returnable'] ? (
                 <Chip
                   selectedColor={theme.colors.primary}
                   mode="flat"
@@ -112,7 +113,8 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                   Non-Returnable
                 </Chip>
               )}
-              {product?.hasOwnProperty('@ondc/org/cancellable') ? (
+              {product?.hasOwnProperty('@ondc/org/cancellable') &&
+              product['@ondc/org/cancellable'] ? (
                 <Chip
                   selectedColor={theme.colors.primary}
                   mode="flat"
