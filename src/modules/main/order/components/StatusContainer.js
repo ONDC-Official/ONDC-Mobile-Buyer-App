@@ -8,7 +8,7 @@ const StatusContainer = ({product, theme}) => {
       <View style={styles.container}>
         <View style={styles.chipContainer}>
           <Chip selectedColor={theme.colors.red} mode="flat">
-            {product.return_status === 'Return_Initialted'
+            {product.return_status === 'Return_Initiated'
               ? 'Return Initiated'
               : product.return_status}
           </Chip>
