@@ -192,7 +192,10 @@ const AddressForm = ({
               />
 
               <View style={styles.addressTagContainer}>
-                <Text>Select address type</Text>
+                <Text>
+                  Address Type
+                  <Text style={{color: theme.colors.red}}> *</Text>
+                </Text>
                 <View style={styles.tagContainer}>
                   {addressTags.map(tag => (
                     <Chip
