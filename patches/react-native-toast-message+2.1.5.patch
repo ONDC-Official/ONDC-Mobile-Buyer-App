@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-toast-message/lib/src/components/BaseToast.js b/node_modules/react-native-toast-message/lib/src/components/BaseToast.js
+index 21c4786..581554f 100644
+--- a/node_modules/react-native-toast-message/lib/src/components/BaseToast.js
++++ b/node_modules/react-native-toast-message/lib/src/components/BaseToast.js
+@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
+ import { getTestId } from '../utils/test-id';
+ import { styles } from './BaseToast.styles';
+ import { Touchable } from './Touchable';
+-export function BaseToast({ text1, text2, onPress, activeOpacity, style, touchableContainerProps, contentContainerStyle, contentContainerProps, text1Style, text1NumberOfLines = 1, text1Props, text2Style, text2NumberOfLines = 1, text2Props, renderLeadingIcon, renderTrailingIcon }) {
++export function BaseToast({ text1, text2, onPress, activeOpacity, style, touchableContainerProps, contentContainerStyle, contentContainerProps, text1Style, text1NumberOfLines = 3, text1Props, text2Style, text2NumberOfLines = 1, text2Props, renderLeadingIcon, renderTrailingIcon }) {
+     return (<Touchable testID={getTestId('TouchableContainer')} onPress={onPress} activeOpacity={activeOpacity} style={[styles.base, styles.leadingBorder, style]} {...touchableContainerProps}>
+       {renderLeadingIcon && renderLeadingIcon()}
+       <View testID={getTestId('ContentContainer')} style={[styles.contentContainer, contentContainerStyle]} {...contentContainerProps}>

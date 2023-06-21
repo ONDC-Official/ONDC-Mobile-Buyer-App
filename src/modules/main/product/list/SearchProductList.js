@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
-import {IconButton, Text, withTheme} from 'react-native-paper';
+import {IconButton, withTheme} from 'react-native-paper';
 
 import {appStyles} from '../../../../styles/styles';
 import {getStoredData} from '../../../../utils/storage';
@@ -16,6 +16,7 @@ import AddressTag from '../../dashboard/components/AddressTag';
 import useRefreshToken from '../../../../hooks/useRefreshToken';
 
 const SearchProductList = ({navigation, theme, route: {params}}) => {
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const {} = useRefreshToken();
   const [address, setAddress] = useState(null);
@@ -61,6 +62,8 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
         } else {
           onSearch('', SEARCH_QUERY.UNKNOWN);
         }
+      } else {
+        resetProductList();
       }
     };
     searchOnAddressChange();

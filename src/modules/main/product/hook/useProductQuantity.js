@@ -22,6 +22,7 @@ export default item => {
         showInfoToast(
           'Product not available at the moment, please try after sometime',
         );
+        return;
       }
     } else {
       dispatch(addItemToCart(product));
