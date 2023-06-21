@@ -18,8 +18,8 @@ const validationSchema = Yup.object({
   lastName: Yup.string().trim().required('Last Name is required'),
   contactNumber: Yup.string()
     .trim()
-    .matches(/^[6-9]{1}[0-9]{9}$/, 'Please enter a valid Mobile number')
-    .required('Mobile number is required'),
+    .matches(/^[6-9]{1}[0-9]{9}$/, 'Please enter a valid Mobile Number')
+    .required('Mobile Number is required'),
   email: Yup.string()
     .trim()
     .email('Please enter a valid Email')
@@ -139,8 +139,8 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
                 value={values.contactNumber}
                 onBlur={handleBlur('contactNumber')}
                 required={true}
-                label={'Mobile number'}
-                placeholder={'Mobile number'}
+                label={'Mobile Number'}
+                placeholder={'Mobile Number'}
                 errorMessage={
                   touched.contactNumber ? errors.contactNumber : null
                 }

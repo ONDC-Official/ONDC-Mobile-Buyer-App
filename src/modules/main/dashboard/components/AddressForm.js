@@ -66,11 +66,10 @@ const AddressForm = ({
         initialValues={addressInfo}
         validationSchema={validationSchema}
         onSubmit={values => {
-          if (!values.tag) {
-            setTagError(true);
+          if (tagError) {
             return;
           }
-          setTagError(false);
+
           saveAddress(values)
             .then(() => {})
             .catch(err => {
@@ -192,7 +191,10 @@ const AddressForm = ({
               />
 
               <View style={styles.addressTagContainer}>
-                <Text>Select address type</Text>
+                <Text>
+                  Address Type
+                  <Text style={{color: theme.colors.red}}> *</Text>
+                </Text>
                 <View style={styles.tagContainer}>
                   {addressTags.map(tag => (
                     <Chip
@@ -208,8 +210,11 @@ const AddressForm = ({
                     </Chip>
                   ))}
                 </View>
-                <HelperText padding="none" type="error" visible={tagError}>
-                  {tagError && 'Please select Address Type'}
+                <HelperText
+                  padding="none"
+                  type="error"
+                  visible={tagError || errors?.tag}>
+                  {(tagError || !!errors?.tag) && 'Please select Address Type'}
                 </HelperText>
               </View>
               <View style={styles.buttonContainer}>
@@ -217,7 +222,14 @@ const AddressForm = ({
                   mode="contained"
                   contentStyle={appStyles.containedButtonContainer}
                   labelStyle={appStyles.containedButtonLabel}
-                  onPress={handleSubmit}
+                  onPress={() => {
+                    if (!values.tag) {
+                      setTagError(true);
+                    } else {
+                      setTagError(false);
+                    }
+                    handleSubmit();
+                  }}
                   loading={apiInProgress}
                   disabled={apiInProgress}>
                   Save
