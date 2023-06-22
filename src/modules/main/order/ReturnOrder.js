@@ -84,8 +84,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
               'Not able to return the order, please try after sometime.',
             );
         setUpdateInProgress(false);
-      } else 
-      if (data[0].message.ack.status === 'ACK') {
+      } else if (data[0].message.ack.status === 'ACK') {
         setUpdateMessageId(data[0].context.message_id);
       }
     } catch (e) {
@@ -179,7 +178,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
     <ScrollView>
       <Card style={styles.card}>
         <Text variant="titleSmall" style={styles.reasonMessage}>
-          Select products to cancel
+          Select products to return
         </Text>
         <View style={styles.productList}>
           {products?.map(item => {
@@ -238,15 +237,6 @@ const ReturnOrder = ({navigation, route: {params}}) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <Button
-            contentStyle={appStyles.containedButtonContainer}
-            labelStyle={appStyles.containedButtonLabel}
-            mode="outlined"
-            disabled={updateInProgress}
-            onPress={() => navigation.goBack()}>
-            Go Back
-          </Button>
-
           {selectedReason && selectedProducts.length > 0 && (
             <Button
               contentStyle={appStyles.containedButtonContainer}
