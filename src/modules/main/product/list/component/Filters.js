@@ -15,6 +15,7 @@ import {
   clearFiltersOnly,
   updateFilters,
 } from '../../../../../redux/filter/actions';
+import {showInfoToast} from '../../../../../utils/utils';
 import OutlineButton from '../../../../../components/button/OutlineButton';
 import InputField from '../../../../../components/input/InputField';
 
@@ -37,9 +38,10 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
   const [rangeMin, setRangeMin] = useState(minPrice);
 
   const applyFilters = () => {
-    if (rangeMin > rangeMax) {
-      showToastWithGravity(
-        'Min price range should be smaller than Max price range',
+    if (!rangeMax || rangeMin > rangeMax) {
+      showInfoToast(
+        'Max price range should be greater than Min price range and should not be empty.',
+        'top',
       );
       return;
     }
@@ -92,10 +94,19 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
   };
 
   const handleMinPriceChange = minValue => {
+    if (minValue && Number(minValue) <= 0) {
+      setRangeMin(0);
+      return;
+    }
     if (minValue >= minPrice && minValue < rangeMax) setRangeMin(minValue);
   };
   const handleMaxPriceChange = maxValue => {
-    if (maxValue <= maxPrice) setRangeMax(maxValue);
+    if (!maxValue) {
+      setRangeMax('');
+      return;
+    }
+    if (maxValue > 0 && maxValue > rangeMin && maxValue <= maxPrice)
+      setRangeMax(maxValue);
   };
 
   /**
