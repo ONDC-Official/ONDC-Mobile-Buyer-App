@@ -38,9 +38,14 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
   const [rangeMin, setRangeMin] = useState(minPrice);
 
   const applyFilters = () => {
-    if (!rangeMax || rangeMin > rangeMax) {
+    if (!rangeMax || String(rangeMin).length <= 0 ) {
+      showInfoToast('Min or Max should not be empty.');
+      return;
+    }
+
+    if (Number(rangeMin) > Number(rangeMax)) {
       showInfoToast(
-        'Max price range should be greater than Min price range and should not be empty.',
+        'Max price range should be greater than Min price range',
         'top',
       );
       return;
@@ -98,7 +103,7 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
       setRangeMin(0);
       return;
     }
-    if (minValue >= minPrice && minValue < rangeMax) setRangeMin(minValue);
+    if (minValue >= 0 && Number(minValue) < Number(rangeMax)) setRangeMin(minValue);
   };
   const handleMaxPriceChange = maxValue => {
     if (!maxValue) {
