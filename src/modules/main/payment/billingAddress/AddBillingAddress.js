@@ -7,6 +7,7 @@ import {BASE_URL, BILLING_ADDRESS} from '../../../../utils/apiUtilities';
 import BillingAddressForm from './components/BillingAddressForm';
 import {billingAddressValidationSchema} from './utils/validations';
 import useRefreshToken from "../../../../hooks/useRefreshToken";
+import { showInfoToast } from '../../../../utils/utils';
 
 /**
  * Component to render form in add new address screen
@@ -63,6 +64,7 @@ const AddBillingAddress = ({navigation, theme}) => {
     try {
       setApiInProgress(true);
       await postData(`${BASE_URL}${BILLING_ADDRESS}`, payload, options);
+      showInfoToast('Your billing address has been added successfully.');
       navigation.goBack();
       setApiInProgress(false);
     } catch (error) {

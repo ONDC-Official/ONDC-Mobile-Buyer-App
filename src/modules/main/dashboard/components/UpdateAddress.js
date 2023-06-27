@@ -10,6 +10,7 @@ import {
 import {postData} from '../../../../utils/api';
 import AddressForm from './AddressForm';
 import useRefreshToken from '../../../../hooks/useRefreshToken';
+import { showInfoToast } from '../../../../utils/utils';
 
 /**
  * Component to render form in add new address screen
@@ -82,6 +83,7 @@ const UpdateAddress = ({navigation, theme, route: {params}}) => {
         payload,
         options,
       );
+      showInfoToast('Your delivery address has been added successfully');
       setApiInProgress(false);
       navigation.goBack();
     } catch (error) {

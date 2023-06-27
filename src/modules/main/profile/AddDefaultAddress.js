@@ -8,6 +8,7 @@ import {BASE_URL, DELIVERY_ADDRESS} from '../../../utils/apiUtilities';
 import {setStoredData} from '../../../utils/storage';
 import AddressForm from '../dashboard/components/AddressForm';
 import useRefreshToken from '../../../hooks/useRefreshToken';
+import { showInfoToast } from '../../../utils/utils';
 
 /**
  * Component to render form in add new address screen
@@ -80,7 +81,7 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
         await setStoredData('address', JSON.stringify(data));
       }
       setApiInProgress(false);
-
+      showInfoToast('Your delivery address has been added successfully.');
       navigation.reset({
         index: 0,
         routes: [{name: 'Dashboard'}],
