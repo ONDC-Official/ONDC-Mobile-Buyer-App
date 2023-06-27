@@ -312,32 +312,26 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
   return (
     <ScrollView>
       <Card style={styles.card}>
-        {products?.length > 0 && (
-          <View style={styles.cancellationType}>
-            <View style={styles.row}>
-              <RadioButton.Android
-                disabled={disabled}
-                value="first"
-                status={
-                  cancellationType === 'complete' ? 'checked' : 'unchecked'
-                }
-                onPress={() => setCancellationType('complete')}
-              />
-              <Text>Complete</Text>
-            </View>
-            <View style={styles.row}>
-              <RadioButton.Android
-                disabled={disabled}
-                value="first"
-                status={
-                  cancellationType === 'partial' ? 'checked' : 'unchecked'
-                }
-                onPress={() => setCancellationType('partial')}
-              />
-              <Text>Partial</Text>
-            </View>
+        <View style={styles.cancellationType}>
+          <View style={styles.row}>
+            <RadioButton.Android
+              disabled={disabled}
+              value="first"
+              status={cancellationType === 'complete' ? 'checked' : 'unchecked'}
+              onPress={() => setCancellationType('complete')}
+            />
+            <Text>Complete</Text>
           </View>
-        )}
+          <View style={styles.row}>
+            <RadioButton.Android
+              disabled={disabled || products?.length <= 0}
+              value="first"
+              status={cancellationType === 'partial' ? 'checked' : 'unchecked'}
+              onPress={() => setCancellationType('partial')}
+            />
+            <Text>Partial</Text>
+          </View>
+        </View>
         {cancellationType === 'partial' && (
           <>
             <Text variant="titleSmall" style={styles.reasonMessage}>
