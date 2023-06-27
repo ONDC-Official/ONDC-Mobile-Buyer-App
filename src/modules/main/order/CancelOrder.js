@@ -25,7 +25,11 @@ import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
 import {useIsFocused} from '@react-navigation/native';
-import {showToastWithGravity, stringToDecimal} from '../../../utils/utils';
+import {
+  showInfoToast,
+  showToastWithGravity,
+  stringToDecimal,
+} from '../../../utils/utils';
 import TextViewWithMoreLess from '../../../components/TextView/TextViewWithMoreLess';
 
 const CancelOrder = ({theme, navigation, route: {params}}) => {
@@ -196,6 +200,7 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
       setCancelInProgress(false);
       orderProcessed.current = true;
       if (data.message) {
+        showInfoToast('Complete order cancelled successfully');
         navigation.navigate('Orders');
       } else {
         showToastWithGravity(
@@ -220,6 +225,7 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
       );
       setUpdateInProgress(false);
       if (data.message) {
+        showInfoToast('Partial order cancelled successfully');
         navigation.navigate('Orders');
       } else {
         showToastWithGravity(

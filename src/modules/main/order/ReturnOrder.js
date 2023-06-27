@@ -20,7 +20,7 @@ import {
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
-import {showToastWithGravity} from '../../../utils/utils';
+import {showInfoToast, showToastWithGravity} from '../../../utils/utils';
 
 const ReturnOrder = ({navigation, route: {params}}) => {
   const {handleApiError} = useNetworkErrorHandling();
@@ -120,6 +120,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
       );
       setUpdateInProgress(false);
       if (data.message) {
+        showInfoToast('Return request initiated successfully');
         navigation.navigate('Orders');
       } else {
         showToastWithGravity(
