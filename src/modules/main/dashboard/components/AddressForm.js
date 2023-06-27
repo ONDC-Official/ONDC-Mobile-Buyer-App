@@ -178,6 +178,7 @@ const AddressForm = ({
                 placeholder={'City'}
                 errorMessage={touched.city ? errors.city : null}
                 onChangeText={handleChange('city')}
+                editable={false}
               />
               <InputField
                 value={values.state}

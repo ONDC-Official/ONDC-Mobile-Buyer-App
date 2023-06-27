@@ -28,6 +28,9 @@ const BillingAddressForm = ({
       setFieldValue('city', data.copResults.city);
       setRequestInProgress(false);
     } catch (error) {
+      setFieldValue('city', null);
+      setFieldValue('state', null);
+      showToastWithGravity('Pin code is invalid');
       handleApiError(error);
       setRequestInProgress(false);
     }
@@ -147,6 +150,7 @@ const BillingAddressForm = ({
                   placeholder={'City'}
                   errorMessage={touched.city ? errors.city : null}
                   onChangeText={handleChange('city')}
+                  editable={false}
                 />
                 <InputField
                   value={values.state}
