@@ -171,6 +171,12 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
               <Text style={styles.longDescription}>
                 {product?.provider_details?.descriptor?.long_desc}
               </Text>
+              {product &&
+                product['@ondc/org/contact_details_consumer_care'] && (
+                  <Text style={styles.providerContact}>
+                    {product['@ondc/org/contact_details_consumer_care']}
+                  </Text>
+                )}
             </View>
           </View>
         </View>
@@ -296,6 +302,12 @@ const styles = StyleSheet.create({
     marginTop: 8,
     flexWrap: 'wrap',
   },
+  providerContact: {
+    marginVertical: 8,
+    color: '#606161',
+    fontWeight: '600',
+  },
+
   metaContainer: {flexShrink: 1, marginEnd: 8},
   chipStyle: {
     width: 122,
