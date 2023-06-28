@@ -51,7 +51,7 @@ const AddressForm = ({
     } catch (error) {
       setFieldValue('city', null);
       setFieldValue('state', null);
-      showToastWithGravity('Pin code is invalid');
+      showToastWithGravity('Pin Code is invalid');
       console.log(error);
       handleApiError(error);
       setRequestInProgress(false);
@@ -112,8 +112,8 @@ const AddressForm = ({
                 value={values.number}
                 required={true}
                 onBlur={handleBlur('number')}
-                label={'Mobile number'}
-                placeholder={'Mobile number'}
+                label={'Mobile Number'}
+                placeholder={'Mobile Number'}
                 errorMessage={touched.number ? errors.number : null}
                 onChangeText={handleChange('number')}
               />
@@ -125,9 +125,9 @@ const AddressForm = ({
                     keyboardType={'numeric'}
                     maxLength={6}
                     onBlur={handleBlur('pin')}
-                    label={'Pin code'}
+                    label={'Pin Code'}
                     required={true}
-                    placeholder={'Pin code'}
+                    placeholder={'Pin Code'}
                     errorMessage={touched.pin ? errors.pin : null}
                     onChangeText={e => {
                       setFieldValue('pin', e);

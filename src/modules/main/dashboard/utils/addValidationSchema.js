@@ -14,7 +14,7 @@ export const validationSchema = Yup.object({
   state: Yup.string().trim().required('State Name cannot be empty').nullable(),
   pin: Yup.string()
     .trim()
-    .matches(/^[1-9]{1}[0-9]{5}$/, 'Invalid pin code')
+    .matches(/^[1-9]{1}[0-9]{5}$/, 'Invalid pin Code')
     .required('Please enter a valid Pin Code'),
   street: Yup.string().trim().required('Please enter Full Address'),
 });

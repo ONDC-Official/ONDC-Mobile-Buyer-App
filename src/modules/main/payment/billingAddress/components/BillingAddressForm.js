@@ -30,7 +30,7 @@ const BillingAddressForm = ({
     } catch (error) {
       setFieldValue('city', null);
       setFieldValue('state', null);
-      showToastWithGravity('Pin code is invalid');
+      showToastWithGravity('Pin Code is invalid');
       handleApiError(error);
       setRequestInProgress(false);
     }
@@ -85,8 +85,8 @@ const BillingAddressForm = ({
                   value={values.number}
                   required={true}
                   onBlur={handleBlur('number')}
-                  label={'Mobile number'}
-                  placeholder={'Mobile number'}
+                  label={'Mobile Number'}
+                  placeholder={'Mobile Number'}
                   errorMessage={touched.number ? errors.number : null}
                   onChangeText={handleChange('number')}
                 />
@@ -98,8 +98,8 @@ const BillingAddressForm = ({
                       maxLength={6}
                       onBlur={handleBlur('pin')}
                       required={true}
-                      label={'Pin code'}
-                      placeholder={'Pin code'}
+                      label={'Pin Code'}
+                      placeholder={'Pin Code'}
                       errorMessage={touched.pin ? errors.pin : null}
                       onChangeText={e => {
                         setFieldValue('pin', e);
