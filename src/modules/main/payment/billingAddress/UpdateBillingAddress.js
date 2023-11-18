@@ -7,7 +7,7 @@ import {BASE_URL, UPDATE_BILLING_ADDRESS} from '../../../../utils/apiUtilities';
 import BillingAddressForm from './components/BillingAddressForm';
 import {billingAddressValidationSchema} from './utils/validations';
 import useRefreshToken from "../../../../hooks/useRefreshToken";
-import { showInfoToast } from '../../../../utils/utils';
+import {showInfoToast} from '../../../../utils/utils';
 
 
 /**

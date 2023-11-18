@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {IconButton, withTheme} from 'react-native-paper';
 
@@ -9,7 +9,7 @@ import {getStoredData} from '../../../../utils/storage';
 import useProductList from '../hook/useProductList';
 import ProductSearch from './component/header/ProductSearch';
 import Products from './Products';
-import {SEARCH_QUERY} from '../../../../utils/Constants';
+import {SEARCH_QUERY} from '../../../../utils/constants';
 import SortAndFilter from './component/header/SortAndFilter';
 import HeaderMenu from '../../../../components/headerMenu/HeaderMenu';
 import AddressTag from '../../dashboard/components/AddressTag';
@@ -79,16 +79,16 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
               icon={'arrow-left'}
               onPress={() => navigation.goBack()}
             />
-            <AddressTag address={address} />
+            <AddressTag address={address}/>
           </View>
 
-          <HeaderMenu />
+          <HeaderMenu/>
         </View>
-        <ProductSearch onSearch={onSearch} address={address} />
+        <ProductSearch onSearch={onSearch} address={address}/>
       </View>
 
       {filters && products.length > 0 && (
-        <SortAndFilter updateFilterCount={updateFilterCount} />
+        <SortAndFilter updateFilterCount={updateFilterCount}/>
       )}
 
       <Products

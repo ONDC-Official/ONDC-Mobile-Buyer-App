@@ -1,5 +1,4 @@
 import {useNavigation} from '@react-navigation/native';
-import SlangRetailAssistant from '@slanglabs/slang-conva-react-native-retail-assistant';
 import {useDispatch} from 'react-redux';
 import {clearAllData} from '../redux/actions';
 import {clearFilters} from '../redux/filter/actions';
@@ -26,7 +25,6 @@ export default () => {
 
   const handleApiError = (error, setError = null) => {
     console.log(error.response);
-    SlangRetailAssistant.cancelSession();
     if (error.response) {
       if (error.response.status === 401) {
         if (!sessionExpiredMessageShown) {
@@ -46,7 +44,8 @@ export default () => {
           'Version mismatch',
           'Please upgrade your application to the latest version',
           'Ok',
-          () => {},
+          () => {
+          },
         );
       } else {
         if (setError !== null) {

@@ -23,7 +23,7 @@ const BillingAddress = ({item, theme, isCurrentAddress, setBillingAddress}) => {
       <View style={styles.container}>
         <View style={styles.emptyCheckbox}>
           {isCurrentAddress && (
-            <Icon name={'check-circle'} color={colors.primary} size={24} />
+            <Icon name={'check-circle'} color={colors.primary} size={24}/>
           )}
         </View>
 
@@ -49,7 +49,7 @@ const BillingAddress = ({item, theme, isCurrentAddress, setBillingAddress}) => {
                 address: item,
               })
             }>
-            <Icon name="pencil-outline" size={24} color={colors.primary} />
+            <Icon name="pencil-outline" size={24} color={colors.primary}/>
           </TouchableOpacity>
         </View>
       </View>

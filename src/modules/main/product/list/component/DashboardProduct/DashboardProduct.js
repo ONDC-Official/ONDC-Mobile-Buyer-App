@@ -5,13 +5,9 @@ import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 
 import {appStyles} from '../../../../../../styles/styles';
-import {
-  maskAmount,
-  showInfoToast,
-  stringToDecimal,
-} from '../../../../../../utils/utils';
+import {showInfoToast, stringToDecimal,} from '../../../../../../utils/utils';
 import useProductQuantity from '../../../hook/useProductQuantity';
-import {SUB_CATEGORY_CATEGORY} from '../../../../../../utils/Constants';
+import {SUB_CATEGORY_CATEGORY} from '../../../../../../utils/constants';
 import VegNonVegTags from '../VegNonVegTag';
 
 const image = require('../../../../../../assets/noImage.png');
@@ -77,7 +73,7 @@ const DashboardProduct = ({theme, navigation, item}) => {
               <Text numberOfLines={1} style={styles.category}>
                 {SUB_CATEGORY_CATEGORY[item?.category_id]}
               </Text>
-              <VegNonVegTags list={item?.tags} />
+              <VegNonVegTags list={item?.tags}/>
             </View>
             <View style={styles.priceContainer}>
               <Text style={styles.amount}>₹{stringToDecimal(cost)}</Text>

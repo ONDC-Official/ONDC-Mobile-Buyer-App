@@ -37,13 +37,13 @@ const Dashboard = ({theme}) => {
       style={[appStyles.container, {backgroundColor: theme.colors.surface}]}>
       <View>
         <View style={styles.header}>
-          <AddressTag address={address} />
+          <AddressTag address={address}/>
 
-          <HeaderMenu />
+          <HeaderMenu/>
         </View>
-        <ProductSearch viewOnly />
+        <ProductSearch viewOnly/>
       </View>
-      <Home />
+      <Home/>
     </SafeAreaView>
   );
 };

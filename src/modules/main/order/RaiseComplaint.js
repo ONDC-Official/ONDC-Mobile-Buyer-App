@@ -83,19 +83,20 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
         validationSchema={validationSchema}
         onSubmit={values => {
           raiseComplaint(values)
-            .then(() => {})
+            .then(() => {
+            })
             .catch(err => {
               console.log(err);
             });
         }}>
         {({
-          values,
-          errors,
-          handleChange,
-          handleBlur,
-          touched,
-          handleSubmit,
-        }) => {
+            values,
+            errors,
+            handleChange,
+            handleBlur,
+            touched,
+            handleSubmit,
+          }) => {
           return (
             <View style={styles.formContainer}>
               <InputField

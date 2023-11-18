@@ -1,22 +1,11 @@
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Divider,
-  RadioButton,
-  Text,
-} from 'react-native-paper';
+import {Button, Card, Checkbox, Divider, RadioButton, Text,} from 'react-native-paper';
 import React, {useEffect, useState} from 'react';
 
 import {returnReasons} from './utils/reasons';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
-import {
-  BASE_URL,
-  ON_UPDATE_ORDER,
-  UPDATE_ORDER,
-} from '../../../utils/apiUtilities';
+import {BASE_URL, ON_UPDATE_ORDER, UPDATE_ORDER,} from '../../../utils/apiUtilities';
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
@@ -81,8 +70,8 @@ const ReturnOrder = ({navigation, route: {params}}) => {
         data[0].error.message
           ? showToastWithGravity(data[0].error.message)
           : showToastWithGravity(
-              'Not able to return the order, please try after sometime.',
-            );
+            'Not able to return the order, please try after sometime.',
+          );
         setUpdateInProgress(false);
       } else if (data[0].message.ack.status === 'ACK') {
         setUpdateMessageId(data[0].context.message_id);
@@ -164,8 +153,10 @@ const ReturnOrder = ({navigation, route: {params}}) => {
       eventSource.addEventListener('on_update', event => {
         const data = JSON.parse(event.data);
         onUpdate(data.messageId)
-          .then(() => {})
-          .catch(() => {});
+          .then(() => {
+          })
+          .catch(() => {
+          });
       });
     }
 
@@ -211,7 +202,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
             );
           })}
         </View>
-        <Divider />
+        <Divider/>
 
         <View>
           <View style={styles.reasonMessage}>

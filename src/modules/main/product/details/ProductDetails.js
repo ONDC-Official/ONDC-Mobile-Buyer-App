@@ -48,7 +48,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
       <ScrollView style={appStyles.container}>
         <View style={[appStyles.container, {backgroundColor: colors.white}]}>
           {product?.descriptor.images?.length > 0 ? (
-            <ProductImages images={product?.descriptor?.images} />
+            <ProductImages images={product?.descriptor?.images}/>
           ) : (
             <FastImage
               source={image}
@@ -64,7 +64,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                   {product?.descriptor?.name}
                 </Text>
                 <View style={styles.typeContainer}>
-                  <VegNonVegTags list={product?.tags} />
+                  <VegNonVegTags list={product?.tags}/>
 
                   <Text style={styles.fssaiLicense}>
                     Fssai License No:{' '}
@@ -89,7 +89,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
                     : stringToDecimal(product?.price.maximum_value)}
                 </Text>
                 {product?.hasOwnProperty('@ondc/org/time_to_ship') && (
-                  <TimeToShip duration={product['@ondc/org/time_to_ship']} />
+                  <TimeToShip duration={product['@ondc/org/time_to_ship']}/>
                 )}
               </View>
             </View>
@@ -143,7 +143,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             </View>
 
             {product?.hasOwnProperty('@ondc/org/return_window') && (
-              <ReturnWindow duration={product['@ondc/org/return_window']} />
+              <ReturnWindow duration={product['@ondc/org/return_window']}/>
             )}
 
             {!!product?.descriptor?.long_desc && (
@@ -219,7 +219,7 @@ const ProductDetails = ({theme, navigation, route: {params}}) => {
             </View>
           ))}
       </View>
-      <CartFooter />
+      <CartFooter/>
     </View>
   );
 };

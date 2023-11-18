@@ -1,5 +1,5 @@
 import React from 'react';
-import {HelperText, TextInput, Text, withTheme} from 'react-native-paper';
+import {HelperText, Text, TextInput, withTheme} from 'react-native-paper';
 import {View} from 'react-native';
 
 /**

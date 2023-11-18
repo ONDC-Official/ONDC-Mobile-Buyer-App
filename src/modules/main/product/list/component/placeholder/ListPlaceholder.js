@@ -12,7 +12,7 @@ const screenWidth = Dimensions.get('window').width;
  */
 const ListPlaceholder = () => (
   <View style={[appStyles.container, styles.container]}>
-    <Image source={image} resizeMode={'contain'} style={styles.image} />
+    <Image source={image} resizeMode={'contain'} style={styles.image}/>
   </View>
 );
 

@@ -1,15 +1,12 @@
+import {useEffect} from "react";
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import Config from 'react-native-config';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 
 import {storeLoginDetails} from '../../../redux/auth/actions';
 import {getStoredData} from '../../../utils/storage';
-
-GoogleSignin.configure({
-  webClientId: Config.GOOGLE_CLIENT_ID,
-});
+import Config from "../../../../config";
 
 export default () => {
   const navigation = useNavigation();
@@ -52,6 +49,12 @@ export default () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: Config.GOOGLE_CLIENT_ID,
+    });
+  }, []);
 
   return {loginWithGoogle};
 };

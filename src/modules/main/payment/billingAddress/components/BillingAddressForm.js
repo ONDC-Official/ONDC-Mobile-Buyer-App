@@ -10,13 +10,13 @@ import {BASE_URL, GET_GPS_CORDS} from '../../../../../utils/apiUtilities';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 
 const BillingAddressForm = ({
-  theme,
-  addressInfo,
-  validationSchema,
-  apiInProgress,
-  buttonLabel,
-  saveAddress,
-}) => {
+                              theme,
+                              addressInfo,
+                              validationSchema,
+                              apiInProgress,
+                              buttonLabel,
+                              saveAddress,
+                            }) => {
   const [requestInProgress, setRequestInProgress] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -44,21 +44,22 @@ const BillingAddressForm = ({
           validationSchema={validationSchema}
           onSubmit={values => {
             saveAddress(values)
-              .then(() => {})
+              .then(() => {
+              })
               .catch(err => {
                 console.log(err);
               });
           }}>
           {({
-            values,
-            errors,
-            handleChange,
-            handleBlur,
-            touched,
-            handleSubmit,
-            setFieldValue,
-            setFieldError,
-          }) => {
+              values,
+              errors,
+              handleChange,
+              handleBlur,
+              touched,
+              handleSubmit,
+              setFieldValue,
+              setFieldError,
+            }) => {
             return (
               <View style={styles.formContainer}>
                 <InputField

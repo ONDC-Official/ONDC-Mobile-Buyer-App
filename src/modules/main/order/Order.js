@@ -80,8 +80,10 @@ const Order = ({navigation}) => {
     const unsubscribeFocus = navigation.addListener('focus', () => {
       pageNumber.current = 1;
       getOrderList(pageNumber.current)
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {
+        })
+        .catch(() => {
+        });
     });
 
     return () => {
@@ -91,8 +93,10 @@ const Order = ({navigation}) => {
 
   useEffect(() => {
     getOrderList(pageNumber.current)
-      .then(() => {})
-      .catch(() => {});
+      .then(() => {
+      })
+      .catch(() => {
+      });
   }, []);
 
   const onRefreshHandler = () => {
@@ -115,9 +119,9 @@ const Order = ({navigation}) => {
    */
   const renderItem = ({item}) =>
     item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <OrderCardSkeleton item={item} />
+      <OrderCardSkeleton item={item}/>
     ) : (
-      <OrderHeader item={item} />
+      <OrderHeader item={item}/>
     );
 
   const listData = orders ? orders : skeletonList;
@@ -137,7 +141,7 @@ const Order = ({navigation}) => {
             ? styles.contentContainerStyle
             : [appStyles.container, styles.emptyContainer]
         }
-        ListFooterComponent={<ListFooter moreRequested={moreListRequested} />}
+        ListFooterComponent={<ListFooter moreRequested={moreListRequested}/>}
       />
     </View>
   );

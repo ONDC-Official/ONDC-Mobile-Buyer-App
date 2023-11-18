@@ -9,6 +9,6 @@ import OrderCardSkeleton from './OrderCardSkeleton';
  * @returns {JSX.Element}
  */
 const ListFooter = ({moreRequested}) =>
-  moreRequested ? <OrderCardSkeleton /> : null;
+  moreRequested ? <OrderCardSkeleton/> : null;
 
 export default ListFooter;

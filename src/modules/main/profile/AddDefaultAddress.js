@@ -8,7 +8,7 @@ import {BASE_URL, DELIVERY_ADDRESS} from '../../../utils/apiUtilities';
 import {setStoredData} from '../../../utils/storage';
 import AddressForm from '../dashboard/components/AddressForm';
 import useRefreshToken from '../../../hooks/useRefreshToken';
-import { showInfoToast } from '../../../utils/utils';
+import {showInfoToast} from '../../../utils/utils';
 
 /**
  * Component to render form in add new address screen

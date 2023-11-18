@@ -17,7 +17,7 @@ const ClearButton = props => {
       disabled={props.loading}
       style={styles.container}>
       {props.loading && (
-        <ActivityIndicator color={props.theme.colors.primary} />
+        <ActivityIndicator color={props.theme.colors.primary}/>
       )}
       <Text style={{color: props.theme.colors.primary}}>{props.title}</Text>
     </TouchableOpacity>

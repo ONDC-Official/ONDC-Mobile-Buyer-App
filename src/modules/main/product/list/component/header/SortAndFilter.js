@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux';
 
 import Filters from '../Filters';
 import SortMenu from './SortMenu';
-import {PRODUCT_SORTING} from '../../../../../../utils/Constants';
+import {PRODUCT_SORTING} from '../../../../../../utils/constants';
 
 const sortOptions = [
   {
@@ -36,7 +36,7 @@ const SortIcon = ({value, color}) => {
       return (
         <>
           <Text style={[styles.text, {color: color}]}>Rating</Text>
-          <Icon name="sort-amount-up-alt" size={14} color={color} />
+          <Icon name="sort-amount-up-alt" size={14} color={color}/>
         </>
       );
 
@@ -44,7 +44,7 @@ const SortIcon = ({value, color}) => {
       return (
         <>
           <Text style={[styles.text, {color: color}]}>Rating</Text>
-          <Icon name="sort-amount-down" size={14} color={color} />
+          <Icon name="sort-amount-down" size={14} color={color}/>
         </>
       );
 
@@ -52,7 +52,7 @@ const SortIcon = ({value, color}) => {
       return (
         <>
           <Text style={[styles.text, {color: color}]}>Price</Text>
-          <Icon name="sort-numeric-down" size={14} color={color} />
+          <Icon name="sort-numeric-down" size={14} color={color}/>
         </>
       );
 
@@ -60,7 +60,7 @@ const SortIcon = ({value, color}) => {
       return (
         <>
           <Text style={[styles.text, {color: color}]}>Price</Text>
-          <Icon name="sort-numeric-up-alt" size={14} color={color} />
+          <Icon name="sort-numeric-up-alt" size={14} color={color}/>
         </>
       );
 
@@ -68,7 +68,7 @@ const SortIcon = ({value, color}) => {
       return (
         <>
           <Text style={[styles.text, {color: color}]}>Sort</Text>
-          <Icon name="sort" size={14} color={color} />
+          <Icon name="sort" size={14} color={color}/>
         </>
       );
   }
@@ -136,12 +136,12 @@ const SortAndFilter = ({theme, updateFilterCount, filterCount}) => {
           style={[{borderColor: filterColor}, styles.row]}
           onPress={openRBSheet}>
           <Text style={[styles.text, {color: filterColor}]}>Filters</Text>
-          <Icon name="filter" size={14} color={filterColor} />
+          <Icon name="filter" size={14} color={filterColor}/>
         </TouchableOpacity>
         <TouchableOpacity
           style={[{borderColor: sortColor}, styles.row]}
           onPress={openSortSheet}>
-          <SortIcon value={selectedSortOption} color={sortColor} />
+          <SortIcon value={selectedSortOption} color={sortColor}/>
         </TouchableOpacity>
       </View>
 

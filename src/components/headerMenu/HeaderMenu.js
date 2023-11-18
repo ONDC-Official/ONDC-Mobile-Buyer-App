@@ -54,7 +54,7 @@ const HeaderMenu = () => {
       anchor={
         <TouchableOpacity onPress={openMenu}>
           {photoURL ? (
-            <Avatar.Image size={32} rounded source={{uri: photoURL}} />
+            <Avatar.Image size={32} rounded source={{uri: photoURL}}/>
           ) : (
             <Avatar.Text
               size={32}
@@ -72,7 +72,7 @@ const HeaderMenu = () => {
         mode="text">
         Profile
       </Button>
-      <Divider />
+      <Divider/>
       <Button
         onPress={() => navigateToPage('Orders')}
         labelStyle={styles.buttonLabel}
@@ -81,7 +81,7 @@ const HeaderMenu = () => {
         mode="text">
         Orders
       </Button>
-      <Divider />
+      <Divider/>
       <Button
         onPress={() => navigateToPage('Support')}
         labelStyle={styles.buttonLabel}
@@ -90,7 +90,7 @@ const HeaderMenu = () => {
         mode="text">
         Support
       </Button>
-      <Divider />
+      <Divider/>
       <Button
         onPress={onLogoutSelect}
         labelStyle={styles.buttonLabel}

@@ -12,15 +12,15 @@ const OrderCardSkeleton = () => (
     <View style={styles.row}>
       <View style={styles.details}>
         <SkeletonPlaceholder>
-          <View style={styles.name} />
+          <View style={styles.name}/>
         </SkeletonPlaceholder>
         <SkeletonPlaceholder>
-          <View style={styles.date} />
+          <View style={styles.date}/>
         </SkeletonPlaceholder>
       </View>
       <View style={styles.statusContainer}>
         <SkeletonPlaceholder>
-          <View style={styles.label} />
+          <View style={styles.label}/>
         </SkeletonPlaceholder>
       </View>
     </View>

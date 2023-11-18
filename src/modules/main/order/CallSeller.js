@@ -3,10 +3,10 @@ import {Card, Divider, Text, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 
 const CallSeller = ({
-  route: {
-    params: {items},
-  },
-}) => {
+                      route: {
+                        params: {items},
+                      },
+                    }) => {
   const [providerList, setProviderList] = useState([]);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const CallSeller = ({
                 : 'N/A'}
             </Text>
           </View>
-          <Divider />
+          <Divider/>
         </>
       ))}
     </Card>

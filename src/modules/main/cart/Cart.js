@@ -37,7 +37,8 @@ const Cart = ({navigation, theme}) => {
       'Ok',
       emptyCart,
       'Cancel',
-      () => {},
+      () => {
+      },
     );
   };
 
@@ -47,7 +48,7 @@ const Cart = ({navigation, theme}) => {
    * @returns {JSX.Element}
    */
   const renderItem = ({item}) => (
-    <DashboardProduct item={item} navigation={navigation} />
+    <DashboardProduct item={item} navigation={navigation}/>
   );
 
   useEffect(() => {
@@ -81,7 +82,7 @@ const Cart = ({navigation, theme}) => {
         data={cartItems}
         renderItem={renderItem}
         ListEmptyComponent={() => {
-          return <EmptyComponent navigation={navigation} />;
+          return <EmptyComponent navigation={navigation}/>;
         }}
         contentContainerStyle={
           cartLength === 0 ? appStyles.container : styles.contentContainerStyle

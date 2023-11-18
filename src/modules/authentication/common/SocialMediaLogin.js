@@ -2,10 +2,10 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {Text, withTheme} from 'react-native-paper';
 import {useNetInfo} from '@react-native-community/netinfo';
+import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
 
 import useLoginWithGoogle from '../hooks/useLoginWithGoogle';
 import {showToastWithGravity} from '../../../utils/utils';
-import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
 
 const SocialMediaLogin = ({theme}) => {
   const {loginWithGoogle} = useLoginWithGoogle();

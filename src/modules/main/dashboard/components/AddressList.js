@@ -65,8 +65,10 @@ const AddressList = ({navigation, theme, route: {params}}) => {
 
     const unsubscribeFocus = navigation.addListener('focus', () => {
       getAddressList()
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {
+        })
+        .catch(() => {
+        });
     });
 
     return () => {
@@ -94,7 +96,7 @@ const AddressList = ({navigation, theme, route: {params}}) => {
   const renderItem = ({item}) => {
     const isSelected = currentAddress?.id === item?.id;
     return item.hasOwnProperty('isSkeleton') ? (
-      <AddressSkeleton />
+      <AddressSkeleton/>
     ) : (
       <Address
         item={item}

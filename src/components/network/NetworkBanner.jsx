@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {useTheme, Button} from 'react-native-paper';
+import {Button, useTheme} from 'react-native-paper';
 import NetInfo from '@react-native-community/netinfo';
 import {appStyles} from '../../styles/styles';
 
@@ -41,7 +41,7 @@ const NetworkBanner = () => {
           </Button>
         </View>
       ) : (
-        <View />
+        <View/>
       )}
     </>
   );

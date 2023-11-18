@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {HelperText, TextInput, withTheme, Text} from 'react-native-paper';
+import {HelperText, Text, TextInput, withTheme} from 'react-native-paper';
 
 /**
  * Component to render input in screens

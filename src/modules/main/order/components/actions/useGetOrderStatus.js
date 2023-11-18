@@ -4,14 +4,10 @@ import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 
 import {getData, postData} from '../../../../../utils/api';
-import {
-  BASE_URL,
-  GET_STATUS,
-  ON_GET_STATUS,
-} from '../../../../../utils/apiUtilities';
+import {BASE_URL, GET_STATUS, ON_GET_STATUS,} from '../../../../../utils/apiUtilities';
 import {alertWithOneButton} from '../../../../../utils/alerts';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
-import { showToastWithGravity } from '../../../../../utils/utils';
+import {showToastWithGravity} from '../../../../../utils/utils';
 
 export default (bppId, transactionId, orderId) => {
   const isFocused = useIsFocused();
@@ -44,7 +40,8 @@ export default (bppId, transactionId, orderId) => {
           'Unable to Call',
           'Unable to place your call currently, please try again',
           'Ok',
-          () => {},
+          () => {
+          },
         );
       }
     } catch (e) {
@@ -60,7 +57,7 @@ export default (bppId, transactionId, orderId) => {
       });
       setStatusInProgress(false);
       const status = statusResponse.data[0]?.message.order?.state;
-      const statement = status ? `Your current order status is: ${status}`: `Sorry, we are not able to fetch the status at the moment, Please try after sometime.`;
+      const statement = status ? `Your current order status is: ${status}` : `Sorry, we are not able to fetch the status at the moment, Please try after sometime.`;
       showToastWithGravity(statement);
     } catch (error) {
       console.log(error);
@@ -96,8 +93,10 @@ export default (bppId, transactionId, orderId) => {
       eventSource.addEventListener('on_status', event => {
         const data = JSON.parse(event.data);
         onGetStatus(data.messageId)
-          .then(() => {})
-          .catch(() => {});
+          .then(() => {
+          })
+          .catch(() => {
+          });
       });
     }
 

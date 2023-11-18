@@ -1,16 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Card, Divider, Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {ORDER_STATUS, UPDATE_TYPE} from '../../../../utils/Constants';
+import {ORDER_STATUS, UPDATE_TYPE} from '../../../../utils/constants';
 import Address from './Address';
 import useGetOrderStatus from './actions/useGetOrderStatus';
 import useTrackOrder from './actions/useTrackOrder';
@@ -51,11 +45,11 @@ const ShippingDetails = ({order, theme}) => {
     <ScrollView>
       <Card style={styles.card}>
         <View style={styles.orderStatus}>
-          {order?.state && <OrderStatus status={order?.state} />}
+          {order?.state && <OrderStatus status={order?.state}/>}
         </View>
-        <Divider />
+        <Divider/>
         {order?.items?.map(product => (
-          <Product key={product.id} item={product} theme={theme} />
+          <Product key={product.id} item={product} theme={theme}/>
         ))}
         {order?.quote?.breakup?.map(
           breakup =>
@@ -87,7 +81,7 @@ const ShippingDetails = ({order, theme}) => {
                   : order.quote.price?.value}
               </Text>
             </View>
-            <Divider />
+            <Divider/>
           </>
         )}
         {shippingAddress ? (
@@ -104,7 +98,7 @@ const ShippingDetails = ({order, theme}) => {
             <Text>NA</Text>
           </View>
         )}
-        <Divider />
+        <Divider/>
         <Address
           title="Billed To"
           name={order?.billing?.name}
@@ -126,12 +120,12 @@ const ShippingDetails = ({order, theme}) => {
               items: order.items,
             })
           }>
-          <Divider />
+          <Divider/>
           <View style={[styles.rowContainer, styles.helpButton]}>
             <Text style={[{color: buttonColor}, styles.helpLabel]}>
               Support
             </Text>
-            <Icon name="chevron-right" size={24} color={buttonColor} />
+            <Icon name="chevron-right" size={24} color={buttonColor}/>
           </View>
         </TouchableOpacity>
 
@@ -152,25 +146,25 @@ const ShippingDetails = ({order, theme}) => {
                   orderStatus: order.state,
                 })
               }>
-              <Divider />
+              <Divider/>
               <View style={[styles.rowContainer, styles.helpButton]}>
                 <Text style={[{color: buttonColor}, styles.helpLabel]}>
                   Return items
                 </Text>
-                <Icon name="chevron-right" size={24} color={buttonColor} />
+                <Icon name="chevron-right" size={24} color={buttonColor}/>
               </View>
             </TouchableOpacity>
           ) : (
             <>
               {!!order.id && (
                 <TouchableOpacity onPress={getStatus} disabled={buttonDisabled}>
-                  <Divider />
+                  <Divider/>
                   <View style={[styles.rowContainer, styles.helpButton]}>
                     <Text style={[{color: buttonColor}, styles.helpLabel]}>
                       Get Order Status
                     </Text>
                     {statusInProgress ? (
-                      <ActivityIndicator size={24} color={colors.primary} />
+                      <ActivityIndicator size={24} color={colors.primary}/>
                     ) : (
                       <Icon
                         name="chevron-right"
@@ -182,15 +176,15 @@ const ShippingDetails = ({order, theme}) => {
                 </TouchableOpacity>
               )}
               <TouchableOpacity onPress={trackOrder} disabled={buttonDisabled}>
-                <Divider />
+                <Divider/>
                 <View style={[styles.rowContainer, styles.helpButton]}>
                   <Text style={[{color: buttonColor}, styles.helpLabel]}>
                     Track Order
                   </Text>
                   {trackInProgress ? (
-                    <ActivityIndicator size={24} color={colors.primary} />
+                    <ActivityIndicator size={24} color={colors.primary}/>
                   ) : (
-                    <Icon name="chevron-right" size={24} color={buttonColor} />
+                    <Icon name="chevron-right" size={24} color={buttonColor}/>
                   )}
                 </View>
               </TouchableOpacity>
@@ -208,12 +202,12 @@ const ShippingDetails = ({order, theme}) => {
                     orderStatus: order.state,
                   })
                 }>
-                <Divider />
+                <Divider/>
                 <View style={[styles.rowContainer, styles.helpButton]}>
                   <Text style={[{color: buttonColor}, styles.helpLabel]}>
                     Cancel Items
                   </Text>
-                  <Icon name="chevron-right" size={24} color={buttonColor} />
+                  <Icon name="chevron-right" size={24} color={buttonColor}/>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -223,12 +217,12 @@ const ShippingDetails = ({order, theme}) => {
                     orderId: order.id,
                   })
                 }>
-                <Divider />
+                <Divider/>
                 <View style={[styles.rowContainer, styles.helpButton]}>
                   <Text style={[{color: buttonColor}, styles.helpLabel]}>
                     Raise Complaint
                   </Text>
-                  <Icon name="chevron-right" size={24} color={buttonColor} />
+                  <Icon name="chevron-right" size={24} color={buttonColor}/>
                 </View>
               </TouchableOpacity>
             </>

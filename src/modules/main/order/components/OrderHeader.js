@@ -37,7 +37,7 @@ const OrderHeader = ({item, theme}) => {
             {moment(item.createdAt).format('Do MMMM YYYY')}
           </Text>
         </View>
-        <View>{item.state && <OrderStatus status={item.state} />}</View>
+        <View>{item.state && <OrderStatus status={item.state}/>}</View>
       </View>
     </Card>
   );

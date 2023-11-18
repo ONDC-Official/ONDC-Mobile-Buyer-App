@@ -1,5 +1,5 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import {View, StyleSheet} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-paper';
 
 const TextViewWithMoreLess = ({textContent, theme, style}) => {

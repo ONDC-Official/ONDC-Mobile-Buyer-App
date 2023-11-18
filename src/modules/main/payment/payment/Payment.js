@@ -1,14 +1,6 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  BackHandler,
-  NativeEventEmitter,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import Config from 'react-native-config';
+import {BackHandler, NativeEventEmitter, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
 import {Button, Card, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
 import FastImage from 'react-native-fast-image';
@@ -28,14 +20,14 @@ import {
   ON_INITIALIZE_ORDER,
   SIGN_PAYLOAD,
 } from '../../../../utils/apiUtilities';
-import {PAYMENT_METHODS} from '../../../../utils/Constants';
+import {PAYMENT_METHODS} from '../../../../utils/constants';
 import {showToastWithGravity} from '../../../../utils/utils';
 import PaymentSkeleton from './components/PaymentSkeleton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BreakDown from './components/BreakDown';
 import Address from '../../order/components/Address';
-import confirmation from '../confirmation/Confirmation';
 import useRefreshToken from '../../../../hooks/useRefreshToken';
+import Config from "../../../../../config";
 
 /**
  * Component to payment screen in application
@@ -46,12 +38,12 @@ import useRefreshToken from '../../../../hooks/useRefreshToken';
  * @returns {JSX.Element}
  */
 const Payment = ({
-  navigation,
-  theme,
-  route: {
-    params: {deliveryAddress, billingAddress, confirmationList},
-  },
-}) => {
+                   navigation,
+                   theme,
+                   route: {
+                     params: {deliveryAddress, billingAddress, confirmationList},
+                   },
+                 }) => {
   const {} = useRefreshToken();
   const {colors} = theme;
   const dispatch = useDispatch();
@@ -422,8 +414,10 @@ const Payment = ({
           switch (data.payload.status.toUpperCase()) {
             case 'CHARGED':
               confirmOrder(PAYMENT_METHODS.JUSPAY)
-                .then(() => {})
-                .catch(() => {});
+                .then(() => {
+                })
+                .catch(() => {
+                });
               break;
 
             case 'AUTHENTICATION_FAILED':
@@ -681,7 +675,8 @@ const Payment = ({
       .then(() => {
         HyperSdkReact.createHyperServices();
       })
-      .catch(() => {});
+      .catch(() => {
+      });
 
     const eventEmitter = new NativeEventEmitter(HyperSdkReact);
     const hyperEventSubscription = eventEmitter.addListener(
@@ -721,10 +716,13 @@ const Payment = ({
           onInitializeOrder(data.messageId)
             .then(() => {
               placeOrder()
-                .then(() => {})
-                .catch(() => {});
+                .then(() => {
+                })
+                .catch(() => {
+                });
             })
-            .catch(() => {});
+            .catch(() => {
+            });
         });
       });
     }
@@ -754,8 +752,10 @@ const Payment = ({
         eventSource.addEventListener('on_confirm', event => {
           const data = JSON.parse(event.data);
           onConfirmOrder(data.messageId)
-            .then(() => {})
-            .catch(() => {});
+            .then(() => {
+            })
+            .catch(() => {
+            });
         });
       });
     }
@@ -770,10 +770,10 @@ const Payment = ({
     <View style={[appStyles.container, styles.container]}>
       <View pointerEvents={confirmOrderRequested ? 'none' : 'auto'}>
         {initializeOrderRequested ? (
-          <PaymentSkeleton />
+          <PaymentSkeleton/>
         ) : (
           <ScrollView>
-            <BreakDown providers={providerDetails} />
+            <BreakDown providers={providerDetails}/>
 
             <Card style={styles.card}>
               <Address
@@ -869,8 +869,10 @@ const Payment = ({
                     onPress={() => {
                       removeInitEvent();
                       processPayment()
-                        .then(() => {})
-                        .catch(() => {});
+                        .then(() => {
+                        })
+                        .catch(() => {
+                        });
                     }}
                     loading={confirmOrderRequested}>
                     Place Order

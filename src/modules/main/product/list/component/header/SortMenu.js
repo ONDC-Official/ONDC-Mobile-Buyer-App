@@ -18,12 +18,12 @@ import OutlineButton from '../../../../../../components/button/OutlineButton';
  * @returns {JSX.Element}
  */
 const SortMenu = ({
-  theme,
-  sortOptions,
-  closeSortSheet,
-  apiInProgress,
-  updateFilterCount,
-}) => {
+                    theme,
+                    sortOptions,
+                    closeSortSheet,
+                    apiInProgress,
+                    updateFilterCount,
+                  }) => {
   const dispatch = useDispatch();
   const {colors} = theme;
   const {selectedSortOption} = useSelector(({filterReducer}) => filterReducer);
@@ -54,7 +54,7 @@ const SortMenu = ({
           textColor={colors.primary}
         />
       </View>
-      <Divider style={styles.divider} />
+      <Divider style={styles.divider}/>
       <View>
         {sortOptions.map(item => {
           return (

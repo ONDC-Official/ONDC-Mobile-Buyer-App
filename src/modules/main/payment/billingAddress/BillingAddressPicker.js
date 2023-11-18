@@ -1,7 +1,7 @@
 import {useIsFocused} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, View, TouchableOpacity} from 'react-native';
-import {Button, withTheme, RadioButton, Text} from 'react-native-paper';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Button, RadioButton, Text, withTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -82,7 +82,7 @@ const BillingAddressPicker = ({navigation, theme}) => {
 
     const isSelected = billingAddress?.id === item?.id;
     return item.hasOwnProperty('isSkeleton') ? (
-      <AddressSkeleton item={item} />
+      <AddressSkeleton item={item}/>
     ) : (
       <BillingAddress
         item={item}
@@ -117,8 +117,10 @@ const BillingAddressPicker = ({navigation, theme}) => {
       });
       setBillingAddress(null);
       getAddressList()
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {
+        })
+        .catch(() => {
+        });
     }
   }, [isFocused]);
 

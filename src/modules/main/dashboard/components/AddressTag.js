@@ -19,11 +19,11 @@ const AddressTag = ({address, theme}) => {
             ? address?.address?.tag
             : address?.address?.city}
         </Text>
-        <Icon name={'chevron-down'} color={theme.colors.primary} />
+        <Icon name={'chevron-down'} color={theme.colors.primary}/>
       </TouchableOpacity>
     );
   } else {
-    return <ActivityIndicator size={'small'} color={theme.colors.primary} />;
+    return <ActivityIndicator size={'small'} color={theme.colors.primary}/>;
   }
 };
 

@@ -2,18 +2,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useRef, useState} from 'react';
 
 import {clearProducts, saveProducts} from '../../../../redux/product/actions';
-import {
-  clearFilters,
-  saveFilters,
-  saveIds,
-} from '../../../../redux/filter/actions';
-import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/Constants';
+import {clearFilters, saveFilters, saveIds,} from '../../../../redux/filter/actions';
+import {PRODUCT_SORTING, SEARCH_QUERY} from '../../../../utils/constants';
 import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  GET_MESSAGE_ID,
-  GET_PRODUCTS,
-} from '../../../../utils/apiUtilities';
+import {BASE_URL, GET_MESSAGE_ID, GET_PRODUCTS,} from '../../../../utils/apiUtilities';
 import {getStoredData} from '../../../../utils/storage';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
@@ -42,9 +34,9 @@ export default (category = null) => {
     minPrice,
   } = useSelector(({filterReducer}) => filterReducer);
 
-  const resetProductList  = () => {
+  const resetProductList = () => {
     dispatch(clearProducts());
-  } 
+  }
 
   /**
    * function request products list with given message id and transaction id
@@ -132,8 +124,10 @@ export default (category = null) => {
     ) {
       currentPage.current = currentPage.current + 1;
       getProductsList(messageId, transactionId, currentPage.current)
-        .then(r => {})
-        .catch(() => {});
+        .then(r => {
+        })
+        .catch(() => {
+        });
     }
   };
 
@@ -250,7 +244,8 @@ export default (category = null) => {
               .then(() => {
                 setApiInProgress(false);
               })
-              .catch(() => {});
+              .catch(() => {
+              });
           } else {
             setApiInProgress(false);
           }
@@ -264,7 +259,8 @@ export default (category = null) => {
               .then(() => {
                 setApiInProgress(false);
               })
-              .catch(() => {});
+              .catch(() => {
+              });
           } else {
             setApiInProgress(false);
           }
@@ -282,8 +278,10 @@ export default (category = null) => {
       currentPage.current = 1;
       dispatch(clearProducts());
       getProductsList(messageId, transactionId)
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {
+        })
+        .catch(() => {
+        });
     }
   }, [filterCount.current]);
 

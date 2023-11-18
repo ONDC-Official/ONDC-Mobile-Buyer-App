@@ -2,12 +2,11 @@ import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Text} from 'react-native-paper';
+import {getBuildNumber, getVersion} from 'react-native-device-info';
 
 import {appStyles} from '../../../styles/styles';
 import ONDCLogo from '../../../assets/ondc.svg';
 import {tryLocalSignIn} from '../../../redux/auth/actions';
-import auth from '@react-native-firebase/auth';
-import {getBuildNumber, getVersion} from 'react-native-device-info';
 
 /**
  * Component to render splash screen
@@ -35,7 +34,8 @@ const Splash = ({navigation}) => {
 
   useEffect(() => {
     setTimeout(() => {
-      checkIfUserIsLoggedIn().then(() => {});
+      checkIfUserIsLoggedIn().then(() => {
+      });
     }, 3000);
   }, []);
 
@@ -45,11 +45,11 @@ const Splash = ({navigation}) => {
         <Text style={styles.appName}>Reference Buyer App</Text>
         <View style={styles.ondcContainer}>
           <Text style={styles.poweredBy}>Powered By</Text>
-          <ONDCLogo width={240} height={95} />
+          <ONDCLogo width={240} height={95}/>
         </View>
       </View>
       <View style={styles.footer}>
-        <Text>Version: {`${getVersion()}-(${getBuildNumber()})`}</Text>
+        <Text>Version: {getVersion()} - ({getBuildNumber()})</Text>
       </View>
     </View>
   );

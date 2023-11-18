@@ -2,25 +2,15 @@ import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Button, Card, Divider, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  GET_SELECT,
-  ON_GET_SELECT,
-  GET_GPS_CORDS,
-  GET_LATLONG,
-} from '../../../../utils/apiUtilities';
-import {removeItemFromCart, updateItemInCart} from '../../../../redux/actions';
+import {BASE_URL, GET_GPS_CORDS, GET_LATLONG, GET_SELECT, ON_GET_SELECT,} from '../../../../utils/apiUtilities';
+import {updateItemInCart} from '../../../../redux/actions';
 
-import {
-  showToastWithGravity,
-  skeletonList,
-  stringToDecimal,
-} from '../../../../utils/utils';
+import {showToastWithGravity, skeletonList, stringToDecimal,} from '../../../../utils/utils';
 import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
 import Product from './components/Product';
 import useRefreshToken from '../../../../hooks/useRefreshToken';
@@ -47,7 +37,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
   useEffect(() => {
     itemRemoved &&
-      showToastWithGravity(`${itemRemoved} item removed from cart.`);
+    showToastWithGravity(`${itemRemoved} item removed from cart.`);
   }, [itemRemoved]);
 
   /**
@@ -160,7 +150,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             } else if (
               remoteElement['@ondc/org/title_type'] === 'item' &&
               remoteElement['@ondc/org/item_quantity']?.count <
-                localElement.quantity
+              localElement.quantity
             ) {
               product.quantityMismatch = true;
               product.quantity =
@@ -184,7 +174,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         setIsError(true);
         setErrorMessage(
           quoteData.error.message ||
-            'Something went wrong, please try again later.',
+          'Something went wrong, please try again later.',
         );
       }
     } catch (error) {
@@ -349,7 +339,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   useEffect(() => {
     if (cartItems.length > 0) {
       getQuote()
-        .then(() => {})
+        .then(() => {
+        })
         .catch(error => {
           console.log(error);
         });
@@ -375,7 +366,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         eventSource.addEventListener('on_select', event => {
           const data = JSON.parse(event.data);
           onGetQuote(data.messageId)
-            .then(() => {})
+            .then(() => {
+            })
             .catch(error => {
               console.log(error);
             });
@@ -391,7 +383,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
   const renderItem = ({item}) => {
     return item.hasOwnProperty('isSkeleton') ? (
-      <ProductCardSkeleton item={item} />
+      <ProductCardSkeleton item={item}/>
     ) : (
       <View style={styles.providerContainer}>
         <Text variant="titleMedium" style={{paddingHorizontal: 12}}>
@@ -407,7 +399,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           ))}
           {item?.additionCharges && item.additionCharges.length > 0 && (
             <>
-              <Divider bold />
+              <Divider bold/>
               {item?.additionCharges?.map((charge, index) => (
                 <View key={`${index}Charge`} style={styles.priceContainer}>
                   <Text variant="titleSmall" style={styles.title}>
@@ -423,7 +415,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             </>
           )}
         </Card>
-        <Divider bold />
+        <Divider bold/>
       </View>
     );
   };

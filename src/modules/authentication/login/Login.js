@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import {useFocusEffect} from '@react-navigation/native';
 import {Formik} from 'formik';
-import React, {useState, useRef, useCallback} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
@@ -123,7 +123,7 @@ const Login = ({navigation, theme}) => {
     <View style={[appStyles.container, appStyles.backgroundWhite]}>
       <ScrollView style={appStyles.container}>
         <View style={styles.imageContainer}>
-          <SignUpIcon />
+          <SignUpIcon/>
         </View>
         <View style={styles.container}>
           <Text style={styles.title}>Login</Text>
@@ -139,13 +139,13 @@ const Login = ({navigation, theme}) => {
               validationSchema={validationSchema}
               onSubmit={login}>
               {({
-                values,
-                errors,
-                handleChange,
-                handleBlur,
-                touched,
-                handleSubmit,
-              }) => {
+                  values,
+                  errors,
+                  handleChange,
+                  handleBlur,
+                  touched,
+                  handleSubmit,
+                }) => {
                 return (
                   <>
                     <View style={appStyles.inputContainer}>
@@ -185,7 +185,7 @@ const Login = ({navigation, theme}) => {
                       </Button>
                     </View>
 
-                    <SocialMediaLogin />
+                    <SocialMediaLogin/>
 
                     <View style={styles.loginMessage}>
                       <Text>Don't have an account?</Text>

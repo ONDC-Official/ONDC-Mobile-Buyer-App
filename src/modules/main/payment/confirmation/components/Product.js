@@ -1,19 +1,9 @@
 import React from 'react';
 import {Pressable, StyleSheet, View} from 'react-native';
-import {
-  Button,
-  Card,
-  Divider,
-  IconButton,
-  Text,
-  withTheme,
-} from 'react-native-paper';
+import {Button, Divider, IconButton, Text, withTheme,} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useDispatch} from 'react-redux';
-import {
-  removeItemFromCart,
-  updateItemInCart,
-} from '../../../../../redux/actions';
+import {removeItemFromCart, updateItemInCart,} from '../../../../../redux/actions';
 import {appStyles} from '../../../../../styles/styles';
 import useProductQuantity from '../../../product/hook/useProductQuantity';
 import {stringToDecimal} from '../../../../../utils/utils';
@@ -55,8 +45,8 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
   const color = item.itemOutOfStock
     ? colors.error
     : item.quantityMismatch
-    ? colors.opposite
-    : colors.text;
+      ? colors.opposite
+      : colors.text;
   return (
     <Pressable
       onPress={() => {
@@ -146,7 +136,7 @@ const Product = ({theme, navigation, item, apiInProgress}) => {
 
       {item?.knowCharges?.map((charge, index) => (
         <View style={styles.messageContainer} key={`${charge?.title}${index}`}>
-          <Divider />
+          <Divider/>
           <View style={styles.priceContainer}>
             <Text variant="titleSmall" style={styles.title}>
               {charge?.title}

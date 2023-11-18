@@ -1,5 +1,5 @@
 import {Text, withTheme} from 'react-native-paper';
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {durationToHumanReadable} from '../../../../../utils/utils';
 
