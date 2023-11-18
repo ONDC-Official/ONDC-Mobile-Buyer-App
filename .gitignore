@@ -68,3 +68,5 @@ yarn-error.log
 # config
 config.ts
 .env
+android/app/google-services.json
+ios/ONDCReferenceBuyerApp/GoogleService-Info.plist
