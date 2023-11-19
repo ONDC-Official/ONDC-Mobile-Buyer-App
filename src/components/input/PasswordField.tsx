@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {HelperText, Text, TextInput, withTheme} from 'react-native-paper';
+import {StyleSheet} from 'react-native';
 
 /**
  * Component to render input in screens
@@ -8,8 +9,23 @@ import {HelperText, Text, TextInput, withTheme} from 'react-native-paper';
  * @returns {JSX.Element}
  * @constructor
  */
-const PasswordField = ({required = false, label, theme, ...props}) => {
+/**
+ * Component is used to render generic password input field
+ * @param required: boolean whether field is required
+ * @param label: label of input field
+ * @param theme: theme object
+ * @param props: other props
+ * @returns {JSX.Element}
+ * @constructor
+ */
+const PasswordField: React.FC<any> = ({
+  required = false,
+  label,
+  theme,
+  ...props
+}) => {
   const [hide, setHide] = useState(true);
+  const styles = makeStyles(theme.colors);
 
   return (
     <>
@@ -18,9 +34,9 @@ const PasswordField = ({required = false, label, theme, ...props}) => {
         {...props}
         label={
           required ? (
-            <Text style={{backgroundColor: 'white'}}>
+            <Text style={styles.label}>
               {label}
-              <Text style={{color: theme.colors.red}}> *</Text>
+              <Text style={styles.required}> *</Text>
             </Text>
           ) : (
             label
@@ -43,5 +59,11 @@ const PasswordField = ({required = false, label, theme, ...props}) => {
     </>
   );
 };
+
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    label: {backgroundColor: 'white'},
+    required: {color: colors.red},
+  });
 
 export default withTheme(PasswordField);

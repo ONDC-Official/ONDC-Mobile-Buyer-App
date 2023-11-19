@@ -8,13 +8,17 @@ import {appStyles} from '../../../styles/styles';
 import ONDCLogo from '../../../assets/ondc.svg';
 import {tryLocalSignIn} from '../../../redux/auth/actions';
 
+interface Splash {
+  navigation: any;
+}
+
 /**
  * Component to render splash screen
  * @param navigation: required: to navigate to the respective screen based on token availability
  * @constructor
  * @returns {JSX.Element}
  */
-const Splash = ({navigation}) => {
+const Splash: React.FC<Splash> = ({navigation}) => {
   const dispatch = useDispatch();
 
   /**
@@ -34,8 +38,7 @@ const Splash = ({navigation}) => {
 
   useEffect(() => {
     setTimeout(() => {
-      checkIfUserIsLoggedIn().then(() => {
-      });
+      checkIfUserIsLoggedIn().then(() => {});
     }, 3000);
   }, []);
 
@@ -45,11 +48,13 @@ const Splash = ({navigation}) => {
         <Text style={styles.appName}>Reference Buyer App</Text>
         <View style={styles.ondcContainer}>
           <Text style={styles.poweredBy}>Powered By</Text>
-          <ONDCLogo width={240} height={95}/>
+          <ONDCLogo width={240} height={95} />
         </View>
       </View>
       <View style={styles.footer}>
-        <Text>Version: {getVersion()} - ({getBuildNumber()})</Text>
+        <Text>
+          Version: {getVersion()} - ({getBuildNumber()})
+        </Text>
       </View>
     </View>
   );

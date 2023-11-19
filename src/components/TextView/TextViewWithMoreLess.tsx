@@ -2,11 +2,11 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Text, withTheme} from 'react-native-paper';
 
-const TextViewWithMoreLess = ({textContent, theme, style}) => {
-  const {colors} = theme;
-  const [showMoreButton, setShowMoreButton] = useState(false);
-  const [textShown, setTextShown] = useState(false);
-  const [numLines, setNumLines] = useState(undefined);
+const TextViewWithMoreLess: React.FC<any> = ({textContent, theme, style}) => {
+  const styles = makeStyles(theme.colors);
+  const [showMoreButton, setShowMoreButton] = useState<boolean>(false);
+  const [textShown, setTextShown] = useState<boolean>(false);
+  const [numLines, setNumLines] = useState<number | undefined>(undefined);
 
   const toggleTextShown = () => {
     setTextShown(!textShown);
@@ -17,7 +17,7 @@ const TextViewWithMoreLess = ({textContent, theme, style}) => {
   }, [textShown]);
 
   const onTextLayout = useCallback(
-    event => {
+    (event: any) => {
       if (event.nativeEvent.lines.length > 2 && !textShown) {
         setShowMoreButton(true);
         setNumLines(2);
@@ -27,7 +27,7 @@ const TextViewWithMoreLess = ({textContent, theme, style}) => {
   );
 
   return (
-    <View style={[styles.mainContainer, style]}>
+    <View style={style}>
       <Text
         onTextLayout={onTextLayout}
         numberOfLines={numLines}
@@ -36,9 +36,7 @@ const TextViewWithMoreLess = ({textContent, theme, style}) => {
       </Text>
 
       {showMoreButton ? (
-        <Text
-          onPress={toggleTextShown}
-          style={[{color: colors.primary}, styles.moreLessTextStyle]}>
+        <Text onPress={toggleTextShown} style={styles.moreLessTextStyle}>
           {textShown ? ' less' : ' more'}
         </Text>
       ) : null}
@@ -46,11 +44,12 @@ const TextViewWithMoreLess = ({textContent, theme, style}) => {
   );
 };
 
-export default withTheme(TextViewWithMoreLess);
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    moreLessTextStyle: {
+      lineHeight: 18,
+      color: colors.primary,
+    },
+  });
 
-const styles = StyleSheet.create({
-  mainContainer: {},
-  moreLessTextStyle: {
-    lineHeight: 18,
-  },
-});
+export default withTheme(TextViewWithMoreLess);

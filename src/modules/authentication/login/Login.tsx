@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import {useFocusEffect} from '@react-navigation/native';
-import {Formik} from 'formik';
-import React, {useCallback, useRef, useState} from 'react';
+import {Formik, FormikHelpers} from 'formik';
+import React, {useCallback, useRef} from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
@@ -17,30 +17,39 @@ import SocialMediaLogin from '../common/SocialMediaLogin';
 import {getStoredData} from '../../../utils/storage';
 import {storeLoginDetails} from '../../../redux/auth/actions';
 
+interface FormData {
+  email: string;
+  password: string;
+}
 
-const userInfo = {
+interface Login {
+  navigation: any;
+  theme: any;
+}
+
+const userInfo: FormData = {
   email: '',
   password: '',
 };
+
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .trim()
+    .email('Please enter valid email address')
+    .required('Email cannot be empty.'),
+  password: Yup.string().trim().required('Password cannot be empty'),
+});
 
 /**
  * Component is used to render login form
  * @param theme
  * @param navigation: application navigation object
  */
-const Login = ({navigation, theme}) => {
+const Login: React.FC<Login> = ({navigation, theme}) => {
   const dispatch = useDispatch();
-  const formikFormRef = useRef(null);
+  const formikFormRef = useRef<any>(null);
+  const styles = makeStyles(theme.colors);
 
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .trim()
-      .email('Please enter valid email address')
-      .required('Email cannot be empty.'),
-    password: Yup.string().trim().required('Password cannot be empty'),
-  });
-
-  const [apiInProgress, setApiInProgress] = useState(false);
   const {isConnected, isInternetReachable} = useNetInfo();
 
   useFocusEffect(
@@ -56,20 +65,21 @@ const Login = ({navigation, theme}) => {
    * function checks whether the email and password is valid if it is valid it creates and store token in context
    * @returns {Promise<void>}
    */
-  const login = async values => {
+  const login = async (
+    values: FormData,
+    formikHelpers: FormikHelpers<FormData>,
+  ) => {
     if (isConnected && isInternetReachable) {
       try {
-        setApiInProgress(true);
-
         const response = await auth().signInWithEmailAndPassword(
           values.email,
           values.password,
         );
 
-        const idTokenResult = await auth().currentUser.getIdTokenResult();
+        const idTokenResult = await auth()?.currentUser?.getIdTokenResult();
 
         await storeLoginDetails(dispatch, {
-          token: idTokenResult.token,
+          token: idTokenResult?.token,
           uid: response.user.uid,
           emailId: response.user.email,
           name: response.user.displayName
@@ -92,9 +102,7 @@ const Login = ({navigation, theme}) => {
             ],
           });
         }
-
-        setApiInProgress(false);
-      } catch (error) {
+      } catch (error: any) {
         if (
           error.code === 'auth/wrong-password' ||
           error.code === 'auth/user-not-found'
@@ -112,10 +120,12 @@ const Login = ({navigation, theme}) => {
             showToastWithGravity('Something went wrong, please try again');
           }
         }
-        setApiInProgress(false);
+      } finally {
+        formikHelpers.setSubmitting(false);
       }
     } else {
       showToastWithGravity('Please check your internet connection.');
+      formikHelpers.setSubmitting(false);
     }
   };
 
@@ -123,7 +133,7 @@ const Login = ({navigation, theme}) => {
     <View style={[appStyles.container, appStyles.backgroundWhite]}>
       <ScrollView style={appStyles.container}>
         <View style={styles.imageContainer}>
-          <SignUpIcon/>
+          <SignUpIcon />
         </View>
         <View style={styles.container}>
           <Text style={styles.title}>Login</Text>
@@ -139,13 +149,14 @@ const Login = ({navigation, theme}) => {
               validationSchema={validationSchema}
               onSubmit={login}>
               {({
-                  values,
-                  errors,
-                  handleChange,
-                  handleBlur,
-                  touched,
-                  handleSubmit,
-                }) => {
+                isSubmitting,
+                values,
+                errors,
+                handleChange,
+                handleBlur,
+                touched,
+                handleSubmit,
+              }) => {
                 return (
                   <>
                     <View style={appStyles.inputContainer}>
@@ -153,9 +164,10 @@ const Login = ({navigation, theme}) => {
                         name="email"
                         value={values.email}
                         onBlur={handleBlur('email')}
-                        required={true}
+                        required
                         label="Email"
                         placeholder="Email"
+                        error={!!touched.email && !!errors.email}
                         errorMessage={touched.email ? errors.email : null}
                         onChangeText={handleChange('email')}
                       />
@@ -163,38 +175,37 @@ const Login = ({navigation, theme}) => {
                     <View style={appStyles.inputContainer}>
                       <PasswordField
                         value={values.password}
-                        required={true}
+                        required
                         onBlur={handleBlur('password')}
                         label="Password"
                         placeholder="Password"
                         secureTextEntry
+                        error={!!touched.password && !!errors.password}
                         errorMessage={touched.password ? errors.password : null}
                         onChangeText={handleChange('password')}
                       />
                     </View>
 
-                    <View style={styles.inputContainer}>
+                    <View style={appStyles.inputContainer}>
                       <Button
                         contentStyle={appStyles.containedButtonContainer}
                         labelStyle={appStyles.containedButtonLabel}
                         mode="contained"
-                        onPress={handleSubmit}
-                        loading={apiInProgress}
-                        disabled={apiInProgress}>
+                        onPress={() => handleSubmit()}
+                        loading={isSubmitting}
+                        disabled={isSubmitting}>
                         Login
                       </Button>
                     </View>
 
-                    <SocialMediaLogin/>
+                    <SocialMediaLogin />
 
                     <View style={styles.loginMessage}>
                       <Text>Don't have an account?</Text>
                       <TouchableOpacity
+                        disabled={isSubmitting}
                         onPress={() => navigation.navigate('SignUp')}>
-                        <Text
-                          style={{color: theme.colors.primary, paddingLeft: 8}}>
-                          Sign up
-                        </Text>
+                        <Text style={styles.signUpText}>Sign up</Text>
                       </TouchableOpacity>
                     </View>
                   </>
@@ -216,38 +227,40 @@ const Login = ({navigation, theme}) => {
 
 export default withTheme(Login);
 
-const styles = StyleSheet.create({
-  imageContainer: {
-    paddingTop: 24,
-    alignSelf: 'center',
-  },
-  container: {
-    alignSelf: 'center',
-  },
-  title: {
-    paddingTop: 12,
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  signUpMessage: {
-    paddingTop: 12,
-    color: '#959595',
-    textAlign: 'center',
-  },
-  formContainer: {
-    marginTop: 16,
-    width: 300,
-  },
-  loginMessage: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  footerContainer: {
-    paddingBottom: 20,
-  },
-  textCenter: {
-    textAlign: 'center',
-  },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    imageContainer: {
+      paddingTop: 24,
+      alignSelf: 'center',
+    },
+    container: {
+      alignSelf: 'center',
+    },
+    title: {
+      paddingTop: 12,
+      fontSize: 24,
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
+    signUpMessage: {
+      paddingTop: 12,
+      color: '#959595',
+      textAlign: 'center',
+    },
+    formContainer: {
+      marginTop: 16,
+      width: 300,
+    },
+    loginMessage: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    footerContainer: {
+      paddingBottom: 20,
+    },
+    textCenter: {
+      textAlign: 'center',
+    },
+    signUpText: {color: colors.primary, paddingLeft: 8},
+  });

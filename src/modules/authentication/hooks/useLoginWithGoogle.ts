@@ -1,15 +1,16 @@
-import {useEffect} from "react";
+import {useEffect} from 'react';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 import {storeLoginDetails} from '../../../redux/auth/actions';
 import {getStoredData} from '../../../utils/storage';
-import Config from "../../../../config";
+import Config from '../../../../config';
 
 export default () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const dispatch = useDispatch();
 
   const loginWithGoogle = async () => {
@@ -23,14 +24,14 @@ export default () => {
       // Sign-in the user with the credential
       await auth().signInWithCredential(googleCredential);
 
-      const idTokenResult = await auth().currentUser.getIdTokenResult();
+      const idTokenResult = await auth()?.currentUser?.getIdTokenResult();
 
       await storeLoginDetails(dispatch, {
-        token: idTokenResult.token,
-        uid: idTokenResult.claims.user_id,
-        emailId: idTokenResult.claims.email,
-        name: idTokenResult.claims.name,
-        photoURL: idTokenResult.claims.picture,
+        token: idTokenResult?.token,
+        uid: idTokenResult?.claims.user_id,
+        emailId: idTokenResult?.claims.email,
+        name: idTokenResult?.claims.name,
+        photoURL: idTokenResult?.claims.picture,
       });
 
       const address = await getStoredData('address');
