@@ -1,3 +1,11 @@
+import FashionIcon from '../assets/categories/fashion.svg';
+import ElectronicsIcon from '../assets/categories/electronics.svg';
+import GroceryIcon from '../assets/categories/grocery.svg';
+import FoodIcon from '../assets/categories/food_beverage.svg';
+import HealthWellnessIcon from '../assets/categories/health_wellness.svg';
+import HomeDecorIcon from '../assets/categories/home_decor.svg';
+import BeautyIcon from '../assets/categories/beauty_personal_care.svg';
+
 export const SEARCH_QUERY = {
   PRODUCT: 'Product',
   PROVIDER: 'Provider',
@@ -84,3 +92,34 @@ export const TAGS = {
   non_veg: 'Non-Veg',
   veg: 'Veg',
 };
+
+export const CATEGORIES = [
+  {
+    name: 'Fashion',
+    Icon: FashionIcon,
+  },
+  {
+    name: 'Electronics',
+    Icon: ElectronicsIcon,
+  },
+  {
+    name: 'Grocery',
+    Icon: GroceryIcon,
+  },
+  {
+    name: 'Food & Beverage',
+    Icon: FoodIcon,
+  },
+  {
+    name: 'Health & Wellness',
+    Icon: HealthWellnessIcon,
+  },
+  {
+    name: 'Home & Decor',
+    Icon: HomeDecorIcon,
+  },
+  {
+    name: 'Beauty & Personal Care',
+    Icon: BeautyIcon,
+  },
+];

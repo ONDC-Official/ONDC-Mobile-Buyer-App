@@ -1,6 +1,6 @@
 import React from 'react';
 import {HelperText, Text, TextInput, withTheme} from 'react-native-paper';
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 /**
  * Component to render generic input field
@@ -12,11 +12,11 @@ import {View, StyleSheet} from 'react-native';
  * @constructor
  */
 const InputField: React.FC<any> = ({
-  required = false,
-  label,
-  theme,
-  ...props
-}) => {
+                                     required = false,
+                                     label,
+                                     theme,
+                                     ...props
+                                   }) => {
   const styles = makeStyles(theme.colors);
 
   return (

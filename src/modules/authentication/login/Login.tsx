@@ -133,7 +133,7 @@ const Login: React.FC<Login> = ({navigation, theme}) => {
     <View style={[appStyles.container, appStyles.backgroundWhite]}>
       <ScrollView style={appStyles.container}>
         <View style={styles.imageContainer}>
-          <SignUpIcon />
+          <SignUpIcon/>
         </View>
         <View style={styles.container}>
           <Text style={styles.title}>Login</Text>
@@ -149,14 +149,14 @@ const Login: React.FC<Login> = ({navigation, theme}) => {
               validationSchema={validationSchema}
               onSubmit={login}>
               {({
-                isSubmitting,
-                values,
-                errors,
-                handleChange,
-                handleBlur,
-                touched,
-                handleSubmit,
-              }) => {
+                  isSubmitting,
+                  values,
+                  errors,
+                  handleChange,
+                  handleBlur,
+                  touched,
+                  handleSubmit,
+                }) => {
                 return (
                   <>
                     <View style={appStyles.inputContainer}>
@@ -198,7 +198,7 @@ const Login: React.FC<Login> = ({navigation, theme}) => {
                       </Button>
                     </View>
 
-                    <SocialMediaLogin />
+                    <SocialMediaLogin/>
 
                     <View style={styles.loginMessage}>
                       <Text>Don't have an account?</Text>
