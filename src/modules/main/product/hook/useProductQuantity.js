@@ -1,4 +1,8 @@
-import {addItemToCart, removeItemFromCart, updateItemInCart,} from '../../../../redux/actions';
+import {
+  addItemToCart,
+  removeItemFromCart,
+  updateItemInCart,
+} from '../../../../redux/actions';
 import {showInfoToast, showToastWithGravity} from '../../../../utils/utils';
 import {useDispatch} from 'react-redux';
 

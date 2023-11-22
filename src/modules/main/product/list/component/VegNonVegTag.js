@@ -20,7 +20,8 @@ const VegNonVegTags = ({list = null, theme}) => {
               style={[
                 styles.innerCircleStyle,
                 {backgroundColor: colors.success},
-              ]}></View>
+              ]}
+            />
           </View>
         </View>
       );
@@ -35,10 +36,8 @@ const VegNonVegTags = ({list = null, theme}) => {
               },
             ]}>
             <View
-              style={[
-                styles.innerCircleStyle,
-                {backgroundColor: colors.error},
-              ]}></View>
+              style={[styles.innerCircleStyle, {backgroundColor: colors.error}]}
+            />
           </View>
         </View>
       );

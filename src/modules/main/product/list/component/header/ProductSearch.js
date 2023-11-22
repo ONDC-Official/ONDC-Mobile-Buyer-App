@@ -37,7 +37,7 @@ const ProductSearch = ({theme, onSearch, viewOnly = false, address}) => {
               style={[styles.menu, {backgroundColor: theme.colors.primary}]}
               activeOpacity={0.8}>
               <Text style={{color: theme.colors.surface}}>
-                {searchType} <Icon name="angle-down" size={14}/>
+                {searchType} <Icon name="angle-down" size={14} />
               </Text>
             </View>
           }

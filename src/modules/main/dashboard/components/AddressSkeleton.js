@@ -11,14 +11,14 @@ const AddressSkeleton = () => (
   <Card style={styles.container}>
     <View style={styles.skeletonContainer}>
       <SkeletonPlaceholder>
-        <View style={styles.radioButton}/>
+        <View style={styles.radioButton} />
       </SkeletonPlaceholder>
       <View style={styles.details}>
         <SkeletonPlaceholder>
-          <View style={styles.text}/>
-          <View style={styles.text}/>
-          <View style={styles.text}/>
-          <View style={styles.text}/>
+          <View style={styles.text} />
+          <View style={styles.text} />
+          <View style={styles.text} />
+          <View style={styles.text} />
         </SkeletonPlaceholder>
       </View>
     </View>

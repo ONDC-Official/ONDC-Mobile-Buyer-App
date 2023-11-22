@@ -1,4 +1,11 @@
-import {CLEAR_FILTERS, CLEAR_FILTERS_ONLY, SAVE_FILTERS, SAVE_IDS, SORT_OPTION, UPDATE_FILTERS,} from '../actions';
+import {
+  CLEAR_FILTERS,
+  CLEAR_FILTERS_ONLY,
+  SAVE_FILTERS,
+  SAVE_IDS,
+  SORT_OPTION,
+  UPDATE_FILTERS,
+} from '../actions';
 
 const initialState = {
   filters: null,

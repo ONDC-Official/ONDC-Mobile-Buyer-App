@@ -19,11 +19,11 @@ import {StyleSheet} from 'react-native';
  * @constructor
  */
 const PasswordField: React.FC<any> = ({
-                                        required = false,
-                                        label,
-                                        theme,
-                                        ...props
-                                      }) => {
+  required = false,
+  label,
+  theme,
+  ...props
+}) => {
   const [hide, setHide] = useState(true);
   const styles = makeStyles(theme.colors);
 

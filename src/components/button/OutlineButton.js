@@ -3,12 +3,12 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Text, withTheme} from 'react-native-paper';
 
 const OutlineButton = ({
-                         theme,
-                         label,
-                         onPress,
-                         textColor,
-                         disabled = false,
-                       }) => {
+  theme,
+  label,
+  onPress,
+  textColor,
+  disabled = false,
+}) => {
   return (
     <TouchableOpacity
       disabled={disabled}

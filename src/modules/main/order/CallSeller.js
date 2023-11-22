@@ -3,10 +3,10 @@ import {Card, Divider, Text, withTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 
 const CallSeller = ({
-                      route: {
-                        params: {items},
-                      },
-                    }) => {
+  route: {
+    params: {items},
+  },
+}) => {
   const [providerList, setProviderList] = useState([]);
 
   useEffect(() => {
@@ -38,11 +38,11 @@ const CallSeller = ({
             <Text>
               Contact Details:&nbsp;
               {item?.hasOwnProperty('contact_details_consumer_care')
-                ? item['contact_details_consumer_care']
+                ? item.contact_details_consumer_care
                 : 'N/A'}
             </Text>
           </View>
-          <Divider/>
+          <Divider />
         </>
       ))}
     </Card>

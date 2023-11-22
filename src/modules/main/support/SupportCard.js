@@ -38,16 +38,16 @@ const SupportCard = ({theme, url, icon, title, message, source}) => {
     <TouchableOpacity style={styles.container} onPress={openSupportLink}>
       <View style={styles.icon}>
         {icon ? (
-          <Icon name={icon} color={colors.primary} size={40}/>
+          <Icon name={icon} color={colors.primary} size={40} />
         ) : (
-          <Image source={source} style={styles.image}/>
+          <Image source={source} style={styles.image} />
         )}
       </View>
       <View style={[appStyles.container, styles.textContainer]}>
         <Text style={[styles.text, {color: colors.primary}]}>{title}</Text>
         <Text style={styles.message}>{message}</Text>
       </View>
-      <IconButton icon="chevron-right" iconColor={colors.primary} style={24}/>
+      <IconButton icon="chevron-right" iconColor={colors.primary} style={24} />
     </TouchableOpacity>
   );
 };

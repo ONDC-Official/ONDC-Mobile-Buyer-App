@@ -1,16 +1,35 @@
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Card, Checkbox, Divider, IconButton, RadioButton, Text, withTheme,} from 'react-native-paper';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Divider,
+  IconButton,
+  RadioButton,
+  Text,
+  withTheme,
+} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 
 import {cancelReasons} from './utils/reasons';
 import {appStyles} from '../../../styles/styles';
 import {getData, postData} from '../../../utils/api';
-import {BASE_URL, CANCEL_ORDER, ON_CANCEL_ORDER, ON_UPDATE_ORDER, UPDATE_ORDER,} from '../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  CANCEL_ORDER,
+  ON_CANCEL_ORDER,
+  ON_UPDATE_ORDER,
+  UPDATE_ORDER,
+} from '../../../utils/apiUtilities';
 import {useSelector} from 'react-redux';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import RNEventSource from 'react-native-event-source';
 import {useIsFocused} from '@react-navigation/native';
-import {showInfoToast, showToastWithGravity, stringToDecimal,} from '../../../utils/utils';
+import {
+  showInfoToast,
+  showToastWithGravity,
+  stringToDecimal,
+} from '../../../utils/utils';
 import TextViewWithMoreLess from '../../../components/TextView/TextViewWithMoreLess';
 
 const CancelOrder = ({theme, navigation, route: {params}}) => {
@@ -75,8 +94,8 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
           id: element.id,
           quantity: element.cancelQuantity
             ? {
-              count: element.cancelQuantity,
-            }
+                count: element.cancelQuantity,
+              }
             : element.quantity,
           tags: {
             update_type: params.updateType,
@@ -118,8 +137,8 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
         data[0].error.message
           ? showToastWithGravity(data[0].error.message)
           : showToastWithGravity(
-            'Not able to cancel/return the order, please try after sometime',
-          );
+              'Not able to cancel/return the order, please try after sometime',
+            );
         setUpdateInProgress(false);
       } else if (
         data[0].message?.ack?.status === 'ACK' ||
@@ -147,13 +166,17 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
     if (addQuantity && cancelQuantity < item.quantity?.count) {
       item.cancelQuantity = cancelQuantity + 1;
       const indexFound = products.findIndex(element => element.id === item.id);
-      if (indexFound > -1) products[indexFound] = item;
+      if (indexFound > -1) {
+        products[indexFound] = item;
+      }
 
       setProducts([...products]);
     } else if (!addQuantity && cancelQuantity > 1) {
       item.cancelQuantity = cancelQuantity - 1;
       const indexFound = products.findIndex(element => element.id === item.id);
-      if (indexFound > -1) products[indexFound] = item;
+      if (indexFound > -1) {
+        products[indexFound] = item;
+      }
 
       setProducts([...products]);
     }
@@ -250,10 +273,8 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
       eventSource.addEventListener('on_cancel', event => {
         const data = JSON.parse(event.data);
         onCancel(data.messageId)
-          .then(() => {
-          })
-          .catch(() => {
-          });
+          .then(() => {})
+          .catch(() => {});
       });
     }
     return () => {
@@ -279,8 +300,7 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
       eventSource.addEventListener('on_update', event => {
         const data = JSON.parse(event.data);
         onUpdate(data.messageId)
-          .then(() => {
-          })
+          .then(() => {})
           .catch(err => {
             console.error(err);
           });
@@ -391,7 +411,7 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
                 );
               })}
             </View>
-            <Divider/>
+            <Divider />
           </>
         )}
 

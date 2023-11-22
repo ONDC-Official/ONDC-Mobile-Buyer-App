@@ -82,7 +82,7 @@ const BillingAddressPicker = ({navigation, theme}) => {
 
     const isSelected = billingAddress?.id === item?.id;
     return item.hasOwnProperty('isSkeleton') ? (
-      <AddressSkeleton item={item}/>
+      <AddressSkeleton item={item} />
     ) : (
       <BillingAddress
         item={item}
@@ -117,10 +117,8 @@ const BillingAddressPicker = ({navigation, theme}) => {
       });
       setBillingAddress(null);
       getAddressList()
-        .then(() => {
-        })
-        .catch(() => {
-        });
+        .then(() => {})
+        .catch(() => {});
     }
   }, [isFocused]);
 

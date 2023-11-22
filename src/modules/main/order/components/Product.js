@@ -43,10 +43,10 @@ const Product = ({item}) => {
               item.product?.price?.value,
             )}`}
           </Text>
-          <StatusContainer product={item}/>
+          <StatusContainer product={item} />
         </View>
       </View>
-      <Divider/>
+      <Divider />
     </>
   );
 };

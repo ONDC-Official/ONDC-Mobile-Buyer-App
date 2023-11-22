@@ -8,7 +8,7 @@ const OrderDetails = ({route: {params}, navigation}) => {
     });
   }, [navigation]);
 
-  return <ShippingDetails order={params.order}/>;
+  return <ShippingDetails order={params.order} />;
 };
 
 export default OrderDetails;

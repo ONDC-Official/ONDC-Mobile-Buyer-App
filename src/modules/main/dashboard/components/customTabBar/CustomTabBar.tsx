@@ -14,28 +14,28 @@ const TabIcon: React.FC<TabIcon> = ({name, isFocused}) => {
   switch (name) {
     case 'Home':
       return (
-        <Icon name={'home'} color={isFocused ? '#fff' : '#686868'} size={20}/>
+        <Icon name={'home'} color={isFocused ? '#fff' : '#686868'} size={20} />
       );
     case 'List':
       return (
-        <Icon name={'heart'} color={isFocused ? '#fff' : '#686868'} size={20}/>
+        <Icon name={'heart'} color={isFocused ? '#fff' : '#686868'} size={20} />
       );
     case 'Cart':
       return (
-        <Icon name={'bag'} color={isFocused ? '#fff' : '#686868'} size={20}/>
+        <Icon name={'bag'} color={isFocused ? '#fff' : '#686868'} size={20} />
       );
     default:
       return (
-        <Icon name={'user'} color={isFocused ? '#fff' : '#686868'} size={20}/>
+        <Icon name={'user'} color={isFocused ? '#fff' : '#686868'} size={20} />
       );
   }
 };
 
 const CustomTabBar: React.FC<BottomTabBarProps> = ({
-                                                     state,
-                                                     descriptors,
-                                                     navigation,
-                                                   }) => {
+  state,
+  descriptors,
+  navigation,
+}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
@@ -76,7 +76,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
               testID={options.tabBarTestID}
               onPress={onPress}
               onLongPress={onLongPress}>
-              <TabIcon name={route.name} isFocused={isFocused}/>
+              <TabIcon name={route.name} isFocused={isFocused} />
               <Caption
                 variant={'caption1'}
                 textStyle={

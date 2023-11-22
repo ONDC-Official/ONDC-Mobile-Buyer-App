@@ -25,7 +25,9 @@ const validationSchema = Yup.object({
     .email('Please enter a valid Email')
     .required('Email is required'),
   issueType: Yup.string().trim().required('Issue Type is required'),
-  issueDescription: Yup.string().trim().required('Issue Description is required'),
+  issueDescription: Yup.string()
+    .trim()
+    .required('Issue Description is required'),
 });
 
 /**
@@ -83,20 +85,19 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
         validationSchema={validationSchema}
         onSubmit={values => {
           raiseComplaint(values)
-            .then(() => {
-            })
+            .then(() => {})
             .catch(err => {
               console.log(err);
             });
         }}>
         {({
-            values,
-            errors,
-            handleChange,
-            handleBlur,
-            touched,
-            handleSubmit,
-          }) => {
+          values,
+          errors,
+          handleChange,
+          handleBlur,
+          touched,
+          handleSubmit,
+        }) => {
           return (
             <View style={styles.formContainer}>
               <InputField

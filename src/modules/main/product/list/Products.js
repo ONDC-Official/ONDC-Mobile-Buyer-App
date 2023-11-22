@@ -12,7 +12,7 @@ import CartFooter from './component/CartFooter/CartFooter';
 import {skeletonList} from '../../../../utils/utils';
 
 const ListFooter = ({moreRequested}) =>
-  moreRequested ? <ProductCardSkeleton/> : null;
+  moreRequested ? <ProductCardSkeleton /> : null;
 
 /**
  * Component to show list of requested products
@@ -33,9 +33,9 @@ const Products = ({theme, loadMore, productsRequested, loading = false}) => {
     const element = cartItems.find(one => one.id === item.id);
     item.quantity = element ? element.quantity : 0;
     return item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
-      <ProductCardSkeleton/>
+      <ProductCardSkeleton />
     ) : (
-      <DashboardProduct item={item} navigation={navigation}/>
+      <DashboardProduct item={item} navigation={navigation} />
     );
   };
 
@@ -51,7 +51,7 @@ const Products = ({theme, loadMore, productsRequested, loading = false}) => {
         data={productList}
         renderItem={renderItem}
         keyExtractor={(item, index) => item.id}
-        ListEmptyComponent={() => <ListPlaceholder/>}
+        ListEmptyComponent={() => <ListPlaceholder />}
         contentContainerStyle={
           productList.length > 0
             ? styles.contentContainerStyle
@@ -64,7 +64,7 @@ const Products = ({theme, loadMore, productsRequested, loading = false}) => {
           />
         }
       />
-      <CartFooter/>
+      <CartFooter />
     </View>
   );
 };

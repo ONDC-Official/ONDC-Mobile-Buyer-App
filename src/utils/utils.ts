@@ -1,7 +1,7 @@
 import {Dimensions, Platform} from 'react-native';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
-import {ToastPosition} from "react-native-toast-message/lib/src/types";
+import {ToastPosition} from 'react-native-toast-message/lib/src/types';
 
 export const isIOS = Platform.OS === 'ios';
 const TOAST_VISIBILITY_TIME = 3000;
@@ -32,7 +32,11 @@ export const getUserInitials = (name: string) => {
     .toUpperCase();
 };
 
-export const showInfoToast = (message: string, position: ToastPosition = 'top', numberOfLines: number = 1) => {
+export const showInfoToast = (
+  message: string,
+  position: ToastPosition = 'top',
+  numberOfLines: number = 1,
+) => {
   Toast.show({
     type: 'info',
     text1: message,

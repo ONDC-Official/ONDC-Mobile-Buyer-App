@@ -1,4 +1,9 @@
-import {CLEAR_LOCATION, SAVE_CITY_STATE, SAVE_LAT_LONG, SAVE_PINCODE,} from '../action';
+import {
+  CLEAR_LOCATION,
+  SAVE_CITY_STATE,
+  SAVE_LAT_LONG,
+  SAVE_PINCODE,
+} from '../action';
 
 const initialState = {
   latitude: null,

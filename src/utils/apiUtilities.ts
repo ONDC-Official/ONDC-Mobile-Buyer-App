@@ -10,12 +10,14 @@ export const RAISE_COMPLAINT: string = '/clientApis/v2/complaint';
 export const UPDATE_DELIVERY_ADDRESS =
   '/clientApis/v1/update_delivery_address/';
 export const BILLING_ADDRESS: string = '/clientApis/v1/billing_details';
-export const UPDATE_BILLING_ADDRESS: string = '/clientApis/v1/update_billing_details/';
+export const UPDATE_BILLING_ADDRESS: string =
+  '/clientApis/v1/update_billing_details/';
 export const GET_ORDERS: string = '/clientApis/v1/orders';
 export const GET_SELECT: string = '/clientApis/v2/select';
 export const ON_GET_SELECT: string = '/clientApis/v2/on_select?';
 export const INITIALIZE_ORDER: string = '/clientApis/v2/initialize_order';
-export const ON_INITIALIZE_ORDER: string = '/clientApis/v2/on_initialize_order?';
+export const ON_INITIALIZE_ORDER: string =
+  '/clientApis/v2/on_initialize_order?';
 export const CONFIRM_ORDER: string = '/clientApis/v2/confirm_order';
 export const ON_CONFIRM_ORDER: string = '/clientApis/v2/on_confirm_order?';
 export const SIGN_PAYLOAD: string = '/clientApis/payment/signPayload';
@@ -28,6 +30,7 @@ export const ON_SUPPORT: string = '/clientApis/v2/on_support?';
 export const CALL: string = '/knowlarity/api/call-patron';
 export const FILTER: string = '/clientApis/v1/getFilterParams?messageId=';
 export const GET_STATUS: string = '/clientApis/v2/order_status';
-export const ON_GET_STATUS: string = '/clientApis/v2/on_order_status?messageIds=';
+export const ON_GET_STATUS: string =
+  '/clientApis/v2/on_order_status?messageIds=';
 export const GET_GPS_CORDS: string = '/mmi/api/mmi_pin_info?pincode=';
 export const ON_UPDATE_ORDER: string = '/clientApis/v2/on_update?';

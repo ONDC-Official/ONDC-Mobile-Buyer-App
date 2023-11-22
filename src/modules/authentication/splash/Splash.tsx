@@ -38,8 +38,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
 
   useEffect(() => {
     setTimeout(() => {
-      checkIfUserIsLoggedIn().then(() => {
-      });
+      checkIfUserIsLoggedIn().then(() => {});
     }, 3000);
   }, []);
 
@@ -49,7 +48,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
         <Text style={styles.appName}>Reference Buyer App</Text>
         <View style={styles.ondcContainer}>
           <Text style={styles.poweredBy}>Powered By</Text>
-          <ONDCLogo width={240} height={95}/>
+          <ONDCLogo width={240} height={95} />
         </View>
       </View>
       <View style={styles.footer}>

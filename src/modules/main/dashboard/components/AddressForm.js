@@ -6,20 +6,24 @@ import InputField from '../../../../components/input/InputField';
 import {Button, Chip, HelperText, Text, withTheme} from 'react-native-paper';
 import {appStyles} from '../../../../styles/styles';
 import React, {useState} from 'react';
-import {BASE_URL, GET_GPS_CORDS, GET_LATLONG,} from '../../../../utils/apiUtilities';
+import {
+  BASE_URL,
+  GET_GPS_CORDS,
+  GET_LATLONG,
+} from '../../../../utils/apiUtilities';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {getData} from '../../../../utils/api';
 import {useSelector} from 'react-redux';
 import {showToastWithGravity} from '../../../../utils/utils';
 
 const AddressForm = ({
-                       theme,
-                       addressInfo,
-                       apiInProgress,
-                       saveAddress,
-                       setLatitude,
-                       setLongitude,
-                     }) => {
+  theme,
+  addressInfo,
+  apiInProgress,
+  saveAddress,
+  setLatitude,
+  setLongitude,
+}) => {
   const {token} = useSelector(({authReducer}) => authReducer);
   const [requestInProgress, setRequestInProgress] = useState(false);
   const {handleApiError} = useNetworkErrorHandling();
@@ -54,8 +58,7 @@ const AddressForm = ({
     }
   };
 
-  const renderLabel = label => {
-  };
+  const renderLabel = label => {};
 
   return (
     <KeyboardAwareScrollView>
@@ -68,22 +71,21 @@ const AddressForm = ({
           }
 
           saveAddress(values)
-            .then(() => {
-            })
+            .then(() => {})
             .catch(err => {
               console.log(err);
             });
         }}>
         {({
-            values,
-            errors,
-            handleChange,
-            handleBlur,
-            touched,
-            handleSubmit,
-            setFieldValue,
-            setFieldError,
-          }) => {
+          values,
+          errors,
+          handleChange,
+          handleBlur,
+          touched,
+          handleSubmit,
+          setFieldValue,
+          setFieldError,
+        }) => {
           return (
             <View style={styles.formContainer}>
               <InputField

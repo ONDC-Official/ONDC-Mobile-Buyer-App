@@ -12,11 +12,11 @@ import {StyleSheet, View} from 'react-native';
  * @constructor
  */
 const InputField: React.FC<any> = ({
-                                     required = false,
-                                     label,
-                                     theme,
-                                     ...props
-                                   }) => {
+  required = false,
+  label,
+  theme,
+  ...props
+}) => {
   const styles = makeStyles(theme.colors);
 
   return (

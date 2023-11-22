@@ -44,8 +44,7 @@ export default () => {
           'Version mismatch',
           'Please upgrade your application to the latest version',
           'Ok',
-          () => {
-          },
+          () => {},
         );
       } else {
         if (setError !== null) {

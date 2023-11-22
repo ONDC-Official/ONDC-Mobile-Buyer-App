@@ -1,4 +1,10 @@
-import {clearAll, getMultipleData, getStoredData, saveMultipleData, setStoredData,} from '../../utils/storage';
+import {
+  clearAll,
+  getMultipleData,
+  getStoredData,
+  saveMultipleData,
+  setStoredData,
+} from '../../utils/storage';
 
 export const tryLocalSignIn = (dispatch, navigation) => {
   const payload = {};

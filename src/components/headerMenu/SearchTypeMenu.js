@@ -4,11 +4,11 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const SearchTypeMenu = ({
-                          theme,
-                          searchType,
-                          onProductSelect,
-                          onProviderSelect,
-                        }) => {
+  theme,
+  searchType,
+  onProductSelect,
+  onProviderSelect,
+}) => {
   const [visible, setVisible] = React.useState(false);
 
   const openMenu = () => setVisible(true);
@@ -27,7 +27,7 @@ const SearchTypeMenu = ({
           activeOpacity={0.8}
           onPress={openMenu}>
           <Text style={{color: theme.colors.surface}}>
-            {searchType} <Icon name="angle-down" size={14}/>
+            {searchType} <Icon name="angle-down" size={14} />
           </Text>
         </TouchableOpacity>
       }>
@@ -41,7 +41,7 @@ const SearchTypeMenu = ({
         mode="text">
         Product
       </Button>
-      <Divider/>
+      <Divider />
       <Button
         onPress={() => {
           onProviderSelect();

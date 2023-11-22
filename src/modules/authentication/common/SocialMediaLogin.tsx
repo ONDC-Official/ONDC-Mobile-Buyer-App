@@ -18,8 +18,7 @@ const SocialMediaLogin: React.FC<SocialMediaLogin> = ({theme}) => {
 
   const onLoginWithGooglePress = () => {
     if (isConnected && isInternetReachable) {
-      loginWithGoogle().then(() => {
-      });
+      loginWithGoogle().then(() => {});
     } else {
       showToastWithGravity('Please check your internet connection.');
     }

@@ -1,0 +1,66 @@
+import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, withTheme} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import React, {useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {getStoredData} from '../../../../utils/storage';
+
+interface AddressTag {
+  theme: any;
+}
+
+const AddressTag: React.FC<AddressTag> = ({theme}) => {
+  const [address, setAddress] = useState<any>(null);
+  const navigation = useNavigation();
+  const styles = makeStyles(theme.colors);
+
+  const getAddress = async () => {
+    const addressResponse = await getStoredData('address');
+    if (addressResponse) {
+      setAddress(JSON.parse(addressResponse));
+    }
+  };
+
+  useEffect(() => {
+    getAddress().then(() => {});
+  }, []);
+
+  if (address) {
+    return (
+      <TouchableOpacity
+        style={styles.addressContainer}
+        onPress={() => navigation.navigate('AddressList')}>
+        <Icon name={'map-marker-alt'} color={'#fff'} size={20} />
+        <Text style={styles.deliverTo}>Deliver to</Text>
+        <Text style={styles.address}>
+          {address?.address?.areaCode
+            ? address?.address?.areaCode
+            : address?.address?.city}
+        </Text>
+        <Icon name={'chevron-down'} color={'#fff'} />
+      </TouchableOpacity>
+    );
+  } else {
+    return <ActivityIndicator size={'small'} color={'#fff'} />;
+  }
+};
+
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    addressContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    deliverTo: {
+      marginHorizontal: 8,
+      color: '#fff',
+      fontWeight: '400',
+    },
+    address: {
+      marginEnd: 8,
+      color: '#fff',
+      fontWeight: '500',
+    },
+  });
+
+export default withTheme(AddressTag);

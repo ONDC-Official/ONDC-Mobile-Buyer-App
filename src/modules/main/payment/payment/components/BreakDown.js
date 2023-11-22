@@ -41,7 +41,7 @@ const BreakDown = ({providers, theme}) => {
                                 {item.item?.price
                                   ? stringToDecimal(item.item?.price?.value)
                                   : price /
-                                  item['@ondc/org/item_quantity'].count}
+                                    item['@ondc/org/item_quantity'].count}
                               </Text>
                             )}
                           </View>
@@ -157,7 +157,7 @@ const BreakDown = ({providers, theme}) => {
                   ₹{!isNaN(total) ? stringToDecimal(total) : total}
                 </Text>
               </View>
-              <Divider bold/>
+              <Divider bold />
             </View>
           </>
         );

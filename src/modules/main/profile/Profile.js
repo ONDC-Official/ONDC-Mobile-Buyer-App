@@ -17,9 +17,9 @@ const Profile = () => {
   return (
     <View style={[appStyles.container, appStyles.centerContainer]}>
       {photoURL ? (
-        <Avatar.Image size={72} rounded source={{uri: photoURL}}/>
+        <Avatar.Image size={72} rounded source={{uri: photoURL}} />
       ) : (
-        <Avatar.Text size={72} rounded label={getUserInitials(name ?? '')}/>
+        <Avatar.Text size={72} rounded label={getUserInitials(name ?? '')} />
       )}
       <View style={styles.container}>
         <View style={styles.profileDetailsContainer}>

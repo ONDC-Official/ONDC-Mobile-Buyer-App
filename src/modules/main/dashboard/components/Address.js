@@ -36,8 +36,7 @@ const Address = ({item, theme, isCurrentAddress, params, onAddressSelect}) => {
           addAddressTostore();
         },
         'No',
-        () => {
-        },
+        () => {},
       );
     } else {
       addAddressTostore();
@@ -62,7 +61,7 @@ const Address = ({item, theme, isCurrentAddress, params, onAddressSelect}) => {
       <View style={styles.container}>
         <View style={styles.emptyCheckbox}>
           {isCurrentAddress && (
-            <Icon name={'check-circle'} color={colors.primary} size={24}/>
+            <Icon name={'check-circle'} color={colors.primary} size={24} />
           )}
         </View>
 
@@ -97,7 +96,7 @@ const Address = ({item, theme, isCurrentAddress, params, onAddressSelect}) => {
             onPress={() =>
               navigation.navigate('UpdateAddress', {address: item})
             }>
-            <Icon name="pencil-outline" size={24} color={colors.primary}/>
+            <Icon name="pencil-outline" size={24} color={colors.primary} />
           </TouchableOpacity>
         </View>
       </View>

@@ -1,11 +1,20 @@
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import React, {memo, useState} from 'react';
-import {Dimensions, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Button, Divider, Text, withTheme} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
 import ClearButton from '../../../../../components/button/ClearButton';
 import {appStyles} from '../../../../../styles/styles';
-import {clearFiltersOnly, updateFilters,} from '../../../../../redux/filter/actions';
+import {
+  clearFiltersOnly,
+  updateFilters,
+} from '../../../../../redux/filter/actions';
 import {showInfoToast} from '../../../../../utils/utils';
 import OutlineButton from '../../../../../components/button/OutlineButton';
 import InputField from '../../../../../components/input/InputField';
@@ -94,15 +103,18 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
       setRangeMin(0);
       return;
     }
-    if (minValue >= 0 && Number(minValue) < Number(rangeMax)) setRangeMin(minValue);
+    if (minValue >= 0 && Number(minValue) < Number(rangeMax)) {
+      setRangeMin(minValue);
+    }
   };
   const handleMaxPriceChange = maxValue => {
     if (!maxValue) {
       setRangeMax('');
       return;
     }
-    if (maxValue > 0 && maxValue > rangeMin && maxValue <= maxPrice)
+    if (maxValue > 0 && maxValue > rangeMin && maxValue <= maxPrice) {
       setRangeMax(maxValue);
+    }
   };
 
   /**
@@ -123,7 +135,7 @@ const Filters = ({closeRBSheet, apiInProgress, theme, updateFilterCount}) => {
           textColor={colors.primary}
         />
       </View>
-      <Divider/>
+      <Divider />
 
       {filters.providers.length > 0 ||
       filters.categories.length > 0 ||

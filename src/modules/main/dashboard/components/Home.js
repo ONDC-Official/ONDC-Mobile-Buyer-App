@@ -28,7 +28,7 @@ const Home = ({theme}) => {
                     styles.imageContainer,
                     {backgroundColor: theme.colors.foodAndBeverages},
                   ]}>
-                  <BurgerImage width={110} height={110}/>
+                  <BurgerImage width={110} height={110} />
                 </View>
                 <Text style={styles.categoryName}>Food & Beverage</Text>
               </View>
@@ -49,7 +49,7 @@ const Home = ({theme}) => {
                     styles.imageContainer,
                     {backgroundColor: theme.colors.grocery},
                   ]}>
-                  <GroceryImage width={110} height={110}/>
+                  <GroceryImage width={110} height={110} />
                 </View>
                 <Text style={styles.categoryName}>Grocery</Text>
               </View>
@@ -57,7 +57,7 @@ const Home = ({theme}) => {
           </Pressable>
         </View>
       </View>
-      <CartFooter/>
+      <CartFooter />
     </>
   );
 };

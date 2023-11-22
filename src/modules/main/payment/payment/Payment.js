@@ -1,6 +1,13 @@
 import HyperSdkReact from 'hyper-sdk-react';
 import React, {useEffect, useRef, useState} from 'react';
-import {BackHandler, NativeEventEmitter, ScrollView, StyleSheet, TouchableOpacity, View,} from 'react-native';
+import {
+  BackHandler,
+  NativeEventEmitter,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Button, Card, Text, withTheme} from 'react-native-paper';
 import RNEventSource from 'react-native-event-source';
 import FastImage from 'react-native-fast-image';
@@ -27,7 +34,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import BreakDown from './components/BreakDown';
 import Address from '../../order/components/Address';
 import useRefreshToken from '../../../../hooks/useRefreshToken';
-import Config from "../../../../../config";
+import Config from '../../../../../config';
 
 /**
  * Component to payment screen in application
@@ -38,12 +45,12 @@ import Config from "../../../../../config";
  * @returns {JSX.Element}
  */
 const Payment = ({
-                   navigation,
-                   theme,
-                   route: {
-                     params: {deliveryAddress, billingAddress, confirmationList},
-                   },
-                 }) => {
+  navigation,
+  theme,
+  route: {
+    params: {deliveryAddress, billingAddress, confirmationList},
+  },
+}) => {
   const {} = useRefreshToken();
   const {colors} = theme;
   const dispatch = useDispatch();
@@ -329,7 +336,10 @@ const Payment = ({
       let messageIds = [];
 
       data.forEach(item => {
-        if (item.message?.ack?.status === 'ACK' || item.message?.status === 'ACK') {
+        if (
+          item.message?.ack?.status === 'ACK' ||
+          item.message?.status === 'ACK'
+        ) {
           parentOrderId.current = item.context.parent_order_id;
           messageIds.push(item.context.message_id);
         }
@@ -414,10 +424,8 @@ const Payment = ({
           switch (data.payload.status.toUpperCase()) {
             case 'CHARGED':
               confirmOrder(PAYMENT_METHODS.JUSPAY)
-                .then(() => {
-                })
-                .catch(() => {
-                });
+                .then(() => {})
+                .catch(() => {});
               break;
 
             case 'AUTHENTICATION_FAILED':
@@ -529,7 +537,10 @@ const Payment = ({
           );
           let messageIds = [];
           data.forEach((item, index) => {
-            if (item.message?.ack?.status === 'ACK' || item.message?.status === 'ACK') {
+            if (
+              item.message?.ack?.status === 'ACK' ||
+              item.message?.status === 'ACK'
+            ) {
               messageIds.push(item.context.message_id);
               providers.current.push({
                 id: payload[index].message.providers.id,
@@ -675,8 +686,7 @@ const Payment = ({
       .then(() => {
         HyperSdkReact.createHyperServices();
       })
-      .catch(() => {
-      });
+      .catch(() => {});
 
     const eventEmitter = new NativeEventEmitter(HyperSdkReact);
     const hyperEventSubscription = eventEmitter.addListener(
@@ -716,13 +726,10 @@ const Payment = ({
           onInitializeOrder(data.messageId)
             .then(() => {
               placeOrder()
-                .then(() => {
-                })
-                .catch(() => {
-                });
+                .then(() => {})
+                .catch(() => {});
             })
-            .catch(() => {
-            });
+            .catch(() => {});
         });
       });
     }
@@ -752,10 +759,8 @@ const Payment = ({
         eventSource.addEventListener('on_confirm', event => {
           const data = JSON.parse(event.data);
           onConfirmOrder(data.messageId)
-            .then(() => {
-            })
-            .catch(() => {
-            });
+            .then(() => {})
+            .catch(() => {});
         });
       });
     }
@@ -770,10 +775,10 @@ const Payment = ({
     <View style={[appStyles.container, styles.container]}>
       <View pointerEvents={confirmOrderRequested ? 'none' : 'auto'}>
         {initializeOrderRequested ? (
-          <PaymentSkeleton/>
+          <PaymentSkeleton />
         ) : (
           <ScrollView>
-            <BreakDown providers={providerDetails}/>
+            <BreakDown providers={providerDetails} />
 
             <Card style={styles.card}>
               <Address
@@ -869,10 +874,8 @@ const Payment = ({
                     onPress={() => {
                       removeInitEvent();
                       processPayment()
-                        .then(() => {
-                        })
-                        .catch(() => {
-                        });
+                        .then(() => {})
+                        .catch(() => {});
                     }}
                     loading={confirmOrderRequested}>
                     Place Order

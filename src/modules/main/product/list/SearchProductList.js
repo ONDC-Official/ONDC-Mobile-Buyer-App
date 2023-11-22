@@ -79,16 +79,16 @@ const SearchProductList = ({navigation, theme, route: {params}}) => {
               icon={'arrow-left'}
               onPress={() => navigation.goBack()}
             />
-            <AddressTag address={address}/>
+            <AddressTag address={address} />
           </View>
 
-          <HeaderMenu/>
+          <HeaderMenu />
         </View>
-        <ProductSearch onSearch={onSearch} address={address}/>
+        <ProductSearch onSearch={onSearch} address={address} />
       </View>
 
       {filters && products.length > 0 && (
-        <SortAndFilter updateFilterCount={updateFilterCount}/>
+        <SortAndFilter updateFilterCount={updateFilterCount} />
       )}
 
       <Products

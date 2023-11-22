@@ -1,6 +1,6 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from "@react-navigation/stack";
+import {createStackNavigator} from '@react-navigation/stack';
 
 import Login from '../modules/authentication/login/Login';
 import SignUp from '../modules/authentication/signUp/SignUp';
@@ -62,7 +62,7 @@ const Navigation: React.FC = () => {
           component={SearchProductList}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="Cart" component={Cart}/>
+        <Stack.Screen name="Cart" component={Cart} />
 
         <Stack.Screen
           name="AddDefaultAddress"
@@ -111,13 +111,13 @@ const Navigation: React.FC = () => {
           }}
         />
 
-        <Stack.Screen name="Confirmation" component={Confirmation}/>
+        <Stack.Screen name="Confirmation" component={Confirmation} />
 
-        <Stack.Screen name="Payment" component={Payment}/>
+        <Stack.Screen name="Payment" component={Payment} />
 
-        <Stack.Screen name="Profile" component={Profile}/>
+        <Stack.Screen name="Profile" component={Profile} />
 
-        <Stack.Screen name="Orders" component={Order}/>
+        <Stack.Screen name="Orders" component={Order} />
 
         <Stack.Screen
           name="OrderDetails"
@@ -159,9 +159,9 @@ const Navigation: React.FC = () => {
           }}
         />
 
-        <Stack.Screen name="Support" component={Support}/>
+        <Stack.Screen name="Support" component={Support} />
 
-        <Stack.Screen name="ProductDetails" component={ProductDetails}/>
+        <Stack.Screen name="ProductDetails" component={ProductDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );
