@@ -142,6 +142,14 @@ export const CATEGORIES = [
     routeName: 'BPC',
     domain: 'ONDC:RET13',
   },
+  {
+    id: '*',
+    name: 'Agriculture',
+    shortName: 'Agriculture',
+    Icon: require('../assets/categories/agriculture.png'),
+    routeName: 'Agriculture',
+    domain: 'ONDC:AGR10',
+  },
 ];
 
 export const PRODUCT_SUBCATEGORY = {

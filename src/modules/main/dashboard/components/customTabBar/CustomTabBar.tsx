@@ -1,9 +1,8 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {useTheme} from 'react-native-paper';
+import {Text, useTheme} from 'react-native-paper';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import Caption from '../../../../../components/typography/Caption';
 
 interface TabIcon {
   name: string;
@@ -77,13 +76,11 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
               onPress={onPress}
               onLongPress={onLongPress}>
               <TabIcon name={route.name} isFocused={isFocused} />
-              <Caption
-                variant={'caption1'}
-                textStyle={
-                  isFocused ? styles.activeButtonText : styles.tabText
-                }>
+              <Text
+                variant={'labelSmall'}
+                style={isFocused ? styles.activeButtonText : styles.tabText}>
                 {label}
-              </Caption>
+              </Text>
             </TouchableOpacity>
           </View>
         );
@@ -108,6 +105,7 @@ const makeStyles = (colors: any) =>
       height: 64,
       borderTopLeftRadius: 12,
       borderTopRightRadius: 12,
+      backgroundColor: '#fff',
     },
     tab: {
       flex: 1,

@@ -22,6 +22,7 @@ const Header = () => {
           iconColor={theme.colors.primary}
           rippleColor={theme.colors.primary}
           inputStyle={styles.searchInput}
+          style={styles.search}
           placeholderTextColor={theme.colors.primary}
           placeholder="Search"
           onChangeText={onChangeSearch}
@@ -51,6 +52,10 @@ const makeStyles = (colors: any) =>
       paddingVertical: 12,
       paddingHorizontal: 16,
       color: colors.primary,
+      minHeight: 44,
+    },
+    search: {
+      height: 44,
     },
   });
 export default Header;

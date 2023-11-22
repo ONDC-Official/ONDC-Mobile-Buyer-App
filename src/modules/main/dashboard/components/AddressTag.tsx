@@ -1,8 +1,9 @@
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
 import {Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {getStoredData} from '../../../../utils/storage';
 
 interface AddressTag {
@@ -11,7 +12,7 @@ interface AddressTag {
 
 const AddressTag: React.FC<AddressTag> = ({theme}) => {
   const [address, setAddress] = useState<any>(null);
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const styles = makeStyles(theme.colors);
 
   const getAddress = async () => {
@@ -31,8 +32,10 @@ const AddressTag: React.FC<AddressTag> = ({theme}) => {
         style={styles.addressContainer}
         onPress={() => navigation.navigate('AddressList')}>
         <Icon name={'map-marker-alt'} color={'#fff'} size={20} />
-        <Text style={styles.deliverTo}>Deliver to</Text>
-        <Text style={styles.address}>
+        <Text variant={'bodySmall'} style={styles.deliverTo}>
+          Deliver to
+        </Text>
+        <Text variant={'bodyMedium'} style={styles.address}>
           {address?.address?.areaCode
             ? address?.address?.areaCode
             : address?.address?.city}
