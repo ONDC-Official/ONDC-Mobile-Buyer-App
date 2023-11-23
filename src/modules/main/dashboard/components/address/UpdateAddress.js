@@ -2,15 +2,15 @@ import React, {useState} from 'react';
 import {withTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {
   BASE_URL,
   UPDATE_DELIVERY_ADDRESS,
-} from '../../../../utils/apiUtilities';
-import {postData} from '../../../../utils/api';
+} from '../../../../../utils/apiUtilities';
+import {postData} from '../../../../../utils/api';
 import AddressForm from './AddressForm';
-import useRefreshToken from '../../../../hooks/useRefreshToken';
-import {showInfoToast} from '../../../../utils/utils';
+import useRefreshToken from '../../../../../hooks/useRefreshToken';
+import {showInfoToast} from '../../../../../utils/utils';
 
 /**
  * Component to render form in add new address screen

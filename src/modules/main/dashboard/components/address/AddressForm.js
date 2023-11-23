@@ -1,20 +1,20 @@
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from 'formik';
-import {addressTags, validationSchema} from '../utils/addValidationSchema';
+import {addressTags, validationSchema} from '../../utils/addValidationSchema';
 import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import InputField from '../../../../components/input/InputField';
+import InputField from '../../../../../components/input/InputField';
 import {Button, Chip, HelperText, Text, withTheme} from 'react-native-paper';
-import {appStyles} from '../../../../styles/styles';
+import {appStyles} from '../../../../../styles/styles';
 import React, {useState} from 'react';
 import {
   BASE_URL,
   GET_GPS_CORDS,
   GET_LATLONG,
-} from '../../../../utils/apiUtilities';
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {getData} from '../../../../utils/api';
+} from '../../../../../utils/apiUtilities';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
+import {getData} from '../../../../../utils/api';
 import {useSelector} from 'react-redux';
-import {showToastWithGravity} from '../../../../utils/utils';
+import {showToastWithGravity} from '../../../../../utils/utils';
 
 const AddressForm = ({
   theme,

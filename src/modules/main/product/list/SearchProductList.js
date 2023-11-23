@@ -12,7 +12,7 @@ import Products from './Products';
 import {SEARCH_QUERY} from '../../../../utils/constants';
 import SortAndFilter from './component/header/SortAndFilter';
 import HeaderMenu from '../../../../components/headerMenu/HeaderMenu';
-import AddressTag from '../../dashboard/components/AddressTag';
+import AddressTag from '../../dashboard/components/address/AddressTag';
 import useRefreshToken from '../../../../hooks/useRefreshToken';
 
 const SearchProductList = ({navigation, theme, route: {params}}) => {

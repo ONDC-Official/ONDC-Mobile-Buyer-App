@@ -2,11 +2,21 @@ import {configureFonts, MD3LightTheme} from 'react-native-paper';
 import {Platform} from 'react-native';
 
 const fontConfig: any = {
+  titleSmall: {
+    fontFamily: Platform.select({
+      web: 'Inter-Bold, sans-serif',
+      ios: 'Inter-Bold',
+      default: 'Inter-Bold',
+    }),
+    fontWeight: '700',
+    fontSize: 16,
+    lineHeight: 20,
+  },
   labelSmall: {
     fontFamily: Platform.select({
-      web: 'Inter, sans-serif',
-      ios: 'Inter',
-      default: 'Inter',
+      web: 'Inter-Regular, sans-serif',
+      ios: 'Inter-Regular',
+      default: 'Inter-Regular',
     }),
     fontSize: 12,
     lineHeight: 16,

@@ -10,7 +10,7 @@ import {getData} from '../../../../utils/api';
 import {BASE_URL, BILLING_ADDRESS} from '../../../../utils/apiUtilities';
 import {skeletonList} from '../../../../utils/utils';
 import {getStoredData} from '../../../../utils/storage';
-import AddressSkeleton from '../../dashboard/components/AddressSkeleton';
+import AddressSkeleton from '../../dashboard/components/address/AddressSkeleton';
 import BillingAddress from './components/BillingAddress';
 import useRefreshToken from '../../../../hooks/useRefreshToken';
 

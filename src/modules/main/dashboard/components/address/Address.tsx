@@ -2,11 +2,20 @@ import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
-import {setStoredData} from '../../../../utils/storage';
 import {useNavigation} from '@react-navigation/native';
-import {Card, Text, withTheme} from 'react-native-paper';
-import {alertWithTwoButtons} from '../../../../utils/alerts';
-import {clearCart} from '../../../../redux/actions';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {setStoredData} from '../../../../../utils/storage';
+import {Card, Chip, Text, withTheme} from 'react-native-paper';
+import {alertWithTwoButtons} from '../../../../../utils/alerts';
+import {clearCart} from '../../../../../redux/actions';
+
+interface Address {
+  item: any;
+  theme: any;
+  isCurrentAddress: boolean;
+  params: any;
+  onAddressSelect: (item: any) => void;
+}
 
 /**
  * Component to render single address card in select address screen
@@ -16,9 +25,15 @@ import {clearCart} from '../../../../redux/actions';
  * @constructor
  * @returns {JSX.Element}
  */
-const Address = ({item, theme, isCurrentAddress, params, onAddressSelect}) => {
+const Address: React.FC<Address> = ({
+  item,
+  theme,
+  isCurrentAddress,
+  params,
+  onAddressSelect,
+}) => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const {colors} = theme;
   const {street, landmark, city, state, areaCode, tag} = item.address;
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
@@ -33,18 +48,18 @@ const Address = ({item, theme, isCurrentAddress, params, onAddressSelect}) => {
         'Yes',
         () => {
           dispatch(clearCart());
-          addAddressTostore();
+          addAddressToStore();
         },
         'No',
         () => {},
       );
     } else {
-      addAddressTostore();
+      addAddressToStore();
     }
   };
 
-  const addAddressTostore = () => {
-    setStoredData('address', JSON.stringify(item)).then(response => {
+  const addAddressToStore = () => {
+    setStoredData('address', JSON.stringify(item)).then(() => {
       if (params?.navigateToDashboard) {
         navigation.reset({
           index: 0,
@@ -66,16 +81,14 @@ const Address = ({item, theme, isCurrentAddress, params, onAddressSelect}) => {
         </View>
 
         <View style={styles.addressContainer}>
-          {tag && (
-            <View style={styles.textContainer}>
-              <Text variant="titleMedium">{tag}</Text>
-            </View>
-          )}
-          {item?.descriptor?.name && (
-            <View style={styles.textContainer}>
-              <Text variant="titleMedium">{item?.descriptor?.name}</Text>
-            </View>
-          )}
+          <View style={styles.headerRow}>
+            {tag && <Chip mode={'outlined'}>{tag}</Chip>}
+            {item?.descriptor?.name && (
+              <Text variant="titleMedium" style={styles.name}>
+                {item?.descriptor?.name}
+              </Text>
+            )}
+          </View>
           {item?.descriptor?.email && (
             <View style={styles.textContainer}>
               <Text>{item?.descriptor?.email}</Text>
@@ -130,6 +143,13 @@ const styles = StyleSheet.create({
     marginEnd: 8,
   },
   textContainer: {
-    marginBottom: 8,
+    marginBottom: 4,
+  },
+  name: {
+    marginLeft: 6,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

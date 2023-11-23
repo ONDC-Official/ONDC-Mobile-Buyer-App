@@ -1,4 +1,4 @@
-export const BASE_URL: string = 'https://buyer-app-preprod.ondc.org';
+export const BASE_URL: string = 'https://ref-app-buyer-staging-v2.ondc.org';
 export const UPDATE_ORDER: string = '/clientApis/v1/update';
 export const GET_MESSAGE_ID: string = '/clientApis/v1/search';
 export const GET_PRODUCTS: string = '/clientApis/v1/on_search?messageId=';

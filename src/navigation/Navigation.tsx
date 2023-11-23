@@ -7,7 +7,7 @@ import SignUp from '../modules/authentication/signUp/SignUp';
 import Splash from '../modules/authentication/splash/Splash';
 import AddDefaultAddress from '../modules/main/profile/AddDefaultAddress';
 import Dashboard from '../modules/main/dashboard/Dashboard';
-import AddressList from '../modules/main/dashboard/components/AddressList';
+import AddressList from '../modules/main/dashboard/components/address/AddressList';
 import Cart from '../modules/main/cart/Cart';
 import SearchProductList from '../modules/main/product/list/SearchProductList';
 import BillingAddressPicker from '../modules/main/payment/billingAddress/BillingAddressPicker';
@@ -22,7 +22,7 @@ import OrderDetails from '../modules/main/order/OrderDetails';
 import CallSeller from '../modules/main/order/CallSeller';
 import CancelOrder from '../modules/main/order/CancelOrder';
 import ReturnOrder from '../modules/main/order/ReturnOrder';
-import UpdateAddress from '../modules/main/dashboard/components/UpdateAddress';
+import UpdateAddress from '../modules/main/dashboard/components/address/UpdateAddress';
 import RaiseComplaint from '../modules/main/order/RaiseComplaint';
 import UpdateBillingAddress from '../modules/main/payment/billingAddress/UpdateBillingAddress';
 

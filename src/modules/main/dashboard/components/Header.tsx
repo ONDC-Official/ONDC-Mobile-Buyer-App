@@ -2,7 +2,7 @@ import React from 'react';
 import {Searchbar, useTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import ONDCLogo from '../../../../assets/ondc_logo.svg';
-import AddressTag from './AddressTag';
+import AddressTag from './address/AddressTag';
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = React.useState<string>('');

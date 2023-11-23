@@ -6,7 +6,7 @@ import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {postData} from '../../../utils/api';
 import {BASE_URL, DELIVERY_ADDRESS} from '../../../utils/apiUtilities';
 import {setStoredData} from '../../../utils/storage';
-import AddressForm from '../dashboard/components/AddressForm';
+import AddressForm from '../dashboard/components/address/AddressForm';
 import useRefreshToken from '../../../hooks/useRefreshToken';
 import {showInfoToast} from '../../../utils/utils';
 

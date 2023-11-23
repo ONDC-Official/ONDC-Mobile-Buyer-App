@@ -4,7 +4,7 @@ import {Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {getStoredData} from '../../../../utils/storage';
+import {getStoredData} from '../../../../../utils/storage';
 
 interface AddressTag {
   theme: any;

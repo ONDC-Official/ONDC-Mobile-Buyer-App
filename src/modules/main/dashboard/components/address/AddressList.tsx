@@ -1,24 +1,64 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {getData} from '../../../../utils/api';
-import {BASE_URL, DELIVERY_ADDRESS} from '../../../../utils/apiUtilities';
-import {useSelector} from 'react-redux';
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import Address from './Address';
-import {getStoredData, setStoredData} from '../../../../utils/storage';
-import {skeletonList} from '../../../../utils/utils';
-import AddressSkeleton from './AddressSkeleton';
 import {Button, IconButton, withTheme} from 'react-native-paper';
-import {appStyles} from '../../../../styles/styles';
-import useRefreshToken from '../../../../hooks/useRefreshToken';
+import axios from 'axios';
 
-const AddressList = ({navigation, theme, route: {params}}) => {
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
+import Address from './Address';
+import {getStoredData, setStoredData} from '../../../../../utils/storage';
+import {skeletonList} from '../../../../../utils/utils';
+import AddressSkeleton from './AddressSkeleton';
+import {appStyles} from '../../../../../styles/styles';
+import useRefreshToken from '../../../../../hooks/useRefreshToken';
+import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
+import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
+
+interface Address {
+  _id: string;
+  userId: string;
+  id: string;
+  descriptor: {
+    name: string;
+    phone: string;
+    email: string;
+  };
+  defaultAddress: boolean;
+  address: {
+    door: string;
+    name: string | null;
+    building: string | null;
+    street: string | null;
+    locality: string | null;
+    ward: string | null;
+    city: string | null;
+    state: string | null;
+    country: string | null;
+    areaCode: string | null;
+    tag: string | null;
+    lat: string | null;
+    lng: string | null;
+  };
+}
+
+interface AddressList {
+  navigation: any;
+  theme: any;
+  route: any;
+}
+
+const CancelToken = axios.CancelToken;
+const AddressList: React.FC<AddressList> = ({
+  navigation,
+  theme,
+  route: {params},
+}) => {
+  const source = useRef<any>(null);
   const {} = useRefreshToken();
-  const {token} = useSelector(({authReducer}) => authReducer);
+  const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const [apiInProgress, setApiInProgress] = useState(true);
-  const [addresses, setAddresses] = useState([]);
-  const [currentAddress, setCurrentAddress] = useState(null);
+  const [apiInProgress, setApiInProgress] = useState<boolean>(true);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [currentAddress, setCurrentAddress] = useState<Address | null>(null);
 
   /**
    * function to get list of address from server
@@ -27,16 +67,14 @@ const AddressList = ({navigation, theme, route: {params}}) => {
   const getAddressList = async () => {
     try {
       setApiInProgress(true);
-      const {data} = await getData(`${BASE_URL}${DELIVERY_ADDRESS}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      source.current = CancelToken.source();
+      const {data} = await getDataWithAuth(
+        `${API_BASE_URL}${DELIVERY_ADDRESS}`,
+        source.current.token,
+      );
       setAddresses(data);
-      setApiInProgress(false);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      setApiInProgress(false);
       if (error.response) {
         if (error.response.status === 404) {
           setAddresses([]);
@@ -46,6 +84,8 @@ const AddressList = ({navigation, theme, route: {params}}) => {
       } else {
         handleApiError(error);
       }
+    } finally {
+      setApiInProgress(false);
     }
   };
 
@@ -70,6 +110,9 @@ const AddressList = ({navigation, theme, route: {params}}) => {
     });
 
     return () => {
+      if (source.current) {
+        source.current.cancel();
+      }
       unsubscribeFocus();
     };
   }, [navigation]);
@@ -82,7 +125,7 @@ const AddressList = ({navigation, theme, route: {params}}) => {
     });
   }, []);
 
-  const onAddressSelect = async item => {
+  const onAddressSelect = async (item: any) => {
     setCurrentAddress(item);
   };
 
@@ -152,6 +195,9 @@ const styles = StyleSheet.create({
     width: 300,
     marginVertical: 10,
     alignSelf: 'center',
+  },
+  contentContainerStyle: {
+    paddingBottom: 16,
   },
 });
 

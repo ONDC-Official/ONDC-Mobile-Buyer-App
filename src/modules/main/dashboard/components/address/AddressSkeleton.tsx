@@ -15,10 +15,12 @@ const AddressSkeleton = () => (
       </SkeletonPlaceholder>
       <View style={styles.details}>
         <SkeletonPlaceholder>
-          <View style={styles.text} />
-          <View style={styles.text} />
-          <View style={styles.text} />
-          <View style={styles.text} />
+          <>
+            <View style={styles.text} />
+            <View style={styles.text} />
+            <View style={styles.text} />
+            <View style={styles.text} />
+          </>
         </SkeletonPlaceholder>
       </View>
     </View>
