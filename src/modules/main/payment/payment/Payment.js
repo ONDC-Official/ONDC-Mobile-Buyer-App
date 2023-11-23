@@ -1,24 +1,17 @@
-import HyperSdkReact from 'hyper-sdk-react';
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  BackHandler,
-  NativeEventEmitter,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {Button, Card, Text, withTheme} from 'react-native-paper';
-import RNEventSource from 'react-native-event-source';
-import FastImage from 'react-native-fast-image';
-import {useDispatch, useSelector} from 'react-redux';
+import HyperSdkReact from "hyper-sdk-react";
+import React, { useEffect, useRef, useState } from "react";
+import { BackHandler, NativeEventEmitter, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Button, Card, Text, withTheme } from "react-native-paper";
+import RNEventSource from "react-native-event-source";
+import FastImage from "react-native-fast-image";
+import { useDispatch, useSelector } from "react-redux";
 
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {clearAllData} from '../../../../redux/actions';
-import {clearFilters} from '../../../../redux/filter/actions';
-import {appStyles} from '../../../../styles/styles';
-import {alertWithOneButton} from '../../../../utils/alerts';
-import {getData, postData} from '../../../../utils/api';
+import useNetworkErrorHandling from "../../../../hooks/useNetworkErrorHandling";
+import { clearAllData } from "../../../../redux/actions";
+import { clearFilters } from "../../../../redux/filter/actions";
+import { appStyles } from "../../../../styles/styles";
+import { alertWithOneButton } from "../../../../utils/alerts";
+import { getData, postData } from "../../../../utils/api";
 import {
   BASE_URL,
   CONFIRM_ORDER,
@@ -26,15 +19,15 @@ import {
   ON_CONFIRM_ORDER,
   ON_INITIALIZE_ORDER,
   SIGN_PAYLOAD,
-} from '../../../../utils/apiUtilities';
-import {PAYMENT_METHODS} from '../../../../utils/constants';
-import {showToastWithGravity} from '../../../../utils/utils';
-import PaymentSkeleton from './components/PaymentSkeleton';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import BreakDown from './components/BreakDown';
-import Address from '../../order/components/Address';
-import useRefreshToken from '../../../../hooks/useRefreshToken';
-import Config from '../../../../../config';
+} from "../../../../utils/apiUtilities";
+import { PAYMENT_METHODS } from "../../../../utils/constants";
+import { showToastWithGravity } from "../../../../utils/utils";
+import PaymentSkeleton from "./components/PaymentSkeleton";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import BreakDown from "./components/BreakDown";
+import Address from "../../order/components/Address";
+import useRefreshToken from "../../../../hooks/useRefreshToken";
+import Config from "../../../../../config";
 
 /**
  * Component to payment screen in application
@@ -45,28 +38,28 @@ import Config from '../../../../../config';
  * @returns {JSX.Element}
  */
 const Payment = ({
-  navigation,
-  theme,
-  route: {
-    params: {deliveryAddress, billingAddress, confirmationList},
-  },
-}) => {
+                   navigation,
+                   theme,
+                   route: {
+                     params: { deliveryAddress, billingAddress, confirmationList },
+                   },
+                 }) => {
   const {} = useRefreshToken();
-  const {colors} = theme;
+  const { colors } = theme;
   const dispatch = useDispatch();
   const error = useRef(null);
   const providers = useRef([]);
-  const {token, uid} = useSelector(({authReducer}) => authReducer);
+  const { token, uid } = useSelector(({ authReducer }) => authReducer);
   const [selectedPaymentOption, setSelectedPaymentOption] = useState(null);
   const [initializeOrderRequested, setInitializeOrderRequested] =
     useState(false);
   const [confirmOrderRequested, setConfirmOrderRequested] = useState(false);
   const [inItMessageIds, setInItMessageIds] = useState(null);
   const [confirmMessageIds, setConfirmMessageIds] = useState(null);
-  const {handleApiError} = useNetworkErrorHandling();
+  const { handleApiError } = useNetworkErrorHandling();
   const eventSources = useRef(null);
   const [requestInProgress, setRequestInProgress] = useState(false);
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+  const { cartItems } = useSelector(({ cartReducer }) => cartReducer);
   const refOrders = useRef();
   const total = useRef(0);
   const [providerDetails, setProviderDetails] = useState([]);
@@ -81,7 +74,7 @@ const Payment = ({
   const onOrderSuccess = () => {
     dispatch(clearAllData());
     dispatch(clearFilters());
-    navigation.navigate('Orders');
+    navigation.navigate("Orders");
   };
 
   /**
@@ -91,14 +84,14 @@ const Payment = ({
    */
   const onInitializeOrder = async id => {
     try {
-      const {data} = await getData(
+      const { data } = await getData(
         `${BASE_URL}${ON_INITIALIZE_ORDER}messageIds=${id}`,
         {
-          headers: {Authorization: `Bearer ${token}`},
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
 
-      if (data[0].hasOwnProperty('error')) {
+      if (data[0].hasOwnProperty("error")) {
         error.current = data[0];
       } else {
         const paymentData = data[0].message.order;
@@ -114,73 +107,73 @@ const Payment = ({
 
         paymentData.quote.breakup.forEach(item => {
           const productIndex = providerBreakDown.items.findIndex(
-            one => one.id === item['@ondc/org/item_id'],
+            one => one.id === item["@ondc/org/item_id"],
           );
           if (productIndex > -1) {
             const product = providerBreakDown.items[productIndex];
-            switch (item['@ondc/org/title_type']) {
-              case 'tax':
-                if (product.hasOwnProperty('taxes')) {
+            switch (item["@ondc/org/title_type"]) {
+              case "tax":
+                if (product.hasOwnProperty("taxes")) {
                   product.taxes.push(item);
                 } else {
                   product.taxes = [item];
                 }
                 break;
 
-              case 'item':
-                if (product.hasOwnProperty('items')) {
+              case "item":
+                if (product.hasOwnProperty("items")) {
                   product.items.push(item);
                 } else {
                   product.items = [item];
                 }
                 break;
 
-              case 'discount':
-                if (product.hasOwnProperty('discounts')) {
+              case "discount":
+                if (product.hasOwnProperty("discounts")) {
                   product.discounts.push(item);
                 } else {
                   product.discounts = [item];
                 }
                 break;
 
-              case 'packing':
+              case "packing":
                 product.packings = [item];
                 break;
 
-              case 'delivery':
+              case "delivery":
                 product.deliveries = [item];
                 break;
 
-              case 'misc':
+              case "misc":
                 product.misces = [item];
                 break;
             }
           } else {
             const product = {
-              id: item['@ondc/org/item_id'],
+              id: item["@ondc/org/item_id"],
             };
-            switch (item['@ondc/org/title_type']) {
-              case 'tax':
+            switch (item["@ondc/org/title_type"]) {
+              case "tax":
                 product.taxes = [item];
                 break;
 
-              case 'item':
+              case "item":
                 product.items = [item];
                 break;
 
-              case 'discount':
+              case "discount":
                 product.discounts = [item];
                 break;
 
-              case 'packing':
+              case "packing":
                 product.packings = [item];
                 break;
 
-              case 'delivery':
+              case "delivery":
                 product.deliveries = [item];
                 break;
 
-              case 'misc':
+              case "misc":
                 product.misces = [item];
                 break;
             }
@@ -212,7 +205,7 @@ const Payment = ({
   const onConfirmOrder = async id => {
     try {
       await getData(`${BASE_URL}${ON_CONFIRM_ORDER}messageIds=${id}`, {
-        headers: {Authorization: `Bearer ${token}`},
+        headers: { Authorization: `Bearer ${token}` },
       });
     } catch (err) {
       console.log(err);
@@ -244,7 +237,7 @@ const Payment = ({
       door: billingAddress.address.door
         ? billingAddress.address.door
         : billingAddress.address.street,
-      country: 'IND',
+      country: "IND",
       city: billingAddress.address.city,
       street: billingAddress.address.street,
       areaCode: billingAddress.address.areaCode,
@@ -255,7 +248,7 @@ const Payment = ({
     };
 
     const deliveryInfo = {
-      type: 'Delivery',
+      type: "Delivery",
       name: deliveryAddress.descriptor.name,
       phone: deliveryAddress.descriptor.phone,
       email: deliveryAddress.descriptor.email,
@@ -265,7 +258,7 @@ const Payment = ({
           door: deliveryAddress.address.door
             ? deliveryAddress.address.door
             : deliveryAddress.address.street,
-          country: 'IND',
+          country: "IND",
           city: deliveryAddress.address.city,
           street: deliveryAddress.address.street,
           areaCode: deliveryAddress.address.areaCode,
@@ -289,7 +282,7 @@ const Payment = ({
           fulfillments: provider.fulfillments,
           billing_info: billingInfo,
           delivery_info: deliveryInfo,
-          payment: {type: 'ON-FULFILLMENT'},
+          payment: { type: "ON-FULFILLMENT" },
         },
       };
 
@@ -329,16 +322,16 @@ const Payment = ({
 
     try {
       setInitializeOrderRequested(true);
-      const {data} = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
-        headers: {Authorization: `Bearer ${token}`},
+      const { data } = await postData(`${BASE_URL}${INITIALIZE_ORDER}`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       let messageIds = [];
 
       data.forEach(item => {
         if (
-          item.message?.ack?.status === 'ACK' ||
-          item.message?.status === 'ACK'
+          item.message?.ack?.status === "ACK" ||
+          item.message?.status === "ACK"
         ) {
           parentOrderId.current = item.context.parent_order_id;
           messageIds.push(item.context.message_id);
@@ -347,7 +340,7 @@ const Payment = ({
       if (messageIds.length > 0) {
         setInItMessageIds(messageIds);
       } else {
-        showToastWithGravity('No data found');
+        showToastWithGravity("No data found");
         setInitializeOrderRequested(false);
       }
     } catch (err) {
@@ -373,28 +366,28 @@ const Payment = ({
         order_id: parentOrderId.current,
         customer_phone: deliveryAddress.descriptor.phone,
         customer_email: deliveryAddress.descriptor.email,
-        amount: Config.ENV === 'dev' ? String(9) : String(9),
+        amount: Config.ENV === "dev" ? String(9) : String(9),
         timestamp: timeStamp.current,
-        return_url: 'https://sandbox.juspay.in/end',
+        return_url: "https://sandbox.juspay.in/end",
       };
 
       const processPayload = {
         requestId: parentOrderId.current,
-        service: 'in.juspay.hyperpay',
+        service: "in.juspay.hyperpay",
         payload: {
-          action: 'paymentPage',
+          action: "paymentPage",
           merchantId: Config.MERCHANT_ID.toUpperCase(),
           clientId: Config.CLIENT_ID.toLowerCase(),
           orderId: parentOrderId.current,
-          amount: Config.ENV === 'dev' ? String(9) : String(9),
+          amount: Config.ENV === "dev" ? String(9) : String(9),
           customerId: uid,
           customerEmail: deliveryAddress.descriptor.email,
           customerMobile: deliveryAddress.descriptor.phone,
           orderDetails: JSON.stringify(orderDetails),
           signature: signedPayload.current,
           merchantKeyId: Config.MERCHANT_KEY_ID,
-          language: 'english',
-          environment: 'sandbox',
+          language: "english",
+          environment: "sandbox",
         },
       };
 
@@ -406,64 +399,66 @@ const Payment = ({
 
   const onHyperEvent = resp => {
     const data = JSON.parse(resp);
-    const event = data.event || '';
+    const event = data.event || "";
     switch (event) {
-      case 'show_loader':
+      case "show_loader":
         setInitializeOrderRequested(true);
         break;
 
-      case 'hide_loader':
+      case "hide_loader":
         setInitializeOrderRequested(false);
         break;
 
-      case 'initiate_result':
+      case "initiate_result":
         break;
 
-      case 'process_result':
-        if (data.payload.hasOwnProperty('status')) {
+      case "process_result":
+        if (data.payload.hasOwnProperty("status")) {
           switch (data.payload.status.toUpperCase()) {
-            case 'CHARGED':
+            case "CHARGED":
               confirmOrder(PAYMENT_METHODS.JUSPAY)
-                .then(() => {})
-                .catch(() => {});
+                .then(() => {
+                })
+                .catch(() => {
+                });
               break;
 
-            case 'AUTHENTICATION_FAILED':
-              showToastWithGravity('Please verify the details and try again');
+            case "AUTHENTICATION_FAILED":
+              showToastWithGravity("Please verify the details and try again");
               setInitializeOrderRequested(false);
               setConfirmOrderRequested(false);
               break;
 
-            case 'AUTHORIZATION_FAILED':
+            case "AUTHORIZATION_FAILED":
               showToastWithGravity(
-                'Bank is unable to process your request at the moment',
+                "Bank is unable to process your request at the moment",
               );
               setInitializeOrderRequested(false);
               setConfirmOrderRequested(false);
               break;
 
-            case 'JUSPAY_DECLINED':
+            case "JUSPAY_DECLINED":
               showToastWithGravity(
-                'Unable to process your request at the moment please try again',
+                "Unable to process your request at the moment please try again",
               );
               setInitializeOrderRequested(false);
               setConfirmOrderRequested(false);
               break;
 
-            case 'AUTHORIZING':
-              showToastWithGravity('Waiting for the bank to confirm');
+            case "AUTHORIZING":
+              showToastWithGravity("Waiting for the bank to confirm");
               setInitializeOrderRequested(false);
               setConfirmOrderRequested(false);
               break;
 
-            case 'PENDING_VBV':
-              showToastWithGravity('Transaction Pending');
+            case "PENDING_VBV":
+              showToastWithGravity("Transaction Pending");
               setConfirmOrderRequested(false);
               setInitializeOrderRequested(false);
               break;
 
-            case 'BACKPRESSED':
-              showToastWithGravity('Payment failed, please try again.');
+            case "BACKPRESSED":
+              showToastWithGravity("Payment failed, please try again.");
               setConfirmOrderRequested(false);
               setInitializeOrderRequested(false);
               break;
@@ -472,18 +467,18 @@ const Payment = ({
               setConfirmOrderRequested(false);
               setInitializeOrderRequested(false);
               showToastWithGravity(
-                'Something went wrong, please try again after some time.',
+                "Something went wrong, please try again after some time.",
               );
           }
         } else {
           showToastWithGravity(
-            'Something went wrong, please try again after some time.',
+            "Something went wrong, please try again after some time.",
           );
         }
         break;
 
       default:
-        console.log('Unknown Event', data);
+        console.log("Unknown Event", data);
     }
   };
 
@@ -496,7 +491,7 @@ const Payment = ({
     try {
       const orderList = refOrders.current;
       if (orderList && orderList.length > 0) {
-        const error = orderList.find(one => one.hasOwnProperty('error'));
+        const error = orderList.find(one => one.hasOwnProperty("error"));
 
         if (!error) {
           const payload = orderList.map(item => {
@@ -528,18 +523,18 @@ const Payment = ({
             };
           });
 
-          const {data} = await postData(
+          const { data } = await postData(
             `${BASE_URL}${CONFIRM_ORDER}`,
             payload,
             {
-              headers: {Authorization: `Bearer ${token}`},
+              headers: { Authorization: `Bearer ${token}` },
             },
           );
           let messageIds = [];
           data.forEach((item, index) => {
             if (
-              item.message?.ack?.status === 'ACK' ||
-              item.message?.status === 'ACK'
+              item.message?.ack?.status === "ACK" ||
+              item.message?.status === "ACK"
             ) {
               messageIds.push(item.context.message_id);
               providers.current.push({
@@ -557,9 +552,9 @@ const Payment = ({
             setConfirmMessageIds(messageIds);
           } else {
             alertWithOneButton(
-              'Order Confirmation Failed',
-              'We are unable to process your order at the moment. Please try with other payment option or try again after some time',
-              'Ok',
+              "Order Confirmation Failed",
+              "We are unable to process your order at the moment. Please try with other payment option or try again after some time",
+              "Ok",
               () => {
                 setConfirmOrderRequested(false);
               },
@@ -567,12 +562,12 @@ const Payment = ({
           }
         } else {
           showToastWithGravity(
-            'Something went wrong, please try again after some time.',
+            "Something went wrong, please try again after some time.",
           );
         }
       } else {
         showToastWithGravity(
-          'Something went wrong, please try again after some time.',
+          "Something went wrong, please try again after some time.",
         );
       }
     } catch (err) {
@@ -587,7 +582,7 @@ const Payment = ({
    */
   const placeOrder = async () => {
     const options = {
-      headers: {Authorization: `Bearer ${token}`},
+      headers: { Authorization: `Bearer ${token}` },
     };
 
     try {
@@ -599,14 +594,14 @@ const Payment = ({
         order_id: parentOrderId.current,
         customer_phone: deliveryAddress.descriptor.phone,
         customer_email: deliveryAddress.descriptor.email,
-        amount: Config.ENV === 'dev' ? String(9) : String(9),
+        amount: Config.ENV === "dev" ? String(9) : String(9),
         timestamp: timeStamp.current,
-        return_url: 'https://sandbox.juspay.in/end',
+        return_url: "https://sandbox.juspay.in/end",
       });
 
-      const {data} = await postData(
+      const { data } = await postData(
         `${BASE_URL}${SIGN_PAYLOAD}`,
-        {payload: payload},
+        { payload: payload },
         options,
       );
 
@@ -628,15 +623,15 @@ const Payment = ({
   const initializeJusPaySdk = signaturePayload => {
     const initiatePayload = {
       requestId: parentOrderId.current,
-      service: 'in.juspay.hyperpay',
+      service: "in.juspay.hyperpay",
       payload: {
-        action: 'initiate',
+        action: "initiate",
         clientId: Config.CLIENT_ID.toLowerCase(),
         merchantId: Config.MERCHANT_ID.toUpperCase(),
         merchantKeyId: Config.MERCHANT_KEY_ID,
         signature: signedPayload.current,
         signaturePayload,
-        environment: 'sandbox',
+        environment: "sandbox",
       },
     };
     HyperSdkReact.initiate(JSON.stringify(initiatePayload));
@@ -665,15 +660,15 @@ const Payment = ({
       if (providers.current.findIndex(one => one?.ack === false) < 0) {
         alertWithOneButton(
           null,
-          'Your order has been placed!',
-          'Ok',
+          "Your order has been placed!",
+          "Ok",
           onOrderSuccess,
         );
       } else {
         alertWithOneButton(
           null,
-          'Your order has been partially placed, please check order details for more information',
-          'Ok',
+          "Your order has been partially placed, please check order details for more information",
+          "Ok",
           onOrderSuccess,
         );
       }
@@ -686,15 +681,16 @@ const Payment = ({
       .then(() => {
         HyperSdkReact.createHyperServices();
       })
-      .catch(() => {});
+      .catch(() => {
+      });
 
     const eventEmitter = new NativeEventEmitter(HyperSdkReact);
     const hyperEventSubscription = eventEmitter.addListener(
-      'HyperEvent',
+      "HyperEvent",
       onHyperEvent,
     );
 
-    BackHandler.addEventListener('hardwareBackPress', () => {
+    BackHandler.addEventListener("hardwareBackPress", () => {
       return !HyperSdkReact.isNull() && HyperSdkReact.onBackPressed();
     });
 
@@ -713,23 +709,26 @@ const Payment = ({
         return new RNEventSource(
           `${BASE_URL}/clientApis/events?messageId=${messageId}`,
           {
-            headers: {Authorization: `Bearer ${token}`},
+            headers: { Authorization: `Bearer ${token}` },
           },
         );
       });
       eventSources.current = sources;
       setRequestInProgress(true);
       sources.forEach(eventSource => {
-        eventSource.addEventListener('on_init', event => {
+        eventSource.addEventListener("on_init", event => {
           const data = JSON.parse(event.data);
 
           onInitializeOrder(data.messageId)
             .then(() => {
               placeOrder()
-                .then(() => {})
-                .catch(() => {});
+                .then(() => {
+                })
+                .catch(() => {
+                });
             })
-            .catch(() => {});
+            .catch(() => {
+            });
         });
       });
     }
@@ -748,7 +747,7 @@ const Payment = ({
         return new RNEventSource(
           `${BASE_URL}/clientApis/events?messageId=${messageId}`,
           {
-            headers: {Authorization: `Bearer ${token}`},
+            headers: { Authorization: `Bearer ${token}` },
           },
         );
       });
@@ -756,11 +755,13 @@ const Payment = ({
         timer = setTimeout(removeEvent, 20000, sources);
       }
       sources.forEach(eventSource => {
-        eventSource.addEventListener('on_confirm', event => {
+        eventSource.addEventListener("on_confirm", event => {
           const data = JSON.parse(event.data);
           onConfirmOrder(data.messageId)
-            .then(() => {})
-            .catch(() => {});
+            .then(() => {
+            })
+            .catch(() => {
+            });
         });
       });
     }
@@ -773,7 +774,7 @@ const Payment = ({
 
   return (
     <View style={[appStyles.container, styles.container]}>
-      <View pointerEvents={confirmOrderRequested ? 'none' : 'auto'}>
+      <View pointerEvents={confirmOrderRequested ? "none" : "auto"}>
         {initializeOrderRequested ? (
           <PaymentSkeleton />
         ) : (
@@ -801,16 +802,16 @@ const Payment = ({
                         styles.paymentOption,
                         {
                           borderColor:
-                            selectedPaymentOption === 'JUSPAY'
+                            selectedPaymentOption === "JUSPAY"
                               ? theme.colors.primary
                               : theme.colors.accent,
                         },
                       ]}
-                      onPress={() => setSelectedPaymentOption('JUSPAY')}>
+                      onPress={() => setSelectedPaymentOption("JUSPAY")}>
                       <View style={styles.emptyCheckbox}>
-                        {selectedPaymentOption === 'JUSPAY' && (
+                        {selectedPaymentOption === "JUSPAY" && (
                           <Icon
-                            name={'check-circle'}
+                            name={"check-circle"}
                             color={colors.primary}
                             size={24}
                           />
@@ -822,10 +823,10 @@ const Payment = ({
                           <Text>Powered By</Text>
                           <FastImage
                             source={{
-                              uri: 'https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png',
+                              uri: "https://imgee.s3.amazonaws.com/imgee/a0baca393d534736b152750c7bde97f1.png",
                             }}
                             style={styles.image}
-                            resizeMode={'contain'}
+                            resizeMode={"contain"}
                           />
                         </View>
                       </View>
@@ -836,16 +837,16 @@ const Payment = ({
                         styles.paymentOption,
                         {
                           borderColor:
-                            selectedPaymentOption === 'COD'
+                            selectedPaymentOption === "COD"
                               ? theme.colors.primary
                               : theme.colors.accent,
                         },
                       ]}
-                      onPress={() => setSelectedPaymentOption('COD')}>
+                      onPress={() => setSelectedPaymentOption("COD")}>
                       <View style={styles.emptyCheckbox}>
-                        {selectedPaymentOption === 'COD' && (
+                        {selectedPaymentOption === "COD" && (
                           <Icon
-                            name={'check-circle'}
+                            name={"check-circle"}
                             color={colors.primary}
                             size={24}
                           />
@@ -868,14 +869,16 @@ const Payment = ({
                     contentStyle={appStyles.containedButtonContainer}
                     labelStyle={appStyles.containedButtonLabel}
                     disabled={
-                      selectedPaymentOption !== 'COD' &&
-                      selectedPaymentOption !== 'JUSPAY'
+                      selectedPaymentOption !== "COD" &&
+                      selectedPaymentOption !== "JUSPAY"
                     }
                     onPress={() => {
                       removeInitEvent();
                       processPayment()
-                        .then(() => {})
-                        .catch(() => {});
+                        .then(() => {
+                        })
+                        .catch(() => {
+                        });
                     }}
                     loading={confirmOrderRequested}>
                     Place Order
@@ -896,36 +899,36 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   card: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 8,
     margin: 8,
   },
-  text: {fontSize: 18, fontWeight: '600', paddingLeft: 10},
-  buttonContainer: {width: 300, alignSelf: 'center', marginTop: 16},
-  paymentOptions: {marginVertical: 10},
-  image: {height: 15, width: 80},
+  text: { fontSize: 18, fontWeight: "600", paddingLeft: 10 },
+  buttonContainer: { width: 300, alignSelf: "center", marginTop: 16 },
+  paymentOptions: { marginVertical: 10 },
+  image: { height: 15, width: 80 },
   itemsContainerStyle: {
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 
   priceContainer: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 10,
   },
-  price: {flexShrink: 1},
-  processing: {alignItems: 'center', justifyContent: 'center'},
-  processingText: {fontSize: 18, fontWeight: '700', marginTop: 20},
+  price: { flexShrink: 1 },
+  processing: { alignItems: "center", justifyContent: "center" },
+  processingText: { fontSize: 18, fontWeight: "700", marginTop: 20 },
   addressContainer: {
     marginTop: 12,
   },
   paymentOption: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     padding: 8,
     borderRadius: 10,
     borderWidth: 1,

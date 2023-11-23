@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {Card, Divider, Text, withTheme} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Card, Divider, Text, withTheme } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
 
 const CallSeller = ({
-  route: {
-    params: {items},
-  },
-}) => {
+                      route: {
+                        params: { items },
+                      },
+                    }) => {
   const [providerList, setProviderList] = useState([]);
 
   useEffect(() => {
@@ -18,8 +18,8 @@ const CallSeller = ({
       if (!provider) {
         const contact_details_consumer_care =
           element.product.hasOwnProperty(
-            '@ondc/org/contact_details_consumer_care',
-          ) && element.product['@ondc/org/contact_details_consumer_care'];
+            "@ondc/org/contact_details_consumer_care",
+          ) && element.product["@ondc/org/contact_details_consumer_care"];
         providerList.push({
           ...element.product?.provider_details,
           contact_details_consumer_care,
@@ -37,9 +37,9 @@ const CallSeller = ({
             <Text variant="titleMedium">{item?.descriptor?.name}</Text>
             <Text>
               Contact Details:&nbsp;
-              {item?.hasOwnProperty('contact_details_consumer_care')
+              {item?.hasOwnProperty("contact_details_consumer_care")
                 ? item.contact_details_consumer_care
-                : 'N/A'}
+                : "N/A"}
             </Text>
           </View>
           <Divider />
@@ -50,9 +50,9 @@ const CallSeller = ({
 };
 
 const styles = StyleSheet.create({
-  row: {marginTop: 8, paddingBottom: 8},
+  row: { marginTop: 8, paddingBottom: 8 },
   card: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     margin: 8,
     padding: 8,
   },

@@ -1,8 +1,8 @@
-import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Card, Text, withTheme} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import React from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Card, Text, withTheme } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 /**
  * Component to render single address card in select address screen
@@ -13,17 +13,17 @@ import {useNavigation} from '@react-navigation/native';
  * @constructor
  * @returns {JSX.Element}
  */
-const BillingAddress = ({item, theme, isCurrentAddress, setBillingAddress}) => {
+const BillingAddress = ({ item, theme, isCurrentAddress, setBillingAddress }) => {
   const navigation = useNavigation();
-  const {colors} = theme;
-  const {street, landmark, city, state, areaCode} = item.address;
+  const { colors } = theme;
+  const { street, landmark, city, state, areaCode } = item.address;
 
   return (
     <Card style={styles.card} onPress={() => setBillingAddress(item)}>
       <View style={styles.container}>
         <View style={styles.emptyCheckbox}>
           {isCurrentAddress && (
-            <Icon name={'check-circle'} color={colors.primary} size={24} />
+            <Icon name={"check-circle"} color={colors.primary} size={24} />
           )}
         </View>
 
@@ -38,14 +38,14 @@ const BillingAddress = ({item, theme, isCurrentAddress, setBillingAddress}) => {
             <Text>{item?.phone}</Text>
           </View>
           <Text>
-            {street}, {landmark ? `${landmark},` : ''} {city}, {state},{' '}
+            {street}, {landmark ? `${landmark},` : ""} {city}, {state},{" "}
             {areaCode}
           </Text>
         </View>
         <View style={styles.editContainer}>
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate('UpdateBillingAddress', {
+              navigation.navigate("UpdateBillingAddress", {
                 address: item,
               })
             }>
@@ -61,12 +61,12 @@ export default withTheme(BillingAddress);
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     margin: 8,
   },
   container: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     padding: 8,
   },
   addressContainer: {

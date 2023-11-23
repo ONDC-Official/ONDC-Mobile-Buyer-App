@@ -1,11 +1,9 @@
-import {useTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import Categories from '../home/Categories';
 import TopBrands from '../home/TopBrands';
 
 const Home = () => {
-  const theme = useTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = makeStyles();
 
   return (
     <View style={styles.container}>

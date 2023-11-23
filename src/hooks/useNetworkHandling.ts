@@ -5,7 +5,6 @@ export default () => {
   const {token} = useSelector(({authReducer}) => authReducer);
 
   const getAuthConfig = (cancelToken = null) => {
-    console.log('Token', token);
     const config: any = {
       headers: {
         Authorization: `Bearer ${token}`,

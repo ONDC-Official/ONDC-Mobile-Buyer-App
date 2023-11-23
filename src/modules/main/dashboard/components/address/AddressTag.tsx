@@ -5,12 +5,15 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {getStoredData} from '../../../../../utils/storage';
+import { useDispatch } from "react-redux";
+import { saveLatLong } from "../../../../../redux/location/action";
 
 interface AddressTag {
   theme: any;
 }
 
 const AddressTag: React.FC<AddressTag> = ({theme}) => {
+  const dispatch = useDispatch();
   const [address, setAddress] = useState<any>(null);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const styles = makeStyles(theme.colors);
@@ -18,7 +21,9 @@ const AddressTag: React.FC<AddressTag> = ({theme}) => {
   const getAddress = async () => {
     const addressResponse = await getStoredData('address');
     if (addressResponse) {
-      setAddress(JSON.parse(addressResponse));
+      let object = JSON.parse(addressResponse);
+      setAddress(object);
+      dispatch(saveLatLong(object?.address?.lat, object?.address?.lng));
     }
   };
 

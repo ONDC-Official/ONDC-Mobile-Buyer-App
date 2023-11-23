@@ -85,7 +85,7 @@ export const TAGS = {
   veg: 'Veg',
 };
 
-export const CATEGORIES = [
+export const CATEGORIES: any = [
   {
     id: '1',
     name: 'Fashion',
@@ -152,7 +152,7 @@ export const CATEGORIES = [
   },
 ];
 
-export const PRODUCT_SUBCATEGORY = {
+export const PRODUCT_SUBCATEGORY: any = {
   Grocery: [
     {
       value: 'Fruits and Vegetables',

@@ -1,11 +1,19 @@
-import {FlatList, Image, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Text, useTheme} from 'react-native-paper';
+import FastImage from 'react-native-fast-image';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 import {CATEGORIES} from '../../../../../utils/constants';
 
 const Categories = () => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const navigateToCategoryDetails = (category: string, domain: string) => {
+    navigation.navigate('CategoryDetails', {category, domain});
+  };
 
   return (
     <View>
@@ -13,14 +21,16 @@ const Categories = () => {
         data={CATEGORIES}
         numColumns={4}
         renderItem={({item}) => (
-          <View style={styles.category}>
-            <View style={styles.imageContainer}>
-              <Image source={item.Icon} style={styles.imageContainer} />
-            </View>
-            <Text variant={'labelSmall'} style={styles.categoryText}>
+          <TouchableOpacity
+            style={styles.category}
+            onPress={() =>
+              navigateToCategoryDetails(item.shortName, item.domain)
+            }>
+            <FastImage source={item.Icon} style={styles.imageContainer} />
+            <Text variant={'labelMedium'} style={styles.categoryText}>
               {item.name}
             </Text>
-          </View>
+          </TouchableOpacity>
         )}
         keyExtractor={item => item.name}
       />

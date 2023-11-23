@@ -1,30 +1,19 @@
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Divider,
-  RadioButton,
-  Text,
-} from 'react-native-paper';
-import React, {useEffect, useState} from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Button, Card, Checkbox, Divider, RadioButton, Text } from "react-native-paper";
+import React, { useEffect, useState } from "react";
 
-import {returnReasons} from './utils/reasons';
-import {appStyles} from '../../../styles/styles';
-import {getData, postData} from '../../../utils/api';
-import {
-  BASE_URL,
-  ON_UPDATE_ORDER,
-  UPDATE_ORDER,
-} from '../../../utils/apiUtilities';
-import {useSelector} from 'react-redux';
-import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import RNEventSource from 'react-native-event-source';
-import {showInfoToast, showToastWithGravity} from '../../../utils/utils';
+import { returnReasons } from "./utils/reasons";
+import { appStyles } from "../../../styles/styles";
+import { getData, postData } from "../../../utils/api";
+import { BASE_URL, ON_UPDATE_ORDER, UPDATE_ORDER } from "../../../utils/apiUtilities";
+import { useSelector } from "react-redux";
+import useNetworkErrorHandling from "../../../hooks/useNetworkErrorHandling";
+import RNEventSource from "react-native-event-source";
+import { showInfoToast, showToastWithGravity } from "../../../utils/utils";
 
-const ReturnOrder = ({navigation, route: {params}}) => {
-  const {handleApiError} = useNetworkErrorHandling();
-  const {token} = useSelector(({authReducer}) => authReducer);
+const ReturnOrder = ({ navigation, route: { params } }) => {
+  const { handleApiError } = useNetworkErrorHandling();
+  const { token } = useSelector(({ authReducer }) => authReducer);
   const [products, setProducts] = useState([]);
   const [updateInProgress, setUpdateInProgress] = useState(false);
   const [selectedReason, setSelectedReason] = useState(null);
@@ -45,11 +34,11 @@ const ReturnOrder = ({navigation, route: {params}}) => {
           tags: {
             update_type: params.updateType,
             reason_code: selectedReason.id,
-            ttl_approval: element.hasOwnProperty('@ondc/org/return_window')
-              ? element['@ondc/org/return_window']
-              : '',
-            ttl_reverseqc: 'P3D',
-            image: '',
+            ttl_approval: element.hasOwnProperty("@ondc/org/return_window")
+              ? element["@ondc/org/return_window"]
+              : "",
+            ttl_reverseqc: "P3D",
+            image: "",
           },
         };
       });
@@ -60,7 +49,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
             bpp_id: params.bppId,
           },
           message: {
-            update_target: 'item',
+            update_target: "item",
             order: {
               id: params.orderId,
               state: params.orderStatus,
@@ -72,19 +61,19 @@ const ReturnOrder = ({navigation, route: {params}}) => {
           },
         },
       ];
-      const {data} = await postData(`${BASE_URL}${UPDATE_ORDER}`, payload, {
+      const { data } = await postData(`${BASE_URL}${UPDATE_ORDER}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (data[0].message?.ack?.status === 'NACK') {
+      if (data[0].message?.ack?.status === "NACK") {
         data[0].error.message
           ? showToastWithGravity(data[0].error.message)
           : showToastWithGravity(
-              'Not able to return the order, please try after sometime.',
-            );
+            "Not able to return the order, please try after sometime.",
+          );
         setUpdateInProgress(false);
-      } else if (data[0].message.ack.status === 'ACK') {
+      } else if (data[0].message.ack.status === "ACK") {
         setUpdateMessageId(data[0].context.message_id);
       }
     } catch (e) {
@@ -110,7 +99,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
 
   const onUpdate = async id => {
     try {
-      const {data} = await getData(
+      const { data } = await getData(
         `${BASE_URL}${ON_UPDATE_ORDER}messageId=${id}`,
         {
           headers: {
@@ -120,11 +109,11 @@ const ReturnOrder = ({navigation, route: {params}}) => {
       );
       setUpdateInProgress(false);
       if (data.message) {
-        showInfoToast('Return request initiated successfully');
-        navigation.navigate('Orders');
+        showInfoToast("Return request initiated successfully");
+        navigation.navigate("Orders");
       } else {
         showToastWithGravity(
-          'Something went wrong, please try again after some time.',
+          "Something went wrong, please try again after some time.",
         );
       }
     } catch (e) {
@@ -139,8 +128,8 @@ const ReturnOrder = ({navigation, route: {params}}) => {
       setProducts(
         params.items.filter(
           one =>
-            one.product['@ondc/org/cancellable'] &&
-            one.return_status !== 'Cancelled',
+            one.product["@ondc/org/cancellable"] &&
+            one.return_status !== "Cancelled",
         ),
       );
     }
@@ -153,7 +142,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
       eventSource = new RNEventSource(
         `${BASE_URL}/clientApis/events?messageId=${updateMessageId}`,
         {
-          headers: {Authorization: `Bearer ${token}`},
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
 
@@ -161,11 +150,13 @@ const ReturnOrder = ({navigation, route: {params}}) => {
         timer = setTimeout(removeEvents, 20000, eventSource);
       }
 
-      eventSource.addEventListener('on_update', event => {
+      eventSource.addEventListener("on_update", event => {
         const data = JSON.parse(event.data);
         onUpdate(data.messageId)
-          .then(() => {})
-          .catch(() => {});
+          .then(() => {
+          })
+          .catch(() => {
+          });
       });
     }
 
@@ -190,7 +181,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
               <View style={styles.itemContainer}>
                 <Checkbox
                   disabled={disabled}
-                  status={index > -1 ? 'checked' : 'unchecked'}
+                  status={index > -1 ? "checked" : "unchecked"}
                   onPress={() => onProductClicked(item, index)}
                 />
                 <TouchableOpacity
@@ -223,7 +214,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
                 disabled={disabled}
                 value="first"
                 status={
-                  selectedReason?.id === reason?.id ? 'checked' : 'unchecked'
+                  selectedReason?.id === reason?.id ? "checked" : "unchecked"
                 }
                 onPress={() => setSelectedReason(reason)}
               />
@@ -242,7 +233,7 @@ const ReturnOrder = ({navigation, route: {params}}) => {
             <Button
               contentStyle={appStyles.containedButtonContainer}
               labelStyle={appStyles.containedButtonLabel}
-              mode={'contained'}
+              mode={"contained"}
               disabled={updateInProgress}
               loading={updateInProgress}
               onPress={updateOrder}>
@@ -257,13 +248,13 @@ const ReturnOrder = ({navigation, route: {params}}) => {
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   card: {
     margin: 8,
     padding: 8,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   reason: {
     marginStart: 8,
@@ -273,21 +264,21 @@ const styles = StyleSheet.create({
     marginVertical: 12,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
     marginVertical: 12,
   },
   itemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 8,
   },
   product: {
     marginEnd: 32,
   },
   productDetails: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   productAmount: {
     marginStart: 32,

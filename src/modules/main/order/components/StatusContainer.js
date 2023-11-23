@@ -1,21 +1,21 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Chip, withTheme} from 'react-native-paper';
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { Chip, withTheme } from "react-native-paper";
 
-const StatusContainer = ({product, theme}) => {
-  if (product.hasOwnProperty('return_status')) {
+const StatusContainer = ({ product, theme }) => {
+  if (product.hasOwnProperty("return_status")) {
     return (
       <View style={styles.container}>
         <View style={styles.chipContainer}>
           <Chip selectedColor={theme.colors.red} mode="flat">
-            {product.return_status === 'Return_Initiated'
-              ? 'Return Initiated'
+            {product.return_status === "Return_Initiated"
+              ? "Return Initiated"
               : product.return_status}
           </Chip>
         </View>
       </View>
     );
-  } else if (product.hasOwnProperty('cancellation_status')) {
+  } else if (product.hasOwnProperty("cancellation_status")) {
     return (
       <View style={styles.container}>
         <View style={styles.chipContainer}>
@@ -28,9 +28,9 @@ const StatusContainer = ({product, theme}) => {
   } else {
     return (
       <View style={styles.container}>
-        {product.product.hasOwnProperty('@ondc/org/returnable') && (
+        {product.product.hasOwnProperty("@ondc/org/returnable") && (
           <View style={styles.chipContainer}>
-            {product.product['@ondc/org/returnable'] ? (
+            {product.product["@ondc/org/returnable"] ? (
               <Chip
                 selectedColor={theme.colors.primary}
                 mode="flat"
@@ -49,9 +49,9 @@ const StatusContainer = ({product, theme}) => {
             )}
           </View>
         )}
-        {product.product.hasOwnProperty('@ondc/org/cancellable') && (
+        {product.product.hasOwnProperty("@ondc/org/cancellable") && (
           <View style={styles.chipContainer}>
-            {product.product['@ondc/org/cancellable'] ? (
+            {product.product["@ondc/org/cancellable"] ? (
               <Chip
                 selectedColor={theme.colors.primary}
                 mode="flat"
@@ -79,21 +79,21 @@ export default withTheme(StatusContainer);
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 5,
     marginTop: 10,
   },
-  chipContainer: {paddingEnd: 5},
+  chipContainer: { paddingEnd: 5 },
   chipStyle: {
     width: 122,
-    alignSelf: 'center',
-    justifyContent: 'center',
+    alignSelf: "center",
+    justifyContent: "center",
   },
   chipTextStyle: {
     marginLeft: 8,
     marginRight: 8,
     minWidth: 105,
     fontSize: 13,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

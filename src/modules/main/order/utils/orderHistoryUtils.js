@@ -1,5 +1,5 @@
-import {postData} from '../../../../utils/api';
-import {BASE_URL, CANCEL_ORDER} from '../../../../utils/apiUtilities';
+import { postData } from "../../../../utils/api";
+import { BASE_URL, CANCEL_ORDER } from "../../../../utils/apiUtilities";
 
 /**
  * function used to request cancel order
@@ -19,9 +19,9 @@ export const cancelOrder = async (
         bpp_id: order.bppId,
         transaction_id: order.transactionId,
       },
-      message: {order_id: order.id, cancellation_reason_id: id},
+      message: { order_id: order.id, cancellation_reason_id: id },
     };
-    const {data} = await postData(
+    const { data } = await postData(
       `${BASE_URL}${CANCEL_ORDER}`,
       payload,
       options,

@@ -1,9 +1,9 @@
-import {Card, Divider, Text, withTheme} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
-import React from 'react';
-import {stringToDecimal} from '../../../../../utils/utils';
+import { Card, Divider, Text, withTheme } from "react-native-paper";
+import { StyleSheet, View } from "react-native";
+import React from "react";
+import { stringToDecimal } from "../../../../../utils/utils";
 
-const BreakDown = ({providers, theme}) => {
+const BreakDown = ({ providers, theme }) => {
   let orderTotal = 0;
   return (
     <Card style={styles.card}>
@@ -12,13 +12,13 @@ const BreakDown = ({providers, theme}) => {
         return (
           <>
             <View key={provider?.provider?.id}>
-              <Text variant="titleMedium" style={{marginTop: 8}}>
+              <Text variant="titleMedium" style={{ marginTop: 8 }}>
                 {provider?.provider?.descriptor?.name}
               </Text>
               {provider.items.map(product => {
                 return (
                   <View key={product.id}>
-                    {product.hasOwnProperty('items') ? (
+                    {product.hasOwnProperty("items") ? (
                       product.items.map(item => {
                         const price = Number(
                           stringToDecimal(item?.price?.value),
@@ -26,7 +26,7 @@ const BreakDown = ({providers, theme}) => {
                         total += Number(stringToDecimal(price));
                         orderTotal += Number(stringToDecimal(price));
                         return (
-                          <View key={`${item['@ondc/org/item_id']}Item`}>
+                          <View key={`${item["@ondc/org/item_id"]}Item`}>
                             <View style={styles.priceContainer}>
                               <Text style={styles.price}>{item.title}</Text>
                               <Text
@@ -35,13 +35,13 @@ const BreakDown = ({providers, theme}) => {
                                 ₹{stringToDecimal(item?.price?.value)}
                               </Text>
                             </View>
-                            {item.hasOwnProperty('@ondc/org/item_quantity') && (
+                            {item.hasOwnProperty("@ondc/org/item_quantity") && (
                               <Text>
-                                Qt: {item['@ondc/org/item_quantity'].count} *{' '}
+                                Qt: {item["@ondc/org/item_quantity"].count} *{" "}
                                 {item.item?.price
                                   ? stringToDecimal(item.item?.price?.value)
                                   : price /
-                                    item['@ondc/org/item_quantity'].count}
+                                  item["@ondc/org/item_quantity"].count}
                               </Text>
                             )}
                           </View>
@@ -50,14 +50,14 @@ const BreakDown = ({providers, theme}) => {
                     ) : (
                       <></>
                     )}
-                    {product.hasOwnProperty('discounts') &&
+                    {product.hasOwnProperty("discounts") &&
                       product.discounts.map(item => {
                         const price = stringToDecimal(item?.price?.value);
                         total += Number(stringToDecimal(price));
                         orderTotal += Number(stringToDecimal(price));
                         return (
                           <View
-                            key={`${item['@ondc/org/item_id']}Discount`}
+                            key={`${item["@ondc/org/item_id"]}Discount`}
                             style={styles.priceContainer}>
                             <Text style={styles.price}>{item.title}</Text>
                             <Text
@@ -68,14 +68,14 @@ const BreakDown = ({providers, theme}) => {
                           </View>
                         );
                       })}
-                    {product.hasOwnProperty('taxes') &&
+                    {product.hasOwnProperty("taxes") &&
                       product.taxes.map(item => {
                         const price = stringToDecimal(item?.price?.value);
                         total += Number(stringToDecimal(price));
                         orderTotal += Number(stringToDecimal(price));
                         return (
                           <View
-                            key={`${item['@ondc/org/item_id']}Tax`}
+                            key={`${item["@ondc/org/item_id"]}Tax`}
                             style={styles.priceContainer}>
                             <Text style={styles.price}>{item.title}</Text>
                             <Text
@@ -86,14 +86,14 @@ const BreakDown = ({providers, theme}) => {
                           </View>
                         );
                       })}
-                    {product.hasOwnProperty('packings') &&
+                    {product.hasOwnProperty("packings") &&
                       product.packings.map(item => {
                         const price = stringToDecimal(item?.price?.value);
                         total += Number(stringToDecimal(price));
                         orderTotal += Number(stringToDecimal(price));
                         return (
                           <View
-                            key={`${item['@ondc/org/item_id']}Packing`}
+                            key={`${item["@ondc/org/item_id"]}Packing`}
                             style={styles.priceContainer}>
                             <Text style={styles.price}>{item.title}</Text>
                             <Text
@@ -104,7 +104,7 @@ const BreakDown = ({providers, theme}) => {
                           </View>
                         );
                       })}
-                    {product.hasOwnProperty('deliveries') &&
+                    {product.hasOwnProperty("deliveries") &&
                       product.deliveries.map(item => {
                         const price = Number(
                           stringToDecimal(item?.price?.value),
@@ -113,7 +113,7 @@ const BreakDown = ({providers, theme}) => {
                         orderTotal += Number(stringToDecimal(price));
                         return (
                           <View
-                            key={`${item['@ondc/org/item_id']}Delivery`}
+                            key={`${item["@ondc/org/item_id"]}Delivery`}
                             style={styles.priceContainer}>
                             <Text style={styles.price}>{item.title}</Text>
                             <Text
@@ -124,14 +124,14 @@ const BreakDown = ({providers, theme}) => {
                           </View>
                         );
                       })}
-                    {product.hasOwnProperty('misces') &&
+                    {product.hasOwnProperty("misces") &&
                       product.misces.map(item => {
                         const price = stringToDecimal(item?.price?.value);
                         total += Number(stringToDecimal(price));
                         orderTotal += Number(stringToDecimal(price));
                         return (
                           <View
-                            key={`${item['@ondc/org/item_id']}misc`}
+                            key={`${item["@ondc/org/item_id"]}misc`}
                             style={styles.priceContainer}>
                             <Text style={styles.price}>{item.title}</Text>
                             <Text
@@ -148,12 +148,12 @@ const BreakDown = ({providers, theme}) => {
               <View style={styles.priceContainer}>
                 <Text
                   variant="titleSmall"
-                  style={{color: theme.colors.opposite}}>
+                  style={{ color: theme.colors.opposite }}>
                   Total
                 </Text>
                 <Text
                   variant="titleSmall"
-                  style={{color: theme.colors.opposite}}>
+                  style={{ color: theme.colors.opposite }}>
                   ₹{!isNaN(total) ? stringToDecimal(total) : total}
                 </Text>
               </View>
@@ -163,10 +163,10 @@ const BreakDown = ({providers, theme}) => {
         );
       })}
       <View style={styles.priceContainer}>
-        <Text variant="titleMedium" style={{color: theme.colors.opposite}}>
+        <Text variant="titleMedium" style={{ color: theme.colors.opposite }}>
           Order Total
         </Text>
-        <Text variant="titleMedium" style={{color: theme.colors.opposite}}>
+        <Text variant="titleMedium" style={{ color: theme.colors.opposite }}>
           ₹{!isNaN(orderTotal) ? stringToDecimal(orderTotal) : orderTotal}
         </Text>
       </View>
@@ -176,20 +176,20 @@ const BreakDown = ({providers, theme}) => {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 8,
     margin: 8,
   },
   priceContainer: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 10,
   },
-  price: {flexShrink: 1},
+  price: { flexShrink: 1 },
   productPrice: {
     width: 70,
-    textAlign: 'right',
+    textAlign: "right",
   },
 });
 

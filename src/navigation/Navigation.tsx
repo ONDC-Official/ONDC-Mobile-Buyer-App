@@ -25,6 +25,7 @@ import ReturnOrder from '../modules/main/order/ReturnOrder';
 import UpdateAddress from '../modules/main/dashboard/components/address/UpdateAddress';
 import RaiseComplaint from '../modules/main/order/RaiseComplaint';
 import UpdateBillingAddress from '../modules/main/payment/billingAddress/UpdateBillingAddress';
+import CategoryDetails from '../modules/main/category/CategoryDetails';
 
 const Stack = createStackNavigator();
 
@@ -162,6 +163,12 @@ const Navigation: React.FC = () => {
         <Stack.Screen name="Support" component={Support} />
 
         <Stack.Screen name="ProductDetails" component={ProductDetails} />
+
+        <Stack.Screen
+          name="CategoryDetails"
+          component={CategoryDetails}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

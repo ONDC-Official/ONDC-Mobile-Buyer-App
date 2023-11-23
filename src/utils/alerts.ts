@@ -1,4 +1,4 @@
-import {Alert} from 'react-native';
+import { Alert } from "react-native";
 
 /**
  * Show alert with two action buttons
@@ -15,7 +15,7 @@ export const alertWithTwoButtons = (
   positiveText: string,
   positiveAction: any,
   negativeText: string,
-  negativeAction: any,
+  negativeAction: any
 ) => {
   Alert.alert(
     title,
@@ -25,16 +25,16 @@ export const alertWithTwoButtons = (
         text: negativeText,
         onPress: () => {
           negativeAction();
-        },
+        }
       },
       {
         text: positiveText,
         onPress: () => {
           positiveAction();
-        },
-      },
+        }
+      }
     ],
-    {cancelable: false},
+    { cancelable: false }
   );
 };
 
@@ -49,7 +49,7 @@ export const alertWithOneButton = (
   title: string,
   message: string,
   positiveText: string,
-  positiveAction: any,
+  positiveAction: any
 ) => {
   Alert.alert(
     title,
@@ -59,9 +59,9 @@ export const alertWithOneButton = (
         text: positiveText,
         onPress: () => {
           positiveAction();
-        },
-      },
+        }
+      }
     ],
-    {cancelable: false},
+    { cancelable: false }
   );
 };

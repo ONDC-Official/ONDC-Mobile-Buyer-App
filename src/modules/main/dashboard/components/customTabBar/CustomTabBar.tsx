@@ -77,7 +77,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
               onLongPress={onLongPress}>
               <TabIcon name={route.name} isFocused={isFocused} />
               <Text
-                variant={'labelSmall'}
+                variant={'labelMedium'}
                 style={isFocused ? styles.activeButtonText : styles.tabText}>
                 {label}
               </Text>

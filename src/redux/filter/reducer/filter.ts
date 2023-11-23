@@ -1,11 +1,4 @@
-import {
-  CLEAR_FILTERS,
-  CLEAR_FILTERS_ONLY,
-  SAVE_FILTERS,
-  SAVE_IDS,
-  SORT_OPTION,
-  UPDATE_FILTERS,
-} from '../actions';
+import { CLEAR_FILTERS, CLEAR_FILTERS_ONLY, SAVE_FILTERS, SAVE_IDS, SORT_OPTION, UPDATE_FILTERS } from "../actions";
 
 const initialState = {
   filters: null,
@@ -16,18 +9,18 @@ const initialState = {
   selectedCategories: [],
   maxPrice: 0,
   minPrice: 0,
-  priceRangeSelected: false,
+  priceRangeSelected: false
 };
 
 const filterReducer = (state = initialState, action) => {
-  const {type, payload} = action;
+  const { type, payload } = action;
 
   switch (type) {
     case SAVE_FILTERS:
-      let maxPrice = payload.hasOwnProperty('maxPrice')
+      let maxPrice = payload.hasOwnProperty("maxPrice")
         ? Math.ceil(payload.maxPrice)
         : 0;
-      let minPrice = payload.hasOwnProperty('minPrice')
+      let minPrice = payload.hasOwnProperty("minPrice")
         ? Math.floor(payload.minPrice)
         : 0;
 
@@ -44,15 +37,15 @@ const filterReducer = (state = initialState, action) => {
         providers = state.filters?.providers.concat(
           payload.providers.filter(
             item =>
-              state.filters?.providers.findIndex(one => one.id === item.id) < 0,
-          ),
+              state.filters?.providers.findIndex(one => one.id === item.id) < 0
+          )
         );
         categories = state.filters?.categories.concat(
           payload.categories.filter(
             item =>
               state.filters?.categories.findIndex(one => one.id === item.id) <
-              0,
-          ),
+              0
+          )
         );
       }
       return Object.assign({}, state, {
@@ -60,14 +53,14 @@ const filterReducer = (state = initialState, action) => {
           providers: providers,
           categories: categories,
           minPrice: minPrice,
-          maxPrice: maxPrice,
+          maxPrice: maxPrice
         },
         maxPrice,
-        minPrice,
+        minPrice
       });
 
     case SORT_OPTION:
-      return Object.assign({}, state, {selectedSortOption: payload});
+      return Object.assign({}, state, { selectedSortOption: payload });
 
     case UPDATE_FILTERS:
       return Object.assign({}, state, {
@@ -75,20 +68,20 @@ const filterReducer = (state = initialState, action) => {
         selectedCategories: payload.selectedCategories,
         maxPrice: payload.maxPrice,
         minPrice: payload.minPrice,
-        priceRangeSelected: true,
+        priceRangeSelected: true
       });
 
     case SAVE_IDS:
       return Object.assign({}, state, {
         messageId: payload.messageId,
-        transactionId: payload.transactionId,
+        transactionId: payload.transactionId
       });
 
     case CLEAR_FILTERS_ONLY:
-      let rangeMaxPrice = state.filters.hasOwnProperty('maxPrice')
+      let rangeMaxPrice = state.filters.hasOwnProperty("maxPrice")
         ? Math.ceil(state.filters.maxPrice)
         : 0;
-      let rangeMinPrice = state.filters.hasOwnProperty('minPrice')
+      let rangeMinPrice = state.filters.hasOwnProperty("minPrice")
         ? Math.floor(state.filters.minPrice)
         : 0;
       return Object.assign({}, state, {
@@ -96,7 +89,7 @@ const filterReducer = (state = initialState, action) => {
         minPrice: rangeMinPrice,
         selectedProviders: [],
         selectedCategories: [],
-        priceRangeSelected: false,
+        priceRangeSelected: false
       });
 
     case CLEAR_FILTERS:

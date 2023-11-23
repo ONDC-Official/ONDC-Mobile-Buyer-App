@@ -1,33 +1,33 @@
-import {Formik} from 'formik';
-import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Button, withTheme} from 'react-native-paper';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useSelector} from 'react-redux';
-import * as Yup from 'yup';
+import { Formik } from "formik";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { Button, withTheme } from "react-native-paper";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useSelector } from "react-redux";
+import * as Yup from "yup";
 
-import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {postData} from '../../../utils/api';
-import {BASE_URL, RAISE_COMPLAINT} from '../../../utils/apiUtilities';
-import InputField from '../../../components/input/InputField';
-import {appStyles} from '../../../styles/styles';
-import {showInfoToast} from '../../../utils/utils';
+import useNetworkErrorHandling from "../../../hooks/useNetworkErrorHandling";
+import { postData } from "../../../utils/api";
+import { BASE_URL, RAISE_COMPLAINT } from "../../../utils/apiUtilities";
+import InputField from "../../../components/input/InputField";
+import { appStyles } from "../../../styles/styles";
+import { showInfoToast } from "../../../utils/utils";
 
 const validationSchema = Yup.object({
-  firstName: Yup.string().trim().required('First Name is required'),
-  lastName: Yup.string().trim().required('Last Name is required'),
+  firstName: Yup.string().trim().required("First Name is required"),
+  lastName: Yup.string().trim().required("Last Name is required"),
   contactNumber: Yup.string()
     .trim()
-    .matches(/^[6-9]{1}[0-9]{9}$/, 'Please enter a valid Mobile Number')
-    .required('Mobile Number is required'),
+    .matches(/^[6-9]{1}[0-9]{9}$/, "Please enter a valid Mobile Number")
+    .required("Mobile Number is required"),
   email: Yup.string()
     .trim()
-    .email('Please enter a valid Email')
-    .required('Email is required'),
-  issueType: Yup.string().trim().required('Issue Type is required'),
+    .email("Please enter a valid Email")
+    .required("Email is required"),
+  issueType: Yup.string().trim().required("Issue Type is required"),
   issueDescription: Yup.string()
     .trim()
-    .required('Issue Description is required'),
+    .required("Issue Description is required"),
 });
 
 /**
@@ -38,21 +38,21 @@ const validationSchema = Yup.object({
  * @constructor
  * @returns {JSX.Element}
  */
-const RaiseComplaint = ({navigation, theme, route: {params}}) => {
-  const {token} = useSelector(({authReducer}) => authReducer);
+const RaiseComplaint = ({ navigation, theme, route: { params } }) => {
+  const { token } = useSelector(({ authReducer }) => authReducer);
 
-  const {handleApiError} = useNetworkErrorHandling();
+  const { handleApiError } = useNetworkErrorHandling();
 
   const [apiInProgress, setApiInProgress] = useState(false);
 
   let userInfo = {
-    firstName: '',
-    lastName: '',
-    middleName: '',
-    contactNumber: '',
-    email: '',
-    issueType: '',
-    issueDescription: '',
+    firstName: "",
+    lastName: "",
+    middleName: "",
+    contactNumber: "",
+    email: "",
+    issueType: "",
+    issueDescription: "",
     orderId: params.orderId,
   };
 
@@ -69,7 +69,7 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      showInfoToast('Complaint raised successfully');
+      showInfoToast("Complaint raised successfully");
       setApiInProgress(false);
       navigation.goBack();
     } catch (error) {
@@ -85,89 +85,90 @@ const RaiseComplaint = ({navigation, theme, route: {params}}) => {
         validationSchema={validationSchema}
         onSubmit={values => {
           raiseComplaint(values)
-            .then(() => {})
+            .then(() => {
+            })
             .catch(err => {
               console.log(err);
             });
         }}>
         {({
-          values,
-          errors,
-          handleChange,
-          handleBlur,
-          touched,
-          handleSubmit,
-        }) => {
+            values,
+            errors,
+            handleChange,
+            handleBlur,
+            touched,
+            handleSubmit,
+          }) => {
           return (
             <View style={styles.formContainer}>
               <InputField
                 value={values.firstName}
-                onBlur={handleBlur('firstName')}
+                onBlur={handleBlur("firstName")}
                 required={true}
-                label={'First Name'}
-                placeholder={'First name'}
+                label={"First Name"}
+                placeholder={"First name"}
                 errorMessage={touched.firstName ? errors.firstName : null}
-                onChangeText={handleChange('firstName')}
+                onChangeText={handleChange("firstName")}
               />
               <InputField
                 value={values.middleName}
-                onBlur={handleBlur('middleName')}
-                label={'Middle Name'}
-                placeholder={'Middle name'}
+                onBlur={handleBlur("middleName")}
+                label={"Middle Name"}
+                placeholder={"Middle name"}
                 errorMessage={touched.middleName ? errors.middleName : null}
-                onChangeText={handleChange('middleName')}
+                onChangeText={handleChange("middleName")}
               />
               <InputField
                 value={values.lastName}
-                onBlur={handleBlur('lastName')}
+                onBlur={handleBlur("lastName")}
                 required={true}
-                label={'Last Name'}
-                placeholder={'Last name'}
+                label={"Last Name"}
+                placeholder={"Last name"}
                 errorMessage={touched.lastName ? errors.lastName : null}
-                onChangeText={handleChange('lastName')}
+                onChangeText={handleChange("lastName")}
               />
               <InputField
                 value={values.email}
-                onBlur={handleBlur('email')}
+                onBlur={handleBlur("email")}
                 required={true}
-                label={'Email'}
-                placeholder={'Email'}
+                label={"Email"}
+                placeholder={"Email"}
                 errorMessage={touched.email ? errors.email : null}
-                onChangeText={handleChange('email')}
+                onChangeText={handleChange("email")}
               />
               <InputField
-                keyboardType={'numeric'}
+                keyboardType={"numeric"}
                 maxLength={10}
                 value={values.contactNumber}
-                onBlur={handleBlur('contactNumber')}
+                onBlur={handleBlur("contactNumber")}
                 required={true}
-                label={'Mobile Number'}
-                placeholder={'Mobile Number'}
+                label={"Mobile Number"}
+                placeholder={"Mobile Number"}
                 errorMessage={
                   touched.contactNumber ? errors.contactNumber : null
                 }
-                onChangeText={handleChange('contactNumber')}
+                onChangeText={handleChange("contactNumber")}
               />
 
               <InputField
                 value={values.street}
-                onBlur={handleBlur('issueType')}
+                onBlur={handleBlur("issueType")}
                 required={true}
-                label={'Issue Type'}
-                placeholder={'Issue type'}
+                label={"Issue Type"}
+                placeholder={"Issue type"}
                 errorMessage={touched.issueType ? errors.issueType : null}
-                onChangeText={handleChange('issueType')}
+                onChangeText={handleChange("issueType")}
               />
               <InputField
                 value={values.street}
-                onBlur={handleBlur('issueDescription')}
+                onBlur={handleBlur("issueDescription")}
                 required={true}
-                label={'Issue Description'}
-                placeholder={'Issue description'}
+                label={"Issue Description"}
+                placeholder={"Issue description"}
                 errorMessage={
                   touched.issueDescription ? errors.issueDescription : null
                 }
-                onChangeText={handleChange('issueDescription')}
+                onChangeText={handleChange("issueDescription")}
               />
 
               <View style={styles.buttonContainer}>
@@ -193,13 +194,13 @@ export default withTheme(RaiseComplaint);
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    alignSelf: 'center',
+    alignSelf: "center",
     width: 300,
   },
   formContainer: {
     marginTop: 8,
     paddingBottom: 20,
     width: 300,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 });

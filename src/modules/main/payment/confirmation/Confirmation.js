@@ -1,39 +1,29 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
-import {Button, Card, Divider, Text, withTheme} from 'react-native-paper';
-import RNEventSource from 'react-native-event-source';
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useEffect, useRef, useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import { Button, Card, Divider, Text, withTheme } from "react-native-paper";
+import RNEventSource from "react-native-event-source";
+import { useDispatch, useSelector } from "react-redux";
 
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {appStyles} from '../../../../styles/styles';
-import {getData, postData} from '../../../../utils/api';
-import {
-  BASE_URL,
-  GET_GPS_CORDS,
-  GET_LATLONG,
-  GET_SELECT,
-  ON_GET_SELECT,
-} from '../../../../utils/apiUtilities';
-import {updateItemInCart} from '../../../../redux/actions';
+import useNetworkErrorHandling from "../../../../hooks/useNetworkErrorHandling";
+import { appStyles } from "../../../../styles/styles";
+import { getData, postData } from "../../../../utils/api";
+import { BASE_URL, GET_GPS_CORDS, GET_LATLONG, GET_SELECT, ON_GET_SELECT } from "../../../../utils/apiUtilities";
+import { updateItemInCart } from "../../../../redux/actions";
 
-import {
-  showToastWithGravity,
-  skeletonList,
-  stringToDecimal,
-} from '../../../../utils/utils';
-import ProductCardSkeleton from '../../product/list/component/ProductCardSkeleton';
-import Product from './components/Product';
-import useRefreshToken from '../../../../hooks/useRefreshToken';
+import { showToastWithGravity, skeletonList, stringToDecimal } from "../../../../utils/utils";
+import ProductCardSkeleton from "../../product/list/component/ProductCardSkeleton";
+import Product from "./components/Product";
+import useRefreshToken from "../../../../hooks/useRefreshToken";
 
-const Confirmation = ({theme, navigation, route: {params}}) => {
+const Confirmation = ({ theme, navigation, route: { params } }) => {
   const {} = useRefreshToken();
-  const {token} = useSelector(({authReducer}) => authReducer);
-  const {transactionId} = useSelector(({filterReducer}) => filterReducer);
-  const {cartItems, itemRemoved} = useSelector(({cartReducer}) => cartReducer);
+  const { token } = useSelector(({ authReducer }) => authReducer);
+  const { transactionId } = useSelector(({ filterReducer }) => filterReducer);
+  const { cartItems, itemRemoved } = useSelector(({ cartReducer }) => cartReducer);
 
   const dispatch = useDispatch();
 
-  const {handleApiError} = useNetworkErrorHandling();
+  const { handleApiError } = useNetworkErrorHandling();
   const confirmation = useRef([]);
   const availableProducts = useRef([]);
   const totalAmount = useRef(0);
@@ -47,7 +37,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
   useEffect(() => {
     itemRemoved &&
-      showToastWithGravity(`${itemRemoved} item removed from cart.`);
+    showToastWithGravity(`${itemRemoved} item removed from cart.`);
   }, [itemRemoved]);
 
   /**
@@ -59,10 +49,10 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     try {
       setIsError(false);
       setErrorMessage(null);
-      const {data} = await getData(
+      const { data } = await getData(
         `${BASE_URL}${ON_GET_SELECT}messageIds=${id}`,
         {
-          headers: {Authorization: `Bearer ${token}`},
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
       const quoteData = data[0];
@@ -80,8 +70,8 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           if (product) {
             const productPrice = quoteData.message.quote.quote.breakup.find(
               one =>
-                one['@ondc/org/item_id'] === String(product.id) &&
-                one['@ondc/org/title_type'] === 'item',
+                one["@ondc/org/item_id"] === String(product.id) &&
+                one["@ondc/org/title_type"] === "item",
             );
 
             const cost = product.price.value
@@ -92,7 +82,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
               stringToDecimal(productPrice?.item?.price?.value) !==
               stringToDecimal(cost)
             ) {
-              element.message = 'Price of this product has been updated';
+              element.message = "Price of this product has been updated";
             }
 
             element.provider = {
@@ -119,18 +109,18 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
             product.knowCharges = [];
             provider.additionCharges = [];
             quoteData.message.quote.quote.breakup.forEach(breakup => {
-              if (breakup['@ondc/org/item_id'] === String(product.id)) {
-                if (breakup['@ondc/org/title_type'] !== 'item') {
-                  if (product.hasOwnProperty('knowCharges')) {
+              if (breakup["@ondc/org/item_id"] === String(product.id)) {
+                if (breakup["@ondc/org/title_type"] !== "item") {
+                  if (product.hasOwnProperty("knowCharges")) {
                     product.knowCharges.push(breakup);
                   } else {
                     product.knowCharges = [breakup];
                   }
                 }
-              } else if (breakup['@ondc/org/title_type'] !== 'item') {
-                if (provider.hasOwnProperty('additionCharges')) {
+              } else if (breakup["@ondc/org/title_type"] !== "item") {
+                if (provider.hasOwnProperty("additionCharges")) {
                   const indexFound = provider.items.findIndex(
-                    one => one.id == breakup['@ondc/org/item_id'],
+                    one => one.id == breakup["@ondc/org/item_id"],
                   );
                   if (indexFound < 0) {
                     provider.additionCharges.push(breakup);
@@ -145,26 +135,26 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
             // check wheather the element is out of stock
             const remoteElement = quoteData.message.quote.quote.breakup.find(
-              one => String(one['@ondc/org/item_id']) === String(element.id),
+              one => String(one["@ondc/org/item_id"]) === String(element.id),
             );
             const localElement = cartItems.find(
               one => String(one.id) === String(element.id),
             );
             if (
-              remoteElement['@ondc/org/title_type'] === 'item' &&
-              remoteElement['@ondc/org/item_quantity']?.count === 0
+              remoteElement["@ondc/org/title_type"] === "item" &&
+              remoteElement["@ondc/org/item_quantity"]?.count === 0
             ) {
               product.itemOutOfStock = true;
               product.quantity = 0;
               dispatch(updateItemInCart(product));
             } else if (
-              remoteElement['@ondc/org/title_type'] === 'item' &&
-              remoteElement['@ondc/org/item_quantity']?.count <
-                localElement.quantity
+              remoteElement["@ondc/org/title_type"] === "item" &&
+              remoteElement["@ondc/org/item_quantity"]?.count <
+              localElement.quantity
             ) {
               product.quantityMismatch = true;
               product.quantity =
-                remoteElement['@ondc/org/item_quantity']?.count;
+                remoteElement["@ondc/org/item_quantity"]?.count;
               dispatch(updateItemInCart(product));
             }
           }
@@ -184,7 +174,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         setIsError(true);
         setErrorMessage(
           quoteData.error.message ||
-            'Something went wrong, please try again later.',
+          "Something went wrong, please try again later.",
         );
       }
     } catch (error) {
@@ -195,7 +185,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
 
   const getGPSCords = async pin => {
     try {
-      const {data} = await getData(`${BASE_URL}${GET_GPS_CORDS}${pin}`);
+      const { data } = await getData(`${BASE_URL}${GET_GPS_CORDS}${pin}`);
       const response = await getData(
         `${BASE_URL}${GET_LATLONG}${data.copResults.eLoc}`,
         {
@@ -294,13 +284,13 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         }
       });
       setProviders(confirmationProducts);
-      const {data} = await postData(`${BASE_URL}${GET_SELECT}`, payload, {
-        headers: {Authorization: `Bearer ${token}`},
+      const { data } = await postData(`${BASE_URL}${GET_SELECT}`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       let messageIdArray = [];
       const isNACK = data.find(
-        item => item.error && item.message.ack.status === 'NACK',
+        item => item.error && item.message.ack.status === "NACK",
       );
       if (isNACK) {
         showToastWithGravity(fulfillmentMissingItem?.message);
@@ -336,7 +326,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       const list = providers?.concat([]);
       list?.forEach(provider => {
         provider.items?.forEach(one => {
-          if (!one.hasOwnProperty('dataReceived')) {
+          if (!one.hasOwnProperty("dataReceived")) {
             one.dataReceived = false;
           }
         });
@@ -349,12 +339,13 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
   useEffect(() => {
     if (cartItems.length > 0) {
       getQuote()
-        .then(() => {})
+        .then(() => {
+        })
         .catch(error => {
           console.log(error);
         });
     } else {
-      navigation.navigate('Dashboard', {screen: 'Cart'});
+      navigation.navigate("Dashboard", { screen: "Cart" });
     }
   }, [cartItems]);
 
@@ -366,16 +357,17 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         return new RNEventSource(
           `${BASE_URL}/clientApis/events?messageId=${messageId}`,
           {
-            headers: {Authorization: `Bearer ${token}`},
+            headers: { Authorization: `Bearer ${token}` },
           },
         );
       });
       timer = setTimeout(removeEvent, 20000, eventSources);
       eventSources.forEach(eventSource => {
-        eventSource.addEventListener('on_select', event => {
+        eventSource.addEventListener("on_select", event => {
           const data = JSON.parse(event.data);
           onGetQuote(data.messageId)
-            .then(() => {})
+            .then(() => {
+            })
             .catch(error => {
               console.log(error);
             });
@@ -389,12 +381,12 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
     };
   }, [messageIds]);
 
-  const renderItem = ({item}) => {
-    return item.hasOwnProperty('isSkeleton') ? (
+  const renderItem = ({ item }) => {
+    return item.hasOwnProperty("isSkeleton") ? (
       <ProductCardSkeleton item={item} />
     ) : (
       <View style={styles.providerContainer}>
-        <Text variant="titleMedium" style={{paddingHorizontal: 12}}>
+        <Text variant="titleMedium" style={{ paddingHorizontal: 12 }}>
           {item?.provider?.descriptor?.name}
         </Text>
         <Card style={styles.cardContainer}>
@@ -414,7 +406,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                     {charge?.title}
                   </Text>
                   <Text
-                    style={{color: theme.colors.opposite}}
+                    style={{ color: theme.colors.opposite }}
                     variant="titleMedium">
                     ₹{stringToDecimal(charge?.price?.value)}
                   </Text>
@@ -447,11 +439,11 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       {apiInProgress ? (
         <></>
       ) : (
-        <View style={[{backgroundColor: theme.colors.footer, padding: 8}]}>
+        <View style={[{ backgroundColor: theme.colors.footer, padding: 8 }]}>
           {errorMessage && (
-            <Text style={{color: theme.colors.error}}>{errorMessage}</Text>
+            <Text style={{ color: theme.colors.error }}>{errorMessage}</Text>
           )}
-          <View style={[styles.footer, {backgroundColor: theme.colors.footer}]}>
+          <View style={[styles.footer, { backgroundColor: theme.colors.footer }]}>
             <View style={appStyles.container}>
               <Text>Subtotal</Text>
               <Text style={styles.totalAmount}>₹{stringToDecimal(total)}</Text>
@@ -464,7 +456,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
                     contentStyle={appStyles.containedButtonContainer}
                     labelStyle={appStyles.containedButtonLabel}
                     onPress={() =>
-                      navigation.navigate('Payment', {
+                      navigation.navigate("Payment", {
                         deliveryAddress: params.deliveryAddress,
                         billingAddress: params.billingAddress,
                         confirmationList: confirmation.current,
@@ -487,28 +479,28 @@ const styles = StyleSheet.create({
   providerContainer: {
     paddingVertical: 10,
   },
-  contentContainerStyle: {paddingBottom: 10},
-  emptyListComponent: {alignItems: 'center', justifyContent: 'center'},
+  contentContainerStyle: { paddingBottom: 10 },
+  emptyListComponent: { alignItems: "center", justifyContent: "center" },
   footer: {
     padding: 16,
-    flexDirection: 'row',
-    alignSelf: 'center',
-    justifyContent: 'space-evenly',
+    flexDirection: "row",
+    alignSelf: "center",
+    justifyContent: "space-evenly",
   },
   totalAmount: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 18,
   },
   priceContainer: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 12,
     paddingHorizontal: 8,
   },
   cardContainer: {
     margin: 8,
     padding: 8,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
 });

@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
-import ShippingDetails from './components/ShippingDetails';
+import React, { useEffect } from "react";
+import ShippingDetails from "./components/ShippingDetails";
 
-const OrderDetails = ({route: {params}, navigation}) => {
+const OrderDetails = ({ route: { params }, navigation }) => {
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: `Order Id: ${params.order.id ? params.order.id : 'NA'}`,
+      headerTitle: `Order Id: ${params.order.id ? params.order.id : "NA"}`,
     });
   }, [navigation]);
 
