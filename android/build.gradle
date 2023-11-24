@@ -24,6 +24,6 @@ buildscript {
 allprojects {
     repositories {
         maven { url "https://maven.juspay.in/jp-build-packages/hyper-sdk/" }
-        maven { url 'https://maven.mapmyindia.com/repository/mapmyindia/'}
+        maven { url 'https://maven.mappls.com/repository/mappls/'}
     }
 }

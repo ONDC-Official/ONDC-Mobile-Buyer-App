@@ -1,81 +1,74 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {withTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
-
+import axios from 'axios';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {postData} from '../../../utils/api';
 import {BASE_URL, DELIVERY_ADDRESS} from '../../../utils/apiUtilities';
 import {setStoredData} from '../../../utils/storage';
 import AddressForm from '../dashboard/components/address/AddressForm';
 import useRefreshToken from '../../../hooks/useRefreshToken';
 import {showInfoToast} from '../../../utils/utils';
+import useNetworkHandling from '../../../hooks/useNetworkHandling';
 
+interface AddDefaultAddress {
+  navigation: any;
+  route: any;
+}
+
+const CancelToken = axios.CancelToken;
 /**
  * Component to render form in add new address screen
  * @param navigation: required: to navigate to the respective screen
- * @param theme:application theme
  * @param params
  * @constructor
  * @returns {JSX.Element}
  */
-const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
+const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
+  navigation,
+  route: {params},
+}) => {
   const {} = useRefreshToken();
-  const {token, name, emailId} = useSelector(({authReducer}) => authReducer);
-
+  const source = useRef<any>(null);
+  const {name, emailId} = useSelector(({authReducer}) => authReducer);
+  const {postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-
-  const [apiInProgress, setApiInProgress] = useState(false);
-
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-
-  let addressInfo = {
-    email: emailId || '',
-    name: name || '',
-    number: '',
-    city: '',
-    state: '',
-    pin: '',
-    landMark: '',
-    street: '',
-  };
+  const [apiInProgress, setApiInProgress] = useState<boolean>(false);
+  const [addressInfo, setAddressInfo] = useState<any>(null);
 
   /**
    * Function is used to save new address
    * @param values:object containing user inputs
    * @returns {Promise<void>}
    **/
-  const saveAddress = async values => {
-    const options = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
+  const saveAddress = async (values: any) => {
     const payload = {
       descriptor: {
         name: values.name,
         email: values.email,
         phone: values.number,
       },
-      gps: `${latitude},${longitude}`,
       defaultAddress: true,
       address: {
-        areaCode: values.pin,
+        areaCode: values.areaCode,
+        building: values.building,
         city: values.city,
-        locality: values.landMark,
+        country: 'IND',
+        door: values.building,
         state: values.state,
         street: values.street,
-        country: 'IND',
         tag: values.tag,
+        lat: values.lat,
+        lng: values.lng,
       },
     };
 
     try {
       setApiInProgress(true);
-      const {data} = await postData(
+      source.current = CancelToken.source();
+      const {data} = await postDataWithAuth(
         `${BASE_URL}${DELIVERY_ADDRESS}`,
         payload,
-        options,
+        source.current.token,
       );
       if (!params) {
         await setStoredData('address', JSON.stringify(data));
@@ -88,17 +81,30 @@ const AddDefaultAddress = ({navigation, theme, route: {params}}) => {
       });
     } catch (error) {
       handleApiError(error);
+    } finally {
       setApiInProgress(false);
     }
   };
+
+  useEffect(() => {
+    setAddressInfo({
+      email: emailId || '',
+      name: name || '',
+      number: '',
+      city: '',
+      state: '',
+      areaCode: '',
+      street: '',
+      building: '',
+      tag: '',
+    });
+  }, [emailId, name]);
 
   return (
     <AddressForm
       addressInfo={addressInfo}
       apiInProgress={apiInProgress}
       saveAddress={saveAddress}
-      setLatitude={setLatitude}
-      setLongitude={setLongitude}
     />
   );
 };

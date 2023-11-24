@@ -12,11 +12,13 @@ export const validationSchema = Yup.object({
     .required('Please enter a valid Mobile Number'),
   city: Yup.string().trim().required('City Name cannot be empty').nullable(),
   state: Yup.string().trim().required('State Name cannot be empty').nullable(),
-  pin: Yup.string()
+  areaCode: Yup.string()
     .trim()
     .matches(/^[1-9]{1}[0-9]{5}$/, 'Invalid pin Code')
     .required('Please enter a valid Pin Code'),
-  street: Yup.string().trim().required('Please enter Full Address'),
+  street: Yup.string().trim().required('Please enter street'),
+  building: Yup.string().trim().required('Please enter building'),
+  tag: Yup.string().trim().required('Please select tag'),
 });
 
 export const addressTags = ['Home', 'Office', 'Other'];

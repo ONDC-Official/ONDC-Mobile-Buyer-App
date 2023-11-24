@@ -1,5 +1,5 @@
-import React from 'react';
-import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
+import {Linking, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import Toast, {ErrorToast} from 'react-native-toast-message';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Provider as StoreProvider} from 'react-redux';
@@ -7,11 +7,32 @@ import store from './src/redux/store';
 import {theme} from './src/utils/theme';
 import Navigation from './src/navigation/Navigation';
 import NetworkBanner from './src/components/network/NetworkBanner';
+import {alertWithOneButton} from './src/utils/alerts';
 
 const App = () => {
   const toastConfig = {
     error: (props: any) => <ErrorToast {...props} text1NumberOfLines={2} />,
   };
+
+  useEffect(() => {
+    const getUrlDetails = ({url}) => {
+      if (url) {
+        alertWithOneButton('Application Focus for', url, 'Ok', () => {});
+      }
+    };
+
+    Linking.addEventListener('url', getUrlDetails);
+
+    Linking.getInitialURL().then(url => {
+      if (url) {
+        alertWithOneButton('Application is open using', url, 'Ok', () => {});
+      }
+    });
+
+    return () => {
+      Linking.removeAllListeners('url');
+    };
+  }, []);
 
   return (
     <StoreProvider store={store}>

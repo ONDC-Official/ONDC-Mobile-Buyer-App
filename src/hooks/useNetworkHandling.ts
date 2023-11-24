@@ -16,6 +16,20 @@ export default () => {
     return config;
   };
 
+  const postDataWithAuth = async (
+    url: string,
+    params: any,
+    cancelToken: any,
+  ) => {
+    try {
+      const config = getAuthConfig(cancelToken);
+      console.log(url);
+      return await axios.post(url, params, config);
+    } catch (e) {
+      throw e;
+    }
+  };
+
   const getDataWithAuth = async (url: string, cancelToken: any) => {
     try {
       const config = getAuthConfig(cancelToken);
@@ -28,5 +42,6 @@ export default () => {
 
   return {
     getDataWithAuth,
+    postDataWithAuth,
   };
 };
