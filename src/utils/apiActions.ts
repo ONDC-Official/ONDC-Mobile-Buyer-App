@@ -6,3 +6,4 @@ export const MAP_ACCESS_TOKEN: string = '/clientApis/v2/map/accesstoken';
 export const PROVIDER: string = '/protocol/provider-details';
 export const CUSTOM_MENU: string = '/clientApis/v2/custom-menus';
 export const PRODUCT_ATTRIBUTES: string = '/clientApis/v2/attributes';
+export const PRODUCT_SEARCH: string = '/clientApis/v2/search';

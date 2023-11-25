@@ -1,3 +1,4 @@
+export const BRAND_PRODUCTS_LIMIT = 10;
 export const SEARCH_QUERY = {
   PRODUCT: 'Product',
   PROVIDER: 'Provider',
@@ -1416,4 +1417,8 @@ export const PRODUCT_SUBCATEGORY: any = {
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Pain Relief.png',
     },
   ],
+};
+
+export const CURRENCY_SYMBOLS: any = {
+  INR: '₹',
 };

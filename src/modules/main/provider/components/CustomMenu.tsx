@@ -1,61 +1,82 @@
-import {StyleSheet, View} from 'react-native';
-import React from 'react';
-import {Text, useTheme} from 'react-native-paper';
-import FastImage from 'react-native-fast-image';
+import React, {useEffect, useRef, useState} from 'react';
+import axios from 'axios';
+import {FlatList, StyleSheet, View} from 'react-native';
+import {useTheme} from 'react-native-paper';
+import {API_BASE_URL, CUSTOM_MENU} from '../../../../utils/apiActions';
+import useNetworkHandling from '../../../../hooks/useNetworkHandling';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {skeletonList} from '../../../../utils/utils';
+import CustomMenuSkeleton from '../../../../components/skeleton/CustomMenuSkeleton';
+import CustomMenuItem from './CustomMenuItem';
 
 interface CustomMenu {
-  item: any;
-  selected: boolean;
+  providerId: string;
+  providerDomain: string;
 }
 
-const NoImageAvailable = require('../../../../assets/noImage.png');
+const CancelToken = axios.CancelToken;
 
-const CustomMenu: React.FC<CustomMenu> = ({item, selected}) => {
+const CustomMenu: React.FC<CustomMenu> = ({providerId, providerDomain}) => {
+  const customMenuSource = useRef<any>(null);
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const [menu, setMenu] = useState<any[]>([]);
+  const [menuRequested, setMenuRequested] = useState<boolean>(true);
+  const {getDataWithAuth} = useNetworkHandling();
+  const {handleApiError} = useNetworkErrorHandling();
 
-  return (
-    <View style={styles.container}>
-      <FastImage
-        style={[styles.image, selected ? styles.selected : styles.normal]}
-        source={
-          item?.descriptor?.images
-            ? {uri: item?.descriptor?.images[0]}
-            : NoImageAvailable
-        }
+  const getCustomMenu = async () => {
+    try {
+      setMenuRequested(true);
+      customMenuSource.current = CancelToken.source();
+      const {data} = await getDataWithAuth(
+        `${API_BASE_URL}${CUSTOM_MENU}?provider=${providerId}&domain=${providerDomain}`,
+        customMenuSource.current.token,
+      );
+      setMenu(data.data);
+    } catch (error) {
+      handleApiError(error);
+    } finally {
+      setMenuRequested(false);
+    }
+  };
+
+  useEffect(() => {
+    getCustomMenu().then(() => {});
+
+    return () => {
+      if (customMenuSource.current) {
+        customMenuSource.current.cancel();
+      }
+    };
+  }, []);
+
+  return menuRequested ? (
+    <View style={styles.menuContainer}>
+      <FlatList
+        horizontal
+        data={skeletonList}
+        renderItem={() => <CustomMenuSkeleton />}
+        keyExtractor={item => item.id}
       />
-      <Text variant={'labelSmall'} style={styles.title}>
-        {item?.descriptor?.name}
-      </Text>
+    </View>
+  ) : (
+    <View style={styles.menuContainer}>
+      <FlatList
+        horizontal
+        data={menu}
+        keyExtractor={item => item.id}
+        renderItem={({item}) => <CustomMenuItem item={item} selected={false} />}
+      />
     </View>
   );
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    container: {
-      width: 56,
-      marginRight: 24,
-    },
-    image: {
-      width: 56,
-      height: 56,
-      marginBottom: 6,
-    },
-    title: {
-      width: 56,
-      fontWeight: '700',
-      textAlign: 'center',
-    },
-    selected: {
-      borderRadius: 28,
-      borderWidth: 1,
-      borderColor: colors.primary,
-    },
-    normal: {
-      borderRadius: 28,
-      borderWidth: 1,
-      borderColor: '#E7E7E7',
+    menuContainer: {
+      paddingVertical: 16,
+      paddingLeft: 16,
     },
   });
 

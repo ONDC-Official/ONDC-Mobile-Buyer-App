@@ -3,15 +3,15 @@ import axios from 'axios';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {API_BASE_URL, CUSTOM_MENU} from '../../../../utils/apiActions';
+import {API_BASE_URL, PRODUCT_SEARCH} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {skeletonList} from '../../../../utils/utils';
-import CustomMenuSkeleton from '../../../../components/skeleton/CustomMenuSkeleton';
 import CustomMenu from './CustomMenu';
 import Filters from './Filters';
+import {BRAND_PRODUCTS_LIMIT} from '../../../../utils/constants';
+import ProductSkeleton from '../../../../components/skeleton/ProductSkeleton';
+import Product from './Product';
 
 interface OtherBrandDetails {
   provider: any;
@@ -20,63 +20,41 @@ interface OtherBrandDetails {
 const CancelToken = axios.CancelToken;
 
 const OtherBrandDetails: React.FC<OtherBrandDetails> = ({provider}) => {
-  const navigation = useNavigation<StackNavigationProp<any>>();
-  const customMenuSource = useRef<any>(null);
+  const productSearchSource = useRef<any>(null);
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
-  const [menu, setMenu] = useState<any[]>([]);
-  const [menuRequested, setMenuRequested] = useState<boolean>(true);
+  const [productsRequested, setProductsRequested] = useState<boolean>(true);
   const [isGridView, setIsGridView] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [products, setProducts] = useState<any[]>([]);
+  const [totalProducts, setTotalProducts] = useState<number>(0);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
-  const getCustomMenu = async () => {
+  const searchProducts = async (pageNumber: number) => {
     try {
-      setMenuRequested(true);
-      customMenuSource.current = CancelToken.source();
+      setProductsRequested(true);
+      productSearchSource.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${CUSTOM_MENU}?provider=${provider.id}&domain=${provider.domain}`,
-        customMenuSource.current.token,
+        `${API_BASE_URL}${PRODUCT_SEARCH}?providerIds=${provider.id}&pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}`,
+        productSearchSource.current.token,
       );
-      setMenu(data.data);
+      setTotalProducts(data.response.count);
+      setProducts(data.response.data);
     } catch (error) {
       handleApiError(error);
     } finally {
-      setMenuRequested(false);
+      setProductsRequested(false);
     }
   };
 
   useEffect(() => {
-    getCustomMenu().then(() => {});
-
-    return () => {
-      if (customMenuSource.current) {
-        customMenuSource.current.cancel();
-      }
-    };
-  }, []);
+    searchProducts(page).then(() => {});
+  }, [page]);
 
   return (
     <View style={styles.container}>
-      {menuRequested ? (
-        <View style={styles.menuContainer}>
-          <FlatList
-            horizontal
-            data={skeletonList}
-            renderItem={() => <CustomMenuSkeleton />}
-            keyExtractor={item => item.id}
-          />
-        </View>
-      ) : (
-        <View style={styles.menuContainer}>
-          <FlatList
-            horizontal
-            data={menu}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => <CustomMenu item={item} selected={false} />}
-          />
-        </View>
-      )}
+      <CustomMenu providerId={provider.id} providerDomain={provider.domain} />
       <View style={styles.filterContainer}>
         <Filters providerId={provider.id} />
         <View style={styles.reorderContainer}>
@@ -103,6 +81,36 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({provider}) => {
           </TouchableOpacity>
         </View>
       </View>
+      {productsRequested ? (
+        <FlatList
+          numColumns={2}
+          data={skeletonList}
+          renderItem={() => <ProductSkeleton />}
+          contentContainerStyle={styles.listContainer}
+          keyExtractor={item => item.id}
+        />
+      ) : isGridView ? (
+        <FlatList
+          key={'grid'}
+          numColumns={2}
+          data={products}
+          renderItem={({item}) => (
+            <Product product={item} isGrid={isGridView} />
+          )}
+          contentContainerStyle={styles.listContainer}
+          keyExtractor={item => item.id}
+        />
+      ) : (
+        <FlatList
+          key={'list'}
+          data={products}
+          renderItem={({item}) => (
+            <Product product={item} isGrid={isGridView} />
+          )}
+          contentContainerStyle={styles.listContainer}
+          keyExtractor={item => item.id}
+        />
+      )}
     </View>
   );
 };
@@ -143,6 +151,9 @@ const makeStyles = (colors: any) =>
     },
     defaultReorderButton: {
       borderColor: '#E8E8E8',
+    },
+    listContainer: {
+      paddingHorizontal: 8,
     },
   });
 

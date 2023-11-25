@@ -29,7 +29,6 @@ const Filters: React.FC<Filters> = ({providerId}) => {
         `${API_BASE_URL}${PRODUCT_ATTRIBUTES}?provider=${providerId}`,
         attributeSource.current.token,
       );
-      console.log(JSON.stringify(data, undefined, 4));
       setAttributes(data.response.data);
     } catch (error) {
       handleApiError(error);

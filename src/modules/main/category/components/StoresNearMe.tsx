@@ -65,8 +65,6 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const navigateToDetails = store => {
     navigation.navigate('BrandDetails', {
       brandId: store.provider,
-      domain: store.domain,
-      name: store?.provider_descriptor?.name,
     });
   };
 

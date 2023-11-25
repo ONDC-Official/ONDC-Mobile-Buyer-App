@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Linking, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import Toast, {ErrorToast} from 'react-native-toast-message';
 import {Provider as PaperProvider} from 'react-native-paper';
@@ -7,9 +7,10 @@ import store from './src/redux/store';
 import {theme} from './src/utils/theme';
 import AppNavigation from './src/navigation/AppNavigation';
 import NetworkBanner from './src/components/network/NetworkBanner';
-import {alertWithOneButton} from './src/utils/alerts';
+import {getMultipleData} from './src/utils/storage';
 
 const App = () => {
+  const navigationRef = useRef<any>(null);
   const toastConfig = {
     error: (props: any) => <ErrorToast {...props} text1NumberOfLines={2} />,
   };
@@ -17,17 +18,30 @@ const App = () => {
   useEffect(() => {
     const getUrlDetails = ({url}) => {
       if (url) {
-        alertWithOneButton('Application Focus for', url, 'Ok', () => {});
+        getMultipleData(['token', 'uid', 'emailId', 'name']).then(data => {
+          if (data[0][1] !== null) {
+            const urlParams: any = {};
+            const params = url.split('?');
+            if (params.length > 0) {
+              const variables = params[1].split('&');
+              variables.forEach(one => {
+                const fields = one.split('=');
+                if (fields.length > 0) {
+                  urlParams[fields[0]] = fields[1];
+                  if (urlParams.hasOwnProperty('context.provider.id')) {
+                    navigationRef.current.navigate('BrandDetails', {
+                      brandId: urlParams['context.provider.id'],
+                    });
+                  }
+                }
+              });
+            }
+          }
+        });
       }
     };
 
     Linking.addEventListener('url', getUrlDetails);
-
-    Linking.getInitialURL().then(url => {
-      if (url) {
-        alertWithOneButton('Application is open using', url, 'Ok', () => {});
-      }
-    });
 
     return () => {
       Linking.removeAllListeners('url');
@@ -39,7 +53,7 @@ const App = () => {
       <PaperProvider theme={theme}>
         <SafeAreaView style={styles.container}>
           <StatusBar backgroundColor={theme.colors.primary} />
-          <AppNavigation />
+          <AppNavigation navigationRef={navigationRef} />
           <NetworkBanner />
           <Toast config={toastConfig} />
         </SafeAreaView>

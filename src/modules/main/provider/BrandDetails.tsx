@@ -36,6 +36,9 @@ const BrandDetails: React.FC<BrandDetails> = ({route: {params}}) => {
         `${API_BASE_URL}${PROVIDER}?id=${params.brandId}`,
         source.current.token,
       );
+      navigation.setOptions({
+        headerTitle: data?.descriptor?.name,
+      });
       setProvider(data);
     } catch (error) {
       handleApiError(error);
@@ -43,12 +46,6 @@ const BrandDetails: React.FC<BrandDetails> = ({route: {params}}) => {
       setApiRequested(false);
     }
   };
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: params.name,
-    });
-  }, [navigation]);
 
   useEffect(() => {
     getProviderDetails().then(() => {});
@@ -65,7 +62,7 @@ const BrandDetails: React.FC<BrandDetails> = ({route: {params}}) => {
   }
   return (
     <View style={styles.container}>
-      {params.domain === 'ONDC:RET11' ? (
+      {provider.domain === 'ONDC:RET11' ? (
         <FBBrandDetails provider={provider} apiRequested={apiRequested} />
       ) : (
         <OtherBrandDetails provider={provider} />

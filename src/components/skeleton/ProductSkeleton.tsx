@@ -10,10 +10,6 @@ const ProductSkeleton = () => {
           <View style={styles.image} />
           <View style={styles.title} />
           <View style={styles.brand} />
-          <View style={styles.row}>
-            <View style={styles.amount} />
-            <View style={styles.button} />
-          </View>
         </>
       </SkeletonPlaceholder>
     </View>
@@ -23,6 +19,9 @@ const ProductSkeleton = () => {
 const styles = StyleSheet.create({
   container: {
     borderRadius: 12,
+    paddingHorizontal: 8,
+    flex: 1,
+    marginBottom: 20,
   },
   image: {
     height: 180,
@@ -38,18 +37,6 @@ const styles = StyleSheet.create({
     height: 12,
     width: '100%',
     marginBottom: 8,
-  },
-  amount: {
-    height: 16,
-    width: 80,
-  },
-  button: {
-    height: 32,
-    width: 100,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 });
 

@@ -30,14 +30,18 @@ import BrandDetails from '../modules/main/provider/BrandDetails';
 
 const Stack = createStackNavigator();
 
+interface AppNavigation {
+  navigationRef: any;
+}
+
 /**
  * Component for stack navigation
  * @returns {JSX.Element}
  * @constructor
  */
-const AppNavigation: React.FC = () => {
+const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>
         <Stack.Screen
           name="Splash"
