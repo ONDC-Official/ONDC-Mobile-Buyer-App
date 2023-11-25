@@ -26,6 +26,7 @@ import UpdateAddress from '../modules/main/dashboard/components/address/UpdateAd
 import RaiseComplaint from '../modules/main/order/RaiseComplaint';
 import UpdateBillingAddress from '../modules/main/payment/billingAddress/UpdateBillingAddress';
 import CategoryDetails from '../modules/main/category/CategoryDetails';
+import BrandDetails from '../modules/main/provider/BrandDetails';
 
 const Stack = createStackNavigator();
 
@@ -34,7 +35,7 @@ const Stack = createStackNavigator();
  * @returns {JSX.Element}
  * @constructor
  */
-const Navigation: React.FC = () => {
+const AppNavigation: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -169,9 +170,10 @@ const Navigation: React.FC = () => {
           component={CategoryDetails}
           options={{headerShown: false}}
         />
+        <Stack.Screen name="BrandDetails" component={BrandDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
 
-export default Navigation;
+export default AppNavigation;

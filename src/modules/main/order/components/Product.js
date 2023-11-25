@@ -1,14 +1,14 @@
-import { StyleSheet, View } from "react-native";
-import { Divider, Text } from "react-native-paper";
-import StatusContainer from "./StatusContainer";
-import React from "react";
-import FastImage from "react-native-fast-image";
-import { stringToDecimal } from "../../../../utils/utils";
-import TextViewWithMoreLess from "../../../../components/TextView/TextViewWithMoreLess";
+import {StyleSheet, View} from 'react-native';
+import {Divider, Text} from 'react-native-paper';
+import StatusContainer from './StatusContainer';
+import React from 'react';
+import FastImage from 'react-native-fast-image';
+import {stringToDecimal} from '../../../../utils/utils';
+import TextViewWithMoreLess from '../../../../components/TextView/TextViewWithMoreLess';
 
-const image = require("../../../../assets/noImage.png");
+const image = require('../../../../assets/noImage.png');
 
-const Product = ({ item }) => {
+const Product = ({item}) => {
   const uri =
     item.product?.descriptor?.images &&
     item.product?.descriptor?.images.length > 0
@@ -19,9 +19,9 @@ const Product = ({ item }) => {
     <>
       <View style={styles.container}>
         <FastImage
-          source={uri ? { uri } : image}
+          source={uri ? {uri} : image}
           style={styles.image}
-          resizeMode={"contain"}
+          resizeMode={'contain'}
         />
         <View style={styles.rightPane}>
           <View style={styles.details}>
@@ -53,35 +53,35 @@ const Product = ({ item }) => {
 
 const styles = StyleSheet.create({
   image: {
-    height: "100%",
+    height: '100%',
     width: 100,
     marginRight: 10,
   },
   container: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingVertical: 8,
   },
   details: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "flex-start",
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
   rightPane: {
     flex: 1,
     paddingHorizontal: 8,
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
   },
   title: {
     marginRight: 8,
     flexShrink: 1,
   },
-  address: { marginBottom: 4 },
-  divider: { marginTop: 10 },
+  address: {marginBottom: 4},
+  divider: {marginTop: 10},
   price: {
     width: 70,
-    textAlign: "right",
+    textAlign: 'right',
   },
 });
 

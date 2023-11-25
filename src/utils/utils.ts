@@ -1,9 +1,9 @@
-import { Dimensions, Platform } from "react-native";
-import Toast from "react-native-toast-message";
-import moment from "moment";
-import { ToastPosition } from "react-native-toast-message/lib/src/types";
+import {Dimensions, Platform} from 'react-native';
+import Toast from 'react-native-toast-message';
+import moment from 'moment';
+import {ToastPosition} from 'react-native-toast-message/lib/src/types';
 
-export const isIOS = Platform.OS === "ios";
+export const isIOS = Platform.OS === 'ios';
 const TOAST_VISIBILITY_TIME = 3000;
 
 /**
@@ -12,10 +12,10 @@ const TOAST_VISIBILITY_TIME = 3000;
  **/
 export const showToastWithGravity = (message: string) => {
   Toast.show({
-    type: "error",
+    type: 'error',
     text1: message,
-    position: "top",
-    visibilityTime: TOAST_VISIBILITY_TIME
+    position: 'top',
+    visibilityTime: TOAST_VISIBILITY_TIME,
   });
 };
 
@@ -26,56 +26,56 @@ export const showToastWithGravity = (message: string) => {
  */
 export const getUserInitials = (name: string) => {
   return name
-    .split(" ")
+    .split(' ')
     .map((n, i, a) => (i === 0 || i + 1 === a.length ? n[0] : null))
-    .join("")
+    .join('')
     .toUpperCase();
 };
 
 export const showInfoToast = (
   message: string,
-  position: ToastPosition = "top",
-  numberOfLines: number = 1
+  position: ToastPosition = 'top',
+  numberOfLines: number = 1,
 ) => {
   Toast.show({
-    type: "info",
+    type: 'info',
     text1: message,
     position: position,
-    visibilityTime: TOAST_VISIBILITY_TIME
+    visibilityTime: TOAST_VISIBILITY_TIME,
   });
 };
 
 export const skeletonList = [
   {
     isSkeleton: true,
-    _id: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb6d",
-    id: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb6d"
+    _id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb6d',
+    id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb6d',
   },
   {
     isSkeleton: true,
-    _id: "9b1deb4d-3b7d-4bad-9bed-2b0d7b4dcb6d",
-    id: "9b1deb4d-3b7d-4bad-9bed-2b0d7b4dcb6d"
+    _id: '9b1deb4d-3b7d-4bad-9bed-2b0d7b4dcb6d',
+    id: '9b1deb4d-3b7d-4bad-9bed-2b0d7b4dcb6d',
   },
   {
     isSkeleton: true,
-    _id: "9b1deb4d-3b7d-4bad-9bfd-2b0d7b4dcb6d",
-    id: "9b1deb4d-3b7d-4bad-9bfd-2b0d7b4dcb6d"
+    _id: '9b1deb4d-3b7d-4bad-9bfd-2b0d7b4dcb6d',
+    id: '9b1deb4d-3b7d-4bad-9bfd-2b0d7b4dcb6d',
   },
   {
     isSkeleton: true,
-    _id: "9b1deb4d-3b7d-4bad-9bid-2b0d7b4dcb6d",
-    id: "9b1deb4d-3b7d-4bad-9bid-2b0d7b4dcb6d"
+    _id: '9b1deb4d-3b7d-4bad-9bid-2b0d7b4dcb6d',
+    id: '9b1deb4d-3b7d-4bad-9bid-2b0d7b4dcb6d',
   },
   {
     isSkeleton: true,
-    _id: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb9d",
-    id: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb9d"
+    _id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb9d',
+    id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb9d',
   },
   {
     isSkeleton: true,
-    _id: "9b1deb4d-3b7d-4bad-9bde-2b0d7b4dcb6d",
-    id: "9b1deb4d-3b7d-4bad-9bde-2b0d7b4dcb6d"
-  }
+    _id: '9b1deb4d-3b7d-4bad-9bde-2b0d7b4dcb6d',
+    id: '9b1deb4d-3b7d-4bad-9bde-2b0d7b4dcb6d',
+  },
 ];
 
 /**
@@ -85,13 +85,13 @@ export const skeletonList = [
  */
 export const maskAmount = value => {
   if (value) {
-    return value.toLocaleString("en-IN", {
+    return value.toLocaleString('en-IN', {
       maximumFractionDigits: 2,
-      style: "currency",
-      currency: "INR"
+      style: 'currency',
+      currency: 'INR',
     });
   } else {
-    return "";
+    return '';
   }
 };
 
@@ -101,9 +101,9 @@ export const maskAmount = value => {
  */
 export const keyExtractor = (item: any) => item._id;
 
-export const threeForth = Dimensions.get("window").height - 200;
+export const threeForth = Dimensions.get('window').height - 200;
 
-export const half = Dimensions.get("window").height / 2;
+export const half = Dimensions.get('window').height / 2;
 
 /**
  * Check if the value is of type object
@@ -111,7 +111,7 @@ export const half = Dimensions.get("window").height / 2;
  * @returns {boolean}
  */
 const isObject = (obj: any) => {
-  return obj != null && obj.constructor.name === "Object";
+  return obj != null && obj.constructor.name === 'Object';
 };
 
 /**
@@ -121,7 +121,7 @@ const isObject = (obj: any) => {
 export const cleanFormData = (initialObject: any) => {
   const object = Object.assign({}, initialObject);
   Object.keys(object).forEach(key => {
-    if (object[key] == null || object[key] === "" || object[key].length === 0) {
+    if (object[key] == null || object[key] === '' || object[key].length === 0) {
       delete object[key];
     } else {
       if (isObject(object[key])) {
@@ -145,11 +145,11 @@ export const durationToHumanReadable = (value: any) => {
     const hours = duration.asHours();
     if (hours > 24) {
       const days = duration.asDays();
-      return { timeDuration: days, unit: "days" };
+      return {timeDuration: days, unit: 'days'};
     } else {
-      return { timeDuration: hours, unit: "hrs" };
+      return {timeDuration: hours, unit: 'hrs'};
     }
   } else {
-    return { timeDuration: minutes, unit: "min" };
+    return {timeDuration: minutes, unit: 'min'};
   }
 };

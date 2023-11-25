@@ -5,6 +5,9 @@ import {Text, useTheme} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
+
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
@@ -31,6 +34,7 @@ const BrandSkeleton = () => {
 const NoImageAvailable = require('../../../../assets/noImage.png');
 
 const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const {latitude, longitude} = useSelector(
     ({locationReducer}) => locationReducer,
   );
@@ -56,6 +60,14 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     } finally {
       setApiRequested(false);
     }
+  };
+
+  const navigateToDetails = store => {
+    navigation.navigate('BrandDetails', {
+      brandId: store.provider,
+      domain: store.domain,
+      name: store?.provider_descriptor?.name,
+    });
   };
 
   useEffect(() => {
@@ -85,7 +97,9 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
           horizontal
           data={locations}
           renderItem={({item}) => (
-            <TouchableOpacity style={styles.brand}>
+            <TouchableOpacity
+              style={styles.brand}
+              onPress={() => navigateToDetails(item)}>
               <FastImage
                 source={
                   item?.provider_descriptor?.images.length > 0

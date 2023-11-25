@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Text, withTheme } from "react-native-paper";
+import React, {useEffect} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {Button, Text, withTheme} from 'react-native-paper';
 
-import { clearCart } from "../../../redux/actions";
-import { appStyles } from "../../../styles/styles";
-import { alertWithTwoButtons } from "../../../utils/alerts";
-import EmptyComponent from "./EmptyComponent";
-import DashboardProduct from "../product/list/component/DashboardProduct/DashboardProduct";
-import { stringToDecimal } from "../../../utils/utils";
+import {clearCart} from '../../../redux/actions';
+import {appStyles} from '../../../styles/styles';
+import {alertWithTwoButtons} from '../../../utils/alerts';
+import EmptyComponent from './EmptyComponent';
+import DashboardProduct from '../product/list/component/DashboardProduct/DashboardProduct';
+import {stringToDecimal} from '../../../utils/utils';
 
 /**
  * Component to render list of items added in cart
@@ -17,12 +17,12 @@ import { stringToDecimal } from "../../../utils/utils";
  * @constructor
  * @returns {JSX.Element}
  */
-const Cart = ({ navigation, theme }) => {
+const Cart = ({navigation, theme}) => {
   const dispatch = useDispatch();
 
-  const { colors } = theme;
+  const {colors} = theme;
 
-  const { cartItems, subTotal } = useSelector(({ cartReducer }) => cartReducer);
+  const {cartItems, subTotal} = useSelector(({cartReducer}) => cartReducer);
 
   const emptyCart = () => dispatch(clearCart());
 
@@ -33,12 +33,11 @@ const Cart = ({ navigation, theme }) => {
   const onClearCart = () => {
     alertWithTwoButtons(
       null,
-      "Are you sure you want to clear cart?",
-      "Ok",
+      'Are you sure you want to clear cart?',
+      'Ok',
       emptyCart,
-      "Cancel",
-      () => {
-      },
+      'Cancel',
+      () => {},
     );
   };
 
@@ -47,7 +46,7 @@ const Cart = ({ navigation, theme }) => {
    * @param item:single object from cart list
    * @returns {JSX.Element}
    */
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <DashboardProduct item={item} navigation={navigation} />
   );
 
@@ -76,7 +75,7 @@ const Cart = ({ navigation, theme }) => {
       style={[
         appStyles.container,
         styles.container,
-        { backgroundColor: colors.backgroundColor },
+        {backgroundColor: colors.backgroundColor},
       ]}>
       <FlatList
         data={cartItems}
@@ -89,7 +88,7 @@ const Cart = ({ navigation, theme }) => {
         }
       />
       {cartLength > 0 && (
-        <View style={[styles.footer, { backgroundColor: theme.colors.footer }]}>
+        <View style={[styles.footer, {backgroundColor: theme.colors.footer}]}>
           <View style={appStyles.container}>
             <Text>Subtotal</Text>
             <Text style={styles.totalAmount}>₹{stringToDecimal(subTotal)}</Text>
@@ -100,8 +99,8 @@ const Cart = ({ navigation, theme }) => {
               contentStyle={appStyles.containedButtonContainer}
               labelStyle={appStyles.containedButtonLabel}
               onPress={() =>
-                navigation.navigate("AddressList", {
-                  navigateToNext: "BillingAddressPicker",
+                navigation.navigate('AddressList', {
+                  navigateToNext: 'BillingAddressPicker',
                 })
               }>
               Checkout
@@ -116,15 +115,15 @@ const Cart = ({ navigation, theme }) => {
 export default withTheme(Cart);
 
 const styles = StyleSheet.create({
-  contentContainerStyle: { paddingBottom: 10 },
+  contentContainerStyle: {paddingBottom: 10},
   footer: {
     padding: 16,
-    flexDirection: "row",
-    alignSelf: "center",
-    justifyContent: "space-evenly",
+    flexDirection: 'row',
+    alignSelf: 'center',
+    justifyContent: 'space-evenly',
   },
   totalAmount: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 18,
   },
 });

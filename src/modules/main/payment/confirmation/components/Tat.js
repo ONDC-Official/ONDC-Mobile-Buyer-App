@@ -1,10 +1,10 @@
-import React from "react";
-import { Text } from "react-native-paper";
+import React from 'react';
+import {Text} from 'react-native-paper';
 
-import { durationToHumanReadable } from "../../../../../utils/utils";
+import {durationToHumanReadable} from '../../../../../utils/utils';
 
-const Tat = ({ duration }) => {
-  const { timeDuration, unit } = durationToHumanReadable(duration);
+const Tat = ({duration}) => {
+  const {timeDuration, unit} = durationToHumanReadable(duration);
 
   return (
     <Text>

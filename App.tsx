@@ -5,7 +5,7 @@ import {Provider as PaperProvider} from 'react-native-paper';
 import {Provider as StoreProvider} from 'react-redux';
 import store from './src/redux/store';
 import {theme} from './src/utils/theme';
-import Navigation from './src/navigation/Navigation';
+import AppNavigation from './src/navigation/AppNavigation';
 import NetworkBanner from './src/components/network/NetworkBanner';
 import {alertWithOneButton} from './src/utils/alerts';
 
@@ -39,7 +39,7 @@ const App = () => {
       <PaperProvider theme={theme}>
         <SafeAreaView style={styles.container}>
           <StatusBar backgroundColor={theme.colors.primary} />
-          <Navigation />
+          <AppNavigation />
           <NetworkBanner />
           <Toast config={toastConfig} />
         </SafeAreaView>

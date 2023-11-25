@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useIsFocused } from "@react-navigation/native";
-import RNEventSource from "react-native-event-source";
-import { useSelector } from "react-redux";
+import React, {useEffect, useState} from 'react';
+import {useIsFocused} from '@react-navigation/native';
+import RNEventSource from 'react-native-event-source';
+import {useSelector} from 'react-redux';
 
-import { getData, postData } from "../../../../../utils/api";
-import { BASE_URL, GET_STATUS, ON_GET_STATUS } from "../../../../../utils/apiUtilities";
-import { alertWithOneButton } from "../../../../../utils/alerts";
-import useNetworkErrorHandling from "../../../../../hooks/useNetworkErrorHandling";
-import { showToastWithGravity } from "../../../../../utils/utils";
+import {getData, postData} from '../../../../../utils/api';
+import {
+  BASE_URL,
+  GET_STATUS,
+  ON_GET_STATUS,
+} from '../../../../../utils/apiUtilities';
+import {alertWithOneButton} from '../../../../../utils/alerts';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
+import {showToastWithGravity} from '../../../../../utils/utils';
 
 export default (bppId, transactionId, orderId) => {
   const isFocused = useIsFocused();
-  const { handleApiError } = useNetworkErrorHandling();
-  const { token } = useSelector(({ authReducer }) => authReducer);
+  const {handleApiError} = useNetworkErrorHandling();
+  const {token} = useSelector(({authReducer}) => authReducer);
   const [statusInProgress, setStatusInProgress] = useState(false);
   const [statusMessageId, setStatusMessageId] = useState(null);
 
@@ -25,23 +29,22 @@ export default (bppId, transactionId, orderId) => {
             bpp_id: bppId,
             transaction_id: transactionId,
           },
-          message: { order_id: orderId },
+          message: {order_id: orderId},
         },
       ];
-      const { data } = await postData(`${BASE_URL}${GET_STATUS}`, payload, {
+      const {data} = await postData(`${BASE_URL}${GET_STATUS}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      if (data[0]?.message?.ack?.status === "ACK") {
+      if (data[0]?.message?.ack?.status === 'ACK') {
         setStatusMessageId(`${data[0].context.message_id}`);
       } else {
         alertWithOneButton(
-          "Unable to Call",
-          "Unable to place your call currently, please try again",
-          "Ok",
-          () => {
-          },
+          'Unable to Call',
+          'Unable to place your call currently, please try again',
+          'Ok',
+          () => {},
         );
       }
     } catch (e) {
@@ -53,13 +56,13 @@ export default (bppId, transactionId, orderId) => {
   const onGetStatus = async id => {
     try {
       const statusResponse = await getData(`${BASE_URL}${ON_GET_STATUS}${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {Authorization: `Bearer ${token}`},
       });
       setStatusInProgress(false);
       const status = statusResponse.data[0]?.message.order?.state;
       const statement = status
         ? `Your current order status is: ${status}`
-        : "Sorry, we are not able to fetch the status at the moment, Please try after sometime.";
+        : 'Sorry, we are not able to fetch the status at the moment, Please try after sometime.';
       showToastWithGravity(statement);
     } catch (error) {
       console.log(error);
@@ -84,7 +87,7 @@ export default (bppId, transactionId, orderId) => {
       eventSource = new RNEventSource(
         `${BASE_URL}/clientApis/events?messageId=${statusMessageId}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         },
       );
 
@@ -92,13 +95,11 @@ export default (bppId, transactionId, orderId) => {
         timer = setTimeout(removeEvents, 20000, eventSource);
       }
 
-      eventSource.addEventListener("on_status", event => {
+      eventSource.addEventListener('on_status', event => {
         const data = JSON.parse(event.data);
         onGetStatus(data.messageId)
-          .then(() => {
-          })
-          .catch(() => {
-          });
+          .then(() => {})
+          .catch(() => {});
       });
     }
 

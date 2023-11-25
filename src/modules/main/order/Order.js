@@ -1,26 +1,26 @@
-import React, { memo, useEffect, useRef, useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
+import React, {memo, useEffect, useRef, useState} from 'react';
+import {FlatList, StyleSheet, View} from 'react-native';
+import {useSelector} from 'react-redux';
 
-import useNetworkErrorHandling from "../../../hooks/useNetworkErrorHandling";
-import { appStyles } from "../../../styles/styles";
-import { getData } from "../../../utils/api";
-import { BASE_URL, GET_ORDERS } from "../../../utils/apiUtilities";
-import { keyExtractor, skeletonList } from "../../../utils/utils";
-import ListFooter from "./components/ListFooter";
-import OrderCardSkeleton from "./components/OrderCardSkeleton";
-import OrderHeader from "./components/OrderHeader";
-import { Text } from "react-native-paper";
+import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
+import {appStyles} from '../../../styles/styles';
+import {getData} from '../../../utils/api';
+import {BASE_URL, GET_ORDERS} from '../../../utils/apiUtilities';
+import {keyExtractor, skeletonList} from '../../../utils/utils';
+import ListFooter from './components/ListFooter';
+import OrderCardSkeleton from './components/OrderCardSkeleton';
+import OrderHeader from './components/OrderHeader';
+import {Text} from 'react-native-paper';
 
 /**
  * Component to render orders screen
  * @constructor
  * @returns {JSX.Element}
  */
-const Order = ({ navigation }) => {
-  const { token } = useSelector(({ authReducer }) => authReducer);
+const Order = ({navigation}) => {
+  const {token} = useSelector(({authReducer}) => authReducer);
 
-  const { handleApiError } = useNetworkErrorHandling();
+  const {handleApiError} = useNetworkErrorHandling();
 
   const totalOrders = useRef(null);
   const pageNumber = useRef(1);
@@ -36,7 +36,7 @@ const Order = ({ navigation }) => {
    */
   const getOrderList = async number => {
     try {
-      const { data } = await getData(
+      const {data} = await getData(
         `${BASE_URL}${GET_ORDERS}?pageNumber=${number}&limit=10`,
         {
           headers: {
@@ -77,13 +77,11 @@ const Order = ({ navigation }) => {
   };
 
   useEffect(() => {
-    const unsubscribeFocus = navigation.addListener("focus", () => {
+    const unsubscribeFocus = navigation.addListener('focus', () => {
       pageNumber.current = 1;
       getOrderList(pageNumber.current)
-        .then(() => {
-        })
-        .catch(() => {
-        });
+        .then(() => {})
+        .catch(() => {});
     });
 
     return () => {
@@ -93,10 +91,8 @@ const Order = ({ navigation }) => {
 
   useEffect(() => {
     getOrderList(pageNumber.current)
-      .then(() => {
-      })
-      .catch(() => {
-      });
+      .then(() => {})
+      .catch(() => {});
   }, []);
 
   const onRefreshHandler = () => {
@@ -117,8 +113,8 @@ const Order = ({ navigation }) => {
    * @constructor
    * @returns {JSX.Element}
    */
-  const renderItem = ({ item }) =>
-    item.hasOwnProperty("isSkeleton") && item.isSkeleton ? (
+  const renderItem = ({item}) =>
+    item.hasOwnProperty('isSkeleton') && item.isSkeleton ? (
       <OrderCardSkeleton item={item} />
     ) : (
       <OrderHeader item={item} />
@@ -150,6 +146,6 @@ const Order = ({ navigation }) => {
 export default memo(Order);
 
 const styles = StyleSheet.create({
-  contentContainerStyle: { paddingVertical: 10 },
-  emptyContainer: { justifyContent: "center", alignItems: "center" },
+  contentContainerStyle: {paddingVertical: 10},
+  emptyContainer: {justifyContent: 'center', alignItems: 'center'},
 });

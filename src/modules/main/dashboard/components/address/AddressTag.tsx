@@ -5,8 +5,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {getStoredData} from '../../../../../utils/storage';
-import { useDispatch } from "react-redux";
-import { saveLatLong } from "../../../../../redux/location/action";
+import {useDispatch} from 'react-redux';
+import {saveLatLong} from '../../../../../redux/location/action';
 
 interface AddressTag {
   theme: any;

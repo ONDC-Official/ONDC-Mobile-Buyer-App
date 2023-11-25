@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import RNEventSource from "react-native-event-source";
-import { Linking } from "react-native";
+import React, {useEffect, useState} from 'react';
+import {useSelector} from 'react-redux';
+import RNEventSource from 'react-native-event-source';
+import {Linking} from 'react-native';
 
-import { getData, postData } from "../../../../../utils/api";
-import { BASE_URL, ON_TRACK_ORDER, TRACK_ORDER } from "../../../../../utils/apiUtilities";
-import { useIsFocused } from "@react-navigation/native";
-import useNetworkErrorHandling from "../../../../../hooks/useNetworkErrorHandling";
-import { showToastWithGravity } from "../../../../../utils/utils";
+import {getData, postData} from '../../../../../utils/api';
+import {
+  BASE_URL,
+  ON_TRACK_ORDER,
+  TRACK_ORDER,
+} from '../../../../../utils/apiUtilities';
+import {useIsFocused} from '@react-navigation/native';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
+import {showToastWithGravity} from '../../../../../utils/utils';
 
 export default (bppId, transactionId, orderId) => {
   const isFocused = useIsFocused();
-  const { handleApiError } = useNetworkErrorHandling();
-  const { token } = useSelector(({ authReducer }) => authReducer);
+  const {handleApiError} = useNetworkErrorHandling();
+  const {token} = useSelector(({authReducer}) => authReducer);
   const [trackInProgress, setTrackInProgress] = useState(false);
   const [trackMessageId, setTrackMessageId] = useState(null);
 
@@ -29,16 +33,16 @@ export default (bppId, transactionId, orderId) => {
             transaction_id: transactionId,
             bpp_id: bppId,
           },
-          message: { order_id: orderId },
+          message: {order_id: orderId},
         },
       ];
-      const { data } = await postData(`${BASE_URL}${TRACK_ORDER}`, payload, {
+      const {data} = await postData(`${BASE_URL}${TRACK_ORDER}`, payload, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
-      if (data[0].message.ack.status === "ACK") {
+      if (data[0].message.ack.status === 'ACK') {
         setTrackMessageId(data[0].context.message_id);
       }
     } catch (e) {
@@ -57,7 +61,7 @@ export default (bppId, transactionId, orderId) => {
 
   const onTrackOrder = async messageId => {
     try {
-      const { data } = await getData(
+      const {data} = await getData(
         `${BASE_URL}${ON_TRACK_ORDER}messageIds=${messageId}`,
         {
           headers: {
@@ -65,7 +69,7 @@ export default (bppId, transactionId, orderId) => {
           },
         },
       );
-      if (data[0].message.tracking.status === "active") {
+      if (data[0].message.tracking.status === 'active') {
         const trackingUrl = data[0].message.tracking.url;
         const supported = await Linking.canOpenURL(trackingUrl);
         if (supported) {
@@ -91,19 +95,17 @@ export default (bppId, transactionId, orderId) => {
       eventSource = new RNEventSource(
         `${BASE_URL}/clientApis/events?messageId=${trackMessageId}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {Authorization: `Bearer ${token}`},
         },
       );
       if (!timer) {
         timer = setTimeout(removeEvents, 20000, eventSource);
       }
-      eventSource.addEventListener("on_track", event => {
+      eventSource.addEventListener('on_track', event => {
         const data = JSON.parse(event.data);
         onTrackOrder(data.messageId)
-          .then(() => {
-          })
-          .catch(() => {
-          });
+          .then(() => {})
+          .catch(() => {});
       });
     }
     return () => {

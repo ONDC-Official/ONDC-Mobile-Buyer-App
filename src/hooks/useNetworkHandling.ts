@@ -24,7 +24,7 @@ export default () => {
     try {
       const config = getAuthConfig(cancelToken);
       console.log(url);
-      return await axios.post(url, params, config);
+      return await axios.post(encodeURI(url), params, config);
     } catch (e) {
       throw e;
     }
@@ -34,7 +34,7 @@ export default () => {
     try {
       const config = getAuthConfig(cancelToken);
       console.log(url);
-      return await axios.get(url, config);
+      return await axios.get(encodeURI(url), config);
     } catch (e) {
       throw e;
     }
