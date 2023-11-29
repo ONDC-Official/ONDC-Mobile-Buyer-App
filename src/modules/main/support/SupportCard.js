@@ -30,7 +30,7 @@ const SupportCard = ({theme, url, icon, title, message, source}) => {
         await Linking.openURL(url);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

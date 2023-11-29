@@ -44,6 +44,7 @@ const makeStyles = (colors: any) =>
     },
     brandImage: {
       height: 268,
+      backgroundColor: '#000',
     },
     brandDetails: {
       padding: 16,

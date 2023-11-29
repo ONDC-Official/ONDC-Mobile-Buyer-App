@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
 import {Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
@@ -6,16 +6,23 @@ import FastImage from 'react-native-fast-image';
 interface CustomMenuItem {
   item: any;
   selected: boolean;
+  setSelectedMenu: (menu: any) => void;
 }
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
 
-const CustomMenuItem: React.FC<CustomMenuItem> = ({item, selected}) => {
+const CustomMenuItem: React.FC<CustomMenuItem> = ({
+  item,
+  selected,
+  setSelectedMenu,
+}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => setSelectedMenu(item.id)}>
       <FastImage
         style={[styles.image, selected ? styles.selected : styles.normal]}
         source={
@@ -27,7 +34,7 @@ const CustomMenuItem: React.FC<CustomMenuItem> = ({item, selected}) => {
       <Text variant={'labelSmall'} style={styles.title}>
         {item?.descriptor?.name}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

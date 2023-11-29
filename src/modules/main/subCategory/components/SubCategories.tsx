@@ -1,53 +1,58 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {CATEGORIES} from '../../../../utils/constants';
+import {PRODUCT_SUBCATEGORY} from '../../../../utils/constants';
 
-interface Categories {
-  currentCategory: string;
+interface SubCategories {
+  currentSubCategory: string;
+  category: string;
+  setCurrentSubCategory: (newSubCategory: string) => void;
 }
 
-const Categories: React.FC<Categories> = ({currentCategory}) => {
-  const navigation = useNavigation<StackNavigationProp<any>>();
+const SubCategories: React.FC<SubCategories> = ({
+  category,
+  currentSubCategory,
+  setCurrentSubCategory,
+}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const [subCategories, setSubCategories] = useState<any[]>([]);
 
-  const navigateToCategory = (category: any) => {
-    if (category.shortName !== currentCategory) {
-      navigation.navigate('CategoryDetails', {
-        category: category.shortName,
-        domain: category.domain,
-      });
+  const updateSubCategory = (subCategory: any) => {
+    if (subCategory.shortName !== currentSubCategory) {
+      setCurrentSubCategory(subCategory.key);
     }
   };
+
+  useEffect(() => {
+    setSubCategories(PRODUCT_SUBCATEGORY[category]);
+  }, [category]);
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={CATEGORIES}
+        data={subCategories}
         horizontal
         renderItem={({item}) => (
           <TouchableOpacity
-            style={styles.category}
-            onPress={() => navigateToCategory(item)}>
+            style={styles.subCategory}
+            onPress={() => updateSubCategory(item)}>
             <View
               style={[
                 styles.imageContainer,
-                item.shortName === currentCategory
+                item?.key === currentSubCategory
                   ? styles.selected
                   : styles.normal,
               ]}>
-              <FastImage source={item.Icon} style={styles.image} />
+              <FastImage source={{uri: item?.imageUrl}} style={styles.image} />
             </View>
             <Text variant={'labelSmall'} style={styles.categoryText}>
-              {item.name}
+              {item?.value}
             </Text>
           </TouchableOpacity>
         )}
-        keyExtractor={item => item.name}
+        keyExtractor={item => item.key}
       />
     </View>
   );
@@ -58,12 +63,13 @@ const makeStyles = (colors: any) =>
     container: {
       paddingLeft: 16,
       paddingTop: 16,
+      backgroundColor: '#fff',
     },
     categoryText: {
       fontWeight: '700',
       textAlign: 'center',
     },
-    category: {
+    subCategory: {
       alignItems: 'center',
       marginRight: 24,
       width: 58,
@@ -73,13 +79,13 @@ const makeStyles = (colors: any) =>
       width: 56,
       marginBottom: 6,
       backgroundColor: '#E7E7E7',
-      padding: 6,
       justifyContent: 'center',
       alignItems: 'center',
     },
     image: {
-      height: 44,
-      width: 44,
+      height: 54,
+      width: 54,
+      borderRadius: 28,
     },
     selected: {
       borderRadius: 28,
@@ -93,4 +99,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default Categories;
+export default SubCategories;

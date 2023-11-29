@@ -65,7 +65,7 @@ export default (bppId, transactionId, orderId) => {
         : 'Sorry, we are not able to fetch the status at the moment, Please try after sometime.';
       showToastWithGravity(statement);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       handleApiError(error);
       setStatusInProgress(false);
     }

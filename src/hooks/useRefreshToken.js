@@ -13,7 +13,7 @@ export default () => {
         updateToken(dispatch, idToken);
       })
       .catch(error => {
-        console.log(error);
+        console.error(error);
       });
   }, []);
 

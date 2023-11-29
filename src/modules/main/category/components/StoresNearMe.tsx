@@ -39,8 +39,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     ({locationReducer}) => locationReducer,
   );
   const source = useRef<any>(null);
-  const theme = useTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = makeStyles();
   const [locations, setLocations] = useState<any[]>([]);
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
@@ -76,7 +75,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
         source.current.cancel();
       }
     };
-  }, []);
+  }, [domain]);
 
   return (
     <View style={styles.container}>
@@ -118,7 +117,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   );
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     container: {
       paddingTop: 40,

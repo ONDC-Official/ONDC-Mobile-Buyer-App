@@ -12,11 +12,18 @@ import CustomMenuItem from './CustomMenuItem';
 interface CustomMenu {
   providerId: string;
   providerDomain: string;
+  setSelectedMenu: (menu: any) => void;
+  selectedMenu: any;
 }
 
 const CancelToken = axios.CancelToken;
 
-const CustomMenu: React.FC<CustomMenu> = ({providerId, providerDomain}) => {
+const CustomMenu: React.FC<CustomMenu> = ({
+  providerId,
+  providerDomain,
+  selectedMenu,
+  setSelectedMenu,
+}) => {
   const customMenuSource = useRef<any>(null);
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
@@ -66,7 +73,13 @@ const CustomMenu: React.FC<CustomMenu> = ({providerId, providerDomain}) => {
         horizontal
         data={menu}
         keyExtractor={item => item.id}
-        renderItem={({item}) => <CustomMenuItem item={item} selected={false} />}
+        renderItem={({item}) => (
+          <CustomMenuItem
+            item={item}
+            selected={item.id === selectedMenu}
+            setSelectedMenu={setSelectedMenu}
+          />
+        )}
       />
     </View>
   );

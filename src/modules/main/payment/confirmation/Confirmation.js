@@ -188,7 +188,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         );
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       handleApiError(error);
     }
   };
@@ -320,7 +320,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
         }
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       handleApiError(error);
       setApiInProgress(false);
     }
@@ -351,7 +351,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
       getQuote()
         .then(() => {})
         .catch(error => {
-          console.log(error);
+          console.error(error);
         });
     } else {
       navigation.navigate('Dashboard', {screen: 'Cart'});
@@ -377,7 +377,7 @@ const Confirmation = ({theme, navigation, route: {params}}) => {
           onGetQuote(data.messageId)
             .then(() => {})
             .catch(error => {
-              console.log(error);
+              console.error(error);
             });
         });
       });

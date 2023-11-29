@@ -27,6 +27,7 @@ import RaiseComplaint from '../modules/main/order/RaiseComplaint';
 import UpdateBillingAddress from '../modules/main/payment/billingAddress/UpdateBillingAddress';
 import CategoryDetails from '../modules/main/category/CategoryDetails';
 import BrandDetails from '../modules/main/provider/BrandDetails';
+import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
 
 const Stack = createStackNavigator();
 
@@ -172,6 +173,11 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="CategoryDetails"
           component={CategoryDetails}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="SubCategoryDetails"
+          component={SubCategoryDetails}
           options={{headerShown: false}}
         />
         <Stack.Screen name="BrandDetails" component={BrandDetails} />

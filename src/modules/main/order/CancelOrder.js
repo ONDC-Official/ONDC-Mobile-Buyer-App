@@ -148,7 +148,7 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
       }
     } catch (e) {
       setUpdateInProgress(false);
-      console.log(e);
+      console.error(e);
       handleApiError(e);
     }
   };
@@ -237,7 +237,7 @@ const CancelOrder = ({theme, navigation, route: {params}}) => {
         );
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
       handleApiError(e);
       setUpdateInProgress(false);
     }

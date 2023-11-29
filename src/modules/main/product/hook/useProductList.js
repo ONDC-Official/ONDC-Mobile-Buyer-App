@@ -116,7 +116,7 @@ export default (category = null) => {
         }
         setProductsRequested(false);
       } catch (error) {
-        console.log(error);
+        console.error(error);
         handleApiError(error);
         setProductsRequested(false);
         throw error;

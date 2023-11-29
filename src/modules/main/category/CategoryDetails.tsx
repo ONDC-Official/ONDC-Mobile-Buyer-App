@@ -1,10 +1,10 @@
 import React from 'react';
-import {ScrollView} from 'react-native';
-import {withTheme} from 'react-native-paper';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import Categories from './components/Categories';
 import Header from '../dashboard/components/Header';
 import SubCategories from './components/SubCategories';
 import StoresNearMe from './components/StoresNearMe';
+import {appStyles} from '../../../styles/styles';
 
 interface CategoryDetails {
   route: any;
@@ -12,15 +12,21 @@ interface CategoryDetails {
 
 const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   return (
-    <>
+    <View style={[appStyles.container, styles.container]}>
       <Header />
-      <ScrollView>
+      <ScrollView style={appStyles.container}>
         <Categories currentCategory={params.category} />
         <SubCategories currentCategory={params.category} />
         <StoresNearMe domain={params.domain} />
       </ScrollView>
-    </>
+    </View>
   );
 };
 
-export default withTheme(CategoryDetails);
+const styles = StyleSheet.create({
+  container: {
+    paddingBottom: 16,
+  },
+});
+
+export default CategoryDetails;

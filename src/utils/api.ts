@@ -10,7 +10,7 @@ export const getData = async (url: string, options: any) => {
     console.log('Get url', url);
     return await axios.get(url, options);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 };
@@ -26,7 +26,7 @@ export const postData = async (url: string, payload: any, options: any) => {
     console.log('Post url', url);
     return await axios.post(url, payload, options);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 };

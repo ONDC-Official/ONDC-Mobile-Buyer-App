@@ -26,8 +26,14 @@ const Product: React.FC<Product> = ({isGrid, product}) => {
           }
           resizeMode={FastImage.resizeMode.contain}
         />
-        <Text variant={'labelMedium'} numberOfLines={2}>
+        <Text
+          variant={'labelMedium'}
+          numberOfLines={2}
+          style={styles.productName}>
           {product?.item_details?.descriptor?.name}
+        </Text>
+        <Text variant={'labelSmall'} numberOfLines={2}>
+          {product?.provider_details?.descriptor?.name}
         </Text>
         <View style={styles.divider} />
         <View style={styles.row}>
@@ -54,8 +60,14 @@ const Product: React.FC<Product> = ({isGrid, product}) => {
             resizeMode={FastImage.resizeMode.contain}
           />
           <View style={styles.metaContainer}>
-            <Text variant={'labelMedium'} numberOfLines={2}>
+            <Text
+              variant={'labelMedium'}
+              numberOfLines={2}
+              style={styles.productName}>
               {product?.item_details?.descriptor?.name}
+            </Text>
+            <Text variant={'labelSmall'} numberOfLines={2}>
+              {product?.provider_details?.descriptor?.name}
             </Text>
             <View style={styles.divider} />
             <View style={styles.row}>
@@ -113,6 +125,7 @@ const makeStyles = () =>
     metaContainer: {
       flex: 1,
     },
+    productName: {fontWeight: '500'},
   });
 
 export default Product;
