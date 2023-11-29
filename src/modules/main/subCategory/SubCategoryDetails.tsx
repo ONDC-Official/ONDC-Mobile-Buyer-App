@@ -28,7 +28,11 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
         category={params.category}
         setCurrentSubCategory={setCurrentSubCategory}
       />
-      <Products providerId={null} customMenu={null} subCategories={[currentSubCategory]} />
+      <Products
+        providerId={null}
+        customMenu={null}
+        subCategories={[currentSubCategory]}
+      />
     </View>
   );
 };

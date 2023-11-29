@@ -59,6 +59,16 @@ const fontConfig: any = {
       default: 'Inter-Medium',
     }),
   },
+  bodyLarge: {
+    fontSize: 16,
+    lineHeight: 20,
+    fontWeight: '500',
+    fontFamily: Platform.select({
+      web: 'Inter-Medium',
+      ios: 'Inter-Medium',
+      default: 'Inter-Medium',
+    }),
+  },
 };
 
 export const theme = {
@@ -72,7 +82,7 @@ export const theme = {
     footer: '#f3bf93',
     background: '#FFF',
     surface: '#FFF',
-    error: '#B00020',
+    error: '#FC9595',
     red: '#D61C4E',
     text: '#333',
     pageBackground: '#f0f0f0',

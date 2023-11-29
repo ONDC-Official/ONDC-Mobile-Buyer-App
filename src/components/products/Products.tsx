@@ -143,7 +143,9 @@ const Products: React.FC<Products> = ({
               <Text variant={'bodyMedium'}>No products available</Text>
             </View>
           )}
-          contentContainerStyle={products.length === 0 ? styles.emptyContainer : styles.listContainer}
+          contentContainerStyle={
+            products.length === 0 ? styles.emptyContainer : styles.listContainer
+          }
           keyExtractor={item => item.id}
         />
       ) : (
@@ -180,7 +182,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       paddingHorizontal: 16,
       paddingBottom: 16,
-      marginTop: 8,
+      marginTop: 20,
     },
     reorderContainer: {
       flexDirection: 'row',

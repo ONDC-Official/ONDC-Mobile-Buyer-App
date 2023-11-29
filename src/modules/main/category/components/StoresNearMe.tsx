@@ -61,10 +61,15 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     }
   };
 
-  const navigateToDetails = store => {
-    navigation.navigate('BrandDetails', {
+  const navigateToDetails = (store: any) => {
+    const routeParams: any = {
       brandId: store.provider,
-    });
+    };
+
+    if (store.domain === 'ONDC:RET11') {
+      routeParams.outletId = store.id;
+    }
+    navigation.navigate('BrandDetails', routeParams);
   };
 
   useEffect(() => {
