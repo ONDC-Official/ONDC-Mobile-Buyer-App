@@ -1,35 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
 import {Text, withTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {getStoredData} from '../../../../../utils/storage';
-import {useDispatch} from 'react-redux';
-import {saveLatLong} from '../../../../../redux/location/action';
+import {useSelector} from 'react-redux';
 
 interface AddressTag {
   theme: any;
 }
 
 const AddressTag: React.FC<AddressTag> = ({theme}) => {
-  const dispatch = useDispatch();
-  const [address, setAddress] = useState<any>(null);
+  const {address} = useSelector(({addressReducer}) => addressReducer);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const styles = makeStyles(theme.colors);
-
-  const getAddress = async () => {
-    const addressResponse = await getStoredData('address');
-    if (addressResponse) {
-      let object = JSON.parse(addressResponse);
-      setAddress(object);
-      dispatch(saveLatLong(object?.address?.lat, object?.address?.lng));
-    }
-  };
-
-  useEffect(() => {
-    getAddress().then(() => {});
-  }, []);
 
   if (address) {
     return (

@@ -1,17 +1,21 @@
-import React, {useState} from 'react';
-import {withTheme} from 'react-native-paper';
-import {useSelector} from 'react-redux';
-
+import React, {useEffect, useRef, useState} from 'react';
+import axios from 'axios';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {
   BASE_URL,
   UPDATE_DELIVERY_ADDRESS,
 } from '../../../../../utils/apiUtilities';
-import {postData} from '../../../../../utils/api';
 import AddressForm from './AddressForm';
 import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import {showInfoToast} from '../../../../../utils/utils';
+import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 
+interface UpdateAddress {
+  navigation: any;
+  route: any;
+}
+
+const CancelToken = axios.CancelToken;
 /**
  * Component to render form in add new address screen
  * @param navigation: required: to navigate to the respective screen
@@ -20,87 +24,87 @@ import {showInfoToast} from '../../../../../utils/utils';
  * @constructor
  * @returns {JSX.Element}
  */
-const UpdateAddress = ({navigation, theme, route: {params}}) => {
+const UpdateAddress: React.FC<UpdateAddress> = ({
+  navigation,
+  route: {params},
+}) => {
   const {} = useRefreshToken();
-  const {token} = useSelector(({authReducer}) => authReducer);
-
+  const source = useRef<any>(null);
+  const {postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-
-  const [apiInProgress, setApiInProgress] = useState(false);
-
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-
-  let addressInfo = {
-    email: params.address.descriptor.email,
-    name: params.address.descriptor.name,
-    number: params.address.descriptor.phone,
-    city: params.address.address.city,
-    state: params.address.address.state,
-    pin: params.address.address.areaCode,
-    landMark: params.address.address.locality,
-    street: params.address.address.street,
-    tag: params.address.address.tag,
-    defaultAddress: params.address.defaultAddress,
-    gps: params.address.gps,
-  };
+  const [apiInProgress, setApiInProgress] = useState<boolean>(false);
+  const [addressInfo, setAddressInfo] = useState<any>(null);
 
   /**
    * Function is used to save new address
    * @param values:object containing user inputs
    * @returns {Promise<void>}
    **/
-  const saveAddress = async values => {
-    const options = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const payload = {
+  const saveAddress = async (values: any) => {
+    const payload: any = {
       descriptor: {
         name: values.name,
         email: values.email,
         phone: values.number,
       },
-      gps: latitude === null ? values.gps : `${latitude},${longitude}`,
       defaultAddress: values.defaultAddress,
       address: {
-        areaCode: values.pin,
+        areaCode: values.areaCode,
+        building: values.building,
         city: values.city,
-        locality: values.landMark,
+        country: 'IND',
+        door: values.building,
         state: values.state,
         street: values.street,
-        country: 'IND',
         tag: values.tag,
+        lat: values.lat,
+        lng: values.lng,
       },
     };
 
     try {
       setApiInProgress(true);
-      await postData(
+      source.current = CancelToken.source();
+      await postDataWithAuth(
         `${BASE_URL}${UPDATE_DELIVERY_ADDRESS}${params.address.id}`,
         payload,
-        options,
+        source.current.token,
       );
       showInfoToast('Your delivery address has been added successfully');
-      setApiInProgress(false);
       navigation.goBack();
     } catch (error) {
       handleApiError(error);
+    } finally {
       setApiInProgress(false);
     }
   };
+
+  useEffect(() => {
+    const {descriptor, address} = params.address;
+    setAddressInfo({
+      email: descriptor.email,
+      name: descriptor.name,
+      number: descriptor.phone,
+      building: address.building,
+      city: address.city,
+      state: address.state,
+      pin: address.areaCode,
+      landMark: address.locality,
+      street: address.street,
+      tag: address.tag,
+      defaultAddress: address.defaultAddress,
+      lat: address.lat,
+      lng: address.lng,
+    });
+  }, [params]);
 
   return (
     <AddressForm
       addressInfo={addressInfo}
       apiInProgress={apiInProgress}
       saveAddress={saveAddress}
-      setLatitude={setLatitude}
-      setLongitude={setLongitude}
     />
   );
 };
 
-export default withTheme(UpdateAddress);
+export default UpdateAddress;

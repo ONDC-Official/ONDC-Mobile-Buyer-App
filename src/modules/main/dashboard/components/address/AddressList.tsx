@@ -2,16 +2,17 @@ import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Button, IconButton, withTheme} from 'react-native-paper';
 import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import Address from './Address';
-import {getStoredData, setStoredData} from '../../../../../utils/storage';
 import {skeletonList} from '../../../../../utils/utils';
 import AddressSkeleton from './AddressSkeleton';
 import {appStyles} from '../../../../../styles/styles';
 import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
+import {saveAddress} from '../../../../../redux/address/actions';
 
 interface Address {
   _id: string;
@@ -52,13 +53,15 @@ const AddressList: React.FC<AddressList> = ({
   theme,
   route: {params},
 }) => {
+  const {address} = useSelector(({addressReducer}) => addressReducer);
   const source = useRef<any>(null);
+  const dispatch = useDispatch();
   const {} = useRefreshToken();
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState<boolean>(true);
   const [addresses, setAddresses] = useState<Address[]>([]);
-  const [currentAddress, setCurrentAddress] = useState<Address | null>(null);
+  const [currentAddress, setCurrentAddress] = useState<Address | null>(address);
 
   /**
    * function to get list of address from server
@@ -74,7 +77,6 @@ const AddressList: React.FC<AddressList> = ({
       );
       setAddresses(data);
     } catch (error: any) {
-      console.error(error);
       if (error.response) {
         if (error.response.status === 404) {
           setAddresses([]);
@@ -117,20 +119,12 @@ const AddressList: React.FC<AddressList> = ({
     };
   }, [navigation]);
 
-  useEffect(() => {
-    getStoredData('address').then(response => {
-      if (response) {
-        setCurrentAddress(JSON.parse(response));
-      }
-    });
-  }, []);
-
   const onAddressSelect = async (item: any) => {
     setCurrentAddress(item);
   };
 
   const onNextButtonClick = async () => {
-    await setStoredData('address', JSON.stringify(currentAddress));
+    dispatch(saveAddress(currentAddress));
     navigation.navigate(params.navigateToNext);
   };
 

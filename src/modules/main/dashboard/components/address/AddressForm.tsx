@@ -243,7 +243,11 @@ const AddressForm: React.FC<AddressForm> = ({
   return (
     <View style={styles.mapContainer}>
       <MapplsUIWidgets.PlacePicker
-        center={defaultLocation}
+        center={
+          addressInfo && addressInfo.lng
+            ? [Number(addressInfo.lng), Number(addressInfo.lat)]
+            : defaultLocation
+        }
         zoom={10}
         searchWidgetProps={{backgroundColor: '#F0FFF0'}}
         resultCallback={(res: any) => {

@@ -1,21 +1,17 @@
 import React, {useEffect, useRef, useState} from 'react';
-import axios from 'axios/index';
-import {API_BASE_URL, CUSTOM_MENU, ITEMS} from '../../../../utils/apiActions';
+import axios from 'axios';
 import {List, Text, useTheme} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {API_BASE_URL, CUSTOM_MENU, ITEMS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import ProductSkeleton from '../../../../components/skeleton/ProductSkeleton';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import FastImage from 'react-native-fast-image';
-import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import FBProduct from './FBProduct';
 
 interface FBProducts {
   provider: string;
   domain: string;
 }
-
-const NoImageAvailable = require('../../../../assets/noImage.png');
 
 const CancelToken = axios.CancelToken;
 const FBProducts: React.FC<FBProducts> = ({provider, domain}) => {
@@ -78,7 +74,7 @@ const FBProducts: React.FC<FBProducts> = ({provider, domain}) => {
   }
 
   return menu.map(section => {
-    const itemLength = section?.items?.length;
+    let itemLength = section?.items?.length;
     return (
       <List.Accordion
         key={section?.id}
@@ -89,43 +85,14 @@ const FBProducts: React.FC<FBProducts> = ({provider, domain}) => {
           </Text>
         }>
         {section?.items?.map((item: any, index: number) => (
-          <TouchableOpacity key={item?.item_details?.id} style={styles.product}>
-            <View style={styles.item}>
-              <View style={styles.meta}>
-                <Text variant={'titleSmall'} style={styles.field}>
-                  {item?.item_details?.descriptor?.name}
-                </Text>
-                <Text variant={'titleMedium'} style={styles.field}>
-                  {CURRENCY_SYMBOLS[item?.item_details?.price?.currency]}{' '}
-                  {item?.item_details?.price?.value}
-                </Text>
-                <Text variant={'bodyMedium'} style={styles.field}>
-                  {item?.item_details?.descriptor?.short_desc}
-                </Text>
-              </View>
-              <View style={styles.imageContainer}>
-                <FastImage
-                  style={styles.image}
-                  source={
-                    item?.item_details?.descriptor.symbol
-                      ? {uri: item?.item_details?.descriptor.symbol}
-                      : NoImageAvailable
-                  }
-                />
-                <TouchableOpacity style={styles.addButton}>
-                  <Text variant={'titleSmall'} style={styles.addText}>
-                    Add
-                  </Text>
-                  <Icon name={'plus'} color={theme.colors.primary} size={16} />
-                </TouchableOpacity>
-              </View>
-            </View>
+          <View key={item.id}>
+            <FBProduct product={item} />
             {itemLength === index + 1 ? (
               <View style={styles.lastItem} />
             ) : (
               <View style={styles.itemSeparator} />
             )}
-          </TouchableOpacity>
+          </View>
         ))}
       </List.Accordion>
     );
@@ -134,29 +101,6 @@ const FBProducts: React.FC<FBProducts> = ({provider, domain}) => {
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    product: {
-      paddingHorizontal: 16,
-    },
-    item: {
-      flexDirection: 'row',
-    },
-    meta: {
-      flex: 1,
-    },
-    imageContainer: {
-      width: 126,
-      alignItems: 'center',
-    },
-    image: {
-      width: 126,
-      height: 126,
-      borderRadius: 15,
-      background: '#F5F5F5',
-      marginBottom: 12,
-    },
-    field: {
-      marginBottom: 12,
-    },
     itemSeparator: {
       marginVertical: 24,
       backgroundColor: '#E0E0E0',
@@ -164,18 +108,6 @@ const makeStyles = (colors: any) =>
     },
     lastItem: {
       marginBottom: 24,
-    },
-    addText: {
-      color: colors.primary,
-    },
-    addButton: {
-      width: 90,
-      borderRadius: 8,
-      borderColor: colors.primary,
-      borderWidth: 1,
-      padding: 10,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
     },
   });
 

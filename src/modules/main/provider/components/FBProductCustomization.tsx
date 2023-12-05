@@ -1,0 +1,469 @@
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {Checkbox, Text, useTheme} from 'react-native-paper';
+import FastImage from 'react-native-fast-image';
+import {createCustomizationAndGroupMapping} from '../../../../utils/utils';
+
+const formatCustomizationGroups = (groups: any) => {
+  return groups?.map((group: any) => {
+    let minConfig, maxConfig, inputTypeConfig, seqConfig;
+
+    group.tags.forEach((tag: any) => {
+      if (tag.code === 'config') {
+        tag.list.forEach((one: any) => {
+          if (one.code === 'min') {
+            minConfig = one.value;
+          }
+          if (one.code === 'max') {
+            maxConfig = one.value;
+          }
+          if (one.code === 'input') {
+            inputTypeConfig = one.value;
+          }
+          if (one.code === 'seq') {
+            seqConfig = one.value;
+          }
+        });
+      }
+    });
+
+    const customization: any = {
+      id: group.local_id,
+      name: group.descriptor.name,
+      inputType: inputTypeConfig,
+      minQuantity: Number(minConfig),
+      maxQuantity: Number(maxConfig),
+      seq: Number(seqConfig),
+    };
+
+    if (inputTypeConfig === 'input') {
+      customization.special_instructions = '';
+    }
+
+    return customization;
+  });
+};
+
+const formatCustomizations = (items: any) => {
+  return items?.map((customization: any) => {
+    let parent = null;
+    let isDefault = false;
+    let childs: any[] = [];
+    let child = null;
+    let vegNonVegTag = null;
+
+    customization.item_details.tags.forEach(tag => {
+      if (tag.code === 'parent') {
+        tag.list.forEach((one: any) => {
+          if (one.code === 'default') {
+            isDefault = one.value.toLowerCase() === 'yes';
+          } else if (one.code === 'id') {
+            parent = one.value;
+          }
+        });
+      } else if (tag.code === 'child') {
+        tag.list.forEach((item: any) => {
+          childs.push(item.value);
+          if (item.code === 'id') {
+            child = item.value;
+          }
+        });
+      } else if (tag.code === 'veg_nonveg') {
+        vegNonVegTag = tag;
+      }
+    });
+
+    return {
+      id: customization.item_details.id,
+      name: customization.item_details.descriptor.name,
+      price: customization.item_details.price.value,
+      inStock: customization.item_details.quantity.available.count > 0,
+      parent,
+      child,
+      childs: childs?.length > 0 ? childs : null,
+      isDefault: isDefault,
+      vegNonVeg: vegNonVegTag ? vegNonVegTag.list[0].code : '',
+    };
+  });
+};
+
+const findMinMaxSeq = (customizationGroups: any) => {
+  if (!customizationGroups || customizationGroups.length === 0) {
+    return {minSeq: undefined, maxSeq: undefined};
+  }
+
+  let minSeq = Infinity;
+  let maxSeq = -Infinity;
+
+  customizationGroups.forEach((group: any) => {
+    const seq = group.seq;
+    if (seq < minSeq) {
+      minSeq = seq;
+    }
+    if (seq > maxSeq) {
+      maxSeq = seq;
+    }
+  });
+
+  return {minSeq, maxSeq};
+};
+
+const VegNonVegTag = ({category = 'veg'}) => {
+  return (
+    <FastImage
+      source={
+        category === 'veg'
+          ? require('../../../../assets/veg.png')
+          : require('../../../../assets/non_veg.png')
+      }
+      style={{width: 18, height: 18}}
+    />
+  );
+};
+
+const FBProductCustomization: React.FC<any> = props => {
+  const theme = useTheme();
+  const styles = makeStyles(theme.colors);
+  const {
+    product,
+    customization_state,
+    setCustomizationState,
+    isEditFlow = false,
+    setItemOutOfStock,
+  } = props;
+
+  const [customizationGroups, setCustomizationGroups] = useState<any[]>([]);
+  const [customizations, setCustomizations] = useState<any[]>([]);
+
+  const [customizationToGroupMap, setCustomizationToGroupMap] = useState<any>(
+    {},
+  );
+
+  useEffect(() => {
+    if (product) {
+      const {customisation_groups, customisation_items} = product;
+      const customGroup = product.item_details.tags.find(
+        (item: any) => item.code === 'custom_group',
+      );
+      if (customGroup && customGroup.list.length > 0) {
+        setCustomizationGroups(formatCustomizationGroups(customisation_groups));
+      } else {
+        setCustomizationGroups([]);
+      }
+      setCustomizations(formatCustomizations(customisation_items));
+    }
+  }, [product]);
+
+  useEffect(() => {
+    const mappings = createCustomizationAndGroupMapping(customizations);
+    setCustomizationToGroupMap(mappings.customizationToGroupMap);
+  }, [customizationGroups, customizations]);
+
+  useEffect(() => {
+    const initializeCustomizationState = () => {
+      const minSeq = findMinMaxSeq(customizationGroups).minSeq;
+      const firstGroup = customizationGroups.find(
+        (group: any) => group.seq === minSeq,
+      );
+      const customization_state: any = {firstGroup};
+
+      const processGroup = (id: any) => {
+        const group: any = customizationGroups.find(item => item.id === id);
+        if (!group) {
+          return;
+        }
+        const groupId = group.id;
+        const groupName = group.name;
+        const isMandatory = group.minQuantity > 0;
+
+        customization_state[groupId] = {
+          id: groupId,
+          name: groupName,
+          seq: group.seq,
+          options: [],
+          selected: [],
+          childs: [],
+          isMandatory,
+          type: group.maxQuantity > 1 ? 'Checkbox' : 'Radio',
+        };
+
+        const childCustomizations = customizations.filter(
+          (customization: any) => customization.parent === groupId,
+        );
+
+        customization_state[groupId].options = childCustomizations;
+        customization_state[groupId].selected =
+          findSelectedCustomizationForGroup(
+            customization_state[groupId],
+            childCustomizations,
+          );
+
+        let childGroups: any =
+          customization_state[groupId].selected[0]?.id != undefined
+            ? customizationToGroupMap[
+                customization_state[groupId].selected[0]?.id
+              ]
+            : [];
+        customization_state[groupId].childs = childGroups;
+
+        if (childGroups) {
+          for (const childGroup of childGroups) {
+            processGroup(childGroup);
+          }
+        }
+      };
+
+      if (firstGroup) {
+        processGroup(firstGroup.id);
+        setCustomizationState(customization_state);
+      }
+    };
+
+    if (!isEditFlow) {
+      initializeCustomizationState();
+    }
+  }, [customizationGroups, customizations, customizationToGroupMap]);
+
+  const findSelectedCustomizationForGroup = (
+    group: any,
+    childCustomizations: any,
+  ) => {
+    if (!group.isMandatory) {
+      return [];
+    }
+    let selected_groups = [];
+    let defaultCustomization = childCustomizations.filter(
+      (customization: any) => customization.isDefault && customization.inStock,
+    );
+
+    if (defaultCustomization.length) {
+      selected_groups = defaultCustomization;
+    } else {
+      const x = childCustomizations.find(
+        (customization: any) => customization.inStock,
+      );
+      selected_groups = x ? [x] : [];
+    }
+
+    let is_item_out_of_stock = true;
+    if (selected_groups.length) {
+      is_item_out_of_stock = false;
+    }
+
+    setItemOutOfStock(is_item_out_of_stock);
+    return selected_groups;
+  };
+
+  const processGroup = (
+    groupId: any,
+    updatedCustomizationState1: any,
+    selectedGroup: any,
+    selectedOption: any,
+  ) => {
+    const currentGroup = customizationGroups.find(item => item.id === groupId);
+    if (!currentGroup) {
+      return;
+    }
+
+    const groupName = currentGroup.name;
+    const isMandatory = currentGroup.minQuantity > 0;
+
+    const currentGroupOldState = updatedCustomizationState1[currentGroup.id];
+
+    updatedCustomizationState1[groupId] = {
+      id: groupId,
+      name: groupName,
+      seq: currentGroup.seq,
+      options: [],
+      selected: [],
+      childs: [],
+      isMandatory,
+      type: 'Checkbox',
+    };
+    updatedCustomizationState1[groupId].options = [];
+
+    const childCustomizations = customizations.filter(
+      customization => customization.parent === groupId,
+    );
+    updatedCustomizationState1[groupId].options = childCustomizations;
+
+    let childGroups = [];
+    if (currentGroup.id === selectedGroup.id) {
+      let new_selected_options = [];
+      // if option is there then remove it here
+      if (
+        !isMandatory &&
+        currentGroupOldState.selected.find(
+          (optn: any) => optn.id === selectedOption.id,
+        )
+      ) {
+        new_selected_options = [...currentGroupOldState.selected].filter(
+          (item: any) => item.id !== selectedOption.id,
+        );
+        updatedCustomizationState1[groupId].selected = new_selected_options;
+      } else {
+        // if option is not there then add it only if length is less than max Qty
+        if (currentGroup.maxQuantity === 1) {
+          childGroups = customizationToGroupMap[selectedOption.id];
+          updatedCustomizationState1[groupId].selected = [selectedOption];
+        } else {
+          if (
+            currentGroup.maxQuantity > 1 &&
+            currentGroupOldState.selected.length < currentGroup.maxQuantity
+          ) {
+            new_selected_options = [
+              ...currentGroupOldState.selected,
+              selectedOption,
+            ];
+            updatedCustomizationState1[groupId].selected = new_selected_options;
+          } else {
+            updatedCustomizationState1[groupId].selected =
+              currentGroupOldState.selected;
+          }
+        }
+      }
+
+      updatedCustomizationState1[groupId].childs = childGroups;
+    } else {
+      const selectedCustomization = findSelectedCustomizationForGroup(
+        updatedCustomizationState1[groupId],
+        childCustomizations,
+      );
+
+      updatedCustomizationState1[groupId].selected = selectedCustomization;
+
+      if (selectedCustomization.length) {
+        childGroups = customizationToGroupMap[selectedCustomization[0].id];
+        updatedCustomizationState1[groupId].childs = childGroups;
+      }
+    }
+
+    // Recursively process child groups
+    for (const childGroup of childGroups) {
+      processGroup(
+        childGroup,
+        updatedCustomizationState1,
+        selectedGroup,
+        selectedOption,
+      );
+    }
+
+    return updatedCustomizationState1;
+  };
+
+  const handleClick = (group: any, selectedOption: any) => {
+    let updatedCustomizationState = {...customization_state};
+    let updatedState = processGroup(
+      group.id,
+      updatedCustomizationState,
+      group,
+      selectedOption,
+    );
+    setCustomizationState(updatedState);
+  };
+
+  const renderGroup = (param: any) => {
+    const group = customization_state[param?.id];
+
+    return (
+      <View key={group?.id} style={styles.filterContainer}>
+        <Text variant={'bodyLarge'}>{group?.name}</Text>
+        {group?.options?.map((option: any) => {
+          const selected =
+            group?.selected?.some(
+              (selectedOption: any) => selectedOption?.id === option?.id,
+            ) ?? false;
+
+          return (
+            <View style={styles.optionContainer}>
+              <View style={styles.meta}>
+                <VegNonVegTag category={option.vegNonVeg} />
+                <Text variant={'bodyMedium'} style={styles.option}>
+                  {option.name}
+                </Text>
+              </View>
+              <View style={styles.optionActionContainer}>
+                {option.inStock ? (
+                  <View style={styles.optionActionContainer}>
+                    <Text variant={'bodyLarge'} style={styles.option}>
+                      ₹ {option.price}
+                    </Text>
+                    <Checkbox.Android
+                      status={selected ? 'checked' : 'unchecked'}
+                      onPress={() => {
+                        if (option.inStock) {
+                          handleClick(group, option);
+                        }
+                      }}
+                    />
+                  </View>
+                ) : (
+                  <Text variant={'bodyMedium'} style={styles.outOfStock}>
+                    Out of Stock
+                  </Text>
+                )}
+              </View>
+            </View>
+          );
+        })}
+      </View>
+    );
+  };
+
+  let elements: any = [];
+  const renderGroups = (group: any) => {
+    if (!group) {
+      return;
+    }
+
+    elements.push(renderGroup(group));
+
+    let children = customization_state[group?.id]?.childs;
+    if (!children) {
+      return;
+    }
+
+    children.map((child: any) => {
+      renderGroups(customization_state[child]);
+    });
+  };
+
+  const renderCustomizations = () => {
+    const minSeq = findMinMaxSeq(customizationGroups).minSeq;
+    const firstGroup = customizationGroups.find(group => group.seq === minSeq);
+    renderGroups(firstGroup);
+
+    return <View>{elements}</View>;
+  };
+
+  return renderCustomizations();
+};
+
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    filterContainer: {
+      marginBottom: 24,
+    },
+    optionContainer: {
+      marginBottom: 15,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    meta: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    optionActionContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    option: {
+      color: '#222',
+      paddingLeft: 8,
+    },
+    outOfStock: {
+      color: '#D83232',
+    },
+  });
+
+export default FBProductCustomization;

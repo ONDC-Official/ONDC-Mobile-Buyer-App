@@ -153,3 +153,35 @@ export const durationToHumanReadable = (value: any) => {
     return {timeDuration: minutes, unit: 'min'};
   }
 };
+
+export const createCustomizationAndGroupMapping = (customizations: any[]) => {
+  let newCustomizationGroupMappings = {};
+  let customizationToGroupMap = {};
+  customizations.forEach((customization: any) => {
+    const groupId = customization.parent;
+    const childId = customization.id;
+
+    customizationToGroupMap = {
+      ...customizationToGroupMap,
+      [customization.id]:
+        customization.childs == undefined ? [] : customization.childs,
+    };
+
+    if (!newCustomizationGroupMappings[groupId]) {
+      newCustomizationGroupMappings[groupId] = new Set();
+    }
+    newCustomizationGroupMappings[groupId].add(childId);
+  });
+
+  const finalizedCustomizationGroupMappings = {};
+  for (const groupId in newCustomizationGroupMappings) {
+    finalizedCustomizationGroupMappings[groupId] = Array.from(
+      newCustomizationGroupMappings[groupId],
+    );
+  }
+
+  return {
+    customizationToGroupMap,
+    groupToCustomizationMap: finalizedCustomizationGroupMappings,
+  };
+};

@@ -4,18 +4,20 @@ import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import FastImage from 'react-native-fast-image';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
+import {useSelector} from 'react-redux';
+import {skeletonList} from '../../../utils/utils';
+import useNetworkHandling from '../../../hooks/useNetworkHandling';
+import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
+import {API_BASE_URL, PROVIDER_LOCATIONS} from '../../../utils/apiActions';
 
-import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
-import {API_BASE_URL, PROVIDERS} from '../../../../../utils/apiActions';
-import {skeletonList} from '../../../../../utils/utils';
-import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
-import {FB_DOMAIN} from '../../../../../utils/constants';
+interface Outlets {
+  navigation: any;
+  route: any;
+}
 
 const CancelToken = axios.CancelToken;
 
-const BrandSkeleton = () => {
+const OutletSkeleton = () => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   return (
@@ -27,27 +29,27 @@ const BrandSkeleton = () => {
   );
 };
 
-const NoImageAvailable = require('../../../../../assets/noImage.png');
+const NoImageAvailable = require('../../../assets/noImage.png');
 
-const TopBrands = () => {
-  const navigation = useNavigation<StackNavigationProp<any>>();
+const Outlets: React.FC<Outlets> = ({navigation, route: {params}}) => {
+  const {address} = useSelector(({addressReducer}) => addressReducer);
   const source = useRef<any>(null);
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
-  const [providers, setProviders] = useState<any[]>([]);
+  const [locations, setLocations] = useState<any[]>([]);
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
-  const getAllProviders = async () => {
+  const getAllOutlets = async () => {
     try {
       setApiRequested(true);
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${PROVIDERS}`,
+        `${API_BASE_URL}${PROVIDER_LOCATIONS}?provider=${params.brandId}&latitude=${address?.address?.lat}&longitude=${address?.address?.lng}&radius=100`,
         source.current.token,
       );
-      setProviders(data.response.data);
+      setLocations(data.data);
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -56,15 +58,14 @@ const TopBrands = () => {
   };
 
   const navigateToBrandDetails = (provider: any) => {
-    if (provider.domain === FB_DOMAIN) {
-      navigation.navigate('Outlets', {brandId: provider.id});
-    } else {
-      navigation.navigate('BrandDetails', {brandId: provider.id});
-    }
+    navigation.navigate('BrandDetails', {
+      brandId: provider.provider,
+      outletId: provider.id,
+    });
   };
 
   useEffect(() => {
-    getAllProviders().then(() => {});
+    getAllOutlets().then(() => {});
 
     return () => {
       if (source.current) {
@@ -75,32 +76,32 @@ const TopBrands = () => {
 
   return (
     <View style={styles.container}>
-      <Text variant={'titleSmall'} style={styles.title}>
-        All Providers
-      </Text>
       {apiRequested ? (
         <FlatList
-          horizontal
+          numColumns={2}
           data={skeletonList}
-          renderItem={() => <BrandSkeleton />}
+          renderItem={() => <OutletSkeleton />}
           keyExtractor={item => item.id}
         />
       ) : (
         <FlatList
-          horizontal
-          data={providers}
+          numColumns={2}
+          data={locations}
           renderItem={({item}) => (
             <TouchableOpacity
               style={styles.brand}
               onPress={() => navigateToBrandDetails(item)}>
               <FastImage
                 source={
-                  item?.descriptor?.symbol
-                    ? {uri: item?.descriptor?.symbol}
+                  item?.provider_descriptor?.symbol
+                    ? {uri: item?.provider_descriptor?.symbol}
                     : NoImageAvailable
                 }
                 style={styles.brandImage}
               />
+              <Text variant={'bodyMedium'}>
+                {item?.provider_descriptor?.name}
+              </Text>
             </TouchableOpacity>
           )}
           keyExtractor={item => item.id}
@@ -120,21 +121,20 @@ const makeStyles = (colors: any) =>
       marginBottom: 12,
     },
     brand: {
-      width: 109,
-      height: 109,
-      marginRight: 15,
+      flex: 1,
       borderRadius: 12,
       backgroundColor: '#F5F5F5',
       alignItems: 'center',
       justifyContent: 'center',
     },
     brandSkeleton: {
-      width: 109,
-      height: 109,
+      width: 160,
+      height: 160,
     },
     brandImage: {
-      width: 100,
-      height: 100,
+      width: 160,
+      height: 160,
+      marginBottom: 12,
     },
   });
-export default TopBrands;
+export default Outlets;

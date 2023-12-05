@@ -4,10 +4,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {setStoredData} from '../../../../../utils/storage';
 import {Card, Chip, Text, withTheme} from 'react-native-paper';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
 import {clearCart} from '../../../../../redux/actions';
+import {saveAddress} from '../../../../../redux/address/actions';
 
 interface Address {
   item: any;
@@ -40,8 +40,10 @@ const Address: React.FC<Address> = ({
 
   const setDefaultAddress = async () => {
     if (params?.navigateToNext) {
+      console.log('Navigate to next page');
       onAddressSelect(item);
     } else if (cartItems.length > 0 && !isCurrentAddress) {
+      console.log('Alert');
       alertWithTwoButtons(
         'Address Updated',
         'You want update the address, it will clear your existing cart. Please confirm if you want to go ahead with this?',
@@ -54,21 +56,21 @@ const Address: React.FC<Address> = ({
         () => {},
       );
     } else {
+      console.log('Add to store');
       addAddressToStore();
     }
   };
 
   const addAddressToStore = () => {
-    setStoredData('address', JSON.stringify(item)).then(() => {
-      if (params?.navigateToDashboard) {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Dashboard'}],
-        });
-      } else {
-        navigation.goBack();
-      }
-    });
+    dispatch(saveAddress(item));
+    if (params?.navigateToDashboard) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Dashboard'}],
+      });
+    } else {
+      navigation.goBack();
+    }
   };
 
   return (

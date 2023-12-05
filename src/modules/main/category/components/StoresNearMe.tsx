@@ -12,6 +12,7 @@ import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
 import {skeletonList} from '../../../../utils/utils';
+import {FB_DOMAIN} from '../../../../utils/constants';
 
 interface StoresNearMe {
   domain: string;
@@ -35,9 +36,7 @@ const NoImageAvailable = require('../../../../assets/noImage.png');
 
 const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const {latitude, longitude} = useSelector(
-    ({locationReducer}) => locationReducer,
-  );
+  const {address} = useSelector(({addressReducer}) => addressReducer);
   const source = useRef<any>(null);
   const styles = makeStyles();
   const [locations, setLocations] = useState<any[]>([]);
@@ -50,7 +49,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       setApiRequested(true);
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${LOCATIONS}?domain=${domain}&latitude=${latitude}&longitude=${longitude}&radius=100`,
+        `${API_BASE_URL}${LOCATIONS}?domain=${domain}&latitude=${address.address.lat}&longitude=${address.address.lng}&radius=100`,
         source.current.token,
       );
       setLocations(data.data);
@@ -66,7 +65,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       brandId: store.provider,
     };
 
-    if (store.domain === 'ONDC:RET11') {
+    if (store.domain === FB_DOMAIN) {
       routeParams.outletId = store.id;
     }
     navigation.navigate('BrandDetails', routeParams);

@@ -11,6 +11,7 @@ import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import BrandSkeleton from '../../../components/skeleton/BrandSkeleton';
 import FBBrandDetails from './components/FBBrandDetails';
 import OtherBrandDetails from './components/OtherBrandDetails';
+import {FB_DOMAIN} from '../../../utils/constants';
 
 interface BrandDetails {
   route: any;
@@ -76,8 +77,8 @@ const BrandDetails: React.FC<BrandDetails> = ({route: {params}}) => {
       navigation.setOptions({
         headerTitle: data?.descriptor?.name,
       });
-      if (data.domain === 'ONDC:RET11') {
-        getOutletDetails();
+      if (data.domain === FB_DOMAIN) {
+        await getOutletDetails();
       }
       setProvider(data);
     } catch (error) {
@@ -102,7 +103,7 @@ const BrandDetails: React.FC<BrandDetails> = ({route: {params}}) => {
   }
   return (
     <View style={styles.container}>
-      {provider.domain === 'ONDC:RET11' ? (
+      {provider.domain === FB_DOMAIN ? (
         <FBBrandDetails
           provider={provider}
           outlet={outlet}

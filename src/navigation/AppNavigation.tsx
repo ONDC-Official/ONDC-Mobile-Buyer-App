@@ -28,12 +28,24 @@ import UpdateBillingAddress from '../modules/main/payment/billingAddress/UpdateB
 import CategoryDetails from '../modules/main/category/CategoryDetails';
 import BrandDetails from '../modules/main/provider/BrandDetails';
 import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
+import Outlets from '../modules/main/provider/Outlets';
 
 const Stack = createStackNavigator();
 
 interface AppNavigation {
   navigationRef: any;
 }
+
+const headerStyle = {
+  shadowOffset: {
+    width: 0,
+    height: 3,
+  },
+  shadowColor: 'black',
+  shadowOpacity: 1,
+  shadowRadius: 3.84,
+  elevation: 15,
+};
 
 /**
  * Component for stack navigation
@@ -76,6 +88,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={AddDefaultAddress}
           options={{
             title: 'Add Address',
+            headerStyle,
           }}
         />
         <Stack.Screen
@@ -83,6 +96,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={UpdateAddress}
           options={{
             title: 'Update Delivery Address',
+            headerStyle,
           }}
         />
 
@@ -91,6 +105,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={AddressList}
           options={{
             title: 'Delivery Address',
+            headerStyle,
           }}
         />
 
@@ -99,6 +114,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={BillingAddressPicker}
           options={{
             title: 'Billing Address',
+            headerStyle,
           }}
         />
 
@@ -107,6 +123,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={AddBillingAddress}
           options={{
             title: 'Add Billing Address',
+            headerStyle,
           }}
         />
 
@@ -115,6 +132,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={UpdateBillingAddress}
           options={{
             title: 'Update Billing Address',
+            headerStyle,
           }}
         />
 
@@ -181,6 +199,13 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           options={{headerShown: false}}
         />
         <Stack.Screen name="BrandDetails" component={BrandDetails} />
+        <Stack.Screen
+          name="Outlets"
+          component={Outlets}
+          options={{
+            headerStyle,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

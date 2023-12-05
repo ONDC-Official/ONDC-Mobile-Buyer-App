@@ -1422,3 +1422,5 @@ export const PRODUCT_SUBCATEGORY: any = {
 export const CURRENCY_SYMBOLS: any = {
   INR: '₹',
 };
+
+export const FB_DOMAIN: string = 'ONDC:RET11';

@@ -1,5 +1,4 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {withTheme} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
@@ -109,4 +108,4 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
   );
 };
 
-export default withTheme(AddDefaultAddress);
+export default AddDefaultAddress;
