@@ -2,6 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
 
@@ -16,9 +19,12 @@ const SubCategories: React.FC<SubCategories> = ({
   currentSubCategory,
   setCurrentSubCategory,
 }) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const [subCategories, setSubCategories] = useState<any[]>([]);
+
+  const goBack = () => navigation.goBack();
 
   const updateSubCategory = (subCategory: any) => {
     if (subCategory.shortName !== currentSubCategory) {
@@ -32,6 +38,16 @@ const SubCategories: React.FC<SubCategories> = ({
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.allOptionsButton} onPress={goBack}>
+        <Icon
+          name={'view-grid-outline'}
+          color={theme.colors.primary}
+          size={20}
+        />
+        <Text variant={'labelLarge'} style={styles.allOptions}>
+          All Options
+        </Text>
+      </TouchableOpacity>
       <FlatList
         data={subCategories}
         horizontal
@@ -65,6 +81,7 @@ const makeStyles = (colors: any) =>
       paddingLeft: 16,
       paddingTop: 16,
       backgroundColor: '#fff',
+      flexDirection: 'row',
     },
     categoryText: {
       fontWeight: '700',
@@ -97,6 +114,15 @@ const makeStyles = (colors: any) =>
       borderRadius: 28,
       borderWidth: 1,
       borderColor: '#E7E7E7',
+    },
+    allOptions: {
+      color: colors.primary,
+      fontWeight: '600',
+    },
+    allOptionsButton: {
+      marginRight: 24,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
 
