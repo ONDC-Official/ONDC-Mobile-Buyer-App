@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import {PRODUCT_SUBCATEGORY} from '../../../../utils/constants';
+
+import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
 
 interface SubCategories {
   currentSubCategory: string;

@@ -4,7 +4,8 @@ import {Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {CATEGORIES} from '../../../../utils/constants';
+
+import {CATEGORIES} from '../../../../utils/categories';
 
 interface Categories {
   currentCategory: string;

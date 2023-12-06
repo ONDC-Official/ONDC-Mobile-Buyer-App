@@ -2,7 +2,6 @@ import React, {useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -12,49 +11,19 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {IconButton, Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {showToastWithGravity} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, ITEM_DETAILS} from '../../../../utils/apiActions';
 import FBProductCustomization from './FBProductCustomization';
+import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 
 interface FBProduct {
   product: any;
 }
-
-interface ProductTag {
-  tags: any[];
-}
-
-const iconStyles = {
-  marginTop: -118,
-  marginLeft: 98,
-};
-
-const ProductTag: React.FC<ProductTag> = ({tags}) => {
-  let category = 'veg';
-  const tag = tags.find(one => one.code === 'veg_nonveg');
-  if (tag) {
-    category = tag.list[0].code;
-  }
-
-  if (category === 'veg') {
-    return (
-      <Image
-        source={require('../../../../assets/veg.png')}
-        style={iconStyles}
-      />
-    );
-  } else {
-    return (
-      <Image
-        source={require('../../../../assets/non_veg.png')}
-        style={iconStyles}
-      />
-    );
-  }
-};
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
 
@@ -72,6 +41,10 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const [customizationState, setCustomizationState] = useState<any>({});
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const navigateToProductDetails = () =>
+    navigation.navigate('ProductDetails', {productId: product.id});
 
   const customizable =
     product?.item_details?.tags.findIndex(
@@ -114,6 +87,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   return (
     <>
       <TouchableOpacity
+        onPress={navigateToProductDetails}
         key={product?.item_details?.id}
         disabled={apiInProgress}>
         <View style={styles.product}>
@@ -139,7 +113,9 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                     : NoImageAvailable
                 }
               />
-              <ProductTag tags={product?.item_details?.tags} />
+              <View style={styles.productTag}>
+                <VegNonVegTag tags={product?.item_details?.tags} />
+              </View>
             </View>
             <TouchableOpacity
               style={styles.addButton}
@@ -177,7 +153,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         <View style={styles.customizationContainer}>
           <FBProductCustomization
             product={productDetails}
-            customization_state={customizationState}
+            customizationState={customizationState}
             setCustomizationState={setCustomizationState}
             setItemOutOfStock={setItemOutOfStock}
           />
@@ -244,6 +220,10 @@ const makeStyles = (colors: any) =>
     },
     customizationContainer: {
       padding: 16,
+    },
+    productTag: {
+      marginTop: -118,
+      marginLeft: 98,
     },
   });
 

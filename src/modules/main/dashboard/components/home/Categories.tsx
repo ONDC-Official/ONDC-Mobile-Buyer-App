@@ -4,7 +4,7 @@ import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-import {CATEGORIES} from '../../../../../utils/constants';
+import {CATEGORIES} from '../../../../../utils/categories';
 
 const Categories = () => {
   const theme = useTheme();

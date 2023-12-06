@@ -1,7 +1,9 @@
-import {StyleSheet, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 
 interface Product {
@@ -12,11 +14,17 @@ interface Product {
 const NoImageAvailable = require('../../../../assets/noImage.png');
 
 const Product: React.FC<Product> = ({isGrid, product}) => {
-  const theme = useTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = makeStyles();
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const navigateToProductDetails = () =>
+    navigation.navigate('ProductDetails', {productId: product.id});
+
   if (isGrid) {
     return (
-      <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={navigateToProductDetails}>
         <FastImage
           style={styles.gridImage}
           source={
@@ -41,11 +49,13 @@ const Product: React.FC<Product> = ({isGrid, product}) => {
             </Text>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   } else {
     return (
-      <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.container}
+        onPress={navigateToProductDetails}>
         <View style={styles.horizontalRow}>
           <FastImage
             style={styles.horizontalImage}
@@ -74,7 +84,7 @@ const Product: React.FC<Product> = ({isGrid, product}) => {
             </View>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 };

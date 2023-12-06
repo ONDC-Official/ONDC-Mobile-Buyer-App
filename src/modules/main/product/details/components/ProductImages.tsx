@@ -2,11 +2,14 @@ import PagerView from 'react-native-pager-view';
 import FastImage from 'react-native-fast-image';
 import {Dimensions, StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
-import {withTheme} from 'react-native-paper';
+
+interface ProductImages {
+  images: any[];
+}
 
 const imageSize = Dimensions.get('window').width;
 
-const ProductImages = ({theme, images}) => {
+const ProductImages: React.FC<ProductImages> = ({images}) => {
   const [selectedMediaPosition, setSelectedMediaPosition] = useState(0);
 
   return (
@@ -30,10 +33,9 @@ const ProductImages = ({theme, images}) => {
         {images.map((item, index) => (
           <View
             key={`${index}dot`}
-            backgroundColor={
-              index === selectedMediaPosition ? theme.colors.primary : 'black'
+            style={
+              index === selectedMediaPosition ? styles.selectedDot : styles.dot
             }
-            style={styles.dot}
           />
         ))}
       </View>
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
     width: imageSize,
     alignSelf: 'center',
   },
-  pagerContainer: {backgroundColor: 'white', paddingBottom: 16},
+  pagerContainer: {backgroundColor: 'white', paddingBottom: 40},
   pager: {
     zIndex: 999,
   },
@@ -56,13 +58,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     bottom: 0,
+    marginTop: 16,
   },
   dot: {
-    width: 12,
-    height: 12,
-    borderRadius: 10,
-    marginHorizontal: 7,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 6,
+    backgroundColor: '#E8E8E8',
+  },
+  selectedDot: {
+    width: 24,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 6,
+    backgroundColor: '#196AAB',
   },
 });
 
-export default withTheme(ProductImages);
+export default ProductImages;

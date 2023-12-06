@@ -1,8 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Checkbox, Text, useTheme} from 'react-native-paper';
+import {Checkbox, Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {createCustomizationAndGroupMapping} from '../../../../utils/utils';
+
+interface FBProductCustomization {
+  product: any;
+  customizationState: any;
+  setCustomizationState: (state: any) => void;
+  isEditFlow: boolean;
+  setItemOutOfStock: (flag: boolean) => void;
+}
 
 const formatCustomizationGroups = (groups: any) => {
   return groups?.map((group: any) => {
@@ -52,7 +60,7 @@ const formatCustomizations = (items: any) => {
     let child = null;
     let vegNonVegTag = null;
 
-    customization.item_details.tags.forEach(tag => {
+    customization.item_details.tags.forEach((tag: any) => {
       if (tag.code === 'parent') {
         tag.list.forEach((one: any) => {
           if (one.code === 'default') {
@@ -121,16 +129,14 @@ const VegNonVegTag = ({category = 'veg'}) => {
   );
 };
 
-const FBProductCustomization: React.FC<any> = props => {
-  const theme = useTheme();
-  const styles = makeStyles(theme.colors);
-  const {
-    product,
-    customization_state,
-    setCustomizationState,
-    isEditFlow = false,
-    setItemOutOfStock,
-  } = props;
+const FBProductCustomization: React.FC<FBProductCustomization> = ({
+  product,
+  customizationState,
+  setCustomizationState,
+  isEditFlow = false,
+  setItemOutOfStock,
+}) => {
+  const styles = makeStyles();
 
   const [customizationGroups, setCustomizationGroups] = useState<any[]>([]);
   const [customizations, setCustomizations] = useState<any[]>([]);
@@ -165,7 +171,7 @@ const FBProductCustomization: React.FC<any> = props => {
       const firstGroup = customizationGroups.find(
         (group: any) => group.seq === minSeq,
       );
-      const customization_state: any = {firstGroup};
+      const state: any = {firstGroup};
 
       const processGroup = (id: any) => {
         const group: any = customizationGroups.find(item => item.id === id);
@@ -176,7 +182,7 @@ const FBProductCustomization: React.FC<any> = props => {
         const groupName = group.name;
         const isMandatory = group.minQuantity > 0;
 
-        customization_state[groupId] = {
+        state[groupId] = {
           id: groupId,
           name: groupName,
           seq: group.seq,
@@ -191,20 +197,17 @@ const FBProductCustomization: React.FC<any> = props => {
           (customization: any) => customization.parent === groupId,
         );
 
-        customization_state[groupId].options = childCustomizations;
-        customization_state[groupId].selected =
-          findSelectedCustomizationForGroup(
-            customization_state[groupId],
-            childCustomizations,
-          );
+        state[groupId].options = childCustomizations;
+        state[groupId].selected = findSelectedCustomizationForGroup(
+          state[groupId],
+          childCustomizations,
+        );
 
         let childGroups: any =
-          customization_state[groupId].selected[0]?.id != undefined
-            ? customizationToGroupMap[
-                customization_state[groupId].selected[0]?.id
-              ]
+          state[groupId].selected[0]?.id != undefined
+            ? customizationToGroupMap[state[groupId].selected[0]?.id]
             : [];
-        customization_state[groupId].childs = childGroups;
+        state[groupId].childs = childGroups;
 
         if (childGroups) {
           for (const childGroup of childGroups) {
@@ -215,7 +218,7 @@ const FBProductCustomization: React.FC<any> = props => {
 
       if (firstGroup) {
         processGroup(firstGroup.id);
-        setCustomizationState(customization_state);
+        setCustomizationState(state);
       }
     };
 
@@ -352,7 +355,7 @@ const FBProductCustomization: React.FC<any> = props => {
   };
 
   const handleClick = (group: any, selectedOption: any) => {
-    let updatedCustomizationState = {...customization_state};
+    let updatedCustomizationState = {...customizationState};
     let updatedState = processGroup(
       group.id,
       updatedCustomizationState,
@@ -363,49 +366,53 @@ const FBProductCustomization: React.FC<any> = props => {
   };
 
   const renderGroup = (param: any) => {
-    const group = customization_state[param?.id];
+    const group = customizationState[param?.id];
 
     return (
       <View key={group?.id} style={styles.filterContainer}>
-        <Text variant={'bodyLarge'}>{group?.name}</Text>
-        {group?.options?.map((option: any) => {
-          const selected =
-            group?.selected?.some(
-              (selectedOption: any) => selectedOption?.id === option?.id,
-            ) ?? false;
+        <Text variant={'bodyLarge'} style={styles.groupName}>
+          {group?.name}
+        </Text>
+        <View style={styles.groupContainer}>
+          {group?.options?.map((option: any) => {
+            const selected =
+              group?.selected?.some(
+                (selectedOption: any) => selectedOption?.id === option?.id,
+              ) ?? false;
 
-          return (
-            <View style={styles.optionContainer}>
-              <View style={styles.meta}>
-                <VegNonVegTag category={option.vegNonVeg} />
-                <Text variant={'bodyMedium'} style={styles.option}>
-                  {option.name}
-                </Text>
-              </View>
-              <View style={styles.optionActionContainer}>
-                {option.inStock ? (
-                  <View style={styles.optionActionContainer}>
-                    <Text variant={'bodyLarge'} style={styles.option}>
-                      ₹ {option.price}
-                    </Text>
-                    <Checkbox.Android
-                      status={selected ? 'checked' : 'unchecked'}
-                      onPress={() => {
-                        if (option.inStock) {
-                          handleClick(group, option);
-                        }
-                      }}
-                    />
-                  </View>
-                ) : (
-                  <Text variant={'bodyMedium'} style={styles.outOfStock}>
-                    Out of Stock
+            return (
+              <View style={styles.optionContainer}>
+                <View style={styles.meta}>
+                  <VegNonVegTag category={option.vegNonVeg} />
+                  <Text variant={'bodyMedium'} style={styles.option}>
+                    {option.name}
                   </Text>
-                )}
+                </View>
+                <View style={styles.optionActionContainer}>
+                  {option.inStock ? (
+                    <View style={styles.optionActionContainer}>
+                      <Text variant={'bodyLarge'} style={styles.option}>
+                        ₹ {option.price}
+                      </Text>
+                      <Checkbox.Android
+                        status={selected ? 'checked' : 'unchecked'}
+                        onPress={() => {
+                          if (option.inStock) {
+                            handleClick(group, option);
+                          }
+                        }}
+                      />
+                    </View>
+                  ) : (
+                    <Text variant={'bodyMedium'} style={styles.outOfStock}>
+                      Out of Stock
+                    </Text>
+                  )}
+                </View>
               </View>
-            </View>
-          );
-        })}
+            );
+          })}
+        </View>
       </View>
     );
   };
@@ -418,13 +425,13 @@ const FBProductCustomization: React.FC<any> = props => {
 
     elements.push(renderGroup(group));
 
-    let children = customization_state[group?.id]?.childs;
+    let children = customizationState[group?.id]?.childs;
     if (!children) {
       return;
     }
 
     children.map((child: any) => {
-      renderGroups(customization_state[child]);
+      renderGroups(customizationState[child]);
     });
   };
 
@@ -439,7 +446,7 @@ const FBProductCustomization: React.FC<any> = props => {
   return renderCustomizations();
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     filterContainer: {
       marginBottom: 24,
@@ -463,6 +470,15 @@ const makeStyles = (colors: any) =>
     },
     outOfStock: {
       color: '#D83232',
+    },
+    groupName: {
+      color: '#1D1D1D',
+      marginBottom: 13,
+    },
+    groupContainer: {
+      backgroundColor: '#F3F9FE',
+      borderRadius: 2,
+      padding: 16,
     },
   });
 
