@@ -1,8 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {ScrollView, StyleSheet, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {ActivityIndicator, ScrollView, StyleSheet, View} from 'react-native';
+import {Button, List, Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import moment from 'moment';
 
 import {API_BASE_URL, ITEM_DETAILS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -35,10 +36,15 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const [product, setProduct] = useState<any>(null);
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
+  const [addToCartLoading, setAddToCartLoading] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(true);
+
   const [variationState, setVariationState] = useState<any[]>([]);
   const [customizationState, setCustomizationState] = useState<any>({});
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+
+  const handleAccordionPress = () => setExpanded(!expanded);
 
   const getProductDetails = async () => {
     try {
@@ -57,6 +63,64 @@ const ProductDetails: React.FC<ProductDetails> = ({
     } finally {
       setApiRequested(false);
     }
+  };
+
+  const addToCart = (navigate: boolean) => {};
+
+  const renderItemDetails = () => {
+    let returnWindowValue: string = '0';
+    if (product.item_details?.['@ondc/org/return_window']) {
+      // Create a duration object from the ISO 8601 string
+      const duration = moment.duration(
+        product.item_details?.['@ondc/org/return_window'],
+      );
+
+      // Get the number of hours from the duration object
+      returnWindowValue = duration.humanize();
+    }
+
+    const data: any = {
+      'Available on COD':
+        product.item_details?.['@ondc/org/available_on_cod']?.toString() ===
+        'true'
+          ? 'Yes'
+          : 'No',
+      Cancellable:
+        product.item_details?.['@ondc/org/cancellable']?.toString() === 'true'
+          ? 'Yes'
+          : 'No',
+      'Return window value': returnWindowValue,
+      Returnable:
+        product.item_details?.['@ondc/org/returnable']?.toString() === 'true'
+          ? 'Yes'
+          : 'No',
+      'Customer care':
+        product.item_details?.['@ondc/org/contact_details_consumer_care'],
+      'Manufacturer name':
+        product.item_details?.['@ondc/org/statutory_reqs_packaged_commodities']
+          ?.manufacturer_or_packer_name,
+      'Manufacturer address':
+        product.item_details?.['@ondc/org/statutory_reqs_packaged_commodities']
+          ?.manufacturer_or_packer_address,
+    };
+
+    return Object.keys(data).map(key => {
+      const value = data[key];
+      if (value !== null && value !== undefined) {
+        return (
+          <View style={styles.aboutRow}>
+            <Text variant="bodyLarge" style={styles.aboutTitle}>
+              {key}
+            </Text>
+            <View style={styles.aboutSeparator} />
+            <Text variant="bodyMedium" style={styles.aboutDetails}>
+              {value}
+            </Text>
+          </View>
+        );
+      }
+      return null; // Return null for fields with null or undefined values
+    });
   };
 
   useEffect(() => {
@@ -133,6 +197,60 @@ const ProductDetails: React.FC<ProductDetails> = ({
             />
           </>
         )}
+        <View style={styles.buttonContainer}>
+          <Button
+            mode={'outlined'}
+            style={styles.button}
+            onPress={() => addToCart(false)}
+            disabled={
+              !(
+                Number(product?.item_details?.quantity?.available?.count) >= 1
+              ) ||
+              itemOutOfStock ||
+              addToCartLoading
+            }>
+            {addToCartLoading ? (
+              <ActivityIndicator size={'small'} color={theme.colors.primary} />
+            ) : (
+              'Add to cart'
+            )}
+          </Button>
+          <View style={styles.buttonSeparator} />
+          <Button
+            mode="contained"
+            style={styles.button}
+            disabled={
+              !(
+                Number(product?.item_details?.quantity?.available?.count) >= 1
+              ) || itemOutOfStock
+            }
+            onPress={() => addToCart(true)}>
+            Order now
+          </Button>
+        </View>
+        <View style={styles.aboutContainer}>
+          <List.Accordion
+            expanded={expanded}
+            onPress={handleAccordionPress}
+            title={
+              <Text variant={'titleSmall'} style={styles.about}>
+                About
+              </Text>
+            }>
+            {Object.keys(product?.attributes).map(key => (
+              <View style={styles.aboutRow}>
+                <Text variant="bodyLarge" style={styles.aboutTitle}>
+                  {key}
+                </Text>
+                <View style={styles.aboutSeparator} />
+                <Text variant="bodyMedium" style={styles.aboutDetails}>
+                  {product?.attributes[key]}
+                </Text>
+              </View>
+            ))}
+            {renderItemDetails()}
+          </List.Accordion>
+        </View>
       </View>
     </ScrollView>
   );
@@ -180,6 +298,40 @@ const makeStyles = (colors: any) =>
       width: '100%',
       backgroundColor: '#E0E0E0',
       marginVertical: 20,
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    button: {
+      flex: 1,
+      borderRadius: 8,
+      borderColor: colors.primary,
+    },
+    buttonSeparator: {
+      width: 15,
+    },
+    about: {
+      color: '#222',
+    },
+    aboutContainer: {
+      marginTop: 40,
+    },
+    aboutRow: {
+      flexDirection: 'row',
+      marginBottom: 30,
+    },
+    aboutTitle: {
+      width: 130,
+      color: '#787A80',
+      textTransform: 'capitalize',
+    },
+    aboutSeparator: {
+      width: 28,
+    },
+    aboutDetails: {
+      flex: 1,
+      color: '#1D1D1D',
     },
   });
 
