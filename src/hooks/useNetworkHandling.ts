@@ -26,6 +26,7 @@ export default () => {
       console.log(url);
       return await axios.post(encodeURI(url), params, config);
     } catch (e) {
+      console.error(e);
       throw e;
     }
   };
@@ -36,6 +37,7 @@ export default () => {
       console.log(url);
       return await axios.get(encodeURI(url), config);
     } catch (e) {
+      console.error(e);
       throw e;
     }
   };

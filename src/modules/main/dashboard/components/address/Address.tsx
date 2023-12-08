@@ -40,10 +40,8 @@ const Address: React.FC<Address> = ({
 
   const setDefaultAddress = async () => {
     if (params?.navigateToNext) {
-      console.log('Navigate to next page');
       onAddressSelect(item);
     } else if (cartItems.length > 0 && !isCurrentAddress) {
-      console.log('Alert');
       alertWithTwoButtons(
         'Address Updated',
         'You want update the address, it will clear your existing cart. Please confirm if you want to go ahead with this?',
@@ -56,7 +54,6 @@ const Address: React.FC<Address> = ({
         () => {},
       );
     } else {
-      console.log('Add to store');
       addAddressToStore();
     }
   };

@@ -2,9 +2,9 @@ import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {
-  BASE_URL,
+  API_BASE_URL,
   UPDATE_DELIVERY_ADDRESS,
-} from '../../../../../utils/apiUtilities';
+} from '../../../../../utils/apiActions';
 import AddressForm from './AddressForm';
 import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import {showInfoToast} from '../../../../../utils/utils';
@@ -66,7 +66,7 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
       setApiInProgress(true);
       source.current = CancelToken.source();
       await postDataWithAuth(
-        `${BASE_URL}${UPDATE_DELIVERY_ADDRESS}${params.address.id}`,
+        `${API_BASE_URL}${UPDATE_DELIVERY_ADDRESS}${params.address.id}`,
         payload,
         source.current.token,
       );

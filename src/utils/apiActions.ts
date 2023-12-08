@@ -2,6 +2,8 @@
 export const API_BASE_URL: string = 'https://buyer-app-preprod-v2.ondc.org';
 export const PROVIDERS: string = '/clientApis/v2/providers';
 export const DELIVERY_ADDRESS: string = '/clientApis/v1/delivery_address';
+export const UPDATE_DELIVERY_ADDRESS: string =
+  '/clientApis/v1/update_delivery_address';
 export const LOCATIONS: string = '/protocol/locations';
 export const MAP_ACCESS_TOKEN: string = '/clientApis/v2/map/accesstoken';
 export const PROVIDER: string = '/protocol/provider-details';

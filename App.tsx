@@ -16,7 +16,8 @@ const App = () => {
   };
 
   useEffect(() => {
-    const getUrlDetails = ({url}) => {
+    const handleDeepLink = (url: any) => {
+      console.log('Link URL', url);
       if (url) {
         getMultipleData(['token', 'uid', 'emailId', 'name']).then(data => {
           if (data[0][1] !== null) {
@@ -24,23 +25,37 @@ const App = () => {
             const params = url.split('?');
             if (params.length > 0) {
               const variables = params[1].split('&');
-              variables.forEach(one => {
+              variables.forEach((one: any) => {
                 const fields = one.split('=');
                 if (fields.length > 0) {
                   urlParams[fields[0]] = fields[1];
-                  if (urlParams.hasOwnProperty('context.provider.id')) {
-                    navigationRef.current.navigate('BrandDetails', {
-                      brandId: urlParams['context.provider.id'],
-                    });
-                  }
                 }
               });
+            }
+            if (
+              urlParams.hasOwnProperty('context.action') &&
+              urlParams['context.action'] === 'search'
+            ) {
+              const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
+              const pageParams: any = {brandId};
+              if (
+                urlParams.hasOwnProperty(
+                  'message.intent.provider.locations.0.id',
+                )
+              ) {
+                pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
+              }
+              navigationRef.current.navigate('BrandDetails', pageParams);
             }
           }
         });
       }
     };
 
+    const getUrlDetails = ({url}) => {
+      handleDeepLink(url);
+    };
+    Linking.getInitialURL().then(handleDeepLink);
     Linking.addEventListener('url', getUrlDetails);
 
     return () => {

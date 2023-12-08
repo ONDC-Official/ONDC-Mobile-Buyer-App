@@ -25,7 +25,6 @@ export default () => {
 
   const handleApiError = (error, setError = null) => {
     if (error.response) {
-      console.error('Error', error.response.status);
       if (error.response.status === 401) {
         if (!sessionExpiredMessageShown) {
           sessionExpiredMessageShown = true;

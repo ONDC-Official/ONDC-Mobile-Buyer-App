@@ -1,13 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {BASE_URL, DELIVERY_ADDRESS} from '../../../utils/apiUtilities';
+import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../utils/apiActions';
 import {setStoredData} from '../../../utils/storage';
 import AddressForm from '../dashboard/components/address/AddressForm';
 import useRefreshToken from '../../../hooks/useRefreshToken';
 import {showInfoToast} from '../../../utils/utils';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
+import {saveAddress} from '../../../redux/address/actions';
 
 interface AddDefaultAddress {
   navigation: any;
@@ -26,6 +27,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
   navigation,
   route: {params},
 }) => {
+  const dispatch = useDispatch();
   const {} = useRefreshToken();
   const source = useRef<any>(null);
   const {name, emailId} = useSelector(({authReducer}) => authReducer);
@@ -39,7 +41,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
    * @param values:object containing user inputs
    * @returns {Promise<void>}
    **/
-  const saveAddress = async (values: any) => {
+  const saveToServer = async (values: any) => {
     const payload = {
       descriptor: {
         name: values.name,
@@ -65,7 +67,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
       setApiInProgress(true);
       source.current = CancelToken.source();
       const {data} = await postDataWithAuth(
-        `${BASE_URL}${DELIVERY_ADDRESS}`,
+        `${API_BASE_URL}${DELIVERY_ADDRESS}`,
         payload,
         source.current.token,
       );
@@ -74,6 +76,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
       }
       setApiInProgress(false);
       showInfoToast('Your delivery address has been added successfully.');
+      dispatch(saveAddress(data));
       navigation.reset({
         index: 0,
         routes: [{name: 'Dashboard'}],
@@ -103,7 +106,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
     <AddressForm
       addressInfo={addressInfo}
       apiInProgress={apiInProgress}
-      saveAddress={saveAddress}
+      saveAddress={saveToServer}
     />
   );
 };
