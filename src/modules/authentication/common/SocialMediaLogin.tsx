@@ -1,8 +1,13 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
 import {Text, withTheme} from 'react-native-paper';
 import {useNetInfo} from '@react-native-community/netinfo';
-import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import useLoginWithGoogle from '../hooks/useLoginWithGoogle';
 import {showToastWithGravity} from '../../../utils/utils';
@@ -15,10 +20,14 @@ const SocialMediaLogin: React.FC<SocialMediaLogin> = ({theme}) => {
   const {loginWithGoogle} = useLoginWithGoogle();
   const styles = makeStyles(theme.colors);
   const {isConnected, isInternetReachable} = useNetInfo();
+  const [loginRequested, setLoginRequested] = useState(false);
 
   const onLoginWithGooglePress = () => {
     if (isConnected && isInternetReachable) {
-      loginWithGoogle().then(() => {});
+      setLoginRequested(true);
+      loginWithGoogle().then(() => {
+        setLoginRequested(false);
+      });
     } else {
       showToastWithGravity('Please check your internet connection.');
     }
@@ -28,14 +37,14 @@ const SocialMediaLogin: React.FC<SocialMediaLogin> = ({theme}) => {
     <>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
+          disabled={loginRequested}
           style={styles.button}
           onPress={onLoginWithGooglePress}>
-          <GoogleSigninButton
-            style={styles.googleButton}
-            size={GoogleSigninButton.Size.Icon}
-            color={GoogleSigninButton.Color.Light}
-            onPress={onLoginWithGooglePress}
-          />
+          {loginRequested ? (
+            <ActivityIndicator size={16} />
+          ) : (
+            <Icon name={'google'} color={theme.colors.primary} size={16} />
+          )}
           <Text style={styles.buttonLabel}>Continue with google</Text>
         </TouchableOpacity>
       </View>

@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import auth from '@react-native-firebase/auth';
-import {updateToken} from '../redux/auth/actions';
 import {useDispatch} from 'react-redux';
+import {updateToken} from '../redux/auth/actions';
 
 export default () => {
   const dispatch = useDispatch();

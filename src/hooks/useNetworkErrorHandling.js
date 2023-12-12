@@ -73,5 +73,5 @@ export default () => {
     }
   };
 
-  return {handleApiError: handleApiError};
+  return {handleApiError};
 };
