@@ -1,7 +1,26 @@
+import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
+import Cart from '../../../cart/Cart';
 
-const Cart = () => {
-  return <Text>Cart</Text>;
+const DashboardCart = () => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text variant={'titleSmall'}>My Cart</Text>
+      </View>
+      <Cart />
+    </View>
+  );
 };
 
-export default Cart;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    padding: 16,
+  },
+});
+
+export default DashboardCart;

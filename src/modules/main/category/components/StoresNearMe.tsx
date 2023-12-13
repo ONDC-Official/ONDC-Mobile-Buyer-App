@@ -18,6 +18,10 @@ interface StoresNearMe {
   domain: string;
 }
 
+interface StoreImage {
+  source: any;
+}
+
 const CancelToken = axios.CancelToken;
 
 const BrandSkeleton = () => {
@@ -33,6 +37,19 @@ const BrandSkeleton = () => {
 };
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
+
+const StoreImage: React.FC<StoreImage> = ({source}) => {
+  const [imageSource, setImageSource] = useState(source);
+  const styles = makeStyles();
+
+  return (
+    <FastImage
+      source={imageSource}
+      style={styles.brandImage}
+      onError={() => setImageSource(NoImageAvailable)}
+    />
+  );
+};
 
 const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -101,13 +118,12 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
             <TouchableOpacity
               style={styles.brand}
               onPress={() => navigateToDetails(item)}>
-              <FastImage
+              <StoreImage
                 source={
                   item?.provider_descriptor?.images.length > 0
                     ? {uri: item?.provider_descriptor?.images[0]}
                     : NoImageAvailable
                 }
-                style={styles.brandImage}
               />
               <Text variant={'bodyMedium'}>
                 {item?.provider_descriptor?.name}

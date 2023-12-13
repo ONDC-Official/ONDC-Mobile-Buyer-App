@@ -23,8 +23,23 @@ export default () => {
   ) => {
     try {
       const config = getAuthConfig(cancelToken);
-      console.log(url);
+      console.log('Post', url);
       return await axios.post(encodeURI(url), params, config);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  };
+
+  const putDataWithAuth = async (
+    url: string,
+    params: any,
+    cancelToken: any,
+  ) => {
+    try {
+      const config = getAuthConfig(cancelToken);
+      console.log('Put', url);
+      return await axios.put(encodeURI(url), params, config);
     } catch (e) {
       console.error(e);
       throw e;
@@ -34,8 +49,19 @@ export default () => {
   const getDataWithAuth = async (url: string, cancelToken: any) => {
     try {
       const config = getAuthConfig(cancelToken);
-      console.log(url);
+      console.log('Get', url);
       return await axios.get(encodeURI(url), config);
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  };
+
+  const deleteDataWithAuth = async (url: string, cancelToken: any) => {
+    try {
+      const config = getAuthConfig(cancelToken);
+      console.log('Delete', url);
+      return await axios.delete(encodeURI(url), config);
     } catch (e) {
       console.error(e);
       throw e;
@@ -45,5 +71,7 @@ export default () => {
   return {
     getDataWithAuth,
     postDataWithAuth,
+    putDataWithAuth,
+    deleteDataWithAuth,
   };
 };

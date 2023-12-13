@@ -93,3 +93,5 @@ export const CURRENCY_SYMBOLS: any = {
 export const FB_DOMAIN: string = 'ONDC:RET11';
 export const GROCERY_DOMAIN: string = 'ONDC:RET10';
 export const FASHION_DOMAIN: string = 'ONDC:RET12';
+
+export const SSE_TIMEOUT = 20000;

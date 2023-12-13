@@ -9,6 +9,7 @@ import AddDefaultAddress from '../modules/main/profile/AddDefaultAddress';
 import Dashboard from '../modules/main/dashboard/Dashboard';
 import AddressList from '../modules/main/dashboard/components/address/AddressList';
 import Cart from '../modules/main/cart/Cart';
+import Checkout from '../modules/main/checkout/Checkout';
 import SearchProductList from '../modules/main/product/list/SearchProductList';
 import BillingAddressPicker from '../modules/main/payment/billingAddress/BillingAddressPicker';
 import AddBillingAddress from '../modules/main/payment/billingAddress/AddBillingAddress';
@@ -82,6 +83,14 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           options={{headerShown: false}}
         />
         <Stack.Screen name="Cart" component={Cart} />
+        <Stack.Screen
+          name="Checkout"
+          component={Checkout}
+          options={{
+            title: 'Checkout',
+            headerStyle,
+          }}
+        />
 
         <Stack.Screen
           name="AddDefaultAddress"

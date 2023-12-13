@@ -4,14 +4,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {Card, Chip, Text, withTheme} from 'react-native-paper';
+import {RadioButton, Text, useTheme} from 'react-native-paper';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
 import {clearCart} from '../../../../../redux/actions';
 import {saveAddress} from '../../../../../redux/address/actions';
 
 interface Address {
   item: any;
-  theme: any;
   isCurrentAddress: boolean;
   params: any;
   onAddressSelect: (item: any) => void;
@@ -19,23 +18,22 @@ interface Address {
 
 /**
  * Component to render single address card in select address screen
- * @param theme
- * @param selectedAddress:address selected by user
+ * @param selectedAddress: address selected by user
  * @param item:object which contains address details
  * @constructor
  * @returns {JSX.Element}
  */
 const Address: React.FC<Address> = ({
   item,
-  theme,
   isCurrentAddress,
   params,
   onAddressSelect,
 }) => {
+  const theme = useTheme();
+  const styles = makeStyles(theme.colors);
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const {colors} = theme;
-  const {street, landmark, city, state, areaCode, tag} = item.address;
+  const {street, landmark, city, state, areaCode} = item.address;
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
   const setDefaultAddress = async () => {
@@ -71,84 +69,64 @@ const Address: React.FC<Address> = ({
   };
 
   return (
-    <Card style={styles.card} onPress={setDefaultAddress}>
-      <View style={styles.container}>
-        <View style={styles.emptyCheckbox}>
-          {isCurrentAddress && (
-            <Icon name={'check-circle'} color={colors.primary} size={24} />
-          )}
-        </View>
-
-        <View style={styles.addressContainer}>
-          <View style={styles.headerRow}>
-            {tag && <Chip mode={'outlined'}>{tag}</Chip>}
-            {item?.descriptor?.name && (
-              <Text variant="titleMedium" style={styles.name}>
-                {item?.descriptor?.name}
-              </Text>
-            )}
-          </View>
-          {item?.descriptor?.email && (
-            <View style={styles.textContainer}>
-              <Text>{item?.descriptor?.email}</Text>
-            </View>
-          )}
-          {item?.descriptor?.phone && (
-            <View style={styles.textContainer}>
-              <Text>{item?.descriptor?.phone}</Text>
-            </View>
-          )}
-          <Text>
-            {street}, {landmark ? `${landmark},` : ''} {city}, {state},{' '}
-            {areaCode}
+    <TouchableOpacity style={styles.card} onPress={setDefaultAddress}>
+      <View style={styles.header}>
+        <RadioButton.Android
+          onPress={setDefaultAddress}
+          value={item?.descriptor?.name}
+          status={isCurrentAddress ? 'checked' : 'unchecked'}
+        />
+        {item?.descriptor?.name && (
+          <Text variant="titleMedium" style={styles.name}>
+            {item?.descriptor?.name}
           </Text>
-        </View>
-        <View style={styles.editContainer}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('UpdateAddress', {address: item})
-            }>
-            <Icon name="pencil-outline" size={24} color={colors.primary} />
-          </TouchableOpacity>
-        </View>
+        )}
       </View>
-    </Card>
+      <Text variant={'bodySmall'} style={styles.description}>
+        {street}, {landmark ? `${landmark},` : ''} {city}, {state}, {areaCode}{' '}
+        {item?.descriptor?.phone ? `phone: ${item?.descriptor?.phone}` : ''}
+      </Text>
+      <TouchableOpacity
+        style={styles.editButton}
+        onPress={() => navigation.navigate('UpdateAddress', {address: item})}>
+        <Icon name={'pencil-outline'} color={theme.colors.primary} size={17} />
+      </TouchableOpacity>
+    </TouchableOpacity>
   );
 };
 
-export default withTheme(Address);
+export default Address;
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: 'white',
-    margin: 8,
-  },
-  container: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    padding: 8,
-  },
-  addressContainer: {
-    flex: 1,
-    paddingHorizontal: 8,
-  },
-  emptyCheckbox: {
-    width: 24,
-    height: 24,
-  },
-  editContainer: {
-    width: 24,
-    height: 24,
-    marginEnd: 8,
-  },
-  textContainer: {
-    marginBottom: 4,
-  },
-  name: {
-    marginLeft: 6,
-  },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    card: {
+      backgroundColor: 'white',
+      margin: 8,
+      borderWidth: 1,
+      borderColor: '#196AAB',
+      borderRadius: 8,
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    name: {
+      marginLeft: 8,
+    },
+    description: {
+      color: '#4F4F4F',
+      marginBottom: 20,
+    },
+    editButton: {
+      borderColor: colors.primary,
+      borderWidth: 1,
+      width: 27,
+      height: 27,
+      borderRadius: 14,
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  });
