@@ -1,6 +1,8 @@
 import {Text, useTheme} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 import useLogoutUser from '../../../../../hooks/useLogoutUser';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
 
@@ -8,6 +10,7 @@ const Profile = () => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const {clearDataAndLogout} = useLogoutUser();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const confirmLogout = () => {
     alertWithTwoButtons(
@@ -20,6 +23,8 @@ const Profile = () => {
     );
   };
 
+  const navigateToOrders = () => navigation.navigate('Orders');
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -29,7 +34,7 @@ const Profile = () => {
         <Text variant={'bodyLarge'}>My Profile</Text>
         <Icon name={'chevron-right'} size={24} light />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.menuOption}>
+      <TouchableOpacity style={styles.menuOption} onPress={navigateToOrders}>
         <Text variant={'bodyLarge'}>Order History</Text>
         <Icon name={'chevron-right'} size={24} light />
       </TouchableOpacity>

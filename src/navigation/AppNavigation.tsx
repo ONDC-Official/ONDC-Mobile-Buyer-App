@@ -18,7 +18,6 @@ import ProductDetails from '../modules/main/product/details/ProductDetails';
 import Payment from '../modules/main/payment/payment/Payment';
 import Profile from '../modules/main/profile/Profile';
 import Support from '../modules/main/support/Support';
-import Order from '../modules/main/order/Order';
 import OrderDetails from '../modules/main/order/OrderDetails';
 import CallSeller from '../modules/main/order/CallSeller';
 import CancelOrder from '../modules/main/order/CancelOrder';
@@ -30,6 +29,7 @@ import CategoryDetails from '../modules/main/category/CategoryDetails';
 import BrandDetails from '../modules/main/provider/BrandDetails';
 import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
 import Outlets from '../modules/main/provider/Outlets';
+import Orders from '../modules/main/order/Orders';
 
 const Stack = createStackNavigator();
 
@@ -151,7 +151,14 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
 
         <Stack.Screen name="Profile" component={Profile} />
 
-        <Stack.Screen name="Orders" component={Order} />
+        <Stack.Screen
+          name="Orders"
+          component={Orders}
+          options={{
+            title: 'Order History',
+            headerStyle,
+          }}
+        />
 
         <Stack.Screen
           name="OrderDetails"

@@ -17,3 +17,4 @@ export const PRODUCT_SEARCH: string = '/clientApis/v2/search';
 export const ITEMS: string = '/clientApis/v2/items';
 export const PROVIDER_LOCATIONS: string = '/clientApis/v2/locations';
 export const ITEM_DETAILS: string = '/protocol/item-details';
+export const ORDERS: string = '/clientApis/v2/orders';
