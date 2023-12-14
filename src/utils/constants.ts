@@ -95,3 +95,7 @@ export const GROCERY_DOMAIN: string = 'ONDC:RET10';
 export const FASHION_DOMAIN: string = 'ONDC:RET12';
 
 export const SSE_TIMEOUT = 20000;
+export const ORDER_PAYMENT_METHODS = {
+  COD: 'cash_on_delivery',
+  JUSPAY: 'juspay',
+};

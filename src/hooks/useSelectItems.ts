@@ -7,7 +7,6 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
-import {BASE_URL} from '../utils/apiUtilities';
 import {SSE_TIMEOUT} from '../utils/constants';
 import {API_BASE_URL} from '../utils/apiActions';
 import {setStoredData} from '../utils/storage';
@@ -90,8 +89,8 @@ export default (navigate: boolean = true) => {
 
   const getProviderIds = async (qoute: any[]) => {
     let providers: any[] = [];
-    qoute.map(cartItem => {
-      providers.push(cartItem.provider.local_id);
+    qoute.forEach(item => {
+      providers.push(item.provider.local_id);
     });
     const ids = [...new Set(providers)];
     await setStoredData('providerIds', JSON.stringify(ids));
@@ -176,7 +175,7 @@ export default (navigate: boolean = true) => {
   const onFetchQuote = (messageIds: any[]) => {
     eventTimeOutRef.current = messageIds.map(messageId => {
       const eventSource = new RNEventSource(
-        `${BASE_URL}/clientApis/events/v2?messageId=${messageId}`,
+        `${API_BASE_URL}/clientApis/events/v2?messageId=${messageId}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },

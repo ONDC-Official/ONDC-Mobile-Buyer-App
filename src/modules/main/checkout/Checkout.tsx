@@ -1,35 +1,16 @@
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {useEffect, useState} from 'react';
-import {
-  Avatar,
-  Button,
-  Card,
-  RadioButton,
-  Text,
-  useTheme,
-} from 'react-native-paper';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import useSelectItems from '../../../hooks/useSelectItems';
-import EmptyCart from '../cart/components/EmptyCart';
-import CartItems from '../cart/components/CartItems';
-import {getStoredData, setStoredData} from '../../../utils/storage';
-import {
-  constructQuoteObject,
-  getInitials,
-  showToastWithGravity,
-} from '../../../utils/utils';
-import {useSelector} from 'react-redux';
+import {getStoredData} from '../../../utils/storage';
+import {showToastWithGravity} from '../../../utils/utils';
+import AddressList from './components/AddressList';
+import Customer from './components/Customer';
+import Fulfillment from './components/Fulfillment';
+import Payment from './components/Payment';
 
 const steps = [
-  {
-    label: 'Cart',
-  },
   {
     label: 'Customer',
   },
@@ -37,7 +18,7 @@ const steps = [
     label: 'Fulfillment',
   },
   {
-    label: 'Add Address',
+    label: 'Address',
   },
   {
     label: 'Payment',
@@ -48,7 +29,8 @@ const stepsCount = steps.length;
 
 const Checkout = () => {
   const theme = useTheme();
-  const {address} = useSelector(({addressReducer}) => addressReducer);
+  const [billingAddress, setBillingAddress] = useState<any>(null);
+  const [deliveryAddress, setDeliveryAddress] = useState<any>(null);
   const styles = makeStyles(theme.colors);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [updatedCartItems, setUpdatedCartItems] = useState<any[]>([]);
@@ -59,111 +41,55 @@ const Checkout = () => {
     isError: false,
     total_payable: 0,
   });
-
-  const {
-    loading,
-    cartItems,
-    checkoutLoading,
-    onCheckoutFromCart,
-    haveDistinctProviders,
-    isProductAvailableQuantityIsZero,
-    isProductCategoryIsDifferent,
-    setCartItems,
-  } = useSelectItems(false);
+  const {cartItems, setCartItems} = useSelectItems(false);
 
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size={'large'} color={theme.colors.primary} />
-          </View>
-        ) : cartItems.length === 0 ? (
-          <EmptyCart />
-        ) : (
-          <ScrollView style={styles.listContainer}>
-            <CartItems
-              allowScroll={false}
-              cartItems={cartItems}
-              setCartItems={setCartItems}
-              haveDistinctProviders={haveDistinctProviders}
-              isProductCategoryIsDifferent={isProductCategoryIsDifferent}
-            />
-            <View style={styles.buttonContainer}>
-              <Button
-                style={styles.cartButton}
-                mode={'contained'}
-                onPress={() => setCurrentStep(currentStep + 1)}>
-                Continue
-              </Button>
-              <View style={styles.separator} />
-              <Button
-                disabled={checkoutLoading}
-                style={styles.cartButton}
-                mode={'contained'}
-                onPress={onCheckoutFromCart}>
-                {checkoutLoading ? (
-                  <ActivityIndicator color={theme.colors.primary} size={14} />
-                ) : (
-                  'Update Cart'
-                )}
-              </Button>
-            </View>
-          </ScrollView>
+        return (
+          <Customer currentStep={currentStep} setCurrentStep={setCurrentStep} />
         );
 
       case 1:
         return (
-          <View style={styles.listContainer}>
-            <View style={styles.customerRow}>
-              <Avatar.Text
-                size={36}
-                label={getInitials(address?.descriptor?.name)}
-              />
-              <View style={styles.customerMeta}>
-                <Text variant={'titleSmall'}>{address?.descriptor?.name}</Text>
-                <Text variant={'bodyLarge'}>{address?.descriptor?.email}</Text>
-              </View>
-            </View>
-            <Button
-              mode={'contained'}
-              onPress={() => setCurrentStep(currentStep + 1)}>
-              Continue
-            </Button>
-          </View>
+          <Fulfillment
+            selectedFulfillment={selectedFulfillment}
+            setSelectedFulfillment={setSelectedFulfillment}
+            cartItems={updatedCartItems}
+            setCurrentStep={setCurrentStep}
+            currentStep={currentStep}
+          />
         );
 
       case 2:
         return (
-          <View style={styles.listContainer}>
-            <RadioButton.Group
-              value={selectedFulfillment}
-              onValueChange={newValue => setSelectedFulfillment(newValue)}>
-              {updatedCartItems[0]?.message?.quote?.fulfillments?.map(
-                (fulfillment: any) => (
-                  <View key={fulfillment.id} style={styles.customerRow}>
-                    <RadioButton.Android value={fulfillment.id} />
-                    <Text>{fulfillment['@ondc/org/category']}</Text>
-                  </View>
-                ),
-              )}
-            </RadioButton.Group>
-            <Button
-              mode={'contained'}
-              onPress={() => setCurrentStep(currentStep + 1)}>
-              Continue
-            </Button>
-          </View>
+          <AddressList
+            deliveryAddress={deliveryAddress}
+            setBillingAddress={setBillingAddress}
+            setCurrentStep={setCurrentStep}
+            currentStep={currentStep}
+            setDeliveryAddress={setDeliveryAddress}
+          />
         );
 
       case 3:
-        return <View style={styles.listContainer}></View>;
-
-      case 4:
-        return <></>;
-
-      case 5:
-        return <></>;
+        return (
+          <Payment
+            productsQuote={productsQuote}
+            cartItems={cartItems}
+            updatedCartItemsData={updatedCartItems}
+            billingAddress={billingAddress}
+            deliveryAddress={deliveryAddress}
+            selectedFulfillmentId={selectedFulfillment}
+            responseReceivedIds={updatedCartItems.map(item =>
+              item?.message?.quote?.provider?.id.toString(),
+            )}
+            fulfilmentList={updatedCartItems[0]?.message?.quote?.fulfillments}
+            setUpdateCartItemsDataOnInitialize={data => {
+              setUpdatedCartItems(data);
+            }}
+          />
+        );
     }
   };
 
@@ -183,65 +109,6 @@ const Checkout = () => {
       }
     });
     return isCustomization;
-  };
-
-  const getItemsTotal = (providers: any[]) => {
-    let finalTotal = 0;
-    if (providers) {
-      providers.forEach((provider: any) => {
-        const items = Object.values(provider.items).filter(
-          (quote: any) => quote?.title !== '',
-        );
-        items.forEach((item: any) => {
-          finalTotal = finalTotal + parseFloat(item.price.value);
-          if (item?.tax) {
-            finalTotal = finalTotal + parseFloat(item.tax.value);
-          }
-          if (item?.discount) {
-            finalTotal = finalTotal + parseFloat(item.discount.value);
-          }
-          if (item?.customizations) {
-            Object.values(item.customizations)?.forEach((custItem: any) => {
-              finalTotal = finalTotal + parseFloat(custItem.price.value);
-              if (custItem?.tax) {
-                finalTotal = finalTotal + parseFloat(custItem.tax.value);
-              }
-            });
-          }
-        });
-      });
-    }
-    return finalTotal.toFixed(2);
-  };
-
-  const renderDeliveryLine = (quote: any, key: any) => (
-    <View style={styles.summaryRow} key={`d-quote-${key}-price`}>
-      <Text variant="bodyMedium">{quote?.title}</Text>
-      <Text variant="bodyMedium">₹{parseInt(quote?.value).toFixed(2)}</Text>
-    </View>
-  );
-
-  const getDeliveryTotalAmount = (providers: any[]) => {
-    let total = 0;
-    providers.forEach((provider: any) => {
-      const data = provider.delivery;
-      if (data.delivery) {
-        total = total + parseFloat(data.delivery.value);
-      }
-      if (data.discount) {
-        total = total + parseFloat(data.discount.value);
-      }
-      if (data.tax) {
-        total = total + parseFloat(data.tax.value);
-      }
-      if (data.packing) {
-        total = total + parseFloat(data.packing.value);
-      }
-      if (data.misc) {
-        total = total + parseFloat(data.misc.value);
-      }
-    });
-    return total.toFixed(2);
   };
 
   const showQuoteError = () => {
@@ -597,96 +464,6 @@ const Checkout = () => {
         ))}
       </View>
       {renderStep()}
-      <View style={styles.summaryCard}>
-        <Text variant={'titleMedium'}>Summary</Text>
-        <View style={styles.summaryDivider} />
-        <View style={styles.summaryRow}>
-          <Text variant="bodyMedium">Total</Text>
-          <Text variant="bodyMedium">
-            ₹{getItemsTotal(productsQuote?.providers)}
-          </Text>
-        </View>
-        <View style={styles.summaryDivider} />
-        {productsQuote?.providers.map((provider: any, pindex: number) => {
-          const {delivery} = provider;
-          return (
-            <View key={`delivery${pindex}`}>
-              {delivery.delivery &&
-                renderDeliveryLine(delivery.delivery, 'delivery')}
-              {delivery.discount &&
-                renderDeliveryLine(delivery.discount, 'discount')}
-              {delivery.tax && renderDeliveryLine(delivery.tax, 'tax')}
-              {delivery.packing &&
-                renderDeliveryLine(delivery.packing, 'packing')}
-              {delivery.misc && renderDeliveryLine(delivery.misc, 'misc')}
-              {delivery &&
-                (delivery.delivery ||
-                  delivery.discount ||
-                  delivery.tax ||
-                  delivery.packing ||
-                  delivery.misc) && (
-                  <View style={styles.summaryRow}>
-                    <Text variant="bodyMedium">Total</Text>
-                    <Text variant="bodyMedium">
-                      ₹{getDeliveryTotalAmount(productsQuote?.providers)}
-                    </Text>
-                  </View>
-                )}
-            </View>
-          );
-        })}
-        <View style={styles.summaryDivider} />
-        <View style={styles.summaryRow}>
-          <Text variant="bodyLarge">Order Total</Text>
-          <Text variant="titleSmall">
-            ₹{Number(productsQuote?.total_payable).toFixed(2)}
-          </Text>
-        </View>
-        {/*<Button*/}
-        {/*  className={classes.proceedToBuy}*/}
-        {/*  fullWidth*/}
-        {/*  variant="contained"*/}
-        {/*  disabled={*/}
-        {/*    activePaymentMethod === '' ||*/}
-        {/*    productsQuote.isError ||*/}
-        {/*    confirmOrderLoading ||*/}
-        {/*    initLoading ||*/}
-        {/*    currentStep !== 4*/}
-        {/*  }*/}
-        {/*  onClick={() => {*/}
-        {/*    // if (activePaymentMethod) {*/}
-        {/*    //   const {productQuotes, successOrderIds} = JSON.parse(*/}
-        {/*    //     localStorage.getItem('checkout_details') || '{}',*/}
-        {/*    //   );*/}
-        {/*    //   setConfirmOrderLoading(true);*/}
-        {/*    //   let c = cartItems.map(item => {*/}
-        {/*    //     return item.item;*/}
-        {/*    //   });*/}
-        {/*    //   if (activePaymentMethod === payment_methods.JUSPAY) {*/}
-        {/*    //     // setTogglePaymentGateway(true);*/}
-        {/*    //     // setLoadingSdkForPayment(true);*/}
-        {/*    //     // initiateSDK();*/}
-        {/*    //     const request_object = constructQuoteObject(*/}
-        {/*    //       c.filter(({provider}) =>*/}
-        {/*    //         successOrderIds.includes(provider.local_id.toString()),*/}
-        {/*    //       ),*/}
-        {/*    //     );*/}
-        {/*    //     confirmOrder(request_object[0], payment_methods.JUSPAY);*/}
-        {/*    //   } else {*/}
-        {/*    //     const request_object = constructQuoteObject(*/}
-        {/*    //       c.filter(({provider}) =>*/}
-        {/*    //         successOrderIds.includes(provider.local_id.toString()),*/}
-        {/*    //       ),*/}
-        {/*    //     );*/}
-        {/*    //     confirmOrder(request_object[0], payment_methods.COD);*/}
-        {/*    //   }*/}
-        {/*    // } else {*/}
-        {/*    //   showToastWithGravity('Please select payment.');*/}
-        {/*    // }*/}
-        {/*  }}>*/}
-        {/*  {confirmOrderLoading || initLoading ? <ActivityIndicator size={14} color={theme.colors.primary} /> : 'Proceed to Buy'}*/}
-        {/*</Button>*/}
-      </View>
     </View>
   );
 };
@@ -695,6 +472,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     pageContainer: {
       backgroundColor: '#fff',
+      flex: 1,
     },
     stepNumberText: {
       color: '#151515',
@@ -724,7 +502,6 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       flex: 1,
-      backgroundColor: '#0f0',
       height: 50,
     },
     selectedStep: {
@@ -753,25 +530,13 @@ const makeStyles = (colors: any) =>
       height: 1,
       flex: 1,
     },
-    loadingContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    separator: {
-      width: 16,
-    },
     listContainer: {
       padding: 16,
       backgroundColor: '#F9F9F9',
     },
-    buttonContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: 20,
-    },
-    cartButton: {
+    addressFormContainer: {
       flex: 1,
+      backgroundColor: '#0f0',
     },
     summaryCard: {
       paddingTop: 40,
@@ -791,13 +556,22 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       marginBottom: 12,
     },
-    customerRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
+    addAddress: {
       marginBottom: 20,
     },
-    customerMeta: {
-      marginLeft: 12,
+    shippingAddress: {
+      marginBottom: 12,
+    },
+    billingAddressContainer: {
+      marginTop: 20,
+    },
+    addressSelection: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 16,
+    },
+    addressText: {
+      marginVertical: 8,
     },
   });
 
