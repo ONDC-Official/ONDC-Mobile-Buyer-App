@@ -13,17 +13,14 @@ import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useSelector} from 'react-redux';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {getCustomizations, showToastWithGravity} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, ITEM_DETAILS} from '../../../../utils/apiActions';
-import FBProductCustomization, {
-  formatCustomizationGroups,
-  formatCustomizations,
-} from './FBProductCustomization';
+import FBProductCustomization from './FBProductCustomization';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
-import {useSelector} from 'react-redux';
 import useCartItems from '../../../../hooks/useCartItems';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {areCustomisationsSame} from '../../product/details/ProductDetails';
@@ -322,12 +319,14 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               {itemQty}
             </Text>
             <TouchableOpacity
+              disabled={itemOutOfStock}
               style={styles.incrementButton}
               onPress={() => setItemQty(itemQty + 1)}>
               <Icon name={'plus'} color={theme.colors.primary} />
             </TouchableOpacity>
           </View>
           <Button
+            disabled={itemOutOfStock}
             mode="contained"
             style={styles.addToCardButton}
             onPress={addDetailsToCart}>
@@ -391,7 +390,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       borderBottomColor: '#ababab',
-      borderWidth: 1,
+      borderBottomWidth: 1,
     },
     title: {
       color: '#1A1A1A',

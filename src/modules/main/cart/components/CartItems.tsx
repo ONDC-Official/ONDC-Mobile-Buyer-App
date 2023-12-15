@@ -1,7 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {
   ActivityIndicator,
+  Dimensions,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -9,16 +10,19 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import FastImage from 'react-native-fast-image';
-import {IconButton, Modal, Portal, Text, useTheme} from 'react-native-paper';
+import {Button, IconButton, Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {API_BASE_URL} from '../../../../utils/apiActions';
 import {
+  getCustomizations,
   getPriceWithCustomisations,
   showToastWithGravity,
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
+import FBProductCustomization from '../../provider/components/FBProductCustomization';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -29,6 +33,7 @@ interface CartItems {
 }
 
 const CancelToken = axios.CancelToken;
+const screenHeight: number = Dimensions.get('screen').height;
 
 const CartItems: React.FC<CartItems> = ({
   allowScroll = true,
@@ -39,6 +44,7 @@ const CartItems: React.FC<CartItems> = ({
 }) => {
   const {deleteDataWithAuth, getDataWithAuth, putDataWithAuth} =
     useNetworkHandling();
+  const customizationSheet = useRef<any>(null);
   const source = useRef<any>(null);
   const {uid} = useSelector(({authReducer}) => authReducer);
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -46,15 +52,14 @@ const CartItems: React.FC<CartItems> = ({
   const styles = makeStyles(theme.colors);
   const [updatingCartItem, setUpdatingCartItem] = useState<any>(null);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
-  const [productLoading, setProductLoading] = useState<boolean>(false);
   const [currentCartItem, setCurrentCartItem] = useState<any>(null);
   const [productPayload, setProductPayload] = useState<any>(null);
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [requestedProduct, setRequestedProduct] = useState<any>(null);
   const [customizationState, setCustomizationState] = useState<any>({});
 
   const getProductDetails = async (productId: any) => {
     try {
-      setProductLoading(true);
+      source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
         `${API_BASE_URL}/protocol/item-details?id=${productId}`,
         source.current.token,
@@ -62,12 +67,10 @@ const CartItems: React.FC<CartItems> = ({
       setProductPayload(data);
     } catch (error) {
       console.error('Error fetching product details:', error);
-    } finally {
-      setProductLoading(false);
     }
   };
 
-  const getCustomizations = (cartItem: any) => {
+  const renderCustomizations = (cartItem: any) => {
     if (cartItem.item.customisations) {
       const customisations = cartItem.item.customisations;
 
@@ -188,6 +191,19 @@ const CartItems: React.FC<CartItems> = ({
     }
   };
 
+  const handleCustomiseClick = async (cartItem: any) => {
+    try {
+      setRequestedProduct(cartItem._id);
+      setCustomizationState(cartItem.item.customisationState);
+      await getProductDetails(cartItem.item.id);
+      setCurrentCartItem(cartItem);
+      showCustomization();
+    } catch (e) {
+    } finally {
+      setRequestedProduct(null);
+    }
+  };
+
   const renderItems = () => {
     return cartItems?.map((cartItem: any, index: number) => (
       <View key={cartItem._id}>
@@ -210,17 +226,21 @@ const CartItems: React.FC<CartItems> = ({
             <Text variant={'bodyMedium'}>
               {cartItem?.item?.product?.descriptor?.name}
             </Text>
-            {getCustomizations(cartItem)}
+            {renderCustomizations(cartItem)}
             {cartItem.item.hasCustomisations && (
               <TouchableOpacity
+                disabled={!!requestedProduct}
                 style={styles.customiseContainer}
-                onPress={() => {
-                  setCustomizationState(cartItem.item.customisationState);
-                  getProductDetails(cartItem.item.id).then(() => {});
-                  setCurrentCartItem(cartItem);
-                  setOpenDrawer(true);
-                }}>
-                <Icon name={'pencil'} color={theme.colors.primary} size={14} />
+                onPress={() => handleCustomiseClick(cartItem)}>
+                {cartItem._id === requestedProduct ? (
+                  <ActivityIndicator color={theme.colors.primary} size={14} />
+                ) : (
+                  <Icon
+                    name={'pencil-outline'}
+                    color={theme.colors.primary}
+                    size={14}
+                  />
+                )}
                 <Text variant={'labelMedium'} style={styles.customiseText}>
                   Customise
                 </Text>
@@ -310,6 +330,31 @@ const CartItems: React.FC<CartItems> = ({
     ));
   };
 
+  const showCustomization = () => customizationSheet.current.open();
+
+  const hideCustomization = () => customizationSheet.current.close();
+
+  const updateCustomizations = async () => {
+    const url = `${API_BASE_URL}/clientApis/v2/cart/${uid}/${currentCartItem._id}`;
+    const items = cartItems.concat([]);
+    const itemIndex = items.findIndex(item => item._id === currentCartItem._id);
+    if (itemIndex !== -1) {
+      let updatedCartItem = items[itemIndex];
+      const updatedCustomizations = await getCustomizations(
+        productPayload,
+        customizationState,
+      );
+      updatedCartItem.id = updatedCartItem.item.id;
+      updatedCartItem.item.customisations = updatedCustomizations;
+      updatedCartItem = updatedCartItem.item;
+      updatedCartItem.customisationState = customizationState;
+      source.current = CancelToken.source();
+      await putDataWithAuth(url, updatedCartItem, source.current.token);
+      hideCustomization();
+      setCartItems(items);
+    }
+  };
+
   return (
     <>
       {allowScroll ? (
@@ -318,25 +363,48 @@ const CartItems: React.FC<CartItems> = ({
         renderItems()
       )}
 
-      <Portal>
-        <Modal
-          visible={openDrawer}
-          onDismiss={() => {
-            setProductPayload(null);
-            setCustomizationState({});
-            setOpenDrawer(false);
-          }}>
-          {/*<EditCustomizations*/}
-          {/*  cartItems={cartItems}*/}
-          {/*  productPayload={productPayload}*/}
-          {/*  setProductPayload={setProductPayload}*/}
-          {/*  customization_state={customization_state}*/}
-          {/*  setCustomizationState={setCustomizationState}*/}
-          {/*  setOpenDrawer={setOpenDrawer}*/}
-          {/*  currentCartItem={currentCartItem}*/}
-          {/*/>*/}
-        </Modal>
-      </Portal>
+      <RBSheet
+        ref={customizationSheet}
+        height={screenHeight - 150}
+        customStyles={{
+          container: styles.rbSheet,
+        }}>
+        <View style={styles.header}>
+          <Text variant={'titleSmall'} style={styles.title}>
+            Customize
+          </Text>
+          <IconButton icon={'close'} onPress={hideCustomization} />
+        </View>
+        <View style={styles.customizationContainer}>
+          <FBProductCustomization
+            isEditFlow
+            product={productPayload}
+            customizationState={customizationState}
+            setCustomizationState={setCustomizationState}
+            setItemOutOfStock={() => {}}
+          />
+        </View>
+
+        <View style={styles.customizationButtons}>
+          <Button
+            style={styles.customizationButton}
+            mode="outlined"
+            onPress={() =>
+              navigation.navigate('ProductDetails', {
+                productId: productPayload.id,
+              })
+            }>
+            View Details
+          </Button>
+          <View style={styles.separator} />
+          <Button
+            style={styles.customizationButton}
+            mode="contained"
+            onPress={updateCustomizations}>
+            Save
+          </Button>
+        </View>
+      </RBSheet>
     </>
   );
 };
@@ -419,6 +487,34 @@ const makeStyles = (colors: any) =>
       width: '100%',
       height: 1,
       backgroundColor: '#CACDD8',
+    },
+    customizationButtons: {
+      marginTop: 16,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingHorizontal: 16,
+    },
+    customizationButton: {
+      flex: 1,
+    },
+    separator: {
+      width: 16,
+    },
+    customizationContainer: {
+      padding: 16,
+    },
+    rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
+    header: {
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      borderBottomColor: '#ababab',
+      borderBottomWidth: 1,
+    },
+    title: {
+      color: '#1A1A1A',
     },
   });
 

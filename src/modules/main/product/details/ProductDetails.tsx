@@ -11,7 +11,7 @@ import {Button, List, Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
-
+import {useSelector} from 'react-redux';
 import {API_BASE_URL, ITEM_DETAILS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -25,8 +25,8 @@ import {
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import VariationsRenderer from '../../../../components/products/VariationsRenderer';
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
-import {useSelector} from 'react-redux';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
+import {showToastWithGravity} from '../../../../utils/utils';
 
 interface ProductDetails {
   route: any;
@@ -35,7 +35,10 @@ interface ProductDetails {
 
 const CancelToken = axios.CancelToken;
 
-export const areCustomisationsSame = (existingIds: any[], currentIds: any[]) => {
+export const areCustomisationsSame = (
+  existingIds: any[],
+  currentIds: any[],
+) => {
   if (existingIds.length !== currentIds.length) {
     return false;
   }
@@ -262,14 +265,15 @@ const ProductDetails: React.FC<ProductDetails> = ({
         setAddToCartLoading(false);
         await getCartItems(product.id);
       } else {
-        const currentCount = parseInt(cartItem[0].item.quantity.count);
-        const maxCount = parseInt(
+        const currentCount = Number(cartItem[0].item.quantity.count);
+        const maxCount = Number(
           cartItem[0].item.product.quantity.maximum.count,
         );
 
         if (currentCount < maxCount || !isIncrement) {
           if (!customisations) {
             await updateCartItem(cartItems, isIncrement, cartItem[0]._id);
+            showToastWithGravity('Item quantity updated in your cart.');
             setAddToCartLoading(false);
           } else {
             const currentIds = customisations.map(item => item.id);
@@ -291,14 +295,19 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 isIncrement,
                 matchingCustomisation._id,
               );
+              showToastWithGravity('Item quantity updated in your cart.');
               setAddToCartLoading(false);
             } else {
               await postDataWithAuth(url, payload, source.current.token);
+              showToastWithGravity('Item added to cart successfully.');
               setAddToCartLoading(false);
               await getCartItems(product.id);
             }
           }
         } else {
+          showToastWithGravity(
+            'The maximum available quantity for item is already in your cart.',
+          );
           setAddToCartLoading(false);
         }
       }
