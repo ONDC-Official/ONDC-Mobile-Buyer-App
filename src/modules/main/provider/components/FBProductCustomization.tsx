@@ -12,7 +12,7 @@ interface FBProductCustomization {
   setItemOutOfStock: (flag: boolean) => void;
 }
 
-const formatCustomizationGroups = (groups: any) => {
+export const formatCustomizationGroups = (groups: any) => {
   return groups?.map((group: any) => {
     let minConfig, maxConfig, inputTypeConfig, seqConfig;
 
@@ -52,7 +52,7 @@ const formatCustomizationGroups = (groups: any) => {
   });
 };
 
-const formatCustomizations = (items: any) => {
+export const formatCustomizations = (items: any) => {
   return items?.map((customization: any) => {
     let parent = null;
     let isDefault = false;
@@ -381,7 +381,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
               ) ?? false;
 
             return (
-              <View style={styles.optionContainer}>
+              <View key={option.id} style={styles.optionContainer}>
                 <View style={styles.meta}>
                   <VegNonVegTag category={option.vegNonVeg} />
                   <Text variant={'bodyMedium'} style={styles.option}>
@@ -459,6 +459,7 @@ const makeStyles = () =>
     meta: {
       flexDirection: 'row',
       alignItems: 'center',
+      flex: 1,
     },
     optionActionContainer: {
       flexDirection: 'row',

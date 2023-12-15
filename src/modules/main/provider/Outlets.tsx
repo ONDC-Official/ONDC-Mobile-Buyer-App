@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import { Button, Text, useTheme } from "react-native-paper";
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
@@ -9,6 +9,7 @@ import {skeletonList} from '../../../utils/utils';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, PROVIDER_LOCATIONS} from '../../../utils/apiActions';
+import { appStyles } from "../../../styles/styles";
 
 interface Outlets {
   navigation: any;
@@ -105,6 +106,14 @@ const Outlets: React.FC<Outlets> = ({navigation, route: {params}}) => {
             </TouchableOpacity>
           )}
           keyExtractor={item => item.id}
+          ListEmptyComponent={() => (
+            <View style={[appStyles.container, appStyles.centerContainer]}>
+              <Text>No Outlets available</Text>
+            </View>
+          )}
+          contentContainerStyle={
+            locations.length > 0 ? styles.contentContainer : appStyles.container
+          }
         />
       )}
     </View>
@@ -116,6 +125,7 @@ const makeStyles = (colors: any) =>
     container: {
       paddingTop: 40,
       paddingHorizontal: 16,
+      flex: 1,
     },
     title: {
       marginBottom: 12,
@@ -135,6 +145,9 @@ const makeStyles = (colors: any) =>
       width: 160,
       height: 160,
       marginBottom: 12,
+    },
+    contentContainer: {
+      paddingBottom: 16,
     },
   });
 export default Outlets;

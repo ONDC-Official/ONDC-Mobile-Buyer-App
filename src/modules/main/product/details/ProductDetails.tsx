@@ -35,7 +35,7 @@ interface ProductDetails {
 
 const CancelToken = axios.CancelToken;
 
-const areCustomisationsSame = (existingIds: any[], currentIds: any[]) => {
+export const areCustomisationsSame = (existingIds: any[], currentIds: any[]) => {
   if (existingIds.length !== currentIds.length) {
     return false;
   }

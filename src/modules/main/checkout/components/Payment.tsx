@@ -197,7 +197,7 @@ const Payment: React.FC<Payment> = ({
               email: deliveryAddress?.descriptor?.email,
               phone: deliveryAddress?.descriptor?.phone,
               location: {
-                gps: `${deliveryAddress?.address?.lat}, ${deliveryAddress?.address?.lng}`,
+                gps: `${deliveryAddress?.address?.lat},${deliveryAddress?.address?.lng}`,
                 address: deliveryAddress?.address,
               },
             },

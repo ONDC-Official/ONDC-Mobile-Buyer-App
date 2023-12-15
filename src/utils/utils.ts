@@ -241,3 +241,61 @@ export const removeNullValues = (object: any) => {
   });
   return object;
 };
+
+const getSingleCustomization = (
+  groupId: any,
+  customizationState: any,
+  selectedCustomizationIds: any[],
+) => {
+  let group = customizationState[groupId];
+  if (!group) {
+    return selectedCustomizationIds;
+  }
+
+  group.selected.map((selected: any) =>
+    selectedCustomizationIds.push(selected.id),
+  );
+  group?.childs?.map((child: any) => {
+    selectedCustomizationIds = getSingleCustomization(
+      child,
+      customizationState,
+      selectedCustomizationIds,
+    );
+  });
+  return selectedCustomizationIds;
+};
+
+export const getCustomizations = async (
+  product: any,
+  customizationState: any,
+) => {
+  const {customisation_items} = product;
+  const customizations: any[] = [];
+
+  const firstGroupId = customizationState.firstGroup?.id;
+  if (!firstGroupId) {
+    return;
+  }
+
+  const selectedCustomizationIds = getSingleCustomization(
+    firstGroupId,
+    customizationState,
+    [],
+  );
+
+  for (const cId of selectedCustomizationIds) {
+    let customizationItem = customisation_items.find(
+      (item: any) => item.local_id === cId,
+    );
+    if (customizationItem) {
+      customizationItem = {
+        ...customizationItem,
+        quantity: {
+          count: 1,
+        },
+      };
+      customizations.push(customizationItem);
+    }
+  }
+  return customizations;
+};
