@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OrderCardSkeleton from './OrderCardSkeleton';
+import OrderSkeleton from './OrderSkeleton';
 
 interface ListFooter {
   moreRequested: boolean;
@@ -13,6 +13,6 @@ interface ListFooter {
  * @returns {JSX.Element}
  */
 const ListFooter: React.FC<ListFooter> = ({moreRequested}) =>
-  moreRequested ? <OrderCardSkeleton /> : null;
+  moreRequested ? <OrderSkeleton /> : null;
 
 export default ListFooter;

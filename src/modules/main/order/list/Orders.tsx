@@ -3,14 +3,14 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import axios from 'axios';
 import {useIsFocused} from '@react-navigation/native';
-import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {appStyles} from '../../../styles/styles';
-import {keyExtractor, skeletonList} from '../../../utils/utils';
-import ListFooter from './components/ListFooter';
-import OrderCardSkeleton from './components/OrderCardSkeleton';
-import OrderHeader from './components/OrderHeader';
-import useNetworkHandling from '../../../hooks/useNetworkHandling';
-import {API_BASE_URL, ORDERS} from '../../../utils/apiActions';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {appStyles} from '../../../../styles/styles';
+import {keyExtractor, skeletonList} from '../../../../utils/utils';
+import ListFooter from '../components/ListFooter';
+import OrderSkeleton from '../components/OrderSkeleton';
+import Order from '../components/Order';
+import useNetworkHandling from '../../../../hooks/useNetworkHandling';
+import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
 
 const CancelToken = axios.CancelToken;
 
@@ -119,16 +119,17 @@ const Orders: React.FC<any> = () => {
    * @constructor
    * @returns {JSX.Element}
    */
-  const renderItem = ({item}) => <OrderHeader order={item} />;
+  const renderItem = ({item}) => <Order order={item} />;
 
   if (apiInProgress) {
     return (
       <View style={styles.pageContainer}>
         <FlatList
           data={skeletonList}
-          renderItem={() => <OrderCardSkeleton />}
+          renderItem={() => <OrderSkeleton />}
           keyExtractor={keyExtractor}
           contentContainerStyle={styles.contentContainerStyle}
+          ItemSeparatorComponent={() => <View style={styles.divider} />}
         />
       </View>
     );

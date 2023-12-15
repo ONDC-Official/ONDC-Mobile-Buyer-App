@@ -18,7 +18,7 @@ import ProductDetails from '../modules/main/product/details/ProductDetails';
 import Payment from '../modules/main/payment/payment/Payment';
 import Profile from '../modules/main/profile/Profile';
 import Support from '../modules/main/support/Support';
-import OrderDetails from '../modules/main/order/OrderDetails';
+import OrderDetails from '../modules/main/order/details/OrderDetails';
 import CallSeller from '../modules/main/order/CallSeller';
 import CancelOrder from '../modules/main/order/CancelOrder';
 import ReturnOrder from '../modules/main/order/ReturnOrder';
@@ -29,7 +29,7 @@ import CategoryDetails from '../modules/main/category/CategoryDetails';
 import BrandDetails from '../modules/main/provider/BrandDetails';
 import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
 import Outlets from '../modules/main/provider/Outlets';
-import Orders from '../modules/main/order/Orders';
+import Orders from '../modules/main/order/list/Orders';
 
 const Stack = createStackNavigator();
 
@@ -164,7 +164,8 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="OrderDetails"
           component={OrderDetails}
           options={{
-            title: '',
+            title: 'Order Details',
+            headerStyle,
           }}
         />
 

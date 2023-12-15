@@ -7,7 +7,7 @@ import FastImage from 'react-native-fast-image';
 import {Text, useTheme} from 'react-native-paper';
 import OrderStatus from './OrderStatus';
 
-interface OrderHeader {
+interface Order {
   order: any;
 }
 
@@ -17,7 +17,7 @@ interface OrderHeader {
  * @constructor
  * @returns {JSX.Element}
  */
-const OrderHeader: React.FC<OrderHeader> = ({order}) => {
+const OrderHeader: React.FC<Order> = ({order}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -51,14 +51,25 @@ const OrderHeader: React.FC<OrderHeader> = ({order}) => {
       </View>
       <View style={styles.row}>
         <View style={styles.imagesRow}>
-          {order?.items?.map((item: any) => (
-            <View style={styles.imageContainer}>
-              <FastImage
-                source={{uri: item?.product?.descriptor?.symbol}}
-                style={styles.image}
-              />
-            </View>
-          ))}
+          {order?.items?.map((item: any) => {
+            const type = item?.tags?.find((one: any) => one.code === 'type');
+            const isItem =
+              type?.list?.findIndex(
+                (one: any) => one.value === 'item' && one.code === 'type',
+              ) > -1;
+            if (isItem) {
+              return (
+                <View style={styles.imageContainer} key={item?.id}>
+                  <FastImage
+                    source={{uri: item?.product?.descriptor?.symbol}}
+                    style={styles.image}
+                  />
+                </View>
+              );
+            } else {
+              return <View key={item?.id} />;
+            }
+          })}
         </View>
         <TouchableOpacity
           style={styles.detailsButton}

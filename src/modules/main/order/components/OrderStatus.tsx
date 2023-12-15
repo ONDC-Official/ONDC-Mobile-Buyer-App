@@ -1,7 +1,12 @@
 import React from 'react';
-import {Chip, withTheme} from 'react-native-paper';
+import {Chip, useTheme} from 'react-native-paper';
 
-const OrderStatus = ({status, theme}) => {
+interface OrderStatus {
+  status: string;
+}
+
+const OrderStatus: React.FC<OrderStatus> = ({status}) => {
+  const theme = useTheme();
   switch (status) {
     case 'Created':
       return (
@@ -59,4 +64,4 @@ const OrderStatus = ({status, theme}) => {
   }
 };
 
-export default withTheme(OrderStatus);
+export default OrderStatus;
