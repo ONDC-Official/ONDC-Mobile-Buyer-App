@@ -1,5 +1,5 @@
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {Button, Text, useTheme} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Button, Text, useTheme} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
@@ -274,7 +274,7 @@ const Summary: React.FC<Summary> = ({
     }
   };
 
-  const clearDataAndNavigate = async (events: any[]) => {
+  const clearDataAndNavigate = async () => {
     if (responseRef.current.length > 0) {
       const checkoutDetails = await getStoredData('checkout_details');
       // fetch request object length and compare it with the response length
@@ -296,8 +296,165 @@ const Summary: React.FC<Summary> = ({
     }
   };
 
+  const renderItemDetails = (
+    quote: any,
+    qIndex: number,
+    isCustomization: boolean,
+  ) => {
+    return (
+      <View>
+        <View key={`quote-${qIndex}-price`} style={styles.summaryRow}>
+          <Text
+            variant="bodyMedium"
+            style={
+              isCustomization
+                ? styles.summaryCustomizationPriceLabel
+                : styles.summaryItemPriceLabel
+            }>
+            {quote?.price?.title}
+          </Text>
+          <Text
+            variant="bodyMedium"
+            style={
+              isCustomization
+                ? styles.summaryCustomizationPriceValue
+                : styles.summaryItemPriceValue
+            }>
+            ₹{Number(quote?.price?.value).toFixed(2)}
+          </Text>
+        </View>
+        {quote?.tax && (
+          <View key={`quote-${qIndex}-tax`} style={styles.summaryRow}>
+            <Text
+              variant="bodyMedium"
+              style={
+                isCustomization
+                  ? styles.summaryCustomizationTaxLabel
+                  : styles.summaryItemTaxLabel
+              }>
+              {quote?.tax.title}
+            </Text>
+            <Text
+              variant="bodyMedium"
+              style={
+                isCustomization
+                  ? styles.summaryCustomizationPriceValue
+                  : styles.summaryItemPriceValue
+              }>
+              ₹${Number(quote?.tax.value).toFixed(2)}
+            </Text>
+          </View>
+        )}
+        {quote?.discount && (
+          <View key={`quote-${qIndex}-discount`} style={styles.summaryRow}>
+            <Text
+              variant="bodyMedium"
+              style={
+                isCustomization
+                  ? styles.summaryCustomizationDiscountLabel
+                  : styles.summaryItemDiscountLabel
+              }>
+              {quote?.discount.title}
+            </Text>
+            <Text variant="bodyMedium" style={styles.summaryItemPriceValue}>
+              ₹{Number(quote?.discount.value).toFixed(2)}
+            </Text>
+          </View>
+        )}
+      </View>
+    );
+  };
+
+  const renderOutOfStockItems = (provider: any, pindex: number) => {
+    if (
+      productsQuote.isError &&
+      provider.errorCode === '40002' &&
+      provider.error
+    ) {
+      return (
+        <View key={`outof-stockpindex-${pindex}`}>
+          {provider.error && provider.errorCode === '40002' ? (
+            <>
+              <View>
+                <Text variant="bodyMedium">Out of stock</Text>
+              </View>
+              {provider.outOfStock.map(
+                (outOfStockItems: any, outOfStockIndex: number) => (
+                  <View key={`outof-stock-item-index-${outOfStockIndex}`}>
+                    <View
+                      style={styles.outOfStockRow}
+                      key={`quote-${outOfStockIndex}-price`}>
+                      <Text variant="bodySmall">{outOfStockItems?.title}</Text>
+                      <View style={styles.stockQuantity}>
+                        <Text style={styles.stockQuantity} variant="bodyMedium">
+                          {outOfStockItems?.cartQuantity}
+                        </Text>
+                        <Text variant="bodyMedium">
+                          /{outOfStockItems?.quantity}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                ),
+              )}
+              <View style={styles.divider} />
+            </>
+          ) : (
+            <></>
+          )}
+        </View>
+      );
+    } else {
+      return <></>;
+    }
+  };
+
+  const renderItems = (provider: any, pindex: number) => {
+    return (
+      <View key={`pindex-${pindex}`}>
+        {Object.values(provider.items)
+          .filter((quote: any) => quote?.title !== '')
+          .map((quote: any, qIndex) => (
+            <View key={`quote-${qIndex}`}>
+              <View key={`quote-${qIndex}-title`}>
+                <Text variant="bodyLarge" style={styles.field}>
+                  {quote?.title}
+                </Text>
+              </View>
+              {renderItemDetails(quote, qIndex, false)}
+              {quote?.customizations && (
+                <View key={`quote-${qIndex}-customizations`}>
+                  <Text variant="bodyMedium" style={styles.field}>
+                    Customizations
+                  </Text>
+                  {Object.values(quote?.customizations).map(
+                    (customization: any, cIndex: number) => (
+                      <View style={styles.customizationContainer}>
+                        <View key={`quote-${qIndex}-customizations-${cIndex}`}>
+                          <Text variant="bodySmall">{customization.title}</Text>
+                        </View>
+                        {renderItemDetails(customization, cIndex, true)}
+                      </View>
+                    ),
+                  )}
+                </View>
+              )}
+            </View>
+          ))}
+        {productsQuote.isError &&
+          provider.errorCode !== '' &&
+          provider.errorCode !== '40002' &&
+          provider.error && (
+            <Text variant="bodyMedium" style={styles.error}>
+              {provider.error}
+            </Text>
+          )}
+      </View>
+    );
+  };
+
   useEffect(() => {
-    clearDataAndNavigate(eventData).then(r => {});
+    clearDataAndNavigate().then(() => {});
   }, [eventData]);
 
   return (
@@ -305,9 +462,17 @@ const Summary: React.FC<Summary> = ({
       <View style={styles.summaryCard}>
         <Text variant={'titleMedium'}>Summary</Text>
         <View style={styles.summaryDivider} />
+        {productsQuote?.providers.map((provider, pindex) =>
+          renderOutOfStockItems(provider, pindex),
+        )}
+
+        {productsQuote?.providers.map((provider, pindex) =>
+          renderItems(provider, pindex),
+        )}
+        <View style={styles.summaryDivider} />
         <View style={styles.summaryRow}>
           <Text variant="bodyMedium">Total</Text>
-          <Text variant="bodyMedium">
+          <Text variant="bodyMedium" style={styles.total}>
             ₹{getItemsTotal(productsQuote?.providers)}
           </Text>
         </View>
@@ -347,21 +512,26 @@ const Summary: React.FC<Summary> = ({
             ₹{Number(productsQuote?.total_payable).toFixed(2)}
           </Text>
         </View>
-        <Button
-          mode="contained"
-          disabled={
-            activePaymentMethod === '' ||
-            productsQuote.isError ||
-            confirmOrderLoading ||
-            initLoading
-          }
-          onPress={handleConfirmOrder}>
-          {confirmOrderLoading || initLoading ? (
-            <ActivityIndicator size={14} color={theme.colors.primary} />
-          ) : (
-            'Proceed to Buy'
-          )}
-        </Button>
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="contained"
+            disabled={
+              activePaymentMethod === '' ||
+              productsQuote.isError ||
+              confirmOrderLoading ||
+              initLoading
+            }
+            icon={() =>
+              confirmOrderLoading || initLoading ? (
+                <ActivityIndicator size={14} color={theme.colors.primary} />
+              ) : (
+                <></>
+              )
+            }
+            onPress={handleConfirmOrder}>
+            Proceed to Buy
+          </Button>
+        </View>
       </View>
     </>
   );
@@ -383,6 +553,62 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: 12,
+    },
+    outOfStockRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 12,
+    },
+    stockQuantity: {
+      flexDirection: 'row',
+    },
+    cartQuantity: {
+      color: colors.error,
+    },
+    divider: {
+      height: 1,
+      backgroundColor: '#CACDD8',
+      marginVertical: 12,
+    },
+    error: {
+      color: colors.error,
+    },
+    summaryCustomizationPriceLabel: {
+      color: '#A2A6B0',
+    },
+    summaryItemPriceLabel: {
+      color: '#151515',
+    },
+    summaryCustomizationPriceValue: {
+      color: '#A2A6B0',
+    },
+    summaryItemPriceValue: {
+      color: '#151515',
+    },
+    summaryCustomizationTaxLabel: {
+      color: '#eb9494',
+    },
+    summaryItemTaxLabel: {
+      color: 'red',
+    },
+    summaryCustomizationDiscountLabel: {
+      color: '#b1e3b1',
+    },
+    summaryItemDiscountLabel: {
+      color: 'green',
+    },
+    field: {
+      marginBottom: 8,
+    },
+    customizationContainer: {
+      paddingLeft: 8,
+    },
+    total: {
+      fontWeight: '700',
+    },
+    buttonContainer: {
+      marginVertical: 24,
     },
   });
 

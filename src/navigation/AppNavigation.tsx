@@ -82,7 +82,14 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={SearchProductList}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="Cart" component={Cart} />
+        <Stack.Screen
+          name="Cart"
+          component={Cart}
+          options={{
+            title: 'My Cart',
+            headerStyle,
+          }}
+        />
         <Stack.Screen
           name="Checkout"
           component={Checkout}
@@ -203,7 +210,13 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
 
         <Stack.Screen name="Support" component={Support} />
 
-        <Stack.Screen name="ProductDetails" component={ProductDetails} />
+        <Stack.Screen
+          name="ProductDetails"
+          component={ProductDetails}
+          options={{
+            headerStyle,
+          }}
+        />
 
         <Stack.Screen
           name="CategoryDetails"
@@ -215,7 +228,13 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={SubCategoryDetails}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="BrandDetails" component={BrandDetails} />
+        <Stack.Screen
+          name="BrandDetails"
+          component={BrandDetails}
+          options={{
+            headerStyle,
+          }}
+        />
         <Stack.Screen
           name="Outlets"
           component={Outlets}

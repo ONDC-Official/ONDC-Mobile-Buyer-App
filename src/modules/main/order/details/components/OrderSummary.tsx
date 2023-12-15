@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
 import {Button, Text, useTheme} from 'react-native-paper';
 import OrderStatus from '../../components/OrderStatus';
@@ -11,11 +11,7 @@ interface OrderSummary {
   onUpdateTrackingDetails: () => void;
 }
 
-const OrderSummary: React.FC<OrderSummary> = ({
-  orderDetails,
-  onUpdateOrder,
-  onUpdateTrackingDetails,
-}) => {
+const OrderSummary: React.FC<OrderSummary> = ({orderDetails}) => {
   const {colors} = useTheme();
   const styles = makeStyles(colors);
 
@@ -182,12 +178,12 @@ const OrderSummary: React.FC<OrderSummary> = ({
         </Text>
 
         <View style={styles.actionContainer}>
-        <Button
-          mode="outlined"
-          onPress={() => Linking.openURL(orderDetails?.documents?.[0]?.url)}
-          disabled={!orderDetails?.documents}>
-          Download Invoice
-        </Button>
+          <Button
+            mode="outlined"
+            onPress={() => Linking.openURL(orderDetails?.documents?.[0]?.url)}
+            disabled={!orderDetails?.documents}>
+            Download Invoice
+          </Button>
         </View>
       </View>
     </View>

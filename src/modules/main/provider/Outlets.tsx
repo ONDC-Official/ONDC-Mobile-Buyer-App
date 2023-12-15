@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import { Button, Text, useTheme } from "react-native-paper";
+import {Text, useTheme} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
@@ -9,7 +9,7 @@ import {skeletonList} from '../../../utils/utils';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, PROVIDER_LOCATIONS} from '../../../utils/apiActions';
-import { appStyles } from "../../../styles/styles";
+import {appStyles} from '../../../styles/styles';
 
 interface Outlets {
   navigation: any;

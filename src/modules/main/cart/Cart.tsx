@@ -1,6 +1,12 @@
-import {ActivityIndicator, StyleSheet, View} from 'react-native';
-import {Button, Card, Text, useTheme} from 'react-native-paper';
-import {useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Button,
+  Card,
+  Text,
+  useTheme,
+} from 'react-native-paper';
+import React, {useEffect} from 'react';
 
 import {getPriceWithCustomisations} from '../../../utils/utils';
 import CartItems from './components/CartItems';
@@ -73,12 +79,18 @@ const Cart = () => {
                     haveDistinctProviders ||
                     checkoutLoading
                   }
+                  icon={() =>
+                    checkoutLoading ? (
+                      <ActivityIndicator
+                        size={14}
+                        color={theme.colors.primary}
+                      />
+                    ) : (
+                      <></>
+                    )
+                  }
                   onPress={onCheckoutFromCart}>
-                  {checkoutLoading ? (
-                    <ActivityIndicator color={theme.colors.primary} size={14} />
-                  ) : (
-                    'Checkout'
-                  )}
+                  Checkout
                 </Button>
               </Card>
             </>

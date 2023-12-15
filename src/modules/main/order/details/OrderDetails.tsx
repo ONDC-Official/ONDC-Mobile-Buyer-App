@@ -1,8 +1,6 @@
 import React, {useEffect} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import {IconButton, useTheme} from 'react-native-paper';
-
-import OrderStatus from '../components/OrderStatus';
 import OrderSummary from './components/OrderSummary';
 
 const OrderDetails = ({route: {params}, navigation}) => {
