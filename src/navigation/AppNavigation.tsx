@@ -10,21 +10,10 @@ import Dashboard from '../modules/main/dashboard/Dashboard';
 import AddressList from '../modules/main/dashboard/components/address/AddressList';
 import Cart from '../modules/main/cart/Cart';
 import Checkout from '../modules/main/checkout/Checkout';
-import SearchProductList from '../modules/main/product/list/SearchProductList';
-import BillingAddressPicker from '../modules/main/payment/billingAddress/BillingAddressPicker';
-import AddBillingAddress from '../modules/main/payment/billingAddress/AddBillingAddress';
-import Confirmation from '../modules/main/payment/confirmation/Confirmation';
 import ProductDetails from '../modules/main/product/details/ProductDetails';
-import Payment from '../modules/main/payment/payment/Payment';
 import Profile from '../modules/main/profile/Profile';
-import Support from '../modules/main/support/Support';
 import OrderDetails from '../modules/main/order/details/OrderDetails';
-import CallSeller from '../modules/main/order/CallSeller';
-import CancelOrder from '../modules/main/order/CancelOrder';
-import ReturnOrder from '../modules/main/order/ReturnOrder';
 import UpdateAddress from '../modules/main/dashboard/components/address/UpdateAddress';
-import RaiseComplaint from '../modules/main/order/RaiseComplaint';
-import UpdateBillingAddress from '../modules/main/payment/billingAddress/UpdateBillingAddress';
 import CategoryDetails from '../modules/main/category/CategoryDetails';
 import BrandDetails from '../modules/main/provider/BrandDetails';
 import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
@@ -78,11 +67,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="SearchProductList"
-          component={SearchProductList}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
           name="Cart"
           component={Cart}
           options={{
@@ -126,37 +110,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         />
 
         <Stack.Screen
-          name="BillingAddressPicker"
-          component={BillingAddressPicker}
-          options={{
-            title: 'Billing Address',
-            headerStyle,
-          }}
-        />
-
-        <Stack.Screen
-          name="AddBillingAddress"
-          component={AddBillingAddress}
-          options={{
-            title: 'Add Billing Address',
-            headerStyle,
-          }}
-        />
-
-        <Stack.Screen
-          name="UpdateBillingAddress"
-          component={UpdateBillingAddress}
-          options={{
-            title: 'Update Billing Address',
-            headerStyle,
-          }}
-        />
-
-        <Stack.Screen name="Confirmation" component={Confirmation} />
-
-        <Stack.Screen name="Payment" component={Payment} />
-
-        <Stack.Screen
           name="MyProfile"
           component={Profile}
           options={{
@@ -182,40 +135,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
             headerStyle,
           }}
         />
-
-        <Stack.Screen
-          name="CallSeller"
-          component={CallSeller}
-          options={{
-            title: 'Provider Contact Details',
-          }}
-        />
-
-        <Stack.Screen
-          name="CancelOrder"
-          component={CancelOrder}
-          options={{
-            title: 'Cancel Order',
-          }}
-        />
-
-        <Stack.Screen
-          name="ReturnOrder"
-          component={ReturnOrder}
-          options={{
-            title: 'Return Order',
-          }}
-        />
-
-        <Stack.Screen
-          name="RaiseComplaint"
-          component={RaiseComplaint}
-          options={{
-            title: 'Raise Complaint',
-          }}
-        />
-
-        <Stack.Screen name="Support" component={Support} />
 
         <Stack.Screen
           name="ProductDetails"

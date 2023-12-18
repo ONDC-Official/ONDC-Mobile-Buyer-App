@@ -13,14 +13,9 @@ import FBBrandDetails from './components/FBBrandDetails';
 import OtherBrandDetails from './components/OtherBrandDetails';
 import {FB_DOMAIN} from '../../../utils/constants';
 
-interface BrandDetails {
-  route: any;
-  theme: any;
-}
-
 const CancelToken = axios.CancelToken;
 
-const BrandDetails: React.FC<BrandDetails> = ({route: {params}}) => {
+const BrandDetails = ({route: {params}}: {route: any}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
   const theme = useTheme();

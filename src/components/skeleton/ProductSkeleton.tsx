@@ -2,19 +2,17 @@ import {StyleSheet, View} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import React from 'react';
 
-const ProductSkeleton = () => {
-  return (
-    <View style={styles.container}>
-      <SkeletonPlaceholder>
-        <>
-          <View style={styles.image} />
-          <View style={styles.title} />
-          <View style={styles.brand} />
-        </>
-      </SkeletonPlaceholder>
-    </View>
-  );
-};
+const ProductSkeleton = () => (
+  <View style={styles.container}>
+    <SkeletonPlaceholder>
+      <>
+        <View style={styles.image} />
+        <View style={styles.title} />
+        <View style={styles.brand} />
+      </>
+    </SkeletonPlaceholder>
+  </View>
+);
 
 const styles = StyleSheet.create({
   container: {

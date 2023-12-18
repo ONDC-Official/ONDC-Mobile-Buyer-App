@@ -3,7 +3,13 @@ import {ScrollView, StyleSheet} from 'react-native';
 import {IconButton, useTheme} from 'react-native-paper';
 import OrderSummary from './components/OrderSummary';
 
-const OrderDetails = ({route: {params}, navigation}) => {
+const OrderDetails = ({
+  route: {params},
+  navigation,
+}: {
+  route: any;
+  navigation: any;
+}) => {
   const {colors} = useTheme();
   const {order} = params;
 
@@ -64,9 +70,6 @@ const styles = StyleSheet.create({
   },
   helpLabel: {
     fontSize: 18,
-  },
-  priceContainer: {
-    marginTop: 10,
   },
   name: {fontSize: 18, fontWeight: '500', marginVertical: 4, flexShrink: 1},
   title: {fontSize: 16, marginRight: 10, flexShrink: 1},

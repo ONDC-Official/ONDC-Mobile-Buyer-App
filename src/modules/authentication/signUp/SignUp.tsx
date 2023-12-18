@@ -5,7 +5,7 @@ import React, {useCallback, useRef} from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
-import {Button, Text, withTheme} from 'react-native-paper';
+import {Button, Text, useTheme} from 'react-native-paper';
 import {useNetInfo} from '@react-native-community/netinfo';
 
 import SignUpIcon from '../../../assets/signup_icon.svg';
@@ -15,11 +15,6 @@ import {showToastWithGravity} from '../../../utils/utils';
 import {appStyles} from '../../../styles/styles';
 import SocialMediaLogin from '../common/SocialMediaLogin';
 import {storeLoginDetails} from '../../../redux/auth/actions';
-
-interface SignUp {
-  navigation: any;
-  theme: any;
-}
 
 interface FormData {
   email: string;
@@ -50,7 +45,8 @@ const validationSchema = Yup.object({
  * @param theme
  * @param navigation: application navigation object
  */
-const SignUp: React.FC<SignUp> = ({navigation, theme}) => {
+const SignUp = ({navigation}: {navigation: any}) => {
+  const theme = useTheme();
   const dispatch = useDispatch();
   const {isConnected, isInternetReachable} = useNetInfo();
   const formikFormRef = useRef<any>(null);
@@ -222,7 +218,7 @@ const SignUp: React.FC<SignUp> = ({navigation, theme}) => {
   );
 };
 
-export default withTheme(SignUp);
+export default SignUp;
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
