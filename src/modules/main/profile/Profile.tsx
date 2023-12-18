@@ -3,7 +3,6 @@ import {StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Avatar, Text} from 'react-native-paper';
 
-import {appStyles} from '../../../styles/styles';
 import {getUserInitials} from '../../../utils/utils';
 
 /**
@@ -15,17 +14,17 @@ const Profile = () => {
   const {name, emailId, photoURL} = useSelector(({authReducer}) => authReducer);
 
   return (
-    <View style={[appStyles.container, appStyles.centerContainer]}>
+    <View style={styles.container}>
       {photoURL ? (
-        <Avatar.Image size={72} rounded source={{uri: photoURL}} />
+        <Avatar.Image size={72} source={{uri: photoURL}} />
       ) : (
-        <Avatar.Text size={72} rounded label={getUserInitials(name ?? '')} />
+        <Avatar.Text size={72} label={getUserInitials(name ?? '')} />
       )}
-      <View style={styles.container}>
-        <View style={styles.profileDetailsContainer}>
-          <Text style={styles.name}>{name}</Text>
-          <Text>{emailId}</Text>
-        </View>
+      <View style={styles.profileDetailsContainer}>
+        <Text variant={'titleMedium'} style={styles.name}>
+          {name}
+        </Text>
+        <Text variant={'bodyLarge'}>{emailId}</Text>
       </View>
     </View>
   );
@@ -37,10 +36,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 10,
+    padding: 16,
+    backgroundColor: '#fff',
   },
-  name: {fontWeight: 'bold', fontSize: 20, marginVertical: 12},
+  name: {marginVertical: 8},
   profileDetailsContainer: {
-    alignItems: 'center',
+    marginLeft: 8,
   },
 });

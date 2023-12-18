@@ -156,7 +156,14 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
 
         <Stack.Screen name="Payment" component={Payment} />
 
-        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen
+          name="MyProfile"
+          component={Profile}
+          options={{
+            title: 'My Profile',
+            headerStyle,
+          }}
+        />
 
         <Stack.Screen
           name="Orders"

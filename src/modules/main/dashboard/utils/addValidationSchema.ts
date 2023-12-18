@@ -21,4 +21,4 @@ export const validationSchema = Yup.object({
   tag: Yup.string().trim().required('Please select tag'),
 });
 
-export const addressTags = ['Home', 'Office', 'Other'];
+export const addressTags: string[] = ['Home', 'Office', 'Other'];

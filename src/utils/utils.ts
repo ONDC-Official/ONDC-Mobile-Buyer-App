@@ -35,7 +35,6 @@ export const getUserInitials = (name: string) => {
 export const showInfoToast = (
   message: string,
   position: ToastPosition = 'top',
-  numberOfLines: number = 1,
 ) => {
   Toast.show({
     type: 'info',
@@ -45,7 +44,7 @@ export const showInfoToast = (
   });
 };
 
-export const skeletonList = [
+export const skeletonList: any[] = [
   {
     isSkeleton: true,
     _id: '9b1deb4d-3b7d-4bad-9bdd-2b0d7b4dcb6d',
@@ -79,29 +78,10 @@ export const skeletonList = [
 ];
 
 /**
- * Function to convert any number to currency
- * @param value: amount in number format
- * @returns {string}
- */
-export const maskAmount = value => {
-  if (value) {
-    return value.toLocaleString('en-IN', {
-      maximumFractionDigits: 2,
-      style: 'currency',
-      currency: 'INR',
-    });
-  } else {
-    return '';
-  }
-};
-
-/**
  * Common function used to assign ids to flat list item
  * @param item
  */
 export const keyExtractor = (item: any) => item._id;
-
-export const threeForth = Dimensions.get('window').height - 200;
 
 export const half = Dimensions.get('window').height / 2;
 
@@ -155,8 +135,8 @@ export const durationToHumanReadable = (value: any) => {
 };
 
 export const createCustomizationAndGroupMapping = (customizations: any[]) => {
-  let newCustomizationGroupMappings = {};
-  let customizationToGroupMap = {};
+  let newCustomizationGroupMappings: any = {};
+  let customizationToGroupMap: any = {};
   customizations.forEach((customization: any) => {
     const groupId = customization.parent;
     const childId = customization.id;
@@ -173,7 +153,7 @@ export const createCustomizationAndGroupMapping = (customizations: any[]) => {
     newCustomizationGroupMappings[groupId].add(childId);
   });
 
-  const finalizedCustomizationGroupMappings = {};
+  const finalizedCustomizationGroupMappings: any = {};
   for (const groupId in newCustomizationGroupMappings) {
     finalizedCustomizationGroupMappings[groupId] = Array.from(
       newCustomizationGroupMappings[groupId],

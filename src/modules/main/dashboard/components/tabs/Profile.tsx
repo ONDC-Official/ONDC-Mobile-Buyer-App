@@ -23,6 +23,8 @@ const Profile = () => {
     );
   };
 
+  const navigateToProfile = () => navigation.navigate('MyProfile');
+
   const navigateToOrders = () => navigation.navigate('Orders');
 
   return (
@@ -30,7 +32,7 @@ const Profile = () => {
       <View style={styles.header}>
         <Text variant={'titleSmall'}>Profile</Text>
       </View>
-      <TouchableOpacity style={styles.menuOption}>
+      <TouchableOpacity style={styles.menuOption} onPress={navigateToProfile}>
         <Text variant={'bodyLarge'}>My Profile</Text>
         <Icon name={'chevron-right'} size={24} light />
       </TouchableOpacity>
