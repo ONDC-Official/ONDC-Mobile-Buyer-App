@@ -38,11 +38,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
       );
       data.timings = '';
       data.isOpen = false;
-      data.circle.gps = data.circle.gps.split(',');
-      data.circle.gps = {
-        lat: data.circle.gps[0],
-        lng: data.circle.gps[1],
-      };
       if (data.time.range.start && data.time.range.end) {
         data.timings = `${moment(data.time.range.start, 'hhmm').format(
           'h:mm a',
@@ -51,7 +46,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         const startTime = moment(data.time.range.start, 'hh:mm');
         const endTime = moment(data.time.range.end, 'hh:mm');
         data.isOpen = time.isBetween(startTime, endTime);
-      } else {
       }
       setOutlet(data);
     } catch (error) {

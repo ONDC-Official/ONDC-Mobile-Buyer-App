@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import { Checkbox, Text, useTheme } from "react-native-paper";
+import {Checkbox, Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {createCustomizationAndGroupMapping} from '../../../../utils/utils';
+import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 
 interface FBProductCustomization {
   product: any;
@@ -366,18 +367,21 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
     setCustomizationState(updatedState);
   };
 
-  const renderGroup = (param: any) => {
-    const group = customizationState[param?.id];
+  const renderGroups = (group: any) => {
+    if (!group) {
+      return <></>;
+    }
+    const groupDetails = customizationState[group?.id];
 
     return (
-      <View key={group?.id} style={styles.filterContainer}>
+      <View key={groupDetails?.id} style={styles.filterContainer}>
         <Text variant={'bodyLarge'} style={styles.groupName}>
-          {group?.name}
+          {groupDetails?.name}
         </Text>
         <View style={styles.groupContainer}>
-          {group?.options?.map((option: any) => {
+          {groupDetails?.options?.map((option: any) => {
             const selected =
-              group?.selected?.some(
+              groupDetails?.selected?.some(
                 (selectedOption: any) => selectedOption?.id === option?.id,
               ) ?? false;
 
@@ -399,7 +403,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
                         status={selected ? 'checked' : 'unchecked'}
                         onPress={() => {
                           if (option.inStock) {
-                            handleClick(group, option);
+                            handleClick(groupDetails, option);
                           }
                         }}
                       />
@@ -414,37 +418,31 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
             );
           })}
         </View>
+        {groupDetails?.childs &&
+          groupDetails?.childs.map((child: any) =>
+            renderGroups(customizationState[child]),
+          )}
       </View>
     );
   };
 
-  let elements: any = [];
-  const renderGroups = (group: any) => {
-    if (!group) {
-      return;
-    }
+  const minSeq = findMinMaxSeq(customizationGroups).minSeq;
+  const firstGroup = customizationGroups.find(group => group.seq === minSeq);
 
-    elements.push(renderGroup(group));
-
-    let children = customizationState[group?.id]?.childs;
-    if (!children) {
-      return;
-    }
-
-    children.map((child: any) => {
-      renderGroups(customizationState[child]);
-    });
-  };
-
-  const renderCustomizations = () => {
-    const minSeq = findMinMaxSeq(customizationGroups).minSeq;
-    const firstGroup = customizationGroups.find(group => group.seq === minSeq);
-    renderGroups(firstGroup);
-
-    return <View>{elements}</View>;
-  };
-
-  return renderCustomizations();
+  return (
+    <View>
+      <View style={styles.header}>
+        <Text variant={'titleSmall'}>
+          {product?.item_details?.descriptor?.name}
+        </Text>
+        <Text variant={'titleMedium'}>
+          {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}{' '}
+          {product?.item_details?.price?.value}
+        </Text>
+      </View>
+      {renderGroups(firstGroup)}
+    </View>
+  );
 };
 
 const makeStyles = (colors: any) =>
@@ -476,11 +474,17 @@ const makeStyles = (colors: any) =>
     groupName: {
       color: '#1D1D1D',
       marginBottom: 13,
+      marginTop: 20,
     },
     groupContainer: {
       backgroundColor: '#F3F9FE',
       borderRadius: 2,
       padding: 16,
+    },
+    header: {
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexDirection: 'row',
     },
   });
 

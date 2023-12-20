@@ -89,6 +89,8 @@ export const theme = {
     cancelledBackground: '#FFE8E7',
     statusBackground: '#E9F1F8',
     success: '#419E6A',
+    disabled: 'grey',
+    white: '#fff',
   },
   fonts: configureFonts({config: fontConfig}),
 };

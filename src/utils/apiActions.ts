@@ -20,3 +20,4 @@ export const ITEM_DETAILS: string = '/protocol/item-details';
 export const ORDERS: string = '/clientApis/v2/orders';
 export const ORDER_STATUS: string = '/clientApis/v2/order_status';
 export const TRACK_ORDER: string = '/clientApis/v2/track';
+export const CART: string = '/clientApis/v2/cart';

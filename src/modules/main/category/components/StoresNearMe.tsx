@@ -171,7 +171,6 @@ const makeStyles = () =>
       width: 100,
       marginRight: 20,
       alignItems: 'center',
-      justifyContent: 'center',
       marginBottom: 20,
     },
     brandImage: {

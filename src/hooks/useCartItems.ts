@@ -1,4 +1,4 @@
-import {API_BASE_URL} from '../utils/apiActions';
+import { API_BASE_URL, CART } from "../utils/apiActions";
 import axios from 'axios/index';
 import {useSelector} from 'react-redux';
 import {useEffect, useRef} from 'react';
@@ -17,7 +17,7 @@ export default () => {
     try {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}/clientApis/v2/cart/${uid}`,
+        `${API_BASE_URL}${CART}/${uid}`,
         source.current.token,
       );
       return data;

@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
-import {API_BASE_URL, ITEM_DETAILS} from '../../../../utils/apiActions';
+import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import ProductSkeleton from './components/ProductSkeleton';
@@ -27,6 +27,8 @@ import VariationsRenderer from '../../../../components/products/VariationsRender
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {showToastWithGravity} from '../../../../utils/utils';
+import { makeGlobalStyles } from "../../../../styles/styles";
+import StockAvailability from "../../../../components/products/StockAvailability";
 
 interface ProductDetails {
   route: any;
@@ -63,6 +65,8 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const source = useRef<any>(null);
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const globalStyles = makeGlobalStyles(theme.colors);
+
   const [product, setProduct] = useState<any>(null);
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
@@ -168,7 +172,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
     try {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}/clientApis/v2/cart/${uid}`,
+        `${API_BASE_URL}${CART}/${uid}`,
         source.current.token,
       );
       if (pId) {
@@ -193,7 +197,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const deleteCartItem = async (itemId: any) => {
     source.current = CancelToken.source();
     await deleteDataWithAuth(
-      `${API_BASE_URL}/clientApis/v2/cart/${uid}/${itemId}`,
+      `${API_BASE_URL}${CART}/${uid}/${itemId}`,
       source.current.token,
     );
     await getCartItems();
@@ -203,7 +207,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
     try {
       setAddToCartLoading(true);
       source.current = CancelToken.source();
-      const url = `${API_BASE_URL}/clientApis/v2/cart/${uid}`;
+      const url = `${API_BASE_URL}${CART}/${uid}`;
       let subtotal = product?.item_details?.price?.value;
 
       const customisations = getCustomizations() ?? null;
@@ -402,30 +406,17 @@ const ProductDetails: React.FC<ProductDetails> = ({
         )}
       />
       <View style={styles.details}>
-        {product?.context?.domain === FB_DOMAIN ||
-        product?.context?.domain === GROCERY_DOMAIN ? (
+        {(product?.context?.domain === FB_DOMAIN ||
+          product?.context?.domain === GROCERY_DOMAIN) && (
           <View style={styles.stockRow}>
             <VegNonVegTag tags={product?.item_details?.tags} showLabel />
           </View>
-        ) : parseInt(product?.item_details?.quantity?.available?.count) >= 1 ? (
-          <View style={styles.stockRow}>
-            <Icon name={'check'} color={theme.colors.success} size={16} />
-            <Text variant={'bodyMedium'} style={styles.inStockLabel}>
-              In stock
-            </Text>
-          </View>
-        ) : (
-          <View style={styles.stockRow}>
-            <MaterialCommunityIcons
-              name={'close-circle-outline'}
-              color={theme.colors.error}
-              size={16}
-            />
-            <Text variant={'bodyMedium'} style={styles.outOfStockLabel}>
-              Out of stock
-            </Text>
-          </View>
         )}
+        <StockAvailability
+          available={
+            Number(product?.item_details?.quantity?.available?.count) >= 1
+          }
+        />
         <Text variant="titleMedium" style={styles.title}>
           {product?.item_details?.descriptor?.name}
         </Text>
@@ -489,9 +480,13 @@ const ProductDetails: React.FC<ProductDetails> = ({
               </TouchableOpacity>
             </View>
           ) : (
-            <Button
-              mode={'outlined'}
-              style={styles.button}
+            <TouchableOpacity
+              style={[
+                disableActionButtons
+                  ? globalStyles.disabledOutlineButton
+                  : globalStyles.outlineButton,
+                styles.addToCartButton,
+              ]}
               onPress={() => addToCart(false, true)}
               disabled={disableActionButtons}>
               {addToCartLoading ? (
@@ -500,18 +495,38 @@ const ProductDetails: React.FC<ProductDetails> = ({
                   color={theme.colors.primary}
                 />
               ) : (
-                'Add to cart'
+                <Text
+                  variant={'bodyMedium'}
+                  style={
+                    disableActionButtons
+                      ? globalStyles.disabledOutlineButtonText
+                      : globalStyles.outlineButtonText
+                  }>
+                  Add to cart
+                </Text>
               )}
-            </Button>
+            </TouchableOpacity>
           )}
           <View style={styles.buttonSeparator} />
-          <Button
-            mode="contained"
-            style={styles.button}
+          <TouchableOpacity
+            style={[
+              disableActionButtons
+                ? globalStyles.disabledContainedButton
+                : globalStyles.containedButton,
+              styles.orderNowButton,
+            ]}
             disabled={disableActionButtons}
             onPress={() => addToCart(true)}>
-            Order now
-          </Button>
+            <Text
+              variant={'bodyMedium'}
+              style={
+                disableActionButtons
+                  ? globalStyles.disabledContainedButtonText
+                  : globalStyles.containedButtonText
+              }>
+              Order now
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.aboutContainer}>
           <List.Accordion
@@ -552,14 +567,6 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       marginBottom: 10,
     },
-    inStockLabel: {
-      color: colors.success,
-      marginLeft: 6,
-    },
-    outOfStockLabel: {
-      color: colors.error,
-      marginLeft: 6,
-    },
     details: {
       padding: 16,
     },
@@ -588,10 +595,21 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
     },
-    button: {
+    addToCartButton: {
       flex: 1,
       borderRadius: 8,
-      borderColor: colors.primary,
+      borderWidth: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 36,
+    },
+    orderNowButton: {
+      flex: 1,
+      borderRadius: 8,
+      borderWidth: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 36,
     },
     buttonSeparator: {
       width: 15,

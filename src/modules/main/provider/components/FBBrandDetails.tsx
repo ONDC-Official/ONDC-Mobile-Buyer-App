@@ -1,5 +1,12 @@
 import React from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Linking,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
@@ -20,6 +27,14 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
 }) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+
+  const getDirection = async () => {
+    const url =
+      Platform.OS === 'android'
+        ? `geo:0,0?q=${outlet?.gps[0]}+${outlet?.gps[1]}`
+        : `maps:0,0?q=${outlet?.gps[0]}+${outlet?.gps[1]}`;
+    await Linking.openURL(url);
+  };
 
   if (apiRequested) {
     return <BrandSkeleton />;
@@ -64,14 +79,15 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
           </Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              style={[styles.directionButton, styles.actionButton]}>
-              <Text variant={'bodyMedium'} style={styles.directionText}>
+              onPress={getDirection}
+              style={styles.actionButton}>
+              <Text variant={'bodyMedium'} style={styles.buttonText}>
                 Get Direction
               </Text>
             </TouchableOpacity>
             <View style={styles.separator} />
-            <TouchableOpacity style={[styles.callButton, styles.actionButton]}>
-              <Text variant={'bodyMedium'} style={styles.callText}>
+            <TouchableOpacity style={styles.actionButton}>
+              <Text variant={'bodyMedium'} style={styles.buttonText}>
                 Call Now
               </Text>
             </TouchableOpacity>
@@ -132,17 +148,9 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       paddingHorizontal: 24,
       paddingVertical: 12,
-    },
-    directionButton: {
-      borderColor: colors.error,
-    },
-    directionText: {
-      color: colors.error,
-    },
-    callButton: {
       borderColor: colors.primary,
     },
-    callText: {
+    buttonText: {
       color: colors.primary,
     },
   });

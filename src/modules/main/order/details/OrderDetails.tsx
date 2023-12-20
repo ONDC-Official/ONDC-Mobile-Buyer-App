@@ -50,10 +50,6 @@ const OrderDetails = ({
     });
   }, [navigation]);
 
-  useEffect(() => {
-    console.log(JSON.stringify(params.order, undefined, 4));
-  }, []);
-
   return (
     <ScrollView style={styles.pageContainer}>
       <OrderSummary

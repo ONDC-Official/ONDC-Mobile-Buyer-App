@@ -9,7 +9,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import {SSE_TIMEOUT} from '../utils/constants';
-import {API_BASE_URL} from '../utils/apiActions';
+import { API_BASE_URL, CART } from "../utils/apiActions";
 import {setStoredData} from '../utils/storage';
 import useNetworkHandling from './useNetworkHandling';
 
@@ -76,7 +76,7 @@ export default (navigate: boolean = true) => {
   const getCartItems = async () => {
     try {
       setLoading(true);
-      const url = `${API_BASE_URL}/clientApis/v2/cart/${uid}`;
+      const url = `${API_BASE_URL}${CART}/${uid}`;
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(url, source.current.token);
       setCartItems(data);

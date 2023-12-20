@@ -2,7 +2,7 @@ import {useSelector} from 'react-redux';
 import {useRef} from 'react';
 import axios from 'axios';
 import useNetworkHandling from './useNetworkHandling';
-import {API_BASE_URL} from '../utils/apiActions';
+import { API_BASE_URL, CART } from "../utils/apiActions";
 
 const CancelToken = axios.CancelToken;
 
@@ -16,7 +16,7 @@ export default () => {
     increment: boolean,
     uniqueId: any,
   ) => {
-    const url = `${API_BASE_URL}/clientApis/v2/cart/${uid}/${uniqueId}`;
+    const url = `${API_BASE_URL}${CART}/${uid}/${uniqueId}`;
     source.current = CancelToken.source();
     const items = cartItems.concat([]);
     const itemIndex = items.findIndex((item: any) => item._id === uniqueId);

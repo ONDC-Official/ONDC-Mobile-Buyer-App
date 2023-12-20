@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {API_BASE_URL} from '../../../../utils/apiActions';
+import { API_BASE_URL, CART } from "../../../../utils/apiActions";
 import {
   getCustomizations,
   getPriceWithCustomisations,
@@ -96,7 +96,7 @@ const CartItems: React.FC<CartItems> = ({
   ) => {
     try {
       setUpdatingCartItem(itemId);
-      const url = `${API_BASE_URL}/clientApis/v2/cart/${uid}/${uniqueId}`;
+      const url = `${API_BASE_URL}${CART}/${uid}/${uniqueId}`;
       const items = cartItems.concat([]);
       const itemIndex = items.findIndex((item: any) => item._id === uniqueId);
       if (itemIndex !== -1) {
@@ -181,7 +181,7 @@ const CartItems: React.FC<CartItems> = ({
   const deleteCartItem = async (itemId: any) => {
     try {
       setItemToDelete(itemId);
-      const url = `${API_BASE_URL}/clientApis/v2/cart/${uid}/${itemId}`;
+      const url = `${API_BASE_URL}${CART}/${uid}/${itemId}`;
       source.current = CancelToken.source();
       await deleteDataWithAuth(url, source.current.token);
       setCartItems(cartItems.filter((item: any) => item._id !== itemId));
@@ -335,7 +335,7 @@ const CartItems: React.FC<CartItems> = ({
   const hideCustomization = () => customizationSheet.current.close();
 
   const updateCustomizations = async () => {
-    const url = `${API_BASE_URL}/clientApis/v2/cart/${uid}/${currentCartItem._id}`;
+    const url = `${API_BASE_URL}${CART}/${uid}/${currentCartItem._id}`;
     const items = cartItems.concat([]);
     const itemIndex = items.findIndex(item => item._id === currentCartItem._id);
     if (itemIndex !== -1) {

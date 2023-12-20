@@ -2,13 +2,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
 import axios from 'axios';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {Button, IconButton, Text, useTheme} from 'react-native-paper';
+import {IconButton, Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
@@ -18,12 +19,14 @@ import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {getCustomizations, showToastWithGravity} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {API_BASE_URL, ITEM_DETAILS} from '../../../../utils/apiActions';
+import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
 import FBProductCustomization from './FBProductCustomization';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useCartItems from '../../../../hooks/useCartItems';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {areCustomisationsSame} from '../../product/details/ProductDetails';
+import {makeGlobalStyles} from '../../../../styles/styles';
+import StockAvailability from '../../../../components/products/StockAvailability';
 
 interface FBProduct {
   product: any;
@@ -35,12 +38,13 @@ const screenHeight: number = Dimensions.get('screen').height;
 
 const CancelToken = axios.CancelToken;
 const FBProduct: React.FC<FBProduct> = ({product}) => {
-  const source = useRef<any>(null);
   const theme = useTheme();
+  const styles = makeStyles(theme.colors);
+  const globalStyles = makeGlobalStyles(theme.colors);
+  const source = useRef<any>(null);
   const {uid} = useSelector(({authReducer}) => authReducer);
   const customizationSheet = useRef<any>(null);
   const productSource = useRef<any>(null);
-  const styles = makeStyles(theme.colors);
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
   const [productLoading, setProductLoading] = useState<boolean>(false);
@@ -81,7 +85,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const addDetailsToCart = async () => {
     setProductLoading(true);
     try {
-      const url = `${API_BASE_URL}/clientApis/v2/cart/${uid}`;
+      const url = `${API_BASE_URL}${CART}/${uid}`;
 
       let customisations = await getCustomizations(
         productDetails,
@@ -116,7 +120,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         hasCustomisations: true,
       };
 
-      console.log(JSON.stringify(payload, undefined, 4));
       const cartItems = await getCartItems();
 
       let items: any[] = [];
@@ -229,6 +232,9 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     }
   }, [customizationState]);
 
+  const disabled =
+    apiInProgress ||
+    !(Number(product?.item_details?.quantity?.available?.count) >= 1);
   return (
     <>
       <TouchableOpacity
@@ -247,6 +253,11 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             <Text variant={'bodyMedium'} style={styles.field}>
               {product?.item_details?.descriptor?.short_desc}
             </Text>
+            <StockAvailability
+              available={
+                Number(product?.item_details?.quantity?.available?.count) >= 1
+              }
+            />
           </View>
           <View style={styles.actionContainer}>
             <View style={styles.imageContainer}>
@@ -263,16 +274,33 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               </View>
             </View>
             <TouchableOpacity
-              style={styles.addButton}
+              style={[
+                disabled
+                  ? globalStyles.disabledOutlineButton
+                  : globalStyles.outlineButton,
+                styles.addButton,
+              ]}
               onPress={addToCart}
-              disabled={apiInProgress}>
-              <Text variant={'titleSmall'} style={styles.addText}>
+              disabled={disabled}>
+              <Text
+                variant={'titleSmall'}
+                style={[
+                  disabled
+                    ? globalStyles.disabledOutlineButtonText
+                    : globalStyles.outlineButtonText,
+                ]}>
                 Add
               </Text>
               {apiInProgress ? (
                 <ActivityIndicator size={16} />
               ) : (
-                <Icon name={'plus'} color={theme.colors.primary} size={16} />
+                <Icon
+                  name={'plus'}
+                  color={
+                    disabled ? theme.colors.disabled : theme.colors.primary
+                  }
+                  size={16}
+                />
               )}
             </TouchableOpacity>
             {customizable && (
@@ -295,14 +323,14 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           </Text>
           <IconButton icon={'close'} onPress={hideCustomization} />
         </View>
-        <View style={styles.customizationContainer}>
+        <ScrollView style={styles.customizationContainer}>
           <FBProductCustomization
             product={productDetails}
             customizationState={customizationState}
             setCustomizationState={setCustomizationState}
             setItemOutOfStock={setItemOutOfStock}
           />
-        </View>
+        </ScrollView>
 
         <View style={styles.customizationButtons}>
           <View style={styles.quantityContainer}>
@@ -325,15 +353,16 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               <Icon name={'plus'} color={theme.colors.primary} />
             </TouchableOpacity>
           </View>
-          <Button
+          <TouchableOpacity
             disabled={itemOutOfStock}
-            mode="contained"
             style={styles.addToCardButton}
             onPress={addDetailsToCart}>
-            Add Item Total - ₹
-            {(product?.item_details?.price.value + customizationPrices) *
-              itemQty}
-          </Button>
+            <Text variant={'bodyMedium'} style={styles.addToCardButtonLabel}>
+              Add Item Total - ₹
+              {(product?.item_details?.price.value + customizationPrices) *
+                itemQty}
+            </Text>
+          </TouchableOpacity>
         </View>
       </RBSheet>
     </>
@@ -367,13 +396,9 @@ const makeStyles = (colors: any) =>
     field: {
       marginBottom: 12,
     },
-    addText: {
-      color: colors.primary,
-    },
     addButton: {
       width: 90,
       borderRadius: 8,
-      borderColor: colors.primary,
       borderWidth: 1,
       padding: 10,
       flexDirection: 'row',
@@ -403,6 +428,7 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingHorizontal: 16,
+      marginBottom: 20,
     },
     quantityContainer: {
       borderRadius: 6,
@@ -411,14 +437,13 @@ const makeStyles = (colors: any) =>
       backgroundColor: '#FFF',
       flexDirection: 'row',
       height: 40,
-      flex: 1,
       alignItems: 'center',
       marginRight: 18,
     },
     quantity: {
-      flex: 1,
       alignItems: 'center',
       textAlign: 'center',
+      minWidth: 50,
     },
     incrementButton: {
       paddingHorizontal: 10,
@@ -433,6 +458,13 @@ const makeStyles = (colors: any) =>
     addToCardButton: {
       flex: 1,
       borderRadius: 8,
+      backgroundColor: colors.primary,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 10,
+    },
+    addToCardButtonLabel: {
+      color: '#fff',
     },
   });
 
