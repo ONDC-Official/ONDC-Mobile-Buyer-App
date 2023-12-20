@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import FastImage from 'react-native-fast-image';
 
 import {COLOR_CODE_TO_NAME} from '../../utils/colorCodes';
+import {makeGlobalStyles} from '../../styles/styles';
 
 interface VariationsRenderer {
   product: any;
@@ -25,6 +26,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
 }) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const globalStyles = makeGlobalStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [variationGroups, setVariationGroups] = useState<any[]>([]);
   const [variations, setVariations] = useState<any[]>([]);
@@ -123,22 +125,21 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
     setVariations(relatedItems);
   };
 
-  const findMatchingVariation = () => {
+  const findMatchingVariation = (updatedVariationState: any) => {
     // Iterate through variations
     for (const variation of variations) {
       let isMatch = true;
 
       // Iterate through variationState
-      for (const groupId in variationState) {
-        if (variationState.hasOwnProperty(groupId)) {
-          const groupData = variationState[groupId];
+      for (const groupId in updatedVariationState) {
+        if (updatedVariationState.hasOwnProperty(groupId)) {
+          const groupData = updatedVariationState[groupId];
           const groupName = groupData.name;
           const selectedOption = groupData.selected[0];
 
           // Check if the variation matches the values in variationState
           if (variation[groupName] !== selectedOption) {
             isMatch = false;
-            break; // No need to continue checking
           }
         }
       }
@@ -156,16 +157,6 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
     let updatedVariationState = {...variationState};
     groupData.selected = [option];
     updatedVariationState[groupData.id] = groupData;
-
-    if (groupData.id === Object.keys(variationState).length) {
-      const matchingVariation = findMatchingVariation();
-      if (matchingVariation) {
-        navigation.navigate('ProductDetails', {
-          productId: matchingVariation.id,
-        });
-      }
-    }
-
     const isLastGroup = groupData.id === Object.keys(variationState).length;
     if (!isLastGroup) {
       const lastGroupId = Object.keys(variationState).length;
@@ -176,10 +167,11 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
       const groupName = group.name;
       const groupId = group.seq;
 
+      const selectionOption = updatedVariationState[index + 1].selected[0];
       const newGroupData: any = {
         id: groupId,
         name: groupName,
-        selected: [updatedVariationState[index + 1].selected[0]],
+        selected: selectionOption ? [selectionOption] : [],
         options: [],
       };
 
@@ -193,9 +185,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
       } else {
         const prevGroupName = updatedVariationState[index].name;
         const prevGroupSelection = updatedVariationState[index].selected[0];
-
         variations.forEach(variation => {
-          //  newGroupData.productId = variation.productId;
           if (variation[prevGroupName] === prevGroupSelection) {
             if (!newGroupData.options.includes(variation[groupName])) {
               newGroupData.options.push(variation[groupName]);
@@ -204,10 +194,20 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
         });
       }
 
+      if (newGroupData.selected.length === 0) {
+        newGroupData.selected = [newGroupData.options[0]];
+      }
       updatedVariationState[groupId] = newGroupData;
     });
 
     setVariationState(updatedVariationState);
+
+    const matchingVariation = findMatchingVariation(updatedVariationState);
+    if (matchingVariation) {
+      navigation.navigate('ProductDetails', {
+        productId: matchingVariation.id,
+      });
+    }
   };
 
   const handleUOMClick = (groupData: any, option: any) => {
@@ -315,11 +315,12 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
               return (
                 <TouchableOpacity
                   key={option}
-                  style={
+                  style={[
                     isSelected
-                      ? styles.selectedCustomization
-                      : styles.customization
-                  }
+                      ? globalStyles.containedButton
+                      : globalStyles.outlineButton,
+                    styles.customization,
+                  ]}
                   onPress={() => {
                     if (isUOM) {
                       handleUOMClick(groupData, option);
@@ -331,8 +332,8 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
                     variant="bodyMedium"
                     style={
                       isSelected
-                        ? styles.selectedCustomizationLabel
-                        : styles.customizationLabel
+                        ? globalStyles.containedButtonText
+                        : globalStyles.outlineButtonText
                     }>
                     {groupName === 'colour'
                       ? COLOR_CODE_TO_NAME[option] || option
@@ -366,7 +367,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
   });
 };
 
-const makeStyles = colors =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     group: {
       marginBottom: 24,
@@ -392,33 +393,14 @@ const makeStyles = colors =>
       alignItems: 'center',
       marginTop: 16,
     },
-    selectedCustomization: {
-      textTransform: 'capitalize',
-      borderWidth: 2,
-      borderColor: '#008ECC',
-      backgroundColor: '#008ECC',
-      borderRadius: 9,
-      marginRight: 20,
-      padding: 9,
-      textAlign: 'center',
-      marginBottom: 8,
-    },
     customization: {
       textTransform: 'capitalize',
-      borderWidth: 2,
-      borderColor: '#BEBCBD',
-      backgroundColor: '#fff',
-      borderRadius: 9,
+      borderRadius: 8,
+      borderWidth: 1,
       marginRight: 20,
-      padding: 9,
+      padding: 8,
       textAlign: 'center',
       marginBottom: 8,
-    },
-    selectedCustomizationLabel: {
-      color: 'white',
-    },
-    customizationLabel: {
-      color: '#3C4242',
     },
     chartImage: {
       width: '100%',

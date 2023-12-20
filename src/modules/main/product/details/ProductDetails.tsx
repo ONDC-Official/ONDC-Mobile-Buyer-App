@@ -7,9 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Button, List, Text, useTheme} from 'react-native-paper';
+import {List, Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
 import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
@@ -27,8 +26,8 @@ import VariationsRenderer from '../../../../components/products/VariationsRender
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {showToastWithGravity} from '../../../../utils/utils';
-import { makeGlobalStyles } from "../../../../styles/styles";
-import StockAvailability from "../../../../components/products/StockAvailability";
+import {makeGlobalStyles} from '../../../../styles/styles';
+import StockAvailability from '../../../../components/products/StockAvailability';
 
 interface ProductDetails {
   route: any;
@@ -61,6 +60,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   navigation,
   route: {params},
 }) => {
+  const firstTime = useRef<boolean>(true);
   const {uid} = useSelector(({authReducer}) => authReducer);
   const source = useRef<any>(null);
   const theme = useTheme();
@@ -88,7 +88,10 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
   const getProductDetails = async () => {
     try {
-      setApiRequested(true);
+      if (firstTime.current) {
+        setApiRequested(true);
+      }
+      firstTime.current = false;
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
         `${API_BASE_URL}${ITEM_DETAILS}?id=${params.productId}`,
