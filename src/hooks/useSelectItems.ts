@@ -1,4 +1,5 @@
 import uuid from 'react-native-uuid';
+// @ts-ignore
 import RNEventSource from 'react-native-event-source';
 import {useEffect, useRef, useState} from 'react';
 import axios from 'axios';

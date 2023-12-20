@@ -279,3 +279,21 @@ export const getCustomizations = async (
   }
   return customizations;
 };
+
+export const isItemCustomization = (tags: any[]) => {
+  let isCustomization = false;
+  tags?.forEach((tag: any) => {
+    if (tag.code === 'type') {
+      tag.list.forEach((listOption: any) => {
+        if (
+          listOption.code === 'type' &&
+          listOption.value === 'customization'
+        ) {
+          isCustomization = true;
+          return true;
+        }
+      });
+    }
+  });
+  return isCustomization;
+};

@@ -5,7 +5,7 @@ import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
-import Address from './Address';
+import SingleAddress from './Address';
 import {skeletonList} from '../../../../../utils/utils';
 import AddressSkeleton from './AddressSkeleton';
 import {appStyles} from '../../../../../styles/styles';
@@ -133,7 +133,7 @@ const AddressList: React.FC<AddressList> = ({
     return item.hasOwnProperty('isSkeleton') ? (
       <AddressSkeleton />
     ) : (
-      <Address
+      <SingleAddress
         item={item}
         isCurrentAddress={isSelected}
         params={params}

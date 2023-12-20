@@ -18,3 +18,5 @@ export const ITEMS: string = '/clientApis/v2/items';
 export const PROVIDER_LOCATIONS: string = '/clientApis/v2/locations';
 export const ITEM_DETAILS: string = '/protocol/item-details';
 export const ORDERS: string = '/clientApis/v2/orders';
+export const ORDER_STATUS: string = '/clientApis/v2/order_status';
+export const TRACK_ORDER: string = '/clientApis/v2/track';

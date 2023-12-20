@@ -1,19 +1,24 @@
 import React from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
-import {Button, Text, useTheme} from 'react-native-paper';
-import OrderStatus from '../../components/OrderStatus';
+import {Button, Text} from 'react-native-paper';
 import moment from 'moment';
 import FastImage from 'react-native-fast-image';
 
+import OrderStatus from '../../components/OrderStatus';
+import Actions from './Actions';
+
 interface OrderSummary {
   orderDetails: any;
-  onUpdateOrder: () => void;
-  onUpdateTrackingDetails: () => void;
+  onUpdateTrackingDetails: (value: any) => void;
+  onUpdateOrder: (value: any) => void;
 }
 
-const OrderSummary: React.FC<OrderSummary> = ({orderDetails}) => {
-  const {colors} = useTheme();
-  const styles = makeStyles(colors);
+const OrderSummary: React.FC<OrderSummary> = ({
+  orderDetails,
+  onUpdateOrder,
+  onUpdateTrackingDetails,
+}) => {
+  const styles = makeStyles();
 
   const {person, contact, location} = orderDetails?.fulfillments[0]?.end;
   return (
@@ -52,6 +57,8 @@ const OrderSummary: React.FC<OrderSummary> = ({orderDetails}) => {
           {location?.address?.city}, {location?.address?.state},{' '}
           {location?.address?.area_code}
         </Text>
+
+        <Actions orderDetails={orderDetails} onUpdateOrder={onUpdateOrder} onUpdateTrackingDetails={onUpdateTrackingDetails} />
       </View>
       <View style={styles.section}>
         <Text variant={'titleSmall'} style={styles.sectionTitle}>

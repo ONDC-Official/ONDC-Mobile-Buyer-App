@@ -4,7 +4,7 @@ import {Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import useSelectItems from '../../../hooks/useSelectItems';
 import {getStoredData} from '../../../utils/storage';
-import {showToastWithGravity} from '../../../utils/utils';
+import { isItemCustomization, showToastWithGravity } from "../../../utils/utils";
 import AddressList from './components/AddressList';
 import Customer from './components/Customer';
 import Fulfillment from './components/Fulfillment';
@@ -91,24 +91,6 @@ const Checkout = () => {
           />
         );
     }
-  };
-
-  const isItemCustomization = (tags: any[]) => {
-    let isCustomization = false;
-    tags?.forEach((tag: any) => {
-      if (tag.code === 'type') {
-        tag.list.forEach((listOption: any) => {
-          if (
-            listOption.code === 'type' &&
-            listOption.value === 'customization'
-          ) {
-            isCustomization = true;
-            return true;
-          }
-        });
-      }
-    });
-    return isCustomization;
   };
 
   const showQuoteError = () => {

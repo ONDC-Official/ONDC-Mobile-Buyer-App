@@ -1,7 +1,13 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import {IconButton, useTheme} from 'react-native-paper';
 import OrderSummary from './components/OrderSummary';
+import axios from 'axios';
+import useNetworkHandling from '../../../../hooks/useNetworkHandling';
+import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
+import {showToastWithGravity} from '../../../../utils/utils';
+
+const CancelToken = axios.CancelToken;
 
 const OrderDetails = ({
   route: {params},
@@ -10,8 +16,24 @@ const OrderDetails = ({
   route: any;
   navigation: any;
 }) => {
+  const source = useRef<any>(null);
   const {colors} = useTheme();
-  const {order} = params;
+  const {getDataWithAuth} = useNetworkHandling();
+  const [orderDetails, setOrderDetails] = useState<any>(params.order);
+  const [trackingDetails, setTrackingDetails] = useState<any>(null);
+
+  const getOrderDetails = async () => {
+    try {
+      source.current = CancelToken.source();
+      const {data} = await getDataWithAuth(
+        `${API_BASE_URL}${ORDERS}/${params.order.id}`,
+        source.current.token,
+      );
+      setOrderDetails(data[0]);
+    } catch (err: any) {
+      showToastWithGravity(err?.response?.data?.error?.message);
+    }
+  };
 
   useEffect(() => {
     navigation.setOptions({
@@ -28,12 +50,16 @@ const OrderDetails = ({
     });
   }, [navigation]);
 
+  useEffect(() => {
+    console.log(JSON.stringify(params.order, undefined, 4));
+  }, []);
+
   return (
     <ScrollView style={styles.pageContainer}>
       <OrderSummary
-        orderDetails={order}
-        onUpdateOrder={() => {}}
-        onUpdateTrackingDetails={() => {}}
+        orderDetails={orderDetails}
+        onUpdateOrder={getOrderDetails}
+        onUpdateTrackingDetails={setTrackingDetails}
       />
     </ScrollView>
   );
