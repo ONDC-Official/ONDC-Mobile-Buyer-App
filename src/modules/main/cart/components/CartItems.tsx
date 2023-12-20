@@ -470,7 +470,7 @@ const makeStyles = (colors: any) =>
       marginTop: 20,
     },
     infoText: {
-      color: '#C89A04',
+      color: colors.warning,
     },
     errorBox: {
       backgroundColor: '#FFEBEB',

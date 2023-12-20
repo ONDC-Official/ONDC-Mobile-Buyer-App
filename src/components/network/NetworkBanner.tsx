@@ -45,7 +45,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
       alignItem: 'center',
       paddingHorizontal: 16,
-      backgroundColor: colors.opposite,
+      backgroundColor: colors.warning,
     },
     messageTitle: {
       fontSize: 15,

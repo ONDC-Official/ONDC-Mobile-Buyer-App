@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Checkbox, Text} from 'react-native-paper';
+import { Checkbox, Text, useTheme } from "react-native-paper";
 import FastImage from 'react-native-fast-image';
 import {createCustomizationAndGroupMapping} from '../../../../utils/utils';
 
@@ -136,7 +136,8 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
   isEditFlow = false,
   setItemOutOfStock,
 }) => {
-  const styles = makeStyles();
+  const theme = useTheme();
+  const styles = makeStyles(theme.colors);
 
   const [customizationGroups, setCustomizationGroups] = useState<any[]>([]);
   const [customizations, setCustomizations] = useState<any[]>([]);
@@ -446,7 +447,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
   return renderCustomizations();
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     filterContainer: {
       marginBottom: 24,
@@ -470,7 +471,7 @@ const makeStyles = () =>
       paddingLeft: 8,
     },
     outOfStock: {
-      color: '#D83232',
+      color: colors.error,
     },
     groupName: {
       color: '#1D1D1D',

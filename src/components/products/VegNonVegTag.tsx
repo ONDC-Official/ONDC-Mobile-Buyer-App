@@ -1,7 +1,7 @@
 import React from 'react';
 import FastImage from 'react-native-fast-image';
 import {StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {Text, useTheme} from 'react-native-paper';
 
 interface VegNonVegTag {
   tags: any[];
@@ -9,6 +9,9 @@ interface VegNonVegTag {
 }
 
 const VegNonVegTag: React.FC<VegNonVegTag> = ({tags, showLabel}) => {
+  const theme = useTheme();
+  const styles = makeStyles(theme.colors);
+
   let category = 'veg';
 
   tags.forEach((tag: any) => {
@@ -70,23 +73,24 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({tags, showLabel}) => {
   }
 };
 
-const styles = StyleSheet.create({
-  icon: {
-    width: 18,
-    height: 18,
-  },
-  veg: {
-    marginLeft: 8,
-    color: '#419E6A',
-  },
-  nonVeg: {
-    marginLeft: 8,
-    color: 'red',
-  },
-  iconRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    icon: {
+      width: 18,
+      height: 18,
+    },
+    veg: {
+      marginLeft: 8,
+      color: colors.success,
+    },
+    nonVeg: {
+      marginLeft: 8,
+      color: colors.red,
+    },
+    iconRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+  });
 
 export default VegNonVegTag;

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {Text} from 'react-native-paper';
+import {Text, useTheme} from 'react-native-paper';
 import {getBuildNumber, getVersion} from 'react-native-device-info';
 
 import {appStyles} from '../../../styles/styles';
@@ -21,6 +21,8 @@ interface Splash {
  */
 const Splash: React.FC<Splash> = ({navigation}) => {
   const dispatch = useDispatch();
+  const theme = useTheme();
+  const styles = makeStyles(theme.colors);
 
   /**
    * Function is used to check if the token is available
@@ -98,16 +100,17 @@ const Splash: React.FC<Splash> = ({navigation}) => {
 
 export default Splash;
 
-const styles = StyleSheet.create({
-  appName: {color: '#06038D', fontSize: 28, fontWeight: '500'},
-  ondcContainer: {
-    marginTop: 50,
-  },
-  poweredBy: {
-    color: '#00AEEF',
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  container: {alignItems: 'center', justifyContent: 'center'},
-  footer: {alignItems: 'center', marginBottom: 20},
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    appName: {color: colors.primary, fontSize: 28, fontWeight: '500'},
+    ondcContainer: {
+      marginTop: 50,
+    },
+    poweredBy: {
+      color: colors.primary,
+      marginBottom: 16,
+      textAlign: 'center',
+    },
+    container: {alignItems: 'center', justifyContent: 'center'},
+    footer: {alignItems: 'center', marginBottom: 20},
+  });

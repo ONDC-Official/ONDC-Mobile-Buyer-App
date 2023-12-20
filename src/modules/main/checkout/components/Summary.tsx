@@ -1,6 +1,7 @@
 import {StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Button, Text, useTheme} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
+// @ts-ignore
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -36,7 +37,7 @@ const Summary: React.FC<Summary> = ({
 }) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
-  const {token, uid} = useSelector(({authReducer}) => authReducer);
+  const {token} = useSelector(({authReducer}) => authReducer);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const [eventData, setEventData] = useState<any[]>([]);
   const {handleApiError} = useNetworkErrorHandling();
@@ -590,7 +591,7 @@ const makeStyles = (colors: any) =>
       color: '#eb9494',
     },
     summaryItemTaxLabel: {
-      color: 'red',
+      color: colors.red,
     },
     summaryCustomizationDiscountLabel: {
       color: '#b1e3b1',

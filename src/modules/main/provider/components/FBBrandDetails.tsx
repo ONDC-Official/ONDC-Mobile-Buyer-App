@@ -114,7 +114,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 12,
     },
     open: {
-      color: '#419E6A',
+      color: colors.success,
     },
     buttonContainer: {
       flexDirection: 'row',

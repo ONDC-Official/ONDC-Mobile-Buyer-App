@@ -30,6 +30,7 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
       <FlatList
         data={CATEGORIES}
         horizontal
+        showsHorizontalScrollIndicator={false}
         renderItem={({item}) => (
           <TouchableOpacity
             style={styles.category}

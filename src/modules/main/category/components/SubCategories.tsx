@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
@@ -27,28 +33,41 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
     setSubCategories(PRODUCT_SUBCATEGORY[currentCategory]);
   }, [currentCategory]);
 
+  const numColumns = Math.ceil(subCategories.length / 2);
   return (
     <View style={styles.container}>
       <Text variant={'titleSmall'} style={styles.title}>
         Shop By Category
       </Text>
 
-      <FlatList
-        horizontal
-        data={subCategories}
-        renderItem={({item}) => (
-          <TouchableOpacity
-            style={styles.brand}
-            onPress={() => navigateToSubCategory(item)}>
-            <FastImage
-              source={{uri: item?.imageUrl}}
-              style={styles.brandImage}
-            />
-            <Text variant={'bodyMedium'}>{item.key}</Text>
-          </TouchableOpacity>
-        )}
-        keyExtractor={item => item.value}
-      />
+      {subCategories.length > 0 && (
+        <ScrollView
+          horizontal
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}>
+          <FlatList
+            scrollEnabled={false}
+            contentContainerStyle={{
+              alignSelf: 'flex-start',
+            }}
+            numColumns={numColumns}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            data={subCategories}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                style={styles.brand}
+                onPress={() => navigateToSubCategory(item)}>
+                <FastImage
+                  source={{uri: item?.imageUrl}}
+                  style={styles.brandImage}
+                />
+                <Text variant={'bodyMedium'}>{item.key}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -63,18 +82,18 @@ const makeStyles = (colors: any) =>
       marginBottom: 12,
     },
     brand: {
-      width: 160,
+      width: 100,
       marginRight: 20,
+      marginBottom: 20,
       alignItems: 'center',
     },
     brandImage: {
       padding: 16,
       borderRadius: 10,
-      width: 160,
-      height: 160,
+      width: 100,
+      height: 100,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#EDEDED',
       marginBottom: 12,
     },
   });

@@ -102,7 +102,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
     }
   };
 
-  const calculateSubtotal = (groupId, newState) => {
+  const calculateSubtotal = (groupId: any, newState: any) => {
     let group = newState[groupId];
     if (!group) {
       return;
@@ -409,7 +409,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           </View>
         ) : parseInt(product?.item_details?.quantity?.available?.count) >= 1 ? (
           <View style={styles.stockRow}>
-            <Icon name={'check'} color={'#419E6A'} size={16} />
+            <Icon name={'check'} color={theme.colors.success} size={16} />
             <Text variant={'bodyMedium'} style={styles.inStockLabel}>
               In stock
             </Text>
@@ -418,7 +418,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           <View style={styles.stockRow}>
             <MaterialCommunityIcons
               name={'close-circle-outline'}
-              color={'#D83232'}
+              color={theme.colors.error}
               size={16}
             />
             <Text variant={'bodyMedium'} style={styles.outOfStockLabel}>
@@ -553,11 +553,11 @@ const makeStyles = (colors: any) =>
       marginBottom: 10,
     },
     inStockLabel: {
-      color: '#419E6A',
+      color: colors.success,
       marginLeft: 6,
     },
     outOfStockLabel: {
-      color: '#D83232',
+      color: colors.error,
       marginLeft: 6,
     },
     details: {

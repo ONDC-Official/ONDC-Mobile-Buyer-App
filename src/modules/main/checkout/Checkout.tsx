@@ -518,7 +518,6 @@ const makeStyles = (colors: any) =>
     },
     addressFormContainer: {
       flex: 1,
-      backgroundColor: '#0f0',
     },
     summaryCard: {
       paddingTop: 40,

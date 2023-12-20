@@ -1,5 +1,6 @@
 import React from 'react';
 import {Chip, useTheme} from 'react-native-paper';
+import {StyleSheet} from 'react-native';
 
 interface OrderStatus {
   status: string;
@@ -7,13 +8,15 @@ interface OrderStatus {
 
 const OrderStatus: React.FC<OrderStatus> = ({status}) => {
   const theme = useTheme();
+  const styles = makeStyles(theme.colors);
+
   switch (status) {
     case 'Created':
       return (
         <Chip
           mode="flat"
           selectedColor={theme.colors.primary}
-          style={{backgroundColor: theme.colors.statusBackground}}>
+          style={styles.created}>
           {status}
         </Chip>
       );
@@ -24,7 +27,7 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
         <Chip
           mode="flat"
           selectedColor={theme.colors.primary}
-          style={{backgroundColor: theme.colors.shippedBackground}}>
+          style={styles.shipped}>
           {status}
         </Chip>
       );
@@ -36,7 +39,7 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
         <Chip
           mode="flat"
           selectedColor={theme.colors.surface}
-          style={{backgroundColor: theme.colors.deliveredBackground}}>
+          style={styles.completed}>
           {status}
         </Chip>
       );
@@ -47,7 +50,7 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
         <Chip
           mode="flat"
           selectedColor={theme.colors.primary}
-          style={{backgroundColor: theme.colors.cancelledBackground}}>
+          style={styles.cancelled}>
           {status}
         </Chip>
       );
@@ -57,11 +60,19 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
         <Chip
           mode="flat"
           selectedColor={theme.colors.primary}
-          style={{backgroundColor: theme.colors.statusBackground}}>
+          style={styles.created}>
           {status}
         </Chip>
       );
   }
 };
+
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    created: {backgroundColor: colors.statusBackground},
+    shipped: {backgroundColor: colors.shippedBackground},
+    completed: {backgroundColor: colors.deliveredBackground},
+    cancelled: {backgroundColor: colors.cancelledBackground},
+  });
 
 export default OrderStatus;

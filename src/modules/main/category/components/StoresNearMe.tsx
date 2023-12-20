@@ -1,6 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import FastImage from 'react-native-fast-image';
@@ -98,6 +104,10 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     };
   }, [domain]);
 
+  const numColumns = apiRequested
+    ? Math.ceil(skeletonList.length / 2)
+    : Math.ceil(locations.length / 2);
+
   return (
     <View style={styles.container}>
       <Text variant={'titleSmall'} style={styles.title}>
@@ -111,27 +121,38 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
           keyExtractor={item => item.id}
         />
       ) : (
-        <FlatList
+        <ScrollView
           horizontal
-          data={locations}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              style={styles.brand}
-              onPress={() => navigateToDetails(item)}>
-              <StoreImage
-                source={
-                  item?.provider_descriptor?.images.length > 0
-                    ? {uri: item?.provider_descriptor?.images[0]}
-                    : NoImageAvailable
-                }
-              />
-              <Text variant={'bodyMedium'}>
-                {item?.provider_descriptor?.name}
-              </Text>
-            </TouchableOpacity>
-          )}
-          keyExtractor={item => item.id}
-        />
+          showsVerticalScrollIndicator={false}
+          showsHorizontalScrollIndicator={false}>
+          <FlatList
+            scrollEnabled={false}
+            contentContainerStyle={{
+              alignSelf: 'flex-start',
+            }}
+            numColumns={numColumns}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            data={locations}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                style={styles.brand}
+                onPress={() => navigateToDetails(item)}>
+                <StoreImage
+                  source={
+                    item?.provider_descriptor?.images.length > 0
+                      ? {uri: item?.provider_descriptor?.images[0]}
+                      : NoImageAvailable
+                  }
+                />
+                <Text variant={'bodyMedium'}>
+                  {item?.provider_descriptor?.name}
+                </Text>
+              </TouchableOpacity>
+            )}
+            keyExtractor={item => item.id}
+          />
+        </ScrollView>
       )}
     </View>
   );
@@ -147,24 +168,25 @@ const makeStyles = () =>
       marginBottom: 12,
     },
     brand: {
-      width: 160,
+      width: 100,
       marginRight: 20,
       alignItems: 'center',
       justifyContent: 'center',
+      marginBottom: 20,
     },
     brandImage: {
       padding: 16,
       borderRadius: 10,
-      width: 160,
-      height: 160,
+      width: 100,
+      height: 100,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: '#EDEDED',
       marginBottom: 12,
     },
     brandSkeleton: {
-      width: 160,
-      height: 160,
+      width: 100,
+      height: 100,
       marginRight: 20,
     },
   });
