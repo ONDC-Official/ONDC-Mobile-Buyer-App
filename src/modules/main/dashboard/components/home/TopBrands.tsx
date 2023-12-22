@@ -73,6 +73,7 @@ const TopBrands = () => {
         />
       ) : (
         <FlatList
+          showsHorizontalScrollIndicator={false}
           horizontal
           data={providers}
           renderItem={({item}) => <Brand brand={item} />}

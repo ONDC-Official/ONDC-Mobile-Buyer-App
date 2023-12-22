@@ -1,75 +1,18 @@
-import {
-  ADD_PRODUCT_CART,
-  CLEAR_CART,
-  CLEAR_DATA,
-  REMOVE_PRODUCT_CART,
-  UPDATE_PRODUCT_CART,
-} from '../../actions';
+import {CLEAR_CART, CLEAR_DATA} from '../../actions';
+import {SET_CART_ITEMS} from '../actions';
 
 const initialState = {
   cartItems: [],
-  subTotal: 0,
-  itemRemoved: null,
 };
 
-const cartReducer = (state = initialState, action) => {
+const cartReducer = (state = initialState, action: any) => {
   const {type, payload} = action;
 
   switch (type) {
-    case ADD_PRODUCT_CART:
-      const addProducts = state.cartItems.slice();
-      addProducts.push(payload);
-      const subTotal = addProducts.reduce((total, item) => {
-        total += item.price.value * item.quantity;
-        return total;
-      }, 0);
+    case SET_CART_ITEMS:
       return Object.assign({}, state, {
-        cartItems: addProducts,
-        subTotal: subTotal,
-        itemRemoved: null,
+        cartItems: payload,
       });
-
-    case REMOVE_PRODUCT_CART:
-      const removeIndex = state.cartItems.findIndex(
-        product => product.id === payload.id,
-      );
-      const itemNameRemoved = state.cartItems[removeIndex];
-      if (removeIndex > -1) {
-        const list = state.cartItems.filter(
-          product => product.id !== payload.id,
-        );
-        const removedCartTotal = list.reduce((total, item) => {
-          total += item.price.value * item.quantity;
-          return total;
-        }, 0);
-        return Object.assign({}, state, {
-          cartItems: list,
-          subTotal: removedCartTotal,
-          itemRemoved: itemNameRemoved?.descriptor?.name,
-        });
-      } else {
-        return state;
-      }
-
-    case UPDATE_PRODUCT_CART:
-      const updateIndex = state.cartItems.findIndex(
-        product => product.id === payload.id,
-      );
-      if (updateIndex > -1) {
-        const list = state.cartItems.slice();
-        list[updateIndex] = payload;
-        const updatedCartTotal = list.reduce((total, item) => {
-          total += item.price.value * item.quantity;
-          return total;
-        }, 0);
-        return Object.assign({}, state, {
-          cartItems: list,
-          subTotal: updatedCartTotal,
-          itemRemoved: null,
-        });
-      } else {
-        return state;
-      }
 
     case CLEAR_CART:
     case CLEAR_DATA:

@@ -4,6 +4,7 @@ import Header from '../dashboard/components/Header';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
 import Products from '../../../components/products/Products';
+import Page from '../../../components/page/Page';
 
 interface SubCategoryDetails {
   route: any;
@@ -21,19 +22,21 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   }, [params]);
 
   return (
-    <View style={[appStyles.container, styles.container]}>
-      <Header />
-      <SubCategories
-        currentSubCategory={currentSubCategory}
-        category={params.category}
-        setCurrentSubCategory={setCurrentSubCategory}
-      />
-      <Products
-        providerId={null}
-        customMenu={null}
-        subCategories={[currentSubCategory]}
-      />
-    </View>
+    <Page>
+      <View style={[appStyles.container, styles.container]}>
+        <Header />
+        <SubCategories
+          currentSubCategory={currentSubCategory}
+          category={params.category}
+          setCurrentSubCategory={setCurrentSubCategory}
+        />
+        <Products
+          providerId={null}
+          customMenu={null}
+          subCategories={[currentSubCategory]}
+        />
+      </View>
+    </Page>
   );
 };
 

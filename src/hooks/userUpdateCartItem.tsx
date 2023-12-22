@@ -1,8 +1,9 @@
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useRef} from 'react';
 import axios from 'axios';
 import useNetworkHandling from './useNetworkHandling';
-import { API_BASE_URL, CART } from "../utils/apiActions";
+import {API_BASE_URL, CART} from '../utils/apiActions';
+import {updateCartItems} from '../redux/cart/actions';
 
 const CancelToken = axios.CancelToken;
 
@@ -10,6 +11,7 @@ export default () => {
   const source = useRef<any>(null);
   const {uid} = useSelector(({authReducer}) => authReducer);
   const {putDataWithAuth} = useNetworkHandling();
+  const dispatch = useDispatch();
 
   const updateCartItem = async (
     cartItems: any[],
@@ -74,6 +76,7 @@ export default () => {
         }
       }
     }
+    dispatch(updateCartItems(items));
   };
 
   return {updateCartItem};

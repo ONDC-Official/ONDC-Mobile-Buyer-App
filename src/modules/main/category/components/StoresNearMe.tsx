@@ -151,6 +151,9 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
               </TouchableOpacity>
             )}
             keyExtractor={item => item.id}
+            ListEmptyComponent={() => (
+              <Text variant={'bodyLarge'}>No stores near you</Text>
+            )}
           />
         </ScrollView>
       )}

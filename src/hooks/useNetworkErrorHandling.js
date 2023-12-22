@@ -1,7 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {clearAllData} from '../redux/actions';
-import {clearFilters} from '../redux/filter/actions';
 import {alertWithOneButton} from '../utils/alerts';
 import {showToastWithGravity} from '../utils/utils';
 import {logoutUser} from '../redux/auth/actions';
@@ -15,7 +14,6 @@ export default () => {
   const clearDataAndLogout = () => {
     logoutUser(dispatch);
     dispatch(clearAllData());
-    dispatch(clearFilters());
 
     navigation.reset({
       index: 0,

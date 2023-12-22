@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {useSelector} from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {
   ActivityIndicator,
   Dimensions,
@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import { API_BASE_URL, CART } from "../../../../utils/apiActions";
+import {API_BASE_URL, CART} from '../../../../utils/apiActions';
 import {
   getCustomizations,
   getPriceWithCustomisations,
@@ -23,6 +23,7 @@ import {
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
+import { updateCartItems } from "../../../../redux/cart/actions";
 
 interface CartItems {
   allowScroll?: boolean;
@@ -46,6 +47,7 @@ const CartItems: React.FC<CartItems> = ({
     useNetworkHandling();
   const customizationSheet = useRef<any>(null);
   const source = useRef<any>(null);
+  const dispatch = useDispatch();
   const {uid} = useSelector(({authReducer}) => authReducer);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useTheme();
@@ -181,10 +183,14 @@ const CartItems: React.FC<CartItems> = ({
   const deleteCartItem = async (itemId: any) => {
     try {
       setItemToDelete(itemId);
-      const url = `${API_BASE_URL}${CART}/${uid}/${itemId}`;
       source.current = CancelToken.source();
-      await deleteDataWithAuth(url, source.current.token);
-      setCartItems(cartItems.filter((item: any) => item._id !== itemId));
+      await deleteDataWithAuth(
+        `${API_BASE_URL}${CART}/${uid}/${itemId}`,
+        source.current.token,
+      );
+      const list = cartItems.filter((item: any) => item._id !== itemId);
+      setCartItems(list);
+      dispatch(updateCartItems(list));
     } catch (error) {
     } finally {
       setItemToDelete(null);

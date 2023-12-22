@@ -58,7 +58,11 @@ const OrderSummary: React.FC<OrderSummary> = ({
           {location?.address?.area_code}
         </Text>
 
-        <Actions orderDetails={orderDetails} onUpdateOrder={onUpdateOrder} onUpdateTrackingDetails={onUpdateTrackingDetails} />
+        <Actions
+          orderDetails={orderDetails}
+          onUpdateOrder={onUpdateOrder}
+          onUpdateTrackingDetails={onUpdateTrackingDetails}
+        />
       </View>
       <View style={styles.section}>
         <Text variant={'titleSmall'} style={styles.sectionTitle}>

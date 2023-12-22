@@ -10,6 +10,7 @@ import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, PROVIDER_LOCATIONS} from '../../../utils/apiActions';
 import {appStyles} from '../../../styles/styles';
+import Page from '../../../components/page/Page';
 
 interface Outlets {
   navigation: any;
@@ -76,47 +77,51 @@ const Outlets: React.FC<Outlets> = ({navigation, route: {params}}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      {apiRequested ? (
-        <FlatList
-          numColumns={2}
-          data={skeletonList}
-          renderItem={() => <OutletSkeleton />}
-          keyExtractor={item => item.id}
-        />
-      ) : (
-        <FlatList
-          numColumns={2}
-          data={locations}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              style={styles.brand}
-              onPress={() => navigateToBrandDetails(item)}>
-              <FastImage
-                source={
-                  item?.provider_descriptor?.symbol
-                    ? {uri: item?.provider_descriptor?.symbol}
-                    : NoImageAvailable
-                }
-                style={styles.brandImage}
-              />
-              <Text variant={'bodyMedium'}>
-                {item?.provider_descriptor?.name}
-              </Text>
-            </TouchableOpacity>
-          )}
-          keyExtractor={item => item.id}
-          ListEmptyComponent={() => (
-            <View style={[appStyles.container, appStyles.centerContainer]}>
-              <Text>No Outlets available</Text>
-            </View>
-          )}
-          contentContainerStyle={
-            locations.length > 0 ? styles.contentContainer : appStyles.container
-          }
-        />
-      )}
-    </View>
+    <Page>
+      <View style={styles.container}>
+        {apiRequested ? (
+          <FlatList
+            numColumns={2}
+            data={skeletonList}
+            renderItem={() => <OutletSkeleton />}
+            keyExtractor={item => item.id}
+          />
+        ) : (
+          <FlatList
+            numColumns={2}
+            data={locations}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                style={styles.brand}
+                onPress={() => navigateToBrandDetails(item)}>
+                <FastImage
+                  source={
+                    item?.provider_descriptor?.symbol
+                      ? {uri: item?.provider_descriptor?.symbol}
+                      : NoImageAvailable
+                  }
+                  style={styles.brandImage}
+                />
+                <Text variant={'bodyMedium'}>
+                  {item?.provider_descriptor?.name}
+                </Text>
+              </TouchableOpacity>
+            )}
+            keyExtractor={item => item.id}
+            ListEmptyComponent={() => (
+              <View style={[appStyles.container, appStyles.centerContainer]}>
+                <Text>No Outlets available</Text>
+              </View>
+            )}
+            contentContainerStyle={
+              locations.length > 0
+                ? styles.contentContainer
+                : appStyles.container
+            }
+          />
+        )}
+      </View>
+    </Page>
   );
 };
 

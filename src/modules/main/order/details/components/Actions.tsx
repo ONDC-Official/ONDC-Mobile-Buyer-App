@@ -7,7 +7,6 @@ import {
 } from '../../../../../utils/utils';
 import axios from 'axios';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
-import {ORDER_STATUS} from '../../../../../utils/apiActions';
 import GetStatusButton from './GetStatusButton';
 import TrackOrderButton from './TrackOrderButton';
 
@@ -18,7 +17,11 @@ interface Actions {
 }
 
 const CancelToken = axios.CancelToken;
-const Actions: React.FC<Actions> = ({orderDetails, onUpdateOrder, onUpdateTrackingDetails}) => {
+const Actions: React.FC<Actions> = ({
+  orderDetails,
+  onUpdateOrder,
+  onUpdateTrackingDetails,
+}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const [statusLoading, setStatusLoading] = useState<boolean>(false);

@@ -12,6 +12,7 @@ import BrandSkeleton from '../../../components/skeleton/BrandSkeleton';
 import FBBrandDetails from './components/FBBrandDetails';
 import OtherBrandDetails from './components/OtherBrandDetails';
 import {FB_DOMAIN} from '../../../utils/constants';
+import Page from '../../../components/page/Page';
 
 const CancelToken = axios.CancelToken;
 
@@ -90,18 +91,21 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   if (apiRequested) {
     return <BrandSkeleton />;
   }
+
   return (
-    <View style={styles.container}>
-      {provider.domain === FB_DOMAIN ? (
-        <FBBrandDetails
-          provider={provider}
-          outlet={outlet}
-          apiRequested={apiRequested || outletDetailsRequested}
-        />
-      ) : (
-        <OtherBrandDetails provider={provider} />
-      )}
-    </View>
+    <Page>
+      <View style={styles.container}>
+        {provider.domain === FB_DOMAIN ? (
+          <FBBrandDetails
+            provider={provider}
+            outlet={outlet}
+            apiRequested={apiRequested || outletDetailsRequested}
+          />
+        ) : (
+          <OtherBrandDetails provider={provider} />
+        )}
+      </View>
+    </Page>
   );
 };
 

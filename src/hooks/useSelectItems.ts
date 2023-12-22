@@ -3,20 +3,22 @@ import uuid from 'react-native-uuid';
 import RNEventSource from 'react-native-event-source';
 import {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import {SSE_TIMEOUT} from '../utils/constants';
-import { API_BASE_URL, CART } from "../utils/apiActions";
+import {API_BASE_URL, CART} from '../utils/apiActions';
 import {setStoredData} from '../utils/storage';
 import useNetworkHandling from './useNetworkHandling';
+import {updateCartItems} from '../redux/cart/actions';
 
 const CancelToken = axios.CancelToken;
 
 export default (navigate: boolean = true) => {
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
+  const dispatch = useDispatch();
   const source = useRef<any>(null);
   const {token, uid} = useSelector(({authReducer}) => authReducer);
   const {address} = useSelector(({addressReducer}) => addressReducer);
@@ -76,10 +78,13 @@ export default (navigate: boolean = true) => {
   const getCartItems = async () => {
     try {
       setLoading(true);
-      const url = `${API_BASE_URL}${CART}/${uid}`;
       source.current = CancelToken.source();
-      const {data} = await getDataWithAuth(url, source.current.token);
+      const {data} = await getDataWithAuth(
+        `${API_BASE_URL}${CART}/${uid}`,
+        source.current.token,
+      );
       setCartItems(data);
+      dispatch(updateCartItems(data));
       updatedCartItems.current = data;
     } catch (error) {
       console.log('Error fetching cart items:', error);

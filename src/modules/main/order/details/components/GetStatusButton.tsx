@@ -15,6 +15,7 @@ interface GetStatusButton {
   setStatusLoading: (value: boolean) => void;
   onUpdateOrder: (value: any) => void;
 }
+
 const CancelToken = axios.CancelToken;
 
 const GetStatusButton: React.FC<GetStatusButton> = ({

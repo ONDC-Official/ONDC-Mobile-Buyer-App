@@ -5,7 +5,7 @@ import React, {useCallback, useRef} from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
-import { Button, Text, useTheme, withTheme } from "react-native-paper";
+import {Button, Text, useTheme} from 'react-native-paper';
 import {useNetInfo} from '@react-native-community/netinfo';
 
 import SignUpIcon from '../../../assets/signup_icon.svg';
