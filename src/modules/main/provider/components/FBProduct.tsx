@@ -9,12 +9,10 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {IconButton, Text, useTheme} from 'react-native-paper';
+import {Button, IconButton, Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {getCustomizations, showToastWithGravity} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -27,6 +25,10 @@ import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {areCustomisationsSame} from '../../product/details/ProductDetails';
 import {makeGlobalStyles} from '../../../../styles/styles';
 import StockAvailability from '../../../../components/products/StockAvailability';
+import Customizations from '../../../../components/customization/Customizations';
+import ManageQuantity from '../../../../components/customization/ManageQuantity';
+import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
+import {updateCartItems} from '../../../../redux/cart/actions';
 
 interface FBProduct {
   product: any;
@@ -43,23 +45,28 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const globalStyles = makeGlobalStyles(theme.colors);
   const source = useRef<any>(null);
   const {uid} = useSelector(({authReducer}) => authReducer);
+  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const customizationSheet = useRef<any>(null);
+  const quantitySheet = useRef<any>(null);
   const productSource = useRef<any>(null);
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
   const [productLoading, setProductLoading] = useState<boolean>(false);
+  const [cartItemDetails, setCartItemDetails] = useState<any>({
+    items: [],
+    productQuantity: 0,
+  });
   const [productDetails, setProductDetails] = useState<any>(null);
   const [customizationState, setCustomizationState] = useState<any>({});
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const navigation = useNavigation<StackNavigationProp<any>>();
   const [itemQty, setItemQty] = useState<number>(1);
   const [customizationPrices, setCustomizationPrices] = useState<number>(0);
   const {getCartItems} = useCartItems();
   const {updateCartItem} = userUpdateCartItem();
-
-  const navigateToProductDetails = () =>
-    navigation.navigate('ProductDetails', {productId: product.id});
+  const {updatingCartItem, updateSpecificCartItem} =
+    useUpdateSpecificItemCount();
+  const dispatch = useDispatch();
 
   const customizable =
     product?.item_details?.tags.findIndex(
@@ -69,6 +76,16 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const showCustomization = () => customizationSheet.current.open();
 
   const hideCustomization = () => customizationSheet.current.close();
+
+  const showQuantitySheet = () => quantitySheet.current.open();
+
+  const hideQuantitySheet = () => quantitySheet.current.close();
+
+  const addNewCustomization = () => {
+    setItemQty(1);
+    hideQuantitySheet();
+    addToCart().then(() => {});
+  };
 
   const addToCart = async () => {
     if (customizable) {
@@ -120,8 +137,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         hasCustomisations: true,
       };
 
-      const cartItems = await getCartItems();
-
       let items: any[] = [];
       items = cartItems.filter((ci: any) => ci.item.id === payload.id);
 
@@ -131,8 +146,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         });
       }
 
+      source.current = CancelToken.source();
       if (items.length === 0) {
-        source.current = CancelToken.source();
         await postDataWithAuth(url, payload, source.current.token);
         setCustomizationState({});
         setProductLoading(false);
@@ -155,7 +170,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
 
             for (let i = 0; i < items.length; i++) {
               let existingIds = items[i].item.customisations.map(
-                item => item.id,
+                (item: any) => item.id,
               );
               const areSame = areCustomisationsSame(existingIds, currentIds);
               if (areSame) {
@@ -183,6 +198,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           );
         }
       }
+      await getCartItems();
     } catch (error) {
       console.log(error);
     } finally {
@@ -205,6 +221,24 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     } finally {
       setApiInProgress(false);
     }
+  };
+
+  const setCartItems = (items: any[]) => {
+    dispatch(updateCartItems(items));
+  };
+
+  const updateSpecificItem = async (
+    itemId: any,
+    increment: boolean,
+    uniqueId: any,
+  ) => {
+    await updateSpecificCartItem(
+      itemId,
+      increment,
+      uniqueId,
+      cartItems,
+      setCartItems,
+    );
   };
 
   const calculateSubtotal = (groupId: any, state: any) => {
@@ -232,15 +266,27 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     }
   }, [customizationState]);
 
+  useEffect(() => {
+    if (product && cartItems.length > 0) {
+      let items: any[] = cartItems.filter(
+        (ci: any) => ci.item.id === product.id,
+      );
+      let quantity = 0;
+      const productQuantity = items.reduce(
+        (accumulator, item) => accumulator + item.item.quantity.count,
+        quantity,
+      );
+      setCartItemDetails({items, productQuantity});
+    }
+  }, [product, cartItems]);
+
   const disabled =
     apiInProgress ||
     !(Number(product?.item_details?.quantity?.available?.count) >= 1);
+
   return (
     <>
-      <TouchableOpacity
-        onPress={navigateToProductDetails}
-        key={product?.item_details?.id}
-        disabled={apiInProgress}>
+      <View key={product?.item_details?.id}>
         <View style={styles.product}>
           <View style={styles.meta}>
             <Text variant={'titleSmall'} style={styles.field}>
@@ -273,36 +319,60 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                 <VegNonVegTag tags={product?.item_details?.tags} />
               </View>
             </View>
-            <TouchableOpacity
-              style={[
-                disabled
-                  ? globalStyles.disabledOutlineButton
-                  : globalStyles.outlineButton,
-                styles.addButton,
-              ]}
-              onPress={addToCart}
-              disabled={disabled}>
-              <Text
-                variant={'titleSmall'}
+            {cartItemDetails?.productQuantity > 0 ? (
+              <TouchableOpacity
                 style={[
                   disabled
-                    ? globalStyles.disabledOutlineButtonText
-                    : globalStyles.outlineButtonText,
-                ]}>
-                Add
-              </Text>
-              {apiInProgress ? (
-                <ActivityIndicator size={16} />
-              ) : (
-                <Icon
-                  name={'plus'}
-                  color={
-                    disabled ? theme.colors.disabled : theme.colors.primary
-                  }
-                  size={16}
-                />
-              )}
-            </TouchableOpacity>
+                    ? globalStyles.disabledOutlineButton
+                    : globalStyles.outlineButton,
+                  styles.addButton,
+                ]}
+                onPress={showQuantitySheet}
+                disabled={disabled}>
+                <Icon name={'minus'} color={theme.colors.primary} size={14} />
+                <Text
+                  variant={'titleSmall'}
+                  style={[
+                    disabled
+                      ? globalStyles.disabledOutlineButtonText
+                      : globalStyles.outlineButtonText,
+                  ]}>
+                  {cartItemDetails?.productQuantity}
+                </Text>
+                <Icon name={'plus'} color={theme.colors.primary} size={14} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={[
+                  disabled
+                    ? globalStyles.disabledOutlineButton
+                    : globalStyles.outlineButton,
+                  styles.addButton,
+                ]}
+                onPress={addToCart}
+                disabled={disabled}>
+                <Text
+                  variant={'titleSmall'}
+                  style={[
+                    disabled
+                      ? globalStyles.disabledOutlineButtonText
+                      : globalStyles.outlineButtonText,
+                  ]}>
+                  Add
+                </Text>
+                {apiInProgress ? (
+                  <ActivityIndicator size={16} />
+                ) : (
+                  <Icon
+                    name={'plus'}
+                    color={
+                      disabled ? theme.colors.disabled : theme.colors.primary
+                    }
+                    size={16}
+                  />
+                )}
+              </TouchableOpacity>
+            )}
             {customizable && (
               <Text variant={'labelSmall'} style={styles.customise}>
                 Customizable
@@ -310,7 +380,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             )}
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
       <RBSheet
         ref={customizationSheet}
         height={screenHeight - 150}
@@ -335,34 +405,97 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         <View style={styles.customizationButtons}>
           <View style={styles.quantityContainer}>
             <TouchableOpacity
+              disabled={productLoading}
               style={styles.incrementButton}
               onPress={() => {
                 if (itemQty > 1) {
                   setItemQty(itemQty - 1);
                 }
               }}>
-              <Icon name={'minus'} color={theme.colors.primary} />
+              <Icon
+                name={'minus'}
+                color={
+                  productLoading ? theme.colors.border : theme.colors.primary
+                }
+              />
             </TouchableOpacity>
             <Text variant={'bodyMedium'} style={styles.quantity}>
               {itemQty}
             </Text>
             <TouchableOpacity
-              disabled={itemOutOfStock}
+              disabled={productLoading || itemOutOfStock}
               style={styles.incrementButton}
               onPress={() => setItemQty(itemQty + 1)}>
-              <Icon name={'plus'} color={theme.colors.primary} />
+              <Icon
+                name={'plus'}
+                color={
+                  productLoading ? theme.colors.border : theme.colors.primary
+                }
+              />
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            disabled={itemOutOfStock}
-            style={styles.addToCardButton}
+            disabled={itemOutOfStock || productLoading}
+            style={[
+              styles.addToCardButton,
+              itemOutOfStock || productLoading
+                ? globalStyles.disabledContainedButton
+                : globalStyles.containedButton,
+            ]}
             onPress={addDetailsToCart}>
-            <Text variant={'bodyMedium'} style={styles.addToCardButtonLabel}>
-              Add Item Total - ₹
-              {(product?.item_details?.price.value + customizationPrices) *
-                itemQty}
-            </Text>
+            {productLoading ? (
+              <ActivityIndicator size={14} color={theme.colors.primary} />
+            ) : (
+              <Text
+                variant={'bodyMedium'}
+                style={
+                  itemOutOfStock || productLoading
+                    ? globalStyles.disabledContainedButtonText
+                    : globalStyles.containedButtonText
+                }>
+                Add Item Total - ₹
+                {(product?.item_details?.price.value + customizationPrices) *
+                  itemQty}
+              </Text>
+            )}
           </TouchableOpacity>
+        </View>
+      </RBSheet>
+      <RBSheet
+        ref={quantitySheet}
+        height={screenHeight - 150}
+        customStyles={{
+          container: styles.rbSheet,
+        }}>
+        <View style={styles.header}>
+          <Text
+            variant={'titleSmall'}
+            style={styles.title}
+            ellipsizeMode={'tail'}>
+            Customizations for $
+            {cartItemDetails?.items[0]?.item?.product?.descriptor?.name}
+          </Text>
+          <IconButton icon={'close'} onPress={hideQuantitySheet} />
+        </View>
+        <ScrollView style={styles.customizationContainer}>
+          {cartItemDetails?.items?.map((item: any) => (
+            <View key={item?._id} style={styles.cartItem}>
+              <View style={styles.productMeta}>
+                <Text variant={'bodyMedium'}>
+                  {item?.item?.product?.descriptor?.name}
+                </Text>
+                <Customizations cartItem={item} />
+              </View>
+              <ManageQuantity
+                cartItem={item}
+                updatingCartItem={updatingCartItem}
+                updateCartItem={updateSpecificItem}
+              />
+            </View>
+          ))}
+        </ScrollView>
+        <View style={styles.addNewCustomizationButton}>
+          <Button onPress={addNewCustomization}>Add new customization</Button>
         </View>
       </RBSheet>
     </>
@@ -403,6 +536,7 @@ const makeStyles = (colors: any) =>
       padding: 10,
       flexDirection: 'row',
       justifyContent: 'space-between',
+      alignItems: 'center',
     },
     customise: {
       color: '#979797',
@@ -458,13 +592,23 @@ const makeStyles = (colors: any) =>
     addToCardButton: {
       flex: 1,
       borderRadius: 8,
-      backgroundColor: colors.primary,
       justifyContent: 'center',
       alignItems: 'center',
       padding: 10,
     },
-    addToCardButtonLabel: {
-      color: '#fff',
+    cartItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    productMeta: {
+      flex: 1,
+    },
+    addNewCustomizationButton: {
+      marginVertical: 16,
     },
   });
 

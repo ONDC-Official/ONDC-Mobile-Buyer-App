@@ -91,6 +91,7 @@ export const theme = {
     success: '#419E6A',
     disabled: 'grey',
     white: '#fff',
+    border: '#ebebeb',
   },
   fonts: configureFonts({config: fontConfig}),
 };

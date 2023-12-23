@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from 'react-redux';
 import {
   ActivityIndicator,
   Dimensions,
@@ -23,7 +23,10 @@ import {
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
-import { updateCartItems } from "../../../../redux/cart/actions";
+import {updateCartItems} from '../../../../redux/cart/actions';
+import Customizations from '../../../../components/customization/Customizations';
+import ManageQuantity from '../../../../components/customization/ManageQuantity';
+import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -52,12 +55,13 @@ const CartItems: React.FC<CartItems> = ({
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
-  const [updatingCartItem, setUpdatingCartItem] = useState<any>(null);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
   const [currentCartItem, setCurrentCartItem] = useState<any>(null);
   const [productPayload, setProductPayload] = useState<any>(null);
   const [requestedProduct, setRequestedProduct] = useState<any>(null);
   const [customizationState, setCustomizationState] = useState<any>({});
+  const {updatingCartItem, updateSpecificCartItem} =
+    useUpdateSpecificItemCount();
 
   const getProductDetails = async (productId: any) => {
     try {
@@ -72,112 +76,18 @@ const CartItems: React.FC<CartItems> = ({
     }
   };
 
-  const renderCustomizations = (cartItem: any) => {
-    if (cartItem.item.customisations) {
-      const customisations = cartItem.item.customisations;
-
-      return (
-        <Text variant={'labelSmall'}>
-          {customisations.map((customization: any, index: number) => {
-            const isLastItem = index === customisations.length - 1;
-            return `${customization.item_details.descriptor.name} (₹${
-              customization.item_details.price.value
-            })${isLastItem ? '' : ' + '}`;
-          })}
-        </Text>
-      );
-    }
-
-    return <></>;
-  };
-
   const updateCartItem = async (
     itemId: any,
     increment: boolean,
     uniqueId: any,
   ) => {
-    try {
-      setUpdatingCartItem(itemId);
-      const url = `${API_BASE_URL}${CART}/${uid}/${uniqueId}`;
-      const items = cartItems.concat([]);
-      const itemIndex = items.findIndex((item: any) => item._id === uniqueId);
-      if (itemIndex !== -1) {
-        source.current = CancelToken.source();
-        let updatedCartItem = items[itemIndex];
-        updatedCartItem.id = updatedCartItem.item.id;
-
-        if (increment) {
-          const productMaxQuantity =
-            updatedCartItem?.item?.product?.quantity?.maximum;
-          if (productMaxQuantity) {
-            if (
-              updatedCartItem.item.quantity.count < productMaxQuantity.count
-            ) {
-              updatedCartItem.item.quantity.count += 1;
-
-              let customisations = updatedCartItem.item.customisations;
-
-              if (customisations) {
-                customisations = customisations.map((customisation: any) => {
-                  return {
-                    ...customisation,
-                    quantity: {
-                      ...customisation.quantity,
-                      count: customisation.quantity.count + 1,
-                    },
-                  };
-                });
-
-                updatedCartItem.item.customisations = customisations;
-              } else {
-                updatedCartItem.item.customisations = null;
-              }
-
-              updatedCartItem = updatedCartItem.item;
-
-              await putDataWithAuth(url, updatedCartItem, source.current.token);
-            } else {
-              showToastWithGravity(
-                `Maximum allowed quantity is ${updatedCartItem.item.quantity.count}`,
-              );
-            }
-          } else {
-            updatedCartItem.item.quantity.count += 1;
-            updatedCartItem = updatedCartItem.item;
-            await putDataWithAuth(url, updatedCartItem, source.current.token);
-          }
-        } else {
-          if (updatedCartItem.item.quantity.count > 1) {
-            updatedCartItem.item.quantity.count -= 1;
-
-            let customisations = updatedCartItem.item.customisations;
-
-            if (customisations) {
-              customisations = customisations.map((customisation: any) => {
-                return {
-                  ...customisation,
-                  quantity: {
-                    ...customisation.quantity,
-                    count: customisation.quantity.count - 1,
-                  },
-                };
-              });
-              updatedCartItem.item.customisations = customisations;
-            } else {
-              updatedCartItem.item.customisations = null;
-            }
-
-            updatedCartItem = updatedCartItem.item;
-            await putDataWithAuth(url, updatedCartItem, source.current.token);
-          }
-        }
-        setCartItems(items);
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setUpdatingCartItem(null);
-    }
+    await updateSpecificCartItem(
+      itemId,
+      increment,
+      uniqueId,
+      cartItems,
+      setCartItems,
+    );
   };
 
   const deleteCartItem = async (itemId: any) => {
@@ -232,7 +142,7 @@ const CartItems: React.FC<CartItems> = ({
             <Text variant={'bodyMedium'}>
               {cartItem?.item?.product?.descriptor?.name}
             </Text>
-            {renderCustomizations(cartItem)}
+            <Customizations cartItem={cartItem} />
             {cartItem.item.hasCustomisations && (
               <TouchableOpacity
                 disabled={!!requestedProduct}
@@ -254,31 +164,11 @@ const CartItems: React.FC<CartItems> = ({
             )}
           </View>
 
-          <View style={styles.quantityContainer}>
-            <TouchableOpacity
-              disabled={!!updatingCartItem}
-              style={styles.incrementButton}
-              onPress={() =>
-                updateCartItem(cartItem.item.id, false, cartItem._id)
-              }>
-              <Icon name={'minus'} color={theme.colors.primary} />
-            </TouchableOpacity>
-            <Text variant={'bodyMedium'} style={styles.quantity}>
-              {updatingCartItem ? (
-                <ActivityIndicator color={theme.colors.primary} size={14} />
-              ) : (
-                cartItem?.item?.quantity?.count
-              )}
-            </Text>
-            <TouchableOpacity
-              disabled={!!updatingCartItem}
-              style={styles.incrementButton}
-              onPress={() =>
-                updateCartItem(cartItem.item.id, true, cartItem._id)
-              }>
-              <Icon name={'plus'} color={theme.colors.primary} />
-            </TouchableOpacity>
-          </View>
+          <ManageQuantity
+            cartItem={cartItem}
+            updatingCartItem={updatingCartItem}
+            updateCartItem={updateCartItem}
+          />
 
           <View>
             <Text variant="titleSmall">
@@ -445,28 +335,6 @@ const makeStyles = (colors: any) =>
     customiseText: {
       color: colors.primary,
       marginLeft: 4,
-    },
-    quantityContainer: {
-      borderRadius: 6,
-      borderColor: '#E8E8E8',
-      borderWidth: 1,
-      backgroundColor: '#FFF',
-      flexDirection: 'row',
-      height: 26,
-      alignItems: 'center',
-      marginRight: 18,
-      width: 54,
-    },
-    quantity: {
-      flex: 1,
-      alignItems: 'center',
-      textAlign: 'center',
-    },
-    incrementButton: {
-      paddingHorizontal: 4,
-      height: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
     },
     infoBox: {
       backgroundColor: 'rgba(249, 197, 28, 0.17)',

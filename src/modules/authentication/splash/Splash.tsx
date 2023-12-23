@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Text, useTheme} from 'react-native-paper';
-import {getBuildNumber, getVersion} from 'react-native-device-info';
+import {getVersion} from 'react-native-device-info';
 
 import {appStyles} from '../../../styles/styles';
 import ONDCLogo from '../../../assets/ondc.svg';
@@ -90,9 +90,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
         </View>
       </View>
       <View style={styles.footer}>
-        <Text>
-          Version: {getVersion()} - ({getBuildNumber()})
-        </Text>
+        <Text>Version: {getVersion()}</Text>
       </View>
     </View>
   );
