@@ -75,7 +75,7 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      paddingTop: 40,
+      paddingTop: 16,
       paddingLeft: 16,
     },
     title: {

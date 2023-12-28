@@ -77,7 +77,7 @@ const TopBrands = () => {
           horizontal
           data={providers}
           renderItem={({item}) => <Brand brand={item} />}
-          keyExtractor={item => item.id}
+          keyExtractor={(item, index) => `${item.id}${index}`}
         />
       )}
     </View>

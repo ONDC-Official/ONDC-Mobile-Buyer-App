@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import {useSelector} from 'react-redux';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
@@ -12,10 +12,21 @@ interface Page {
 const Page: React.FC<Page> = ({children}) => {
   const theme = useTheme();
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const [itemQuantity, setItemQuantity] = useState<number>(0);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const styles = makeStyles(theme.colors);
 
   const navigateToCart = () => navigation.navigate('Cart');
+
+  useEffect(() => {
+    const getSum = (total: number, item: any) =>
+      total + item?.item?.quantity?.count;
+    if (cartItems) {
+      setItemQuantity(cartItems.reduce(getSum, 0));
+    } else {
+      setItemQuantity(0);
+    }
+  }, [cartItems]);
 
   return (
     <>
@@ -23,7 +34,7 @@ const Page: React.FC<Page> = ({children}) => {
       {cartItems.length > 0 && (
         <TouchableOpacity style={styles.container} onPress={navigateToCart}>
           <Text variant={'titleSmall'} style={styles.text}>
-            Items: {cartItems.length}
+            Items: {itemQuantity}
           </Text>
           <Text variant={'titleMedium'} style={styles.text}>
             View Cart

@@ -24,11 +24,11 @@ import useCartItems from '../../../../hooks/useCartItems';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {areCustomisationsSame} from '../../product/details/ProductDetails';
 import {makeGlobalStyles} from '../../../../styles/styles';
-import StockAvailability from '../../../../components/products/StockAvailability';
 import Customizations from '../../../../components/customization/Customizations';
 import ManageQuantity from '../../../../components/customization/ManageQuantity';
 import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
 import {updateCartItems} from '../../../../redux/cart/actions';
+import StockAvailability from '../../../../components/products/StockAvailability';
 
 interface FBProduct {
   product: any;
@@ -299,11 +299,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             <Text variant={'bodyMedium'} style={styles.field}>
               {product?.item_details?.descriptor?.short_desc}
             </Text>
-            <StockAvailability
-              available={
-                Number(product?.item_details?.quantity?.available?.count) >= 1
-              }
-            />
           </View>
           <View style={styles.actionContainer}>
             <View style={styles.imageContainer}>
@@ -341,42 +336,47 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                 </Text>
                 <Icon name={'plus'} color={theme.colors.primary} size={14} />
               </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={[
-                  disabled
-                    ? globalStyles.disabledOutlineButton
-                    : globalStyles.outlineButton,
-                  styles.addButton,
-                ]}
-                onPress={addToCart}
-                disabled={disabled}>
-                <Text
-                  variant={'titleSmall'}
+            ) : Number(product?.item_details?.quantity?.available?.count) >=
+              1 ? (
+              <View>
+                <TouchableOpacity
                   style={[
                     disabled
-                      ? globalStyles.disabledOutlineButtonText
-                      : globalStyles.outlineButtonText,
-                  ]}>
-                  Add
-                </Text>
-                {apiInProgress ? (
-                  <ActivityIndicator size={16} />
-                ) : (
-                  <Icon
-                    name={'plus'}
-                    color={
-                      disabled ? theme.colors.disabled : theme.colors.primary
-                    }
-                    size={16}
-                  />
+                      ? globalStyles.disabledOutlineButton
+                      : globalStyles.outlineButton,
+                    styles.addButton,
+                  ]}
+                  onPress={addToCart}
+                  disabled={disabled}>
+                  <Text
+                    variant={'titleSmall'}
+                    style={[
+                      disabled
+                        ? globalStyles.disabledOutlineButtonText
+                        : globalStyles.outlineButtonText,
+                    ]}>
+                    Add
+                  </Text>
+                  {apiInProgress ? (
+                    <ActivityIndicator size={16} />
+                  ) : (
+                    <Icon
+                      name={'plus'}
+                      color={
+                        disabled ? theme.colors.disabled : theme.colors.primary
+                      }
+                      size={16}
+                    />
+                  )}
+                </TouchableOpacity>
+                {customizable && (
+                  <Text variant={'labelSmall'} style={styles.customise}>
+                    Customizable
+                  </Text>
                 )}
-              </TouchableOpacity>
-            )}
-            {customizable && (
-              <Text variant={'labelSmall'} style={styles.customise}>
-                Customizable
-              </Text>
+              </View>
+            ) : (
+              <StockAvailability available={false} />
             )}
           </View>
         </View>

@@ -36,6 +36,8 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
     await Linking.openURL(url);
   };
 
+  const callProvider = () => Linking.openURL('tel:+91 92729282982');
+
   if (apiRequested) {
     return <BrandSkeleton />;
   }
@@ -86,7 +88,9 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
               </Text>
             </TouchableOpacity>
             <View style={styles.separator} />
-            <TouchableOpacity style={styles.actionButton}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={callProvider}>
               <Text variant={'bodyMedium'} style={styles.buttonText}>
                 Call Now
               </Text>

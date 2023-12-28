@@ -164,7 +164,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
 const makeStyles = () =>
   StyleSheet.create({
     container: {
-      paddingTop: 40,
+      paddingTop: 16,
       paddingLeft: 16,
     },
     title: {
