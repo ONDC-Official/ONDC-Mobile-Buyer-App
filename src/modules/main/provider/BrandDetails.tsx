@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {StyleSheet, View} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import moment from 'moment';
 import {API_BASE_URL, PROVIDER, STORE_DETAILS} from '../../../utils/apiActions';
@@ -17,6 +17,7 @@ import Page from '../../../components/page/Page';
 const CancelToken = axios.CancelToken;
 
 const BrandDetails = ({route: {params}}: {route: any}) => {
+  const isFocused = useIsFocused();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
   const theme = useTheme();
@@ -77,6 +78,16 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
       setApiRequested(false);
     }
   };
+
+  useEffect(() => {
+    getProviderDetails().then(() => {});
+
+    return () => {
+      if (source.current) {
+        source.current.cancel();
+      }
+    };
+  }, [isFocused]);
 
   useEffect(() => {
     getProviderDetails().then(() => {});

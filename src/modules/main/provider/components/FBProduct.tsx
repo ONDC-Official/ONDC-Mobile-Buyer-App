@@ -570,6 +570,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     customise: {
+      textAlign: 'center',
       color: '#979797',
     },
     rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
