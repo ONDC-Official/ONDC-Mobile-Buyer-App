@@ -9,7 +9,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import {SSE_TIMEOUT} from '../utils/constants';
-import {API_BASE_URL, CART} from '../utils/apiActions';
+import { API_BASE_URL, CART, ON_SELECT } from "../utils/apiActions";
 import {setStoredData} from '../utils/storage';
 import useNetworkHandling from './useNetworkHandling';
 import {updateCartItems} from '../redux/cart/actions';
@@ -225,7 +225,7 @@ export default (navigate: boolean = true) => {
     try {
       setCheckoutLoading(true);
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}/clientApis/v2/on_select?messageIds=${messageId}`,
+        `${API_BASE_URL}${ON_SELECT}${messageId}`,
         source.current.token,
       );
       responseRef.current = [...responseRef.current, data[0]];

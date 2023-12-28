@@ -173,12 +173,11 @@ const CartItems: React.FC<CartItems> = ({
 
           <View>
             <Text variant="titleSmall">
+              ₹{' '}
               {cartItem.item.hasCustomisations
-                ? `₹ ${
-                    Number(getPriceWithCustomisations(cartItem)) *
-                    Number(cartItem?.item?.quantity?.count)
-                  }`
-                : `₹ ${Number(cartItem?.item?.product?.subtotal)}`}
+                ? Number(getPriceWithCustomisations(cartItem)) *
+                  Number(cartItem?.item?.quantity?.count)
+                : Number(cartItem?.item?.product?.subtotal)}
             </Text>
             {itemToDelete === cartItem._id ? (
               <ActivityIndicator size={20} color={theme.colors.primary} />

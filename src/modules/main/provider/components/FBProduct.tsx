@@ -14,7 +14,11 @@ import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
-import {getCustomizations, showToastWithGravity} from '../../../../utils/utils';
+import {
+  getCustomizations,
+  getPriceWithCustomisations,
+  showToastWithGravity,
+} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
@@ -503,6 +507,13 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                   {item?.item?.product?.descriptor?.name}
                 </Text>
                 <Customizations cartItem={item} />
+                <Text variant="titleSmall" style={styles.cartQuantity}>
+                  ₹{' '}
+                  {item.item.hasCustomisations
+                    ? Number(getPriceWithCustomisations(item)) *
+                      Number(item?.item?.quantity?.count)
+                    : Number(item?.item?.product?.subtotal)}
+                </Text>
               </View>
               <ManageQuantity
                 allowDelete
@@ -629,6 +640,9 @@ const makeStyles = (colors: any) =>
     },
     addNewCustomizationButton: {
       marginVertical: 16,
+    },
+    cartQuantity: {
+      marginTop: 4,
     },
   });
 
