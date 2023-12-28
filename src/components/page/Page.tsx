@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';

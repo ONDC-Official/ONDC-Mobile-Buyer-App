@@ -19,7 +19,6 @@ import {API_BASE_URL, CART} from '../../../../utils/apiActions';
 import {
   getCustomizations,
   getPriceWithCustomisations,
-  showToastWithGravity,
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
@@ -165,9 +164,11 @@ const CartItems: React.FC<CartItems> = ({
           </View>
 
           <ManageQuantity
+            allowDelete
             cartItem={cartItem}
             updatingCartItem={updatingCartItem}
             updateCartItem={updateCartItem}
+            deleteCartItem={deleteCartItem}
           />
 
           <View>

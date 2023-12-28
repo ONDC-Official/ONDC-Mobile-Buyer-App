@@ -1,5 +1,5 @@
 import {useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import axios from 'axios';
 import {API_BASE_URL, CART} from '../utils/apiActions';
 import {showToastWithGravity} from '../utils/utils';

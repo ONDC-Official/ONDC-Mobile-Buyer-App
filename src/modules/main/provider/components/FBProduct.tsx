@@ -49,6 +49,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const customizationSheet = useRef<any>(null);
   const quantitySheet = useRef<any>(null);
   const productSource = useRef<any>(null);
+  const [itemToDelete, setItemToDelete] = useState<any>(null);
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
   const [productLoading, setProductLoading] = useState<boolean>(false);
@@ -58,7 +59,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   });
   const [productDetails, setProductDetails] = useState<any>(null);
   const [customizationState, setCustomizationState] = useState<any>({});
-  const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
+  const {deleteDataWithAuth, getDataWithAuth, postDataWithAuth} =
+    useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const [itemQty, setItemQty] = useState<number>(1);
   const [customizationPrices, setCustomizationPrices] = useState<number>(0);
@@ -239,6 +241,22 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       cartItems,
       setCartItems,
     );
+  };
+
+  const deleteCartItem = async (itemId: any) => {
+    try {
+      setItemToDelete(itemId);
+      source.current = CancelToken.source();
+      await deleteDataWithAuth(
+        `${API_BASE_URL}${CART}/${uid}/${itemId}`,
+        source.current.token,
+      );
+      const list = cartItems.filter((item: any) => item._id !== itemId);
+      dispatch(updateCartItems(list));
+    } catch (error) {
+    } finally {
+      setItemToDelete(null);
+    }
   };
 
   const calculateSubtotal = (groupId: any, state: any) => {
@@ -487,8 +505,10 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                 <Customizations cartItem={item} />
               </View>
               <ManageQuantity
+                allowDelete
                 cartItem={item}
-                updatingCartItem={updatingCartItem}
+                updatingCartItem={updatingCartItem ?? itemToDelete}
+                deleteCartItem={deleteCartItem}
                 updateCartItem={updateSpecificItem}
               />
             </View>

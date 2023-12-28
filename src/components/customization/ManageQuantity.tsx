@@ -12,12 +12,16 @@ interface ManageQuantity {
   cartItem: any;
   updatingCartItem: any;
   updateCartItem: (item: any, increment: boolean, uniqueId: any) => void;
+  allowDelete?: boolean;
+  deleteCartItem?: (itemId: any) => void;
 }
 
 const ManageQuantity: React.FC<ManageQuantity> = ({
   cartItem,
   updatingCartItem,
   updateCartItem,
+  allowDelete = false,
+  deleteCartItem = () => {},
 }) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
@@ -27,12 +31,21 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
   );
   return (
     <View style={styles.quantityContainer}>
-      <TouchableOpacity
-        disabled={!!updatingCartItem || cartItem?.item?.quantity?.count === 0}
-        style={styles.incrementButton}
-        onPress={() => updateCartItem(cartItem.item.id, false, cartItem._id)}>
-        <Icon name={'minus'} color={theme.colors.primary} />
-      </TouchableOpacity>
+      {allowDelete && cartItem?.item?.quantity?.count === 1 ? (
+        <TouchableOpacity
+          disabled={!!updatingCartItem || cartItem?.item?.quantity?.count === 0}
+          style={styles.incrementButton}
+          onPress={() => deleteCartItem(cartItem._id)}>
+          <Icon name={'delete'} color={theme.colors.error} />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          disabled={!!updatingCartItem || cartItem?.item?.quantity?.count === 0}
+          style={styles.incrementButton}
+          onPress={() => updateCartItem(cartItem.item.id, false, cartItem._id)}>
+          <Icon name={'minus'} color={theme.colors.primary} />
+        </TouchableOpacity>
+      )}
       <Text variant={'bodyMedium'} style={styles.quantity}>
         {updatingCartItem === cartItem._id ? (
           <ActivityIndicator color={theme.colors.primary} size={14} />
