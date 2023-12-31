@@ -33,6 +33,7 @@ import ManageQuantity from '../../../../components/customization/ManageQuantity'
 import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
 import {updateCartItems} from '../../../../redux/cart/actions';
 import StockAvailability from '../../../../components/products/StockAvailability';
+import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
 
 interface FBProduct {
   product: any;
@@ -47,9 +48,19 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
-  const source = useRef<any>(null);
+  const {deleteDataWithAuth, getDataWithAuth, postDataWithAuth} =
+    useNetworkHandling();
+  const {handleApiError} = useNetworkErrorHandling();
   const {uid} = useSelector(({authReducer}) => authReducer);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+  const {getCartItems} = useCartItems();
+  const {updateCartItem} = userUpdateCartItem();
+  const {updatingCartItem, updateSpecificCartItem} =
+    useUpdateSpecificItemCount();
+  const {customizationState, setCustomizationState, customizationPrices} =
+    useCustomizationStateHelper();
+  const dispatch = useDispatch();
+  const source = useRef<any>(null);
   const customizationSheet = useRef<any>(null);
   const quantitySheet = useRef<any>(null);
   const productSource = useRef<any>(null);
@@ -62,17 +73,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     productQuantity: 0,
   });
   const [productDetails, setProductDetails] = useState<any>(null);
-  const [customizationState, setCustomizationState] = useState<any>({});
-  const {deleteDataWithAuth, getDataWithAuth, postDataWithAuth} =
-    useNetworkHandling();
-  const {handleApiError} = useNetworkErrorHandling();
   const [itemQty, setItemQty] = useState<number>(1);
-  const [customizationPrices, setCustomizationPrices] = useState<number>(0);
-  const {getCartItems} = useCartItems();
-  const {updateCartItem} = userUpdateCartItem();
-  const {updatingCartItem, updateSpecificCartItem} =
-    useUpdateSpecificItemCount();
-  const dispatch = useDispatch();
 
   const customizable =
     product?.item_details?.tags.findIndex(
@@ -148,7 +149,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
 
       if (items.length > 0 && customisations && customisations.length > 0) {
         items = cartItems.filter((ci: any) => {
-          return ci.item.customisations.length === customisations.length;
+          return ci.item.customisations.length === customisations?.length;
         });
       }
 
@@ -263,31 +264,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     }
   };
 
-  const calculateSubtotal = (groupId: any, state: any) => {
-    let group = state[groupId];
-    if (!group) {
-      return;
-    }
-
-    let prices = group.selected.map(
-      (selectedGroup: any) => selectedGroup.price,
-    );
-    setCustomizationPrices(prevState => {
-      return prevState + prices.reduce((a, b) => a + b, 0);
-    });
-
-    group?.childs?.map((child: any) => {
-      calculateSubtotal(child, state);
-    });
-  };
-
-  useEffect(() => {
-    if (customizationState && customizationState.firstGroup) {
-      setCustomizationPrices(0);
-      calculateSubtotal(customizationState.firstGroup?.id, customizationState);
-    }
-  }, [customizationState]);
-
   useEffect(() => {
     if (product && cartItems.length > 0) {
       let items: any[] = cartItems.filter(
@@ -306,6 +282,9 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     apiInProgress ||
     !(Number(product?.item_details?.quantity?.available?.count) >= 1);
 
+  // @ts-ignore
+  // @ts-ignore
+  // @ts-ignore
   return (
     <>
       <View key={product?.item_details?.id}>
@@ -403,6 +382,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           </View>
         </View>
       </View>
+      {/*@ts-ignore*/}
       <RBSheet
         ref={customizationSheet}
         height={screenHeight - 150}
@@ -483,6 +463,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           </TouchableOpacity>
         </View>
       </RBSheet>
+      {/*@ts-ignore*/}
       <RBSheet
         ref={quantitySheet}
         height={screenHeight - 150}

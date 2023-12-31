@@ -26,6 +26,7 @@ import {updateCartItems} from '../../../../redux/cart/actions';
 import Customizations from '../../../../components/customization/Customizations';
 import ManageQuantity from '../../../../components/customization/ManageQuantity';
 import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
+import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -45,22 +46,24 @@ const CartItems: React.FC<CartItems> = ({
   cartItems,
   setCartItems,
 }) => {
+  const theme = useTheme();
+  const styles = makeStyles(theme.colors);
   const {deleteDataWithAuth, getDataWithAuth, putDataWithAuth} =
     useNetworkHandling();
-  const customizationSheet = useRef<any>(null);
-  const source = useRef<any>(null);
+  const {customizationState, setCustomizationState, customizationPrices} =
+    useCustomizationStateHelper();
+  const {updatingCartItem, updateSpecificCartItem} =
+    useUpdateSpecificItemCount();
   const dispatch = useDispatch();
   const {uid} = useSelector(({authReducer}) => authReducer);
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const theme = useTheme();
-  const styles = makeStyles(theme.colors);
+  const customizationSheet = useRef<any>(null);
+  const source = useRef<any>(null);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
   const [currentCartItem, setCurrentCartItem] = useState<any>(null);
   const [productPayload, setProductPayload] = useState<any>(null);
   const [requestedProduct, setRequestedProduct] = useState<any>(null);
-  const [customizationState, setCustomizationState] = useState<any>({});
-  const {updatingCartItem, updateSpecificCartItem} =
-    useUpdateSpecificItemCount();
+  const [updatingProduct, setUpdatingProduct] = useState<boolean>(false);
 
   const getProductDetails = async (productId: any) => {
     try {
@@ -135,7 +138,6 @@ const CartItems: React.FC<CartItems> = ({
               }}
               style={styles.productImage}
             />
-            {/*{renderVegNonVegTag(cartItem)}*/}
           </TouchableOpacity>
           <View style={styles.productMeta}>
             <Text variant={'bodyMedium'}>
@@ -231,23 +233,31 @@ const CartItems: React.FC<CartItems> = ({
   const hideCustomization = () => customizationSheet.current.close();
 
   const updateCustomizations = async () => {
-    const url = `${API_BASE_URL}${CART}/${uid}/${currentCartItem._id}`;
-    const items = cartItems.concat([]);
-    const itemIndex = items.findIndex(item => item._id === currentCartItem._id);
-    if (itemIndex !== -1) {
-      let updatedCartItem = items[itemIndex];
-      const updatedCustomizations = await getCustomizations(
-        productPayload,
-        customizationState,
+    try {
+      setUpdatingProduct(true);
+      const url = `${API_BASE_URL}${CART}/${uid}/${currentCartItem._id}`;
+      const items = cartItems.concat([]);
+      const itemIndex = items.findIndex(
+        item => item._id === currentCartItem._id,
       );
-      updatedCartItem.id = updatedCartItem.item.id;
-      updatedCartItem.item.customisations = updatedCustomizations;
-      updatedCartItem = updatedCartItem.item;
-      updatedCartItem.customisationState = customizationState;
-      source.current = CancelToken.source();
-      await putDataWithAuth(url, updatedCartItem, source.current.token);
-      hideCustomization();
-      setCartItems(items);
+      if (itemIndex !== -1) {
+        let updatedCartItem = items[itemIndex];
+        const updatedCustomizations = await getCustomizations(
+          productPayload,
+          customizationState,
+        );
+        updatedCartItem.id = updatedCartItem.item.id;
+        updatedCartItem.item.customisations = updatedCustomizations;
+        updatedCartItem = updatedCartItem.item;
+        updatedCartItem.customisationState = customizationState;
+        source.current = CancelToken.source();
+        await putDataWithAuth(url, updatedCartItem, source.current.token);
+        hideCustomization();
+        setCartItems(items);
+      }
+    } catch (e) {
+    } finally {
+      setUpdatingProduct(false);
     }
   };
 
@@ -283,6 +293,7 @@ const CartItems: React.FC<CartItems> = ({
 
         <View style={styles.customizationButtons}>
           <Button
+            disabled={updatingProduct}
             style={styles.customizationButton}
             mode="outlined"
             onPress={() =>
@@ -294,8 +305,16 @@ const CartItems: React.FC<CartItems> = ({
           </Button>
           <View style={styles.separator} />
           <Button
+            disabled={updatingProduct}
             style={styles.customizationButton}
             mode="contained"
+            icon={() =>
+              updatingProduct ? (
+                <ActivityIndicator size={14} color={theme.colors.primary} />
+              ) : (
+                <></>
+              )
+            }
             onPress={updateCustomizations}>
             Save
           </Button>

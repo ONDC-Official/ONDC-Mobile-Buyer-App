@@ -9,7 +9,7 @@ interface FBProductCustomization {
   product: any;
   customizationState: any;
   setCustomizationState: (state: any) => void;
-  isEditFlow: boolean;
+  isEditFlow?: boolean;
   setItemOutOfStock: (flag: boolean) => void;
 }
 
