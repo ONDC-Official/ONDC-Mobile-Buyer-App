@@ -27,6 +27,7 @@ import Customizations from '../../../../components/customization/Customizations'
 import ManageQuantity from '../../../../components/customization/ManageQuantity';
 import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
 import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
+import CustomizationFooterButtons from '../../provider/components/CustomizationFooterButtons';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -64,6 +65,8 @@ const CartItems: React.FC<CartItems> = ({
   const [productPayload, setProductPayload] = useState<any>(null);
   const [requestedProduct, setRequestedProduct] = useState<any>(null);
   const [updatingProduct, setUpdatingProduct] = useState<boolean>(false);
+  const [itemQty, setItemQty] = useState<number>(1);
+  const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
 
   const getProductDetails = async (productId: any) => {
     try {
@@ -115,6 +118,7 @@ const CartItems: React.FC<CartItems> = ({
       setCustomizationState(cartItem.item.customisationState);
       await getProductDetails(cartItem.item.id);
       setCurrentCartItem(cartItem);
+      setItemQty(cartItem?.item?.quantity?.count);
       showCustomization();
     } catch (e) {
     } finally {
@@ -228,7 +232,9 @@ const CartItems: React.FC<CartItems> = ({
     ));
   };
 
-  const showCustomization = () => customizationSheet.current.open();
+  const showCustomization = () => {
+    customizationSheet.current.open();
+  };
 
   const hideCustomization = () => customizationSheet.current.close();
 
@@ -250,12 +256,15 @@ const CartItems: React.FC<CartItems> = ({
         updatedCartItem.item.customisations = updatedCustomizations;
         updatedCartItem = updatedCartItem.item;
         updatedCartItem.customisationState = customizationState;
+        updatedCartItem.quantity.count = itemQty;
         source.current = CancelToken.source();
         await putDataWithAuth(url, updatedCartItem, source.current.token);
         hideCustomization();
         setCartItems(items);
       }
+      hideCustomization();
     } catch (e) {
+      console.log(e);
     } finally {
       setUpdatingProduct(false);
     }
@@ -287,38 +296,20 @@ const CartItems: React.FC<CartItems> = ({
             product={productPayload}
             customizationState={customizationState}
             setCustomizationState={setCustomizationState}
-            setItemOutOfStock={() => {}}
+            setItemOutOfStock={setItemOutOfStock}
           />
         </View>
 
-        <View style={styles.customizationButtons}>
-          <Button
-            disabled={updatingProduct}
-            style={styles.customizationButton}
-            mode="outlined"
-            onPress={() =>
-              navigation.navigate('ProductDetails', {
-                productId: productPayload.id,
-              })
-            }>
-            View Details
-          </Button>
-          <View style={styles.separator} />
-          <Button
-            disabled={updatingProduct}
-            style={styles.customizationButton}
-            mode="contained"
-            icon={() =>
-              updatingProduct ? (
-                <ActivityIndicator size={14} color={theme.colors.primary} />
-              ) : (
-                <></>
-              )
-            }
-            onPress={updateCustomizations}>
-            Save
-          </Button>
-        </View>
+        <CustomizationFooterButtons
+          update
+          productLoading={updatingProduct}
+          itemQty={itemQty}
+          setItemQty={setItemQty}
+          itemOutOfStock={itemOutOfStock}
+          addDetailsToCart={updateCustomizations}
+          product={productPayload}
+          customizationPrices={customizationPrices}
+        />
       </RBSheet>
     </>
   );

@@ -34,6 +34,7 @@ import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemC
 import {updateCartItems} from '../../../../redux/cart/actions';
 import StockAvailability from '../../../../components/products/StockAvailability';
 import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
+import CustomizationFooterButtons from './CustomizationFooterButtons';
 
 interface FBProduct {
   product: any;
@@ -446,64 +447,15 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           />
         </ScrollView>
 
-        <View style={styles.customizationButtons}>
-          <View style={styles.quantityContainer}>
-            <TouchableOpacity
-              disabled={productLoading}
-              style={styles.incrementButton}
-              onPress={() => {
-                if (itemQty > 1) {
-                  setItemQty(itemQty - 1);
-                }
-              }}>
-              <Icon
-                name={'minus'}
-                color={
-                  productLoading ? theme.colors.border : theme.colors.primary
-                }
-              />
-            </TouchableOpacity>
-            <Text variant={'bodyMedium'} style={styles.quantity}>
-              {itemQty}
-            </Text>
-            <TouchableOpacity
-              disabled={productLoading || itemOutOfStock}
-              style={styles.incrementButton}
-              onPress={() => setItemQty(itemQty + 1)}>
-              <Icon
-                name={'plus'}
-                color={
-                  productLoading ? theme.colors.border : theme.colors.primary
-                }
-              />
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            disabled={itemOutOfStock || productLoading}
-            style={[
-              styles.addToCardButton,
-              itemOutOfStock || productLoading
-                ? globalStyles.disabledContainedButton
-                : globalStyles.containedButton,
-            ]}
-            onPress={addDetailsToCart}>
-            {productLoading ? (
-              <ActivityIndicator size={14} color={theme.colors.primary} />
-            ) : (
-              <Text
-                variant={'bodyMedium'}
-                style={
-                  itemOutOfStock || productLoading
-                    ? globalStyles.disabledContainedButtonText
-                    : globalStyles.containedButtonText
-                }>
-                Add Item Total - ₹
-                {(product?.item_details?.price.value + customizationPrices) *
-                  itemQty}
-              </Text>
-            )}
-          </TouchableOpacity>
-        </View>
+        <CustomizationFooterButtons
+          productLoading={productLoading}
+          itemQty={itemQty}
+          setItemQty={setItemQty}
+          itemOutOfStock={itemOutOfStock}
+          addDetailsToCart={addDetailsToCart}
+          product={product}
+          customizationPrices={customizationPrices}
+        />
       </RBSheet>
       {/*@ts-ignore*/}
       <RBSheet
