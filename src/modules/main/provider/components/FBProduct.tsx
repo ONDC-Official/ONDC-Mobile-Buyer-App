@@ -88,6 +88,21 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
 
   const hideQuantitySheet = () => quantitySheet.current.close();
 
+  const removeQuantityClick = () => {
+    if (cartItemDetails?.items.length === 1) {
+      const cartItem = cartItems[0];
+      if (cartItem?.item?.quantity?.count === 1) {
+        deleteCartItem(cartItem?._id).then(() => {});
+      } else {
+        updateSpecificItem(cartItem?.item?.id, false, cartItem?._id).then(
+          () => {},
+        );
+      }
+    } else {
+      showQuantitySheet();
+    }
+  };
+
   const addNewCustomization = () => {
     setItemQty(1);
     hideQuantitySheet();
@@ -275,6 +290,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         quantity,
       );
       setCartItemDetails({items, productQuantity});
+    } else {
+      setCartItemDetails({items: [], productQuantity: 0});
     }
   }, [product, cartItems]);
 
@@ -283,49 +300,51 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     !(Number(product?.item_details?.quantity?.available?.count) >= 1);
 
   // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
   return (
     <>
-      <View key={product?.item_details?.id}>
-        <View style={styles.product}>
-          <View style={styles.meta}>
-            <Text variant={'titleSmall'} style={styles.field}>
-              {product?.item_details?.descriptor?.name}
-            </Text>
-            <Text variant={'titleMedium'} style={styles.field}>
-              {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}{' '}
-              {product?.item_details?.price?.value}
-            </Text>
-            <Text variant={'bodyMedium'} style={styles.field}>
-              {product?.item_details?.descriptor?.short_desc}
-            </Text>
-          </View>
-          <View style={styles.actionContainer}>
-            <View style={styles.imageContainer}>
-              <FastImage
-                style={styles.image}
-                source={
-                  product?.item_details?.descriptor.symbol
-                    ? {uri: product?.item_details?.descriptor.symbol}
-                    : NoImageAvailable
-                }
-              />
-              <View style={styles.productTag}>
-                <VegNonVegTag tags={product?.item_details?.tags} />
-              </View>
+      <View style={styles.product}>
+        <TouchableOpacity style={styles.meta} onPress={addNewCustomization}>
+          <Text variant={'titleSmall'} style={styles.field}>
+            {product?.item_details?.descriptor?.name}
+          </Text>
+          <Text variant={'titleMedium'} style={styles.field}>
+            {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}{' '}
+            {product?.item_details?.price?.value}
+          </Text>
+          <Text variant={'bodyMedium'} style={styles.field}>
+            {product?.item_details?.descriptor?.short_desc}
+          </Text>
+        </TouchableOpacity>
+        <View style={styles.actionContainer}>
+          <TouchableOpacity
+            style={styles.imageContainer}
+            onPress={addNewCustomization}>
+            <FastImage
+              style={styles.image}
+              source={
+                product?.item_details?.descriptor.symbol
+                  ? {uri: product?.item_details?.descriptor.symbol}
+                  : NoImageAvailable
+              }
+            />
+            <View style={styles.productTag}>
+              <VegNonVegTag tags={product?.item_details?.tags} />
             </View>
-            {cartItemDetails?.productQuantity > 0 ? (
-              <TouchableOpacity
+          </TouchableOpacity>
+          {cartItemDetails?.productQuantity > 0 ? (
+            <View>
+              <View
                 style={[
                   disabled
                     ? globalStyles.disabledOutlineButton
                     : globalStyles.outlineButton,
                   styles.addButton,
-                ]}
-                onPress={showQuantitySheet}
-                disabled={disabled}>
-                <Icon name={'minus'} color={theme.colors.primary} size={14} />
+                ]}>
+                <TouchableOpacity
+                  onPress={removeQuantityClick}
+                  disabled={disabled}>
+                  <Icon name={'minus'} color={theme.colors.primary} size={14} />
+                </TouchableOpacity>
                 <Text
                   variant={'titleSmall'}
                   style={[
@@ -335,51 +354,74 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                   ]}>
                   {cartItemDetails?.productQuantity}
                 </Text>
-                <Icon name={'plus'} color={theme.colors.primary} size={14} />
-              </TouchableOpacity>
-            ) : Number(product?.item_details?.quantity?.available?.count) >=
-              1 ? (
-              <View>
                 <TouchableOpacity
+                  disabled={disabled}
+                  onPress={showQuantitySheet}>
+                  <Icon name={'plus'} color={theme.colors.primary} size={14} />
+                </TouchableOpacity>
+              </View>
+              {customizable && (
+                <Text variant={'labelSmall'} style={styles.customise}>
+                  Customizable
+                </Text>
+              )}
+            </View>
+          ) : Number(product?.item_details?.quantity?.available?.count) >= 1 ? (
+            <View>
+              <TouchableOpacity
+                style={[
+                  disabled
+                    ? globalStyles.disabledOutlineButton
+                    : globalStyles.outlineButton,
+                  styles.addButton,
+                ]}
+                onPress={addToCart}
+                disabled={disabled}>
+                <Text
+                  variant={'titleSmall'}
                   style={[
                     disabled
-                      ? globalStyles.disabledOutlineButton
-                      : globalStyles.outlineButton,
-                    styles.addButton,
-                  ]}
-                  onPress={addToCart}
-                  disabled={disabled}>
-                  <Text
-                    variant={'titleSmall'}
-                    style={[
-                      disabled
-                        ? globalStyles.disabledOutlineButtonText
-                        : globalStyles.outlineButtonText,
-                    ]}>
-                    Add
-                  </Text>
-                  {apiInProgress ? (
-                    <ActivityIndicator size={16} />
-                  ) : (
-                    <Icon
-                      name={'plus'}
-                      color={
-                        disabled ? theme.colors.disabled : theme.colors.primary
-                      }
-                      size={16}
-                    />
-                  )}
-                </TouchableOpacity>
-                {customizable && (
-                  <Text variant={'labelSmall'} style={styles.customise}>
-                    Customizable
-                  </Text>
+                      ? globalStyles.disabledOutlineButtonText
+                      : globalStyles.outlineButtonText,
+                  ]}>
+                  Add
+                </Text>
+                {apiInProgress ? (
+                  <ActivityIndicator size={16} />
+                ) : (
+                  <Icon
+                    name={'plus'}
+                    color={
+                      disabled ? theme.colors.disabled : theme.colors.primary
+                    }
+                    size={16}
+                  />
                 )}
+              </TouchableOpacity>
+              {customizable && (
+                <Text variant={'labelSmall'} style={styles.customise}>
+                  Customizable
+                </Text>
+              )}
+            </View>
+          ) : (
+            <View>
+              <View
+                style={[
+                  globalStyles.disabledOutlineButton,
+                  styles.outOfStockButton,
+                ]}>
+                <Text
+                  variant={'labelSmall'}
+                  style={[
+                    globalStyles.disabledOutlineButtonText,
+                    styles.outOfStock,
+                  ]}>
+                  Out of stock
+                </Text>
               </View>
-            ) : (
-              <StockAvailability available={false} />
-            )}
-          </View>
+            </View>
+          )}
         </View>
       </View>
       {/*@ts-ignore*/}
@@ -550,6 +592,17 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       alignItems: 'center',
     },
+    outOfStockButton: {
+      width: 90,
+      borderRadius: 8,
+      borderWidth: 1,
+      padding: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    outOfStock: {
+      textAlign: 'center',
+    },
     customise: {
       textAlign: 'center',
       color: '#979797',
@@ -566,6 +619,7 @@ const makeStyles = (colors: any) =>
     },
     title: {
       color: '#1A1A1A',
+      flexShrink: 1,
     },
     customizationContainer: {
       padding: 16,

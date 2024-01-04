@@ -36,7 +36,7 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
           disabled={!!updatingCartItem || cartItem?.item?.quantity?.count === 0}
           style={styles.incrementButton}
           onPress={() => deleteCartItem(cartItem._id)}>
-          <Icon name={'delete'} color={theme.colors.error} />
+          <Icon name={'minus'} color={theme.colors.primary} />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
