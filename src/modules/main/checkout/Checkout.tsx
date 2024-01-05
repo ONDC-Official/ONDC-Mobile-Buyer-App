@@ -1,38 +1,14 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Text, useTheme} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import {ActivityIndicator, useTheme} from 'react-native-paper';
 import useSelectItems from '../../../hooks/useSelectItems';
 import {getStoredData} from '../../../utils/storage';
 import {isItemCustomization, showToastWithGravity} from '../../../utils/utils';
-import AddressList from './components/AddressList';
-import Customer from './components/Customer';
-import Fulfillment from './components/Fulfillment';
-import Payment from './components/Payment';
-
-const steps = [
-  {
-    label: 'Customer',
-  },
-  {
-    label: 'Fulfillment',
-  },
-  {
-    label: 'Address',
-  },
-  {
-    label: 'Payment',
-  },
-];
-
-const stepsCount = steps.length;
+import Summary from './components/Summary';
 
 const Checkout = () => {
   const theme = useTheme();
-  const [billingAddress, setBillingAddress] = useState<any>(null);
-  const [deliveryAddress, setDeliveryAddress] = useState<any>(null);
   const styles = makeStyles(theme.colors);
-  const [currentStep, setCurrentStep] = useState<number>(0);
   const [updatedCartItems, setUpdatedCartItems] = useState<any[]>([]);
   const [quoteItemProcessing, setQuoteItemProcessing] = useState<any>(null);
   const [selectedFulfillment, setSelectedFulfillment] = useState<any>(null);
@@ -41,57 +17,13 @@ const Checkout = () => {
     isError: false,
     total_payable: 0,
   });
-  const {cartItems, setCartItems} = useSelectItems(false);
-
-  const renderStep = () => {
-    switch (currentStep) {
-      case 0:
-        return (
-          <Customer currentStep={currentStep} setCurrentStep={setCurrentStep} />
-        );
-
-      case 1:
-        return (
-          <Fulfillment
-            selectedFulfillment={selectedFulfillment}
-            setSelectedFulfillment={setSelectedFulfillment}
-            cartItems={updatedCartItems}
-            setCurrentStep={setCurrentStep}
-            currentStep={currentStep}
-          />
-        );
-
-      case 2:
-        return (
-          <AddressList
-            deliveryAddress={deliveryAddress}
-            setBillingAddress={setBillingAddress}
-            setCurrentStep={setCurrentStep}
-            currentStep={currentStep}
-            setDeliveryAddress={setDeliveryAddress}
-          />
-        );
-
-      case 3:
-        return (
-          <Payment
-            productsQuote={productsQuote}
-            cartItems={cartItems}
-            updatedCartItemsData={updatedCartItems}
-            billingAddress={billingAddress}
-            deliveryAddress={deliveryAddress}
-            selectedFulfillmentId={selectedFulfillment}
-            responseReceivedIds={updatedCartItems.map(item =>
-              item?.message?.quote?.provider?.id.toString(),
-            )}
-            fulfilmentList={updatedCartItems[0]?.message?.quote?.fulfillments}
-            setUpdateCartItemsDataOnInitialize={data => {
-              setUpdatedCartItems(data);
-            }}
-          />
-        );
-    }
-  };
+  const {
+    cartItems,
+    getCartItems,
+    setCartItems,
+    onCheckoutFromCart,
+    checkoutLoading,
+  } = useSelectItems(false);
 
   const showQuoteError = () => {
     let msg: string = quoteItemProcessing
@@ -407,45 +339,27 @@ const Checkout = () => {
     getStoredData('updatedCartItems').then(response => {
       setUpdatedCartItems(JSON.parse(response || '{}'));
     });
+    getCartItems().then(() => {});
   }, []);
 
+  if (checkoutLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size={'large'} color={theme.colors.primary} />
+      </View>
+    );
+  }
   return (
     <View style={styles.pageContainer}>
-      <View style={styles.stepperContainer}>
-        {steps.map((step, stepIndex) => (
-          <TouchableOpacity
-            key={step.label}
-            style={styles.stepContainer}
-            onPress={() => setCurrentStep(stepIndex)}>
-            <View style={styles.step}>
-              {stepIndex > 0 && <View style={styles.stepLine} />}
-              <View
-                style={
-                  stepIndex <= currentStep
-                    ? styles.selectedStep
-                    : styles.stepNumber
-                }>
-                {stepIndex <= currentStep ? (
-                  <Icon name={'check'} size={10} color={'#fff'} />
-                ) : (
-                  <Text style={styles.stepNumberText}>{stepIndex + 1}</Text>
-                )}
-              </View>
-              {stepIndex !== stepsCount - 1 && <View style={styles.stepLine} />}
-            </View>
-            <Text
-              variant={'labelSmall'}
-              style={[
-                styles.stepLabel,
-                stepIndex === 0 ? styles.textLeft : {},
-                stepIndex === stepsCount - 1 ? styles.textRight : {},
-              ]}>
-              {step.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-      {renderStep()}
+      <Summary
+        cartItems={cartItems}
+        updatedCartItems={updatedCartItems}
+        productsQuote={productsQuote}
+        selectedFulfillment={selectedFulfillment}
+        setSelectedFulfillment={setSelectedFulfillment}
+        onCheckoutFromCart={onCheckoutFromCart}
+        setUpdatedCartItems={setUpdatedCartItems}
+      />
     </View>
   );
 };
@@ -456,103 +370,10 @@ const makeStyles = (colors: any) =>
       backgroundColor: '#fff',
       flex: 1,
     },
-    stepNumberText: {
-      color: '#151515',
-      fontSize: 7,
-    },
-    stepLabel: {
-      marginTop: 12,
-      textAlign: 'center',
-    },
-    textLeft: {
-      textAlign: 'left',
-    },
-    textRight: {
-      textAlign: 'right',
-    },
-    stepperContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-evenly',
-      padding: 16,
-      backgroundColor: '#fff',
-    },
-    stepContainer: {
+    loadingContainer: {
       flex: 1,
-    },
-    step: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flex: 1,
-      height: 50,
-    },
-    selectedStep: {
-      borderWidth: 1,
-      borderColor: colors.primary,
-      backgroundColor: colors.primary,
-      borderRadius: 16,
-      width: 16,
-      height: 16,
-      alignItems: 'center',
       justifyContent: 'center',
-      marginHorizontal: 8,
-    },
-    stepNumber: {
-      borderWidth: 1,
-      borderColor: '#151515',
-      borderRadius: 16,
-      width: 16,
-      height: 16,
       alignItems: 'center',
-      justifyContent: 'center',
-      marginHorizontal: 8,
-    },
-    stepLine: {
-      backgroundColor: '#151515',
-      height: 1,
-      flex: 1,
-    },
-    listContainer: {
-      padding: 16,
-      backgroundColor: '#F9F9F9',
-    },
-    addressFormContainer: {
-      flex: 1,
-    },
-    summaryCard: {
-      paddingTop: 40,
-      paddingHorizontal: 16,
-    },
-    summaryDivider: {
-      marginVertical: 12,
-      height: 1,
-      backgroundColor: '#CACDD8',
-    },
-    outOfStock: {
-      color: colors.error,
-    },
-    summaryRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: 12,
-    },
-    addAddress: {
-      marginBottom: 20,
-    },
-    shippingAddress: {
-      marginBottom: 12,
-    },
-    billingAddressContainer: {
-      marginTop: 20,
-    },
-    addressSelection: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 16,
-    },
-    addressText: {
-      marginVertical: 8,
     },
   });
 

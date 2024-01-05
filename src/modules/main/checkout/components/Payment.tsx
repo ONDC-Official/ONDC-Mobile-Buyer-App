@@ -1,13 +1,19 @@
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Checkbox, Text, useTheme} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Button,
+  IconButton,
+  Text,
+  useTheme,
+} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import axios from 'axios';
+// @ts-ignore
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 
 import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../../../../utils/constants';
-import Summary from './Summary';
 import {
   constructQuoteObject,
   removeNullValues,
@@ -15,7 +21,12 @@ import {
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {API_BASE_URL} from '../../../../utils/apiActions';
+import {
+  API_BASE_URL,
+  EVENTS,
+  INITIALIZE_ORDER,
+  ON_INITIALIZE,
+} from '../../../../utils/apiActions';
 import {getStoredData, setStoredData} from '../../../../utils/storage';
 
 interface Payment {
@@ -28,11 +39,19 @@ interface Payment {
   fulfilmentList: any[];
   updatedCartItemsData: any[];
   setUpdateCartItemsDataOnInitialize: (items: any[]) => void;
+  activePaymentMethod: any;
+  setActivePaymentMethod: (value: any) => void;
+  closePaymentSheet: () => void;
+  handleConfirmOrder: () => void;
+  confirmOrderLoading: boolean;
 }
 
 const CancelToken = axios.CancelToken;
 
 const Payment: React.FC<Payment> = ({
+  activePaymentMethod,
+  setActivePaymentMethod,
+  closePaymentSheet,
   productsQuote,
   cartItems,
   responseReceivedIds,
@@ -42,19 +61,20 @@ const Payment: React.FC<Payment> = ({
   fulfilmentList,
   updatedCartItemsData,
   setUpdateCartItemsDataOnInitialize,
+  handleConfirmOrder,
+  confirmOrderLoading,
 }) => {
   const theme = useTheme();
-  const {token, uid} = useSelector(({authReducer}) => authReducer);
-  const styles = makeStyles(theme.colors);
-  const [activePaymentMethod, setActivePaymentMethod] = useState<string>('');
-  const [initializeOrderLoading, setInitializeOrderLoading] = useState(false);
+  const {token} = useSelector(({authReducer}) => authReducer);
+  const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
+  const {handleApiError} = useNetworkErrorHandling();
   const updatedCartItems = useRef<any[]>([]);
   const responseRef = useRef<any[]>([]);
   const eventTimeOutRef = useRef<any[]>([]);
-  const [eventData, setEventData] = useState<any[]>([]);
   const source = useRef<any>(null);
-  const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
-  const {handleApiError} = useNetworkErrorHandling();
+  const styles = makeStyles(theme.colors);
+  const [initializeOrderLoading, setInitializeOrderLoading] = useState(false);
+  const [eventData, setEventData] = useState<any[]>([]);
 
   const handleSuccess = async () => {
     setInitializeOrderLoading(false);
@@ -84,7 +104,7 @@ const Payment: React.FC<Payment> = ({
       );
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}/clientApis/v2/on_initialize_order?messageIds=${messageId}`,
+        `${API_BASE_URL}${ON_INITIALIZE}${messageId}`,
         source.current.token,
       );
       responseRef.current = [...responseRef.current, data[0]];
@@ -95,7 +115,7 @@ const Payment: React.FC<Payment> = ({
 
       setUpdateCartItemsDataOnInitialize(oldData);
       await handleSuccess();
-    } catch (err) {
+    } catch (err: any) {
       showToastWithGravity(err?.response?.data?.error?.message);
       setInitializeOrderLoading(false);
     }
@@ -105,7 +125,7 @@ const Payment: React.FC<Payment> = ({
   const onInit = (messageIds: any[]) => {
     eventTimeOutRef.current = messageIds.map(messageId => {
       const eventSource = new RNEventSource(
-        `${API_BASE_URL}/clientApis/events/v2?messageId=${messageId}`,
+        `${API_BASE_URL}${EVENTS}${messageId}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },
@@ -211,7 +231,7 @@ const Payment: React.FC<Payment> = ({
         };
       });
       const {data} = await postDataWithAuth(
-        `${API_BASE_URL}/clientApis/v2/initialize_order`,
+        `${API_BASE_URL}${INITIALIZE_ORDER}`,
         payload,
         source.current.token,
       );
@@ -274,70 +294,75 @@ const Payment: React.FC<Payment> = ({
   }, [updatedCartItemsData]);
 
   return (
-    <ScrollView style={styles.pageContainer}>
-      <View style={styles.paymentContainer}>
-        <TouchableOpacity
-          style={[styles.paymentOption]}
-          onPress={() => updatePaymentMethod(ORDER_PAYMENT_METHODS.COD)}>
-          <View
-            style={[
-              styles.paymentOptionMeta,
-              activePaymentMethod === ORDER_PAYMENT_METHODS.COD
-                ? styles.selectedOption
-                : {},
-            ]}>
-            <View style={styles.selectionStatus}>
-              {activePaymentMethod === ORDER_PAYMENT_METHODS.COD ? (
-                <Checkbox.Android status={'checked'} />
-              ) : (
-                <View style={styles.emptyCheckbox} />
-              )}
-            </View>
-            <FastImage
-              source={require('../../../../assets/payment/cashOnDelivery.png')}
-              style={styles.paymentImage}
-            />
-          </View>
-          <Text variant={'labelMedium'} style={styles.paymentOptionText}>
-            Cash on delivery
-          </Text>
-        </TouchableOpacity>
-        <View style={styles.separator} />
-        <TouchableOpacity
-          style={[styles.paymentOption]}
-          onPress={() => updatePaymentMethod(ORDER_PAYMENT_METHODS.JUSPAY)}>
-          <View
-            style={[
-              styles.paymentOptionMeta,
-              activePaymentMethod === ORDER_PAYMENT_METHODS.JUSPAY
-                ? styles.selectedOption
-                : {},
-            ]}>
-            <View style={styles.selectionStatus}>
-              {activePaymentMethod === ORDER_PAYMENT_METHODS.JUSPAY ? (
-                <Checkbox.Android status={'checked'} />
-              ) : (
-                <View style={styles.emptyCheckbox} />
-              )}
-            </View>
-            <FastImage
-              source={require('../../../../assets/payment/prepaid.png')}
-              style={styles.paymentImage}
-            />
-          </View>
-          <Text variant={'labelMedium'} style={styles.paymentOptionText}>
-            Prepaid
-          </Text>
-        </TouchableOpacity>
+    <>
+      <View style={styles.header}>
+        <Text variant={'bodyMedium'}>Select Payment Option</Text>
+        <IconButton icon={'close-circle'} onPress={closePaymentSheet} />
       </View>
-      <Summary
-        deliveryAddress={deliveryAddress}
-        cartItems={cartItems}
-        productsQuote={productsQuote}
-        initLoading={initializeOrderLoading}
-        activePaymentMethod={activePaymentMethod}
-      />
-    </ScrollView>
+      <ScrollView style={styles.pageContainer}>
+        <View style={styles.paymentContainer}>
+          <TouchableOpacity
+            style={styles.paymentOption}
+            onPress={() => updatePaymentMethod(ORDER_PAYMENT_METHODS.COD)}>
+            <View
+              style={[
+                styles.paymentOptionMeta,
+                activePaymentMethod === ORDER_PAYMENT_METHODS.COD
+                  ? styles.selectedOption
+                  : {},
+              ]}>
+              <FastImage
+                source={require('../../../../assets/payment/cashOnDelivery.png')}
+                style={styles.paymentImage}
+              />
+              <Text variant={'bodyMedium'} style={styles.paymentOptionText}>
+                Cash on delivery
+              </Text>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.separator} />
+          <TouchableOpacity
+            style={styles.paymentOption}
+            onPress={() => updatePaymentMethod(ORDER_PAYMENT_METHODS.JUSPAY)}>
+            <View
+              style={[
+                styles.paymentOptionMeta,
+                activePaymentMethod === ORDER_PAYMENT_METHODS.JUSPAY
+                  ? styles.selectedOption
+                  : {},
+              ]}>
+              <FastImage
+                source={require('../../../../assets/payment/prepaid.png')}
+                style={styles.paymentImage}
+              />
+              <Text variant={'bodyMedium'} style={styles.paymentOptionText}>
+                Prepaid
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="contained"
+          disabled={
+            activePaymentMethod === '' ||
+            productsQuote.isError ||
+            confirmOrderLoading ||
+            initializeOrderLoading
+          }
+          icon={() =>
+            confirmOrderLoading || initializeOrderLoading ? (
+              <ActivityIndicator size={14} color={theme.colors.primary} />
+            ) : (
+              <></>
+            )
+          }
+          onPress={handleConfirmOrder}>
+          Proceed to Buy
+        </Button>
+      </View>
+    </>
   );
 };
 
@@ -346,10 +371,16 @@ const makeStyles = (colors: any) =>
     pageContainer: {
       flex: 1,
     },
+    header: {
+      paddingHorizontal: 16,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
     paymentContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 40,
+      marginHorizontal: 16,
     },
     paymentOption: {
       flex: 1,
@@ -359,30 +390,28 @@ const makeStyles = (colors: any) =>
       paddingBottom: 16,
       paddingHorizontal: 12,
       borderRadius: 6,
-      borderColor: '#fff',
+      borderColor: '#aaa',
       borderWidth: 1,
     },
     selectedOption: {
-      borderColor: '#196AAB',
+      borderColor: colors.primary,
       borderWidth: 1,
-    },
-    selectionStatus: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
     },
     separator: {
       width: 16,
-    },
-    emptyCheckbox: {
-      height: 24,
     },
     paymentImage: {
       width: 150,
       aspectRatio: 1,
       borderRadius: 6,
+      marginBottom: 8,
     },
     paymentOptionText: {
       fontWeight: '700',
+      textAlign: 'center',
+    },
+    buttonContainer: {
+      margin: 16,
     },
   });
 

@@ -7,7 +7,7 @@ import {
   useTheme,
 } from 'react-native-paper';
 import React, {useEffect} from 'react';
-
+import {useSelector} from 'react-redux';
 import {getPriceWithCustomisations} from '../../../utils/utils';
 import CartItems from './components/CartItems';
 import useSelectItems from '../../../hooks/useSelectItems';
@@ -16,6 +16,7 @@ import EmptyCart from './components/EmptyCart';
 const Cart = () => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const {address} = useSelector(({addressReducer}) => addressReducer);
   const {
     loading,
     cartItems,
@@ -89,7 +90,7 @@ const Cart = () => {
                       <></>
                     )
                   }
-                  onPress={onCheckoutFromCart}>
+                  onPress={() => onCheckoutFromCart(address)}>
                   Checkout
                 </Button>
               </Card>

@@ -9,7 +9,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import {SSE_TIMEOUT} from '../utils/constants';
-import { API_BASE_URL, CART, ON_SELECT } from "../utils/apiActions";
+import {API_BASE_URL, CART, ON_SELECT, SELECT} from '../utils/apiActions';
 import {setStoredData} from '../utils/storage';
 import useNetworkHandling from './useNetworkHandling';
 import {updateCartItems} from '../redux/cart/actions';
@@ -20,8 +20,8 @@ export default (navigate: boolean = true) => {
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const dispatch = useDispatch();
   const source = useRef<any>(null);
+  const address = useRef<any>(null);
   const {token, uid} = useSelector(({authReducer}) => authReducer);
-  const {address} = useSelector(({addressReducer}) => addressReducer);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const responseRef = useRef<any[]>([]);
   const eventTimeOutRef = useRef<any[]>([]);
@@ -104,11 +104,11 @@ export default (navigate: boolean = true) => {
   };
 
   const getQuote = async (items: any[]) => {
+    setCheckoutLoading(true);
     const transactionId: any = uuid.v4();
     await setStoredData('transaction_id', transactionId);
     responseRef.current = [];
-    setCheckoutLoading(true);
-    if (address) {
+    if (address.current) {
       try {
         let domain = '';
         let contextCity = '';
@@ -123,8 +123,8 @@ export default (navigate: boolean = true) => {
           context: {
             transaction_id: transactionId,
             domain: domain,
-            city: contextCity || address.address.city,
-            state: address.address.state,
+            city: contextCity || address.current.address.city,
+            state: address.current.address.state,
           },
           message: {
             cart: {
@@ -134,9 +134,9 @@ export default (navigate: boolean = true) => {
               {
                 end: {
                   location: {
-                    gps: `${address?.address?.lat},${address?.address?.lng}`,
+                    gps: `${address.current?.address?.lat},${address.current?.address?.lng}`,
                     address: {
-                      area_code: `${address?.address?.areaCode}`,
+                      area_code: `${address.current?.address?.areaCode}`,
                     },
                   },
                 },
@@ -146,7 +146,7 @@ export default (navigate: boolean = true) => {
         };
         source.current = CancelToken.source();
         const {data} = await postDataWithAuth(
-          `${API_BASE_URL}/clientApis/v2/select`,
+          `${API_BASE_URL}${SELECT}`,
           [selectPayload],
           source.current.token,
         );
@@ -263,7 +263,8 @@ export default (navigate: boolean = true) => {
     }
   };
 
-  const onCheckoutFromCart = async () => {
+  const onCheckoutFromCart = async (currentAddress: any) => {
+    address.current = currentAddress;
     if (cartItems.length > 0) {
       let items = cartItems.map((item: any) => item.item);
       const quote = constructQuoteObject(items);

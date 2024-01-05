@@ -117,15 +117,14 @@ const makeStyles = (colors: any) =>
     },
     description: {
       color: '#4F4F4F',
-      marginBottom: 20,
+      marginBottom: 12,
     },
     editButton: {
       borderColor: colors.primary,
       borderWidth: 1,
       width: 27,
       height: 27,
-      borderRadius: 14,
-      flex: 1,
+      borderRadius: 30,
       alignItems: 'center',
       justifyContent: 'center',
     },

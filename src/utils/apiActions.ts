@@ -23,3 +23,11 @@ export const TRACK_ORDER: string = '/clientApis/v2/track';
 export const CART: string = '/clientApis/v2/cart';
 
 export const ON_SELECT: string = '/clientApis/v2/on_select?messageIds=';
+
+export const SELECT: string = '/clientApis/v2/select';
+export const CONFIRM_ORDER: string = '/clientApis/v2/confirm_order';
+export const ON_CONFIRM: string = '/clientApis/v2/on_confirm_order?messageIds=';
+export const EVENTS: string = '/clientApis/events/v2?messageId=';
+export const INITIALIZE_ORDER: string = '/clientApis/v2/initialize_order';
+export const ON_INITIALIZE: string =
+  '/clientApis/v2/on_initialize_order?messageIds=';

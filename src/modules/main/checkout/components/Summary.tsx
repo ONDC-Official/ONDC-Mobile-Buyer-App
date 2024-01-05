@@ -1,12 +1,13 @@
-import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Button, Text, useTheme} from 'react-native-paper';
+import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
+import {Button, Text, useTheme} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-
+import axios from 'axios';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import {getStoredData, removeData} from '../../../../utils/storage';
 import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../../../../utils/constants';
 import {
@@ -15,38 +16,58 @@ import {
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import axios from 'axios';
-import {API_BASE_URL} from '../../../../utils/apiActions';
+import {
+  API_BASE_URL,
+  CONFIRM_ORDER,
+  EVENTS,
+  ON_CONFIRM,
+} from '../../../../utils/apiActions';
+import Fulfillment from './Fulfillment';
+import AddressList from './AddressList';
+import Payment from './Payment';
 
 interface Summary {
   cartItems: any[];
+  updatedCartItems: any[];
   productsQuote: any;
-  deliveryAddress: any;
-  initLoading: boolean;
-  activePaymentMethod: string;
+  selectedFulfillment: any;
+  setSelectedFulfillment: (value: any) => void;
+  onCheckoutFromCart: (address: any) => void;
+  setUpdatedCartItems: (value: any) => void;
 }
 
 const CancelToken = axios.CancelToken;
+const screenHeight: number = Dimensions.get('screen').height;
 
 const Summary: React.FC<Summary> = ({
   cartItems,
+  updatedCartItems,
   productsQuote,
-  initLoading,
-  deliveryAddress,
-  activePaymentMethod,
+  selectedFulfillment,
+  setSelectedFulfillment,
+  onCheckoutFromCart,
+  setUpdatedCartItems,
 }) => {
+  const isFocused = useIsFocused();
+  const {address} = useSelector(({addressReducer}) => addressReducer);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
   const {token} = useSelector(({authReducer}) => authReducer);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
-  const [eventData, setEventData] = useState<any[]>([]);
   const {handleApiError} = useNetworkErrorHandling();
-  const eventTimeOutRef = useRef<any[]>([]);
-  const responseRef = useRef<any[]>([]);
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const eventTimeOutRef = useRef<any[]>([]);
+  const responseRef = useRef<any[]>([]);
+  const fulfillmentSheet = useRef<any>();
+  const addressSheet = useRef<any>();
+  const paymentSheet = useRef<any>();
+  const [eventData, setEventData] = useState<any[]>([]);
   const [confirmOrderLoading, setConfirmOrderLoading] =
     useState<boolean>(false);
+  const [billingAddress, setBillingAddress] = useState<any>(null);
+  const [deliveryAddress, setDeliveryAddress] = useState<any>(null);
+  const [activePaymentMethod, setActivePaymentMethod] = useState<string>('');
 
   const getItemsTotal = (providers: any[]) => {
     let finalTotal = 0;
@@ -77,36 +98,6 @@ const Summary: React.FC<Summary> = ({
     return finalTotal.toFixed(2);
   };
 
-  const renderDeliveryLine = (quote: any, key: any) => (
-    <View style={styles.summaryRow} key={`d-quote-${key}-price`}>
-      <Text variant="bodyMedium">{quote?.title}</Text>
-      <Text variant="bodyMedium">₹{Number(quote?.value).toFixed(2)}</Text>
-    </View>
-  );
-
-  const getDeliveryTotalAmount = (providers: any[]) => {
-    let total = 0;
-    providers.forEach((provider: any) => {
-      const data = provider.delivery;
-      if (data.delivery) {
-        total = total + parseFloat(data.delivery.value);
-      }
-      if (data.discount) {
-        total = total + parseFloat(data.discount.value);
-      }
-      if (data.tax) {
-        total = total + parseFloat(data.tax.value);
-      }
-      if (data.packing) {
-        total = total + parseFloat(data.packing.value);
-      }
-      if (data.misc) {
-        total = total + parseFloat(data.misc.value);
-      }
-    });
-    return total.toFixed(2);
-  };
-
   const getItemProviderId = async (item: any) => {
     const providersString = await getStoredData('providerIds');
     const providers = providersString ? JSON.parse(providersString) : [];
@@ -127,7 +118,7 @@ const Summary: React.FC<Summary> = ({
     try {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}/clientApis/v2/on_confirm_order?messageIds=${messageId}`,
+        `${API_BASE_URL}${ON_CONFIRM}${messageId}`,
         source.current.token,
       );
       responseRef.current = [...responseRef.current, data[0]];
@@ -142,7 +133,7 @@ const Summary: React.FC<Summary> = ({
   const onConfirm = (messageIds: any[]) => {
     eventTimeOutRef.current = messageIds.map(messageId => {
       const eventSource = new RNEventSource(
-        `${API_BASE_URL}/clientApis/events/v2?messageId=${messageId}`,
+        `${API_BASE_URL}${EVENTS}${messageId}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },
@@ -227,7 +218,7 @@ const Summary: React.FC<Summary> = ({
 
       source.current = CancelToken.source();
       const {data} = await postDataWithAuth(
-        `${API_BASE_URL}/clientApis/v2/confirm_order`,
+        `${API_BASE_URL}${CONFIRM_ORDER}`,
         queryParams,
         source.current.token,
       );
@@ -306,7 +297,7 @@ const Summary: React.FC<Summary> = ({
       <View>
         <View key={`quote-${qIndex}-price`} style={styles.summaryRow}>
           <Text
-            variant="bodyMedium"
+            variant="labelMedium"
             style={
               isCustomization
                 ? styles.summaryCustomizationPriceLabel
@@ -315,7 +306,7 @@ const Summary: React.FC<Summary> = ({
             {quote?.price?.title}
           </Text>
           <Text
-            variant="bodyMedium"
+            variant="labelMedium"
             style={
               isCustomization
                 ? styles.summaryCustomizationPriceValue
@@ -327,7 +318,7 @@ const Summary: React.FC<Summary> = ({
         {quote?.tax && (
           <View key={`quote-${qIndex}-tax`} style={styles.summaryRow}>
             <Text
-              variant="bodyMedium"
+              variant="labelMedium"
               style={
                 isCustomization
                   ? styles.summaryCustomizationTaxLabel
@@ -336,7 +327,7 @@ const Summary: React.FC<Summary> = ({
               {quote?.tax.title}
             </Text>
             <Text
-              variant="bodyMedium"
+              variant="labelMedium"
               style={
                 isCustomization
                   ? styles.summaryCustomizationPriceValue
@@ -357,7 +348,7 @@ const Summary: React.FC<Summary> = ({
               }>
               {quote?.discount.title}
             </Text>
-            <Text variant="bodyMedium" style={styles.summaryItemPriceValue}>
+            <Text variant="labelMedium" style={styles.summaryItemPriceValue}>
               ₹{Number(quote?.discount.value).toFixed(2)}
             </Text>
           </View>
@@ -385,7 +376,9 @@ const Summary: React.FC<Summary> = ({
                     <View
                       style={styles.outOfStockRow}
                       key={`quote-${outOfStockIndex}-price`}>
-                      <Text variant="bodySmall">{outOfStockItems?.title}</Text>
+                      <Text variant="labelMedium">
+                        {outOfStockItems?.title}
+                      </Text>
                       <View style={styles.stockQuantity}>
                         <Text style={styles.stockQuantity} variant="bodyMedium">
                           {outOfStockItems?.cartQuantity}
@@ -395,6 +388,7 @@ const Summary: React.FC<Summary> = ({
                         </Text>
                       </View>
                     </View>
+                    <View style={styles.divider} />
                   </View>
                 ),
               )}
@@ -418,21 +412,23 @@ const Summary: React.FC<Summary> = ({
           .map((quote: any, qIndex) => (
             <View key={`quote-${qIndex}`}>
               <View key={`quote-${qIndex}-title`}>
-                <Text variant="bodyLarge" style={styles.field}>
+                <Text variant="bodyMedium" style={styles.field}>
                   {quote?.title}
                 </Text>
               </View>
               {renderItemDetails(quote, qIndex, false)}
               {quote?.customizations && (
                 <View key={`quote-${qIndex}-customizations`}>
-                  <Text variant="bodyMedium" style={styles.field}>
+                  <Text variant="labelMedium" style={styles.field}>
                     Customizations
                   </Text>
                   {Object.values(quote?.customizations).map(
                     (customization: any, cIndex: number) => (
                       <View style={styles.customizationContainer}>
                         <View key={`quote-${qIndex}-customizations-${cIndex}`}>
-                          <Text variant="bodySmall">{customization.title}</Text>
+                          <Text variant="labelMedium">
+                            {customization.title}
+                          </Text>
                         </View>
                         {renderItemDetails(customization, cIndex, true)}
                       </View>
@@ -440,6 +436,7 @@ const Summary: React.FC<Summary> = ({
                   )}
                 </View>
               )}
+              <View style={styles.divider} />
             </View>
           ))}
         {productsQuote.isError &&
@@ -454,86 +451,150 @@ const Summary: React.FC<Summary> = ({
     );
   };
 
+  const updateDeliveryAddress = (newAddress: any) => {
+    setDeliveryAddress(newAddress);
+    onCheckoutFromCart(newAddress);
+    addressSheet.current.close();
+  };
+
+  const showPaymentOption = () => {
+    fulfillmentSheet.current.close();
+    paymentSheet.current.open();
+  };
+
   useEffect(() => {
     clearDataAndNavigate().then(() => {});
   }, [eventData]);
 
+  useEffect(() => {
+    setDeliveryAddress(address);
+    setBillingAddress(address);
+  }, []);
+
+  useEffect(() => {
+    if (!isFocused) {
+      addressSheet.current.close();
+      fulfillmentSheet.current.close();
+    }
+  }, [isFocused]);
+
+  const cartTotal = getItemsTotal(productsQuote?.providers);
   return (
     <>
       <View style={styles.summaryCard}>
-        <Text variant={'titleMedium'}>Summary</Text>
-        <View style={styles.summaryDivider} />
-        {productsQuote?.providers.map((provider, pindex) =>
-          renderOutOfStockItems(provider, pindex),
-        )}
+        <ScrollView style={styles.list}>
+          <View style={styles.listContent}>
+            {productsQuote?.providers.map((provider: any, pindex: number) =>
+              renderOutOfStockItems(provider, pindex),
+            )}
 
-        {productsQuote?.providers.map((provider, pindex) =>
-          renderItems(provider, pindex),
-        )}
-        <View style={styles.summaryDivider} />
-        <View style={styles.summaryRow}>
-          <Text variant="bodyMedium">Total</Text>
-          <Text variant="bodyMedium" style={styles.total}>
-            ₹{getItemsTotal(productsQuote?.providers)}
-          </Text>
-        </View>
-        <View style={styles.summaryDivider} />
-        {productsQuote?.providers.map((provider: any, pindex: number) => {
-          const {delivery} = provider;
-          return (
-            <View key={`delivery${pindex}`}>
-              {delivery.delivery &&
-                renderDeliveryLine(delivery.delivery, 'delivery')}
-              {delivery.discount &&
-                renderDeliveryLine(delivery.discount, 'discount')}
-              {delivery.tax && renderDeliveryLine(delivery.tax, 'tax')}
-              {delivery.packing &&
-                renderDeliveryLine(delivery.packing, 'packing')}
-              {delivery.misc && renderDeliveryLine(delivery.misc, 'misc')}
-              {delivery &&
-                (delivery.delivery ||
-                  delivery.discount ||
-                  delivery.tax ||
-                  delivery.packing ||
-                  delivery.misc) && (
-                  <View style={styles.summaryRow}>
-                    <Text variant="bodyMedium">Total</Text>
-                    <Text variant="bodyMedium">
-                      ₹{getDeliveryTotalAmount(productsQuote?.providers)}
-                    </Text>
-                  </View>
-                )}
+            {productsQuote?.providers.map((provider: any, pindex: number) =>
+              renderItems(provider, pindex),
+            )}
+          </View>
+        </ScrollView>
+        <View style={styles.footer}>
+          <View style={styles.addressContainer}>
+            <View style={styles.address}>
+              <Text variant={'bodyMedium'}>
+                Delivering to {deliveryAddress?.address?.tag}
+              </Text>
+              <Text variant={'labelMedium'}>
+                {deliveryAddress?.address?.street},{' '}
+                {deliveryAddress?.address?.landmark
+                  ? `${deliveryAddress?.address?.landmark},`
+                  : ''}{' '}
+                {deliveryAddress?.address?.city},{' '}
+                {deliveryAddress?.address?.state},{' '}
+                {deliveryAddress?.address?.areaCode}{' '}
+              </Text>
+              <Text variant={'labelMedium'}>
+                {deliveryAddress?.descriptor?.name} (
+                {deliveryAddress?.descriptor?.phone})
+              </Text>
             </View>
-          );
-        })}
-        <View style={styles.summaryDivider} />
-        <View style={styles.summaryRow}>
-          <Text variant="bodyLarge">Order Total</Text>
-          <Text variant="titleSmall">
-            ₹{Number(productsQuote?.total_payable).toFixed(2)}
-          </Text>
-        </View>
-        <View style={styles.buttonContainer}>
-          <Button
-            mode="contained"
-            disabled={
-              activePaymentMethod === '' ||
-              productsQuote.isError ||
-              confirmOrderLoading ||
-              initLoading
-            }
-            icon={() =>
-              confirmOrderLoading || initLoading ? (
-                <ActivityIndicator size={14} color={theme.colors.primary} />
-              ) : (
-                <></>
-              )
-            }
-            onPress={handleConfirmOrder}>
-            Proceed to Buy
-          </Button>
+            <View>
+              <Button
+                mode={'outlined'}
+                onPress={() => addressSheet.current.open()}>
+                Change
+              </Button>
+            </View>
+          </View>
+          <View style={styles.summaryDivider} />
+          <View style={styles.addressContainer}>
+            <View>
+              <Text variant="bodyMedium" style={styles.total}>
+                ₹{cartTotal}
+              </Text>
+            </View>
+            <View>
+              <Button
+                mode={'contained'}
+                onPress={() => fulfillmentSheet.current.open()}>
+                View Delivery Options
+              </Button>
+            </View>
+          </View>
         </View>
       </View>
+      <RBSheet
+        closeOnPressMask
+        ref={fulfillmentSheet}
+        height={screenHeight / 2}
+        customStyles={{
+          container: styles.rbSheet,
+        }}>
+        <Fulfillment
+          showPaymentOption={showPaymentOption}
+          selectedFulfillment={selectedFulfillment}
+          setSelectedFulfillment={setSelectedFulfillment}
+          cartItems={updatedCartItems}
+          productsQuote={productsQuote}
+          closeFulfilment={() => fulfillmentSheet.current.close()}
+          cartTotal={cartTotal}
+        />
+      </RBSheet>
+      <RBSheet
+        closeOnPressMask
+        ref={addressSheet}
+        height={screenHeight / 2}
+        customStyles={{
+          container: styles.rbSheet,
+        }}>
+        <AddressList
+          deliveryAddress={deliveryAddress}
+          setBillingAddress={setBillingAddress}
+          setDeliveryAddress={updateDeliveryAddress}
+          closeSheet={() => addressSheet.current.close()}
+        />
+      </RBSheet>
+      <RBSheet
+        closeOnPressMask
+        ref={paymentSheet}
+        height={screenHeight / 2}
+        customStyles={{
+          container: styles.rbSheet,
+        }}>
+        <Payment
+          productsQuote={productsQuote}
+          cartItems={cartItems}
+          updatedCartItemsData={updatedCartItems}
+          billingAddress={billingAddress}
+          deliveryAddress={deliveryAddress}
+          selectedFulfillmentId={selectedFulfillment}
+          responseReceivedIds={updatedCartItems.map(item =>
+            item?.message?.quote?.provider?.id.toString(),
+          )}
+          fulfilmentList={updatedCartItems[0]?.message?.quote?.fulfillments}
+          setUpdateCartItemsDataOnInitialize={data => setUpdatedCartItems(data)}
+          closePaymentSheet={() => paymentSheet.current.close()}
+          handleConfirmOrder={handleConfirmOrder}
+          confirmOrderLoading={confirmOrderLoading}
+          setActivePaymentMethod={setActivePaymentMethod}
+          activePaymentMethod={activePaymentMethod}
+        />
+      </RBSheet>
     </>
   );
 };
@@ -541,8 +602,15 @@ const Summary: React.FC<Summary> = ({
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     summaryCard: {
-      paddingTop: 40,
+      flex: 1,
+      paddingTop: 20,
+    },
+    list: {
+      flex: 1,
       paddingHorizontal: 16,
+    },
+    listContent: {
+      paddingBottom: 16,
     },
     summaryDivider: {
       marginVertical: 12,
@@ -611,6 +679,24 @@ const makeStyles = (colors: any) =>
     buttonContainer: {
       marginVertical: 24,
     },
+    footer: {
+      borderTopLeftRadius: 16,
+      borderTopRightRadius: 16,
+      padding: 16,
+      backgroundColor: '#fff',
+      elevation: 10,
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+    },
+    addressContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    address: {
+      flexShrink: 1,
+    },
+    rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
   });
 
 export default Summary;
