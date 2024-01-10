@@ -7,9 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {List, Text, useTheme} from 'react-native-paper';
+import {Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
 import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -30,6 +29,7 @@ import {makeGlobalStyles} from '../../../../styles/styles';
 import StockAvailability from '../../../../components/products/StockAvailability';
 import {updateCartItems} from '../../../../redux/cart/actions';
 import Page from '../../../../components/page/Page';
+import AboutProduct from './components/AboutProduct';
 
 interface ProductDetails {
   route: any;
@@ -74,7 +74,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
   const [addToCartLoading, setAddToCartLoading] = useState<boolean>(false);
-  const [expanded, setExpanded] = useState<boolean>(true);
   const [customizationPrices, setCustomizationPrices] = useState<number>(0);
   const [itemAvailableInCart, setItemAvailableInCart] = useState<any>(null);
   const [isItemAvailableInCart, setIsItemAvailableInCart] =
@@ -86,8 +85,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
     useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const {updateCartItem} = userUpdateCartItem();
-
-  const handleAccordionPress = () => setExpanded(!expanded);
 
   const getProductDetails = async () => {
     try {
@@ -330,62 +327,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
     }
   };
 
-  const renderItemDetails = () => {
-    let returnWindowValue: string = '0';
-    if (product.item_details?.['@ondc/org/return_window']) {
-      // Create a duration object from the ISO 8601 string
-      const duration = moment.duration(
-        product.item_details?.['@ondc/org/return_window'],
-      );
-
-      // Get the number of hours from the duration object
-      returnWindowValue = duration.humanize();
-    }
-
-    const data: any = {
-      'Available on COD':
-        product.item_details?.['@ondc/org/available_on_cod']?.toString() ===
-        'true'
-          ? 'Yes'
-          : 'No',
-      Cancellable:
-        product.item_details?.['@ondc/org/cancellable']?.toString() === 'true'
-          ? 'Yes'
-          : 'No',
-      'Return window value': returnWindowValue,
-      Returnable:
-        product.item_details?.['@ondc/org/returnable']?.toString() === 'true'
-          ? 'Yes'
-          : 'No',
-      'Customer care':
-        product.item_details?.['@ondc/org/contact_details_consumer_care'],
-      'Manufacturer name':
-        product.item_details?.['@ondc/org/statutory_reqs_packaged_commodities']
-          ?.manufacturer_or_packer_name,
-      'Manufacturer address':
-        product.item_details?.['@ondc/org/statutory_reqs_packaged_commodities']
-          ?.manufacturer_or_packer_address,
-    };
-
-    return Object.keys(data).map(key => {
-      const value = data[key];
-      if (value !== null && value !== undefined) {
-        return (
-          <View style={styles.aboutRow} key={key}>
-            <Text variant="bodyLarge" style={styles.aboutTitle}>
-              {key}
-            </Text>
-            <View style={styles.aboutSeparator} />
-            <Text variant="bodyMedium" style={styles.aboutDetails}>
-              {value}
-            </Text>
-          </View>
-        );
-      }
-      return <View key={key} />; // Return null for fields with null or undefined values
-    });
-  };
-
   useEffect(() => {
     getProductDetails().then(() => {});
 
@@ -536,29 +477,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.aboutContainer}>
-            <List.Accordion
-              expanded={expanded}
-              onPress={handleAccordionPress}
-              title={
-                <Text variant={'titleSmall'} style={styles.about}>
-                  About
-                </Text>
-              }>
-              {Object.keys(product?.attributes).map(key => (
-                <View style={styles.aboutRow} key={key}>
-                  <Text variant="bodyLarge" style={styles.aboutTitle}>
-                    {key}
-                  </Text>
-                  <View style={styles.aboutSeparator} />
-                  <Text variant="bodyMedium" style={styles.aboutDetails}>
-                    {product?.attributes[key]}
-                  </Text>
-                </View>
-              ))}
-              {renderItemDetails()}
-            </List.Accordion>
-          </View>
+          <AboutProduct product={product} />
         </View>
       </ScrollView>
     </Page>
@@ -622,28 +541,6 @@ const makeStyles = (colors: any) =>
     },
     buttonSeparator: {
       width: 15,
-    },
-    about: {
-      color: '#222',
-    },
-    aboutContainer: {
-      marginTop: 40,
-    },
-    aboutRow: {
-      flexDirection: 'row',
-      marginBottom: 30,
-    },
-    aboutTitle: {
-      width: 130,
-      color: '#787A80',
-      textTransform: 'capitalize',
-    },
-    aboutSeparator: {
-      width: 28,
-    },
-    aboutDetails: {
-      flex: 1,
-      color: '#1D1D1D',
     },
     buttonGroup: {
       borderColor: colors.primary,

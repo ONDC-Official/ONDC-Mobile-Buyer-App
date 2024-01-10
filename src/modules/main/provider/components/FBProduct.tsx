@@ -32,9 +32,9 @@ import Customizations from '../../../../components/customization/Customizations'
 import ManageQuantity from '../../../../components/customization/ManageQuantity';
 import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
 import {updateCartItems} from '../../../../redux/cart/actions';
-import StockAvailability from '../../../../components/products/StockAvailability';
 import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
 import CustomizationFooterButtons from './CustomizationFooterButtons';
+import FBProductDetails from '../../product/details/FBProductDetails';
 
 interface FBProduct {
   product: any;
@@ -64,6 +64,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const source = useRef<any>(null);
   const customizationSheet = useRef<any>(null);
   const quantitySheet = useRef<any>(null);
+  const productDetailsSheet = useRef<any>(null);
   const productSource = useRef<any>(null);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
@@ -89,6 +90,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
 
   const hideQuantitySheet = () => quantitySheet.current.close();
 
+  const hideProductDetails = () => productDetailsSheet.current.close();
+
   const removeQuantityClick = () => {
     if (cartItemDetails?.items.length === 1) {
       const cartItem = cartItems[0];
@@ -108,6 +111,15 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     setItemQty(1);
     hideQuantitySheet();
     addToCart().then(() => {});
+  };
+
+  const showProductDetails = async () => {
+    setItemQty(1);
+    hideQuantitySheet();
+    if (!productDetails) {
+      await getProductDetails();
+    }
+    productDetailsSheet.current.open();
   };
 
   const addToCart = async () => {
@@ -304,7 +316,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   return (
     <>
       <View style={styles.product}>
-        <TouchableOpacity style={styles.meta} onPress={addNewCustomization}>
+        <TouchableOpacity style={styles.meta} onPress={showProductDetails}>
           <Text variant={'titleSmall'} style={styles.field}>
             {product?.item_details?.descriptor?.name}
           </Text>
@@ -319,7 +331,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         <View style={styles.actionContainer}>
           <TouchableOpacity
             style={styles.imageContainer}
-            onPress={addNewCustomization}>
+            onPress={showProductDetails}>
             <FastImage
               style={styles.image}
               source={
@@ -503,6 +515,46 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         <View style={styles.addNewCustomizationButton}>
           <Button onPress={addNewCustomization}>Add new customization</Button>
         </View>
+      </RBSheet>
+      {/*@ts-ignore*/}
+      <RBSheet
+        ref={productDetailsSheet}
+        height={screenHeight - 150}
+        customStyles={{
+          container: styles.rbSheet,
+        }}>
+        <View style={styles.header}>
+          <Text variant={'titleSmall'} style={styles.title}>
+            Product Details
+          </Text>
+          <IconButton icon={'close'} onPress={hideProductDetails} />
+        </View>
+        <ScrollView>
+          <FBProductDetails product={productDetails}>
+            {Number(product?.item_details?.quantity?.available?.count) >= 1 ? (
+              <>
+                <FBProductCustomization
+                  hideProductDetails
+                  product={productDetails}
+                  customizationState={customizationState}
+                  setCustomizationState={setCustomizationState}
+                  setItemOutOfStock={setItemOutOfStock}
+                />
+                <CustomizationFooterButtons
+                  productLoading={productLoading}
+                  itemQty={itemQty}
+                  setItemQty={setItemQty}
+                  itemOutOfStock={itemOutOfStock}
+                  addDetailsToCart={addDetailsToCart}
+                  product={product}
+                  customizationPrices={customizationPrices}
+                />
+              </>
+            ) : (
+              <></>
+            )}
+          </FBProductDetails>
+        </ScrollView>
       </RBSheet>
     </>
   );

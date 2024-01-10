@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
@@ -30,10 +24,13 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
   };
 
   useEffect(() => {
-    setSubCategories(PRODUCT_SUBCATEGORY[currentCategory]);
+    const list = PRODUCT_SUBCATEGORY[currentCategory];
+    const midPoint = Math.floor(list.length / 2);
+    const firstHalf = list.slice(0, midPoint);
+    const secondHalf = list.slice(midPoint);
+    setSubCategories([firstHalf, secondHalf]);
   }, [currentCategory]);
 
-  const numColumns = Math.ceil(subCategories.length / 2);
   return (
     <View style={styles.container}>
       <Text variant={'titleSmall'} style={styles.title}>
@@ -45,27 +42,33 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
           horizontal
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}>
-          <FlatList
-            scrollEnabled={false}
-            contentContainerStyle={{
-              alignSelf: 'flex-start',
-            }}
-            numColumns={numColumns}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            data={subCategories}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                style={styles.brand}
-                onPress={() => navigateToSubCategory(item)}>
-                <FastImage
-                  source={{uri: item?.imageUrl}}
-                  style={styles.brandImage}
-                />
-                <Text variant={'bodyMedium'}>{item.key}</Text>
-              </TouchableOpacity>
-            )}
-          />
+          {subCategories[0].map((item: any, index: number) => {
+            const secondItem = subCategories[1][index];
+            return (
+              <View key={`SubCategory${index}`}>
+                <TouchableOpacity
+                  style={styles.brand}
+                  onPress={() => navigateToSubCategory(item)}>
+                  <FastImage
+                    source={{uri: item?.imageUrl}}
+                    style={styles.brandImage}
+                  />
+                  <Text variant={'bodyMedium'}>{item.key}</Text>
+                </TouchableOpacity>
+                {!!secondItem && (
+                  <TouchableOpacity
+                    style={styles.brand}
+                    onPress={() => navigateToSubCategory(secondItem)}>
+                    <FastImage
+                      source={{uri: secondItem?.imageUrl}}
+                      style={styles.brandImage}
+                    />
+                    <Text variant={'bodyMedium'}>{secondItem.key}</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            );
+          })}
         </ScrollView>
       )}
     </View>

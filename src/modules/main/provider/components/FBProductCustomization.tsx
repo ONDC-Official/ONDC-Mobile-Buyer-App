@@ -11,6 +11,7 @@ interface FBProductCustomization {
   setCustomizationState: (state: any) => void;
   isEditFlow?: boolean;
   setItemOutOfStock: (flag: boolean) => void;
+  hideProductDetails?: boolean;
 }
 
 export const formatCustomizationGroups = (groups: any) => {
@@ -136,6 +137,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
   setCustomizationState,
   isEditFlow = false,
   setItemOutOfStock,
+  hideProductDetails = false,
 }) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
@@ -431,15 +433,17 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
 
   return (
     <View>
-      <View style={styles.header}>
-        <Text variant={'titleSmall'}>
-          {product?.item_details?.descriptor?.name}
-        </Text>
-        <Text variant={'titleMedium'}>
-          {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}{' '}
-          {product?.item_details?.price?.value}
-        </Text>
-      </View>
+      {!hideProductDetails && (
+        <View style={styles.header}>
+          <Text variant={'titleSmall'}>
+            {product?.item_details?.descriptor?.name}
+          </Text>
+          <Text variant={'titleMedium'}>
+            {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}{' '}
+            {product?.item_details?.price?.value}
+          </Text>
+        </View>
+      )}
       {renderGroups(firstGroup)}
     </View>
   );
