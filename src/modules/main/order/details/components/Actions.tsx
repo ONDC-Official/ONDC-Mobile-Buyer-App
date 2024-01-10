@@ -422,6 +422,7 @@ const Actions: React.FC<Actions> = ({
           {(orderDetails?.state === 'Accepted' ||
             orderDetails?.state === 'Created') && (
             <Button
+              buttonColor={theme.colors.error}
               mode="contained"
               onPress={() => setShowCancelOrderModal(true)}
               disabled={

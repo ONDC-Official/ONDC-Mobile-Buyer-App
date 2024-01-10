@@ -31,6 +31,7 @@ import CustomizationFooterButtons from '../../provider/components/CustomizationF
 
 interface CartItems {
   allowScroll?: boolean;
+  providerWiseItems: any[];
   cartItems: any[];
   setCartItems: (items: any[]) => void;
   haveDistinctProviders: boolean;
@@ -44,6 +45,7 @@ const CartItems: React.FC<CartItems> = ({
   allowScroll = true,
   haveDistinctProviders,
   isProductCategoryIsDifferent,
+  providerWiseItems,
   cartItems,
   setCartItems,
 }) => {
@@ -126,112 +128,6 @@ const CartItems: React.FC<CartItems> = ({
     }
   };
 
-  const renderItems = () => {
-    return cartItems?.map((cartItem: any, index: number) => (
-      <View key={cartItem._id}>
-        <View style={styles.product}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('ProductDetails', {
-                productId: cartItem.item.id,
-              })
-            }>
-            <FastImage
-              source={{
-                uri: cartItem?.item?.product?.descriptor?.symbol,
-              }}
-              style={styles.productImage}
-            />
-          </TouchableOpacity>
-          <View style={styles.productMeta}>
-            <Text variant={'bodyMedium'}>
-              {cartItem?.item?.product?.descriptor?.name}
-            </Text>
-            <Customizations cartItem={cartItem} />
-            {cartItem.item.hasCustomisations && (
-              <TouchableOpacity
-                disabled={!!requestedProduct}
-                style={styles.customiseContainer}
-                onPress={() => handleCustomiseClick(cartItem)}>
-                {cartItem._id === requestedProduct ? (
-                  <ActivityIndicator color={theme.colors.primary} size={14} />
-                ) : (
-                  <Icon
-                    name={'pencil-outline'}
-                    color={theme.colors.primary}
-                    size={14}
-                  />
-                )}
-                <Text variant={'labelMedium'} style={styles.customiseText}>
-                  Customise
-                </Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          <ManageQuantity
-            allowDelete
-            cartItem={cartItem}
-            updatingCartItem={updatingCartItem}
-            updateCartItem={updateCartItem}
-            deleteCartItem={deleteCartItem}
-          />
-
-          <View>
-            <Text variant="titleSmall">
-              ₹{' '}
-              {cartItem.item.hasCustomisations
-                ? Number(getPriceWithCustomisations(cartItem)) *
-                  Number(cartItem?.item?.quantity?.count)
-                : Number(cartItem?.item?.product?.subtotal)}
-            </Text>
-            {itemToDelete === cartItem._id ? (
-              <ActivityIndicator size={20} color={theme.colors.primary} />
-            ) : (
-              <IconButton
-                icon={'delete'}
-                iconColor={'#D83132'}
-                onPress={() => deleteCartItem(cartItem._id)}
-              />
-            )}
-          </View>
-        </View>
-        {cartItem.item.quantity.count >
-          cartItem.item.product.quantity.available.count && (
-          <View style={styles.infoBox}>
-            <Text variant={'bodyMedium'} style={styles.infoText}>
-              Only {cartItem.item.product.quantity.available.count} available
-              instead of {cartItem.item.quantity.count}. Update the quantity or
-              switch to another provider.
-            </Text>
-          </View>
-        )}
-        {index === cartItems.length - 1 ? (
-          <>
-            {haveDistinctProviders && (
-              <View style={styles.errorBox}>
-                <Text variant={'bodyMedium'} style={styles.errorText}>
-                  You are ordering from different store. Please check your order
-                  again.
-                </Text>
-              </View>
-            )}
-            {isProductCategoryIsDifferent && (
-              <View style={styles.errorBox}>
-                <Text variant={'bodyMedium'} style={styles.errorText}>
-                  You are ordering from different category. Please check your
-                  order again.
-                </Text>
-              </View>
-            )}
-          </>
-        ) : (
-          <View style={styles.divider} />
-        )}
-      </View>
-    ));
-  };
-
   const showCustomization = () => {
     customizationSheet.current.open();
   };
@@ -272,11 +168,131 @@ const CartItems: React.FC<CartItems> = ({
 
   return (
     <>
-      {allowScroll ? (
-        <ScrollView style={styles.container}>{renderItems()}</ScrollView>
-      ) : (
-        renderItems()
-      )}
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.scrollViewContent}>
+        {providerWiseItems?.map((provider: any, providerIndex: number) => (
+          <View key={provider.provider.id}>
+            <Text variant={'labelLarge'} style={styles.providerName}>
+              {provider?.provider?.descriptor?.name}
+            </Text>
+            {provider?.items?.map((cartItem: any, index: number) => (
+              <View key={cartItem._id}>
+                <View style={styles.product}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('ProductDetails', {
+                        productId: cartItem.item.id,
+                      })
+                    }>
+                    <FastImage
+                      source={{
+                        uri: cartItem?.item?.product?.descriptor?.symbol,
+                      }}
+                      style={styles.productImage}
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.productMeta}>
+                    <Text variant={'bodyMedium'}>
+                      {cartItem?.item?.product?.descriptor?.name}
+                    </Text>
+                    <Customizations cartItem={cartItem} />
+                    {cartItem.item.hasCustomisations && (
+                      <TouchableOpacity
+                        disabled={!!requestedProduct}
+                        style={styles.customiseContainer}
+                        onPress={() => handleCustomiseClick(cartItem)}>
+                        {cartItem._id === requestedProduct ? (
+                          <ActivityIndicator
+                            color={theme.colors.primary}
+                            size={14}
+                          />
+                        ) : (
+                          <Icon
+                            name={'pencil-outline'}
+                            color={theme.colors.primary}
+                            size={14}
+                          />
+                        )}
+                        <Text
+                          variant={'labelMedium'}
+                          style={styles.customiseText}>
+                          Customise
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+
+                  <ManageQuantity
+                    allowDelete
+                    cartItem={cartItem}
+                    updatingCartItem={updatingCartItem}
+                    updateCartItem={updateCartItem}
+                    deleteCartItem={deleteCartItem}
+                  />
+
+                  <View>
+                    <Text variant="titleSmall">
+                      ₹{' '}
+                      {cartItem.item.hasCustomisations
+                        ? Number(getPriceWithCustomisations(cartItem)) *
+                          Number(cartItem?.item?.quantity?.count)
+                        : Number(cartItem?.item?.product?.subtotal)}
+                    </Text>
+                    {itemToDelete === cartItem._id ? (
+                      <ActivityIndicator
+                        size={20}
+                        color={theme.colors.primary}
+                      />
+                    ) : (
+                      <IconButton
+                        icon={'delete'}
+                        iconColor={'#D83132'}
+                        onPress={() => deleteCartItem(cartItem._id)}
+                      />
+                    )}
+                  </View>
+                </View>
+                {cartItem.item.quantity.count >
+                  cartItem.item.product.quantity.available.count && (
+                  <View style={styles.infoBox}>
+                    <Text variant={'bodyMedium'} style={styles.infoText}>
+                      Only {cartItem.item.product.quantity.available.count}{' '}
+                      available instead of {cartItem.item.quantity.count}.
+                      Update the quantity or switch to another provider.
+                    </Text>
+                  </View>
+                )}
+                {index === provider?.items.length - 1 ? (
+                  <>
+                    {haveDistinctProviders && (
+                      <View style={styles.errorBox}>
+                        <Text variant={'bodyMedium'} style={styles.errorText}>
+                          You are ordering from different store. Please check
+                          your order again.
+                        </Text>
+                      </View>
+                    )}
+                    {isProductCategoryIsDifferent && (
+                      <View style={styles.errorBox}>
+                        <Text variant={'bodyMedium'} style={styles.errorText}>
+                          You are ordering from different category. Please check
+                          your order again.
+                        </Text>
+                      </View>
+                    )}
+                  </>
+                ) : (
+                  <View style={styles.divider} />
+                )}
+              </View>
+            ))}
+            {providerIndex !== providerWiseItems.length - 1 && (
+              <View style={styles.providerBorderBottom} />
+            )}
+          </View>
+        ))}
+      </ScrollView>
 
       <RBSheet
         ref={customizationSheet}
@@ -321,6 +337,18 @@ const makeStyles = (colors: any) =>
       flex: 1,
       paddingVertical: 24,
       paddingHorizontal: 16,
+    },
+    scrollViewContent: {
+      paddingBottom: 24,
+    },
+    providerBorderBottom: {
+      borderBottomColor: '#ababab',
+      borderBottomWidth: 1,
+      paddingTop: 10,
+      marginBottom: 10,
+    },
+    providerName: {
+      marginBottom: 10,
     },
     product: {
       flexDirection: 'row',

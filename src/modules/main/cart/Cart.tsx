@@ -39,6 +39,7 @@ const Cart = () => {
   });
   const [quoteItemProcessing, setQuoteItemProcessing] = useState<any>(null);
   const [cartTotal, setCartTotal] = useState<string>('0');
+  const [providerWiseItems, setProviderWiseItems] = useState<any[]>([]);
 
   const openFulfillmentSheet = () => fulfillmentSheet.current.open();
 
@@ -404,6 +405,23 @@ const Cart = () => {
       return subtotal.toFixed(2);
     };
 
+    const getProviderWiseItems = () => {
+      let providers: any[] = [];
+      cartItems.forEach((item: any) => {
+        const availableProvider = providers.find((provider: any) => provider.provider.id === item.item.provider.id);
+        if (!!availableProvider) {
+          availableProvider.items.push(item);
+        } else {
+          providers.push({
+            provider: item.item.provider,
+            items: [item],
+          });
+        }
+      });
+      return providers;
+    };
+
+    setProviderWiseItems(getProviderWiseItems());
     setCartTotal(getCartSubtotal());
   }, [cartItems]);
 
@@ -429,6 +447,7 @@ const Cart = () => {
                   style={styles.pageContainer}
                   pointerEvents={checkoutLoading ? 'none' : 'auto'}>
                   <CartItems
+                    providerWiseItems={providerWiseItems}
                     cartItems={cartItems}
                     setCartItems={setCartItems}
                     haveDistinctProviders={haveDistinctProviders}
