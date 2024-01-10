@@ -112,6 +112,7 @@ const Payment: React.FC<Payment> = ({
 
       let oldData = updatedCartItems.current;
       oldData[0].message.quote.quote = data[0].message.order.quote;
+      oldData[0].message.quote.payment = data[0].message.order.payment;
 
       setUpdateCartItemsDataOnInitialize(oldData);
       await handleSuccess();

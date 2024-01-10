@@ -9,7 +9,6 @@ import AddDefaultAddress from '../modules/main/profile/AddDefaultAddress';
 import Dashboard from '../modules/main/dashboard/Dashboard';
 import AddressList from '../modules/main/dashboard/components/address/AddressList';
 import Cart from '../modules/main/cart/Cart';
-import Checkout from '../modules/main/checkout/Checkout';
 import ProductDetails from '../modules/main/product/details/ProductDetails';
 import Profile from '../modules/main/profile/Profile';
 import OrderDetails from '../modules/main/order/details/OrderDetails';
@@ -74,15 +73,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
             headerStyle,
           }}
         />
-        <Stack.Screen
-          name="Checkout"
-          component={Checkout}
-          options={{
-            title: 'Checkout',
-            headerStyle,
-          }}
-        />
-
         <Stack.Screen
           name="AddDefaultAddress"
           component={AddDefaultAddress}

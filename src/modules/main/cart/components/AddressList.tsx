@@ -15,7 +15,6 @@ import {saveAddress} from '../../../../redux/address/actions';
 
 interface AddressList {
   deliveryAddress: any;
-  setBillingAddress: (newAddress: any) => void;
   setDeliveryAddress: (newAddress: any) => void;
   closeSheet: () => void;
 }

@@ -16,7 +16,7 @@ import {updateCartItems} from '../redux/cart/actions';
 
 const CancelToken = axios.CancelToken;
 
-export default (navigate: boolean = true) => {
+export default (openFulfillmentSheet: () => void) => {
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const dispatch = useDispatch();
   const source = useRef<any>(null);
@@ -26,8 +26,10 @@ export default (navigate: boolean = true) => {
   const responseRef = useRef<any[]>([]);
   const eventTimeOutRef = useRef<any[]>([]);
   const updatedCartItems = useRef<any[]>([]);
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
+  const [selectedItemsForInit, setSelectedItemsForInit] = useState<any[]>([]);
   const [eventData, setEventData] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(navigate);
+  const [loading, setLoading] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<any>([]);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [haveDistinctProviders, setHaveDistinctProviders] =
@@ -104,7 +106,6 @@ export default (navigate: boolean = true) => {
   };
 
   const getQuote = async (items: any[]) => {
-    setCheckoutLoading(true);
     const transactionId: any = uuid.v4();
     await setStoredData('transaction_id', transactionId);
     responseRef.current = [];
@@ -245,17 +246,17 @@ export default (navigate: boolean = true) => {
           ].item.product.fulfillments = data[0].message.quote.fulfillments;
         }
       });
-      await setStoredData(
-        'cartItems',
-        JSON.stringify(updatedCartItems.current),
-      );
-      await setStoredData(
-        'updatedCartItems',
-        JSON.stringify(responseRef.current),
-      );
-      if (navigate) {
-        navigation.navigate('Checkout');
-      }
+      // await setStoredData(
+      //   'cartItems',
+      //   JSON.stringify(updatedCartItems.current),
+      // );
+      setSelectedItemsForInit(updatedCartItems.current.concat([]));
+      setSelectedItems(responseRef.current.concat([]));
+      // await setStoredData(
+      //   'updatedCartItems',
+      //   JSON.stringify(responseRef.current),
+      // );
+      openFulfillmentSheet();
     } catch (err: any) {
       showToastWithGravity(err?.message);
     } finally {
@@ -264,6 +265,7 @@ export default (navigate: boolean = true) => {
   };
 
   const onCheckoutFromCart = async (currentAddress: any) => {
+    setCheckoutLoading(true);
     address.current = currentAddress;
     if (cartItems.length > 0) {
       let items = cartItems.map((item: any) => item.item);
@@ -297,5 +299,9 @@ export default (navigate: boolean = true) => {
     isProductAvailableQuantityIsZero,
     isProductCategoryIsDifferent,
     setCartItems,
+    selectedItems,
+    setSelectedItems,
+    selectedItemsForInit,
+    setSelectedItemsForInit,
   };
 };

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import FastImage from 'react-native-fast-image';
-import {Button, IconButton, Text, useTheme} from 'react-native-paper';
+import {IconButton, Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
