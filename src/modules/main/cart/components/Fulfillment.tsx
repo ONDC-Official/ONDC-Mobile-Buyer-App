@@ -8,6 +8,7 @@ interface Fulfillment {
   selectedFulfillment: any;
   setSelectedFulfillment: (newValue: any) => void;
   cartItems: any[];
+  products: any[];
   productsQuote: any;
   closeFulfilment: () => void;
   cartTotal: string;
@@ -18,6 +19,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
   selectedFulfillment,
   setSelectedFulfillment,
   cartItems,
+  products,
   productsQuote,
   closeFulfilment,
   cartTotal,
@@ -39,6 +41,14 @@ const Fulfillment: React.FC<Fulfillment> = ({
     navigation.navigate('Dashboard');
   };
 
+  const allowFulfillmentSelection = () => {
+    // by default is different fulfillments are selected for diff items, we don't allow fulfillment selection
+    let uniqueDefaultSelections = Object.values(selectedFulfillment).filter(
+      (value, index, array) => array.indexOf(value) === index,
+    );
+    return uniqueDefaultSelections.length === 1;
+  };
+
   const orderTotal = Number(productsQuote?.total_payable).toFixed(2);
 
   return (
@@ -47,7 +57,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
         <Text variant={'bodyMedium'}>Choose delivery/pickup</Text>
         <IconButton icon={'close-circle'} onPress={closeFulfilment} />
       </View>
-      <ScrollView style={styles.listContainer}>
+      <ScrollView contentContainerStyle={styles.listContainer}>
         {productsQuote.isError ? (
           <View style={styles.errorContainer}>
             {productsQuote?.providers.map((provider: any, pindex: number) => (
@@ -68,31 +78,59 @@ const Fulfillment: React.FC<Fulfillment> = ({
           </View>
         ) : (
           <>
-            {cartItems[0]?.message?.quote?.fulfillments?.map(
-              (fulfillment: any) => (
-                <TouchableOpacity
-                  key={fulfillment.id}
-                  style={[
-                    styles.customerRow,
-                    fulfillment.id === selectedFulfillment
-                      ? styles.active
-                      : styles.normal,
-                  ]}
-                  onPress={() => setSelectedFulfillment(fulfillment.id)}>
-                  <Text variant={'bodyMedium'} style={styles.customerMeta}>
-                    {fulfillment['@ondc/org/category']}
-                  </Text>
-                  {fulfillment.hasOwnProperty('@ondc/org/TAT') && (
-                    <Text variant={'labelMedium'} style={styles.customerMeta}>
-                      Delivery By:{' '}
-                      {moment()
-                        .add(moment.duration(fulfillment['@ondc/org/TAT']))
-                        .format('YYYY-MM-DD HH:mm:ss')}
-                    </Text>
-                  )}
-                </TouchableOpacity>
-              ),
-            )}
+            {allowFulfillmentSelection()
+              ? cartItems[0]?.message?.quote?.fulfillments?.map(
+                  (fulfillment: any) => (
+                    <TouchableOpacity
+                      key={fulfillment.id}
+                      style={[
+                        styles.customerRow,
+                        fulfillment.id === selectedFulfillment
+                          ? styles.active
+                          : styles.normal,
+                      ]}
+                      onPress={() => setSelectedFulfillment(fulfillment.id)}>
+                      <Text variant={'bodyMedium'} style={styles.customerMeta}>
+                        {fulfillment['@ondc/org/category']}
+                      </Text>
+                      {fulfillment.hasOwnProperty('@ondc/org/TAT') && (
+                        <Text
+                          variant={'labelMedium'}
+                          style={styles.customerMeta}>
+                          - in{' '}
+                          {moment
+                            .duration(fulfillment['@ondc/org/TAT'])
+                            .humanize()}
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  ),
+                )
+              : products.map((product: any) => {
+                  const fulfillment =
+                    cartItems[0]?.message?.quote?.fulfillments?.find(
+                      (one: any) => one.id === selectedFulfillment,
+                    );
+                  return (
+                    <View
+                      key={product.id}
+                      style={[styles.customerRow, styles.active]}>
+                      <Text variant={'bodyMedium'} style={styles.customerMeta}>
+                        {product.name} : {fulfillment['@ondc/org/category']}
+                      </Text>
+                      {fulfillment.hasOwnProperty('@ondc/org/TAT') && (
+                        <Text
+                          variant={'labelMedium'}
+                          style={styles.customerMeta}>
+                          - in{' '}
+                          {moment
+                            .duration(fulfillment['@ondc/org/TAT'])
+                            .humanize()}
+                        </Text>
+                      )}
+                    </View>
+                  );
+                })}
             <View style={styles.summaryRow}>
               <Text variant="bodyMedium">Item Total</Text>
               <Text variant="bodyMedium">₹{cartTotal}</Text>

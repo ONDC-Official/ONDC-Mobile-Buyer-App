@@ -21,6 +21,7 @@ import Fulfillment from './components/Fulfillment';
 import AddressList from './components/AddressList';
 import Payment from './components/Payment';
 import useConfirmItems from '../../../hooks/useConfirmItems';
+import {useIsFocused} from '@react-navigation/native';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
@@ -42,6 +43,11 @@ const Cart = () => {
   const [providerWiseItems, setProviderWiseItems] = useState<any[]>([]);
 
   const openFulfillmentSheet = () => fulfillmentSheet.current.open();
+
+  const closePaymentSheet = () => {
+    setActivePaymentMethod('');
+    paymentSheet.current.close();
+  };
 
   const {
     loading,
@@ -65,7 +71,7 @@ const Cart = () => {
     setDeliveryAddress,
     activePaymentMethod,
     setActivePaymentMethod,
-  } = useConfirmItems();
+  } = useConfirmItems(closePaymentSheet);
 
   const showQuoteError = () => {
     let msg: string = quoteItemProcessing
@@ -84,9 +90,13 @@ const Cart = () => {
     addressSheet.current.close();
   };
 
-  const closePaymentSheet = () => {
-    setActivePaymentMethod('');
-    paymentSheet.current.close();
+  const getProducts = () => {
+    return selectedItemsForInit?.map(cartItem => {
+      return {
+        name: cartItem?.item?.product?.descriptor?.name,
+        id: cartItem.item.local_id,
+      };
+    });
   };
 
   useEffect(() => {
@@ -408,8 +418,10 @@ const Cart = () => {
     const getProviderWiseItems = () => {
       let providers: any[] = [];
       cartItems.forEach((item: any) => {
-        const availableProvider = providers.find((provider: any) => provider.provider.id === item.item.provider.id);
-        if (!!availableProvider) {
+        const availableProvider = providers.find(
+          (provider: any) => provider.provider.id === item.item.provider.id,
+        );
+        if (availableProvider) {
           availableProvider.items.push(item);
         } else {
           providers.push({
@@ -424,6 +436,10 @@ const Cart = () => {
     setProviderWiseItems(getProviderWiseItems());
     setCartTotal(getCartSubtotal());
   }, [cartItems]);
+
+  useEffect(() => {
+    getCartItems().then(() => {});
+  }, [useIsFocused()]);
 
   useEffect(() => {
     getCartItems().then(() => {});
@@ -524,13 +540,14 @@ const Cart = () => {
         )}
       </View>
       <RBSheet
-        closeOnPressMask
+        closeOnPressMask={false}
         ref={fulfillmentSheet}
         height={screenHeight / 2}
         customStyles={{
           container: styles.rbSheet,
         }}>
         <Fulfillment
+          products={getProducts()}
           showPaymentOption={showPaymentOption}
           selectedFulfillment={selectedFulfillment}
           setSelectedFulfillment={setSelectedFulfillment}
@@ -541,7 +558,7 @@ const Cart = () => {
         />
       </RBSheet>
       <RBSheet
-        closeOnPressMask
+        closeOnPressMask={false}
         ref={addressSheet}
         height={screenHeight / 2}
         customStyles={{
@@ -554,9 +571,9 @@ const Cart = () => {
         />
       </RBSheet>
       <RBSheet
-        closeOnPressMask
+        closeOnPressMask={false}
         ref={paymentSheet}
-        height={screenHeight / 2}
+        height={320}
         customStyles={{
           container: styles.rbSheet,
         }}>

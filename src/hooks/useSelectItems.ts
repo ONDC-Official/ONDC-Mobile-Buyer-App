@@ -246,16 +246,8 @@ export default (openFulfillmentSheet: () => void) => {
           ].item.product.fulfillments = data[0].message.quote.fulfillments;
         }
       });
-      // await setStoredData(
-      //   'cartItems',
-      //   JSON.stringify(updatedCartItems.current),
-      // );
       setSelectedItemsForInit(updatedCartItems.current.concat([]));
       setSelectedItems(responseRef.current.concat([]));
-      // await setStoredData(
-      //   'updatedCartItems',
-      //   JSON.stringify(responseRef.current),
-      // );
       openFulfillmentSheet();
     } catch (err: any) {
       showToastWithGravity(err?.message);

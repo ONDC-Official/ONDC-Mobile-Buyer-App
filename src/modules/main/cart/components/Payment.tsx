@@ -70,6 +70,7 @@ const Payment: React.FC<Payment> = ({
   const {handleApiError} = useNetworkErrorHandling();
   const updatedCartItems = useRef<any[]>([]);
   const responseRef = useRef<any[]>([]);
+  const requestCount = useRef(0);
   const eventTimeOutRef = useRef<any[]>([]);
   const source = useRef<any>(null);
   const styles = makeStyles(theme.colors);
@@ -150,14 +151,8 @@ const Payment: React.FC<Payment> = ({
           showToastWithGravity('Cannot fetch details for this product');
           return;
         }
-        let items = cartItems.map(item => item.item);
-        // tale action to redirect them.
-        const requestObject = constructQuoteObject(
-          items.filter(({provider}) =>
-            responseReceivedIds.includes(provider.id.toString()),
-          ),
-        );
-        if (requestObject.length !== responseRef.current.length) {
+        console.log(requestCount.current, responseRef.current.length);
+        if (requestCount.current !== responseRef.current.length) {
           showToastWithGravity('Some orders are not initialized!');
         }
       }, SSE_TIMEOUT);
@@ -246,11 +241,11 @@ const Payment: React.FC<Payment> = ({
         setInitializeOrderLoading(false);
       } else {
         const parentTransactionIdMap = new Map();
-        data.map((data: any) => {
-          const provider_id = data?.context?.provider_id;
+        data.map((one: any) => {
+          const provider_id = one?.context?.provider_id;
           return parentTransactionIdMap.set(provider_id, {
-            parent_order_id: data?.context?.parent_order_id,
-            transaction_id: data?.context?.transaction_id,
+            parent_order_id: one?.context?.parent_order_id,
+            transaction_id: one?.context?.transaction_id,
           });
         });
         await setStoredData(
@@ -261,6 +256,8 @@ const Payment: React.FC<Payment> = ({
           'parent_and_transaction_id_map',
           JSON.stringify(Array.from(parentTransactionIdMap.entries())),
         );
+        console.log('Request count', data.length);
+        requestCount.current = data.length;
         onInit(data?.map((txn: any) => txn?.context?.message_id));
       }
     } catch (err: any) {

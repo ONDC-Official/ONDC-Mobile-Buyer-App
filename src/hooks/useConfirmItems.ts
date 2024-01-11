@@ -17,7 +17,7 @@ import useNetworkHandling from './useNetworkHandling';
 import useNetworkErrorHandling from './useNetworkErrorHandling';
 
 const CancelToken = axios.CancelToken;
-export default () => {
+export default (closePaymentSheet: () => void) => {
   const navigation = useNavigation<any>();
   const responseRef = useRef<any[]>([]);
   const source = useRef<any>(null);
@@ -224,7 +224,10 @@ export default () => {
         await removeData('parent_order_id');
         await removeData('checkout_details');
         await removeData('parent_and_transaction_id_map');
-        navigation.navigate('Orders');
+        closePaymentSheet();
+        navigation.navigate('OrderDetails', {
+          orderId: responseRef.current[0].message?.order?.id,
+        });
       }
       setConfirmOrderLoading(false);
     }

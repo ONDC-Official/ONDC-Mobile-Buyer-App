@@ -3,12 +3,23 @@ import {ScrollView, StyleSheet} from 'react-native';
 import {IconButton, useTheme} from 'react-native-paper';
 import OrderSummary from './components/OrderSummary';
 import axios from 'axios';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../utils/utils';
 
 const CancelToken = axios.CancelToken;
 
+const Skeleton = () => (
+  <SkeletonPlaceholder>
+    <>
+      <SkeletonPlaceholder.Item width={100} marginBottom={10} height={20} />
+      <SkeletonPlaceholder.Item width={100} marginBottom={10} height={20} />
+      <SkeletonPlaceholder.Item width={100} marginBottom={10} height={20} />
+      <SkeletonPlaceholder.Item width={100} marginBottom={10} height={20} />
+    </>
+  </SkeletonPlaceholder>
+);
 const OrderDetails = ({
   route: {params},
   navigation,
@@ -19,19 +30,23 @@ const OrderDetails = ({
   const source = useRef<any>(null);
   const {colors} = useTheme();
   const {getDataWithAuth} = useNetworkHandling();
-  const [orderDetails, setOrderDetails] = useState<any>(params.order);
+  const [orderDetails, setOrderDetails] = useState<any>(null);
   const [trackingDetails, setTrackingDetails] = useState<any>(null);
+  const [apiInProgress, setApiInProgress] = useState<boolean>(true);
 
   const getOrderDetails = async () => {
     try {
+      setApiInProgress(true);
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${ORDERS}/${params.order.id}`,
+        `${API_BASE_URL}${ORDERS}/${params.orderId}`,
         source.current.token,
       );
       setOrderDetails(data[0]);
     } catch (err: any) {
       showToastWithGravity(err?.response?.data?.error?.message);
+    } finally {
+      setApiInProgress(false);
     }
   };
 
@@ -49,6 +64,14 @@ const OrderDetails = ({
       ),
     });
   }, [navigation]);
+
+  useEffect(() => {
+    getOrderDetails().then(r => {});
+  }, []);
+
+  if (apiInProgress) {
+    return <Skeleton />;
+  }
 
   return (
     <ScrollView style={styles.pageContainer}>
