@@ -308,9 +308,9 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     }
   }, [product, cartItems]);
 
-  const disabled =
-    apiInProgress ||
-    !(Number(product?.item_details?.quantity?.available?.count) >= 1);
+  const inStock =
+    Number(product?.item_details?.quantity?.available?.count) >= 1;
+  const disabled = apiInProgress || !inStock;
 
   // @ts-ignore
   return (
@@ -379,7 +379,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                 </Text>
               )}
             </View>
-          ) : Number(product?.item_details?.quantity?.available?.count) >= 1 ? (
+          ) : inStock ? (
             <View>
               <TouchableOpacity
                 style={[
@@ -529,32 +529,39 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           </Text>
           <IconButton icon={'close'} onPress={hideProductDetails} />
         </View>
-        <ScrollView>
-          <FBProductDetails product={productDetails}>
-            {Number(product?.item_details?.quantity?.available?.count) >= 1 ? (
-              <>
-                <FBProductCustomization
-                  hideProductDetails
-                  product={productDetails}
-                  customizationState={customizationState}
-                  setCustomizationState={setCustomizationState}
-                  setItemOutOfStock={setItemOutOfStock}
-                />
-                <CustomizationFooterButtons
-                  productLoading={productLoading}
-                  itemQty={itemQty}
-                  setItemQty={setItemQty}
-                  itemOutOfStock={itemOutOfStock}
-                  addDetailsToCart={addDetailsToCart}
-                  product={product}
-                  customizationPrices={customizationPrices}
-                />
-              </>
-            ) : (
-              <></>
-            )}
-          </FBProductDetails>
-        </ScrollView>
+        <View style={styles.productDetails}>
+          <ScrollView style={styles.productDetails}>
+            <FBProductDetails product={productDetails}>
+              {Number(product?.item_details?.quantity?.available?.count) >=
+              1 ? (
+                <>
+                  <FBProductCustomization
+                    hideProductDetails
+                    product={productDetails}
+                    customizationState={customizationState}
+                    setCustomizationState={setCustomizationState}
+                    setItemOutOfStock={setItemOutOfStock}
+                  />
+                </>
+              ) : (
+                <></>
+              )}
+            </FBProductDetails>
+          </ScrollView>
+          {inStock ? (
+            <CustomizationFooterButtons
+              productLoading={productLoading}
+              itemQty={itemQty}
+              setItemQty={setItemQty}
+              itemOutOfStock={itemOutOfStock}
+              addDetailsToCart={addDetailsToCart}
+              product={product}
+              customizationPrices={customizationPrices}
+            />
+          ) : (
+            <></>
+          )}
+        </View>
       </RBSheet>
     </>
   );
@@ -683,6 +690,9 @@ const makeStyles = (colors: any) =>
     },
     cartQuantity: {
       marginTop: 4,
+    },
+    productDetails: {
+      flex: 1,
     },
   });
 

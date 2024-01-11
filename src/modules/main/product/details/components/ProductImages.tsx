@@ -54,7 +54,7 @@ const makeStyles = (colors: any) =>
       width: imageSize,
       alignSelf: 'center',
     },
-    pagerContainer: {backgroundColor: 'white', paddingBottom: 40},
+    pagerContainer: {backgroundColor: 'white', paddingBottom: 20},
     pager: {
       zIndex: 999,
     },

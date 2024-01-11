@@ -5,7 +5,6 @@ import ProductImages from './components/ProductImages';
 import {FASHION_DOMAIN} from '../../../../utils/constants';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import VariationsRenderer from '../../../../components/products/VariationsRenderer';
-import StockAvailability from '../../../../components/products/StockAvailability';
 import AboutProduct from './components/AboutProduct';
 
 interface ProductDetails {
@@ -26,15 +25,10 @@ const ProductDetails: React.FC<ProductDetails> = ({product, children}) => {
           product?.item_details?.descriptor?.images,
         )}
       />
+      <View style={styles.tagContainer}>
+        <VegNonVegTag tags={product?.item_details?.tags} showLabel />
+      </View>
       <View style={styles.details}>
-        <View style={styles.stockRow}>
-          <VegNonVegTag tags={product?.item_details?.tags} showLabel />
-        </View>
-        <StockAvailability
-          available={
-            Number(product?.item_details?.quantity?.available?.count) >= 1
-          }
-        />
         <Text variant="titleMedium" style={styles.title}>
           {product?.item_details?.descriptor?.name}
         </Text>
@@ -93,6 +87,11 @@ const makeStyles = (colors: any) =>
       width: '100%',
       backgroundColor: '#E0E0E0',
       marginVertical: 20,
+    },
+    tagContainer: {
+      position: 'absolute',
+      marginLeft: 10,
+      marginTop: 10,
     },
   });
 
