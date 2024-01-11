@@ -305,6 +305,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       setCartItemDetails({items, productQuantity});
     } else {
       setCartItemDetails({items: [], productQuantity: 0});
+      quantitySheet.current.close();
     }
   }, [product, cartItems]);
 
@@ -532,8 +533,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         <View style={styles.productDetails}>
           <ScrollView style={styles.productDetails}>
             <FBProductDetails product={productDetails}>
-              {Number(product?.item_details?.quantity?.available?.count) >=
-              1 ? (
+              {inStock ? (
                 <>
                   <FBProductCustomization
                     hideProductDetails
@@ -559,7 +559,22 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               customizationPrices={customizationPrices}
             />
           ) : (
-            <></>
+            <View style={styles.outOfStockContainer}>
+              <View
+                style={[
+                  globalStyles.disabledOutlineButton,
+                  styles.outOfStockButton,
+                ]}>
+                <Text
+                  variant={'labelSmall'}
+                  style={[
+                    globalStyles.disabledOutlineButtonText,
+                    styles.outOfStock,
+                  ]}>
+                  Out of stock
+                </Text>
+              </View>
+            </View>
           )}
         </View>
       </RBSheet>
@@ -602,6 +617,11 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+    },
+    outOfStockContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      paddingBottom: 10,
     },
     outOfStockButton: {
       width: 90,

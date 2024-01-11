@@ -90,7 +90,7 @@ const CustomizationFooterButtons = ({
   );
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     product: {
       paddingHorizontal: 16,
