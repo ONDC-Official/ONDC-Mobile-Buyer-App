@@ -151,7 +151,6 @@ const Payment: React.FC<Payment> = ({
           showToastWithGravity('Cannot fetch details for this product');
           return;
         }
-        console.log(requestCount.current, responseRef.current.length);
         if (requestCount.current !== responseRef.current.length) {
           showToastWithGravity('Some orders are not initialized!');
         }
@@ -171,6 +170,7 @@ const Payment: React.FC<Payment> = ({
     try {
       source.current = CancelToken.source();
       const transactionId = await getStoredData('transaction_id');
+      const contextCity = await getStoredData('contextCity');
       const payload = items.map((item: any) => {
         let itemsData = Object.assign([], JSON.parse(JSON.stringify(item)));
         itemsData = itemsData.map((itemData: any) => {
@@ -192,7 +192,7 @@ const Payment: React.FC<Payment> = ({
         return {
           context: {
             transaction_id: transactionId,
-            city: deliveryAddress.address.city,
+            city: contextCity || deliveryAddress.address.city,
             state: deliveryAddress.address.state,
             domain: item[0].domain,
           },
@@ -256,7 +256,6 @@ const Payment: React.FC<Payment> = ({
           'parent_and_transaction_id_map',
           JSON.stringify(Array.from(parentTransactionIdMap.entries())),
         );
-        console.log('Request count', data.length);
         requestCount.current = data.length;
         onInit(data?.map((txn: any) => txn?.context?.message_id));
       }

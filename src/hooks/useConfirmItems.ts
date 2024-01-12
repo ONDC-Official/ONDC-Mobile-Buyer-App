@@ -116,11 +116,12 @@ export default (closePaymentSheet: () => void) => {
     );
     try {
       const item = items[0];
-      const queryParams = [
+      const contextCity = await getStoredData('contextCity');
+      const queryParams: any = [
         {
           context: {
             domain: item.domain,
-            city: deliveryAddress.address.city,
+            city: contextCity || deliveryAddress.address.city,
             state: deliveryAddress.address.state,
             parent_order_id: parentOrderIDMap.get(item?.provider?.id)
               .parent_order_id,

@@ -9,7 +9,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import {SSE_TIMEOUT} from '../utils/constants';
-import {API_BASE_URL, CART, ON_SELECT, SELECT} from '../utils/apiActions';
+import { API_BASE_URL, CART, EVENTS, ON_SELECT, SELECT } from "../utils/apiActions";
 import {setStoredData} from '../utils/storage';
 import useNetworkHandling from './useNetworkHandling';
 import {updateCartItems} from '../redux/cart/actions';
@@ -111,16 +111,16 @@ export default (openFulfillmentSheet: () => void) => {
     responseRef.current = [];
     if (address.current) {
       try {
-        let domain = '';
-        let contextCity = '';
-        const updatedItems = items.map(item => {
+        let domain: string = '';
+        let contextCity: string = '';
+        const updatedItems: any[] = items.map(item => {
           domain = item.domain;
           contextCity = item.contextCity;
           delete item.context;
           delete item.contextCity;
           return item;
         });
-        let selectPayload = {
+        let selectPayload: any = {
           context: {
             transaction_id: transactionId,
             domain: domain,
@@ -151,6 +151,7 @@ export default (openFulfillmentSheet: () => void) => {
           [selectPayload],
           source.current.token,
         );
+        await setStoredData('contextCity', contextCity);
         //Error handling workflow eg, NACK
         const isNACK = data.find(
           (item: any) => item.error && item?.message?.ack?.status === 'NACK',
@@ -182,7 +183,7 @@ export default (openFulfillmentSheet: () => void) => {
   const onFetchQuote = (messageIds: any[]) => {
     eventTimeOutRef.current = messageIds.map(messageId => {
       const eventSource = new RNEventSource(
-        `${API_BASE_URL}/clientApis/events/v2?messageId=${messageId}`,
+        `${API_BASE_URL}${EVENTS}${messageId}`,
         {
           headers: {Authorization: `Bearer ${token}`},
         },
