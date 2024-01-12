@@ -212,10 +212,8 @@ const Login = ({navigation}: {navigation: any}) => {
         </View>
       </ScrollView>
       <View style={styles.footerContainer}>
-        <Text style={styles.textCenter}>
-          By Log In to Mobile App. I accept all the applicable
-        </Text>
-        <Button mode="text">Terms and condition</Button>
+        <Text style={styles.textCenter}>By continuing, I accept the </Text>
+        <Button mode="text">Terms and Conditions</Button>
       </View>
     </View>
   );
