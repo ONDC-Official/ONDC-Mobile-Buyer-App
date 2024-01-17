@@ -77,10 +77,9 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const [productDetails, setProductDetails] = useState<any>(null);
   const [itemQty, setItemQty] = useState<number>(1);
 
-  const customizable =
-    product?.item_details?.tags.findIndex(
-      (item: any) => item.code === 'custom_group',
-    ) > -1;
+  const customizable = !!product?.item_details?.tags?.find(
+    (item: any) => item.code === 'custom_group',
+  );
 
   const showCustomization = () => customizationSheet.current.open();
 
@@ -312,6 +311,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const inStock =
     Number(product?.item_details?.quantity?.available?.count) >= 1;
   const disabled = apiInProgress || !inStock;
+
+  console.log(``);
 
   // @ts-ignore
   return (
