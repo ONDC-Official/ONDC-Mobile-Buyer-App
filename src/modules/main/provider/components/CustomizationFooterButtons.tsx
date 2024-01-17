@@ -37,7 +37,7 @@ const CustomizationFooterButtons = ({
       <View style={styles.quantityContainer}>
         <TouchableOpacity
           disabled={productLoading}
-          style={styles.incrementButton}
+          style={styles.decrementButton}
           onPress={() => {
             if (itemQty > 1) {
               setItemQty(itemQty - 1);
@@ -97,29 +97,36 @@ const makeStyles = () =>
       flexDirection: 'row',
     },
     customizationButtons: {
-      marginTop: 28,
+      marginVertical: 8,
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingHorizontal: 16,
-      marginBottom: 20,
     },
     quantityContainer: {
-      borderRadius: 6,
-      borderColor: '#E8E8E8',
+      borderRadius: 8,
+      borderColor: '#008ECC',
       borderWidth: 1,
-      backgroundColor: '#FFF',
+      backgroundColor: '#ECF3F8',
       flexDirection: 'row',
-      height: 40,
+      height: 44,
       alignItems: 'center',
-      marginRight: 18,
+      marginRight: 15,
+      padding: 10,
     },
     quantity: {
       alignItems: 'center',
       textAlign: 'center',
-      minWidth: 50,
+      minWidth: 36,
+      color: '#008ECC',
+    },
+    decrementButton: {
+      marginRight: 4,
+      height: '100%',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     incrementButton: {
-      paddingHorizontal: 10,
+      marginLeft: 4,
       height: '100%',
       alignItems: 'center',
       justifyContent: 'center',

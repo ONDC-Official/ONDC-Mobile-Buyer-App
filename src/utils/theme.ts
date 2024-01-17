@@ -76,7 +76,7 @@ export const theme = {
   roundness: 4,
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#196AAB',
+    primary: '#008ECC',
     warning: '#F29C49',
     footer: '#f3bf93',
     background: '#FFF',

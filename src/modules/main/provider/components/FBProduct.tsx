@@ -312,8 +312,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     Number(product?.item_details?.quantity?.available?.count) >= 1;
   const disabled = apiInProgress || !inStock;
 
-  console.log(``);
-
   // @ts-ignore
   return (
     <>
@@ -443,14 +441,26 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       <RBSheet
         ref={customizationSheet}
         height={screenHeight - 150}
+        closeOnDragDown={false}
+        closeOnPressMask={true}
         customStyles={{
           container: styles.rbSheet,
+          draggableIcon: styles.draggableIcon,
         }}>
         <View style={styles.header}>
-          <Text variant={'titleSmall'} style={styles.title}>
-            Customize
-          </Text>
-          <IconButton icon={'close'} onPress={hideCustomization} />
+          <FastImage
+            source={{uri: product?.item_details?.descriptor?.symbol}}
+            style={styles.sheetProductSymbol}
+          />
+          <View style={styles.titleContainer}>
+            <Text variant={'titleSmall'} style={styles.title}>
+              {product?.item_details?.descriptor?.name}
+            </Text>
+            <Text variant={'labelMedium'} style={styles.prize}>
+              {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
+              {product?.item_details?.price?.value}
+            </Text>
+          </View>
         </View>
         <ScrollView style={styles.customizationContainer}>
           <FBProductCustomization
@@ -642,19 +652,23 @@ const makeStyles = (colors: any) =>
     rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
     header: {
       paddingHorizontal: 16,
-      paddingVertical: 12,
+      paddingVertical: 8,
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center',
-      borderBottomColor: '#ababab',
-      borderBottomWidth: 1,
+    },
+    titleContainer: {
+      marginLeft: 8,
     },
     title: {
       color: '#1A1A1A',
       flexShrink: 1,
     },
+    prize: {
+      color: '#008ECC',
+    },
     customizationContainer: {
       padding: 16,
+      backgroundColor: '#FAFAFA',
     },
     customizationButtons: {
       marginTop: 28,
@@ -714,6 +728,13 @@ const makeStyles = (colors: any) =>
     },
     productDetails: {
       flex: 1,
+    },
+    sheetProductSymbol: {
+      width: 36,
+      height: 36,
+    },
+    draggableIcon: {
+      backgroundColor: '#000',
     },
   });
 

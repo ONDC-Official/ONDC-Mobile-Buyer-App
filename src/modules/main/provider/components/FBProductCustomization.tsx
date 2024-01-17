@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Checkbox, Text, useTheme} from 'react-native-paper';
-import FastImage from 'react-native-fast-image';
 import {createCustomizationAndGroupMapping} from '../../../../utils/utils';
-import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
+import CustomizationGroup from './CustomizationGroup';
 
 interface FBProductCustomization {
   product: any;
@@ -60,7 +57,7 @@ export const formatCustomizations = (items: any) => {
     let isDefault = false;
     let childs: any[] = [];
     let child = null;
-    let vegNonVegTag = null;
+    let vegNonVegTag: any = null;
 
     customization.item_details.tags.forEach((tag: any) => {
       if (tag.code === 'parent') {
@@ -118,30 +115,13 @@ const findMinMaxSeq = (customizationGroups: any) => {
   return {minSeq, maxSeq};
 };
 
-const VegNonVegTag = ({category = 'veg'}) => {
-  return (
-    <FastImage
-      source={
-        category === 'veg'
-          ? require('../../../../assets/veg.png')
-          : require('../../../../assets/non_veg.png')
-      }
-      style={{width: 18, height: 18}}
-    />
-  );
-};
-
 const FBProductCustomization: React.FC<FBProductCustomization> = ({
   product,
   customizationState,
   setCustomizationState,
   isEditFlow = false,
   setItemOutOfStock,
-  hideProductDetails = false,
 }) => {
-  const theme = useTheme();
-  const styles = makeStyles(theme.colors);
-
   const [customizationGroups, setCustomizationGroups] = useState<any[]>([]);
   const [customizations, setCustomizations] = useState<any[]>([]);
 
@@ -151,6 +131,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
 
   useEffect(() => {
     if (product) {
+      console.log(JSON.stringify(product, undefined, 4));
       const {customisation_groups, customisation_items} = product;
       const customGroup = product.item_details.tags.find(
         (item: any) => item.code === 'custom_group',
@@ -369,127 +350,18 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
     setCustomizationState(updatedState);
   };
 
-  const renderGroups = (group: any) => {
-    if (!group) {
-      return <></>;
-    }
-    const groupDetails = customizationState[group?.id];
-
-    return (
-      <View key={groupDetails?.id} style={styles.filterContainer}>
-        <Text variant={'bodyLarge'} style={styles.groupName}>
-          {groupDetails?.name}
-        </Text>
-        <View style={styles.groupContainer}>
-          {groupDetails?.options?.map((option: any) => {
-            const selected =
-              groupDetails?.selected?.some(
-                (selectedOption: any) => selectedOption?.id === option?.id,
-              ) ?? false;
-
-            return (
-              <View key={option.id} style={styles.optionContainer}>
-                <View style={styles.meta}>
-                  <VegNonVegTag category={option.vegNonVeg} />
-                  <Text variant={'bodyMedium'} style={styles.option}>
-                    {option.name}
-                  </Text>
-                </View>
-                <View style={styles.optionActionContainer}>
-                  {option.inStock ? (
-                    <View style={styles.optionActionContainer}>
-                      <Text variant={'bodyLarge'} style={styles.option}>
-                        ₹ {option.price}
-                      </Text>
-                      <Checkbox.Android
-                        status={selected ? 'checked' : 'unchecked'}
-                        onPress={() => {
-                          if (option.inStock) {
-                            handleClick(groupDetails, option);
-                          }
-                        }}
-                      />
-                    </View>
-                  ) : (
-                    <Text variant={'bodyMedium'} style={styles.outOfStock}>
-                      Out of Stock
-                    </Text>
-                  )}
-                </View>
-              </View>
-            );
-          })}
-        </View>
-        {groupDetails?.childs &&
-          groupDetails?.childs.map((child: any) =>
-            renderGroups(customizationState[child]),
-          )}
-      </View>
-    );
-  };
-
   const minSeq = findMinMaxSeq(customizationGroups).minSeq;
   const firstGroup = customizationGroups.find(group => group.seq === minSeq);
 
+  console.log(firstGroup);
   return (
-    <View>
-      {!hideProductDetails && (
-        <View style={styles.header}>
-          <Text variant={'titleSmall'}>
-            {product?.item_details?.descriptor?.name}
-          </Text>
-          <Text variant={'titleMedium'}>
-            {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}{' '}
-            {product?.item_details?.price?.value}
-          </Text>
-        </View>
-      )}
-      {renderGroups(firstGroup)}
-    </View>
+    <CustomizationGroup
+      group={customizationState[firstGroup?.id]}
+      customizationState={customizationState}
+      customizationGroups={customizationGroups}
+      handleClick={handleClick}
+    />
   );
 };
-
-const makeStyles = (colors: any) =>
-  StyleSheet.create({
-    filterContainer: {
-      marginBottom: 24,
-    },
-    optionContainer: {
-      marginBottom: 15,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    meta: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flex: 1,
-    },
-    optionActionContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    option: {
-      color: '#222',
-      paddingLeft: 8,
-    },
-    outOfStock: {
-      color: colors.error,
-    },
-    groupName: {
-      color: '#1D1D1D',
-      marginBottom: 13,
-      marginTop: 20,
-    },
-    groupContainer: {
-      backgroundColor: '#F3F9FE',
-      borderRadius: 2,
-      padding: 16,
-    },
-    header: {
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      flexDirection: 'row',
-    },
-  });
 
 export default FBProductCustomization;
