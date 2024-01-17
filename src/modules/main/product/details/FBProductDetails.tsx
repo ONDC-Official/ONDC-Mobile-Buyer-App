@@ -20,29 +20,36 @@ const ProductDetails: React.FC<ProductDetails> = ({product, children}) => {
 
   return (
     <>
-      <ProductImages
-        images={[product?.item_details?.descriptor?.symbol].concat(
-          product?.item_details?.descriptor?.images,
-        )}
-      />
+      <View style={styles.imagesContainer}>
+        <ProductImages
+          roundedCorner={true}
+          images={[product?.item_details?.descriptor?.symbol].concat(
+            product?.item_details?.descriptor?.images,
+          )}
+        />
+      </View>
       <View style={styles.tagContainer}>
-        <VegNonVegTag tags={product?.item_details?.tags} showLabel />
+        <VegNonVegTag tags={product?.item_details?.tags} />
       </View>
       <View style={styles.details}>
-        <Text variant="titleMedium" style={styles.title}>
+        <Text variant="titleSmall" style={styles.title}>
           {product?.item_details?.descriptor?.name}
         </Text>
         <View style={styles.priceContainer}>
-          <Text variant="titleMedium" style={styles.price}>
+          <Text variant="labelMedium" style={styles.price}>
             ₹{product?.item_details?.price?.value}
           </Text>
           <Text
-            variant="bodyLarge"
+            variant="labelMedium"
             style={[styles.price, styles.maximumAmount]}>
             ₹{Number(product?.item_details?.price?.maximum_value).toFixed(0)}
           </Text>
         </View>
-        <View style={styles.divider} />
+        <Text variant={'labelMedium'} style={styles.description}>
+          {product?.item_details?.descriptor?.short_desc}
+        </Text>
+      </View>
+      <View>
         <VariationsRenderer
           product={product}
           variationState={variationState}
@@ -50,8 +57,10 @@ const ProductDetails: React.FC<ProductDetails> = ({product, children}) => {
           chartImage={product?.attributes?.size_chart || ''}
           isFashion={product?.context?.domain === FASHION_DOMAIN}
         />
-        {children}
-        <AboutProduct product={product} />
+        <View style={styles.customizationContainer}>{children}</View>
+        <View style={styles.aboutContainer}>
+          <AboutProduct product={product} />
+        </View>
       </View>
     </>
   );
@@ -69,10 +78,12 @@ const makeStyles = (colors: any) =>
     },
     title: {
       color: '#222',
-      marginBottom: 10,
+      marginBottom: 4,
+      fontWeight: '600',
     },
     price: {
-      color: '#222',
+      color: colors.primary,
+      fontWeight: '600',
     },
     priceContainer: {
       flexDirection: 'row',
@@ -89,9 +100,24 @@ const makeStyles = (colors: any) =>
       marginVertical: 20,
     },
     tagContainer: {
-      position: 'absolute',
-      marginLeft: 10,
-      marginTop: 10,
+      marginLeft: 16,
+    },
+    imagesContainer: {
+      borderRadius: 8,
+      paddingHorizontal: 16,
+    },
+    description: {
+      color: '#1A1A1A',
+      fontWeight: '400',
+      marginTop: 4,
+      marginBottom: 8,
+    },
+    customizationContainer: {
+      padding: 16,
+      backgroundColor: '#FAFAFA',
+    },
+    aboutContainer: {
+      paddingHorizontal: 16,
     },
   });
 

@@ -98,9 +98,7 @@ const makeStyles = (colors: any) =>
     about: {
       color: '#222',
     },
-    aboutContainer: {
-      marginTop: 40,
-    },
+    aboutContainer: {},
     aboutRow: {
       flexDirection: 'row',
       marginBottom: 30,

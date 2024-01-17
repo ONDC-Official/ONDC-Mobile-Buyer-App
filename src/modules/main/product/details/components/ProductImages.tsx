@@ -1,16 +1,15 @@
 import PagerView from 'react-native-pager-view';
 import FastImage from 'react-native-fast-image';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import {useTheme} from 'react-native-paper';
 
 interface ProductImages {
   images: any[];
+  roundedCorner?: boolean;
 }
 
-const imageSize = Dimensions.get('window').width;
-
-const ProductImages: React.FC<ProductImages> = ({images}) => {
+const ProductImages: React.FC<ProductImages> = ({images, roundedCorner = false}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
@@ -22,13 +21,13 @@ const ProductImages: React.FC<ProductImages> = ({images}) => {
         onPageSelected={({nativeEvent: {position}}) =>
           setSelectedMediaPosition(position)
         }
-        style={[styles.pager, {height: imageSize}]}
+        style={[styles.pager]}
         initialPage={0}>
         {images?.map((uri, index) => (
           <FastImage
             key={`${index}image`}
             source={{uri}}
-            style={styles.image}
+            style={[styles.image, roundedCorner ? styles.roundedCorner : {}]}
             resizeMode={'contain'}
           />
         ))}
@@ -50,13 +49,15 @@ const ProductImages: React.FC<ProductImages> = ({images}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     image: {
-      height: imageSize,
-      width: imageSize,
+      height: 220,
+      width: '100%',
+      objectFit: 'contain',
       alignSelf: 'center',
     },
-    pagerContainer: {backgroundColor: 'white', paddingBottom: 20},
+    pagerContainer: {backgroundColor: 'white', paddingBottom: 8},
     pager: {
       zIndex: 999,
+      height: 220,
     },
     pageIndicator: {
       alignItems: 'center',
@@ -78,6 +79,9 @@ const makeStyles = (colors: any) =>
       borderRadius: 4,
       marginRight: 6,
       backgroundColor: colors.primary,
+    },
+    roundedCorner: {
+      borderRadius: 8,
     },
   });
 

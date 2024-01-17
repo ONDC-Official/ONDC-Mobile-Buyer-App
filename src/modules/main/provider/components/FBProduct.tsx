@@ -441,7 +441,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       <RBSheet
         ref={customizationSheet}
         height={screenHeight - 150}
-        closeOnDragDown={false}
+        closeOnDragDown={true}
+        closeOnPressBack={true}
         closeOnPressMask={true}
         customStyles={{
           container: styles.rbSheet,
@@ -485,8 +486,12 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       <RBSheet
         ref={quantitySheet}
         height={screenHeight - 150}
+        closeOnDragDown={true}
+        closeOnPressBack={true}
+        closeOnPressMask={true}
         customStyles={{
           container: styles.rbSheet,
+          draggableIcon: styles.draggableIcon,
         }}>
         <View style={styles.header}>
           <Text
@@ -530,17 +535,15 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       </RBSheet>
       {/*@ts-ignore*/}
       <RBSheet
+        closeOnDragDown={true}
+        closeOnPressBack={true}
+        closeOnPressMask={true}
         ref={productDetailsSheet}
         height={screenHeight - 150}
         customStyles={{
           container: styles.rbSheet,
+          draggableIcon: styles.draggableIcon,
         }}>
-        <View style={styles.header}>
-          <Text variant={'titleSmall'} style={styles.title}>
-            Product Details
-          </Text>
-          <IconButton icon={'close'} onPress={hideProductDetails} />
-        </View>
         <View style={styles.productDetails}>
           <ScrollView style={styles.productDetails}>
             <FBProductDetails product={productDetails}>

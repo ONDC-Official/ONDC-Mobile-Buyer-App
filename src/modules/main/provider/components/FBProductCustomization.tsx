@@ -353,7 +353,6 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
   const minSeq = findMinMaxSeq(customizationGroups).minSeq;
   const firstGroup = customizationGroups.find(group => group.seq === minSeq);
 
-  console.log(firstGroup);
   return (
     <CustomizationGroup
       group={customizationState[firstGroup?.id]}
