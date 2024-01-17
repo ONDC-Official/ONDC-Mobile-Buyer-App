@@ -49,11 +49,23 @@ const CustomizationGroup = ({
             <Text variant={'bodyMedium'} style={styles.groupName}>
               {group?.name}
             </Text>
-            <Text variant={'labelSmall'} style={styles.selectionLabel}>
-              {customizationGroup?.minQuantity === 0
-                ? `Select upto ${customizationGroup?.maxQuantity} options`
-                : `Select any ${customizationGroup.minQuantity} - ${customizationGroup.maxQuantity} of ${totalRecords}`}
-            </Text>
+            {customizationGroup?.minQuantity !== 0 &&
+            customizationGroup?.maxQuantity !== 0 ? (
+              <Text variant={'labelSmall'} style={styles.selectionLabel}>
+                Select any {customizationGroup.minQuantity} and upto{' '}
+                {customizationGroup?.maxQuantity} options
+              </Text>
+            ) : customizationGroup?.minQuantity !== 0 ? (
+              <Text variant={'labelSmall'} style={styles.selectionLabel}>
+                Select any {customizationGroup.minQuantity} options
+              </Text>
+            ) : customizationGroup?.maxQuantity !== 0 ? (
+              <Text variant={'labelSmall'} style={styles.selectionLabel}>
+                Select upto {customizationGroup?.maxQuantity} options
+              </Text>
+            ) : (
+              <></>
+            )}
           </View>
           {group?.isMandatory && (
             <View>

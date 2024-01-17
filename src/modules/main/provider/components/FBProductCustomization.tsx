@@ -131,7 +131,6 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
 
   useEffect(() => {
     if (product) {
-      console.log(JSON.stringify(product, undefined, 4));
       const {customisation_groups, customisation_items} = product;
       const customGroup = product.item_details.tags.find(
         (item: any) => item.code === 'custom_group',

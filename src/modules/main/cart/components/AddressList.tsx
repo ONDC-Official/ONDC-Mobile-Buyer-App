@@ -29,6 +29,7 @@ const AddressList: React.FC<AddressList> = ({
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
   const theme = useTheme();
+  const isFocused = useIsFocused();
   const source = useRef<any>(null);
   const styles = makeStyles(theme.colors);
   const {getDataWithAuth} = useNetworkHandling();
@@ -70,8 +71,11 @@ const AddressList: React.FC<AddressList> = ({
   };
 
   useEffect(() => {
-    getAddressList().then(() => {});
-  }, [useIsFocused()]);
+    if (isFocused) {
+      getAddressList().then(() => {
+      });
+    }
+  }, [isFocused]);
 
   return (
     <View style={styles.addressFormContainer}>

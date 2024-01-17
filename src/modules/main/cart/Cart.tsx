@@ -29,6 +29,7 @@ const Cart = () => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const {address} = useSelector(({addressReducer}) => addressReducer);
+  const isFocused = useIsFocused();
   const addressSheet = useRef<any>();
   const fulfillmentSheet = useRef<any>();
   const paymentSheet = useRef<any>();
@@ -438,8 +439,10 @@ const Cart = () => {
   }, [cartItems]);
 
   useEffect(() => {
-    getCartItems().then(() => {});
-  }, [useIsFocused()]);
+    if (isFocused) {
+      getCartItems().then(() => {});
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     getCartItems().then(() => {});

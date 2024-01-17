@@ -28,6 +28,7 @@ import ManageQuantity from '../../../../components/customization/ManageQuantity'
 import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
 import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
 import CustomizationFooterButtons from '../../provider/components/CustomizationFooterButtons';
+import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -42,7 +43,6 @@ const CancelToken = axios.CancelToken;
 const screenHeight: number = Dimensions.get('screen').height;
 
 const CartItems: React.FC<CartItems> = ({
-  allowScroll = true,
   haveDistinctProviders,
   isProductCategoryIsDifferent,
   providerWiseItems,
@@ -295,18 +295,40 @@ const CartItems: React.FC<CartItems> = ({
       </ScrollView>
 
       <RBSheet
+        closeOnDragDown={true}
+        closeOnPressBack={true}
+        closeOnPressMask={true}
         ref={customizationSheet}
         height={screenHeight - 150}
         customStyles={{
           container: styles.rbSheet,
+          draggableIcon: styles.draggableIcon,
         }}>
         <View style={styles.header}>
-          <Text variant={'titleSmall'} style={styles.title}>
-            Customize
-          </Text>
-          <IconButton icon={'close'} onPress={hideCustomization} />
+          <FastImage
+            source={{uri: productPayload?.item_details?.descriptor?.symbol}}
+            style={styles.sheetProductSymbol}
+          />
+          <View style={styles.titleContainer}>
+            <Text variant={'titleSmall'} style={styles.title}>
+              {productPayload?.item_details?.descriptor?.name}
+            </Text>
+            <Text variant={'labelMedium'} style={styles.prize}>
+              {CURRENCY_SYMBOLS[productPayload?.item_details?.price?.currency]}
+              {productPayload?.item_details?.price?.value}
+            </Text>
+          </View>
         </View>
-        <View style={styles.customizationContainer}>
+        {currentCartItem?.item?.provider?.locations?.length > 0 && (
+          <Text variant={'labelMedium'} style={styles.address}>
+            {currentCartItem?.item?.provider?.locations[0]?.address?.street ||
+              '-'}
+            ,{' '}
+            {currentCartItem?.item?.provider?.locations[0]?.address?.city ||
+              '-'}
+          </Text>
+        )}
+        <ScrollView style={styles.customizationContainer}>
           <FBProductCustomization
             isEditFlow
             product={productPayload}
@@ -314,7 +336,7 @@ const CartItems: React.FC<CartItems> = ({
             setCustomizationState={setCustomizationState}
             setItemOutOfStock={setItemOutOfStock}
           />
-        </View>
+        </ScrollView>
 
         <CustomizationFooterButtons
           update
@@ -414,19 +436,35 @@ const makeStyles = (colors: any) =>
     },
     customizationContainer: {
       padding: 16,
+      backgroundColor: '#FAFAFA',
     },
     rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
     header: {
       paddingHorizontal: 16,
       paddingVertical: 12,
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center',
-      borderBottomColor: '#ababab',
-      borderBottomWidth: 1,
+    },
+    titleContainer: {
+      marginLeft: 8,
     },
     title: {
       color: '#1A1A1A',
+      flexShrink: 1,
+    },
+    sheetProductSymbol: {
+      width: 36,
+      height: 36,
+    },
+    draggableIcon: {
+      backgroundColor: '#000',
+    },
+    prize: {
+      color: colors.primary,
+    },
+    address: {
+      paddingHorizontal: 16,
+      paddingBottom: 8,
     },
   });
 
