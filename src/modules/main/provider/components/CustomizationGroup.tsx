@@ -50,7 +50,9 @@ const CustomizationGroup = ({
               {group?.name}
             </Text>
             {customizationGroup?.minQuantity !== 0 &&
-            customizationGroup?.maxQuantity !== 0 ? (
+            customizationGroup?.maxQuantity !== 0 &&
+            customizationGroup?.minQuantity !==
+              customizationGroup?.maxQuantity ? (
               <Text variant={'labelSmall'} style={styles.selectionLabel}>
                 Select any {customizationGroup.minQuantity} and upto{' '}
                 {customizationGroup?.maxQuantity} options
