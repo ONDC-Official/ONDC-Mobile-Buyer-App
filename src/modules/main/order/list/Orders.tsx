@@ -79,15 +79,17 @@ const Orders: React.FC<any> = () => {
   };
 
   useEffect(() => {
-    setApiInProgress(true);
-    pageNumber.current = 1;
-    getOrderList(pageNumber.current)
-      .then(() => {
-        setApiInProgress(false);
-      })
-      .catch(() => {
-        setApiInProgress(false);
-      });
+    if (isFocused) {
+      setApiInProgress(true);
+      pageNumber.current = 1;
+      getOrderList(pageNumber.current)
+        .then(() => {
+          setApiInProgress(false);
+        })
+        .catch(() => {
+          setApiInProgress(false);
+        });
+    }
   }, [isFocused]);
 
   useEffect(() => {

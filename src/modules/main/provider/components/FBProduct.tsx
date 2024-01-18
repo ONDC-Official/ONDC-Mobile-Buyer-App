@@ -11,7 +11,7 @@ import axios from 'axios';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {Button, IconButton, Text, useTheme} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {
@@ -151,6 +151,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         local_id: productDetails.local_id,
         bpp_id: productDetails.bpp_details.bpp_id,
         bpp_uri: productDetails.context.bpp_uri,
+        contextCity: productDetails.context.city,
         domain: productDetails.context.domain,
         tags: productDetails.item_details.tags,
         customisationState: customizationState,
@@ -440,156 +441,168 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       {/*@ts-ignore*/}
       <RBSheet
         ref={customizationSheet}
-        height={screenHeight - 150}
-        closeOnDragDown={true}
-        closeOnPressBack={true}
-        closeOnPressMask={true}
+        height={screenHeight}
         customStyles={{
           container: styles.rbSheet,
-          draggableIcon: styles.draggableIcon,
+          wrapper: styles.wrapper,
         }}>
-        <View style={styles.header}>
-          <FastImage
-            source={{uri: product?.item_details?.descriptor?.symbol}}
-            style={styles.sheetProductSymbol}
-          />
-          <View style={styles.titleContainer}>
-            <Text variant={'titleSmall'} style={styles.title}>
-              {product?.item_details?.descriptor?.name}
-            </Text>
-            <Text variant={'labelMedium'} style={styles.prize}>
-              {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
-              {product?.item_details?.price?.value}
-            </Text>
-          </View>
+        <View style={styles.closeSheet}>
+          <TouchableOpacity onPress={hideCustomization}>
+            <Icon name={'close-circle'} color={theme.colors.error} size={32} />
+          </TouchableOpacity>
         </View>
-        <ScrollView style={styles.customizationContainer}>
-          <FBProductCustomization
-            product={productDetails}
-            customizationState={customizationState}
-            setCustomizationState={setCustomizationState}
-            setItemOutOfStock={setItemOutOfStock}
-          />
-        </ScrollView>
+        <View style={styles.sheetContainer}>
+          <View style={styles.header}>
+            <FastImage
+              source={{uri: product?.item_details?.descriptor?.symbol}}
+              style={styles.sheetProductSymbol}
+            />
+            <View style={styles.titleContainer}>
+              <Text variant={'titleSmall'} style={styles.title}>
+                {product?.item_details?.descriptor?.name}
+              </Text>
+              <Text variant={'labelMedium'} style={styles.prize}>
+                {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
+                {product?.item_details?.price?.value}
+              </Text>
+            </View>
+          </View>
+          <ScrollView style={styles.customizationContainer}>
+            <FBProductCustomization
+              product={productDetails}
+              customizationState={customizationState}
+              setCustomizationState={setCustomizationState}
+              setItemOutOfStock={setItemOutOfStock}
+            />
+          </ScrollView>
 
-        <CustomizationFooterButtons
-          productLoading={productLoading}
-          itemQty={itemQty}
-          setItemQty={setItemQty}
-          itemOutOfStock={itemOutOfStock}
-          addDetailsToCart={addDetailsToCart}
-          product={product}
-          customizationPrices={customizationPrices}
-        />
+          <CustomizationFooterButtons
+            productLoading={productLoading}
+            itemQty={itemQty}
+            setItemQty={setItemQty}
+            itemOutOfStock={itemOutOfStock}
+            addDetailsToCart={addDetailsToCart}
+            product={product}
+            customizationPrices={customizationPrices}
+          />
+        </View>
       </RBSheet>
       {/*@ts-ignore*/}
       <RBSheet
         ref={quantitySheet}
-        height={screenHeight - 150}
-        closeOnDragDown={true}
-        closeOnPressBack={true}
-        closeOnPressMask={true}
+        height={screenHeight}
         customStyles={{
           container: styles.rbSheet,
-          draggableIcon: styles.draggableIcon,
+          wrapper: styles.wrapper,
         }}>
-        <View style={styles.header}>
-          <Text
-            variant={'titleSmall'}
-            style={styles.title}
-            ellipsizeMode={'tail'}>
-            Customizations for $
-            {cartItemDetails?.items[0]?.item?.product?.descriptor?.name}
-          </Text>
-          <IconButton icon={'close'} onPress={hideQuantitySheet} />
+        <View style={styles.closeSheet}>
+          <TouchableOpacity onPress={hideQuantitySheet}>
+            <Icon name={'close-circle'} color={theme.colors.error} size={32} />
+          </TouchableOpacity>
         </View>
-        <ScrollView style={styles.customizationContainer}>
-          {cartItemDetails?.items?.map((item: any) => (
-            <View key={item?._id} style={styles.cartItem}>
-              <View style={styles.productMeta}>
-                <Text variant={'bodyMedium'}>
-                  {item?.item?.product?.descriptor?.name}
-                </Text>
-                <Customizations cartItem={item} />
-                <Text variant="titleSmall" style={styles.cartQuantity}>
-                  ₹{' '}
-                  {item.item.hasCustomisations
-                    ? Number(getPriceWithCustomisations(item)) *
-                      Number(item?.item?.quantity?.count)
-                    : Number(item?.item?.product?.subtotal)}
-                </Text>
+        <View style={styles.sheetContainer}>
+          <View style={styles.header}>
+            <Text
+              variant={'titleSmall'}
+              style={styles.title}
+              ellipsizeMode={'tail'}>
+              Customizations for $
+              {cartItemDetails?.items[0]?.item?.product?.descriptor?.name}
+            </Text>
+            <IconButton icon={'close'} onPress={hideQuantitySheet} />
+          </View>
+          <ScrollView style={styles.customizationContainer}>
+            {cartItemDetails?.items?.map((item: any) => (
+              <View key={item?._id} style={styles.cartItem}>
+                <View style={styles.productMeta}>
+                  <Text variant={'bodyMedium'}>
+                    {item?.item?.product?.descriptor?.name}
+                  </Text>
+                  <Customizations cartItem={item} />
+                  <Text variant="titleSmall" style={styles.cartQuantity}>
+                    ₹{' '}
+                    {item.item.hasCustomisations
+                      ? Number(getPriceWithCustomisations(item)) *
+                        Number(item?.item?.quantity?.count)
+                      : Number(item?.item?.product?.subtotal)}
+                  </Text>
+                </View>
+                <ManageQuantity
+                  allowDelete
+                  cartItem={item}
+                  updatingCartItem={updatingCartItem ?? itemToDelete}
+                  deleteCartItem={deleteCartItem}
+                  updateCartItem={updateSpecificItem}
+                />
               </View>
-              <ManageQuantity
-                allowDelete
-                cartItem={item}
-                updatingCartItem={updatingCartItem ?? itemToDelete}
-                deleteCartItem={deleteCartItem}
-                updateCartItem={updateSpecificItem}
-              />
-            </View>
-          ))}
-        </ScrollView>
-        <View style={styles.addNewCustomizationButton}>
-          <Button onPress={addNewCustomization}>Add new customization</Button>
+            ))}
+          </ScrollView>
+          <View style={styles.addNewCustomizationButton}>
+            <Button onPress={addNewCustomization}>Add new customization</Button>
+          </View>
         </View>
       </RBSheet>
       {/*@ts-ignore*/}
       <RBSheet
-        closeOnDragDown={true}
-        closeOnPressBack={true}
-        closeOnPressMask={true}
         ref={productDetailsSheet}
-        height={screenHeight - 150}
+        height={screenHeight}
         customStyles={{
           container: styles.rbSheet,
-          draggableIcon: styles.draggableIcon,
+          wrapper: styles.wrapper,
         }}>
-        <View style={styles.productDetails}>
-          <ScrollView style={styles.productDetails}>
-            <FBProductDetails product={productDetails}>
-              {inStock ? (
-                <>
-                  <FBProductCustomization
-                    hideProductDetails
-                    product={productDetails}
-                    customizationState={customizationState}
-                    setCustomizationState={setCustomizationState}
-                    setItemOutOfStock={setItemOutOfStock}
-                  />
-                </>
-              ) : (
-                <></>
-              )}
-            </FBProductDetails>
-          </ScrollView>
-          {inStock ? (
-            <CustomizationFooterButtons
-              productLoading={productLoading}
-              itemQty={itemQty}
-              setItemQty={setItemQty}
-              itemOutOfStock={itemOutOfStock}
-              addDetailsToCart={addDetailsToCart}
-              product={product}
-              customizationPrices={customizationPrices}
-            />
-          ) : (
-            <View style={styles.outOfStockContainer}>
-              <View
-                style={[
-                  globalStyles.disabledOutlineButton,
-                  styles.outOfStockButton,
-                ]}>
-                <Text
-                  variant={'labelSmall'}
+        <View style={styles.closeSheet}>
+          <TouchableOpacity onPress={hideProductDetails}>
+            <Icon name={'close-circle'} color={theme.colors.error} size={32} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.sheetContainer}>
+          <View style={styles.productDetails}>
+            <ScrollView style={styles.productDetails}>
+              <FBProductDetails product={productDetails}>
+                {inStock ? (
+                  <>
+                    <FBProductCustomization
+                      hideProductDetails
+                      product={productDetails}
+                      customizationState={customizationState}
+                      setCustomizationState={setCustomizationState}
+                      setItemOutOfStock={setItemOutOfStock}
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
+              </FBProductDetails>
+            </ScrollView>
+            {inStock ? (
+              <CustomizationFooterButtons
+                productLoading={productLoading}
+                itemQty={itemQty}
+                setItemQty={setItemQty}
+                itemOutOfStock={itemOutOfStock}
+                addDetailsToCart={addDetailsToCart}
+                product={product}
+                customizationPrices={customizationPrices}
+              />
+            ) : (
+              <View style={styles.outOfStockContainer}>
+                <View
                   style={[
-                    globalStyles.disabledOutlineButtonText,
-                    styles.outOfStock,
+                    globalStyles.disabledOutlineButton,
+                    styles.outOfStockButton,
                   ]}>
-                  Out of stock
-                </Text>
+                  <Text
+                    variant={'labelSmall'}
+                    style={[
+                      globalStyles.disabledOutlineButtonText,
+                      styles.outOfStock,
+                    ]}>
+                    Out of stock
+                  </Text>
+                </View>
               </View>
-            </View>
-          )}
+            )}
+          </View>
         </View>
       </RBSheet>
     </>
@@ -652,7 +665,15 @@ const makeStyles = (colors: any) =>
       textAlign: 'center',
       color: '#979797',
     },
-    rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
+    rbSheet: {
+      backgroundColor: 'rgba(47, 47, 47, 0.75)',
+    },
+    sheetContainer: {
+      borderTopLeftRadius: 15,
+      borderTopRightRadius: 15,
+      backgroundColor: '#FFF',
+      height: screenHeight - 130,
+    },
     header: {
       paddingHorizontal: 16,
       paddingVertical: 8,
@@ -738,6 +759,15 @@ const makeStyles = (colors: any) =>
     },
     draggableIcon: {
       backgroundColor: '#000',
+    },
+    closeSheet: {
+      backgroundColor: 'rgba(47, 47, 47, 0.75)',
+      alignItems: 'center',
+      paddingBottom: 8,
+      paddingTop: 20,
+    },
+    wrapper: {
+      backgroundColor: 'rgba(47, 47, 47, 0.75)',
     },
   });
 

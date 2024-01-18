@@ -9,7 +9,10 @@ interface ProductImages {
   roundedCorner?: boolean;
 }
 
-const ProductImages: React.FC<ProductImages> = ({images, roundedCorner = false}) => {
+const ProductImages: React.FC<ProductImages> = ({
+  images,
+  roundedCorner = false,
+}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 

@@ -1,4 +1,4 @@
-import {ActivityIndicator, Button, useTheme} from 'react-native-paper';
+import {ActivityIndicator, Button, Text, useTheme} from 'react-native-paper';
 import React, {useRef} from 'react';
 import axios from 'axios';
 import {useSelector} from 'react-redux';
@@ -8,6 +8,8 @@ import {API_BASE_URL, ORDER_STATUS} from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
+import {StyleSheet, TouchableOpacity} from 'react-native';
+import {makeButtonStyles} from './buttonStyles';
 
 interface GetStatusButton {
   orderDetails: any;
@@ -30,6 +32,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({
   const statusEventSourceResponseRef = useRef<any>(null);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const theme = useTheme();
+  const styles = makeButtonStyles(theme.colors);
 
   // use this api to get updated status of the order
   const handleFetchUpdatedStatus = async () => {
@@ -131,19 +134,19 @@ const GetStatusButton: React.FC<GetStatusButton> = ({
   };
 
   return (
-    <Button
-      mode="outlined"
+    <TouchableOpacity
+      style={styles.container}
       disabled={statusLoading}
-      icon={() =>
-        statusLoading ? (
-          <ActivityIndicator size={14} color={theme.colors.primary} />
-        ) : (
-          <></>
-        )
-      }
       onPress={handleFetchUpdatedStatus}>
-      Get Status
-    </Button>
+      {statusLoading ? (
+        <ActivityIndicator size={14} color={theme.colors.primary} />
+      ) : (
+        <></>
+      )}
+      <Text variant={'bodyMedium'} style={styles.label}>
+        Get Status
+      </Text>
+    </TouchableOpacity>
   );
 };
 

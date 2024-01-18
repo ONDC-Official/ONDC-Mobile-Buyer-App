@@ -73,7 +73,9 @@ const OrderHeader: React.FC<Order> = ({order}) => {
         </View>
         <TouchableOpacity
           style={styles.detailsButton}
-          onPress={() => navigation.navigate('OrderDetails', {orderId: order.id})}>
+          onPress={() =>
+            navigation.navigate('OrderDetails', {orderId: order.id})
+          }>
           <Text style={styles.detailsLabel} variant={'labelMedium'}>
             Order Details
           </Text>

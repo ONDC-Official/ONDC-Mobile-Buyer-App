@@ -412,6 +412,7 @@ const Actions: React.FC<Actions> = ({
             setStatusLoading={setStatusLoading}
             onUpdateOrder={onUpdateOrder}
           />
+          <View style={styles.buttonSeparator} />
           <TrackOrderButton
             orderDetails={orderDetails}
             trackOrderLoading={trackOrderLoading}
@@ -419,18 +420,18 @@ const Actions: React.FC<Actions> = ({
             setTrackOrderLoading={setTrackOrderLoading}
             onUpdateTrackingDetails={onUpdateTrackingDetails}
           />
-          {(orderDetails?.state === 'Accepted' ||
-            orderDetails?.state === 'Created') && (
-            <Button
-              buttonColor={theme.colors.error}
-              mode="contained"
-              onPress={() => setShowCancelOrderModal(true)}
-              disabled={
-                allNonCancellable || statusLoading || trackOrderLoading
-              }>
-              Cancel Order
-            </Button>
-          )}
+          {/*{(orderDetails?.state === 'Accepted' ||*/}
+          {/*  orderDetails?.state === 'Created') && (*/}
+          {/*  <Button*/}
+          {/*    buttonColor={theme.colors.error}*/}
+          {/*    mode="contained"*/}
+          {/*    onPress={() => setShowCancelOrderModal(true)}*/}
+          {/*    disabled={*/}
+          {/*      allNonCancellable || statusLoading || trackOrderLoading*/}
+          {/*    }>*/}
+          {/*    Cancel Order*/}
+          {/*  </Button>*/}
+          {/*)}*/}
         </View>
       )}
     </>
@@ -443,7 +444,12 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      marginTop: 20,
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+      backgroundColor: '#ECF3F8',
+    },
+    buttonSeparator: {
+      width: 15,
     },
   });
 

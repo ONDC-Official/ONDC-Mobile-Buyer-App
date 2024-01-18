@@ -72,8 +72,7 @@ const AddressList: React.FC<AddressList> = ({
 
   useEffect(() => {
     if (isFocused) {
-      getAddressList().then(() => {
-      });
+      getAddressList().then(() => {});
     }
   }, [isFocused]);
 

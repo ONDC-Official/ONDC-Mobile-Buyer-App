@@ -1,15 +1,16 @@
-import {ActivityIndicator, Button, useTheme} from 'react-native-paper';
+import {ActivityIndicator, Button, Text, useTheme} from 'react-native-paper';
 import React, {useRef} from 'react';
 import {API_BASE_URL, TRACK_ORDER} from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
 import axios from 'axios';
 import {useSelector} from 'react-redux';
-import {Linking} from 'react-native';
+import {Linking, TouchableOpacity} from 'react-native';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
 
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
+import {makeButtonStyles} from './buttonStyles';
 
 interface TrackOrderButton {
   orderDetails: any;
@@ -28,12 +29,13 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
   setTrackOrderLoading,
   onUpdateTrackingDetails,
 }) => {
+  const theme = useTheme();
+  const styles = makeButtonStyles(theme.colors);
   const trackEventSourceResponseRef = useRef<any>(null);
   const {token} = useSelector(({authReducer}) => authReducer);
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
-  const theme = useTheme();
 
   // TRACK APIS
   // use this api to track and order
@@ -157,19 +159,19 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
   };
 
   return (
-    <Button
-      mode="outlined"
+    <TouchableOpacity
+      style={styles.container}
       disabled={trackOrderLoading || statusLoading}
-      icon={() =>
-        trackOrderLoading ? (
-          <ActivityIndicator size={14} color={theme.colors.primary} />
-        ) : (
-          <></>
-        )
-      }
       onPress={handleFetchTrackOrderDetails}>
-      Track
-    </Button>
+      {trackOrderLoading ? (
+        <ActivityIndicator size={14} color={theme.colors.primary} />
+      ) : (
+        <></>
+      )}
+      <Text variant={'bodyMedium'} style={styles.label}>
+        Track
+      </Text>
+    </TouchableOpacity>
   );
 };
 export default TrackOrderButton;
