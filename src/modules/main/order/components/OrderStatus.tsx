@@ -1,6 +1,6 @@
 import React from 'react';
-import {Chip, useTheme} from 'react-native-paper';
-import {StyleSheet} from 'react-native';
+import {Chip, Text, useTheme} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
 
 interface OrderStatus {
   status: string;
@@ -13,66 +13,81 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
   switch (status) {
     case 'Created':
       return (
-        <Chip
-          mode="flat"
-          selectedColor={theme.colors.primary}
-          style={styles.created}>
-          {status}
-        </Chip>
+        <View style={styles.created}>
+          <Text variant={'labelMedium'} style={styles.createdLabel}>
+            {status}
+          </Text>
+        </View>
       );
 
     case 'Shipped':
     case 'Updated':
       return (
-        <Chip
-          mode="flat"
-          selectedColor={theme.colors.primary}
-          style={styles.shipped}>
-          {status}
-        </Chip>
+        <View style={styles.shipped}>
+          <Text variant={'labelMedium'} style={styles.createdLabel}>
+            {status}
+          </Text>
+        </View>
       );
 
     case 'Delivered':
     case 'Active':
     case 'Completed':
       return (
-        <Chip
-          mode="flat"
-          selectedColor={theme.colors.surface}
-          style={styles.completed}>
-          {status}
-        </Chip>
+        <View style={styles.completed}>
+          <Text variant={'labelMedium'} style={styles.createdLabel}>
+            {status}
+          </Text>
+        </View>
       );
 
     case 'Returned':
     case 'Cancelled':
       return (
-        <Chip
-          mode="flat"
-          selectedColor={theme.colors.primary}
-          style={styles.cancelled}>
-          {status}
-        </Chip>
+        <View style={styles.cancelled}>
+          <Text variant={'labelMedium'} style={styles.createdLabel}>
+            {status}
+          </Text>
+        </View>
       );
 
     default:
       return (
-        <Chip
-          mode="flat"
-          selectedColor={theme.colors.primary}
-          style={styles.created}>
-          {status}
-        </Chip>
+        <View style={styles.created}>
+          <Text variant={'labelMedium'} style={styles.createdLabel}>
+            {status}
+          </Text>
+        </View>
       );
   }
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    created: {backgroundColor: colors.statusBackground},
-    shipped: {backgroundColor: colors.shippedBackground},
-    completed: {backgroundColor: colors.deliveredBackground},
-    cancelled: {backgroundColor: colors.cancelledBackground},
+    created: {
+      backgroundColor: colors.statusBackground,
+      paddingVertical: 4,
+      paddingHorizontal: 12,
+    },
+    shipped: {
+      backgroundColor: colors.shippedBackground,
+      paddingVertical: 4,
+      paddingHorizontal: 12,
+    },
+    completed: {
+      backgroundColor: colors.deliveredBackground,
+      paddingVertical: 4,
+      paddingHorizontal: 12,
+    },
+    cancelled: {
+      backgroundColor: colors.cancelledBackground,
+      paddingVertical: 4,
+      paddingHorizontal: 12,
+    },
+    createdLabel: {
+      color: colors.primary,
+      fontWeight: '600',
+    },
   });
 
 export default OrderStatus;

@@ -6,6 +6,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import FastImage from 'react-native-fast-image';
 import {Text, useTheme} from 'react-native-paper';
 import OrderStatus from './OrderStatus';
+import Icon from "react-native-vector-icons/FontAwesome";
 
 interface Order {
   order: any;
@@ -29,59 +30,38 @@ const OrderHeader: React.FC<Order> = ({order}) => {
     : order.state;
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate('OrderDetails', {orderId: order.id})}>
       <View style={styles.header}>
-        <View>
-          <Text variant={'labelSmall'} style={styles.orderNumberLabel}>
-            Order Number
-          </Text>
-          <Text variant={'labelSmall'} style={styles.orderNumber}>
-            {order.id}
+        <FastImage
+          source={{uri: order?.provider?.descriptor?.symbol}}
+          style={styles.providerImage}
+        />
+        <View style={styles.providerNameContainer}>
+          <Text variant={'bodyMedium'}>
+            {order?.provider?.descriptor?.name}
           </Text>
         </View>
         <View>{order.state && <OrderStatus status={order.state} />}</View>
       </View>
-      <View style={styles.orderDateContainer}>
-        <Text variant={'labelSmall'} style={styles.orderOn}>
-          Order On:&nbsp;
-        </Text>
-        <Text variant={'labelSmall'} style={styles.orderDate}>
-          {moment(order.createdAt).format('Do MMMM YYYY')}
-        </Text>
-      </View>
-      <View style={styles.row}>
-        <View style={styles.imagesRow}>
-          {order?.items?.map((item: any) => {
-            const type = item?.tags?.find((one: any) => one.code === 'type');
-            const isItem =
-              type?.list?.findIndex(
-                (one: any) => one.value === 'item' && one.code === 'type',
-              ) > -1;
-            if (isItem) {
-              return (
-                <View style={styles.imageContainer} key={item?.id}>
-                  <FastImage
-                    source={{uri: item?.product?.descriptor?.symbol}}
-                    style={styles.image}
-                  />
-                </View>
-              );
-            } else {
-              return <View key={item?.id} />;
-            }
-          })}
-        </View>
-        <TouchableOpacity
-          style={styles.detailsButton}
-          onPress={() =>
-            navigation.navigate('OrderDetails', {orderId: order.id})
-          }>
-          <Text style={styles.detailsLabel} variant={'labelMedium'}>
-            Order Details
+      <View style={styles.orderDetails}>
+        {order?.items?.map((item: any) => (
+          <Text variant={'labelMedium'} style={styles.item}>
+            {item?.quantity?.count} x {item?.product?.descriptor?.name}
           </Text>
-        </TouchableOpacity>
+        ))}
+        <View style={styles.paymentDetails}>
+          <Text style={styles.date} variant={'labelMedium'}>
+            {moment(order?.createdAt).format('DD MMM YYYY hh:mm a')}
+          </Text>
+          <Text style={styles.amount} variant={'labelMedium'}>
+            {order?.payment?.params?.amount}
+            <Icon name={'chevron-right'} size={10} color={'#1A1A1A'} />
+          </Text>
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -91,56 +71,60 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       paddingHorizontal: 16,
+      marginBottom: 16,
     },
     header: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      backgroundColor: '#ECF3F8',
+      padding: 12,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
+    },
+    providerImage: {
+      width: 32,
+      height: 32,
+    },
+    providerNameContainer: {
+      flex: 1,
+      paddingHorizontal: 8,
+    },
+    item: {
+      color: '#686868',
+      marginBottom: 8,
     },
     row: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'flex-end',
     },
-    orderNumberLabel: {
-      color: '#5F5F5F',
+    orderDetails: {
+      paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderLeftColor: '#E8E8E8',
+      borderRightColor: '#E8E8E8',
+      borderBottomColor: '#E8E8E8',
+      borderLeftWidth: 1,
+      borderRightWidth: 1,
+      borderBottomLeftRadius: 12,
+      borderBottomRightRadius: 12,
+      paddingHorizontal: 16,
     },
-    orderNumber: {
-      color: '#222',
-    },
-    orderOn: {
-      color: '#686868',
-    },
-    orderDateContainer: {
-      marginVertical: 12,
+    paymentDetails: {
+      borderTopWidth: 1,
+      borderColor: '#E8E8E8',
+      paddingTop: 10,
+      justifyContent: 'space-between',
+      alignItems: 'center',
       flexDirection: 'row',
     },
-    orderDate: {
-      color: '#151515',
+    date: {
+      color: '#1A1A1A',
     },
-    imagesRow: {
-      flexDirection: 'row',
-    },
-    imageContainer: {
-      padding: 10,
-      borderRadius: 8,
-      width: 50,
-      height: 50,
-      marginRight: 8,
-      backgroundColor: '#ECECEC',
-    },
-    image: {
-      width: 30,
-      height: 30,
-    },
-    detailsButton: {
-      paddingVertical: 7,
-      paddingHorizontal: 8,
-      borderColor: colors.primary,
-      borderRadius: 8,
-      borderWidth: 1,
-    },
-    detailsLabel: {
-      color: colors.primary,
+    amount: {
+      color: '#1A1A1A',
+      fontWeight: '700',
+      alignItems: 'center',
     },
   });
