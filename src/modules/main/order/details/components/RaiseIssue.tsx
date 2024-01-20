@@ -1,8 +1,8 @@
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import React from 'react';
-import RaiseComplaint from '../../../../../assets/raise_complaint.svg';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import RaiseComplaint from '../../../../../assets/raise_complaint.svg';
 
 const RaiseIssue = () => {
   const theme = useTheme();

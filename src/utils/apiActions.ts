@@ -31,3 +31,5 @@ export const EVENTS: string = '/clientApis/events/v2?messageId=';
 export const INITIALIZE_ORDER: string = '/clientApis/v2/initialize_order';
 export const ON_INITIALIZE: string =
   '/clientApis/v2/on_initialize_order?messageIds=';
+
+export const CANCEL_ORDER: string = '/clientApis/v2/cancel_order';

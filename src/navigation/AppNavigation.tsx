@@ -18,6 +18,7 @@ import BrandDetails from '../modules/main/provider/BrandDetails';
 import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
 import Outlets from '../modules/main/provider/Outlets';
 import Orders from '../modules/main/order/list/Orders';
+import CancelOrder from '../modules/main/order/details/CancelOrder';
 
 const Stack = createStackNavigator();
 
@@ -139,6 +140,11 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="SubCategoryDetails"
           component={SubCategoryDetails}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CancelOrder"
+          component={CancelOrder}
           options={{headerShown: false}}
         />
         <Stack.Screen

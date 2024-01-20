@@ -4,6 +4,7 @@ import {IconButton, Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import moment from 'moment';
+import {useDispatch, useSelector} from 'react-redux';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
@@ -13,6 +14,8 @@ import ShippingDetails from './components/ShippingDetails';
 import ItemDetails from './components/ItemDetails';
 import PaymentMethod from './components/PaymentMethod';
 import RaiseIssue from './components/RaiseIssue';
+import {updateOrderDetails} from '../../../../redux/order/actions';
+import CancelOrderButton from './components/CancelOrderButton';
 
 const CancelToken = axios.CancelToken;
 
@@ -33,11 +36,12 @@ const OrderDetails = ({
   route: any;
   navigation: any;
 }) => {
+  const dispatch = useDispatch();
   const source = useRef<any>(null);
   const {colors} = useTheme();
   const styles = makeStyles(colors);
   const {getDataWithAuth} = useNetworkHandling();
-  const [orderDetails, setOrderDetails] = useState<any>(null);
+  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
   const [trackingDetails, setTrackingDetails] = useState<any>(null);
   const [apiInProgress, setApiInProgress] = useState<boolean>(true);
 
@@ -49,7 +53,7 @@ const OrderDetails = ({
         `${API_BASE_URL}${ORDERS}/${params.orderId}`,
         source.current.token,
       );
-      setOrderDetails(data[0]);
+      dispatch(updateOrderDetails(data[0]));
     } catch (err: any) {
       showToastWithGravity(err?.response?.data?.error?.message);
     } finally {
@@ -106,7 +110,6 @@ const OrderDetails = ({
       </View>
       <ScrollView style={styles.pageContainer}>
         <Actions
-          orderDetails={orderDetails}
           onUpdateOrder={getOrderDetails}
           onUpdateTrackingDetails={setTrackingDetails}
         />
@@ -116,8 +119,12 @@ const OrderDetails = ({
           items={orderDetails?.items}
           provider={orderDetails?.provider}
         />
-        <PaymentMethod payment={orderDetails?.payment} />
+        <PaymentMethod
+          payment={orderDetails?.payment}
+          billing={orderDetails?.billing}
+        />
         <RaiseIssue />
+        <CancelOrderButton />
       </ScrollView>
     </View>
   );

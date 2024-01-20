@@ -1,29 +1,28 @@
 import {ActivityIndicator, Button, useTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
+import {useSelector} from 'react-redux';
 import {
   isItemCustomization,
   showToastWithGravity,
 } from '../../../../../utils/utils';
-import axios from 'axios';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import GetStatusButton from './GetStatusButton';
 import TrackOrderButton from './TrackOrderButton';
 
 interface Actions {
-  orderDetails: any;
   onUpdateOrder: (value: any) => void;
   onUpdateTrackingDetails: (value: any) => void;
 }
 
-const CancelToken = axios.CancelToken;
 const Actions: React.FC<Actions> = ({
-  orderDetails,
   onUpdateOrder,
   onUpdateTrackingDetails,
 }) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+
   const [statusLoading, setStatusLoading] = useState<boolean>(false);
   const [isIssueRaised, setIsIssueRaised] = useState<boolean>(false);
   const [issueLoading, setIssueLoading] = useState<boolean>(false);
@@ -406,32 +405,9 @@ const Actions: React.FC<Actions> = ({
         </View>
       ) : (
         <View style={styles.buttonContainer}>
-          <GetStatusButton
-            orderDetails={orderDetails}
-            statusLoading={statusLoading}
-            setStatusLoading={setStatusLoading}
-            onUpdateOrder={onUpdateOrder}
-          />
+          <GetStatusButton onUpdateOrder={onUpdateOrder} />
           <View style={styles.buttonSeparator} />
-          <TrackOrderButton
-            orderDetails={orderDetails}
-            trackOrderLoading={trackOrderLoading}
-            statusLoading={statusLoading}
-            setTrackOrderLoading={setTrackOrderLoading}
-            onUpdateTrackingDetails={onUpdateTrackingDetails}
-          />
-          {/*{(orderDetails?.state === 'Accepted' ||*/}
-          {/*  orderDetails?.state === 'Created') && (*/}
-          {/*  <Button*/}
-          {/*    buttonColor={theme.colors.error}*/}
-          {/*    mode="contained"*/}
-          {/*    onPress={() => setShowCancelOrderModal(true)}*/}
-          {/*    disabled={*/}
-          {/*      allNonCancellable || statusLoading || trackOrderLoading*/}
-          {/*    }>*/}
-          {/*    Cancel Order*/}
-          {/*  </Button>*/}
-          {/*)}*/}
+          <TrackOrderButton onUpdateTrackingDetails={onUpdateTrackingDetails} />
         </View>
       )}
     </>

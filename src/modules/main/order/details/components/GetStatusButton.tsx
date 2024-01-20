@@ -1,31 +1,28 @@
-import {ActivityIndicator, Button, Text, useTheme} from 'react-native-paper';
+import {ActivityIndicator, Text, useTheme} from 'react-native-paper';
 import React, {useRef} from 'react';
+import {TouchableOpacity} from 'react-native';
 import axios from 'axios';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
 import {API_BASE_URL, ORDER_STATUS} from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
-import {StyleSheet, TouchableOpacity} from 'react-native';
 import {makeButtonStyles} from './buttonStyles';
+import {updateRequestingStatus} from '../../../../../redux/order/actions';
 
 interface GetStatusButton {
-  orderDetails: any;
-  statusLoading: boolean;
-  setStatusLoading: (value: boolean) => void;
   onUpdateOrder: (value: any) => void;
 }
 
 const CancelToken = axios.CancelToken;
 
-const GetStatusButton: React.FC<GetStatusButton> = ({
-  orderDetails,
-  statusLoading,
-  setStatusLoading,
-  onUpdateOrder,
-}) => {
+const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
+  const dispatch = useDispatch();
+  const {orderDetails, requestingStatus} = useSelector(
+    ({orderReducer}) => orderReducer,
+  );
   const {token} = useSelector(({authReducer}) => authReducer);
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
@@ -37,7 +34,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({
   // use this api to get updated status of the order
   const handleFetchUpdatedStatus = async () => {
     statusEventSourceResponseRef.current = [];
-    setStatusLoading(true);
+    dispatch(updateRequestingStatus(true));
     source.current = CancelToken.source();
     const transaction_id = orderDetails?.transactionId;
     const bpp_id = orderDetails?.bppId;
@@ -60,14 +57,15 @@ const GetStatusButton: React.FC<GetStatusButton> = ({
       );
       //Error handling workflow eg, NACK
       if (data[0].error && data[0].message.ack.status === 'NACK') {
-        setStatusLoading(false);
+        dispatch(updateRequestingStatus(false));
         showToastWithGravity(data[0].error.message);
       } else {
         fetchStatusDataThroughEvents(data[0]?.context?.message_id);
       }
     } catch (err: any) {
-      setStatusLoading(false);
       showToastWithGravity(err?.message);
+    } finally {
+      dispatch(updateRequestingStatus(false));
     }
   };
 
@@ -85,16 +83,16 @@ const GetStatusButton: React.FC<GetStatusButton> = ({
       const {message, error = {}} = data[0];
       if (error?.message) {
         showToastWithGravity('Cannot get status for this product');
-        setStatusLoading(false);
+        dispatch(updateRequestingStatus(false));
         return;
       }
       if (message?.order) {
         onUpdateOrder(message?.order);
         showToastWithGravity('Order status updated successfully!');
       }
-      setStatusLoading(false);
+      dispatch(updateRequestingStatus(false));
     } catch (err: any) {
-      setStatusLoading(false);
+      dispatch(updateRequestingStatus(false));
       showToastWithGravity(err?.message);
       eventTimeOutRef.current.eventSource.close();
       clearTimeout(eventTimeOutRef.current.timer);
@@ -123,7 +121,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({
         showToastWithGravity(
           'Cannot proceed with you request now! Please try again',
         );
-        setStatusLoading(false);
+        dispatch(updateRequestingStatus(false));
       }
     }, SSE_TIMEOUT);
 
@@ -136,9 +134,9 @@ const GetStatusButton: React.FC<GetStatusButton> = ({
   return (
     <TouchableOpacity
       style={styles.container}
-      disabled={statusLoading}
+      disabled={requestingStatus}
       onPress={handleFetchUpdatedStatus}>
-      {statusLoading ? (
+      {requestingStatus ? (
         <ActivityIndicator size={14} color={theme.colors.primary} />
       ) : (
         <></>

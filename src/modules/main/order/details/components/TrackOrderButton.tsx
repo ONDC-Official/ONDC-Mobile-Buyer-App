@@ -1,9 +1,9 @@
-import {ActivityIndicator, Button, Text, useTheme} from 'react-native-paper';
+import {ActivityIndicator, Text, useTheme} from 'react-native-paper';
 import React, {useRef} from 'react';
 import {API_BASE_URL, TRACK_ORDER} from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
 import axios from 'axios';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {Linking, TouchableOpacity} from 'react-native';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
@@ -11,26 +11,23 @@ import RNEventSource from 'react-native-event-source';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {makeButtonStyles} from './buttonStyles';
+import {updateRequestingTracker} from '../../../../../redux/order/actions';
 
 interface TrackOrderButton {
-  orderDetails: any;
-  trackOrderLoading: boolean;
-  statusLoading: boolean;
-  setTrackOrderLoading: (value: boolean) => void;
   onUpdateTrackingDetails: (value: any) => void;
 }
 
 const CancelToken = axios.CancelToken;
 
 const TrackOrderButton: React.FC<TrackOrderButton> = ({
-  orderDetails,
-  trackOrderLoading,
-  statusLoading,
-  setTrackOrderLoading,
   onUpdateTrackingDetails,
 }) => {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const styles = makeButtonStyles(theme.colors);
+  const {orderDetails, requestingStatus, requestingTracker} = useSelector(
+    ({orderReducer}) => orderReducer,
+  );
   const trackEventSourceResponseRef = useRef<any>(null);
   const {token} = useSelector(({authReducer}) => authReducer);
   const source = useRef<any>(null);
@@ -41,7 +38,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
   // use this api to track and order
   const handleFetchTrackOrderDetails = async () => {
     trackEventSourceResponseRef.current = [];
-    setTrackOrderLoading(true);
+    dispatch(updateRequestingTracker(true));
     const transaction_id = orderDetails?.transactionId;
     const bpp_id = orderDetails?.bppId;
     const order_id = orderDetails?.id;
@@ -64,7 +61,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
       );
       fetchTrackingDataThroughEvents(data[0]?.context?.message_id);
     } catch (err: any) {
-      setTrackOrderLoading(false);
+      dispatch(updateRequestingTracker(false));
       showToastWithGravity(err?.message);
     }
   };
@@ -90,7 +87,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
         showToastWithGravity(
           'Cannot proceed with you request now! Please try again',
         );
-        setTrackOrderLoading(false);
+        dispatch(updateRequestingTracker(false));
       }
     }, SSE_TIMEOUT);
 
@@ -108,7 +105,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
         `${API_BASE_URL}/clientApis/v2/on_track?messageIds=${messageId}`,
         source.current.token,
       );
-      setTrackOrderLoading(false);
+      dispatch(updateRequestingTracker(false));
       trackEventSourceResponseRef.current = [
         ...trackEventSourceResponseRef.current,
         data[0],
@@ -116,14 +113,14 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
       const {message} = data[0];
       if (message.tracking.status === 'active' && message.tracking.url === '') {
         onUpdateTrackingDetails(null);
-        setTrackOrderLoading(false);
+        dispatch(updateRequestingTracker(false));
         showToastWithGravity(
           'Tracking information is not provided by the provider.',
         );
         return;
       } else if (message?.tracking?.url === '') {
         onUpdateTrackingDetails(null);
-        setTrackOrderLoading(false);
+        dispatch(updateRequestingTracker(false));
         showToastWithGravity(
           'Tracking information not available for this product',
         );
@@ -137,19 +134,19 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
         message.tracking.status === 'active' &&
         (message?.tracking?.url !== '' || message?.tracking?.url !== undefined)
       ) {
-        setTrackOrderLoading(false);
+        dispatch(updateRequestingTracker(false));
         await Linking.openURL(message?.tracking?.url);
         onUpdateTrackingDetails(null);
       } else {
         onUpdateTrackingDetails(null);
-        setTrackOrderLoading(false);
+        dispatch(updateRequestingTracker(false));
         showToastWithGravity(
           'Tracking information is not provided by the provider.',
         );
         return;
       }
     } catch (err: any) {
-      setTrackOrderLoading(false);
+      dispatch(updateRequestingTracker(false));
       showToastWithGravity(err?.message);
       eventTimeOutRef.current.forEach((timeout: any) => {
         timeout.eventSource.close();
@@ -161,9 +158,9 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
   return (
     <TouchableOpacity
       style={styles.container}
-      disabled={trackOrderLoading || statusLoading}
+      disabled={requestingTracker || requestingStatus}
       onPress={handleFetchTrackOrderDetails}>
-      {trackOrderLoading ? (
+      {requestingTracker ? (
         <ActivityIndicator size={14} color={theme.colors.primary} />
       ) : (
         <></>
