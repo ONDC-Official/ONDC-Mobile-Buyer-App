@@ -1,9 +1,10 @@
 import {Chip, Text, useTheme} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import React from 'react';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useNavigation} from '@react-navigation/native';
 
 const ItemDetails = ({
   fulfillments,
@@ -12,13 +13,17 @@ const ItemDetails = ({
   fulfillments: any[];
   items: any[];
 }) => {
+  const navigation = useNavigation<any>();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
   return (
     <>
       {fulfillments.map(fulfillment => (
-        <View key={fulfillment.id} style={styles.container}>
+        <TouchableOpacity
+          key={fulfillment.id}
+          style={styles.container}
+          onPress={() => navigation.navigate('OrderProductDetails')}>
           <View style={styles.header}>
             <Text variant={'labelMedium'} style={styles.deliveryDate}>
               Order will be delivered by{' '}
@@ -26,7 +31,9 @@ const ItemDetails = ({
             </Text>
             <View style={styles.statusContainer}>
               <View style={styles.statusChip}>
-                <Text variant={'labelMedium'} style={styles.statusText}>{fulfillment?.state?.descriptor?.code}</Text>
+                <Text variant={'labelMedium'} style={styles.statusText}>
+                  {fulfillment?.state?.descriptor?.code}
+                </Text>
               </View>
               <Icon name={'chevron-right'} size={20} color={'#686868'} />
             </View>
@@ -68,7 +75,7 @@ const ItemDetails = ({
                 </View>
               ))}
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </>
   );

@@ -42,8 +42,15 @@ const ShippingDetails = ({orderDetails}: {orderDetails: any}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     shippingContainer: {
-      paddingTop: 24,
+      borderRadius: 8,
+      backgroundColor: '#FFF',
+      borderWidth: 1,
+      borderColor: '#E8E8E8',
+      marginHorizontal: 16,
       paddingHorizontal: 16,
+      paddingTop: 16,
+      marginTop: 24,
+      paddingBottom: 8,
     },
     shippingTitle: {
       marginBottom: 12,

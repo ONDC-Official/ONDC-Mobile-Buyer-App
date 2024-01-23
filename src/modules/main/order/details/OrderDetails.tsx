@@ -22,7 +22,6 @@ import PaymentMethod from './components/PaymentMethod';
 import RaiseIssue from './components/RaiseIssue';
 import {updateOrderDetails} from '../../../../redux/order/actions';
 import CancelOrderButton from './components/CancelOrderButton';
-import {theme} from '../../../../utils/theme';
 import DownloadIcon from '../../../../assets/download.svg';
 import ProviderDetails from './components/ProviderDetails';
 
@@ -92,61 +91,111 @@ const OrderDetails = ({
     return <Skeleton />;
   }
 
-  return (
-    <View style={styles.orderDetails}>
-      <View style={styles.header}>
-        <View style={styles.headerRow}>
-          <TouchableOpacity>
-            <Icon name={'arrow-back'} size={24} color={'#fff'} />
-          </TouchableOpacity>
-          <Text variant={'titleSmall'} style={styles.orderDetailsTitle}>
-            Order Details
-          </Text>
-          <View style={styles.empty} />
-        </View>
-        <Text variant={'titleMedium'} style={styles.orderStatus}>
-          Order {orderDetails?.state}
-        </Text>
-      </View>
-      <ScrollView style={styles.pageContainer}>
-        <Actions onUpdateOrder={getOrderDetails} />
-        <View style={styles.creationHeader}>
-          <SimpleLineIcons
-            name={'bag'}
-            color={theme.colors.primary}
-            size={24}
-          />
-          <Text variant={'bodyMedium'} style={styles.creationDate}>
-            Order placed on{' '}
-            {moment(orderDetails?.createdAt).format('DD MMM hh:mm a')}
-          </Text>
-        </View>
-        <View style={styles.orderIdContainer}>
-          <Text variant={'titleSmall'} style={styles.orderId}>
-            {orderDetails?.id}
-          </Text>
-          {!!orderDetails?.documents && (
-            <TouchableOpacity
-              onPress={() => Linking.openURL(orderDetails?.documents[0]?.url)}>
-              <DownloadIcon width={24} height={24} />
+  if (orderDetails?.state === 'Cancelled') {
+    return (
+      <View style={styles.orderDetails}>
+        <View style={styles.header}>
+          <View style={styles.headerRow}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name={'arrow-back'} size={24} color={'#fff'} />
             </TouchableOpacity>
-          )}
+            <Text variant={'titleSmall'} style={styles.orderDetailsTitle}>
+              Order Details
+            </Text>
+            <View style={styles.empty} />
+          </View>
+          <Text variant={'titleMedium'} style={styles.orderStatus}>
+            Order {orderDetails?.state}
+          </Text>
         </View>
-        <ProviderDetails provider={orderDetails?.provider} />
-        <ItemDetails
-          items={orderDetails?.items}
-          fulfillments={orderDetails?.fulfillments}
-        />
-        <PaymentMethod
-          payment={orderDetails?.payment}
-          address={orderDetails?.fulfillments[0]?.end?.location?.address}
-          contact={orderDetails?.fulfillments[0]?.end?.contact}
-        />
-        <RaiseIssue />
-        <CancelOrderButton />
-      </ScrollView>
-    </View>
-  );
+        <ScrollView style={styles.pageContainer}>
+          <Actions onUpdateOrder={getOrderDetails} />
+          <View style={styles.creationHeader}>
+            <SimpleLineIcons name={'bag'} color={colors.primary} size={24} />
+            <Text variant={'bodyMedium'} style={styles.creationDate}>
+              Order placed on{' '}
+              {moment(orderDetails?.createdAt).format('DD MMM hh:mm a')}
+            </Text>
+          </View>
+          <View style={styles.orderIdContainer}>
+            <Text variant={'titleSmall'} style={styles.orderId}>
+              {orderDetails?.id}
+            </Text>
+            {!!orderDetails?.documents && (
+              <TouchableOpacity
+                onPress={() => Linking.openURL(orderDetails?.documents[0]?.url)}>
+                <DownloadIcon width={24} height={24} />
+              </TouchableOpacity>
+            )}
+          </View>
+          <ProviderDetails provider={orderDetails?.provider} />
+          <ItemDetails
+            items={orderDetails?.items}
+            fulfillments={orderDetails?.fulfillments}
+          />
+          <PaymentMethod
+            payment={orderDetails?.payment}
+            address={orderDetails?.fulfillments[0]?.end?.location?.address}
+            contact={orderDetails?.fulfillments[0]?.end?.contact}
+          />
+          <RaiseIssue />
+          <CancelOrderButton />
+        </ScrollView>
+      </View>
+    );
+  } else {
+    return (
+      <View style={styles.orderDetails}>
+        <View style={styles.header}>
+          <View style={styles.headerRow}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon name={'arrow-back'} size={24} color={'#fff'} />
+            </TouchableOpacity>
+            <Text variant={'titleSmall'} style={styles.orderDetailsTitle}>
+              Order Details
+            </Text>
+            <View style={styles.empty} />
+          </View>
+          <Text variant={'titleMedium'} style={styles.orderStatus}>
+            Order {orderDetails?.state}
+          </Text>
+        </View>
+        <ScrollView style={styles.pageContainer}>
+          <Actions onUpdateOrder={getOrderDetails} />
+          <View style={styles.creationHeader}>
+            <SimpleLineIcons name={'bag'} color={colors.primary} size={24} />
+            <Text variant={'bodyMedium'} style={styles.creationDate}>
+              Order placed on{' '}
+              {moment(orderDetails?.createdAt).format('DD MMM hh:mm a')}
+            </Text>
+          </View>
+          <View style={styles.orderIdContainer}>
+            <Text variant={'titleSmall'} style={styles.orderId}>
+              {orderDetails?.id}
+            </Text>
+            {!!orderDetails?.documents && (
+              <TouchableOpacity
+                onPress={() => Linking.openURL(orderDetails?.documents[0]?.url)}>
+                <DownloadIcon width={24} height={24} />
+              </TouchableOpacity>
+            )}
+          </View>
+          <ProviderDetails provider={orderDetails?.provider} />
+          <ItemDetails
+            items={orderDetails?.items}
+            fulfillments={orderDetails?.fulfillments}
+          />
+          <PaymentMethod
+            payment={orderDetails?.payment}
+            address={orderDetails?.fulfillments[0]?.end?.location?.address}
+            contact={orderDetails?.fulfillments[0]?.end?.contact}
+          />
+          <RaiseIssue />
+          <CancelOrderButton />
+        </ScrollView>
+      </View>
+    );
+  }
 };
 
 const makeStyles = (colors: any) =>

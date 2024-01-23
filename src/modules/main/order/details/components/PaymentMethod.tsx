@@ -1,7 +1,8 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Divider, Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
+import {useNavigation} from '@react-navigation/native';
 
 const PaymentMethod = ({
   payment,
@@ -12,11 +13,14 @@ const PaymentMethod = ({
   address: any;
   contact: any;
 }) => {
+  const navigation = useNavigation<any>();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate('PaymentMethods')}>
       <Text variant={'titleSmall'} style={styles.title}>
         Payment Methods
       </Text>
@@ -39,7 +43,7 @@ const PaymentMethod = ({
         </Text>
         <Icon name={'chevron-right'} size={20} color={'#686868'} />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

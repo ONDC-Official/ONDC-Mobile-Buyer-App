@@ -19,6 +19,8 @@ import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
 import Outlets from '../modules/main/provider/Outlets';
 import Orders from '../modules/main/order/list/Orders';
 import CancelOrder from '../modules/main/order/details/CancelOrder';
+import PaymentMethods from "../modules/main/order/details/PaymentMethods";
+import OrderProductDetails from "../modules/main/order/details/OrderProductDetails";
 
 const Stack = createStackNavigator();
 
@@ -125,6 +127,12 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         />
 
         <Stack.Screen
+          name="OrderProductDetails"
+          component={OrderProductDetails}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
           name="ProductDetails"
           component={ProductDetails}
           options={{
@@ -145,6 +153,11 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="CancelOrder"
           component={CancelOrder}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PaymentMethods"
+          component={PaymentMethods}
           options={{headerShown: false}}
         />
         <Stack.Screen

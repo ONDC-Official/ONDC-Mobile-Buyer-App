@@ -96,7 +96,7 @@ export const theme = {
     text: '#333',
     shippedBackground: '#FFC132',
     deliveredBackground: '#2EB086',
-    cancelledBackground: '#FFE8E7',
+    cancelledBackground: '#FFEBEB',
     statusBackground: '#E9F1F8',
     success: '#419E6A',
     disabled: 'grey',

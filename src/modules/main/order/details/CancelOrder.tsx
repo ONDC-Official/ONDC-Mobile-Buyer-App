@@ -12,6 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useRef, useState} from 'react';
 import axios from 'axios';
+// @ts-ignore
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 import {CANCELLATION_REASONS, SSE_TIMEOUT} from '../../../../utils/constants';
@@ -154,7 +155,7 @@ const CancelOrder = ({
     <>
       <View style={styles.page}>
         <View style={styles.header}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon name={'clear'} color={'#1A1A1A'} size={20} />
           </TouchableOpacity>
           <Text variant={'titleSmall'} style={styles.pageTitle}>
