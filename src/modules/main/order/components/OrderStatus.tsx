@@ -1,5 +1,5 @@
 import React from 'react';
-import {Chip, Text, useTheme} from 'react-native-paper';
+import {Text, useTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 
 interface OrderStatus {

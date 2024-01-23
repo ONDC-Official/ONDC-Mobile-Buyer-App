@@ -91,7 +91,6 @@ export default (openFulfillmentSheet: () => void) => {
         `${API_BASE_URL}${CART}/${uid}`,
         source.current.token,
       );
-      console.log(JSON.stringify(data, undefined, 4));
       setCartItems(data);
       dispatch(updateCartItems(data));
       updatedCartItems.current = data;
@@ -108,14 +107,12 @@ export default (openFulfillmentSheet: () => void) => {
       providers.push(item.provider.local_id);
     });
     const ids = [...new Set(providers)];
-    console.log('providerIds', JSON.stringify(ids));
     await setStoredData('providerIds', JSON.stringify(ids));
     return ids;
   };
 
   const getQuote = async (items: any[]) => {
     const transactionId: any = uuid.v4();
-    console.log('transaction_id', transactionId);
     await setStoredData('transaction_id', transactionId);
     responseRef.current = [];
     if (address.current) {
@@ -160,7 +157,6 @@ export default (openFulfillmentSheet: () => void) => {
           [selectPayload],
           source.current.token,
         );
-        console.log('contextCity', contextCity);
         await setStoredData('contextCity', contextCity);
         //Error handling workflow eg, NACK
         const isNACK = data.find(

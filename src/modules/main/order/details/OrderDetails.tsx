@@ -1,7 +1,14 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Linking,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {IconButton, Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import axios from 'axios';
 import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,12 +17,14 @@ import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../utils/utils';
 import Actions from './components/Actions';
-import ShippingDetails from './components/ShippingDetails';
 import ItemDetails from './components/ItemDetails';
 import PaymentMethod from './components/PaymentMethod';
 import RaiseIssue from './components/RaiseIssue';
 import {updateOrderDetails} from '../../../../redux/order/actions';
 import CancelOrderButton from './components/CancelOrderButton';
+import {theme} from '../../../../utils/theme';
+import DownloadIcon from '../../../../assets/download.svg';
+import ProviderDetails from './components/ProviderDetails';
 
 const CancelToken = axios.CancelToken;
 
@@ -42,7 +51,6 @@ const OrderDetails = ({
   const styles = makeStyles(colors);
   const {getDataWithAuth} = useNetworkHandling();
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
-  const [trackingDetails, setTrackingDetails] = useState<any>(null);
   const [apiInProgress, setApiInProgress] = useState<boolean>(true);
 
   const getOrderDetails = async () => {
@@ -84,11 +92,6 @@ const OrderDetails = ({
     return <Skeleton />;
   }
 
-  const duration = moment.duration(
-    orderDetails?.fulfillments[0]['@ondc/org/TAT'],
-  );
-  const endTime = moment(orderDetails?.createdAt).add(duration);
-
   return (
     <View style={styles.orderDetails}>
       <View style={styles.header}>
@@ -104,24 +107,40 @@ const OrderDetails = ({
         <Text variant={'titleMedium'} style={styles.orderStatus}>
           Order {orderDetails?.state}
         </Text>
-        <Text variant={'bodySmall'} style={styles.fulfilmentDetails}>
-          Will be delivered in {endTime.fromNow()}
-        </Text>
       </View>
       <ScrollView style={styles.pageContainer}>
-        <Actions
-          onUpdateOrder={getOrderDetails}
-          onUpdateTrackingDetails={setTrackingDetails}
-        />
-        <ShippingDetails orderDetails={orderDetails} />
+        <Actions onUpdateOrder={getOrderDetails} />
+        <View style={styles.creationHeader}>
+          <SimpleLineIcons
+            name={'bag'}
+            color={theme.colors.primary}
+            size={24}
+          />
+          <Text variant={'bodyMedium'} style={styles.creationDate}>
+            Order placed on{' '}
+            {moment(orderDetails?.createdAt).format('DD MMM hh:mm a')}
+          </Text>
+        </View>
+        <View style={styles.orderIdContainer}>
+          <Text variant={'titleSmall'} style={styles.orderId}>
+            {orderDetails?.id}
+          </Text>
+          {!!orderDetails?.documents && (
+            <TouchableOpacity
+              onPress={() => Linking.openURL(orderDetails?.documents[0]?.url)}>
+              <DownloadIcon width={24} height={24} />
+            </TouchableOpacity>
+          )}
+        </View>
+        <ProviderDetails provider={orderDetails?.provider} />
         <ItemDetails
-          orderId={orderDetails?.id}
           items={orderDetails?.items}
-          provider={orderDetails?.provider}
+          fulfillments={orderDetails?.fulfillments}
         />
         <PaymentMethod
           payment={orderDetails?.payment}
-          billing={orderDetails?.billing}
+          address={orderDetails?.fulfillments[0]?.end?.location?.address}
+          contact={orderDetails?.fulfillments[0]?.end?.contact}
         />
         <RaiseIssue />
         <CancelOrderButton />
@@ -166,6 +185,24 @@ const makeStyles = (colors: any) =>
     pageContainer: {
       flex: 1,
       backgroundColor: '#FAFAFA',
+    },
+    creationHeader: {
+      flexDirection: 'row',
+      marginVertical: 22,
+      alignItems: 'center',
+      marginHorizontal: 16,
+    },
+    orderIdContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginHorizontal: 16,
+    },
+    orderId: {
+      color: '#686868',
+    },
+    creationDate: {
+      marginLeft: 8,
+      color: '#686868',
     },
     shippingContainer: {
       paddingTop: 24,

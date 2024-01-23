@@ -3,11 +3,18 @@ import {Divider, Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
 
-const PaymentMethod = ({payment, billing}: {payment: any; billing: any}) => {
+const PaymentMethod = ({
+  payment,
+  address,
+  contact,
+}: {
+  payment: any;
+  address: any;
+  contact: any;
+}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
-  console.log(JSON.stringify(billing, undefined, 4));
   return (
     <View style={styles.container}>
       <Text variant={'titleSmall'} style={styles.title}>
@@ -25,11 +32,10 @@ const PaymentMethod = ({payment, billing}: {payment: any; billing: any}) => {
       </Text>
       <View style={styles.modeContainer}>
         <Text variant={'bodySmall'} style={styles.mode}>
-          {billing?.name}, {billing?.phone}
+          {address?.name}, {contact?.phone}
           {'\n'}
-          {billing?.address?.locality}, {billing?.address?.building},{' '}
-          {billing?.address?.city}, {billing?.address?.state},{' '}
-          {billing?.address?.country} - {billing?.address?.areaCode}
+          {address?.locality}, {address?.building}, {address?.city},{' '}
+          {address?.state}, {address?.country} - {address?.area_code}
         </Text>
         <Icon name={'chevron-right'} size={20} color={'#686868'} />
       </View>

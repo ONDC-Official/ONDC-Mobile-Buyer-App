@@ -6,7 +6,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import FastImage from 'react-native-fast-image';
 import {Text, useTheme} from 'react-native-paper';
 import OrderStatus from './OrderStatus';
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface Order {
   order: any;
@@ -55,10 +55,12 @@ const OrderHeader: React.FC<Order> = ({order}) => {
           <Text style={styles.date} variant={'labelMedium'}>
             {moment(order?.createdAt).format('DD MMM YYYY hh:mm a')}
           </Text>
-          <Text style={styles.amount} variant={'labelMedium'}>
-            {order?.payment?.params?.amount}
-            <Icon name={'chevron-right'} size={10} color={'#1A1A1A'} />
-          </Text>
+          <View style={styles.amountContainer}>
+            <Text style={styles.amount} variant={'labelMedium'}>
+              {order?.payment?.params?.amount}
+            </Text>
+            <Icon name={'chevron-right'} size={10} color={'#686868'} />
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -126,5 +128,10 @@ const makeStyles = (colors: any) =>
       color: '#1A1A1A',
       fontWeight: '700',
       alignItems: 'center',
+      marginRight: 8,
+    },
+    amountContainer: {
+      alignItems: 'center',
+      flexDirection: 'row',
     },
   });

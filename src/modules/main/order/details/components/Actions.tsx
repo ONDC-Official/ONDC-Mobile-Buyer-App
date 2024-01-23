@@ -12,12 +12,10 @@ import TrackOrderButton from './TrackOrderButton';
 
 interface Actions {
   onUpdateOrder: (value: any) => void;
-  onUpdateTrackingDetails: (value: any) => void;
 }
 
 const Actions: React.FC<Actions> = ({
   onUpdateOrder,
-  onUpdateTrackingDetails,
 }) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
@@ -407,7 +405,7 @@ const Actions: React.FC<Actions> = ({
         <View style={styles.buttonContainer}>
           <GetStatusButton onUpdateOrder={onUpdateOrder} />
           <View style={styles.buttonSeparator} />
-          <TrackOrderButton onUpdateTrackingDetails={onUpdateTrackingDetails} />
+          <TrackOrderButton />
         </View>
       )}
     </>
