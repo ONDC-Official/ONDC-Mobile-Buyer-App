@@ -47,7 +47,7 @@ const OrderHeader: React.FC<Order> = ({order}) => {
       </View>
       <View style={styles.orderDetails}>
         {order?.items?.map((item: any) => (
-          <Text variant={'labelMedium'} style={styles.item}>
+          <Text key={item?.id} variant={'labelMedium'} style={styles.item}>
             {item?.quantity?.count} x {item?.product?.descriptor?.name}
           </Text>
         ))}

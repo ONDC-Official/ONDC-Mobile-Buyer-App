@@ -35,7 +35,7 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
     case 'Completed':
       return (
         <View style={styles.completed}>
-          <Text variant={'labelMedium'} style={styles.createdLabel}>
+          <Text variant={'labelMedium'} style={styles.completedLabel}>
             {status}
           </Text>
         </View>
@@ -94,6 +94,10 @@ const makeStyles = (colors: any) =>
     },
     cancelledLabel: {
       color: colors.error,
+      fontWeight: '600',
+    },
+    completedLabel: {
+      color: colors.success,
       fontWeight: '600',
     },
   });

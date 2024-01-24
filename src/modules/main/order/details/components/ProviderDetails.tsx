@@ -4,7 +4,13 @@ import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
 
-const ProviderDetails = ({provider}: {provider: any}) => {
+const ProviderDetails = ({
+  provider,
+  cancelled = false,
+}: {
+  provider: any;
+  cancelled?: boolean;
+}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
@@ -24,6 +30,14 @@ const ProviderDetails = ({provider}: {provider: any}) => {
           <Icon name={'call'} size={16} color={theme.colors.primary} />
         </TouchableOpacity>
       </View>
+      {cancelled && (
+        <View style={styles.cancelContainer}>
+          <Icon name={'cancel'} size={20} color={theme.colors.error} />
+          <Text variant={'bodyMedium'} style={styles.cancelledLabel}>
+            Order Cancelled
+          </Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -36,9 +50,7 @@ const makeStyles = (colors: any) =>
       borderWidth: 1,
       borderColor: '#E8E8E8',
       marginHorizontal: 16,
-      paddingHorizontal: 16,
-      paddingTop: 16,
-      paddingBottom: 8,
+      padding: 16,
       marginTop: 12,
     },
     header: {
@@ -68,6 +80,20 @@ const makeStyles = (colors: any) =>
       borderColor: colors.primary,
       alignItems: 'center',
       justifyContent: 'center',
+    },
+    cancelContainer: {
+      borderColor: colors.error,
+      borderRadius: 8,
+      borderWidth: 1,
+      padding: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: '#FFEBEB',
+      marginTop: 8,
+    },
+    cancelledLabel: {
+      color: colors.error,
+      marginLeft: 8,
     },
   });
 

@@ -1,4 +1,4 @@
-import {Chip, Text, useTheme} from 'react-native-paper';
+import {Text, useTheme} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import React from 'react';
@@ -42,7 +42,7 @@ const ItemDetails = ({
             {items
               .filter(item => item.fulfillment_id === fulfillment.id)
               .map(item => (
-                <View id={item.id} style={styles.item}>
+                <View key={item.id} style={styles.item}>
                   <FastImage
                     source={{uri: item?.product?.descriptor?.symbol}}
                     style={styles.itemImage}

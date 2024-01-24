@@ -1,16 +1,36 @@
 import {Text, useTheme} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import React from 'react';
 import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
+import DownloadIcon from '../../../../../assets/download.svg';
 
-const ProductSummary = ({items, quote}: {items: any[]; quote: any}) => {
+const ProductSummary = ({
+  items,
+  quote,
+  cancelled = false,
+  documents = undefined,
+}: {
+  items: any[];
+  quote: any;
+  cancelled?: boolean;
+  documents?: any;
+}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
   return (
     <View style={styles.container}>
-      <Text variant={'titleMedium'} style={styles.sectionTitle}>Your Order</Text>
+      <View style={styles.header}>
+        <Text variant={'titleMedium'} style={styles.sectionTitle}>
+          Your Order
+        </Text>
+        {cancelled && !!documents && (
+          <TouchableOpacity onPress={() => Linking.openURL(documents[0]?.url)}>
+            <DownloadIcon width={24} height={24} />
+          </TouchableOpacity>
+        )}
+      </View>
       {items.map(item => (
         <View id={item.id} style={styles.item}>
           <View style={styles.itemMeta}>
@@ -81,10 +101,6 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingBottom: 12,
-      marginBottom: 12,
-      borderBottomColor: '#E8E8E8',
-      borderBottomWidth: 1,
     },
     providerMeta: {
       flexDirection: 'row',

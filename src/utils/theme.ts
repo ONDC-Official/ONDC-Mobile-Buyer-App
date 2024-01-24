@@ -95,7 +95,7 @@ export const theme = {
     red: '#D61C4E',
     text: '#333',
     shippedBackground: '#FFC132',
-    deliveredBackground: '#2EB086',
+    deliveredBackground: '#E8FCF1',
     cancelledBackground: '#FFEBEB',
     statusBackground: '#E9F1F8',
     success: '#419E6A',
