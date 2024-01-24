@@ -176,6 +176,12 @@ const CartItems: React.FC<CartItems> = ({
             <Text variant={'labelLarge'} style={styles.providerName}>
               {provider?.provider?.descriptor?.name}
             </Text>
+            {provider?.provider?.locations?.length > 0 && (
+              <Text variant={'labelMedium'} style={styles.providerAddress}>
+                {provider?.provider?.locations[0]?.address?.street || '-'},{' '}
+                {provider?.provider?.locations[0]?.address?.city || '-'}
+              </Text>
+            )}
             {provider?.items?.map((cartItem: any, index: number) => (
               <View key={cartItem._id}>
                 <View style={styles.product}>
@@ -295,59 +301,67 @@ const CartItems: React.FC<CartItems> = ({
       </ScrollView>
 
       <RBSheet
-        closeOnDragDown={true}
-        closeOnPressBack={true}
-        closeOnPressMask={true}
         ref={customizationSheet}
-        height={screenHeight - 150}
+        height={screenHeight}
         customStyles={{
           container: styles.rbSheet,
-          draggableIcon: styles.draggableIcon,
+          wrapper: styles.wrapper,
         }}>
-        <View style={styles.header}>
-          <FastImage
-            source={{uri: productPayload?.item_details?.descriptor?.symbol}}
-            style={styles.sheetProductSymbol}
-          />
-          <View style={styles.titleContainer}>
-            <Text variant={'titleSmall'} style={styles.title}>
-              {productPayload?.item_details?.descriptor?.name}
-            </Text>
-            <Text variant={'labelMedium'} style={styles.prize}>
-              {CURRENCY_SYMBOLS[productPayload?.item_details?.price?.currency]}
-              {productPayload?.item_details?.price?.value}
-            </Text>
-          </View>
+        <View style={styles.closeSheet}>
+          <TouchableOpacity onPress={hideCustomization}>
+            <Icon name={'close-circle'} color={theme.colors.error} size={32} />
+          </TouchableOpacity>
         </View>
-        {currentCartItem?.item?.provider?.locations?.length > 0 && (
-          <Text variant={'labelMedium'} style={styles.address}>
-            {currentCartItem?.item?.provider?.locations[0]?.address?.street ||
-              '-'}
-            ,{' '}
-            {currentCartItem?.item?.provider?.locations[0]?.address?.city ||
-              '-'}
-          </Text>
-        )}
-        <ScrollView style={styles.customizationContainer}>
-          <FBProductCustomization
-            isEditFlow
-            product={productPayload}
-            customizationState={customizationState}
-            setCustomizationState={setCustomizationState}
-            setItemOutOfStock={setItemOutOfStock}
-          />
-        </ScrollView>
+        <View style={styles.sheetContainer}>
+          <View style={styles.header}>
+            <FastImage
+              source={{uri: productPayload?.item_details?.descriptor?.symbol}}
+              style={styles.sheetProductSymbol}
+            />
+            <View style={styles.titleContainer}>
+              <Text variant={'titleSmall'} style={styles.title}>
+                {productPayload?.item_details?.descriptor?.name}
+              </Text>
+              <Text variant={'labelMedium'} style={styles.prize}>
+                {
+                  CURRENCY_SYMBOLS[
+                    productPayload?.item_details?.price?.currency
+                  ]
+                }
+                {productPayload?.item_details?.price?.value}
+              </Text>
+            </View>
+          </View>
+          {currentCartItem?.item?.provider?.locations?.length > 0 && (
+            <Text variant={'labelMedium'} style={styles.address}>
+              {currentCartItem?.item?.provider?.locations[0]?.address?.street ||
+                '-'}
+              ,{' '}
+              {currentCartItem?.item?.provider?.locations[0]?.address?.city ||
+                '-'}
+            </Text>
+          )}
+          <ScrollView style={styles.customizationContainer}>
+            <FBProductCustomization
+              isEditFlow
+              product={productPayload}
+              customizationState={customizationState}
+              setCustomizationState={setCustomizationState}
+              setItemOutOfStock={setItemOutOfStock}
+            />
+          </ScrollView>
 
-        <CustomizationFooterButtons
-          update
-          productLoading={updatingProduct}
-          itemQty={itemQty}
-          setItemQty={setItemQty}
-          itemOutOfStock={itemOutOfStock}
-          addDetailsToCart={updateCustomizations}
-          product={productPayload}
-          customizationPrices={customizationPrices}
-        />
+          <CustomizationFooterButtons
+            update
+            productLoading={updatingProduct}
+            itemQty={itemQty}
+            setItemQty={setItemQty}
+            itemOutOfStock={itemOutOfStock}
+            addDetailsToCart={updateCustomizations}
+            product={productPayload}
+            customizationPrices={customizationPrices}
+          />
+        </View>
       </RBSheet>
     </>
   );
@@ -370,6 +384,9 @@ const makeStyles = (colors: any) =>
       marginBottom: 10,
     },
     providerName: {
+      marginBottom: 4,
+    },
+    providerAddress: {
       marginBottom: 10,
     },
     product: {
@@ -465,6 +482,21 @@ const makeStyles = (colors: any) =>
     address: {
       paddingHorizontal: 16,
       paddingBottom: 8,
+    },
+    sheetContainer: {
+      borderTopLeftRadius: 15,
+      borderTopRightRadius: 15,
+      backgroundColor: '#FFF',
+      height: screenHeight - 130,
+    },
+    closeSheet: {
+      backgroundColor: 'rgba(47, 47, 47, 0.75)',
+      alignItems: 'center',
+      paddingBottom: 8,
+      paddingTop: 20,
+    },
+    wrapper: {
+      backgroundColor: 'rgba(47, 47, 47, 0.75)',
     },
   });
 
