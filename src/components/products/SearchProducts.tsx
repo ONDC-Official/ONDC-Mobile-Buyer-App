@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import Product from '../../modules/main/provider/components/Product';
 import {API_BASE_URL, PRODUCT_SEARCH} from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface SearchProducts {
   searchQuery: string;
@@ -54,9 +55,44 @@ const SearchProducts: React.FC<SearchProducts> = ({searchQuery}) => {
 
   return (
     <View>
+      <View style={styles.filterContainer}>
+        <View />
+        <View style={styles.reorderContainer}>
+          <TouchableOpacity
+            onPress={() => setIsGridView(true)}
+            style={[
+              styles.reorderButton,
+              isGridView
+                ? styles.activeReorderButton
+                : styles.defaultReorderButton,
+            ]}>
+            <Icon
+              name={'reorder-vertical'}
+              size={20}
+              color={isGridView ? '#fff' : '#333'}
+            />
+          </TouchableOpacity>
+          <View style={styles.separator} />
+          <TouchableOpacity
+            onPress={() => setIsGridView(false)}
+            style={[
+              styles.reorderButton,
+              isGridView
+                ? styles.defaultReorderButton
+                : styles.activeReorderButton,
+            ]}>
+            <Icon
+              name={'reorder-horizontal'}
+              size={20}
+              color={isGridView ? '#333' : '#fff'}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
       <FlatList
-        key={'grid'}
-        numColumns={2}
+        key={'grid' + isGridView}
+        numColumns={isGridView ? 2 : 1}
         data={products}
         renderItem={({item}) => <Product product={item} isGrid={isGridView} />}
         ListEmptyComponent={() => (
@@ -80,7 +116,36 @@ const makeStyles = (colors: any) =>
     container: {
       flex: 1,
       backgroundColor: colors.white,
-      marginTop: 12,
+    },
+
+    filterContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      paddingBottom: 16,
+      marginTop: 20,
+      width: '100%',
+    },
+    reorderContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignSelf: 'flex-end',
+    },
+    separator: {
+      width: 9,
+    },
+    reorderButton: {
+      padding: 6,
+      borderRadius: 8,
+      borderWidth: 1,
+    },
+    activeReorderButton: {
+      borderColor: colors.primary,
+      backgroundColor: colors.primary,
+    },
+    defaultReorderButton: {
+      borderColor: '#E8E8E8',
     },
     listContainer: {
       paddingHorizontal: 8,
