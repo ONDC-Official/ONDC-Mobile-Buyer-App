@@ -9,6 +9,7 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {useIsFocused} from '@react-navigation/native';
 import {
   getPriceWithCustomisations,
   isItemCustomization,
@@ -21,7 +22,6 @@ import Fulfillment from './components/Fulfillment';
 import AddressList from './components/AddressList';
 import Payment from './components/Payment';
 import useConfirmItems from '../../../hooks/useConfirmItems';
-import {useIsFocused} from '@react-navigation/native';
 
 const screenHeight: number = Dimensions.get('screen').height;
 

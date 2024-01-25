@@ -41,14 +41,6 @@ const Fulfillment: React.FC<Fulfillment> = ({
     navigation.navigate('Dashboard');
   };
 
-  const allowFulfillmentSelection = () => {
-    // by default is different fulfillments are selected for diff items, we don't allow fulfillment selection
-    let uniqueDefaultSelections = Object.values(selectedFulfillment).filter(
-      (value, index, array) => array.indexOf(value) === index,
-    );
-    return uniqueDefaultSelections.length === 1;
-  };
-
   const orderTotal = Number(productsQuote?.total_payable).toFixed(2);
 
   return (
@@ -78,59 +70,29 @@ const Fulfillment: React.FC<Fulfillment> = ({
           </View>
         ) : (
           <>
-            {allowFulfillmentSelection()
-              ? cartItems[0]?.message?.quote?.fulfillments?.map(
-                  (fulfillment: any) => (
-                    <TouchableOpacity
-                      key={fulfillment.id}
-                      style={[
-                        styles.customerRow,
-                        fulfillment.id === selectedFulfillment
-                          ? styles.active
-                          : styles.normal,
-                      ]}
-                      onPress={() => setSelectedFulfillment(fulfillment.id)}>
-                      <Text variant={'bodyMedium'} style={styles.customerMeta}>
-                        {fulfillment['@ondc/org/category']}
-                      </Text>
-                      {fulfillment.hasOwnProperty('@ondc/org/TAT') && (
-                        <Text
-                          variant={'labelMedium'}
-                          style={styles.customerMeta}>
-                          - in{' '}
-                          {moment
-                            .duration(fulfillment['@ondc/org/TAT'])
-                            .humanize()}
-                        </Text>
-                      )}
-                    </TouchableOpacity>
-                  ),
-                )
-              : products.map((product: any) => {
-                  const fulfillment =
-                    cartItems[0]?.message?.quote?.fulfillments?.find(
-                      (one: any) => one.id === selectedFulfillment,
-                    );
-                  return (
-                    <View
-                      key={product.id}
-                      style={[styles.customerRow, styles.active]}>
-                      <Text variant={'bodyMedium'} style={styles.customerMeta}>
-                        {product.name} : {fulfillment['@ondc/org/category']}
-                      </Text>
-                      {fulfillment.hasOwnProperty('@ondc/org/TAT') && (
-                        <Text
-                          variant={'labelMedium'}
-                          style={styles.customerMeta}>
-                          - in{' '}
-                          {moment
-                            .duration(fulfillment['@ondc/org/TAT'])
-                            .humanize()}
-                        </Text>
-                      )}
-                    </View>
-                  );
-                })}
+            {cartItems[0]?.message?.quote?.fulfillments?.map(
+              (fulfillment: any) => (
+                <TouchableOpacity
+                  key={fulfillment.id}
+                  style={[
+                    styles.customerRow,
+                    fulfillment.id === selectedFulfillment
+                      ? styles.active
+                      : styles.normal,
+                  ]}
+                  onPress={() => setSelectedFulfillment(fulfillment.id)}>
+                  <Text variant={'bodyMedium'} style={styles.customerMeta}>
+                    {fulfillment['@ondc/org/category']}
+                  </Text>
+                  {fulfillment.hasOwnProperty('@ondc/org/TAT') && (
+                    <Text variant={'labelMedium'} style={styles.customerMeta}>
+                      - in{' '}
+                      {moment.duration(fulfillment['@ondc/org/TAT']).humanize()}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              ),
+            )}
             <View style={styles.summaryRow}>
               <Text variant="bodyMedium">Item Total</Text>
               <Text variant="bodyMedium">₹{cartTotal}</Text>
