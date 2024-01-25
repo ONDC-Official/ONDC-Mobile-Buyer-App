@@ -7,6 +7,7 @@ import FastImage from 'react-native-fast-image';
 import {Text, useTheme} from 'react-native-paper';
 import OrderStatus from './OrderStatus';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 
 interface Order {
   order: any;
@@ -57,6 +58,7 @@ const OrderHeader: React.FC<Order> = ({order}) => {
           </Text>
           <View style={styles.amountContainer}>
             <Text style={styles.amount} variant={'labelMedium'}>
+              {CURRENCY_SYMBOLS[order?.payment?.params?.currency]}
               {order?.payment?.params?.amount}
             </Text>
             <Icon name={'chevron-right'} size={10} color={'#686868'} />

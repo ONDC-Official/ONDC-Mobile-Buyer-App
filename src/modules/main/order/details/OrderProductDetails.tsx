@@ -3,6 +3,7 @@ import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 import ProviderDetails from './components/ProviderDetails';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import ShippingDetails from './components/ShippingDetails';
@@ -10,6 +11,7 @@ import ProductSummary from './components/ProductSummary';
 import OrderMeta from './components/OrderMeta';
 
 const OrderProductDetails = () => {
+  const navigation = useNavigation();
   const {colors} = useTheme();
   const styles = makeStyles(colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
@@ -17,7 +19,7 @@ const OrderProductDetails = () => {
   return (
     <View style={styles.orderDetails}>
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name={'arrow-back'} size={24} color={'#000'} />
         </TouchableOpacity>
         <View style={styles.headerTitleContainer}>

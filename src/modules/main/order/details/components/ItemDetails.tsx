@@ -6,6 +6,7 @@ import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 
+const today = moment();
 const ItemDetails = ({
   fulfillments,
   items,
@@ -19,64 +20,69 @@ const ItemDetails = ({
 
   return (
     <>
-      {fulfillments.map(fulfillment => (
-        <TouchableOpacity
-          key={fulfillment.id}
-          style={styles.container}
-          onPress={() => navigation.navigate('OrderProductDetails')}>
-          <View style={styles.header}>
-            <Text variant={'labelMedium'} style={styles.deliveryDate}>
-              Order will be delivered by{' '}
-              {moment(fulfillment?.end?.time?.range?.end).format('Do MMM')}
-            </Text>
-            <View style={styles.statusContainer}>
-              <View style={styles.statusChip}>
-                <Text variant={'labelMedium'} style={styles.statusText}>
-                  {fulfillment?.state?.descriptor?.code}
-                </Text>
+      {fulfillments.map(fulfillment => {
+        const endDate = moment(fulfillment?.end?.time?.range?.end);
+        return (
+          <TouchableOpacity
+            key={fulfillment.id}
+            style={styles.container}
+            onPress={() => navigation.navigate('OrderProductDetails')}>
+            <View style={styles.header}>
+              <Text variant={'labelMedium'} style={styles.deliveryDate}>
+                Order will be delivered by{'\n'}
+                {today.isSame(endDate, 'day')
+                  ? endDate.format('hh:mm a')
+                  : endDate.format('Do MMM')}
+              </Text>
+              <View style={styles.statusContainer}>
+                <View style={styles.statusChip}>
+                  <Text variant={'labelMedium'} style={styles.statusText}>
+                    {fulfillment?.state?.descriptor?.code}
+                  </Text>
+                </View>
+                <Icon name={'chevron-right'} size={20} color={'#686868'} />
               </View>
-              <Icon name={'chevron-right'} size={20} color={'#686868'} />
             </View>
-          </View>
-          <View>
-            {items
-              .filter(item => item.fulfillment_id === fulfillment.id)
-              .map(item => (
-                <View key={item.id} style={styles.item}>
-                  <FastImage
-                    source={{uri: item?.product?.descriptor?.symbol}}
-                    style={styles.itemImage}
-                  />
-                  <View style={styles.itemMeta}>
-                    <Text variant={'labelMedium'} style={styles.itemName}>
-                      {item?.product?.descriptor?.name}
-                    </Text>
-                    <View style={styles.itemTags}>
-                      {item?.product['@ondc/org/cancellable'] ? (
-                        <View style={styles.chip}>
-                          <Text variant={'labelMedium'}>Cancellable</Text>
-                        </View>
-                      ) : (
-                        <View style={styles.chip}>
-                          <Text variant={'labelMedium'}>Non-cancellable</Text>
-                        </View>
-                      )}
-                      {item?.product['@ondc/org/returnable'] ? (
-                        <View style={styles.chip}>
-                          <Text variant={'labelMedium'}>Returnable</Text>
-                        </View>
-                      ) : (
-                        <View style={styles.chip}>
-                          <Text variant={'labelMedium'}>Non-returnable</Text>
-                        </View>
-                      )}
+            <View>
+              {items
+                .filter(item => item.fulfillment_id === fulfillment.id)
+                .map(item => (
+                  <View key={item.id} style={styles.item}>
+                    <FastImage
+                      source={{uri: item?.product?.descriptor?.symbol}}
+                      style={styles.itemImage}
+                    />
+                    <View style={styles.itemMeta}>
+                      <Text variant={'labelMedium'} style={styles.itemName}>
+                        {item?.product?.descriptor?.name}
+                      </Text>
+                      <View style={styles.itemTags}>
+                        {item?.product['@ondc/org/cancellable'] ? (
+                          <View style={styles.chip}>
+                            <Text variant={'labelMedium'}>Cancellable</Text>
+                          </View>
+                        ) : (
+                          <View style={styles.chip}>
+                            <Text variant={'labelMedium'}>Non-cancellable</Text>
+                          </View>
+                        )}
+                        {item?.product['@ondc/org/returnable'] ? (
+                          <View style={styles.chip}>
+                            <Text variant={'labelMedium'}>Returnable</Text>
+                          </View>
+                        ) : (
+                          <View style={styles.chip}>
+                            <Text variant={'labelMedium'}>Non-returnable</Text>
+                          </View>
+                        )}
+                      </View>
                     </View>
                   </View>
-                </View>
-              ))}
-          </View>
-        </TouchableOpacity>
-      ))}
+                ))}
+            </View>
+          </TouchableOpacity>
+        );
+      })}
     </>
   );
 };

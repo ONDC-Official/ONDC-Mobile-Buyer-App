@@ -1,5 +1,5 @@
 import {Text, useTheme} from 'react-native-paper';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
@@ -14,6 +14,8 @@ const ProviderDetails = ({
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
+  const callProvider = () => Linking.openURL('tel:+91 92729282982');
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -26,7 +28,7 @@ const ProviderDetails = ({
             {provider?.descriptor?.name}
           </Text>
         </View>
-        <TouchableOpacity style={styles.callButton}>
+        <TouchableOpacity style={styles.callButton} onPress={callProvider}>
           <Icon name={'call'} size={16} color={theme.colors.primary} />
         </TouchableOpacity>
       </View>

@@ -50,7 +50,9 @@ const ProductSummary = ({
             </Text>
             <Text variant={'bodyMedium'} style={styles.quantity}>
               {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-              {item?.quantity?.count * item?.product?.price?.value}
+              {Number(
+                item?.quantity?.count * item?.product?.price?.value,
+              ).toFixed(2)}
             </Text>
           </View>
         </View>

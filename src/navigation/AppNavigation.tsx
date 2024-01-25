@@ -136,9 +136,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="ProductDetails"
           component={ProductDetails}
-          options={{
-            headerStyle,
-          }}
+          options={{headerShown: false}}
         />
 
         <Stack.Screen

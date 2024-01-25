@@ -9,7 +9,7 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
   const styles = makeStyles(theme.colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
-  const {location, contact, person} = orderDetails?.fulfillments[0]?.end;
+  const {location, contact} = orderDetails?.fulfillments[0]?.end;
 
   return (
     <View style={styles.pageContainer}>
@@ -26,9 +26,9 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
           <Text variant={'titleSmall'} style={styles.title}>
             Delivery Address
           </Text>
-          {!!person?.name && (
+          {!!location?.address?.name && (
             <Text variant={'bodyMedium'} style={styles.name}>
-              {person?.name}
+              {location?.address?.name}
             </Text>
           )}
           <Text variant={'bodySmall'} style={styles.normalText}>

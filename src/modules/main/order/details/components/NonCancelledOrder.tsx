@@ -14,6 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import Actions from './Actions';
 import DownloadIcon from '../../../../../assets/download.svg';
+import DownloadDisabledIcon from '../../../../../assets/download_disabled.svg';
 import ProviderDetails from './ProviderDetails';
 import ItemDetails from './ItemDetails';
 import PaymentMethod from './PaymentMethod';
@@ -32,6 +33,8 @@ const NonCancelledOrder = ({
   const {colors} = useTheme();
   const styles = makeStyles(colors);
 
+  const invoiceAvailable = !!orderDetails?.documents;
+
   return (
     <View style={styles.orderDetails}>
       <View style={styles.header}>
@@ -39,10 +42,13 @@ const NonCancelledOrder = ({
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon name={'arrow-back'} size={24} color={'#fff'} />
           </TouchableOpacity>
-          <Text variant={'titleSmall'} style={styles.orderDetailsTitle}>
-            Order Details
+          <Text
+            variant={'titleSmall'}
+            style={styles.orderDetailsTitle}
+            ellipsizeMode={'tail'}
+            numberOfLines={1}>
+            {orderDetails?.provider?.descriptor?.name}
           </Text>
-          <View style={styles.empty} />
         </View>
         <Text variant={'titleMedium'} style={styles.orderStatus}>
           Order {orderDetails?.state}
@@ -52,20 +58,31 @@ const NonCancelledOrder = ({
         <Actions onUpdateOrder={getOrderDetails} />
         <View style={styles.creationHeader}>
           <SimpleLineIcons name={'bag'} color={colors.primary} size={24} />
-          <Text variant={'bodyMedium'} style={styles.creationDate}>
-            Order placed on{' '}
-            {moment(orderDetails?.createdAt).format('DD MMM hh:mm a')}
-          </Text>
+          {orderDetails?.state !== 'Completed' ? (
+            <Text variant={'bodyMedium'} style={styles.creationDate}>
+              Order placed on{' '}
+              {moment(orderDetails?.createdAt).format('DD MMM hh:mm a')}
+            </Text>
+          ) : (
+            <Text variant={'bodyMedium'} style={styles.creationDate}>
+              Order completed on{' '}
+              {moment(orderDetails?.updatedAt).format('DD MMM hh:mm a')}
+            </Text>
+          )}
         </View>
         <View style={styles.orderIdContainer}>
           <Text variant={'titleSmall'} style={styles.orderId}>
             {orderDetails?.id}
           </Text>
-          {!!orderDetails?.documents && (
+          {invoiceAvailable ? (
             <TouchableOpacity
               onPress={() => Linking.openURL(orderDetails?.documents[0]?.url)}>
               <DownloadIcon width={24} height={24} />
             </TouchableOpacity>
+          ) : (
+            <View>
+              <DownloadDisabledIcon width={24} height={24} />
+            </View>
           )}
         </View>
         <ProviderDetails provider={orderDetails?.provider} />
@@ -104,6 +121,7 @@ const makeStyles = (colors: any) =>
     },
     orderDetailsTitle: {
       color: '#fff',
+      textAlign: 'center',
     },
     orderStatus: {
       color: '#fff',
