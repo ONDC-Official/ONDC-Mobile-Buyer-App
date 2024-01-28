@@ -9,6 +9,8 @@ import FBProduct from '../../modules/main/provider/components/FBProduct';
 import Product from '../../modules/main/provider/components/Product';
 import {API_BASE_URL, PRODUCT_SEARCH} from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT, FB_DOMAIN} from '../../utils/constants';
+import ProductSkeleton from '../skeleton/ProductSkeleton';
+import {skeletonList} from '../../utils/utils';
 
 interface SearchProducts {
   searchQuery: string;
@@ -25,7 +27,7 @@ const SearchProducts: React.FC<SearchProducts> = ({searchQuery}) => {
 
   const [products, setProducts] = useState<any[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
-  const [productsRequested, setProductsRequested] = useState<boolean>(true);
+  const [productsRequested, setProductsRequested] = useState<boolean>(false);
   const [isGridView, setIsGridView] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
 
@@ -35,7 +37,6 @@ const SearchProducts: React.FC<SearchProducts> = ({searchQuery}) => {
       productSearchSource.current = CancelToken.source();
 
       let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}&name=${searchQuery}`;
-      console.log('url => ', url);
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
@@ -51,13 +52,17 @@ const SearchProducts: React.FC<SearchProducts> = ({searchQuery}) => {
   };
 
   useEffect(() => {
-    searchProducts(page);
+    if (searchQuery?.length > 2) {
+      searchProducts(page);
+    } else {
+      setTotalProducts(0);
+      setProducts([]);
+    }
   }, [searchQuery]);
 
   const renderItem = (item: any, index: number) => {
-    console.log('item', JSON.stringify(item, null, 2));
     return item.domain === FB_DOMAIN ? (
-      <FBProduct product={item}/>
+      <FBProduct product={item} />
     ) : (
       <Product product={item} isGrid={isGridView} />
     );
@@ -99,22 +104,31 @@ const SearchProducts: React.FC<SearchProducts> = ({searchQuery}) => {
           </TouchableOpacity>
         </View>
       </View>
-
-      <FlatList
-        key={'grid' + isGridView}
-        numColumns={isGridView ? 2 : 1}
-        data={products}
-        renderItem={({item, index}) => renderItem(item, index)}
-        ListEmptyComponent={() => (
-          <View style={styles.emptyContainer}>
-            <Text variant={'bodyMedium'}>No products available</Text>
-          </View>
-        )}
-        contentContainerStyle={
-          products.length === 0 ? styles.emptyContainer : styles.listContainer
-        }
-        keyExtractor={item => item.id}
-      />
+      {productsRequested ? (
+        <FlatList
+          numColumns={2}
+          data={skeletonList}
+          renderItem={() => <ProductSkeleton />}
+          contentContainerStyle={styles.listContainer}
+          keyExtractor={item => item.id}
+        />
+      ) : (
+        <FlatList
+          key={'grid' + isGridView}
+          numColumns={isGridView ? 2 : 1}
+          data={products}
+          renderItem={({item, index}) => renderItem(item, index)}
+          ListEmptyComponent={() => (
+            <View style={styles.emptyContainer}>
+              <Text variant={'bodyMedium'}>No products available</Text>
+            </View>
+          )}
+          contentContainerStyle={
+            products.length === 0 ? styles.emptyContainer : styles.listContainer
+          }
+          keyExtractor={item => item.id}
+        />
+      )}
     </View>
   );
 };
