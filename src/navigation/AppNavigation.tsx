@@ -20,6 +20,10 @@ import Outlets from '../modules/main/provider/Outlets';
 import Orders from '../modules/main/order/list/Orders';
 import CancelOrder from '../modules/main/order/details/CancelOrder';
 import SearchProductsScreen from '../modules/main/dashboard/components/home/SearchProductsScreen';
+import PaymentMethods from '../modules/main/order/details/PaymentMethods';
+import OrderProductDetails from '../modules/main/order/details/OrderProductDetails';
+import ReturnOrder from '../modules/main/order/details/ReturnOrder';
+
 
 const Stack = createStackNavigator();
 
@@ -126,11 +130,15 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         />
 
         <Stack.Screen
+          name="OrderProductDetails"
+          component={OrderProductDetails}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
           name="ProductDetails"
           component={ProductDetails}
-          options={{
-            headerStyle,
-          }}
+          options={{headerShown: false}}
         />
 
         <Stack.Screen
@@ -146,6 +154,16 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="CancelOrder"
           component={CancelOrder}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ReturnOrder"
+          component={ReturnOrder}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="PaymentMethods"
+          component={PaymentMethods}
           options={{headerShown: false}}
         />
         <Stack.Screen

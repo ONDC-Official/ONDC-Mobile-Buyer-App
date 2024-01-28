@@ -249,7 +249,7 @@ const AddressForm: React.FC<AddressForm> = ({
             : defaultLocation
         }
         zoom={10}
-        searchWidgetProps={{backgroundColor: '#F0FFF0'}}
+        searchWidgetProps={styles.searchWidgetProps}
         resultCallback={(res: any) => {
           setMapAddress(res);
         }}
@@ -291,6 +291,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  searchWidgetProps: {backgroundColor: '#F0FFF0'},
 });
 
 export default withTheme(AddressForm);

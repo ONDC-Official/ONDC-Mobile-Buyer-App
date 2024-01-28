@@ -46,7 +46,6 @@ const Orders: React.FC<any> = () => {
         source.current.token,
       );
 
-      console.log(JSON.stringify(data, undefined, 4));
       totalOrders.current = data.totalCount;
       setOrders(currentPage === 1 ? data.orders : [...orders, ...data.orders]);
       pageNumber.current = pageNumber.current + 1;
@@ -122,7 +121,7 @@ const Orders: React.FC<any> = () => {
    * @constructor
    * @returns {JSX.Element}
    */
-  const renderItem = ({item}) => <Order order={item} />;
+  const renderItem = ({item}: {item: any}) => <Order order={item} />;
 
   if (apiInProgress) {
     return (
@@ -130,7 +129,7 @@ const Orders: React.FC<any> = () => {
         <FlatList
           data={skeletonList}
           renderItem={() => <OrderSkeleton />}
-          keyExtractor={keyExtractor}
+          keyExtractor={(item: any) => item.id}
           contentContainerStyle={styles.contentContainerStyle}
         />
       </View>

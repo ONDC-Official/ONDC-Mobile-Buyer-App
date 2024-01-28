@@ -1,5 +1,5 @@
 import React from 'react';
-import {Chip, Text, useTheme} from 'react-native-paper';
+import {Text, useTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 
 interface OrderStatus {
@@ -35,7 +35,7 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
     case 'Completed':
       return (
         <View style={styles.completed}>
-          <Text variant={'labelMedium'} style={styles.createdLabel}>
+          <Text variant={'labelMedium'} style={styles.completedLabel}>
             {status}
           </Text>
         </View>
@@ -45,7 +45,7 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
     case 'Cancelled':
       return (
         <View style={styles.cancelled}>
-          <Text variant={'labelMedium'} style={styles.createdLabel}>
+          <Text variant={'labelMedium'} style={styles.cancelledLabel}>
             {status}
           </Text>
         </View>
@@ -68,24 +68,36 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.statusBackground,
       paddingVertical: 4,
       paddingHorizontal: 12,
+      borderRadius: 21,
     },
     shipped: {
       backgroundColor: colors.shippedBackground,
       paddingVertical: 4,
       paddingHorizontal: 12,
+      borderRadius: 21,
     },
     completed: {
       backgroundColor: colors.deliveredBackground,
       paddingVertical: 4,
       paddingHorizontal: 12,
+      borderRadius: 21,
     },
     cancelled: {
       backgroundColor: colors.cancelledBackground,
       paddingVertical: 4,
       paddingHorizontal: 12,
+      borderRadius: 21,
     },
     createdLabel: {
       color: colors.primary,
+      fontWeight: '600',
+    },
+    cancelledLabel: {
+      color: colors.error,
+      fontWeight: '600',
+    },
+    completedLabel: {
+      color: colors.success,
       fontWeight: '600',
     },
   });

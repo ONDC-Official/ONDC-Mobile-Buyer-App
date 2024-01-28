@@ -8,10 +8,29 @@ export const makeButtonStyles = (colors: any) =>
       height: 32,
       justifyContent: 'center',
       alignItems: 'center',
+      flexDirection: 'row',
       flex: 1,
       borderWidth: 1,
     },
     label: {
       color: colors.primary,
+    },
+    webView: {
+      flex: 1,
+    },
+    draggableIcon: {
+      backgroundColor: '#000',
+    },
+    rbSheet: {
+      backgroundColor: 'rgba(47, 47, 47, 0.75)',
+    },
+    closeSheet: {
+      backgroundColor: 'rgba(47, 47, 47, 0.75)',
+      alignItems: 'center',
+      paddingBottom: 8,
+      paddingTop: 20,
+    },
+    wrapper: {
+      backgroundColor: 'rgba(47, 47, 47, 0.75)',
     },
   });

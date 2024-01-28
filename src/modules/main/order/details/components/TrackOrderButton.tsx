@@ -1,10 +1,11 @@
 import {ActivityIndicator, Text, useTheme} from 'react-native-paper';
-import React, {useRef} from 'react';
-import {API_BASE_URL, TRACK_ORDER} from '../../../../../utils/apiActions';
-import {showToastWithGravity} from '../../../../../utils/utils';
+import React, {useRef, useState} from 'react';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
-import {Linking, TouchableOpacity} from 'react-native';
+import {Dimensions, TouchableOpacity, View} from 'react-native';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {WebView} from 'react-native-webview';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
 
@@ -12,19 +13,18 @@ import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {makeButtonStyles} from './buttonStyles';
 import {updateRequestingTracker} from '../../../../../redux/order/actions';
+import {API_BASE_URL, TRACK_ORDER} from '../../../../../utils/apiActions';
+import {showToastWithGravity} from '../../../../../utils/utils';
 
-interface TrackOrderButton {
-  onUpdateTrackingDetails: (value: any) => void;
-}
+interface TrackOrderButton {}
 
 const CancelToken = axios.CancelToken;
-
-const TrackOrderButton: React.FC<TrackOrderButton> = ({
-  onUpdateTrackingDetails,
-}) => {
+const screenHeight: number = Dimensions.get('screen').height;
+const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   const dispatch = useDispatch();
   const theme = useTheme();
   const styles = makeButtonStyles(theme.colors);
+  const trackingSheet = useRef<any>(null);
   const {orderDetails, requestingStatus, requestingTracker} = useSelector(
     ({orderReducer}) => orderReducer,
   );
@@ -32,6 +32,8 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
   const {token} = useSelector(({authReducer}) => authReducer);
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
+  const [trackingUrl, setTrackingUrl] = useState<string>('');
+  const [tracking, setTracking] = useState<any>(null);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
 
   // TRACK APIS
@@ -112,14 +114,14 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
       ];
       const {message} = data[0];
       if (message.tracking.status === 'active' && message.tracking.url === '') {
-        onUpdateTrackingDetails(null);
+        setTracking(null);
         dispatch(updateRequestingTracker(false));
         showToastWithGravity(
           'Tracking information is not provided by the provider.',
         );
         return;
       } else if (message?.tracking?.url === '') {
-        onUpdateTrackingDetails(null);
+        setTracking(null);
         dispatch(updateRequestingTracker(false));
         showToastWithGravity(
           'Tracking information not available for this product',
@@ -127,18 +129,19 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
         return;
       } else if (
         message.tracking.status === 'active' &&
-        message?.tracking?.location?.gps
-      ) {
-        onUpdateTrackingDetails(message?.tracking);
-      } else if (
-        message.tracking.status === 'active' &&
         (message?.tracking?.url !== '' || message?.tracking?.url !== undefined)
       ) {
         dispatch(updateRequestingTracker(false));
-        await Linking.openURL(message?.tracking?.url);
-        onUpdateTrackingDetails(null);
+        setTrackingUrl(message?.tracking?.url);
+        trackingSheet.current.open();
+        setTracking(null);
+      } else if (
+        message.tracking.status === 'active' &&
+        message?.tracking?.location?.gps
+      ) {
+        setTracking(message?.tracking);
       } else {
-        onUpdateTrackingDetails(null);
+        setTracking(null);
         dispatch(updateRequestingTracker(false));
         showToastWithGravity(
           'Tracking information is not provided by the provider.',
@@ -155,20 +158,38 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({
     }
   };
 
+  const hideTrackingSheet = () => trackingSheet?.current?.close();
+
   return (
-    <TouchableOpacity
-      style={styles.container}
-      disabled={requestingTracker || requestingStatus}
-      onPress={handleFetchTrackOrderDetails}>
-      {requestingTracker ? (
-        <ActivityIndicator size={14} color={theme.colors.primary} />
-      ) : (
-        <></>
-      )}
-      <Text variant={'bodyMedium'} style={styles.label}>
-        Track
-      </Text>
-    </TouchableOpacity>
+    <>
+      <TouchableOpacity
+        style={styles.container}
+        disabled={requestingTracker || requestingStatus}
+        onPress={handleFetchTrackOrderDetails}>
+        {requestingTracker ? (
+          <ActivityIndicator size={14} color={theme.colors.primary} />
+        ) : (
+          <></>
+        )}
+        <Text variant={'bodyMedium'} style={styles.label}>
+          Track
+        </Text>
+      </TouchableOpacity>
+      <RBSheet
+        ref={trackingSheet}
+        height={screenHeight}
+        customStyles={{
+          container: styles.rbSheet,
+          wrapper: styles.wrapper,
+        }}>
+        <View style={styles.closeSheet}>
+          <TouchableOpacity onPress={hideTrackingSheet}>
+            <Icon name={'close-circle'} color={theme.colors.error} size={32} />
+          </TouchableOpacity>
+        </View>
+        <WebView style={styles.webView} source={{uri: trackingUrl}} />
+      </RBSheet>
+    </>
   );
 };
 export default TrackOrderButton;

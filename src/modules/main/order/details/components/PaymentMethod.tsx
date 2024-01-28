@@ -1,15 +1,26 @@
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Divider, Text, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
+import {useNavigation} from '@react-navigation/native';
 
-const PaymentMethod = ({payment, billing}: {payment: any; billing: any}) => {
+const PaymentMethod = ({
+  payment,
+  address,
+  contact,
+}: {
+  payment: any;
+  address: any;
+  contact: any;
+}) => {
+  const navigation = useNavigation<any>();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
-  console.log(JSON.stringify(billing, undefined, 4));
   return (
-    <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate('PaymentMethods')}>
       <Text variant={'titleSmall'} style={styles.title}>
         Payment Methods
       </Text>
@@ -25,15 +36,14 @@ const PaymentMethod = ({payment, billing}: {payment: any; billing: any}) => {
       </Text>
       <View style={styles.modeContainer}>
         <Text variant={'bodySmall'} style={styles.mode}>
-          {billing?.name}, {billing?.phone}
+          {address?.name}, {contact?.phone}
           {'\n'}
-          {billing?.address?.locality}, {billing?.address?.building},{' '}
-          {billing?.address?.city}, {billing?.address?.state},{' '}
-          {billing?.address?.country} - {billing?.address?.areaCode}
+          {address?.locality}, {address?.building}, {address?.city},{' '}
+          {address?.state}, {address?.country} - {address?.area_code}
         </Text>
         <Icon name={'chevron-right'} size={20} color={'#686868'} />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
