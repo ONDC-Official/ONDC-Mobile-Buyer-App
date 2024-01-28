@@ -17,7 +17,6 @@ const SearchProductsScreen: React.FC<SearchProductsProps> = ({}) => {
   const [searchQuery, setSearchQuery] = useState<string | ''>('');
 
   const onSearch = (query: string) => {
-    console.log('Search String is =>', query);
     setSearchQuery(query);
   };
   return (

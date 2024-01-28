@@ -2,12 +2,13 @@ import axios from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
+import useNetworkHandling from '../../hooks/useNetworkHandling';
+import FBProduct from '../../modules/main/provider/components/FBProduct';
 import Product from '../../modules/main/provider/components/Product';
 import {API_BASE_URL, PRODUCT_SEARCH} from '../../utils/apiActions';
-import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
-import useNetworkHandling from '../../hooks/useNetworkHandling';
-import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {BRAND_PRODUCTS_LIMIT, FB_DOMAIN} from '../../utils/constants';
 
 interface SearchProducts {
   searchQuery: string;
@@ -53,8 +54,17 @@ const SearchProducts: React.FC<SearchProducts> = ({searchQuery}) => {
     searchProducts(page);
   }, [searchQuery]);
 
+  const renderItem = (item: any, index: number) => {
+    console.log('item', JSON.stringify(item, null, 2));
+    return item.domain === FB_DOMAIN ? (
+      <FBProduct product={item}/>
+    ) : (
+      <Product product={item} isGrid={isGridView} />
+    );
+  };
+
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.filterContainer}>
         <View />
         <View style={styles.reorderContainer}>
@@ -94,7 +104,7 @@ const SearchProducts: React.FC<SearchProducts> = ({searchQuery}) => {
         key={'grid' + isGridView}
         numColumns={isGridView ? 2 : 1}
         data={products}
-        renderItem={({item}) => <Product product={item} isGrid={isGridView} />}
+        renderItem={({item, index}) => renderItem(item, index)}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
             <Text variant={'bodyMedium'}>No products available</Text>
@@ -146,6 +156,7 @@ const makeStyles = (colors: any) =>
     },
     defaultReorderButton: {
       borderColor: '#E8E8E8',
+      paddingTop: 12,
     },
     listContainer: {
       paddingHorizontal: 8,
