@@ -3,23 +3,43 @@ import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {FB_DOMAIN} from '../../../../../utils/constants';
 
 const ProviderDetails = ({
+  bppId,
+  domain,
   provider,
   cancelled = false,
 }: {
+  bppId: any;
+  domain: any;
   provider: any;
   cancelled?: boolean;
 }) => {
+  const navigation = useNavigation<any>();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
   const callProvider = () => Linking.openURL('tel:+91 92729282982');
 
+  const navigateToProvider = () => {
+    const routeParams: any = {
+      brandId: `${bppId}_${domain}_${provider?.id}`,
+    };
+
+    if (domain === FB_DOMAIN) {
+      routeParams.outletId = provider?.locations[0]?.id;
+    }
+    navigation.navigate('BrandDetails', routeParams);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.providerMeta}>
+        <TouchableOpacity
+          style={styles.providerMeta}
+          onPress={navigateToProvider}>
           <FastImage
             source={{uri: provider?.descriptor?.symbol}}
             style={styles.providerImage}
@@ -27,7 +47,7 @@ const ProviderDetails = ({
           <Text variant={'titleMedium'} style={styles.providerName}>
             {provider?.descriptor?.name}
           </Text>
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.callButton} onPress={callProvider}>
           <Icon name={'call'} size={16} color={theme.colors.primary} />
         </TouchableOpacity>

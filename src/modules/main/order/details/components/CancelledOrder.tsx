@@ -39,7 +39,12 @@ const CancelledOrder = ({orderDetails}: {orderDetails: any}) => {
             </TouchableOpacity>
           )}
         </View>
-        <ProviderDetails provider={orderDetails?.provider} cancelled />
+        <ProviderDetails
+          provider={orderDetails?.provider}
+          bppId={orderDetails?.bppId}
+          domain={orderDetails?.domain}
+          cancelled
+        />
         <ProductSummary
           items={orderDetails?.items}
           quote={orderDetails?.quote}

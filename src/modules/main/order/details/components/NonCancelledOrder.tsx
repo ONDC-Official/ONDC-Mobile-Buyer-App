@@ -85,7 +85,11 @@ const NonCancelledOrder = ({
             </View>
           )}
         </View>
-        <ProviderDetails provider={orderDetails?.provider} />
+        <ProviderDetails
+          provider={orderDetails?.provider}
+          bppId={orderDetails?.bppId}
+          domain={orderDetails?.domain}
+        />
         <ItemDetails
           items={orderDetails?.items}
           fulfillments={orderDetails?.fulfillments}

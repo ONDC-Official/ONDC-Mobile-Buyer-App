@@ -7,7 +7,7 @@ import FastImage from 'react-native-fast-image';
 import {Text, useTheme} from 'react-native-paper';
 import OrderStatus from './OrderStatus';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
+import { CURRENCY_SYMBOLS, FB_DOMAIN } from "../../../../utils/constants";
 
 interface Order {
   order: any;
@@ -24,6 +24,20 @@ const OrderHeader: React.FC<Order> = ({order}) => {
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
+  const navigateToDetails = () =>
+    navigation.navigate('OrderDetails', {orderId: order.id});
+
+  const navigateToProvider = () => {
+    const routeParams: any = {
+      brandId: `${order?.bppId}_${order?.domain}_${order?.provider?.id}`,
+    };
+
+    if (order?.domain === FB_DOMAIN) {
+      routeParams.outletId = order?.provider?.locations[0]?.id;
+    }
+    navigation.navigate('BrandDetails', routeParams);
+  };
+
   order.state = order.items?.every(
     (item: any) => item.cancellation_status === 'Cancelled',
   )
@@ -31,10 +45,8 @@ const OrderHeader: React.FC<Order> = ({order}) => {
     : order.state;
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => navigation.navigate('OrderDetails', {orderId: order.id})}>
-      <View style={styles.header}>
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.header} onPress={navigateToProvider}>
         <FastImage
           source={{uri: order?.provider?.descriptor?.symbol}}
           style={styles.providerImage}
@@ -45,8 +57,8 @@ const OrderHeader: React.FC<Order> = ({order}) => {
           </Text>
         </View>
         <View>{order.state && <OrderStatus status={order.state} />}</View>
-      </View>
-      <View style={styles.orderDetails}>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.orderDetails} onPress={navigateToDetails}>
         {order?.items?.map((item: any) => (
           <Text key={item?.id} variant={'labelMedium'} style={styles.item}>
             {item?.quantity?.count} x {item?.product?.descriptor?.name}
@@ -64,8 +76,8 @@ const OrderHeader: React.FC<Order> = ({order}) => {
             <Icon name={'chevron-right'} size={10} color={'#686868'} />
           </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 };
 

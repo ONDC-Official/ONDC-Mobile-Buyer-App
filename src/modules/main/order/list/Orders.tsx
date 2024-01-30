@@ -92,17 +92,6 @@ const Orders: React.FC<any> = () => {
     }
   }, [isFocused]);
 
-  useEffect(() => {
-    setApiInProgress(true);
-    getOrderList(pageNumber.current)
-      .then(() => {
-        setApiInProgress(false);
-      })
-      .catch(() => {
-        setApiInProgress(false);
-      });
-  }, []);
-
   const onRefreshHandler = () => {
     pageNumber.current = 1;
     setRefreshInProgress(true);

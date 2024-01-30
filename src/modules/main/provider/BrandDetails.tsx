@@ -89,16 +89,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     };
   }, [isFocused]);
 
-  useEffect(() => {
-    getProviderDetails().then(() => {});
-
-    return () => {
-      if (source.current) {
-        source.current.cancel();
-      }
-    };
-  }, []);
-
   if (apiRequested) {
     return <BrandSkeleton />;
   }

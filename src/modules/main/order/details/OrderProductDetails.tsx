@@ -34,7 +34,11 @@ const OrderProductDetails = () => {
         </View>
       </View>
       <ScrollView style={styles.pageContainer}>
-        <ProviderDetails provider={orderDetails?.provider} />
+        <ProviderDetails
+          provider={orderDetails?.provider}
+          bppId={orderDetails?.bppId}
+          domain={orderDetails?.domain}
+        />
         <ShippingDetails orderDetails={orderDetails} />
         <ProductSummary
           items={orderDetails?.items}
