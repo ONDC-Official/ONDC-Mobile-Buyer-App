@@ -1,8 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, PRODUCT_SEARCH} from '../../utils/apiActions';
@@ -11,6 +10,7 @@ import Filters from './Filters';
 import {skeletonList} from '../../utils/utils';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import Product from '../../modules/main/provider/components/Product';
+import ViewTypeSelection from './ViewTypeSelection';
 
 interface Products {
   providerId: any;
@@ -90,37 +90,10 @@ const Products: React.FC<Products> = ({
           providerId={providerId}
           category={subCategories.length ? subCategories[0] : null}
         />
-        <View style={styles.reorderContainer}>
-          <TouchableOpacity
-            onPress={() => setIsGridView(true)}
-            style={[
-              styles.reorderButton,
-              isGridView
-                ? styles.activeReorderButton
-                : styles.defaultReorderButton,
-            ]}>
-            <Icon
-              name={'reorder-vertical'}
-              size={20}
-              color={isGridView ? '#fff' : '#333'}
-            />
-          </TouchableOpacity>
-          <View style={styles.separator} />
-          <TouchableOpacity
-            onPress={() => setIsGridView(false)}
-            style={[
-              styles.reorderButton,
-              isGridView
-                ? styles.defaultReorderButton
-                : styles.activeReorderButton,
-            ]}>
-            <Icon
-              name={'reorder-horizontal'}
-              size={20}
-              color={isGridView ? '#333' : '#fff'}
-            />
-          </TouchableOpacity>
-        </View>
+        <ViewTypeSelection
+          isGridView={isGridView}
+          setIsGridView={setIsGridView}
+        />
       </View>
       {productsRequested ? (
         <FlatList
@@ -183,25 +156,6 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 16,
       paddingBottom: 16,
       marginTop: 20,
-    },
-    reorderContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    separator: {
-      width: 9,
-    },
-    reorderButton: {
-      padding: 6,
-      borderRadius: 8,
-      borderWidth: 1,
-    },
-    activeReorderButton: {
-      borderColor: colors.primary,
-      backgroundColor: colors.primary,
-    },
-    defaultReorderButton: {
-      borderColor: '#E8E8E8',
     },
     listContainer: {
       paddingHorizontal: 8,
