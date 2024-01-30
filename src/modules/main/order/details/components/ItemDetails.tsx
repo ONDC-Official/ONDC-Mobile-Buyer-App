@@ -5,6 +5,7 @@ import React from 'react';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
+import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
 
 const today = moment();
 const ItemDetails = ({
@@ -77,6 +78,15 @@ const ItemDetails = ({
                         )}
                       </View>
                     </View>
+                    <Text variant={'labelMedium'}>
+                      Qty {item?.quantity?.count}
+                    </Text>
+                    <Text variant={'labelMedium'} style={styles.price}>
+                      {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
+                      {Number(
+                        item?.quantity?.count * item?.product?.price?.value,
+                      ).toFixed(2)}
+                    </Text>
                   </View>
                 ))}
             </View>
@@ -179,6 +189,10 @@ const makeStyles = (colors: any) =>
     },
     statusText: {
       color: colors.primary,
+    },
+    price: {
+      fontWeight: '700',
+      marginLeft: 16,
     },
   });
 
