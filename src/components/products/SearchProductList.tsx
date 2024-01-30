@@ -12,13 +12,13 @@ import {BRAND_PRODUCTS_LIMIT, FB_DOMAIN} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
 
-interface SearchProducts {
+interface SearchProductList {
   searchQuery: string;
 }
 
 const CancelToken = axios.CancelToken;
 
-const SearchProducts: React.FC<SearchProducts> = ({searchQuery}) => {
+const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   const productSearchSource = useRef<any>(null);
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
@@ -34,14 +34,16 @@ const SearchProducts: React.FC<SearchProducts> = ({searchQuery}) => {
   const searchProducts = async (pageNumber: number) => {
     try {
       setProductsRequested(true);
+      if (productSearchSource.current) {
+        productSearchSource.current.cancel();
+      }
       productSearchSource.current = CancelToken.source();
-
       let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}&name=${searchQuery}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
       );
-      console.log('Response => ', data?.response?.count);
+      console.log(JSON.stringify(data, undefined, 4));
       setTotalProducts(data.response.count);
       setProducts(data.response.data);
     } catch (error) {
@@ -53,12 +55,12 @@ const SearchProducts: React.FC<SearchProducts> = ({searchQuery}) => {
 
   useEffect(() => {
     if (searchQuery?.length > 2) {
-      searchProducts(page);
+      searchProducts(page).then(() => {});
     } else {
       setTotalProducts(0);
       setProducts([]);
     }
-  }, [searchQuery]);
+  }, [searchQuery, page]);
 
   const renderItem = (item: any, index: number) => {
     return item.domain === FB_DOMAIN ? (

@@ -1,23 +1,15 @@
 import React from 'react';
 import {Searchbar, useTheme} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import ONDCLogo from '../../../../assets/ondc_logo.svg';
-import AddressTag from './address/AddressTag';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-type HeaderProps = {
-  onSearchFocus?: () => void;
-  disableAddress?: boolean;
-  onSearch?: (query: string) => void;
-  backIcon?: boolean;
+type SearchHeaderProps = {
+  onSearch: (query: string) => void;
   backIconPress?: () => void;
 };
 
-const Header: React.FC<HeaderProps> = ({
-  onSearchFocus,
-  disableAddress,
+const SearchHeader: React.FC<SearchHeaderProps> = ({
   onSearch,
-  backIcon,
   backIconPress,
 }) => {
   const [searchQuery, setSearchQuery] = React.useState<string>('');
@@ -26,28 +18,17 @@ const Header: React.FC<HeaderProps> = ({
 
   const onChangeSearch = (query: string) => {
     setSearchQuery(query);
-    onSearch && onSearch(query);
-  };
-  const onFocus = () => {
-    onSearchFocus && onSearchFocus();
+    onSearch(query);
   };
 
   return (
     <View style={styles.container}>
-      {!disableAddress && (
-        <View style={styles.row}>
-          <ONDCLogo />
-          <AddressTag />
-        </View>
-      )}
       <View style={styles.searchContainer}>
-        {backIcon && (
-          <TouchableOpacity
-            onPress={backIconPress}
-            style={styles.backIconContainer}>
-            <Icon name={'arrow-back'} size={24} color={'#fff'} />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          onPress={backIconPress}
+          style={styles.backIconContainer}>
+          <Icon name={'arrow-back'} size={24} color={'#fff'} />
+        </TouchableOpacity>
         <Searchbar
           iconColor={theme.colors.primary}
           rippleColor={theme.colors.primary}
@@ -55,7 +36,6 @@ const Header: React.FC<HeaderProps> = ({
           style={styles.search}
           placeholderTextColor={theme.colors.primary}
           placeholder="Search"
-          onFocus={onFocus}
           onChangeText={onChangeSearch}
           value={searchQuery}
         />
@@ -85,7 +65,6 @@ const makeStyles = (colors: any) =>
     searchInput: {
       paddingVertical: 12,
       paddingHorizontal: 16,
-      color: colors.primary,
       minHeight: 44,
     },
     search: {
@@ -97,4 +76,4 @@ const makeStyles = (colors: any) =>
       marginRight: 12,
     },
   });
-export default Header;
+export default SearchHeader;

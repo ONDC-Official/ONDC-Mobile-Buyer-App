@@ -19,11 +19,10 @@ import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
 import Outlets from '../modules/main/provider/Outlets';
 import Orders from '../modules/main/order/list/Orders';
 import CancelOrder from '../modules/main/order/details/CancelOrder';
-import SearchProductsScreen from '../modules/main/dashboard/components/home/SearchProductsScreen';
+import SearchProducts from '../modules/main/dashboard/SearchProducts';
 import PaymentMethods from '../modules/main/order/details/PaymentMethods';
 import OrderProductDetails from '../modules/main/order/details/OrderProductDetails';
 import ReturnOrder from '../modules/main/order/details/ReturnOrder';
-
 
 const Stack = createStackNavigator();
 
@@ -182,7 +181,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         />
         <Stack.Screen
           name="SearchProducts"
-          component={SearchProductsScreen}
+          component={SearchProducts}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

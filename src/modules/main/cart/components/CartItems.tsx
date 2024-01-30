@@ -79,7 +79,7 @@ const CartItems: React.FC<CartItems> = ({
       );
       setProductPayload(data);
     } catch (error) {
-      console.error('Error fetching product details:', error);
+      console.log('Error fetching product details:', error);
     }
   };
 

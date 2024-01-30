@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import Header from '../dashboard/components/Header';
+import Header from '../dashboard/components/header/Header';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
 import Products from '../../../components/products/Products';

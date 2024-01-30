@@ -8,7 +8,7 @@ export default () => {
 
   useEffect(() => {
     auth()
-      .currentUser.getIdToken(true)
+      .currentUser?.getIdToken(true)
       .then(idToken => {
         updateToken(dispatch, idToken);
       })

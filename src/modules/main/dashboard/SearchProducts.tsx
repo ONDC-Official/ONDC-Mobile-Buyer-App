@@ -3,14 +3,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useTheme} from 'react-native-paper';
-import Header from '../Header';
-import SearchProducts from '../../../../../components/products/SearchProducts';
+import SearchProductList from '../../../components/products/SearchProductList';
+import SearchHeader from './components/header/SearchHeader';
 
 interface SearchProductsProps {
   route: any;
 }
 
-const SearchProductsScreen: React.FC<SearchProductsProps> = ({}) => {
+const SearchProducts: React.FC<SearchProductsProps> = ({}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -19,20 +19,19 @@ const SearchProductsScreen: React.FC<SearchProductsProps> = ({}) => {
   const onSearch = (query: string) => {
     setSearchQuery(query);
   };
+
   return (
     <View style={styles.container}>
-      <Header
-        disableAddress={true}
+      <SearchHeader
         onSearch={onSearch}
-        backIcon={true}
         backIconPress={() => navigation.goBack()}
       />
-      <SearchProducts searchQuery={searchQuery} />
+      <SearchProductList searchQuery={searchQuery} />
     </View>
   );
 };
 
-export default SearchProductsScreen;
+export default SearchProducts;
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({

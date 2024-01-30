@@ -1,18 +1,15 @@
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import Header from '../Header';
+import {StyleSheet, View} from 'react-native';
+import Header from '../header/Header';
 import Categories from '../home/Categories';
 import TopBrands from '../home/TopBrands';
 
 const Home = () => {
   const styles = makeStyles();
-  const navigation = useNavigation<StackNavigationProp<any>>();
 
   return (
     <View style={styles.container}>
-      <Header onSearchFocus={() => navigation.navigate('SearchProducts')}  />
+      <Header />
       <Categories />
       <TopBrands />
     </View>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import Categories from './components/Categories';
-import Header from '../dashboard/components/Header';
+import Header from '../dashboard/components/header/Header';
 import SubCategories from './components/SubCategories';
 import StoresNearMe from './components/StoresNearMe';
 import {appStyles} from '../../../styles/styles';

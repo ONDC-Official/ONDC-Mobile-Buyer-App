@@ -385,7 +385,8 @@ const ProductDetails: React.FC<ProductDetails> = ({
               <Text
                 variant="bodyLarge"
                 style={[styles.price, styles.maximumAmount]}>
-                ₹{Number(product?.item_details?.price?.maximum_value).toFixed(0)}
+                ₹
+                {Number(product?.item_details?.price?.maximum_value).toFixed(0)}
               </Text>
             </View>
             <View style={styles.divider} />
@@ -426,7 +427,10 @@ const ProductDetails: React.FC<ProductDetails> = ({
                   </TouchableOpacity>
                   <Text>
                     {addToCartLoading ? (
-                      <ActivityIndicator size={16} color={theme.colors.primary} />
+                      <ActivityIndicator
+                        size={16}
+                        color={theme.colors.primary}
+                      />
                     ) : (
                       itemAvailableInCart.item.quantity.count
                     )}

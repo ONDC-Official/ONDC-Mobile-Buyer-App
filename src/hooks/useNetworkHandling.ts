@@ -26,7 +26,7 @@ export default () => {
       console.log('Post', url);
       return await axios.post(encodeURI(url), params, config);
     } catch (e) {
-      console.error(e);
+      console.log(e);
       throw e;
     }
   };
@@ -41,7 +41,7 @@ export default () => {
       console.log('Put', url);
       return await axios.put(encodeURI(url), params, config);
     } catch (e) {
-      console.error(e);
+      console.log(e);
       throw e;
     }
   };
@@ -52,7 +52,7 @@ export default () => {
       console.log('Get', url);
       return await axios.get(encodeURI(url), config);
     } catch (e) {
-      console.error(e);
+      console.log(e);
       throw e;
     }
   };
@@ -63,7 +63,7 @@ export default () => {
       console.log('Delete', url);
       return await axios.delete(encodeURI(url), config);
     } catch (e) {
-      console.error(e);
+      console.log(e);
       throw e;
     }
   };

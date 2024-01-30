@@ -137,7 +137,7 @@ const Payment: React.FC<Payment> = ({
         onInitializeOrder(data.messageId)
           .then(() => {})
           .catch((error: any) => {
-            console.error(error);
+            console.log(error);
           });
       });
 

@@ -199,7 +199,7 @@ export default (openFulfillmentSheet: () => void) => {
         onGetQuote(data.messageId)
           .then(() => {})
           .catch(error => {
-            console.error(error);
+            console.log(error);
           });
       });
 
