@@ -227,6 +227,19 @@ const CartItems: React.FC<CartItems> = ({
                         </Text>
                       </TouchableOpacity>
                     )}
+                    {cartItem.item.product?.quantity?.unitized &&
+                      Object.keys(
+                        cartItem.item.product?.quantity?.unitized,
+                      ).map(one => (
+                        <Text
+                          variant={'labelSmall'}
+                          key={
+                            cartItem.item.product?.quantity?.unitized[one].value
+                          }>
+                          {cartItem.item.product?.quantity?.unitized[one].value}{' '}
+                          {cartItem.item.product?.quantity?.unitized[one].unit}
+                        </Text>
+                      ))}
                   </View>
 
                   <ManageQuantity

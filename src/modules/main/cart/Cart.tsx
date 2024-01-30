@@ -445,7 +445,6 @@ const Cart = () => {
   }, [isFocused]);
 
   useEffect(() => {
-    getCartItems().then(() => {});
     setDeliveryAddress(address);
   }, []);
 
