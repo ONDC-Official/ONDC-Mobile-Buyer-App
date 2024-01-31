@@ -23,6 +23,8 @@ import SearchProducts from '../modules/main/dashboard/SearchProducts';
 import PaymentMethods from '../modules/main/order/details/PaymentMethods';
 import OrderProductDetails from '../modules/main/order/details/OrderProductDetails';
 import ReturnOrder from '../modules/main/order/details/ReturnOrder';
+import Complaints from "../modules/main/complaint/list/Complaints";
+import ComplaintDetails from "../modules/main/complaint/details/ComplaintDetails";
 
 const Stack = createStackNavigator();
 
@@ -109,6 +111,24 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={Profile}
           options={{
             title: 'My Profile',
+            headerStyle,
+          }}
+        />
+
+        <Stack.Screen
+          name="Complaints"
+          component={Complaints}
+          options={{
+            title: 'Complaints',
+            headerStyle,
+          }}
+        />
+
+        <Stack.Screen
+          name="ComplaintDetails"
+          component={ComplaintDetails}
+          options={{
+            title: 'Complaint Details',
             headerStyle,
           }}
         />

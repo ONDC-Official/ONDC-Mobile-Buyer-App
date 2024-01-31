@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import useLogoutUser from '../../../../../hooks/useLogoutUser';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
+import Complaints from '../../../complaint/list/Complaints';
 
 const Profile = () => {
   const theme = useTheme();
@@ -27,6 +28,8 @@ const Profile = () => {
 
   const navigateToOrders = () => navigation.navigate('Orders');
 
+  const navigateToComplaints = () => navigation.navigate('Complaints');
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -44,7 +47,9 @@ const Profile = () => {
         <Text variant={'bodyLarge'}>Order History</Text>
         <Icon name={'chevron-right'} size={24} light />
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.menuOption, styles.borderBottom]}>
+      <TouchableOpacity
+        style={[styles.menuOption, styles.borderBottom]}
+        onPress={navigateToComplaints}>
         <Text variant={'bodyLarge'}>Complaints</Text>
         <Icon name={'chevron-right'} size={24} light />
       </TouchableOpacity>
