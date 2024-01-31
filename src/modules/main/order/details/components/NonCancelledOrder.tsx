@@ -11,6 +11,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 import Actions from './Actions';
 import DownloadIcon from '../../../../../assets/download.svg';
@@ -18,20 +19,19 @@ import DownloadDisabledIcon from '../../../../../assets/download_disabled.svg';
 import ProviderDetails from './ProviderDetails';
 import ItemDetails from './ItemDetails';
 import PaymentMethod from './PaymentMethod';
-import RaiseIssue from './RaiseIssue';
+import RaiseIssueButton from './RaiseIssueButton';
 import CancelOrderButton from './CancelOrderButton';
 import ReturnOrderButton from './ReturnOrderButton';
 
 const NonCancelledOrder = ({
-  orderDetails,
   getOrderDetails,
 }: {
-  orderDetails: any;
   getOrderDetails: () => void;
 }) => {
   const navigation = useNavigation<any>();
   const {colors} = useTheme();
   const styles = makeStyles(colors);
+  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
   const invoiceAvailable = !!orderDetails?.documents;
 
@@ -99,7 +99,7 @@ const NonCancelledOrder = ({
           address={orderDetails?.fulfillments[0]?.end?.location?.address}
           contact={orderDetails?.fulfillments[0]?.end?.contact}
         />
-        <RaiseIssue />
+        <RaiseIssueButton />
         <CancelOrderButton />
         <ReturnOrderButton />
       </ScrollView>

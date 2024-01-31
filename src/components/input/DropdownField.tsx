@@ -1,30 +1,21 @@
-import React from 'react';
-import {HelperText, Text, TextInput, withTheme} from 'react-native-paper';
+import DropDown from 'react-native-paper-dropdown';
+import {HelperText, Text, withTheme} from 'react-native-paper';
+import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 
-/**
- * Component to render generic input field
- * @param required: boolean whether input is required
- * @param label: label of input field
- * @param theme: theme object
- * @param props: other props
- * @returns {JSX.Element}
- * @constructor
- */
-const InputField: React.FC<any> = ({
+const DropdownField: React.FC<any> = ({
   required = false,
   label,
   theme,
   ...props
 }) => {
   const styles = makeStyles(theme.colors);
+  const [showDropDown, setShowDropDown] = useState(false);
 
   return (
     <View>
-      <TextInput
+      <DropDown
         {...props}
-        mode="outlined"
-        dense
         label={
           required ? (
             <Text style={styles.label}>
@@ -35,6 +26,10 @@ const InputField: React.FC<any> = ({
             label
           )
         }
+        mode={'outlined'}
+        visible={showDropDown}
+        showDropDown={() => setShowDropDown(true)}
+        onDismiss={() => setShowDropDown(false)}
       />
       {props.error && (
         <HelperText padding="none" type="error" visible={props.error}>
@@ -51,4 +46,4 @@ const makeStyles = (colors: any) =>
     required: {color: colors.red},
   });
 
-export default withTheme(InputField);
+export default withTheme(DropdownField);

@@ -32,16 +32,20 @@ const Profile = () => {
       <View style={styles.header}>
         <Text variant={'titleSmall'}>Profile</Text>
       </View>
-      <TouchableOpacity style={styles.menuOption} onPress={navigateToProfile}>
+      <TouchableOpacity
+        style={[styles.menuOption, styles.borderBottom]}
+        onPress={navigateToProfile}>
         <Text variant={'bodyLarge'}>My Profile</Text>
         <Icon name={'chevron-right'} size={24} light />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.menuOption} onPress={navigateToOrders}>
+      <TouchableOpacity
+        style={[styles.menuOption, styles.borderBottom]}
+        onPress={navigateToOrders}>
         <Text variant={'bodyLarge'}>Order History</Text>
         <Icon name={'chevron-right'} size={24} light />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.menuOption}>
-        <Text variant={'bodyLarge'}>Support</Text>
+      <TouchableOpacity style={[styles.menuOption, styles.borderBottom]}>
+        <Text variant={'bodyLarge'}>Complaints</Text>
         <Icon name={'chevron-right'} size={24} light />
       </TouchableOpacity>
       <TouchableOpacity style={styles.menuOption} onPress={confirmLogout}>
@@ -69,6 +73,10 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       paddingVertical: 20,
       paddingHorizontal: 16,
+    },
+    borderBottom: {
+      borderBottomWidth: 1,
+      borderBottomColor: '#E8E8E8',
     },
   });
 

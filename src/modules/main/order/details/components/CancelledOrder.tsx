@@ -9,16 +9,18 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Text, useTheme} from 'react-native-paper';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 import DownloadIcon from '../../../../../assets/download.svg';
 import ProviderDetails from './ProviderDetails';
 import ProductSummary from './ProductSummary';
 import OrderMeta from './OrderMeta';
 
-const CancelledOrder = ({orderDetails}: {orderDetails: any}) => {
+const CancelledOrder = () => {
   const navigation = useNavigation<any>();
   const {colors} = useTheme();
   const styles = makeStyles(colors);
+  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
   return (
     <View style={styles.orderDetails}>

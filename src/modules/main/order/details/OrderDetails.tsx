@@ -76,14 +76,9 @@ const OrderDetails = ({
   }
 
   if (orderDetails?.state === 'Cancelled') {
-    return <CancelledOrder orderDetails={orderDetails} />;
+    return <CancelledOrder />;
   } else {
-    return (
-      <NonCancelledOrder
-        orderDetails={orderDetails}
-        getOrderDetails={getOrderDetails}
-      />
-    );
+    return <NonCancelledOrder getOrderDetails={getOrderDetails} />;
   }
 };
 
