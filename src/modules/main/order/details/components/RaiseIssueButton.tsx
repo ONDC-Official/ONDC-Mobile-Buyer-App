@@ -107,7 +107,6 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
     };
     const response = await launchImageLibrary(options);
     if (response.didCancel) {
-      console.log('User cancelled image picker');
     } else if (response.errorMessage) {
       console.log('ImagePicker Error: ', response.errorMessage);
     } else {

@@ -20,21 +20,51 @@ const ShippingDetails = ({orderDetails}: {orderDetails: any}) => {
       <TouchableOpacity
         style={styles.accordion}
         onPress={() => setShowDetails(!showDetails)}>
-        <View style={styles.accordionTitle}>
-          <Text variant={'labelMedium'} style={styles.arrivalLabel}>
-            Arriving On:
-          </Text>
-          <Text variant={'labelMedium'} style={styles.arrivalDate}>
-            {moment(
-              orderDetails?.fulfillments[0]?.end?.time?.range?.end,
-            ).format('DD-MM-YYYY')}
-          </Text>
-        </View>
+        {orderDetails?.state !== 'Completed' ? (
+          <View style={styles.accordionTitle}>
+            <Text variant={'labelMedium'} style={styles.arrivalLabel}>
+              Arriving On:
+            </Text>
+            <Text variant={'labelMedium'} style={styles.arrivalDate}>
+              {moment(
+                orderDetails?.fulfillments[0]?.end?.time?.range?.end,
+              ).format('DD-MM-YYYY')}
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.accordionTitle}>
+            <Text variant={'labelMedium'} style={styles.arrivalLabel}>
+              Delivered On:
+            </Text>
+            <Text variant={'labelMedium'} style={styles.arrivalDate}>
+              {moment(orderDetails?.updatedAt).format('DD-MM-YYYY')}
+            </Text>
+          </View>
+        )}
         <Icon
           name={showDetails ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
           size={20}
         />
       </TouchableOpacity>
+      {showDetails &&
+        orderDetails?.orderHistory?.map((history: any, index: number) => (
+          <View key={history?._id} style={styles.statusContainer}>
+            <View style={styles.status}>
+              <View>
+                <Icon name={'check-circle'} color={'#419E6B'} size={20} />
+                {index < orderDetails?.orderHistory.length - 1 && (
+                  <View style={styles.link} />
+                )}
+              </View>
+              <Text variant={'labelMedium'} style={styles.state}>
+                {history?.state}
+              </Text>
+            </View>
+            <Text variant={'labelMedium'}>
+              {moment(history?.createdAt).format('ll')}
+            </Text>
+          </View>
+        ))}
     </View>
   );
 };
@@ -71,6 +101,25 @@ const makeStyles = (colors: any) =>
     arrivalDate: {
       color: '#1A1A1A',
       marginLeft: 8,
+    },
+    statusContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    status: {
+      flexDirection: 'row',
+    },
+    link: {
+      height: 30,
+      borderLeftColor: '#419E6B',
+      borderLeftWidth: 2,
+      marginLeft: 9,
+    },
+    state: {
+      fontWeight: '700',
+      color: '#1D1D1D',
+      paddingTop: 4,
+      paddingLeft: 8,
     },
   });
 

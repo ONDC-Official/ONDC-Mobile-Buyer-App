@@ -46,7 +46,6 @@ const Complaints: React.FC<any> = () => {
         source.current.token,
       );
 
-      console.log(JSON.stringify(data, undefined, 4));
       totalComplaints.current = data.totalCount;
       setComplaints(
         currentPage === 1 ? data.issues : [...complaints, ...data.issues],
