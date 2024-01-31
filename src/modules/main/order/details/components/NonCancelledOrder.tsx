@@ -99,7 +99,7 @@ const NonCancelledOrder = ({
           address={orderDetails?.fulfillments[0]?.end?.location?.address}
           contact={orderDetails?.fulfillments[0]?.end?.contact}
         />
-        <RaiseIssueButton />
+        <RaiseIssueButton getOrderDetails={getOrderDetails} />
         <CancelOrderButton />
         <ReturnOrderButton />
       </ScrollView>

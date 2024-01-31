@@ -13,20 +13,30 @@ import {
   Text,
   useTheme,
 } from 'react-native-paper';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Formik, FormikHelpers} from 'formik';
+import {Formik} from 'formik';
 import * as yup from 'yup';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import {launchImageLibrary} from 'react-native-image-picker';
+import axios from 'axios';
+import RNEventSource from 'react-native-event-source';
 import RaiseComplaint from '../../../../../assets/raise_complaint.svg';
-import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
+import {CURRENCY_SYMBOLS, SSE_TIMEOUT} from '../../../../../utils/constants';
 import {appStyles} from '../../../../../styles/styles';
 import InputField from '../../../../../components/input/InputField';
 import DropdownField from '../../../../../components/input/DropdownField';
 import {ISSUE_TYPES} from '../../../../../utils/issueTypes';
+import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
+import {
+  API_BASE_URL,
+  ISSUE,
+  ON_ISSUE,
+  RAISE_ISSUE,
+} from '../../../../../utils/apiActions';
+import {showToastWithGravity} from '../../../../../utils/utils';
 
 const validationSchema = yup.object({
   subcategory: yup.string().required('Subcategory is required'),
@@ -50,18 +60,25 @@ const categories = ISSUE_TYPES.map(item => {
   });
 }).flat();
 
-const RaiseIssueButton = () => {
+const CancelToken = axios.CancelToken;
+
+const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const source = useRef<any>(null);
+  const eventTimeOutRef = useRef<any>(null);
+  const responseRef = useRef<any[]>([]);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {token} = useSelector(({authReducer}) => authReducer);
+  const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const [visible, setVisible] = React.useState(false);
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [productsWithIssue, setProductsWithIssue] = useState<any[]>([]);
   const [photos, setPhotos] = useState<any[]>([]);
+  const [raiseInProgress, setRaiseInProgress] = useState<boolean>(false);
 
   const showDialog = () => {
     setVisible(true);
-    console.log(JSON.stringify(orderDetails, undefined, 4));
   };
 
   const hideDialog = () => setVisible(false);
@@ -98,10 +115,145 @@ const RaiseIssueButton = () => {
     }
   };
 
-  const raiseIssue = (
-    values: FormData,
-    formikHelpers: FormikHelpers<FormData>,
-  ) => {};
+  const onSuccess = () => {
+    hideDialog();
+    showToastWithGravity('Complaint raised successfully!');
+    getOrderDetails();
+  };
+
+  const removePhoto = (photoIndex: number) => {
+    setPhotos(photos.filter((one, index) => photoIndex !== index));
+  };
+
+  // on Issue api
+  const getPartialCancelOrderDetails = async (message_id, createdDateTime) => {
+    try {
+      source.current = CancelToken.source();
+      const {data} = await getDataWithAuth(
+        `${API_BASE_URL}${ON_ISSUE}${message_id}&createdDateTime=${createdDateTime}`,
+        source.current.token,
+      );
+      responseRef.current = [...responseRef.current, data];
+      setRaiseInProgress(false);
+      onSuccess();
+    } catch (err: any) {
+      setRaiseInProgress(false);
+      onSuccess();
+      showToastWithGravity(err?.message);
+      eventTimeOutRef.current.eventSource.close();
+      clearTimeout(eventTimeOutRef.current.timer);
+    }
+  };
+
+  const onRaiseIssue = (messageId: any, createdDateTime: any) => {
+    const eventSource = new RNEventSource(
+      `${API_BASE_URL}${ISSUE}${messageId}`,
+      {
+        headers: {Authorization: `Bearer ${token}`},
+      },
+    );
+    eventSource.addEventListener('on_issue', (event: any) => {
+      const data = JSON.parse(event.data);
+      getPartialCancelOrderDetails(data.messageId, createdDateTime)
+        .then(() => {})
+        .catch((error: any) => {
+          console.log(error);
+        });
+    });
+
+    const timer = setTimeout(() => {
+      eventTimeOutRef.current.eventSource.close();
+      clearTimeout(eventTimeOutRef.current.timer);
+      if (responseRef.current.length <= 0) {
+        setRaiseInProgress(false);
+        return;
+      }
+    }, SSE_TIMEOUT);
+
+    eventTimeOutRef.current = {
+      eventSource,
+      timer,
+    };
+  };
+
+  const raiseIssue = async (values: any) => {
+    try {
+      setRaiseInProgress(true);
+      const selectedCategory = categories.find(
+        one => one.value === values.subcategory,
+      );
+      const createdDateTime = new Date().toISOString();
+      const items = productsWithIssue.filter(item =>
+        selectedItems.includes(item.id),
+      );
+      const params = {
+        context: {
+          city: orderDetails?.fulfillments[0]?.end?.location?.address?.city,
+          state: orderDetails?.fulfillments[0]?.end?.location?.address?.state,
+          transaction_id: orderDetails?.transactionId,
+          domain: orderDetails?.domain,
+        },
+        message: {
+          issue: {
+            category: selectedCategory?.category.toUpperCase(),
+            sub_category: selectedCategory?.enums,
+            bppId: orderDetails?.bppId,
+            bpp_uri: orderDetails?.bpp_uri,
+            created_at: createdDateTime,
+            updated_at: createdDateTime,
+            complainant_info: {
+              person: {
+                name: orderDetails?.billing?.name,
+              },
+              contact: {
+                phone: orderDetails?.billing?.phone,
+                email: orderDetails?.billing?.email,
+              },
+            },
+            description: {
+              short_desc: values.shortDescription,
+              long_desc: values.longDescription,
+              additional_desc: {
+                url: 'https://buyerapp.com/additonal-details/desc.txt',
+                content_type: 'text/plain',
+              },
+              images: photos?.map(
+                (photo: any) => `data:image/*;base64,${photo.base64}`,
+              ),
+            },
+            order_details: {
+              id: orderDetails?.id,
+              state: orderDetails?.state,
+              items,
+              fulfillments: orderDetails?.fulfillments,
+              provider_id: orderDetails?.provider?.id,
+            },
+            issue_actions: {
+              complainant_actions: [],
+              respondent_actions: [],
+            },
+          },
+        },
+      };
+
+      source.current = CancelToken.source();
+      const {data} = await postDataWithAuth(
+        `${API_BASE_URL}${RAISE_ISSUE}`,
+        params,
+        source.current.token,
+      );
+      //Error handling workflow eg, NACK
+      if (data.message && data.message.ack.status === 'NACK') {
+        showToastWithGravity('Something went wrong');
+        setRaiseInProgress(false);
+      } else {
+        onRaiseIssue(data.context?.message_id, createdDateTime);
+      }
+    } catch (err: any) {
+      showToastWithGravity(err?.message);
+      setRaiseInProgress(false);
+    }
+  };
 
   useEffect(() => {
     if (orderDetails) {
@@ -213,7 +365,6 @@ const RaiseIssueButton = () => {
                   validationSchema={validationSchema}
                   onSubmit={raiseIssue}>
                   {({
-                    isSubmitting,
                     values,
                     errors,
                     handleChange,
@@ -229,7 +380,7 @@ const RaiseIssueButton = () => {
                           <Text style={styles.required}> *</Text>
                         </Text>
                         <DropdownField
-                          disabled={isSubmitting}
+                          disabled={raiseInProgress}
                           name="subcategory"
                           value={values.subcategory}
                           setValue={(newValue: any) =>
@@ -250,7 +401,7 @@ const RaiseIssueButton = () => {
                           <Text style={styles.required}> *</Text>
                         </Text>
                         <InputField
-                          disabled={isSubmitting}
+                          disabled={raiseInProgress}
                           name="shortDescription"
                           value={values.shortDescription}
                           onBlur={handleBlur('shortDescription')}
@@ -274,7 +425,7 @@ const RaiseIssueButton = () => {
                           <Text style={styles.required}> *</Text>
                         </Text>
                         <InputField
-                          disabled={isSubmitting}
+                          disabled={raiseInProgress}
                           name="longDescription"
                           value={values.longDescription}
                           onBlur={handleBlur('longDescription')}
@@ -314,7 +465,7 @@ const RaiseIssueButton = () => {
                         </Text>
                         <View style={styles.fileContainer}>
                           <Button
-                            disabled={isSubmitting}
+                            disabled={raiseInProgress}
                             mode={'contained'}
                             onPress={handleChoosePhoto}>
                             Browse
@@ -329,9 +480,11 @@ const RaiseIssueButton = () => {
                                 }}
                                 style={styles.image}
                               />
-                              <TouchableOpacity style={styles.removeImage}>
+                              <TouchableOpacity
+                                style={styles.removeImage}
+                                onPress={() => removePhoto(index)}>
                                 <Icon
-                                  name={'clear'}
+                                  name={'cancel'}
                                   size={20}
                                   color={theme.colors.error}
                                 />
@@ -346,7 +499,7 @@ const RaiseIssueButton = () => {
                           style={styles.button}
                           mode="outlined"
                           onPress={hideDialog}
-                          disabled={isSubmitting}>
+                          disabled={raiseInProgress}>
                           Cancel
                         </Button>
                         <View style={styles.separator} />
@@ -354,8 +507,10 @@ const RaiseIssueButton = () => {
                           style={styles.button}
                           mode="contained"
                           onPress={() => handleSubmit()}
-                          loading={isSubmitting}
-                          disabled={isSubmitting}>
+                          loading={raiseInProgress}
+                          disabled={
+                            raiseInProgress || selectedItems.length === 0
+                          }>
                           Confirm
                         </Button>
                       </View>
@@ -477,6 +632,7 @@ const makeStyles = (colors: any) =>
     imageContainer: {
       flexDirection: 'row',
       alignItems: 'center',
+      marginTop: 8,
     },
     image: {
       width: 72,
@@ -484,7 +640,7 @@ const makeStyles = (colors: any) =>
       marginRight: 8,
     },
     removeImage: {
-      marginTop: -72,
+      position: 'absolute',
     },
   });
 

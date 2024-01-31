@@ -28,8 +28,12 @@ export const SELECT: string = '/clientApis/v2/select';
 export const CONFIRM_ORDER: string = '/clientApis/v2/confirm_order';
 export const ON_CONFIRM: string = '/clientApis/v2/on_confirm_order?messageIds=';
 export const EVENTS: string = '/clientApis/events/v2?messageId=';
+export const ISSUE: string = '/issueApis/events?messageId=';
+export const ON_ISSUE: string = '/issueApis/v1/on_issue?messageId=';
 export const INITIALIZE_ORDER: string = '/clientApis/v2/initialize_order';
 export const ON_INITIALIZE: string =
   '/clientApis/v2/on_initialize_order?messageIds=';
 
 export const CANCEL_ORDER: string = '/clientApis/v2/cancel_order';
+
+export const RAISE_ISSUE: string = '/issueApis/v1/issue';
