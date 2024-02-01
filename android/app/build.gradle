@@ -1,4 +1,16 @@
 apply plugin: "com.android.application"
+
+// add this block
+project.ext.envConfigFiles = [
+        productiondebug: ".env.production",
+        productionrelease: ".env.production",
+        developmentrelease: ".env.preprod",
+        developmentdebug: ".env.preprod",
+        stagingrelease: ".env.staging",
+        stagingdebug: ".env.staging"
+]
+
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle" // <- add this line
 apply plugin: 'com.google.gms.google-services'
 apply plugin: "com.facebook.react"
 
@@ -74,6 +86,28 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    flavorDimensions "default"
+    productFlavors {
+        production {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId "org.ondc.buyer"
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "org.ondc.buyer"
+        }
+        staging {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId "org.ondc.buyer.stg"
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "org.ondc.buyer"
+        }
+        development {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId "org.ondc.buyer.dev"
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "org.ondc.buyer"
+        }
+    }
+
     namespace "org.ondc.buyer"
     defaultConfig {
         applicationId "org.ondc.buyer"
@@ -91,9 +125,20 @@ android {
             keyPassword 'android'
         }
     }
+    buildFeatures {
+        dataBinding true
+        viewBinding true
+    }
+    configurations.configureEach {
+        resolutionStrategy {
+            force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.0'
+            force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0'
+        }
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            matchingFallbacks = ['debug', 'release']
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -108,12 +153,11 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
-    implementation project(':mappls-map-react-native')
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.squareup.okhttp3', module:'okhttp'
     }
-
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.0"
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

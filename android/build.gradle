@@ -9,6 +9,7 @@ buildscript {
         hyperSDKVersion = "2.1.13"
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
+        kotlinVersion = "1.8.0"
     }
     repositories {
         google()
@@ -18,6 +19,7 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath 'com.google.gms:google-services:4.4.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0"
     }
 }
 
@@ -25,5 +27,8 @@ allprojects {
     repositories {
         maven { url "https://maven.juspay.in/jp-build-packages/hyper-sdk/" }
         maven { url 'https://maven.mappls.com/repository/mappls/'}
+        google()
+        mavenCentral()
+        maven { url 'https://www.jitpack.io' }
     }
 }

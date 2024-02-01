@@ -68,5 +68,8 @@ yarn-error.log
 # config
 config.ts
 .env
+.env.preprod
+.env.staging
+.env.production
 android/app/google-services.json
 ios/ONDCReferenceBuyerApp/GoogleService-Info.plist

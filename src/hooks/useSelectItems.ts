@@ -120,12 +120,17 @@ export default (openFulfillmentSheet: () => void) => {
         let domain: string = '';
         let contextCity: string = '';
         const updatedItems: any[] = items.map(item => {
-          domain = item.domain;
-          contextCity = item.contextCity;
-          delete item.context;
-          delete item.contextCity;
-          return item;
+          const newItem = Object.assign({}, item);
+          domain = newItem.domain;
+          contextCity = newItem.contextCity;
+          delete newItem.context;
+          delete newItem.contextCity;
+          return newItem;
         });
+        if (contextCity === '') {
+          contextCity = address.current.address.city;
+        }
+
         let selectPayload: any = {
           context: {
             transaction_id: transactionId,

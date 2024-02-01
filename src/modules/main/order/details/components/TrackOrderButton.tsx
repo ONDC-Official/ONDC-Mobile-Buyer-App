@@ -6,6 +6,12 @@ import {Dimensions, TouchableOpacity, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {WebView} from 'react-native-webview';
+
+import MapplsDirectionWidget, {
+  DirectionsCriteria,
+} from 'mappls-direction-widget-react-native';
+import MapplsGL from 'mappls-map-react-native';
+
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
 
@@ -13,8 +19,13 @@ import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {makeButtonStyles} from './buttonStyles';
 import {updateRequestingTracker} from '../../../../../redux/order/actions';
-import {API_BASE_URL, TRACK_ORDER} from '../../../../../utils/apiActions';
+import {
+  API_BASE_URL,
+  MAP_ACCESS_TOKEN,
+  TRACK_ORDER,
+} from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
+import Config from '../../../../../../config';
 
 interface TrackOrderButton {}
 
@@ -33,7 +44,6 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
   const [trackingUrl, setTrackingUrl] = useState<string>('');
-  const [tracking, setTracking] = useState<any>(null);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
 
   // TRACK APIS
@@ -114,14 +124,12 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
       ];
       const {message} = data[0];
       if (message.tracking.status === 'active' && message.tracking.url === '') {
-        setTracking(null);
         dispatch(updateRequestingTracker(false));
         showToastWithGravity(
           'Tracking information is not provided by the provider.',
         );
         return;
       } else if (message?.tracking?.url === '') {
-        setTracking(null);
         dispatch(updateRequestingTracker(false));
         showToastWithGravity(
           'Tracking information not available for this product',
@@ -134,14 +142,44 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
         dispatch(updateRequestingTracker(false));
         setTrackingUrl(message?.tracking?.url);
         trackingSheet.current.open();
-        setTracking(null);
       } else if (
         message.tracking.status === 'active' &&
         message?.tracking?.location?.gps
       ) {
-        setTracking(message?.tracking);
+        const mapResponse = await getDataWithAuth(
+          `${API_BASE_URL}${MAP_ACCESS_TOKEN}`,
+          source.current.token,
+        );
+        MapplsGL.setMapSDKKey(mapResponse.data.access_token);
+        MapplsGL.setRestAPIKey(mapResponse.data.access_token);
+        MapplsGL.setAtlasClientId(mapResponse.data.client_id);
+        MapplsGL.setAtlasClientSecret(Config.MMMI_CLIENT_SECRET);
+        let locationString = message?.tracking?.location?.gps.replaceAll(
+          ' ',
+          '',
+        );
+        let locations = locationString.split(',');
+        const sourceLocation = {
+          latitude: Number(locations[0]),
+          longitude: Number(locations[1]),
+        };
+        locations =
+          orderDetails?.fulfillments[0]?.end?.location?.gps.split(',');
+
+        await MapplsDirectionWidget.openDirectionWidget({
+          showStartNavigation: true,
+          steps: true,
+          showAlternative: false,
+          profile: DirectionsCriteria.PROFILE_DRIVING,
+          overview: DirectionsCriteria.OVERVIEW_FULL,
+          annotation: DirectionsCriteria.ANNOTATION_CONGESTION,
+          source: sourceLocation,
+          destination: {
+            latitude: Number(locations[0]),
+            longitude: Number(locations[1]),
+          },
+        });
       } else {
-        setTracking(null);
         dispatch(updateRequestingTracker(false));
         showToastWithGravity(
           'Tracking information is not provided by the provider.',
