@@ -10,7 +10,7 @@ import ShippingDetails from './components/ShippingDetails';
 import ProductSummary from './components/ProductSummary';
 import OrderMeta from './components/OrderMeta';
 
-const OrderProductDetails = () => {
+const OrderProductDetails = ({route: {params}}: {route: any}) => {
   const navigation = useNavigation();
   const {colors} = useTheme();
   const styles = makeStyles(colors);
@@ -39,9 +39,11 @@ const OrderProductDetails = () => {
           bppId={orderDetails?.bppId}
           domain={orderDetails?.domain}
         />
-        <ShippingDetails orderDetails={orderDetails} />
+        <ShippingDetails fullfillmentId={params.fulfillmentId} />
         <ProductSummary
-          items={orderDetails?.items}
+          items={orderDetails?.items.filter(
+            (one: any) => one.fulfillment_id === params.fulfillmentId,
+          )}
           quote={orderDetails?.quote}
         />
         <OrderMeta />

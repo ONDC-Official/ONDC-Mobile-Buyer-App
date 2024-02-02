@@ -27,10 +27,14 @@ const ItemDetails = ({
           <TouchableOpacity
             key={fulfillment.id}
             style={styles.container}
-            onPress={() => navigation.navigate('OrderProductDetails')}>
+            onPress={() =>
+              navigation.navigate('OrderProductDetails', {
+                fulfillmentId: fulfillment.id,
+              })
+            }>
             <View style={styles.header}>
               <Text variant={'labelMedium'} style={styles.deliveryDate}>
-                Order will be delivered by{'\n'}
+                Items will be delivered by{'\n'}
                 {today.isSame(endDate, 'day')
                   ? endDate.format('hh:mm a')
                   : endDate.format('Do MMM')}

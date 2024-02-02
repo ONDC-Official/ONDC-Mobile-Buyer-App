@@ -23,7 +23,7 @@ const ProductSummary = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <Text variant={'titleMedium'} style={styles.sectionTitle}>
-          Your Order
+          Items
         </Text>
         {cancelled && !!documents && (
           <TouchableOpacity onPress={() => Linking.openURL(documents[0]?.url)}>
@@ -143,7 +143,7 @@ const makeStyles = (colors: any) =>
     itemMeta: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 10,
+      marginBottom: 4,
     },
     quantityContainer: {
       flexDirection: 'row',

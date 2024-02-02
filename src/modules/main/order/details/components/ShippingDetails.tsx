@@ -3,16 +3,23 @@ import {Text, useTheme} from 'react-native-paper';
 import moment from 'moment/moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useState} from 'react';
+import {useSelector} from 'react-redux';
 
-const ShippingDetails = ({orderDetails}: {orderDetails: any}) => {
+const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const [showDetails, setShowDetails] = useState<boolean>(true);
+  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+
+  const fulfilmentIndex = orderDetails?.fulfillments.findIndex(
+    (one: any) => one.id === fullfillmentId,
+  );
 
   return (
     <View style={styles.shippingContainer}>
       <Text variant={'bodyLarge'} style={styles.shippingTitle}>
-        Shipment Details
+        Shipment Details ({fulfilmentIndex + 1}/
+        {orderDetails?.fulfillments.length})
       </Text>
       <Text variant={'bodyMedium'} style={styles.shippingTitle}>
         {orderDetails?.items?.length} Item(s) Arriving
