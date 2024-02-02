@@ -1,11 +1,14 @@
 import {ActivityIndicator, Text, useTheme} from 'react-native-paper';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {Dimensions, TouchableOpacity, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {WebView} from 'react-native-webview';
+import Polyline from 'mappls-polyline';
+import {lineString as makeLineString} from '@turf/helpers';
+import deliveryPartner from '../../../../../assets/delivery_partner.png';
 
 import MapplsDirectionWidget, {
   DirectionsCriteria,
@@ -26,11 +29,34 @@ import {
 } from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
 import Config from '../../../../../../config';
+import { point } from "@turf/helpers";
 
 interface TrackOrderButton {}
 
 const CancelToken = axios.CancelToken;
 const screenHeight: number = Dimensions.get('screen').height;
+
+const layerStyles: any = {
+  origin: {
+    circleRadius: 10,
+    circleColor: 'white',
+  },
+  destination: {
+    circleRadius: 10,
+    circleColor: 'green',
+  },
+  route: {
+    lineColor: 'red',
+    lineCap: 'round',
+    lineWidth: 5,
+    lineOpacity: 0.84,
+  },
+  progress: {
+    lineColor: '#314ccd',
+    lineWidth: 5,
+  },
+};
+
 const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -44,6 +70,9 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
   const [trackingUrl, setTrackingUrl] = useState<string>('');
+  const [currentPoint, setCurrentPoint] = useState<any>(null);
+  const [route, setRoute] = useState<any>(null);
+  const [routeCoordinates, setRouteCoordinates] = useState<any>(null);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
 
   // TRACK APIS
@@ -159,26 +188,24 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
           '',
         );
         let locations = locationString.split(',');
-        const sourceLocation = {
-          latitude: Number(locations[0]),
-          longitude: Number(locations[1]),
-        };
-        locations =
+        const endLocation =
           orderDetails?.fulfillments[0]?.end?.location?.gps.split(',');
+        const startLocation =
+          orderDetails?.fulfillments[0]?.start?.location?.gps.split(',');
 
-        await MapplsDirectionWidget.openDirectionWidget({
-          showStartNavigation: true,
-          steps: true,
-          showAlternative: false,
-          profile: DirectionsCriteria.PROFILE_DRIVING,
-          overview: DirectionsCriteria.OVERVIEW_FULL,
-          annotation: DirectionsCriteria.ANNOTATION_CONGESTION,
-          source: sourceLocation,
-          destination: {
-            latitude: Number(locations[0]),
-            longitude: Number(locations[1]),
-          },
+        const directionResponse = await MapplsGL.RestApi.direction({
+          origin: `${startLocation[1]}${startLocation[0]}`,
+          destination: `${endLocation[1]}${endLocation[0]}`,
+          resource: 'route_eta',
+          profile: 'driving',
+          overview: 'simplified',
         });
+        setCurrentPoint(`${locations[1]}${locations[0]}`);
+        setRoute(Polyline.toGeoJSON(directionResponse.routes[0].geometry, 6));
+        setRouteCoordinates(
+          Polyline.toGeoJSON(directionResponse.routes[0].geometry, 6).coordinates,
+        );
+        trackingSheet.current.open();
       } else {
         dispatch(updateRequestingTracker(false));
         showToastWithGravity(
@@ -197,6 +224,107 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   };
 
   const hideTrackingSheet = () => trackingSheet?.current?.close();
+
+  const renderOrigin = () => {
+    if (!route) {
+      return null;
+    }
+
+    let backgroundColor = 'red';
+
+    if (currentPoint) {
+      backgroundColor = '#314ccd';
+    }
+
+    const style = [layerStyles.origin, {circleColor: backgroundColor}];
+
+    return (
+      <MapplsGL.ShapeSource id="origin" shape={point(routeCoordinates[0])}>
+        <MapplsGL.Animated.CircleLayer id="originInnerCircle" style={style} />
+      </MapplsGL.ShapeSource>
+    );
+  };
+
+  const renderRoute = () => {
+    if (!route) {
+      return null;
+    }
+
+    return (
+      <MapplsGL.ShapeSource id="routeSource" shape={route}>
+        <MapplsGL.LineLayer
+          id="routeFill"
+          style={layerStyles.route}
+          belowLayerID="originInnerCircle"
+        />
+      </MapplsGL.ShapeSource>
+    );
+  };
+
+  const renderCurrentPoint = () => {
+    if (!currentPoint) {
+      return;
+    }
+    return (
+      <MapplsGL.ShapeSource id="symbolLocationSource" shape={currentPoint}>
+        <MapplsGL.SymbolLayer
+          id="symbolLocationSymbols"
+          minZoomLevel={1}
+          style={{
+            iconRotationAlignment: 'map',
+            iconImage: deliveryPartner,
+            iconIgnorePlacement: true,
+            iconAllowOverlap: true,
+            iconAnchor: 'center',
+            iconRotate: ['get', 'bearing'],
+            iconSize: 0.07,
+          }}
+        />
+      </MapplsGL.ShapeSource>
+    );
+  };
+
+  const renderProgressLine = () => {
+    if (!currentPoint) {
+      return null;
+    }
+
+    const {nearestIndex} = currentPoint.properties;
+    const coords = route.coordinates.filter((c, i) => i <= nearestIndex);
+    coords.push(currentPoint.geometry.coordinates);
+
+    if (coords.length < 2) {
+      return null;
+    }
+
+    const lineString = makeLineString(coords);
+    return (
+      <MapplsGL.Animated.ShapeSource id="progressSource" shape={lineString}>
+        <MapplsGL.Animated.LineLayer
+          id="progressFill"
+          style={layerStyles.progress}
+          aboveLayerID="routeFill"
+        />
+      </MapplsGL.Animated.ShapeSource>
+    );
+  };
+
+  const renderDestination = () => {
+    if (!route) {
+      return null;
+    }
+
+    return (
+      <MapplsGL.ShapeSource
+        id="destination"
+        shape={point(routeCoordinates[routeCoordinates.length - 1])}>
+        <MapplsGL.CircleLayer
+          id="destinationInnerCircle"
+          style={layerStyles.destination}
+        />
+      </MapplsGL.ShapeSource>
+    );
+  };
 
   return (
     <>
@@ -225,7 +353,18 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
             <Icon name={'close-circle'} color={theme.colors.error} size={32} />
           </TouchableOpacity>
         </View>
-        <WebView style={styles.webView} source={{uri: trackingUrl}} />
+        <MapplsGL.MapView style={styles.webView}>
+          <MapplsGL.Camera
+            zoomLevel={16}
+            centerCoordinate={[77.202432, 28.594475]}
+          />
+          {renderOrigin()}
+          {renderRoute()}
+          {renderCurrentPoint()}
+          {renderProgressLine()}
+          {renderDestination()}
+        </MapplsGL.MapView>
+        {/*<WebView style={styles.webView} source={{uri: trackingUrl}} />*/}
       </RBSheet>
     </>
   );
