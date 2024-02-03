@@ -194,13 +194,13 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
           orderDetails?.fulfillments[0]?.start?.location?.gps.split(',');
 
         const directionResponse = await MapplsGL.RestApi.direction({
-          origin: `${startLocation[1]}${startLocation[0]}`,
-          destination: `${endLocation[1]}${endLocation[0]}`,
+          origin: `${startLocation[1]},${startLocation[0]}`,
+          destination: `${endLocation[1]},${endLocation[0]}`,
           resource: 'route_eta',
           profile: 'driving',
           overview: 'simplified',
         });
-        setCurrentPoint(`${locations[1]}${locations[0]}`);
+        setCurrentPoint(`${locations[1]},${locations[0]}`);
         setRoute(Polyline.toGeoJSON(directionResponse.routes[0].geometry, 6));
         setRouteCoordinates(
           Polyline.toGeoJSON(directionResponse.routes[0].geometry, 6).coordinates,
