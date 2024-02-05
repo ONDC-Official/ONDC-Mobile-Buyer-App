@@ -291,7 +291,7 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                 const itemSelected = selectedItems.includes(item.id);
 
                 return (
-                  <View style={styles.itemContainer}>
+                  <View key={item.id} style={styles.itemContainer}>
                     <Checkbox.Android
                       status={itemSelected ? 'checked' : 'unchecked'}
                       onPress={() => {
