@@ -291,7 +291,6 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
     });
   }, []);
 
-  console.log(currentPoint);
   return (
     <>
       <TouchableOpacity
