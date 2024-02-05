@@ -3,6 +3,7 @@ import React from 'react';
 import {Text, useTheme} from 'react-native-paper';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import {useSelector} from 'react-redux';
 
 interface TabIcon {
   name: string;
@@ -37,6 +38,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
 }) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
   return (
     <View style={[styles.container, styles.boxShadow]}>
@@ -65,6 +67,8 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
           });
         };
 
+        const badge = cartItems?.length;
+
         return (
           <View key={route.name} style={styles.tab}>
             <TouchableOpacity
@@ -81,6 +85,11 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
                 style={isFocused ? styles.activeButtonText : styles.tabText}>
                 {label}
               </Text>
+              {route.name === 'Cart' && badge ? (
+                <View style={[styles.badge, isFocused ? styles.selectedBadge : {}]}>
+                  <Text style={styles.badgeLabel}>{badge}</Text>
+                </View>
+              ) : null}
             </TouchableOpacity>
           </View>
         );
@@ -130,6 +139,19 @@ const makeStyles = (colors: any) =>
     tabText: {
       color: '#686868',
       marginLeft: 6,
+    },
+    badge: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      paddingHorizontal: 6,
+      paddingVertical: 2,
+    },
+    badgeLabel: {color: colors.white, fontSize: 10},
+    selectedBadge: {
+      backgroundColor: colors.warning,
     },
   });
 
