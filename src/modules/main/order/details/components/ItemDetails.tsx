@@ -21,7 +21,7 @@ const ItemDetails = ({
 
   return (
     <>
-      {fulfillments.map(fulfillment => {
+      {fulfillments?.map(fulfillment => {
         const endDate = moment(fulfillment?.end?.time?.range?.end);
         return (
           <TouchableOpacity

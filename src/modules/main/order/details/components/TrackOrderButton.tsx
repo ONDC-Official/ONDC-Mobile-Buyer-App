@@ -1,15 +1,14 @@
 import {ActivityIndicator, Text, useTheme} from 'react-native-paper';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {Dimensions, TouchableOpacity, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {WebView} from 'react-native-webview';
-
-import MapplsDirectionWidget, {
-  DirectionsCriteria,
-} from 'mappls-direction-widget-react-native';
+// @ts-ignore
+import Polyline from 'mappls-polyline';
+import {point} from '@turf/helpers';
 import MapplsGL from 'mappls-map-react-native';
 
 // @ts-ignore
@@ -26,11 +25,34 @@ import {
 } from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
 import Config from '../../../../../../config';
+import {theme} from '../../../../../utils/theme';
 
 interface TrackOrderButton {}
 
 const CancelToken = axios.CancelToken;
 const screenHeight: number = Dimensions.get('screen').height;
+
+const layerStyles: any = {
+  origin: {
+    circleRadius: 10,
+    circleColor: 'white',
+  },
+  destination: {
+    circleRadius: 10,
+    circleColor: theme.colors.primary,
+  },
+  route: {
+    lineColor: 'black',
+    lineCap: 'round',
+    lineWidth: 2,
+    lineOpacity: 0.84,
+  },
+  progress: {
+    lineColor: theme.colors.primary,
+    lineWidth: 5,
+  },
+};
+
 const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -44,6 +66,8 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
   const [trackingUrl, setTrackingUrl] = useState<string>('');
+  const [currentPoint, setCurrentPoint] = useState<any>(null);
+  const [route, setRoute] = useState<any>(null);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
 
   // TRACK APIS
@@ -129,56 +153,43 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
           'Tracking information is not provided by the provider.',
         );
         return;
-      } else if (message?.tracking?.url === '') {
-        dispatch(updateRequestingTracker(false));
-        showToastWithGravity(
-          'Tracking information not available for this product',
-        );
-        return;
       } else if (
         message.tracking.status === 'active' &&
         (message?.tracking?.url !== '' || message?.tracking?.url !== undefined)
       ) {
         dispatch(updateRequestingTracker(false));
         setTrackingUrl(message?.tracking?.url);
+        setRoute(null);
+        setCurrentPoint(null);
         trackingSheet.current.open();
       } else if (
         message.tracking.status === 'active' &&
         message?.tracking?.location?.gps
       ) {
-        const mapResponse = await getDataWithAuth(
-          `${API_BASE_URL}${MAP_ACCESS_TOKEN}`,
-          source.current.token,
-        );
-        MapplsGL.setMapSDKKey(mapResponse.data.access_token);
-        MapplsGL.setRestAPIKey(mapResponse.data.access_token);
-        MapplsGL.setAtlasClientId(mapResponse.data.client_id);
-        MapplsGL.setAtlasClientSecret(Config.MMMI_CLIENT_SECRET);
         let locationString = message?.tracking?.location?.gps.replaceAll(
           ' ',
           '',
         );
         let locations = locationString.split(',');
-        const sourceLocation = {
-          latitude: Number(locations[0]),
-          longitude: Number(locations[1]),
-        };
-        locations =
+        const endLocation =
           orderDetails?.fulfillments[0]?.end?.location?.gps.split(',');
+        const startLocation =
+          orderDetails?.fulfillments[0]?.start?.location?.gps.split(',');
 
-        await MapplsDirectionWidget.openDirectionWidget({
-          showStartNavigation: true,
-          steps: true,
-          showAlternative: false,
-          profile: DirectionsCriteria.PROFILE_DRIVING,
-          overview: DirectionsCriteria.OVERVIEW_FULL,
-          annotation: DirectionsCriteria.ANNOTATION_CONGESTION,
-          source: sourceLocation,
-          destination: {
-            latitude: Number(locations[0]),
-            longitude: Number(locations[1]),
-          },
+        const directionResponse = await MapplsGL.RestApi.direction({
+          origin: `${startLocation[1]},${startLocation[0]}`,
+          destination: `${endLocation[1]},${endLocation[0]}`,
+          resource: 'route_eta',
+          profile: 'driving',
+          overview: 'simplified',
         });
+        setCurrentPoint({
+          lat: Number(locations[0]),
+          lng: Number(locations[1]),
+        });
+        setRoute(Polyline.toGeoJSON(directionResponse.routes[0].geometry, 6));
+        setTrackingUrl('');
+        trackingSheet.current.open();
       } else {
         dispatch(updateRequestingTracker(false));
         showToastWithGravity(
@@ -197,6 +208,88 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   };
 
   const hideTrackingSheet = () => trackingSheet?.current?.close();
+
+  const renderOrigin = () => {
+    if (!route) {
+      return null;
+    }
+
+    let backgroundColor = 'red';
+
+    if (currentPoint) {
+      backgroundColor = '#000';
+    }
+
+    const style = [layerStyles.origin, {circleColor: backgroundColor}];
+
+    return (
+      <MapplsGL.ShapeSource id="origin" shape={point(route.coordinates[0])}>
+        <MapplsGL.Animated.CircleLayer id="originInnerCircle" style={style} />
+      </MapplsGL.ShapeSource>
+    );
+  };
+
+  const renderRoute = () => {
+    if (!route) {
+      return null;
+    }
+
+    return (
+      <MapplsGL.ShapeSource id="routeSource" shape={route}>
+        <MapplsGL.LineLayer
+          id="routeFill"
+          style={layerStyles.route}
+          belowLayerID="originInnerCircle"
+        />
+      </MapplsGL.ShapeSource>
+    );
+  };
+
+  const renderCurrentPoint = () => {
+    if (!currentPoint) {
+      return;
+    }
+    return (
+      <MapplsGL.ShapeSource
+        id="destination"
+        shape={point([currentPoint.lng, currentPoint.lat])}>
+        <MapplsGL.CircleLayer
+          id="destinationInnerCircle"
+          style={layerStyles.destination}
+        />
+      </MapplsGL.ShapeSource>
+    );
+  };
+
+  const renderDestination = () => {
+    if (!route) {
+      return null;
+    }
+
+    return (
+      <MapplsGL.ShapeSource
+        id="destination"
+        shape={point(route.coordinates[route.coordinates.length - 1])}>
+        <MapplsGL.CircleLayer
+          id="destinationInnerCircle"
+          style={layerStyles.destination}
+        />
+      </MapplsGL.ShapeSource>
+    );
+  };
+
+  useEffect(() => {
+    source.current = CancelToken.source();
+    getDataWithAuth(
+      `${API_BASE_URL}${MAP_ACCESS_TOKEN}`,
+      source.current.token,
+    ).then(mapResponse => {
+      MapplsGL.setMapSDKKey(mapResponse.data.access_token);
+      MapplsGL.setRestAPIKey(mapResponse.data.access_token);
+      MapplsGL.setAtlasClientId(mapResponse.data.client_id);
+      MapplsGL.setAtlasClientSecret(Config.MMMI_CLIENT_SECRET);
+    });
+  }, []);
 
   return (
     <>
@@ -225,9 +318,24 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
             <Icon name={'close-circle'} color={theme.colors.error} size={32} />
           </TouchableOpacity>
         </View>
-        <WebView style={styles.webView} source={{uri: trackingUrl}} />
+        {!!trackingUrl && (
+          <WebView style={styles.webView} source={{uri: trackingUrl}} />
+        )}
+        {!!route && (
+          <MapplsGL.MapView style={styles.webView}>
+            <MapplsGL.Camera
+              zoomLevel={16}
+              centerCoordinate={[currentPoint?.lng, currentPoint?.lat]}
+            />
+            {renderOrigin()}
+            {renderRoute()}
+            {renderCurrentPoint()}
+            {renderDestination()}
+          </MapplsGL.MapView>
+        )}
       </RBSheet>
     </>
   );
 };
+
 export default TrackOrderButton;
