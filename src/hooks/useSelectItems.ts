@@ -156,6 +156,7 @@ export default (openFulfillmentSheet: () => void) => {
             ],
           },
         };
+        console.log(JSON.stringify(selectPayload, undefined, 4));
         source.current = CancelToken.source();
         const {data} = await postDataWithAuth(
           `${API_BASE_URL}${SELECT}`,

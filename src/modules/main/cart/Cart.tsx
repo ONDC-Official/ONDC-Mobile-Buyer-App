@@ -544,12 +544,12 @@ const Cart = () => {
       <RBSheet
         closeOnPressMask={false}
         ref={fulfillmentSheet}
-        height={screenHeight / 2}
+        height={screenHeight - 100}
         customStyles={{
-          container: styles.rbSheet,
+          wrapper: styles.wrapper,
         }}>
         <Fulfillment
-          products={getProducts()}
+          items={cartItems}
           showPaymentOption={showPaymentOption}
           selectedFulfillment={selectedFulfillment}
           setSelectedFulfillment={setSelectedFulfillment}
@@ -606,7 +606,7 @@ const Cart = () => {
   );
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     pageContainer: {
       flex: 1,
@@ -646,6 +646,9 @@ const makeStyles = (colors: any) =>
       fontWeight: '700',
     },
     rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
+    wrapper: {
+      backgroundColor: 'rgba(47, 47, 47, 0.75)',
+    },
   });
 
 export default Cart;
