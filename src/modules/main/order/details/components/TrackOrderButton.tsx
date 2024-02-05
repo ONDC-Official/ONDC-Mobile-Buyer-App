@@ -6,13 +6,9 @@ import {Dimensions, TouchableOpacity, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {WebView} from 'react-native-webview';
+// @ts-ignore
 import Polyline from 'mappls-polyline';
-import {lineString as makeLineString} from '@turf/helpers';
-import deliveryPartner from '../../../../../assets/delivery_partner.png';
-
-import MapplsDirectionWidget, {
-  DirectionsCriteria,
-} from 'mappls-direction-widget-react-native';
+import {point} from '@turf/helpers';
 import MapplsGL from 'mappls-map-react-native';
 
 // @ts-ignore
@@ -29,7 +25,7 @@ import {
 } from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
 import Config from '../../../../../../config';
-import { point } from "@turf/helpers";
+import {theme} from '../../../../../utils/theme';
 
 interface TrackOrderButton {}
 
@@ -43,16 +39,16 @@ const layerStyles: any = {
   },
   destination: {
     circleRadius: 10,
-    circleColor: 'green',
+    circleColor: theme.colors.primary,
   },
   route: {
-    lineColor: 'red',
+    lineColor: 'black',
     lineCap: 'round',
-    lineWidth: 5,
+    lineWidth: 2,
     lineOpacity: 0.84,
   },
   progress: {
-    lineColor: '#314ccd',
+    lineColor: theme.colors.primary,
     lineWidth: 5,
   },
 };
@@ -72,7 +68,6 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   const [trackingUrl, setTrackingUrl] = useState<string>('');
   const [currentPoint, setCurrentPoint] = useState<any>(null);
   const [route, setRoute] = useState<any>(null);
-  const [routeCoordinates, setRouteCoordinates] = useState<any>(null);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
 
   // TRACK APIS
@@ -158,31 +153,19 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
           'Tracking information is not provided by the provider.',
         );
         return;
-      } else if (message?.tracking?.url === '') {
-        dispatch(updateRequestingTracker(false));
-        showToastWithGravity(
-          'Tracking information not available for this product',
-        );
-        return;
       } else if (
         message.tracking.status === 'active' &&
         (message?.tracking?.url !== '' || message?.tracking?.url !== undefined)
       ) {
         dispatch(updateRequestingTracker(false));
         setTrackingUrl(message?.tracking?.url);
+        setRoute(null);
+        setCurrentPoint(null);
         trackingSheet.current.open();
       } else if (
         message.tracking.status === 'active' &&
         message?.tracking?.location?.gps
       ) {
-        const mapResponse = await getDataWithAuth(
-          `${API_BASE_URL}${MAP_ACCESS_TOKEN}`,
-          source.current.token,
-        );
-        MapplsGL.setMapSDKKey(mapResponse.data.access_token);
-        MapplsGL.setRestAPIKey(mapResponse.data.access_token);
-        MapplsGL.setAtlasClientId(mapResponse.data.client_id);
-        MapplsGL.setAtlasClientSecret(Config.MMMI_CLIENT_SECRET);
         let locationString = message?.tracking?.location?.gps.replaceAll(
           ' ',
           '',
@@ -200,11 +183,12 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
           profile: 'driving',
           overview: 'simplified',
         });
-        setCurrentPoint(`${locations[1]},${locations[0]}`);
+        setCurrentPoint({
+          lat: Number(locations[0]),
+          lng: Number(locations[1]),
+        });
         setRoute(Polyline.toGeoJSON(directionResponse.routes[0].geometry, 6));
-        setRouteCoordinates(
-          Polyline.toGeoJSON(directionResponse.routes[0].geometry, 6).coordinates,
-        );
+        setTrackingUrl('');
         trackingSheet.current.open();
       } else {
         dispatch(updateRequestingTracker(false));
@@ -233,13 +217,13 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
     let backgroundColor = 'red';
 
     if (currentPoint) {
-      backgroundColor = '#314ccd';
+      backgroundColor = '#000';
     }
 
     const style = [layerStyles.origin, {circleColor: backgroundColor}];
 
     return (
-      <MapplsGL.ShapeSource id="origin" shape={point(routeCoordinates[0])}>
+      <MapplsGL.ShapeSource id="origin" shape={point(route.coordinates[0])}>
         <MapplsGL.Animated.CircleLayer id="originInnerCircle" style={style} />
       </MapplsGL.ShapeSource>
     );
@@ -266,46 +250,14 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
       return;
     }
     return (
-      <MapplsGL.ShapeSource id="symbolLocationSource" shape={currentPoint}>
-        <MapplsGL.SymbolLayer
-          id="symbolLocationSymbols"
-          minZoomLevel={1}
-          style={{
-            iconRotationAlignment: 'map',
-            iconImage: deliveryPartner,
-            iconIgnorePlacement: true,
-            iconAllowOverlap: true,
-            iconAnchor: 'center',
-            iconRotate: ['get', 'bearing'],
-            iconSize: 0.07,
-          }}
+      <MapplsGL.ShapeSource
+        id="destination"
+        shape={point([currentPoint.lng, currentPoint.lat])}>
+        <MapplsGL.CircleLayer
+          id="destinationInnerCircle"
+          style={layerStyles.destination}
         />
       </MapplsGL.ShapeSource>
-    );
-  };
-
-  const renderProgressLine = () => {
-    if (!currentPoint) {
-      return null;
-    }
-
-    const {nearestIndex} = currentPoint.properties;
-    const coords = route.coordinates.filter((c, i) => i <= nearestIndex);
-    coords.push(currentPoint.geometry.coordinates);
-
-    if (coords.length < 2) {
-      return null;
-    }
-
-    const lineString = makeLineString(coords);
-    return (
-      <MapplsGL.Animated.ShapeSource id="progressSource" shape={lineString}>
-        <MapplsGL.Animated.LineLayer
-          id="progressFill"
-          style={layerStyles.progress}
-          aboveLayerID="routeFill"
-        />
-      </MapplsGL.Animated.ShapeSource>
     );
   };
 
@@ -317,7 +269,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
     return (
       <MapplsGL.ShapeSource
         id="destination"
-        shape={point(routeCoordinates[routeCoordinates.length - 1])}>
+        shape={point(route.coordinates[route.coordinates.length - 1])}>
         <MapplsGL.CircleLayer
           id="destinationInnerCircle"
           style={layerStyles.destination}
@@ -326,6 +278,20 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
     );
   };
 
+  useEffect(() => {
+    source.current = CancelToken.source();
+    getDataWithAuth(
+      `${API_BASE_URL}${MAP_ACCESS_TOKEN}`,
+      source.current.token,
+    ).then(mapResponse => {
+      MapplsGL.setMapSDKKey(mapResponse.data.access_token);
+      MapplsGL.setRestAPIKey(mapResponse.data.access_token);
+      MapplsGL.setAtlasClientId(mapResponse.data.client_id);
+      MapplsGL.setAtlasClientSecret(Config.MMMI_CLIENT_SECRET);
+    });
+  }, []);
+
+  console.log(currentPoint);
   return (
     <>
       <TouchableOpacity
@@ -353,20 +319,24 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
             <Icon name={'close-circle'} color={theme.colors.error} size={32} />
           </TouchableOpacity>
         </View>
-        <MapplsGL.MapView style={styles.webView}>
-          <MapplsGL.Camera
-            zoomLevel={16}
-            centerCoordinate={[77.202432, 28.594475]}
-          />
-          {renderOrigin()}
-          {renderRoute()}
-          {renderCurrentPoint()}
-          {renderProgressLine()}
-          {renderDestination()}
-        </MapplsGL.MapView>
-        {/*<WebView style={styles.webView} source={{uri: trackingUrl}} />*/}
+        {!!trackingUrl && (
+          <WebView style={styles.webView} source={{uri: trackingUrl}} />
+        )}
+        {!!route && (
+          <MapplsGL.MapView style={styles.webView}>
+            <MapplsGL.Camera
+              zoomLevel={16}
+              centerCoordinate={[currentPoint?.lng, currentPoint?.lat]}
+            />
+            {renderOrigin()}
+            {renderRoute()}
+            {renderCurrentPoint()}
+            {renderDestination()}
+          </MapplsGL.MapView>
+        )}
       </RBSheet>
     </>
   );
 };
+
 export default TrackOrderButton;
