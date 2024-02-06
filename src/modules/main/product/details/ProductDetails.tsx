@@ -27,7 +27,6 @@ import FBProductCustomization from '../../provider/components/FBProductCustomiza
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {showToastWithGravity} from '../../../../utils/utils';
 import {makeGlobalStyles} from '../../../../styles/styles';
-import StockAvailability from '../../../../components/products/StockAvailability';
 import {updateCartItems} from '../../../../redux/cart/actions';
 import Page from '../../../../components/page/Page';
 import AboutProduct from './components/AboutProduct';
@@ -390,11 +389,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 <VegNonVegTag tags={product?.item_details?.tags} showLabel />
               </View>
             )}
-            <StockAvailability
-              available={
-                Number(product?.item_details?.quantity?.available?.count) >= 1
-              }
-            />
             <Text variant="titleMedium" style={styles.title}>
               {product?.item_details?.descriptor?.name}
             </Text>
