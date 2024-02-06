@@ -297,3 +297,18 @@ export const isItemCustomization = (tags: any[]) => {
   });
   return isCustomization;
 };
+
+export const parseDuration = (duration: number) => {
+  return moment.duration(duration).asMilliseconds();
+};
+
+export const compareDateWithDuration = (duration: any, dateStr: string) => {
+  const currentDate = new Date();
+  const providedDate = new Date(dateStr);
+  // Parse the duration
+  const durationInMilliseconds = parseDuration(duration);
+  // Add the duration to the provided date
+  const newDate = new Date(providedDate.getTime() + durationInMilliseconds);
+  // Compare the new date with the current date
+  return currentDate.getTime() > newDate.getTime();
+};

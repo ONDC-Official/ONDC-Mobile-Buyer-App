@@ -38,3 +38,7 @@ export const ON_INITIALIZE: string =
 export const CANCEL_ORDER: string = '/clientApis/v2/cancel_order';
 
 export const RAISE_ISSUE: string = '/issueApis/v1/issue';
+
+export const ISSUE_STATUS: string = '/issueApis/v1/issue_status';
+export const ON_ISSUE_STATUS: string =
+  '/issueApis/v1/on_issue_status?messageId=';

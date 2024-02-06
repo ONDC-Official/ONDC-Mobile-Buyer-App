@@ -1,11 +1,13 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {useSelector} from 'react-redux';
-import React from 'react';
-import {Text} from 'react-native-paper';
+import React, {useEffect, useState} from 'react';
+import {Button, Text} from 'react-native-paper';
 import moment from 'moment';
 import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
+import {compareDateWithDuration} from '../../../../utils/utils';
+import {theme} from '../../../../utils/theme';
+import GetStatusButton from '../components/GetStatusButton';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -17,87 +19,94 @@ const categories = ISSUE_TYPES.map(item => {
   });
 }).flat();
 
-const Skeleton = () => (
-  <SkeletonPlaceholder>
-    <>
-      <SkeletonPlaceholder.Item width={100} marginBottom={10} height={20} />
-      <SkeletonPlaceholder.Item width={100} marginBottom={10} height={20} />
-      <SkeletonPlaceholder.Item width={100} marginBottom={10} height={20} />
-      <SkeletonPlaceholder.Item width={100} marginBottom={10} height={20} />
-    </>
-  </SkeletonPlaceholder>
-);
 const ComplaintDetails = () => {
   const {complaintDetails} = useSelector(
     ({complaintReducer}) => complaintReducer,
   );
+  const [actions, setActions] = useState<any[]>([]);
+  const [showTakeActionButton, setShowTakeActionButton] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    const mergeIssueActions = (actions: any) => {
+      let resActions = actions.respondent_actions,
+        comActions = actions.complainant_actions.map((item: any) => {
+          return {...item, respondent_action: item.complainant_action};
+        }),
+        mergedActions = [...comActions, ...resActions];
+
+      mergedActions.sort(
+        (a, b) =>
+          new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime(),
+      );
+      const lastAction =
+        mergedActions[mergedActions.length - 1]?.respondent_action;
+      if (
+        lastAction === 'PROCESSING' ||
+        lastAction === 'OPEN' ||
+        lastAction === 'ESCALATE'
+      ) {
+        setShowTakeActionButton(
+          compareDateWithDuration(
+            'PT1H',
+            mergedActions[mergedActions.length - 1]?.updated_at,
+          ),
+        );
+      } else if (
+        lastAction !== 'ESCALATE' &&
+        mergedActions.some(x => x.respondent_action === 'RESOLVED')
+      ) {
+        setShowTakeActionButton(true);
+      } else {
+        setShowTakeActionButton(false);
+      }
+      console.log(JSON.stringify(mergedActions, undefined, 4));
+      setActions(mergedActions);
+    };
+
+    if (complaintDetails) {
+      mergeIssueActions(complaintDetails?.issue_actions);
+    }
+  }, [complaintDetails]);
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.pageContainer}>
       <View style={styles.card}>
         <Text variant={'titleMedium'} style={styles.title}>
           Complaint Details
         </Text>
-        {complaintDetails?.issue_actions?.complainant_actions.map(
-          (action: any, index) => (
-            <View style={styles.process} key={action?.complainant_action}>
-              <View style={styles.dotContainer}>
-                <View style={styles.dot}>
-                  <View style={styles.innerDot} />
-                </View>
+        {actions.map((action: any, actionIndex: number) => (
+          <View style={styles.process} key={action?.complainant_action}>
+            <View style={styles.dotContainer}>
+              <View style={styles.dot}>
+                <View style={styles.innerDot} />
+              </View>
+              {actionIndex !== actions.length - 1 && (
                 <View style={styles.dottedLine} />
-              </View>
-              <View style={styles.processDetails}>
-                <View style={styles.processHeader}>
-                  <Text variant={'labelMedium'} style={styles.actionTitle}>
-                    {action?.complainant_action}
-                  </Text>
-                  <Text variant={'labelMedium'} style={styles.actionTitle}>
-                    {moment(action?.updated_at).format('DD MMM YYYY hh:mma')}
-                  </Text>
-                </View>
-                <Text variant={'labelMedium'} style={styles.shortDescription}>
-                  {action?.short_desc}
-                </Text>
-                {!!action?.updated_by && (
-                  <Text variant={'labelMedium'}>
-                    Updated by: {action?.updated_by?.person?.name}
-                  </Text>
-                )}
-              </View>
+              )}
             </View>
-          ),
-        )}
-        {complaintDetails?.issue_actions?.respondent_actions.map(
-          (action: any) => (
-            <View style={styles.process} key={action?.complainant_action}>
-              <View style={styles.dotContainer}>
-                <View style={styles.dot}>
-                  <View style={styles.innerDot} />
-                </View>
-                <View style={styles.dottedLine} />
-              </View>
-              <View style={styles.processDetails}>
-                <View style={styles.processHeader}>
-                  <Text variant={'labelMedium'} style={styles.actionTitle}>
-                    {action?.respondent_action}
-                  </Text>
-                  <Text variant={'labelMedium'} style={styles.actionTitle}>
-                    {moment(action?.updated_at).format('DD MMM YYYY hh:mma')}
-                  </Text>
-                </View>
-                <Text variant={'labelMedium'} style={styles.shortDescription}>
-                  {action?.short_desc}
+            <View style={styles.processDetails}>
+              <View style={styles.processHeader}>
+                <Text variant={'labelMedium'} style={styles.actionTitle}>
+                  {action?.complainant_action}
                 </Text>
-                {!!action?.updated_by && (
-                  <Text variant={'labelMedium'}>
-                    Updated by: {action?.updated_by?.person?.name}
-                  </Text>
-                )}
+                <Text variant={'labelMedium'} style={styles.actionTitle}>
+                  {moment(action?.updated_at).format('DD MMM YYYY hh:mma')}
+                </Text>
               </View>
+              <Text variant={'labelMedium'} style={styles.shortDescription}>
+                {action?.short_desc}
+              </Text>
+              {!!action?.updated_by && (
+                <Text variant={'labelMedium'}>
+                  Updated by: {action?.updated_by?.person?.name}
+                </Text>
+              )}
             </View>
-          ),
-        )}
+          </View>
+        ))}
       </View>
       <View style={styles.card}>
         <View style={styles.orderIdRow}>
@@ -174,6 +183,19 @@ const ComplaintDetails = () => {
             .add(moment.duration('P1D').asMilliseconds(), 'milliseconds')
             .format('hh:mm a, MMMM Do, YYYY')}
         </Text>
+
+        {showTakeActionButton ? (
+          <Button mode="outlined" style={styles.actionButton}>
+            Take Action
+          </Button>
+        ) : (
+          <GetStatusButton
+            transactionId={complaintDetails?.transaction_id}
+            bppId={complaintDetails?.bppId}
+            issueId={complaintDetails?.issueId}
+            domain={complaintDetails?.domain}
+          />
+        )}
       </View>
       <View style={styles.card}>
         <Text variant={'titleMedium'} style={styles.title}>
@@ -204,8 +226,10 @@ const ComplaintDetails = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
     flex: 1,
+  },
+  pageContainer: {
+    padding: 16,
   },
   card: {
     borderWidth: 1,
@@ -295,6 +319,10 @@ const styles = StyleSheet.create({
   },
   qty: {
     color: '#686868',
+  },
+  actionButton: {
+    borderRadius: 8,
+    borderColor: theme.colors.primary,
   },
 });
 

@@ -1,11 +1,13 @@
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {Button, Text} from 'react-native-paper';
+import {Button, Text, useTheme} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import moment from 'moment';
 import {useNavigation} from '@react-navigation/native';
 import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {updateComplaint} from '../../../../redux/complaint/actions';
+import ComplaintStatus from './ComplaintStatus';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -19,10 +21,11 @@ const categories = ISSUE_TYPES.map(item => {
 
 const Complaint = ({complaint}: {complaint: any}) => {
   const dispatch = useDispatch();
-  const styles = makeStyles();
-  const navigation = useNavigation();
+  const theme = useTheme();
+  const styles = makeStyles(theme.colors);
+  const navigation = useNavigation<any>();
 
-  const {order_details} = complaint;
+  const {issue_status, order_details} = complaint;
 
   const address = order_details?.fulfillments[0]?.end?.location?.address;
 
@@ -40,9 +43,12 @@ const Complaint = ({complaint}: {complaint: any}) => {
         style={styles.image}
       />
       <View style={styles.details}>
-        <Text variant={'bodyMedium'} style={styles.title}>
-          {order_details?.items[0]?.product?.descriptor?.name}
-        </Text>
+        <View style={styles.titleRow}>
+          <Text variant={'bodyMedium'} style={styles.title}>
+            {order_details?.items[0]?.product?.descriptor?.name}
+          </Text>
+          <ComplaintStatus status={issue_status} />
+        </View>
         <Text variant={'labelMedium'} style={styles.address}>
           {address?.building},{address?.locality},{address?.city},
           {address?.state},{address?.country} - {address?.area_code}
@@ -73,7 +79,10 @@ const Complaint = ({complaint}: {complaint: any}) => {
           </Text>
         </View>
         <View style={styles.actionContainer}>
-          <Button mode={'outlined'} onPress={navigateToDetails}>
+          <Button
+            mode={'outlined'}
+            onPress={navigateToDetails}
+            style={styles.button}>
             View Summary
           </Button>
         </View>
@@ -82,7 +91,7 @@ const Complaint = ({complaint}: {complaint: any}) => {
   );
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
@@ -120,6 +129,15 @@ const makeStyles = () =>
       flexDirection: 'row',
       justifyContent: 'flex-end',
       marginTop: 12,
+    },
+    button: {
+      borderRadius: 8,
+      borderColor: colors.primary,
+    },
+    titleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
     },
   });
 

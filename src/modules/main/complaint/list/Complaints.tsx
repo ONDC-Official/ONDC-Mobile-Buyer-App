@@ -7,10 +7,10 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {keyExtractor, skeletonList} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
-import {API_BASE_URL, GET_ISSUES, ORDERS} from '../../../../utils/apiActions';
+import {API_BASE_URL, GET_ISSUES} from '../../../../utils/apiActions';
 import ComplaintSkeleton from '../components/ComplaintSkeleton';
 import ListFooter from '../../order/components/ListFooter';
-import Complaint from "../components/Complaint";
+import Complaint from '../components/Complaint';
 
 const CancelToken = axios.CancelToken;
 

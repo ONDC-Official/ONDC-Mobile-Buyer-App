@@ -76,7 +76,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
   );
 
   const heightOfPager =
-    cartItems[0]?.message?.quote?.fulfillments.length * 70 + 150;
+    cartItems[0]?.message?.quote?.fulfillments.length * 70 + 170;
 
   // Convert Set back to an array if needed
   const unqiueFulfillments = Array.from(uniqueIdsSet);
