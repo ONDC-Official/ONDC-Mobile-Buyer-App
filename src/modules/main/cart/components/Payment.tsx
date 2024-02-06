@@ -35,7 +35,7 @@ interface Payment {
   responseReceivedIds: string[];
   deliveryAddress: any;
   billingAddress: any;
-  selectedFulfillmentId: any;
+  selectedFulfillmentList: any[];
   fulfilmentList: any[];
   updatedCartItemsData: any[];
   setUpdateCartItemsDataOnInitialize: (items: any[]) => void;
@@ -57,7 +57,7 @@ const Payment: React.FC<Payment> = ({
   responseReceivedIds,
   deliveryAddress,
   billingAddress,
-  selectedFulfillmentId,
+  selectedFulfillmentList,
   fulfilmentList,
   updatedCartItemsData,
   setUpdateCartItemsDataOnInitialize,
@@ -174,7 +174,7 @@ const Payment: React.FC<Payment> = ({
       const payload = items.map((item: any) => {
         let itemsData = Object.assign([], JSON.parse(JSON.stringify(item)));
         itemsData = itemsData.map((itemData: any) => {
-          itemData.fulfillment_id = selectedFulfillmentId;
+          itemData.fulfillment_id = itemData.product.fulfillment_id;
           delete itemData.product.fulfillment_id;
           if (updatedCartItems.current) {
             let findItemFromQuote =
@@ -198,8 +198,8 @@ const Payment: React.FC<Payment> = ({
           },
           message: {
             items: itemsData,
-            fulfillments: fulfilmentList.filter(
-              fulfillment => fulfillment.id === selectedFulfillmentId,
+            fulfillments: fulfilmentList.filter(fulfillment =>
+              selectedFulfillmentList.includes(fulfillment.id),
             ),
             billing_info: {
               address: removeNullValues(billingAddress?.address),
@@ -226,6 +226,7 @@ const Payment: React.FC<Payment> = ({
           },
         };
       });
+
       const {data} = await postDataWithAuth(
         `${API_BASE_URL}${INITIALIZE_ORDER}`,
         payload,

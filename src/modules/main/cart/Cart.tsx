@@ -33,7 +33,9 @@ const Cart = () => {
   const addressSheet = useRef<any>();
   const fulfillmentSheet = useRef<any>();
   const paymentSheet = useRef<any>();
-  const [selectedFulfillment, setSelectedFulfillment] = useState<any>(null);
+  const [selectedFulfillmentList, setSelectedFulfillmentList] = useState<any[]>(
+    [],
+  );
   const [productsQuote, setProductsQuote] = useState<any>({
     providers: [],
     isError: false,
@@ -89,15 +91,6 @@ const Cart = () => {
   const updateDeliveryAddress = (newAddress: any) => {
     setDeliveryAddress(newAddress);
     addressSheet.current.close();
-  };
-
-  const getProducts = () => {
-    return selectedItemsForInit?.map(cartItem => {
-      return {
-        name: cartItem?.item?.product?.descriptor?.name,
-        id: cartItem.item.local_id,
-      };
-    });
   };
 
   useEffect(() => {
@@ -226,12 +219,13 @@ const Cart = () => {
             let delivery: any = {};
             let outOfStock: any[] = [];
             let errorCode: string = '';
-            let selected_fulfillment_id = selectedFulfillment;
+            let fulfilmentIds = Object.assign([], selectedFulfillmentList);
 
-            if (!selectedFulfillment) {
-              selected_fulfillment_id =
-                selectedItems[0]?.message?.quote.items[0]?.fulfillment_id;
-              setSelectedFulfillment(selected_fulfillment_id);
+            if (fulfilmentIds.length === 0) {
+              fulfilmentIds = selectedItems[0]?.message?.quote.items.map(
+                (item: any) => item.fulfillment_id,
+              );
+              setSelectedFulfillmentList(fulfilmentIds);
             }
 
             allItems.forEach((item: any) => {
@@ -255,7 +249,7 @@ const Cart = () => {
               if (
                 item.title_type === 'tax' &&
                 !item.isCustomization &&
-                item.id !== selected_fulfillment_id
+                !fulfilmentIds.includes(item.id)
               ) {
                 let key = item.parent_item_id || item.id;
                 items[key] = items[key] || {};
@@ -317,7 +311,7 @@ const Cart = () => {
               //for delivery
               if (
                 item.title_type === 'delivery' &&
-                item.id === selected_fulfillment_id
+                fulfilmentIds.includes(item.id)
               ) {
                 delivery.delivery = {
                   title: item.title,
@@ -326,7 +320,7 @@ const Cart = () => {
               }
               if (
                 item.title_type === 'discount_f' &&
-                item.id === selected_fulfillment_id
+                fulfilmentIds.includes(item.id)
               ) {
                 delivery.discount = {
                   title: item.title,
@@ -335,7 +329,7 @@ const Cart = () => {
               }
               if (
                 (item.title_type === 'tax_f' || item.title_type === 'tax') &&
-                item.id === selected_fulfillment_id
+                fulfilmentIds.includes(item.id)
               ) {
                 delivery.tax = {
                   title: item.title,
@@ -344,7 +338,7 @@ const Cart = () => {
               }
               if (
                 item.title_type === 'packing' &&
-                item.id === selected_fulfillment_id
+                fulfilmentIds.includes(item.id)
               ) {
                 delivery.packing = {
                   title: item.title,
@@ -362,7 +356,7 @@ const Cart = () => {
               }
               if (
                 item.title_type === 'misc' &&
-                item.id === selected_fulfillment_id
+                fulfilmentIds.includes(item.id)
               ) {
                 delivery.misc = {
                   title: item.title,
@@ -398,7 +392,7 @@ const Cart = () => {
       console.log('Calculating quote:', err);
       showQuoteError();
     }
-  }, [selectedItems, selectedFulfillment]);
+  }, [selectedItems, selectedFulfillmentList]);
 
   useEffect(() => {
     const getCartSubtotal = () => {
@@ -551,8 +545,8 @@ const Cart = () => {
         <Fulfillment
           items={cartItems}
           showPaymentOption={showPaymentOption}
-          selectedFulfillment={selectedFulfillment}
-          setSelectedFulfillment={setSelectedFulfillment}
+          selectedFulfillmentList={selectedFulfillmentList}
+          setSelectedFulfillmentList={setSelectedFulfillmentList}
           cartItems={selectedItems}
           productsQuote={productsQuote}
           closeFulfilment={() => fulfillmentSheet.current.close()}
@@ -585,7 +579,7 @@ const Cart = () => {
           updatedCartItemsData={selectedItems}
           billingAddress={deliveryAddress}
           deliveryAddress={deliveryAddress}
-          selectedFulfillmentId={selectedFulfillment}
+          selectedFulfillmentList={selectedFulfillmentList}
           responseReceivedIds={selectedItems.map(item =>
             item?.message?.quote?.provider?.id.toString(),
           )}

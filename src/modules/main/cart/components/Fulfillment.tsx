@@ -1,15 +1,16 @@
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {RadioButton, Text, useTheme} from 'react-native-paper';
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import PagerView from 'react-native-pager-view';
-import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import moment from 'moment';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 
 interface Fulfillment {
-  selectedFulfillment: any;
-  setSelectedFulfillment: (newValue: any) => void;
+  selectedFulfillmentList: any[];
+  setSelectedFulfillmentList: (newValue: any[]) => void;
   cartItems: any[];
   items: any[];
   productsQuote: any;
@@ -19,8 +20,8 @@ interface Fulfillment {
 }
 
 const Fulfillment: React.FC<Fulfillment> = ({
-  selectedFulfillment,
-  setSelectedFulfillment,
+  selectedFulfillmentList = [],
+  setSelectedFulfillmentList,
   cartItems,
   items,
   productsQuote,
@@ -31,17 +32,40 @@ const Fulfillment: React.FC<Fulfillment> = ({
   const navigation = useNavigation<any>();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const pagerRef = useRef<any>();
+  const [page, setPage] = useState<number>(0);
 
   const renderDeliveryLine = (quote: any, key: any) => (
     <View style={styles.summaryRow} key={`d-quote-${key}-price`}>
-      <Text variant="bodySmall">{quote?.title}</Text>
-      <Text variant="bodySmall">₹{Number(quote?.value).toFixed(2)}</Text>
+      <Text variant="labelMedium" style={styles.subTotal}>
+        {quote?.title}
+      </Text>
+      <Text variant="labelMedium" style={styles.subTotal}>
+        ₹{Number(quote?.value).toFixed(2)}
+      </Text>
     </View>
   );
 
   const exploreOtherStores = () => {
     closeFulfilment();
     navigation.navigate('Dashboard');
+  };
+
+  const onPageSelected = (e: any) => {
+    const {position} = e.nativeEvent;
+    setPage(position);
+  };
+
+  const showPreviousFulfilment = () => {
+    const nextPage = page - 1;
+    setPage(nextPage);
+    pagerRef.current?.setPage(nextPage);
+  };
+
+  const showNextFulfilment = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    pagerRef.current?.setPage(nextPage);
   };
 
   const orderTotal = Number(productsQuote?.total_payable).toFixed(2);
@@ -85,8 +109,11 @@ const Fulfillment: React.FC<Fulfillment> = ({
           ) : (
             <>
               <PagerView
+                initialPage={page}
+                onPageSelected={onPageSelected}
+                ref={pagerRef}
                 style={{height: heightOfPager, backgroundColor: '#fff'}}>
-                {unqiueFulfillments.map((fulfillmentId: any) => {
+                {unqiueFulfillments.map((fulfillmentId: any, index) => {
                   const filteredProducts =
                     cartItems[0]?.message?.quote?.items?.filter((item: any) => {
                       let isItem = false;
@@ -106,17 +133,48 @@ const Fulfillment: React.FC<Fulfillment> = ({
                       return isItem && item.fulfillment_id === fulfillmentId;
                     });
                   let fulfillmentTotal = 0;
-                  const fulfilments =
+                  const fulfilmentList: any[] =
                     cartItems[0]?.message?.quote?.fulfillments.filter(
                       (fulfillment: any) => fulfillment.id === fulfillmentId,
                     );
 
                   return (
-                    <>
+                    <View key={fulfillmentId}>
                       <View style={styles.fulfilmentSummary}>
-                        <Text variant={'labelMedium'}>
-                          {filteredProducts.length} Items
-                        </Text>
+                        <View style={styles.fulfilmentCountContainer}>
+                          <View>
+                            {unqiueFulfillments.length > 1 && (
+                              <Text
+                                variant={'bodyMedium'}
+                                style={styles.fulfilmentCount}>
+                                {index + 1} of {unqiueFulfillments.length}
+                              </Text>
+                            )}
+                            <Text variant={'labelMedium'}>
+                              {filteredProducts.length} Items
+                            </Text>
+                          </View>
+                          {unqiueFulfillments.length > 1 && (
+                            <View style={styles.buttonContainer}>
+                              <TouchableOpacity
+                                onPress={showPreviousFulfilment}>
+                                <Icon
+                                  name={'keyboard-arrow-left'}
+                                  size={24}
+                                  color={theme.colors.primary}
+                                />
+                              </TouchableOpacity>
+                              <View style={styles.nextPrevSpace} />
+                              <TouchableOpacity onPress={showNextFulfilment}>
+                                <Icon
+                                  name={'keyboard-arrow-right'}
+                                  size={24}
+                                  color={theme.colors.primary}
+                                />
+                              </TouchableOpacity>
+                            </View>
+                          )}
+                        </View>
                         <ScrollView horizontal>
                           {filteredProducts?.map((item: any) => {
                             const singleProduct = items?.find(
@@ -171,7 +229,9 @@ const Fulfillment: React.FC<Fulfillment> = ({
                         </View>
                       </View>
                       <ScrollView contentContainerStyle={styles.listContainer}>
-                        {fulfilments.map((fulfilment: any) => {
+                        {fulfilmentList.map((fulfilment: any) => {
+                          const fulfilmentPresent: boolean =
+                            selectedFulfillmentList.includes(fulfilment.id);
                           return (
                             <View
                               key={`${fulfilment.id}${fulfilment.type}`}
@@ -179,13 +239,17 @@ const Fulfillment: React.FC<Fulfillment> = ({
                               <RadioButton.Android
                                 value={fulfilment['@ondc/org/category']}
                                 status={
-                                  fulfilment.id === selectedFulfillment
-                                    ? 'checked'
-                                    : 'unchecked'
+                                  fulfilmentPresent ? 'checked' : 'unchecked'
                                 }
-                                onPress={() =>
-                                  setSelectedFulfillment(fulfilment.id)
-                                }
+                                onPress={() => {
+                                  if (!fulfilmentPresent) {
+                                    setSelectedFulfillmentList(
+                                      selectedFulfillmentList.concat([
+                                        fulfilment.id,
+                                      ]),
+                                    );
+                                  }
+                                }}
                               />
                               <View style={styles.customerMeta}>
                                 <Text variant={'bodyMedium'}>
@@ -205,14 +269,19 @@ const Fulfillment: React.FC<Fulfillment> = ({
                           );
                         })}
                       </ScrollView>
-                    </>
+                    </View>
                   );
                 })}
               </PagerView>
               <View style={styles.summaryContainer}>
                 <View style={styles.summaryRow}>
-                  <Text variant="bodyMedium">Item Total</Text>
-                  <Text variant="bodyMedium">₹{cartTotal}</Text>
+                  <Text variant="labelMedium" style={styles.subTotal}>
+                    Item Total ({cartItems[0]?.message?.quote?.items?.length}{' '}
+                    Items)
+                  </Text>
+                  <Text variant="labelMedium" style={styles.subTotal}>
+                    ₹{cartTotal}
+                  </Text>
                 </View>
                 {productsQuote?.providers.map(
                   (provider: any, pindex: number) => {
@@ -236,13 +305,15 @@ const Fulfillment: React.FC<Fulfillment> = ({
                 <View style={styles.summaryDivider} />
                 <View style={styles.summaryRow}>
                   <Text variant="bodyLarge">To Pay</Text>
-                  <Text variant="titleSmall">₹{orderTotal}</Text>
+                  <Text variant="titleSmall" style={styles.totalOrder}>
+                    ₹{orderTotal}
+                  </Text>
                 </View>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={showPaymentOption}>
                   <Text variant={'labelLarge'} style={styles.buttonLabel}>
-                    Proceed to Pay ₹{orderTotal}
+                    Proceed to Pay
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -298,11 +369,13 @@ const makeStyles = (colors: any) =>
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
       backgroundColor: '#fff',
+      borderBottomWidth: 1,
+      borderBottomColor: '#ebebeb',
     },
     button: {
       marginTop: 20,
       backgroundColor: colors.primary,
-      borderRadius: 22,
+      borderRadius: 10,
       padding: 12,
       alignItems: 'center',
     },
@@ -353,6 +426,28 @@ const makeStyles = (colors: any) =>
     summaryContainer: {
       padding: 16,
       backgroundColor: '#fff',
+    },
+    fulfilmentCountContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingTop: 16,
+    },
+    fulfilmentCount: {
+      color: '#1A1A1A',
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    nextPrevSpace: {
+      width: 20,
+    },
+    totalOrder: {
+      color: colors.primary,
+    },
+    subTotal: {
+      fontWeight: '700',
     },
   });
 
