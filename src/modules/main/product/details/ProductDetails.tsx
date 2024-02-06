@@ -79,6 +79,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const [itemAvailableInCart, setItemAvailableInCart] = useState<any>(null);
   const [isItemAvailableInCart, setIsItemAvailableInCart] =
     useState<boolean>(false);
+  const [priceRange, setPriceRange] = useState<any>(null);
 
   const [variationState, setVariationState] = useState<any[]>([]);
   const [customizationState, setCustomizationState] = useState<any>({});
@@ -99,6 +100,25 @@ const ProductDetails: React.FC<ProductDetails> = ({
         source.current.token,
       );
       await getCartItems(data.id);
+      let rangePriceTag = null;
+      if (data?.item_details?.price?.tags) {
+        const findRangePriceTag = data?.item_details?.price?.tags.find(
+          (item: any) => item.code === 'range',
+        );
+        if (findRangePriceTag) {
+          const findLowerPriceObj = findRangePriceTag.list.find(
+            (item: any) => item.code === 'lower',
+          );
+          const findUpperPriceObj = findRangePriceTag.list.find(
+            (item: any) => item.code === 'upper',
+          );
+          rangePriceTag = {
+            maxPrice: findUpperPriceObj.value,
+            minPrice: findLowerPriceObj.value,
+          };
+        }
+      }
+      setPriceRange(rangePriceTag);
       setProduct(data);
     } catch (error) {
       handleApiError(error);
@@ -378,17 +398,25 @@ const ProductDetails: React.FC<ProductDetails> = ({
             <Text variant="titleMedium" style={styles.title}>
               {product?.item_details?.descriptor?.name}
             </Text>
-            <View style={styles.priceContainer}>
-              <Text variant="titleMedium" style={styles.price}>
-                ₹{product?.item_details?.price?.value}
-              </Text>
-              <Text
-                variant="bodyLarge"
-                style={[styles.price, styles.maximumAmount]}>
-                ₹
-                {Number(product?.item_details?.price?.maximum_value).toFixed(0)}
-              </Text>
-            </View>
+            {priceRange ? (
+              <View style={styles.priceContainer}>
+                <Text variant="titleMedium" style={styles.price}>
+                  {`₹${priceRange?.minPrice} - ₹${priceRange?.maxPrice}`}
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.priceContainer}>
+                <Text variant="titleMedium" style={styles.price}>
+                  ₹{product?.item_details?.price?.value}
+                </Text>
+                <Text
+                  variant="bodyLarge"
+                  style={[styles.price, styles.maximumAmount]}>
+                  ₹
+                  {Number(product?.item_details?.price?.maximum_value).toFixed(0)}
+                </Text>
+              </View>
+            )}
             <View style={styles.divider} />
             <VariationsRenderer
               product={product}

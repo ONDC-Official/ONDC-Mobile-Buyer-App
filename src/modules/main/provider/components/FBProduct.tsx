@@ -76,6 +76,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   });
   const [productDetails, setProductDetails] = useState<any>(null);
   const [itemQty, setItemQty] = useState<number>(1);
+  const [priceRange, setPriceRange] = useState<any>(null);
 
   const customizable = !!product?.item_details?.tags?.find(
     (item: any) => item.code === 'custom_group',
@@ -309,6 +310,28 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     }
   }, [product, cartItems]);
 
+  useEffect(() => {
+    let rangePriceTag = null;
+    if (product?.item_details?.price?.tags) {
+      const findRangePriceTag = product?.item_details?.price?.tags.find(
+        (item: any) => item.code === 'range',
+      );
+      if (findRangePriceTag) {
+        const findLowerPriceObj = findRangePriceTag.list.find(
+          (item: any) => item.code === 'lower',
+        );
+        const findUpperPriceObj = findRangePriceTag.list.find(
+          (item: any) => item.code === 'upper',
+        );
+        rangePriceTag = {
+          maxPrice: findUpperPriceObj.value,
+          minPrice: findLowerPriceObj.value,
+        };
+      }
+    }
+    setPriceRange(rangePriceTag);
+  }, [product]);
+
   const inStock =
     Number(product?.item_details?.quantity?.available?.count) >= 1;
   const disabled = apiInProgress || !inStock;
@@ -322,8 +345,11 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             {product?.item_details?.descriptor?.name}
           </Text>
           <Text variant={'titleMedium'} style={styles.field}>
-            {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}{' '}
-            {product?.item_details?.price?.value}
+            {priceRange
+              ? `₹${priceRange?.minPrice} - ₹${priceRange?.maxPrice}`
+              : `${CURRENCY_SYMBOLS[product?.item_details?.price?.currency]} ${
+                  product?.item_details?.price?.value
+                }`}
           </Text>
           <Text variant={'bodyMedium'} style={styles.field}>
             {product?.item_details?.descriptor?.short_desc}
