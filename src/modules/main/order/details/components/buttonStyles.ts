@@ -17,6 +17,8 @@ export const makeButtonStyles = (colors: any) =>
     },
     webView: {
       flex: 1,
+      borderTopLeftRadius: 16,
+      borderTopRightRadius: 16,
     },
     draggableIcon: {
       backgroundColor: '#000',
