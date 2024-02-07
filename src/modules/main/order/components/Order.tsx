@@ -7,7 +7,7 @@ import FastImage from 'react-native-fast-image';
 import {Text, useTheme} from 'react-native-paper';
 import OrderStatus from './OrderStatus';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { CURRENCY_SYMBOLS, FB_DOMAIN } from "../../../../utils/constants";
+import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 
 interface Order {
   order: any;

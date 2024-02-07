@@ -26,6 +26,7 @@ import {
 import {showToastWithGravity} from '../../../../../utils/utils';
 import Config from '../../../../../../config';
 import {theme} from '../../../../../utils/theme';
+import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
 
 interface TrackOrderButton {}
 
@@ -311,28 +312,24 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
         height={screenHeight}
         customStyles={{
           container: styles.rbSheet,
-          wrapper: styles.wrapper,
         }}>
-        <View style={styles.closeSheet}>
-          <TouchableOpacity onPress={hideTrackingSheet}>
-            <Icon name={'close-circle'} color={theme.colors.error} size={32} />
-          </TouchableOpacity>
-        </View>
-        {!!trackingUrl && (
-          <WebView style={styles.webView} source={{uri: trackingUrl}} />
-        )}
-        {!!route && (
-          <MapplsGL.MapView style={styles.webView}>
-            <MapplsGL.Camera
-              zoomLevel={16}
-              centerCoordinate={[currentPoint?.lng, currentPoint?.lat]}
-            />
-            {renderOrigin()}
-            {renderRoute()}
-            {renderCurrentPoint()}
-            {renderDestination()}
-          </MapplsGL.MapView>
-        )}
+        <CloseSheetContainer closeSheet={hideTrackingSheet}>
+          {!!trackingUrl && (
+            <WebView style={styles.webView} source={{uri: trackingUrl}} />
+          )}
+          {!!route && (
+            <MapplsGL.MapView style={styles.webView}>
+              <MapplsGL.Camera
+                zoomLevel={16}
+                centerCoordinate={[currentPoint?.lng, currentPoint?.lat]}
+              />
+              {renderOrigin()}
+              {renderRoute()}
+              {renderCurrentPoint()}
+              {renderDestination()}
+            </MapplsGL.MapView>
+          )}
+        </CloseSheetContainer>
       </RBSheet>
     </>
   );

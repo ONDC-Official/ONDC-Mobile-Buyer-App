@@ -86,7 +86,8 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
                 {label}
               </Text>
               {route.name === 'Cart' && badge ? (
-                <View style={[styles.badge, isFocused ? styles.selectedBadge : {}]}>
+                <View
+                  style={[styles.badge, isFocused ? styles.selectedBadge : {}]}>
                   <Text style={styles.badgeLabel}>{badge}</Text>
                 </View>
               ) : null}

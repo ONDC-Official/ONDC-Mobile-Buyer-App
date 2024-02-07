@@ -23,8 +23,8 @@ import SearchProducts from '../modules/main/dashboard/SearchProducts';
 import PaymentMethods from '../modules/main/order/details/PaymentMethods';
 import OrderProductDetails from '../modules/main/order/details/OrderProductDetails';
 import ReturnOrder from '../modules/main/order/details/ReturnOrder';
-import Complaints from "../modules/main/complaint/list/Complaints";
-import ComplaintDetails from "../modules/main/complaint/details/ComplaintDetails";
+import Complaints from '../modules/main/complaint/list/Complaints';
+import ComplaintDetails from '../modules/main/complaint/details/ComplaintDetails';
 
 const Stack = createStackNavigator();
 

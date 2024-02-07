@@ -407,7 +407,9 @@ const ProductDetails: React.FC<ProductDetails> = ({
                   variant="bodyLarge"
                   style={[styles.price, styles.maximumAmount]}>
                   ₹
-                  {Number(product?.item_details?.price?.maximum_value).toFixed(0)}
+                  {Number(product?.item_details?.price?.maximum_value).toFixed(
+                    0,
+                  )}
                 </Text>
               </View>
             )}

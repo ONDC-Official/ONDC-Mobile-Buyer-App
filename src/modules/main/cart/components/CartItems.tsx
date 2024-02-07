@@ -29,6 +29,7 @@ import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemC
 import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
 import CustomizationFooterButtons from '../../provider/components/CustomizationFooterButtons';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
+import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -318,63 +319,59 @@ const CartItems: React.FC<CartItems> = ({
         height={screenHeight}
         customStyles={{
           container: styles.rbSheet,
-          wrapper: styles.wrapper,
         }}>
-        <View style={styles.closeSheet}>
-          <TouchableOpacity onPress={hideCustomization}>
-            <Icon name={'close-circle'} color={theme.colors.error} size={32} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.sheetContainer}>
-          <View style={styles.header}>
-            <FastImage
-              source={{uri: productPayload?.item_details?.descriptor?.symbol}}
-              style={styles.sheetProductSymbol}
-            />
-            <View style={styles.titleContainer}>
-              <Text variant={'titleSmall'} style={styles.title}>
-                {productPayload?.item_details?.descriptor?.name}
-              </Text>
-              <Text variant={'labelMedium'} style={styles.prize}>
-                {
-                  CURRENCY_SYMBOLS[
-                    productPayload?.item_details?.price?.currency
-                  ]
-                }
-                {productPayload?.item_details?.price?.value}
-              </Text>
+        <CloseSheetContainer closeSheet={hideCustomization}>
+          <View style={styles.sheetContainer}>
+            <View style={styles.header}>
+              <FastImage
+                source={{uri: productPayload?.item_details?.descriptor?.symbol}}
+                style={styles.sheetProductSymbol}
+              />
+              <View style={styles.titleContainer}>
+                <Text variant={'titleSmall'} style={styles.title}>
+                  {productPayload?.item_details?.descriptor?.name}
+                </Text>
+                <Text variant={'labelMedium'} style={styles.prize}>
+                  {
+                    CURRENCY_SYMBOLS[
+                      productPayload?.item_details?.price?.currency
+                    ]
+                  }
+                  {productPayload?.item_details?.price?.value}
+                </Text>
+              </View>
             </View>
-          </View>
-          {currentCartItem?.item?.provider?.locations?.length > 0 && (
-            <Text variant={'labelMedium'} style={styles.address}>
-              {currentCartItem?.item?.provider?.locations[0]?.address?.street ||
-                '-'}
-              ,{' '}
-              {currentCartItem?.item?.provider?.locations[0]?.address?.city ||
-                '-'}
-            </Text>
-          )}
-          <ScrollView style={styles.customizationContainer}>
-            <FBProductCustomization
-              isEditFlow
-              product={productPayload}
-              customizationState={customizationState}
-              setCustomizationState={setCustomizationState}
-              setItemOutOfStock={setItemOutOfStock}
-            />
-          </ScrollView>
+            {currentCartItem?.item?.provider?.locations?.length > 0 && (
+              <Text variant={'labelMedium'} style={styles.address}>
+                {currentCartItem?.item?.provider?.locations[0]?.address
+                  ?.street || '-'}
+                ,{' '}
+                {currentCartItem?.item?.provider?.locations[0]?.address?.city ||
+                  '-'}
+              </Text>
+            )}
+            <ScrollView style={styles.customizationContainer}>
+              <FBProductCustomization
+                isEditFlow
+                product={productPayload}
+                customizationState={customizationState}
+                setCustomizationState={setCustomizationState}
+                setItemOutOfStock={setItemOutOfStock}
+              />
+            </ScrollView>
 
-          <CustomizationFooterButtons
-            update
-            productLoading={updatingProduct}
-            itemQty={itemQty}
-            setItemQty={setItemQty}
-            itemOutOfStock={itemOutOfStock}
-            addDetailsToCart={updateCustomizations}
-            product={productPayload}
-            customizationPrices={customizationPrices}
-          />
-        </View>
+            <CustomizationFooterButtons
+              update
+              productLoading={updatingProduct}
+              itemQty={itemQty}
+              setItemQty={setItemQty}
+              itemOutOfStock={itemOutOfStock}
+              addDetailsToCart={updateCustomizations}
+              product={productPayload}
+              customizationPrices={customizationPrices}
+            />
+          </View>
+        </CloseSheetContainer>
       </RBSheet>
     </>
   );
@@ -452,23 +449,11 @@ const makeStyles = (colors: any) =>
       height: 1,
       backgroundColor: '#CACDD8',
     },
-    customizationButtons: {
-      marginTop: 16,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      paddingHorizontal: 16,
-    },
-    customizationButton: {
-      flex: 1,
-    },
-    separator: {
-      width: 16,
-    },
     customizationContainer: {
       padding: 16,
       backgroundColor: '#FAFAFA',
     },
-    rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
+    rbSheet: {backgroundColor: 'rgba(47, 47, 47, 0.75)'},
     header: {
       paddingHorizontal: 16,
       paddingVertical: 12,
@@ -486,9 +471,6 @@ const makeStyles = (colors: any) =>
       width: 36,
       height: 36,
     },
-    draggableIcon: {
-      backgroundColor: '#000',
-    },
     prize: {
       color: colors.primary,
     },
@@ -501,15 +483,6 @@ const makeStyles = (colors: any) =>
       borderTopRightRadius: 15,
       backgroundColor: '#FFF',
       height: screenHeight - 130,
-    },
-    closeSheet: {
-      backgroundColor: 'rgba(47, 47, 47, 0.75)',
-      alignItems: 'center',
-      paddingBottom: 8,
-      paddingTop: 20,
-    },
-    wrapper: {
-      backgroundColor: 'rgba(47, 47, 47, 0.75)',
     },
   });
 

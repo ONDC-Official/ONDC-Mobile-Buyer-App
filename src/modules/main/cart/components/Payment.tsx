@@ -1,11 +1,5 @@
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {
-  ActivityIndicator,
-  Button,
-  IconButton,
-  Text,
-  useTheme,
-} from 'react-native-paper';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Button, Text, useTheme} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import axios from 'axios';

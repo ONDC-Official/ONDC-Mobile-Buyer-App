@@ -5,7 +5,6 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import useLogoutUser from '../../../../../hooks/useLogoutUser';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
-import Complaints from '../../../complaint/list/Complaints';
 
 const Profile = () => {
   const theme = useTheme();
