@@ -32,7 +32,9 @@ const CloseSheetContainer = ({
 const makeStyles = () =>
   StyleSheet.create({
     container: {
-      backgroundColor: 'rgba(47, 47, 47, 0.75)',
+      justifyContent: 'flex-end',
+      flex: 1,
+      paddingBottom: 70,
     },
     closeSheet: {
       alignItems: 'center',

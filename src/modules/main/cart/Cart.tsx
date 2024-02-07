@@ -22,6 +22,7 @@ import Fulfillment from './components/Fulfillment';
 import AddressList from './components/AddressList';
 import Payment from './components/Payment';
 import useConfirmItems from '../../../hooks/useConfirmItems';
+import CloseSheetContainer from '../../../components/bottomSheet/CloseSheetContainer';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
@@ -538,9 +539,9 @@ const Cart = () => {
       <RBSheet
         closeOnPressMask={false}
         ref={fulfillmentSheet}
-        height={screenHeight - 100}
+        height={screenHeight}
         customStyles={{
-          wrapper: styles.wrapper,
+          container: styles.rbSheet,
         }}>
         <Fulfillment
           items={cartItems}
@@ -556,20 +557,23 @@ const Cart = () => {
       <RBSheet
         closeOnPressMask={false}
         ref={addressSheet}
-        height={screenHeight / 2}
+        height={screenHeight}
         customStyles={{
           container: styles.rbSheet,
         }}>
-        <AddressList
-          deliveryAddress={deliveryAddress}
-          setDeliveryAddress={updateDeliveryAddress}
-          closeSheet={() => addressSheet.current.close()}
-        />
+        <CloseSheetContainer closeSheet={() => addressSheet.current.close()}>
+          <View style={styles.addressContainer}>
+            <AddressList
+              deliveryAddress={deliveryAddress}
+              setDeliveryAddress={updateDeliveryAddress}
+            />
+          </View>
+        </CloseSheetContainer>
       </RBSheet>
       <RBSheet
         closeOnPressMask={false}
         ref={paymentSheet}
-        height={320}
+        height={screenHeight}
         customStyles={{
           container: styles.rbSheet,
         }}>
@@ -639,9 +643,18 @@ const makeStyles = () =>
     total: {
       fontWeight: '700',
     },
-    rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
+    rbSheet: {
+      backgroundColor: 'rgba(47, 47, 47, 0.75)',
+    },
     wrapper: {
       backgroundColor: 'rgba(47, 47, 47, 0.75)',
+    },
+    addressContainer: {
+      backgroundColor: '#fff',
+      flex: 1,
+      paddingTop: 16,
+      borderTopLeftRadius: 16,
+      borderTopRightRadius: 16,
     },
   });
 

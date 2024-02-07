@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, IconButton, Text, useTheme} from 'react-native-paper';
+import {Button, Text, useTheme} from 'react-native-paper';
 import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
@@ -16,7 +16,6 @@ import {saveAddress} from '../../../../redux/address/actions';
 interface AddressList {
   deliveryAddress: any;
   setDeliveryAddress: (newAddress: any) => void;
-  closeSheet: () => void;
 }
 
 const CancelToken = axios.CancelToken;
@@ -24,7 +23,6 @@ const CancelToken = axios.CancelToken;
 const AddressList: React.FC<AddressList> = ({
   deliveryAddress,
   setDeliveryAddress,
-  closeSheet,
 }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
@@ -80,7 +78,6 @@ const AddressList: React.FC<AddressList> = ({
     <View style={styles.addressFormContainer}>
       <View style={styles.header}>
         <Text variant={'titleMedium'}>Select a Delivery Address</Text>
-        <IconButton icon={'close-circle'} onPress={closeSheet} />
       </View>
       <Text variant={'labelLarge'} style={styles.shippingAddress}>
         Saved Addresses
@@ -161,6 +158,7 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+      paddingBottom: 16,
       paddingHorizontal: 16,
     },
     button: {

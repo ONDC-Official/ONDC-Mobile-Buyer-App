@@ -28,6 +28,7 @@ import {
   ON_INITIALIZE,
 } from '../../../../utils/apiActions';
 import {getStoredData, setStoredData} from '../../../../utils/storage';
+import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 
 interface Payment {
   productsQuote: any;
@@ -292,12 +293,11 @@ const Payment: React.FC<Payment> = ({
   }, [updatedCartItemsData]);
 
   return (
-    <>
-      <View style={styles.header}>
-        <Text variant={'bodyMedium'}>Select Payment Option</Text>
-        <IconButton icon={'close-circle'} onPress={closePaymentSheet} />
-      </View>
-      <ScrollView style={styles.pageContainer}>
+    <CloseSheetContainer closeSheet={closePaymentSheet}>
+      <View>
+        <View style={styles.header}>
+          <Text variant={'bodyMedium'}>Select Payment Option</Text>
+        </View>
         <View style={styles.paymentContainer}>
           <TouchableOpacity
             style={styles.paymentOption}
@@ -339,46 +339,49 @@ const Payment: React.FC<Payment> = ({
             </View>
           </TouchableOpacity>
         </View>
-      </ScrollView>
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="contained"
-          disabled={
-            activePaymentMethod === '' ||
-            productsQuote.isError ||
-            confirmOrderLoading ||
-            initializeOrderLoading
-          }
-          icon={() =>
-            confirmOrderLoading || initializeOrderLoading ? (
-              <ActivityIndicator size={14} color={theme.colors.primary} />
-            ) : (
-              <></>
-            )
-          }
-          onPress={handleConfirmOrder}>
-          Proceed to Buy
-        </Button>
+        <View style={styles.buttonContainer}>
+          <Button
+            mode="contained"
+            disabled={
+              activePaymentMethod === '' ||
+              productsQuote.isError ||
+              confirmOrderLoading ||
+              initializeOrderLoading
+            }
+            icon={() =>
+              confirmOrderLoading || initializeOrderLoading ? (
+                <ActivityIndicator size={14} color={theme.colors.primary} />
+              ) : (
+                <></>
+              )
+            }
+            onPress={handleConfirmOrder}>
+            Proceed to Buy
+          </Button>
+        </View>
       </View>
-    </>
+    </CloseSheetContainer>
   );
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    pageContainer: {
-      flex: 1,
-    },
     header: {
-      paddingHorizontal: 16,
+      borderTopLeftRadius: 16,
+      borderTopRightRadius: 16,
+      padding: 16,
+      backgroundColor: '#fff',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+      borderBottomWidth: 1,
+      borderBottomColor: '#ebebeb',
     },
     paymentContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginHorizontal: 16,
+      padding: 16,
+      backgroundColor: '#fff',
     },
     paymentOption: {
       flex: 1,
@@ -409,7 +412,8 @@ const makeStyles = (colors: any) =>
       textAlign: 'center',
     },
     buttonContainer: {
-      margin: 16,
+      padding: 16,
+      backgroundColor: '#fff',
     },
   });
 
