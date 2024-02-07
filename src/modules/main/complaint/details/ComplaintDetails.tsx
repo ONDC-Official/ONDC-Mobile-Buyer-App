@@ -1,7 +1,7 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import React, {useEffect, useState} from 'react';
-import {Button, Text} from 'react-native-paper';
+import {Button, List, Text} from 'react-native-paper';
 import moment from 'moment';
 import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
@@ -28,26 +28,10 @@ const ComplaintDetails = () => {
   const [showTakeActionButton, setShowTakeActionButton] =
     useState<boolean>(false);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'OPEN':
-        return styles.open;
-
-      case 'PROCESSING':
-        return styles.processing;
-
-      case 'ESCALATE':
-        return styles.escalate;
-
-      default:
-        return {};
-    }
-  };
-
   useEffect(() => {
-    const mergeIssueActions = (actions: any) => {
-      let resActions = actions.respondent_actions,
-        comActions = actions.complainant_actions.map((item: any) => {
+    const mergeIssueActions = (list: any) => {
+      let resActions = list.respondent_actions,
+        comActions = list.complainant_actions.map((item: any) => {
           return {...item, respondent_action: item.complainant_action};
         }),
         mergedActions = [...comActions, ...resActions];
@@ -89,44 +73,47 @@ const ComplaintDetails = () => {
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.pageContainer}>
-      <View style={styles.card}>
-        <Text variant={'titleMedium'} style={styles.title}>
-          Complaint Details
-        </Text>
-        {actions.map((action: any, actionIndex: number) => (
-          <View style={styles.process} key={action?.complainant_action}>
-            <View style={styles.dotContainer}>
-              <View
-                style={[styles.dot, getStatusColor(action?.respondent_action)]}>
-                <View style={styles.innerDot} />
-              </View>
-              {actionIndex !== actions.length - 1 && (
-                <View style={styles.dottedLine} />
-              )}
-            </View>
-            <View style={styles.processDetails}>
-              <View style={styles.processHeader}>
-                <Text variant={'labelLarge'} style={styles.actionTitle}>
-                  {action?.respondent_action}
-                </Text>
-                <Text variant={'labelLarge'} style={styles.actionTitle}>
-                  {moment(action?.updated_at).format('DD MMM YYYY hh:mma')}
-                </Text>
-              </View>
-              <Text variant={'labelLarge'} style={styles.shortDescription}>
-                {action?.short_desc}
-              </Text>
-              {!!action?.updated_by && (
-                <View style={styles.updateBy}>
-                  <Text variant={'labelMedium'}>Updated by: </Text>
-                  <Text variant={'labelLarge'}>
-                    {action?.updated_by?.person?.name}
-                  </Text>
+      <View style={styles.accordionContainer}>
+        <List.Accordion
+          style={styles.accordion}
+          title="Complaint Details"
+          titleStyle={styles.accordionTitle}>
+          <View style={styles.accordionDetails}>
+            {actions.map((action: any, actionIndex: number) => (
+              <View style={styles.process} key={action?.complainant_action}>
+                <View style={styles.dotContainer}>
+                  <View style={styles.dot}>
+                    <View style={styles.innerDot} />
+                  </View>
+                  {actionIndex !== actions.length - 1 && (
+                    <View style={styles.dottedLine} />
+                  )}
                 </View>
-              )}
-            </View>
+                <View style={styles.processDetails}>
+                  <View style={styles.processHeader}>
+                    <Text variant={'labelLarge'} style={styles.actionTitle}>
+                      {action?.respondent_action} (Issue)
+                    </Text>
+                    <Text variant={'labelLarge'} style={styles.date}>
+                      {moment(action?.updated_at).format('DD MMM YYYY hh:mma')}
+                    </Text>
+                  </View>
+                  <Text variant={'labelLarge'} style={styles.shortDescription}>
+                    {action?.short_desc}
+                  </Text>
+                  {!!action?.updated_by && (
+                    <View style={styles.updateBy}>
+                      <Text variant={'labelMedium'}>Updated by: </Text>
+                      <Text variant={'labelLarge'}>
+                        {action?.updated_by?.person?.name}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+            ))}
           </View>
-        ))}
+        </List.Accordion>
       </View>
       <View style={styles.card}>
         <View style={styles.orderIdRow}>
@@ -139,6 +126,14 @@ const ComplaintDetails = () => {
             </Text>
           </View>
           <ComplaintStatus status={complaintDetails?.issue_status} />
+        </View>
+        <View style={styles.row}>
+          <Text variant={'bodySmall'} style={styles.text}>
+            Level:{' '}
+          </Text>
+          <Text variant={'bodyMedium'} style={styles.text}>
+            Issue
+          </Text>
         </View>
         <View style={styles.row}>
           <Text variant={'bodySmall'} style={styles.text}>
@@ -202,18 +197,31 @@ const ComplaintDetails = () => {
             .format('hh:mm a, MMMM Do, YYYY')}
         </Text>
 
-        {showTakeActionButton ? (
-          <Button mode="outlined" style={styles.actionButton}>
-            Take Action
-          </Button>
-        ) : (
+        <View style={styles.actionButtonContainer}>
           <GetStatusButton
             transactionId={complaintDetails?.transaction_id}
             bppId={complaintDetails?.bppId}
             issueId={complaintDetails?.issueId}
             domain={complaintDetails?.domain}
           />
-        )}
+
+          <View style={styles.buttonSeparator} />
+
+          <Button
+            mode="outlined"
+            style={styles.cancelButton}
+            textColor={theme.colors.error}>
+            Cancel
+          </Button>
+
+          <View style={styles.buttonSeparator} />
+
+          {/*{showTakeActionButton && (*/}
+            <Button mode="outlined" style={styles.actionButton}>
+              Take Action
+            </Button>
+          {/*)}*/}
+        </View>
       </View>
       <View style={styles.card}>
         <Text variant={'titleMedium'} style={styles.title}>
@@ -251,11 +259,29 @@ const styles = StyleSheet.create({
   },
   card: {
     borderWidth: 1,
-    borderColor: '#686868',
+    borderColor: '#E8E8E8',
     borderRadius: 12,
     padding: 16,
     backgroundColor: '#FFFFFF',
     marginBottom: 12,
+  },
+  accordionContainer: {
+    marginBottom: 12,
+  },
+  accordion: {
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+    borderRadius: 12,
+  },
+  accordionTitle: {
+    fontWeight: '700',
+    color: '#000000',
+  },
+  accordionDetails: {
+    padding: 16,
+    backgroundColor: '#FFFFFF',
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
   },
   title: {
     marginBottom: 16,
@@ -268,7 +294,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 20,
-    backgroundColor: '#B9B9B9',
+    backgroundColor: '#008ECC',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -292,8 +318,8 @@ const styles = StyleSheet.create({
   },
   dottedLine: {
     borderLeftWidth: 2,
-    borderLeftColor: '#0000001A',
-    borderStyle: 'dashed',
+    borderLeftColor: '#008ECC',
+    borderStyle: 'solid',
     height: 60,
     marginLeft: 9,
   },
@@ -308,6 +334,9 @@ const styles = StyleSheet.create({
   },
   actionTitle: {
     color: '#1A1A1A',
+  },
+  date: {
+    color: '#8A8A8A',
   },
   shortDescription: {
     marginBottom: 4,
@@ -330,6 +359,8 @@ const styles = StyleSheet.create({
   },
   row: {
     marginBottom: 4,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   itemTitle: {
     marginBottom: 4,
@@ -351,7 +382,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: theme.colors.primary,
   },
+  buttonSeparator: {
+    width: 6,
+  },
+  cancelButton: {
+    borderRadius: 8,
+    borderColor: theme.colors.error,
+  },
   updateBy: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  actionButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },

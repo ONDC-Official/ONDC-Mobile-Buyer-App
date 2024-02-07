@@ -34,17 +34,17 @@ const makeStyles = (colors: any) =>
       paddingVertical: 2,
     },
     statusOpenChip: {
-      backgroundColor: '#E8FCF1',
-    },
-    statusCloseChip: {
       backgroundColor: '#FFEBEB',
     },
+    statusCloseChip: {
+      backgroundColor: '#E8FCF1',
+    },
     statusOpen: {
-      color: '#419E6A',
+      color: '#D83232',
       fontSize: 11,
     },
     statusClose: {
-      color: '#D83232',
+      color: '#419E6A',
       fontSize: 11,
     },
   });
