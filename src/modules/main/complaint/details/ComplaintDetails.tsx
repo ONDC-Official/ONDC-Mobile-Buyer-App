@@ -8,6 +8,7 @@ import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {compareDateWithDuration} from '../../../../utils/utils';
 import {theme} from '../../../../utils/theme';
 import GetStatusButton from '../components/GetStatusButton';
+import ComplaintStatus from '../components/ComplaintStatus';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -26,6 +27,22 @@ const ComplaintDetails = () => {
   const [actions, setActions] = useState<any[]>([]);
   const [showTakeActionButton, setShowTakeActionButton] =
     useState<boolean>(false);
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'OPEN':
+        return styles.open;
+
+      case 'PROCESSING':
+        return styles.processing;
+
+      case 'ESCALATE':
+        return styles.escalate;
+
+      default:
+        return {};
+    }
+  };
 
   useEffect(() => {
     const mergeIssueActions = (actions: any) => {
@@ -60,7 +77,6 @@ const ComplaintDetails = () => {
       } else {
         setShowTakeActionButton(false);
       }
-      console.log(JSON.stringify(mergedActions, undefined, 4));
       setActions(mergedActions);
     };
 
@@ -80,7 +96,8 @@ const ComplaintDetails = () => {
         {actions.map((action: any, actionIndex: number) => (
           <View style={styles.process} key={action?.complainant_action}>
             <View style={styles.dotContainer}>
-              <View style={styles.dot}>
+              <View
+                style={[styles.dot, getStatusColor(action?.respondent_action)]}>
                 <View style={styles.innerDot} />
               </View>
               {actionIndex !== actions.length - 1 && (
@@ -89,20 +106,23 @@ const ComplaintDetails = () => {
             </View>
             <View style={styles.processDetails}>
               <View style={styles.processHeader}>
-                <Text variant={'labelMedium'} style={styles.actionTitle}>
-                  {action?.complainant_action}
+                <Text variant={'labelLarge'} style={styles.actionTitle}>
+                  {action?.respondent_action}
                 </Text>
-                <Text variant={'labelMedium'} style={styles.actionTitle}>
+                <Text variant={'labelLarge'} style={styles.actionTitle}>
                   {moment(action?.updated_at).format('DD MMM YYYY hh:mma')}
                 </Text>
               </View>
-              <Text variant={'labelMedium'} style={styles.shortDescription}>
+              <Text variant={'labelLarge'} style={styles.shortDescription}>
                 {action?.short_desc}
               </Text>
               {!!action?.updated_by && (
-                <Text variant={'labelMedium'}>
-                  Updated by: {action?.updated_by?.person?.name}
-                </Text>
+                <View style={styles.updateBy}>
+                  <Text variant={'labelMedium'}>Updated by: </Text>
+                  <Text variant={'labelLarge'}>
+                    {action?.updated_by?.person?.name}
+                  </Text>
+                </View>
               )}
             </View>
           </View>
@@ -118,9 +138,7 @@ const ComplaintDetails = () => {
               {complaintDetails?.issueId}
             </Text>
           </View>
-          <View>
-            <Text variant={'bodyMedium'}>{complaintDetails?.issue_status}</Text>
-          </View>
+          <ComplaintStatus status={complaintDetails?.issue_status} />
         </View>
         <View style={styles.row}>
           <Text variant={'bodySmall'} style={styles.text}>
@@ -254,6 +272,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  open: {
+    backgroundColor: '#419E6A',
+  },
+  processing: {
+    backgroundColor: '#F9C51C',
+  },
+  escalate: {
+    backgroundColor: '#008ECC',
+  },
   innerDot: {
     width: 10,
     height: 10,
@@ -323,6 +350,10 @@ const styles = StyleSheet.create({
   actionButton: {
     borderRadius: 8,
     borderColor: theme.colors.primary,
+  },
+  updateBy: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 

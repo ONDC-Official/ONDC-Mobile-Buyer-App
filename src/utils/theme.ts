@@ -50,6 +50,16 @@ const fontConfig: any = {
     fontSize: 11,
     lineHeight: 14,
   },
+  labelLarge: {
+    fontFamily: Platform.select({
+      web: 'Inter-Bold, sans-serif',
+      ios: 'Inter-Bold',
+      default: 'Inter-Bold',
+    }),
+    fontWeight: '600',
+    fontSize: 11,
+    lineHeight: 14,
+  },
   bodySmall: {
     fontSize: 14,
     lineHeight: 18,
