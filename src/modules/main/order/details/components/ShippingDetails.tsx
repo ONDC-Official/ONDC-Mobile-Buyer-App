@@ -15,6 +15,12 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
     (one: any) => one.id === fullfillmentId,
   );
 
+  const fulfillmentHistory = orderDetails?.fulfillmentHistory.filter(
+    (one: any) => one.id === fullfillmentId,
+  );
+
+  const fulfilment = orderDetails?.fulfillments[fulfilmentIndex];
+
   return (
     <View style={styles.shippingContainer}>
       <Text variant={'bodyLarge'} style={styles.shippingTitle}>
@@ -33,9 +39,7 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
               Arriving On:
             </Text>
             <Text variant={'labelMedium'} style={styles.arrivalDate}>
-              {moment(
-                orderDetails?.fulfillments[0]?.end?.time?.range?.end,
-              ).format('DD-MM-YYYY')}
+              {moment(fulfilment?.end?.time?.range?.end).format('DD-MM-YYYY')}
             </Text>
           </View>
         ) : (
@@ -54,21 +58,21 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
         />
       </TouchableOpacity>
       {showDetails &&
-        orderDetails?.orderHistory?.map((history: any, index: number) => (
+        fulfillmentHistory.map((history: any, index: number) => (
           <View key={history?._id} style={styles.statusContainer}>
             <View style={styles.status}>
               <View>
                 <Icon name={'check-circle'} color={'#419E6B'} size={20} />
-                {index < orderDetails?.orderHistory.length - 1 && (
+                {index < fulfillmentHistory.length - 1 && (
                   <View style={styles.link} />
                 )}
               </View>
               <Text variant={'labelMedium'} style={styles.state}>
-                {history?.state}
+                {history?.state.replace(/-/g, ' ')}
               </Text>
             </View>
-            <Text variant={'labelMedium'}>
-              {moment(history?.createdAt).format('ll')}
+            <Text variant={'labelMedium'} style={styles.timestamp}>
+              {moment(history?.createdAt).format('ddd, DD MMM hh:mm A')}
             </Text>
           </View>
         ))}
@@ -101,6 +105,7 @@ const makeStyles = (colors: any) =>
     accordionTitle: {
       flexDirection: 'row',
       alignItems: 'center',
+      marginBottom: 12,
     },
     arrivalLabel: {
       color: '#686868',
@@ -127,6 +132,10 @@ const makeStyles = (colors: any) =>
       color: '#1D1D1D',
       paddingTop: 4,
       paddingLeft: 8,
+    },
+    timestamp: {
+      paddingTop: 4,
+      color: '#8A8A8A',
     },
   });
 

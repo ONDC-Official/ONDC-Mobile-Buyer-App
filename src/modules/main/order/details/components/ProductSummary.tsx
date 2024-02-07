@@ -32,7 +32,7 @@ const ProductSummary = ({
         )}
       </View>
       {items.map(item => (
-        <View id={item.id} style={styles.item}>
+        <View key={item.id} style={styles.item}>
           <View style={styles.itemMeta}>
             <FastImage
               source={{uri: item?.product?.descriptor?.symbol}}
@@ -61,7 +61,7 @@ const ProductSummary = ({
         {quote?.breakup
           ?.filter((one: any) => one['@ondc/org/title_type'] !== 'item')
           .map((one: any) => (
-            <View style={styles.summaryRow}>
+            <View key={one?.title} style={styles.summaryRow}>
               <Text variant={'labelMedium'} style={styles.taxName}>
                 {one?.title}
               </Text>

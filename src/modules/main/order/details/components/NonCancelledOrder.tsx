@@ -49,6 +49,7 @@ const NonCancelledOrder = ({
             numberOfLines={1}>
             {orderDetails?.provider?.descriptor?.name}
           </Text>
+          <View style={styles.empty} />
         </View>
         <Text variant={'titleMedium'} style={styles.orderStatus}>
           Order {orderDetails?.state}
