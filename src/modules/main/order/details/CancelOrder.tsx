@@ -17,7 +17,11 @@ import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 import {CANCELLATION_REASONS, SSE_TIMEOUT} from '../../../../utils/constants';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
-import {API_BASE_URL, CANCEL_ORDER} from '../../../../utils/apiActions';
+import {
+  API_BASE_URL,
+  CANCEL_ORDER,
+  ORDER_EVENT,
+} from '../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../utils/utils';
 
 const CancelToken = axios.CancelToken;
@@ -88,7 +92,7 @@ const CancelOrder = ({
   // use this function to fetch support info through events
   const fetchCancelOrderDataThroughEvents = (messageId: any) => {
     const eventSource = new RNEventSource(
-      `${API_BASE_URL}/clientApis/events?messageId=${messageId}`,
+      `${API_BASE_URL}${ORDER_EVENT}${messageId}`,
       {
         headers: {Authorization: `Bearer ${token}`},
       },

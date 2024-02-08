@@ -60,7 +60,10 @@ const OrderHeader: React.FC<Order> = ({order}) => {
       </TouchableOpacity>
       <TouchableOpacity style={styles.orderDetails} onPress={navigateToDetails}>
         {order?.items?.map((item: any) => (
-          <Text key={item?.id} variant={'labelMedium'} style={styles.item}>
+          <Text
+            key={`${item?.id}${item.fulfillment_id}`}
+            variant={'labelMedium'}
+            style={styles.item}>
             {item?.quantity?.count} x {item?.product?.descriptor?.name}
           </Text>
         ))}

@@ -34,10 +34,13 @@ const ItemDetails = ({
             }>
             <View style={styles.header}>
               <Text variant={'labelMedium'} style={styles.deliveryDate}>
-                Items will be delivered by{'\n'}
-                {today.isSame(endDate, 'day')
-                  ? endDate.format('hh:mm a')
-                  : endDate.format('Do MMM')}
+                {fulfillment.type === 'Delivery'
+                  ? `Items will be delivered by ${
+                      today.isSame(endDate, 'day')
+                        ? endDate.format('hh:mm a')
+                        : endDate.format('Do MMM')
+                    }`
+                  : ''}
               </Text>
               <View style={styles.statusContainer}>
                 <View style={styles.statusChip}>

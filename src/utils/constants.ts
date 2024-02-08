@@ -47,3 +47,31 @@ export const CANCELLATION_REASONS = [
     isApplicableForCancellation: false,
   },
 ];
+
+export const RETURN_REASONS = [
+  {
+    key: '001',
+    value: 'Buyer does not want product any more',
+    isApplicableForNonReturnable: false,
+  },
+  {
+    key: '002',
+    value: 'Product available at lower than order price',
+    isApplicableForNonReturnable: false,
+  },
+  {
+    key: '003',
+    value: 'Product damaged or not in usable state',
+    isApplicableForNonReturnable: true,
+  },
+  {
+    key: '004',
+    value: 'Product is of incorrect quantity or size',
+    isApplicableForNonReturnable: true,
+  },
+  {
+    key: '005',
+    value: 'Product delivered is different from what was shown and ordered',
+    isApplicableForNonReturnable: true,
+  },
+];

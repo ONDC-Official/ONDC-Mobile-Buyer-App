@@ -5,7 +5,11 @@ import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
-import {API_BASE_URL, ORDER_STATUS} from '../../../../../utils/apiActions';
+import {
+  API_BASE_URL,
+  ORDER_EVENT,
+  ORDER_STATUS,
+} from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
@@ -103,7 +107,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
   // use this function to fetch support info through events
   const fetchStatusDataThroughEvents = (messageId: any) => {
     const eventSource = new RNEventSource(
-      `${API_BASE_URL}/clientApis/events?messageId=${messageId}`,
+      `${API_BASE_URL}${ORDER_EVENT}${messageId}`,
       {
         headers: {Authorization: `Bearer ${token}`},
       },

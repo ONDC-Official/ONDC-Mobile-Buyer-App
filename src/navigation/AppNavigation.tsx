@@ -22,7 +22,7 @@ import CancelOrder from '../modules/main/order/details/CancelOrder';
 import SearchProducts from '../modules/main/dashboard/SearchProducts';
 import PaymentMethods from '../modules/main/order/details/PaymentMethods';
 import OrderProductDetails from '../modules/main/order/details/OrderProductDetails';
-import ReturnOrder from '../modules/main/order/details/ReturnOrder';
+import ReturnItem from '../modules/main/order/details/ReturnItem';
 import Complaints from '../modules/main/complaint/list/Complaints';
 import ComplaintDetails from '../modules/main/complaint/details/ComplaintDetails';
 
@@ -176,8 +176,8 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="ReturnOrder"
-          component={ReturnOrder}
+          name="ReturnItem"
+          component={ReturnItem}
           options={{headerShown: false}}
         />
         <Stack.Screen

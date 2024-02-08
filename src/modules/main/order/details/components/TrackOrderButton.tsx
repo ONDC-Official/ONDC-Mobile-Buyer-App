@@ -2,9 +2,8 @@ import {ActivityIndicator, Text, useTheme} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
-import {Dimensions, TouchableOpacity, View} from 'react-native';
+import {Dimensions, TouchableOpacity} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {WebView} from 'react-native-webview';
 // @ts-ignore
 import Polyline from 'mappls-polyline';
@@ -21,6 +20,7 @@ import {updateRequestingTracker} from '../../../../../redux/order/actions';
 import {
   API_BASE_URL,
   MAP_ACCESS_TOKEN,
+  ORDER_EVENT,
   TRACK_ORDER,
 } from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
@@ -106,7 +106,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   // use this function to fetch tracking info through events
   const fetchTrackingDataThroughEvents = (messageId: any) => {
     const eventSource = new RNEventSource(
-      `${API_BASE_URL}/clientApis/events?messageId=${messageId}`,
+      `${API_BASE_URL}${ORDER_EVENT}${messageId}`,
       {
         headers: {Authorization: `Bearer ${token}`},
       },

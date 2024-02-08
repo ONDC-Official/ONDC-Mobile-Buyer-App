@@ -1,7 +1,9 @@
-import {Text, useTheme} from 'react-native-paper';
+import {Button, Text, useTheme} from 'react-native-paper';
 import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import React from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
 import DownloadIcon from '../../../../../assets/download.svg';
 
@@ -16,8 +18,10 @@ const ProductSummary = ({
   cancelled?: boolean;
   documents?: any;
 }) => {
+  const navigation = useNavigation<any>();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
+  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
   return (
     <View style={styles.container}>
@@ -31,32 +35,76 @@ const ProductSummary = ({
           </TouchableOpacity>
         )}
       </View>
-      {items.map(item => (
-        <View key={item.id} style={styles.item}>
-          <View style={styles.itemMeta}>
-            <FastImage
-              source={{uri: item?.product?.descriptor?.symbol}}
-              style={styles.itemImage}
-            />
-            <Text variant={'bodyMedium'} style={styles.itemName}>
-              {item?.product?.descriptor?.name}
-            </Text>
+      {items.map(item => {
+        const cancellable = item?.product['@ondc/org/cancellable'];
+        const returnable = item?.product['@ondc/org/returnable'];
+
+        return (
+          <View key={item.id} style={styles.item}>
+            <View style={styles.itemMeta}>
+              <FastImage
+                source={{uri: item?.product?.descriptor?.symbol}}
+                style={styles.itemImage}
+              />
+              <View style={styles.itemDetails}>
+                <View style={styles.itemHeader}>
+                  <Text variant={'bodyMedium'} style={styles.itemName}>
+                    {item?.product?.descriptor?.name}
+                  </Text>
+                  <Text variant={'labelMedium'} style={styles.quantity}>
+                    Qty {item?.quantity?.count}
+                  </Text>
+                  <Text variant={'labelLarge'} style={styles.quantity}>
+                    {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
+                    {Number(
+                      item?.quantity?.count * item?.product?.price?.value,
+                    ).toFixed(2)}
+                  </Text>
+                </View>
+                <View style={styles.chipContainer}>
+                  {cancellable ? (
+                    <View style={styles.chip}>
+                      <Text variant={'labelMedium'}>Cancellable</Text>
+                    </View>
+                  ) : (
+                    <View style={styles.chip}>
+                      <Text variant={'labelMedium'}>Non-cancellable</Text>
+                    </View>
+                  )}
+                  {returnable ? (
+                    <View style={styles.chip}>
+                      <Text variant={'labelMedium'}>Returnable</Text>
+                    </View>
+                  ) : (
+                    <View style={styles.chip}>
+                      <Text variant={'labelMedium'}>Non-returnable</Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+            </View>
+            {returnable && (
+              <Button
+                mode={'outlined'}
+                compact
+                style={styles.returnItem}
+                onPress={() =>
+                  navigation.navigate('ReturnItem', {
+                    item,
+                    providerId: orderDetails?.provider?.id,
+                    state: orderDetails?.state,
+                    orderId: orderDetails?.id,
+                    bppId: orderDetails?.bppId,
+                    bppUrl: orderDetails?.bpp_uri,
+                    transactionId: orderDetails?.transactionId,
+                  })
+                }>
+                Return Item
+              </Button>
+            )}
           </View>
-          <View style={styles.quantityContainer}>
-            <Text variant={'bodyMedium'} style={styles.quantity}>
-              {item?.quantity?.count} x{' '}
-              {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-              {item?.product?.price?.value}
-            </Text>
-            <Text variant={'bodyMedium'} style={styles.quantity}>
-              {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-              {Number(
-                item?.quantity?.count * item?.product?.price?.value,
-              ).toFixed(2)}
-            </Text>
-          </View>
-        </View>
-      ))}
+        );
+      })}
       <View style={styles.summaryContainer}>
         {quote?.breakup
           ?.filter((one: any) => one['@ondc/org/title_type'] !== 'item')
@@ -144,6 +192,30 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: 4,
+    },
+    itemDetails: {
+      flex: 1,
+    },
+    itemHeader: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    chipContainer: {
+      flexDirection: 'row',
+    },
+    returnItem: {
+      borderRadius: 8,
+      marginTop: 12,
+      borderColor: colors.primary,
+    },
+    chip: {
+      marginRight: 4,
+      backgroundColor: '#E8E8E8',
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      borderRadius: 22,
     },
     quantityContainer: {
       flexDirection: 'row',

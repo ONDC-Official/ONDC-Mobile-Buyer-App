@@ -21,7 +21,6 @@ import ItemDetails from './ItemDetails';
 import PaymentMethod from './PaymentMethod';
 import RaiseIssueButton from './RaiseIssueButton';
 import CancelOrderButton from './CancelOrderButton';
-import ReturnOrderButton from './ReturnOrderButton';
 
 const NonCancelledOrder = ({
   getOrderDetails,
@@ -55,7 +54,9 @@ const NonCancelledOrder = ({
           Order {orderDetails?.state}
         </Text>
       </View>
-      <ScrollView style={styles.pageContainer}>
+      <ScrollView
+        style={styles.pageContainer}
+        contentContainerStyle={styles.scrollView}>
         <Actions onUpdateOrder={getOrderDetails} />
         <View style={styles.creationHeader}>
           <SimpleLineIcons name={'bag'} color={colors.primary} size={24} />
@@ -102,7 +103,6 @@ const NonCancelledOrder = ({
         />
         <RaiseIssueButton getOrderDetails={getOrderDetails} />
         <CancelOrderButton />
-        <ReturnOrderButton />
       </ScrollView>
     </View>
   );
@@ -140,6 +140,9 @@ const makeStyles = (colors: any) =>
     pageContainer: {
       flex: 1,
       backgroundColor: '#FAFAFA',
+    },
+    scrollView: {
+      paddingBottom: 16,
     },
     creationHeader: {
       flexDirection: 'row',

@@ -36,9 +36,15 @@ export const ON_INITIALIZE: string =
   '/clientApis/v2/on_initialize_order?messageIds=';
 
 export const CANCEL_ORDER: string = '/clientApis/v2/cancel_order';
+export const RETURN_ORDER: string = '/clientApis/v2/update';
+export const ON_UPDATE: string = '/clientApis/v2/on_update?messageId=';
+
+export const GET_SIGN_URL: string = '/clientApis/v2/getSignUrlForUpload';
 
 export const RAISE_ISSUE: string = '/issueApis/v1/issue';
 
 export const ISSUE_STATUS: string = '/issueApis/v1/issue_status';
 export const ON_ISSUE_STATUS: string =
   '/issueApis/v1/on_issue_status?messageId=';
+
+export const ORDER_EVENT: string = '/clientApis/events?messageId=';
