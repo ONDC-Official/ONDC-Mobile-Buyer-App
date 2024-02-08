@@ -114,27 +114,10 @@ const GetStatusButton = ({
   };
 
   const checkIssueStatus = async () => {
-    console.log('Check issue status');
     cancelPartialEventSourceResponseRef.current = [];
     setStatusLoading(true);
     try {
       source.current = CancelToken.source();
-      console.log(
-        JSON.stringify(
-          {
-            context: {
-              transaction_id: transactionId,
-              bpp_id: bppId,
-              domain,
-            },
-            message: {
-              issue_id: issueId,
-            },
-          },
-          undefined,
-          4,
-        ),
-      );
       const {data} = await postDataWithAuth(
         `${API_BASE_URL}${ISSUE_STATUS}`,
         {

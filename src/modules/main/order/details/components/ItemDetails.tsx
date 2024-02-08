@@ -6,8 +6,54 @@ import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
+import ReturnStatus from './ReturnStatus';
 
 const today = moment();
+
+const SingleItem = ({item}: {item: any}) => {
+  const theme = useTheme();
+  const styles = makeStyles(theme.colors);
+
+  return (
+    <View key={item.id} style={styles.item}>
+      <FastImage
+        source={{uri: item?.product?.descriptor?.symbol}}
+        style={styles.itemImage}
+      />
+      <View style={styles.itemMeta}>
+        <Text variant={'labelMedium'} style={styles.itemName}>
+          {item?.product?.descriptor?.name}
+        </Text>
+        <View style={styles.itemTags}>
+          {item?.product['@ondc/org/cancellable'] ? (
+            <View style={styles.chip}>
+              <Text variant={'labelMedium'}>Cancellable</Text>
+            </View>
+          ) : (
+            <View style={styles.chip}>
+              <Text variant={'labelMedium'}>Non-cancellable</Text>
+            </View>
+          )}
+          {item?.product['@ondc/org/returnable'] ? (
+            <View style={styles.chip}>
+              <Text variant={'labelMedium'}>Returnable</Text>
+            </View>
+          ) : (
+            <View style={styles.chip}>
+              <Text variant={'labelMedium'}>Non-returnable</Text>
+            </View>
+          )}
+        </View>
+      </View>
+      <Text variant={'labelMedium'}>Qty {item?.quantity?.count}</Text>
+      <Text variant={'labelMedium'} style={styles.price}>
+        {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
+        {Number(item?.quantity?.count * item?.product?.price?.value).toFixed(2)}
+      </Text>
+    </View>
+  );
+};
+
 const ItemDetails = ({
   fulfillments,
   items,
@@ -23,6 +69,20 @@ const ItemDetails = ({
     <>
       {fulfillments?.map(fulfillment => {
         const endDate = moment(fulfillment?.end?.time?.range?.end);
+        const isReturnInitiated =
+          fulfillment?.state?.descriptor?.code === 'Return_Initiated';
+
+        let itemId: any = null;
+        if (isReturnInitiated) {
+          const returnTag = fulfillment.tags.find(
+            (tag: any) => tag.code === 'return_request',
+          );
+          const itemTag = returnTag.list.find(
+            (tag: any) => tag.code === 'item_id',
+          );
+          itemId = itemTag.value;
+        }
+
         return (
           <TouchableOpacity
             key={fulfillment.id}
@@ -43,60 +103,17 @@ const ItemDetails = ({
                   : ''}
               </Text>
               <View style={styles.statusContainer}>
-                <View style={styles.statusChip}>
-                  <Text variant={'labelMedium'} style={styles.statusText}>
-                    {fulfillment?.state?.descriptor?.code}
-                  </Text>
-                </View>
+                <ReturnStatus code={fulfillment?.state?.descriptor?.code} />
                 <Icon name={'chevron-right'} size={20} color={'#686868'} />
               </View>
             </View>
-            <View>
-              {items
-                .filter(item => item.fulfillment_id === fulfillment.id)
-                .map(item => (
-                  <View key={item.id} style={styles.item}>
-                    <FastImage
-                      source={{uri: item?.product?.descriptor?.symbol}}
-                      style={styles.itemImage}
-                    />
-                    <View style={styles.itemMeta}>
-                      <Text variant={'labelMedium'} style={styles.itemName}>
-                        {item?.product?.descriptor?.name}
-                      </Text>
-                      <View style={styles.itemTags}>
-                        {item?.product['@ondc/org/cancellable'] ? (
-                          <View style={styles.chip}>
-                            <Text variant={'labelMedium'}>Cancellable</Text>
-                          </View>
-                        ) : (
-                          <View style={styles.chip}>
-                            <Text variant={'labelMedium'}>Non-cancellable</Text>
-                          </View>
-                        )}
-                        {item?.product['@ondc/org/returnable'] ? (
-                          <View style={styles.chip}>
-                            <Text variant={'labelMedium'}>Returnable</Text>
-                          </View>
-                        ) : (
-                          <View style={styles.chip}>
-                            <Text variant={'labelMedium'}>Non-returnable</Text>
-                          </View>
-                        )}
-                      </View>
-                    </View>
-                    <Text variant={'labelMedium'}>
-                      Qty {item?.quantity?.count}
-                    </Text>
-                    <Text variant={'labelMedium'} style={styles.price}>
-                      {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                      {Number(
-                        item?.quantity?.count * item?.product?.price?.value,
-                      ).toFixed(2)}
-                    </Text>
-                  </View>
-                ))}
-            </View>
+            {fulfillment?.state?.descriptor?.code === 'Return_Initiated'
+              ? items
+                  .filter(item => item.id === itemId)
+                  .map(item => <SingleItem key={item.id} item={item} />)
+              : items
+                  .filter(item => item.fulfillment_id === fulfillment.id)
+                  .map(item => <SingleItem key={item.id} item={item} />)}
           </TouchableOpacity>
         );
       })}
