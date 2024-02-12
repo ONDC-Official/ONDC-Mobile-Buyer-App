@@ -6,25 +6,13 @@ const ReturnStatus = ({code}: {code: string}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
-  switch (code) {
-    case 'Return_Initiated':
-      return (
-        <View style={[styles.statusChip, styles.returnChip]}>
-          <Text variant={'labelMedium'} style={styles.returnText}>
-            {code}
-          </Text>
-        </View>
-      );
-
-    default:
-      return (
-        <View style={styles.statusChip}>
-          <Text variant={'labelMedium'} style={styles.statusText}>
-            {code}
-          </Text>
-        </View>
-      );
-  }
+  return (
+    <View style={styles.statusChip}>
+      <Text variant={'labelMedium'} style={styles.statusText}>
+        {code}
+      </Text>
+    </View>
+  );
 };
 
 const makeStyles = (colors: any) =>
@@ -37,16 +25,6 @@ const makeStyles = (colors: any) =>
     },
     statusText: {
       color: colors.primary,
-    },
-    price: {
-      fontWeight: '700',
-      marginLeft: 16,
-    },
-    returnChip: {
-      backgroundColor: '#FFEBEB',
-    },
-    returnText: {
-      color: '#D83232',
     },
   });
 

@@ -10,11 +10,13 @@ import DownloadIcon from '../../../../../assets/download.svg';
 const ProductSummary = ({
   items,
   quote,
+  fulfilment,
   cancelled = false,
   documents = undefined,
 }: {
   items: any[];
   quote: any;
+  fulfilment: any;
   cancelled?: boolean;
   documents?: any;
 }) => {
@@ -83,25 +85,27 @@ const ProductSummary = ({
                 </View>
               </View>
             </View>
-            {returnable && (
-              <Button
-                mode={'outlined'}
-                compact
-                style={styles.returnItem}
-                onPress={() =>
-                  navigation.navigate('ReturnItem', {
-                    item,
-                    providerId: orderDetails?.provider?.id,
-                    state: orderDetails?.state,
-                    orderId: orderDetails?.id,
-                    bppId: orderDetails?.bppId,
-                    bppUrl: orderDetails?.bpp_uri,
-                    transactionId: orderDetails?.transactionId,
-                  })
-                }>
-                Return Item
-              </Button>
-            )}
+            {returnable &&
+              (fulfilment?.state?.descriptor?.code === 'Order-delivered' ||
+                fulfilment?.state?.descriptor?.code === 'Completed') && (
+                <Button
+                  mode={'outlined'}
+                  compact
+                  style={styles.returnItem}
+                  onPress={() =>
+                    navigation.navigate('ReturnItem', {
+                      item,
+                      providerId: orderDetails?.provider?.id,
+                      state: orderDetails?.state,
+                      orderId: orderDetails?.id,
+                      bppId: orderDetails?.bppId,
+                      bppUrl: orderDetails?.bpp_uri,
+                      transactionId: orderDetails?.transactionId,
+                    })
+                  }>
+                  Return Item
+                </Button>
+              )}
           </View>
         );
       })}

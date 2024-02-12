@@ -25,6 +25,7 @@ import OrderProductDetails from '../modules/main/order/details/OrderProductDetai
 import ReturnItem from '../modules/main/order/details/ReturnItem';
 import Complaints from '../modules/main/complaint/list/Complaints';
 import ComplaintDetails from '../modules/main/complaint/details/ComplaintDetails';
+import OrderReturnDetails from '../modules/main/order/details/OrderReturnDetails';
 
 const Stack = createStackNavigator();
 
@@ -151,6 +152,12 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="OrderProductDetails"
           component={OrderProductDetails}
+          options={{headerShown: false}}
+        />
+
+        <Stack.Screen
+          name="OrderReturnDetails"
+          component={OrderReturnDetails}
           options={{headerShown: false}}
         />
 

@@ -6,11 +6,11 @@ import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import ProviderDetails from './components/ProviderDetails';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
-import ShippingDetails from './components/ShippingDetails';
-import ProductSummary from './components/ProductSummary';
 import OrderMeta from './components/OrderMeta';
+import ReturnDetails from './components/ReturnDetails';
+import ReturnSummary from './components/ReturnSummary';
 
-const OrderProductDetails = ({route: {params}}: {route: any}) => {
+const OrderReturnDetails = ({route: {params}}: {route: any}) => {
   const navigation = useNavigation();
   const {colors} = useTheme();
   const styles = makeStyles(colors);
@@ -39,14 +39,8 @@ const OrderProductDetails = ({route: {params}}: {route: any}) => {
           bppId={orderDetails?.bppId}
           domain={orderDetails?.domain}
         />
-        <ShippingDetails fullfillmentId={params.fulfillmentId} />
-        <ProductSummary
-          items={orderDetails?.items.filter(
-            (one: any) => one.fulfillment_id === params.fulfillmentId,
-          )}
-          quote={orderDetails?.quote}
-          fulfilment={orderDetails.fulfillments.find((one: any) => one.id === params.fulfillmentId)}
-        />
+        <ReturnDetails fulfilmentId={params.fulfillmentId} />
+        <ReturnSummary fulfilmentId={params.fulfillmentId} />
         <OrderMeta />
       </ScrollView>
     </View>
@@ -72,64 +66,13 @@ const makeStyles = (colors: any) =>
       color: '#1A1A1A',
       marginBottom: 2,
     },
-    fulfilmentDetails: {
-      color: '#fff',
-      textAlign: 'center',
-      marginBottom: 8,
-    },
     orderStatus: {
       color: '#686868',
-    },
-    empty: {
-      width: 24,
-      height: 24,
     },
     pageContainer: {
       flex: 1,
       backgroundColor: '#FAFAFA',
     },
-    creationHeader: {
-      flexDirection: 'row',
-      marginVertical: 22,
-      alignItems: 'center',
-      marginHorizontal: 16,
-    },
-    orderIdContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginHorizontal: 16,
-    },
-    orderId: {
-      color: '#686868',
-    },
-    creationDate: {
-      marginLeft: 8,
-      color: '#686868',
-    },
-    shippingContainer: {
-      paddingTop: 24,
-      paddingHorizontal: 16,
-    },
-    shippingTitle: {
-      marginBottom: 12,
-      fontWeight: '600',
-    },
-    accordion: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    accordionTitle: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    arrivalLabel: {
-      color: '#686868',
-    },
-    arrivalDate: {
-      color: '#1A1A1A',
-      marginLeft: 8,
-    },
   });
 
-export default OrderProductDetails;
+export default OrderReturnDetails;
