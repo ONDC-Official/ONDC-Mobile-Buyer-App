@@ -1,14 +1,15 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import React, {useEffect, useState} from 'react';
-import {Button, List, Text} from 'react-native-paper';
+import {Button, List, Modal, Portal, Text} from 'react-native-paper';
 import moment from 'moment';
 import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
-import {compareDateWithDuration} from '../../../../utils/utils';
 import {theme} from '../../../../utils/theme';
 import GetStatusButton from '../components/GetStatusButton';
 import ComplaintStatus from '../components/ComplaintStatus';
+import EscalateForm from './components/EscalateForm';
+import CloseForm from './components/CloseForm';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -25,8 +26,19 @@ const ComplaintDetails = () => {
     ({complaintReducer}) => complaintReducer,
   );
   const [actions, setActions] = useState<any[]>([]);
-  const [showTakeActionButton, setShowTakeActionButton] =
+  const [escalateModalVisible, setEscalateModalVisible] =
     useState<boolean>(false);
+  const [closeModalVisible, setCloseModalVisible] = useState<boolean>(false);
+
+  const hideEscalateModalVisible = () => setEscalateModalVisible(false);
+  const showEscalateModalVisible = () => setEscalateModalVisible(true);
+
+  const hideCloseModal = () => setCloseModalVisible(false);
+  const showCloseModal = () => setCloseModalVisible(true);
+
+  const escalationSuccess = (list: any) => {
+    setActions([...actions, ...list]);
+  };
 
   useEffect(() => {
     const mergeIssueActions = (list: any) => {
@@ -40,27 +52,6 @@ const ComplaintDetails = () => {
         (a, b) =>
           new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime(),
       );
-      const lastAction =
-        mergedActions[mergedActions.length - 1]?.respondent_action;
-      if (
-        lastAction === 'PROCESSING' ||
-        lastAction === 'OPEN' ||
-        lastAction === 'ESCALATE'
-      ) {
-        setShowTakeActionButton(
-          compareDateWithDuration(
-            'PT1H',
-            mergedActions[mergedActions.length - 1]?.updated_at,
-          ),
-        );
-      } else if (
-        lastAction !== 'ESCALATE' &&
-        mergedActions.some(x => x.respondent_action === 'RESOLVED')
-      ) {
-        setShowTakeActionButton(true);
-      } else {
-        setShowTakeActionButton(false);
-      }
       setActions(mergedActions);
     };
 
@@ -70,183 +61,208 @@ const ComplaintDetails = () => {
   }, [complaintDetails]);
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.pageContainer}>
-      <View style={styles.accordionContainer}>
-        <List.Accordion
-          style={styles.accordion}
-          title="Complaint Details"
-          titleStyle={styles.accordionTitle}>
-          <View style={styles.accordionDetails}>
-            {actions.map((action: any, actionIndex: number) => (
-              <View style={styles.process} key={action?.complainant_action}>
-                <View style={styles.dotContainer}>
-                  <View style={styles.dot}>
-                    <View style={styles.innerDot} />
+    <>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.pageContainer}>
+        <View style={styles.accordionContainer}>
+          <List.Accordion
+            style={styles.accordion}
+            title="Complaint Details"
+            titleStyle={styles.accordionTitle}>
+            <View style={styles.accordionDetails}>
+              {actions.map((action: any, actionIndex: number) => (
+                <View style={styles.process} key={action?.complainant_action}>
+                  <View style={styles.dotContainer}>
+                    <View style={styles.dot}>
+                      <View style={styles.innerDot} />
+                    </View>
+                    {actionIndex !== actions.length - 1 && (
+                      <View style={styles.dottedLine} />
+                    )}
                   </View>
-                  {actionIndex !== actions.length - 1 && (
-                    <View style={styles.dottedLine} />
-                  )}
-                </View>
-                <View style={styles.processDetails}>
-                  <View style={styles.processHeader}>
-                    <Text variant={'labelLarge'} style={styles.actionTitle}>
-                      {action?.respondent_action} (Issue)
-                    </Text>
-                    <Text variant={'labelLarge'} style={styles.date}>
-                      {moment(action?.updated_at).format('DD MMM YYYY hh:mma')}
-                    </Text>
-                  </View>
-                  <Text variant={'labelLarge'} style={styles.shortDescription}>
-                    {action?.short_desc}
-                  </Text>
-                  {!!action?.updated_by && (
-                    <View style={styles.updateBy}>
-                      <Text variant={'labelMedium'}>Updated by: </Text>
-                      <Text variant={'labelLarge'}>
-                        {action?.updated_by?.person?.name}
+                  <View style={styles.processDetails}>
+                    <View style={styles.processHeader}>
+                      <Text variant={'labelLarge'} style={styles.actionTitle}>
+                        {action?.respondent_action} (Issue)
+                      </Text>
+                      <Text variant={'labelLarge'} style={styles.date}>
+                        {moment(action?.updated_at).format(
+                          'DD MMM YYYY hh:mma',
+                        )}
                       </Text>
                     </View>
-                  )}
+                    <Text
+                      variant={'labelLarge'}
+                      style={styles.shortDescription}>
+                      {action?.short_desc}
+                    </Text>
+                    {!!action?.updated_by && (
+                      <View style={styles.updateBy}>
+                        <Text variant={'labelMedium'}>Updated by: </Text>
+                        <Text variant={'labelLarge'}>
+                          {action?.updated_by?.person?.name}
+                        </Text>
+                      </View>
+                    )}
+                  </View>
                 </View>
-              </View>
-            ))}
-          </View>
-        </List.Accordion>
-      </View>
-      <View style={styles.card}>
-        <View style={styles.orderIdRow}>
-          <View style={styles.orderId}>
-            <Text variant={'bodySmall'} style={styles.text}>
-              Issue Id:{' '}
-            </Text>
-            <Text variant={'bodyMedium'} style={styles.text}>
-              {complaintDetails?.issueId}
-            </Text>
-          </View>
-          <ComplaintStatus status={complaintDetails?.issue_status} />
+              ))}
+            </View>
+          </List.Accordion>
         </View>
-        <View style={styles.row}>
-          <Text variant={'bodySmall'} style={styles.text}>
-            Level:{' '}
-          </Text>
-          <Text variant={'bodyMedium'} style={styles.text}>
-            Issue
-          </Text>
-        </View>
-        <View style={styles.row}>
-          <Text variant={'bodySmall'} style={styles.text}>
-            Order Id:{' '}
-          </Text>
-          <Text variant={'bodyMedium'} style={styles.text}>
-            {complaintDetails?.order_details?.id}
-          </Text>
-        </View>
-        <View style={styles.row}>
-          <Text variant={'labelMedium'} style={styles.text}>
-            Issue Raised On:{' '}
-            {moment(complaintDetails?.created_at).format('DD MMM YYYY hh:mma')}{' '}
-            | Fulfillment :{' '}
-            {categories.find(
-              one => one.enums === complaintDetails?.sub_category,
-            )?.value ?? 'NA'}
-          </Text>
-        </View>
-        {complaintDetails?.order_details?.items?.map((item: any) => (
-          <View key={item.id}>
-            <Text variant={'bodyMedium'} style={styles.itemTitle}>
-              {item?.product?.descriptor?.name}
-            </Text>
-            <View style={styles.itemContainer}>
-              <Text variant={'bodySmall'} style={styles.qty}>
-                QTY: {item?.quantity?.count} X{' '}
-                {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                {item?.product?.price?.value}
+        <View style={styles.card}>
+          <View style={styles.orderIdRow}>
+            <View style={styles.orderId}>
+              <Text variant={'bodySmall'} style={styles.text}>
+                Issue Id:{' '}
               </Text>
-              <Text variant={'bodyMedium'}>
-                {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                {item?.quantity?.count * item?.product?.price?.value}
+              <Text variant={'bodyMedium'} style={styles.text}>
+                {complaintDetails?.issueId}
               </Text>
             </View>
+            <ComplaintStatus status={complaintDetails?.issue_status} />
           </View>
-        ))}
+          <View style={styles.row}>
+            <Text variant={'bodySmall'} style={styles.text}>
+              Level:{' '}
+            </Text>
+            <Text variant={'bodyMedium'} style={styles.text}>
+              Issue
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Text variant={'bodySmall'} style={styles.text}>
+              Order Id:{' '}
+            </Text>
+            <Text variant={'bodyMedium'} style={styles.text}>
+              {complaintDetails?.order_details?.id}
+            </Text>
+          </View>
+          <View style={styles.row}>
+            <Text variant={'labelMedium'} style={styles.text}>
+              Issue Raised On:{' '}
+              {moment(complaintDetails?.created_at).format(
+                'DD MMM YYYY hh:mma',
+              )}{' '}
+              | Fulfillment :{' '}
+              {categories.find(
+                one => one.enums === complaintDetails?.sub_category,
+              )?.value ?? 'NA'}
+            </Text>
+          </View>
+          {complaintDetails?.order_details?.items?.map((item: any) => (
+            <View key={item.id}>
+              <Text variant={'bodyMedium'} style={styles.itemTitle}>
+                {item?.product?.descriptor?.name}
+              </Text>
+              <View style={styles.itemContainer}>
+                <Text variant={'bodySmall'} style={styles.qty}>
+                  QTY: {item?.quantity?.count} X{' '}
+                  {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
+                  {item?.product?.price?.value}
+                </Text>
+                <Text variant={'bodyMedium'}>
+                  {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
+                  {item?.quantity?.count * item?.product?.price?.value}
+                </Text>
+              </View>
+            </View>
+          ))}
 
-        <Text variant={'bodyMedium'} style={styles.itemTitle}>
-          {complaintDetails?.description?.short_desc}
-        </Text>
-        <Text variant={'bodyMedium'} style={styles.itemDescription}>
-          {complaintDetails?.description?.long_desc}
-        </Text>
+          <Text variant={'bodyMedium'} style={styles.itemTitle}>
+            {complaintDetails?.description?.short_desc}
+          </Text>
+          <Text variant={'bodyMedium'} style={styles.itemDescription}>
+            {complaintDetails?.description?.long_desc}
+          </Text>
 
-        <Text variant={'bodyMedium'} style={styles.itemTitle}>
-          Expected Response Time
-        </Text>
-        <Text variant={'bodyMedium'} style={styles.itemDescription}>
-          {moment(complaintDetails?.created_at)
-            .add(moment.duration('PT1H').asMilliseconds(), 'milliseconds')
-            .format('hh:mm a, MMMM Do, YYYY')}
-        </Text>
+          <Text variant={'bodyMedium'} style={styles.itemTitle}>
+            Expected Response Time
+          </Text>
+          <Text variant={'bodyMedium'} style={styles.itemDescription}>
+            {moment(complaintDetails?.created_at)
+              .add(moment.duration('PT1H').asMilliseconds(), 'milliseconds')
+              .format('hh:mm a, MMMM Do, YYYY')}
+          </Text>
 
-        <Text variant={'bodyMedium'} style={styles.itemTitle}>
-          Expected Resolution Time
-        </Text>
-        <Text variant={'bodyMedium'} style={styles.itemDescription}>
-          {moment(complaintDetails?.created_at)
-            .add(moment.duration('P1D').asMilliseconds(), 'milliseconds')
-            .format('hh:mm a, MMMM Do, YYYY')}
-        </Text>
+          <Text variant={'bodyMedium'} style={styles.itemTitle}>
+            Expected Resolution Time
+          </Text>
+          <Text variant={'bodyMedium'} style={styles.itemDescription}>
+            {moment(complaintDetails?.created_at)
+              .add(moment.duration('P1D').asMilliseconds(), 'milliseconds')
+              .format('hh:mm a, MMMM Do, YYYY')}
+          </Text>
 
-        <View style={styles.actionButtonContainer}>
-          <GetStatusButton
-            transactionId={complaintDetails?.transaction_id}
-            bppId={complaintDetails?.bppId}
-            issueId={complaintDetails?.issueId}
-            domain={complaintDetails?.domain}
-          />
+          <View style={styles.actionButtonContainer}>
+            <GetStatusButton
+              transactionId={complaintDetails?.transaction_id}
+              bppId={complaintDetails?.bppId}
+              issueId={complaintDetails?.issueId}
+              domain={complaintDetails?.domain}
+            />
 
-          <View style={styles.buttonSeparator} />
-
-          <Button
-            mode="outlined"
-            style={styles.cancelButton}
-            textColor={theme.colors.error}>
-            Cancel
-          </Button>
-
-          <View style={styles.buttonSeparator} />
-
-          {/*{showTakeActionButton && (*/}
-            <Button mode="outlined" style={styles.actionButton}>
-              Take Action
+            <View style={styles.buttonSeparator} />
+            <Button
+              mode="outlined"
+              style={styles.actionButton}
+              onPress={showEscalateModalVisible}>
+              Escalate
             </Button>
-          {/*)}*/}
+            <View style={styles.buttonSeparator} />
+
+            {complaintDetails?.issue_status !== 'Close' && (
+              <Button
+                onPress={showCloseModal}
+                mode="outlined"
+                style={styles.cancelButton}
+                textColor={theme.colors.error}>
+                Close
+              </Button>
+            )}
+          </View>
         </View>
-      </View>
-      <View style={styles.card}>
-        <Text variant={'titleMedium'} style={styles.title}>
-          Respondent Details
-        </Text>
+        <View style={styles.card}>
+          <Text variant={'titleMedium'} style={styles.title}>
+            Respondent Details
+          </Text>
 
-        <Text variant={'bodyMedium'} style={styles.itemTitle}>
-          Phone
-        </Text>
-        <Text variant={'bodyMedium'} style={styles.itemDescription}>
-          {complaintDetails?.issue_actions?.respondent_actions[
-            complaintDetails?.issue_actions.respondent_actions.length - 1
-          ]?.updated_by?.contact?.phone ?? 'N/A'}
-        </Text>
+          <Text variant={'bodyMedium'} style={styles.itemTitle}>
+            Phone
+          </Text>
+          <Text variant={'bodyMedium'} style={styles.itemDescription}>
+            {complaintDetails?.issue_actions?.respondent_actions[
+              complaintDetails?.issue_actions.respondent_actions.length - 1
+            ]?.updated_by?.contact?.phone ?? 'N/A'}
+          </Text>
 
-        <Text variant={'bodyMedium'} style={styles.itemTitle}>
-          Email
-        </Text>
-        <Text variant={'bodyMedium'} style={styles.itemDescription}>
-          {complaintDetails?.issue_actions?.respondent_actions[
-            complaintDetails?.issue_actions.respondent_actions.length - 1
-          ]?.updated_by?.contact?.email ?? 'N/A'}
-        </Text>
-      </View>
-    </ScrollView>
+          <Text variant={'bodyMedium'} style={styles.itemTitle}>
+            Email
+          </Text>
+          <Text variant={'bodyMedium'} style={styles.itemDescription}>
+            {complaintDetails?.issue_actions?.respondent_actions[
+              complaintDetails?.issue_actions.respondent_actions.length - 1
+            ]?.updated_by?.contact?.email ?? 'N/A'}
+          </Text>
+        </View>
+      </ScrollView>
+      <Portal>
+        <Modal
+          visible={escalateModalVisible}
+          onDismiss={hideEscalateModalVisible}>
+          <EscalateForm
+            hideEscalateModalVisible={hideEscalateModalVisible}
+            onSuccess={escalationSuccess}
+          />
+        </Modal>
+      </Portal>
+      <Portal>
+        <Modal visible={closeModalVisible} onDismiss={hideCloseModal}>
+          <CloseForm hideModal={hideCloseModal} onSuccess={escalationSuccess} />
+        </Modal>
+      </Portal>
+    </>
   );
 };
 
@@ -297,15 +313,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#008ECC',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  open: {
-    backgroundColor: '#419E6A',
-  },
-  processing: {
-    backgroundColor: '#F9C51C',
-  },
-  escalate: {
-    backgroundColor: '#008ECC',
   },
   innerDot: {
     width: 10,

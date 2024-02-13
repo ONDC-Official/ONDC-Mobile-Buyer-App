@@ -45,7 +45,9 @@ const OrderProductDetails = ({route: {params}}: {route: any}) => {
             (one: any) => one.fulfillment_id === params.fulfillmentId,
           )}
           quote={orderDetails?.quote}
-          fulfilment={orderDetails.fulfillments.find((one: any) => one.id === params.fulfillmentId)}
+          fulfilment={orderDetails.fulfillments.find(
+            (one: any) => one.id === params.fulfillmentId,
+          )}
         />
         <OrderMeta />
       </ScrollView>

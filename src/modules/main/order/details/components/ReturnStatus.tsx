@@ -1,15 +1,26 @@
 import {StyleSheet, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import React from 'react';
+import moment from 'moment';
 
-const ReturnStatus = ({code}: {code: string}) => {
+const return_end_states = [
+  'Return_Delivered',
+  'Liquidated',
+  'Return_Rejected',
+  'Return_Failed',
+];
+
+const ReturnStatus = ({code, fulfilment}: {code: string; fulfilment?: any}) => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
   return (
     <View style={styles.statusChip}>
       <Text variant={'labelMedium'} style={styles.statusText}>
-        {code}
+        {code}{' '}
+        {return_end_states.includes(code)
+          ? moment(fulfilment?.updatedAt).format('Do MMM')
+          : ''}
       </Text>
     </View>
   );

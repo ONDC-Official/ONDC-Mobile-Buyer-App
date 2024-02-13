@@ -3,9 +3,9 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
-import {CURRENCY_SYMBOLS, RETURN_REASONS} from '../../../../../utils/constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PagerView from 'react-native-pager-view';
+import {CURRENCY_SYMBOLS, RETURN_REASONS} from '../../../../../utils/constants';
 
 const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
   const theme = useTheme();

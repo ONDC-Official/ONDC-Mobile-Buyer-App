@@ -10,8 +10,8 @@ import axios from 'axios';
 import {launchImageLibrary} from 'react-native-image-picker';
 
 import {
-  RETURN_REASONS,
   CURRENCY_SYMBOLS,
+  RETURN_REASONS,
   SSE_TIMEOUT,
 } from '../../../../utils/constants';
 import {

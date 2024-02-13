@@ -19,7 +19,9 @@ const ReturnDetails = ({fulfilmentId}: {fulfilmentId: string}) => {
     (one: any) => one.state === 'Return_Initiated',
   );
 
-  const fulfilment = orderDetails?.fulfillments.find((one: any) => one.id === fulfilmentId);
+  const fulfilment = orderDetails?.fulfillments.find(
+    (one: any) => one.id === fulfilmentId,
+  );
   const returnTag = fulfilment.tags.find(
     (tag: any) => tag.code === 'return_request',
   );

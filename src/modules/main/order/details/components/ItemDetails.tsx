@@ -203,7 +203,13 @@ const ItemDetails = ({
                       : ''}
                   </Text>
                   <View style={styles.statusContainer}>
-                    <ReturnStatus code={fulfillment?.state?.descriptor?.code} />
+                    <ReturnStatus
+                      code={fulfillment?.state?.descriptor?.code}
+                      fulfilment={fulfillmentHistory.find(
+                        (one: any) =>
+                          one.state === fulfillment?.state?.descriptor?.code,
+                      )}
+                    />
                     <Icon name={'chevron-right'} size={20} color={'#686868'} />
                   </View>
                 </View>
@@ -382,6 +388,7 @@ const makeStyles = (colors: any) =>
     deliveryDate: {
       color: '#686868',
       flex: 1,
+      flexWrap: 'wrap',
     },
     statusContainer: {
       flexDirection: 'row',
