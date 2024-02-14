@@ -51,7 +51,7 @@ const App = () => {
       }
     };
 
-    const getUrlDetails = ({url}) => {
+    const getUrlDetails = ({url}: {url: any}) => {
       handleDeepLink(url);
     };
     Linking.getInitialURL().then(handleDeepLink);
