@@ -312,3 +312,22 @@ export const compareDateWithDuration = (duration: any, dateStr: string) => {
   // Compare the new date with the current date
   return currentDate.getTime() > newDate.getTime();
 };
+
+export const getFilterCategory = (tags: any) => {
+  let category = 'veg';
+
+  tags.forEach((tag: any) => {
+    if (tag.code === 'veg_nonveg') {
+      const vegNonVegValue = tag.list[0].value;
+      if (vegNonVegValue === 'yes' || vegNonVegValue === 'Yes') {
+        category = 'veg';
+      } else if (vegNonVegValue === 'no') {
+        category = 'nonveg';
+      } else if (vegNonVegValue === 'egg') {
+        category = 'egg';
+      }
+    }
+  });
+
+  return category;
+};
