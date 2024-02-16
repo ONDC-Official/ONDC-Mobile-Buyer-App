@@ -3,46 +3,26 @@ import {HelperText, Text, TextInput, withTheme} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
 
 /**
- * Component to render input in screens
- * @param props
- * placeholder:string that will be rendered before text input has been entered
- * @returns {JSX.Element}
- * @constructor
- */
-/**
  * Component is used to render generic password input field
- * @param required: boolean whether field is required
  * @param label: label of input field
  * @param theme: theme object
  * @param props: other props
  * @returns {JSX.Element}
  * @constructor
  */
-const PasswordField: React.FC<any> = ({
-  required = false,
-  label,
-  theme,
-  ...props
-}) => {
+const PasswordField: React.FC<any> = ({inputLabel, theme, ...props}) => {
   const [hide, setHide] = useState(true);
   const styles = makeStyles(theme.colors);
 
   return (
     <>
+      <Text variant={'bodySmall'} style={styles.inputLabel}>
+        {inputLabel}
+      </Text>
       <TextInput
         mode="outlined"
         {...props}
-        label={
-          required ? (
-            <Text style={styles.label}>
-              {label}
-              <Text style={styles.required}> *</Text>
-            </Text>
-          ) : (
-            label
-          )
-        }
-        placeholder={props.placeholder}
+        dense
         secureTextEntry={hide}
         autoCapitalize={'none'}
         right={
@@ -51,19 +31,28 @@ const PasswordField: React.FC<any> = ({
             onPress={() => setHide(!hide)}
           />
         }
-        dense
+        outlineStyle={styles.outline}
+        placeholderTextColor={'#B5B5B5'}
+        outlineColor={'#B5B5B5'}
       />
-      <HelperText padding="none" type="error" visible={props.errorMessage}>
-        {props.errorMessage}
-      </HelperText>
+      {props.error && (
+        <HelperText padding="none" type="error" visible={props.errorMessage}>
+          {props.errorMessage}
+        </HelperText>
+      )}
     </>
   );
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    label: {backgroundColor: 'white'},
-    required: {color: colors.red},
+    inputLabel: {
+      color: '#1A1A1A',
+      marginBottom: 4,
+    },
+    outline: {
+      borderRadius: 12,
+    },
   });
 
 export default withTheme(PasswordField);

@@ -4,37 +4,26 @@ import {StyleSheet, View} from 'react-native';
 
 /**
  * Component to render generic input field
- * @param required: boolean whether input is required
- * @param label: label of input field
  * @param theme: theme object
  * @param props: other props
  * @returns {JSX.Element}
  * @constructor
  */
-const InputField: React.FC<any> = ({
-  required = false,
-  label,
-  theme,
-  ...props
-}) => {
+const InputField: React.FC<any> = ({inputLabel, theme, ...props}) => {
   const styles = makeStyles(theme.colors);
 
   return (
     <View>
+      <Text variant={'bodySmall'} style={styles.inputLabel}>
+        {inputLabel}
+      </Text>
       <TextInput
         {...props}
         mode="outlined"
         dense
-        label={
-          required ? (
-            <Text style={styles.label}>
-              {label}
-              <Text style={styles.required}> *</Text>
-            </Text>
-          ) : (
-            label
-          )
-        }
+        outlineStyle={styles.outline}
+        placeholderTextColor={'#B5B5B5'}
+        outlineColor={'#B5B5B5'}
       />
       {props.error && (
         <HelperText padding="none" type="error" visible={props.error}>
@@ -47,8 +36,13 @@ const InputField: React.FC<any> = ({
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    label: {backgroundColor: 'white'},
-    required: {color: colors.red},
+    inputLabel: {
+      color: '#1A1A1A',
+      marginBottom: 4,
+    },
+    outline: {
+      borderRadius: 12,
+    },
   });
 
 export default withTheme(InputField);

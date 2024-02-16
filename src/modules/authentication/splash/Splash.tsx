@@ -83,11 +83,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
   return (
     <View style={[appStyles.container, appStyles.backgroundWhite]}>
       <View style={[appStyles.container, styles.container]}>
-        <Text style={styles.appName}>Reference Buyer App</Text>
-        <View style={styles.ondcContainer}>
-          <Text style={styles.poweredBy}>Powered By</Text>
-          <ONDCLogo width={240} height={95} />
-        </View>
+        <ONDCLogo width={240} height={95} />
       </View>
       <View style={styles.footer}>
         <Text>Version: {getVersion()}</Text>
@@ -100,15 +96,6 @@ export default Splash;
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    appName: {color: colors.primary, fontSize: 28, fontWeight: '500'},
-    ondcContainer: {
-      marginTop: 50,
-    },
-    poweredBy: {
-      color: colors.primary,
-      marginBottom: 16,
-      textAlign: 'center',
-    },
     container: {alignItems: 'center', justifyContent: 'center'},
     footer: {alignItems: 'center', marginBottom: 20},
   });

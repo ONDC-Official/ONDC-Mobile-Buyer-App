@@ -1,7 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import {useFocusEffect} from '@react-navigation/native';
 import {Formik, FormikHelpers} from 'formik';
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as Yup from 'yup';
 import {useDispatch} from 'react-redux';
@@ -13,7 +13,7 @@ import InputField from '../../../components/input/InputField';
 import PasswordField from '../../../components/input/PasswordField';
 import {showToastWithGravity} from '../../../utils/utils';
 import {appStyles} from '../../../styles/styles';
-import SocialMediaLogin from '../common/SocialMediaLogin';
+import GoogleLogin from '../common/GoogleLogin';
 import {storeLoginDetails} from '../../../redux/auth/actions';
 
 interface FormData {
@@ -51,6 +51,8 @@ const SignUp = ({navigation}: {navigation: any}) => {
   const {isConnected, isInternetReachable} = useNetInfo();
   const formikFormRef = useRef<any>(null);
   const styles = makeStyles(theme.colors);
+  const [googleLoginRequested, setGoogleLoginRequested] =
+    useState<boolean>(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -192,7 +194,11 @@ const SignUp = ({navigation}: {navigation: any}) => {
                       </Button>
                     </View>
 
-                    <SocialMediaLogin />
+                    <GoogleLogin
+                      loginRequested={googleLoginRequested || isSubmitting}
+                      googleLoginRequested={googleLoginRequested}
+                      setGoogleLoginRequested={setGoogleLoginRequested}
+                    />
 
                     <View style={styles.loginMessage}>
                       <Text>Already have an account?</Text>
