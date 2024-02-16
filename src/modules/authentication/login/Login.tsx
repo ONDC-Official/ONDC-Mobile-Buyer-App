@@ -7,14 +7,13 @@ import {
   View,
 } from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
-import LoginForm from './components/LoginForm';
+import LoginWithEmail from './components/LoginWithEmail';
+import LoginWithPhone from './components/LoginWithPhone';
 
 /**
  * Component is used to render login form
- * @param theme
- * @param navigation: application navigation object
  */
-const Login = ({navigation}: {navigation: any}) => {
+const Login = () => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const [formType, setFormType] = useState<string>('email');
@@ -67,7 +66,7 @@ const Login = ({navigation}: {navigation: any}) => {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <LoginForm />
+              {formType === 'email' ? <LoginWithEmail /> : <LoginWithPhone />}
             </View>
           </View>
         </ScrollView>

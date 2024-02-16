@@ -3,7 +3,6 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Text, useTheme} from 'react-native-paper';
 import React, {useState} from 'react';
 import * as Yup from 'yup';
-import {useDispatch} from 'react-redux';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
@@ -12,9 +11,8 @@ import InputField from '../../../../components/input/InputField';
 import PasswordField from '../../../../components/input/PasswordField';
 import OrContainer from '../../common/OrContainer';
 import SocialMediaLogin from '../../common/GoogleLogin';
-import {storeLoginDetails} from '../../../../redux/auth/actions';
-import {getStoredData} from '../../../../utils/storage';
 import {showToastWithGravity} from '../../../../utils/utils';
+import useStoreUserAndNavigate from '../../../../hooks/useStoreUserAndNavigate';
 
 interface FormData {
   email: string;
@@ -34,9 +32,9 @@ const validationSchema = Yup.object({
   password: Yup.string().trim().required('Password cannot be empty'),
 });
 
-const LoginForm = () => {
+const LoginWithEmail = () => {
   const navigation = useNavigation<any>();
-  const dispatch = useDispatch();
+  const {storeDetails} = useStoreUserAndNavigate();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const {isConnected, isInternetReachable} = useNetInfo();
@@ -60,30 +58,7 @@ const LoginForm = () => {
 
         const idTokenResult = await auth()?.currentUser?.getIdTokenResult();
 
-        await storeLoginDetails(dispatch, {
-          token: idTokenResult?.token,
-          uid: response.user.uid,
-          emailId: response.user.email,
-          name: response.user.displayName
-            ? response.user.displayName
-            : 'Unknown',
-          photoURL: response.user.photoURL ? response.user.photoURL : '',
-        });
-
-        const address = await getStoredData('address');
-        if (address) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'Dashboard'}],
-          });
-        } else {
-          navigation.reset({
-            index: 0,
-            routes: [
-              {name: 'AddressList', params: {navigateToDashboard: true}},
-            ],
-          });
-        }
+        await storeDetails(idTokenResult, response.user);
       } catch (error: any) {
         if (
           error.code === 'auth/wrong-password' ||
@@ -128,6 +103,7 @@ const LoginForm = () => {
         <>
           <View style={styles.inputContainer}>
             <InputField
+              inputMode={'email'}
               disabled={googleLoginRequested || isSubmitting}
               name="email"
               value={values.email}
@@ -227,4 +203,4 @@ const makeStyles = (colors: any) =>
     signUpText: {color: colors.primary, paddingLeft: 8},
   });
 
-export default LoginForm;
+export default LoginWithEmail;
