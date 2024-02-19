@@ -1,14 +1,10 @@
 import React, {useState} from 'react';
-import {
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Platform, ScrollView, StyleSheet, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import LoginWithEmail from './components/LoginWithEmail';
 import LoginWithPhone from './components/LoginWithPhone';
+import FormSwitch from '../common/FormSwitch';
+import PageBackground from '../common/PageBackground';
 
 /**
  * Component is used to render login form
@@ -20,10 +16,7 @@ const Login = () => {
 
   return (
     <>
-      <View style={styles.flexContainer}>
-        <View style={styles.primaryBackground} />
-        <View style={styles.whiteBackground} />
-      </View>
+      <PageBackground />
       <View style={styles.pageContainer}>
         <ScrollView style={styles.flexContainer}>
           <View style={styles.container}>
@@ -34,38 +27,7 @@ const Login = () => {
               Please enter details to sign in
             </Text>
             <View style={styles.formContainer}>
-              <View style={styles.toggleContainer}>
-                <TouchableOpacity
-                  onPress={() => setFormType('email')}
-                  style={[
-                    styles.segmentButton,
-                    formType === 'email' ? styles.selectedSegment : {},
-                  ]}>
-                  <Text
-                    variant={'bodyMedium'}
-                    style={[
-                      styles.segmentLabel,
-                      formType === 'email' ? styles.selectedSegmentLabel : {},
-                    ]}>
-                    Email Address
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => setFormType('phone')}
-                  style={[
-                    styles.segmentButton,
-                    formType === 'phone' ? styles.selectedSegment : {},
-                  ]}>
-                  <Text
-                    variant={'bodyMedium'}
-                    style={[
-                      styles.segmentLabel,
-                      formType === 'phone' ? styles.selectedSegmentLabel : {},
-                    ]}>
-                    Phone No.
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              <FormSwitch formType={formType} setFormType={setFormType} />
               {formType === 'email' ? <LoginWithEmail /> : <LoginWithPhone />}
             </View>
           </View>
@@ -90,14 +52,6 @@ export default Login;
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     flexContainer: {
-      flex: 1,
-    },
-    primaryBackground: {
-      backgroundColor: colors.primary,
-      flex: 1,
-    },
-    whiteBackground: {
-      backgroundColor: '#fff',
       flex: 1,
     },
     pageContainer: {
@@ -133,30 +87,6 @@ const makeStyles = (colors: any) =>
           elevation: 8,
         },
       }),
-    },
-    toggleContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#E8E8E8',
-      borderRadius: 25,
-      marginHorizontal: 16,
-    },
-    segmentButton: {
-      paddingHorizontal: 10,
-      paddingVertical: 8,
-      flex: 1,
-      alignItems: 'center',
-    },
-    segmentLabel: {
-      color: '#686868',
-    },
-    selectedSegmentLabel: {
-      color: '#FFFFFF',
-    },
-    selectedSegment: {
-      backgroundColor: colors.primary,
-      borderRadius: 25,
     },
     footerContainer: {
       paddingBottom: 20,

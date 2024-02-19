@@ -11,16 +11,24 @@ export default () => {
       const name = user?.displayName ? user?.displayName : 'Unknown';
       const photoURL = user?.photoURL ? user?.photoURL : '';
 
-      await saveMultipleData([
+      const storageData = [
         ['token', idTokenResult?.token],
-        ['emailId', user?.email],
         ['uid', user?.uid],
         ['name', name],
         ['photoURL', photoURL],
-      ]);
+      ];
+
+      if (user.email) {
+        storageData.push(['emailId', user?.email]);
+      }
+      if (user.phoneNumber) {
+        storageData.push(['phoneNumber', user?.phoneNumber]);
+      }
+      await saveMultipleData(storageData);
       const payload = {
         token: idTokenResult?.token,
         emailId: user?.email,
+        phoneNumber: user?.phoneNumber,
         uid: user?.uid,
         name: name,
         photoURL: photoURL,

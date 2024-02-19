@@ -10,7 +10,7 @@ import SocialMediaLogin from '../../common/GoogleLogin';
 import {showToastWithGravity} from '../../../../utils/utils';
 import useStoreUserAndNavigate from '../../../../hooks/useStoreUserAndNavigate';
 
-const LoginWithPhone = () => {
+const SignUpWithPhone = () => {
   const navigation = useNavigation<any>();
   const {storeDetails} = useStoreUserAndNavigate();
   const theme = useTheme();
@@ -20,6 +20,8 @@ const LoginWithPhone = () => {
   const [codeAvailable, setCodeAvailable] = useState<boolean>(false);
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
   const [mobileNumber, setMobileNumber] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const [nameError, setNameError] = useState<string>('');
   const [mobileError, setMobileError] = useState<string>('');
   const [codeError, setCodeError] = useState<string>('');
   // If null, no SMS has been sent
@@ -31,6 +33,11 @@ const LoginWithPhone = () => {
     setMobileError(value.length !== 10 ? 'Enter valid mobile number' : '');
   };
 
+  const updateName = (value: string) => {
+    setName(value);
+    setNameError(value.trim().length === 0 ? 'Enter valid full name' : '');
+  };
+
   const updateCode = (value: string) => {
     setCode(value);
     setCodeError(value.length !== 6 ? 'Enter valid code' : '');
@@ -40,9 +47,10 @@ const LoginWithPhone = () => {
     try {
       setApiInProgress(true);
       await confirmation.confirm(code);
-      const user = auth()?.currentUser;
+      let user = auth()?.currentUser;
       const idTokenResult = await user?.getIdTokenResult();
-
+      await auth()?.currentUser?.updateProfile({displayName: name});
+      user = auth()?.currentUser;
       await storeDetails(idTokenResult, user);
     } catch (error) {
       showToastWithGravity('Enter valid OTP');
@@ -74,6 +82,20 @@ const LoginWithPhone = () => {
 
   return (
     <>
+      <View style={styles.inputContainer}>
+        <InputField
+          inputMode={'text'}
+          disabled={googleLoginRequested || apiInProgress}
+          name="name"
+          value={name}
+          required
+          inputLabel="Full Name*"
+          placeholder="Enter full name"
+          error={!!nameError}
+          errorMessage={nameError ? nameError : null}
+          onChangeText={updateName}
+        />
+      </View>
       <View style={styles.inputContainer}>
         <InputField
           left={<TextInput.Affix text="+91" />}
@@ -128,7 +150,11 @@ const LoginWithPhone = () => {
             </Button>
             <View style={styles.dontReceiveContainer}>
               <Text variant={'bodyMedium'}>Didn’t receive OTP?</Text>
-              <Text variant={'bodyLarge'} style={styles.resend}>
+              <Text
+                variant={'bodyLarge'}
+                disabled={googleLoginRequested || apiInProgress}
+                style={styles.resend}
+                onPress={sendOtp}>
                 Resend
               </Text>
             </View>
@@ -145,7 +171,9 @@ const LoginWithPhone = () => {
               googleLoginRequested ||
               apiInProgress ||
               mobileNumber.length !== 10 ||
-              mobileError.length > 0
+              mobileError.length > 0 ||
+              nameError.length > 0 ||
+              name.length === 0
             }>
             Send OTP
           </Button>
@@ -161,13 +189,13 @@ const LoginWithPhone = () => {
 
       <View style={styles.loginMessage}>
         <Text variant={'bodyMedium'} style={styles.dontHaveMessage}>
-          Don't have an account?
+          Already have an account?
         </Text>
         <TouchableOpacity
           disabled={googleLoginRequested || apiInProgress}
-          onPress={() => navigation.navigate('SignUp')}>
+          onPress={() => navigation.navigate('Login')}>
           <Text variant={'bodyLarge'} style={styles.signUpText}>
-            Sign up
+            Sign In
           </Text>
         </TouchableOpacity>
       </View>
@@ -216,4 +244,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default LoginWithPhone;
+export default SignUpWithPhone;
