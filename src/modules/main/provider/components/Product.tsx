@@ -1,7 +1,7 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
@@ -16,9 +16,28 @@ const NoImageAvailable = require('../../../../assets/noImage.png');
 const Product: React.FC<Product> = ({isGrid, product}) => {
   const styles = makeStyles();
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const [backImage, setBackImage] = useState<any>(null);
 
   const navigateToProductDetails = () =>
     navigation.navigate('ProductDetails', {productId: product.id});
+
+  useEffect(() => {
+    if (product) {
+      const imageTag = product?.item_details?.tags?.find(
+        (one: any) => one.code === 'image',
+      );
+      if (
+        imageTag?.list?.find(
+          (one: any) => one.code === 'type' && one.value === 'back_image',
+        )
+      ) {
+        const urlTag = imageTag?.list?.find((one: any) => one.code === 'url');
+        if (urlTag) {
+          setBackImage(urlTag.value);
+        }
+      }
+    }
+  }, [product]);
 
   if (isGrid) {
     return (
@@ -28,7 +47,9 @@ const Product: React.FC<Product> = ({isGrid, product}) => {
         <FastImage
           style={styles.gridImage}
           source={
-            product?.item_details?.descriptor?.symbol
+            backImage
+              ? {uri: backImage}
+              : product?.item_details?.descriptor?.symbol
               ? {uri: product?.item_details?.descriptor?.symbol}
               : NoImageAvailable
           }

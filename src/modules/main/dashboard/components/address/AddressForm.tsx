@@ -66,7 +66,6 @@ const AddressForm: React.FC<AddressForm> = ({
     if (addressInfo) {
       let values = addressInfo;
       if (mapAddress) {
-        console.log(JSON.stringify(mapAddress, undefined, 4));
         values.city = mapAddress.city;
         values.areaCode = mapAddress.pincode;
         values.state = mapAddress.state;

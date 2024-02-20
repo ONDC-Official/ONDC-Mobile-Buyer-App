@@ -140,7 +140,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
                 onPress={() => navigateToDetails(item)}>
                 <StoreImage
                   source={
-                    item?.provider_descriptor?.images.length > 0
+                    item?.provider_descriptor?.images?.length > 0
                       ? {uri: item?.provider_descriptor?.images[0]}
                       : NoImageAvailable
                   }

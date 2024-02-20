@@ -78,6 +78,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const [productDetails, setProductDetails] = useState<any>(null);
   const [itemQty, setItemQty] = useState<number>(1);
   const [priceRange, setPriceRange] = useState<any>(null);
+  const [backImage, setBackImage] = useState<any>(null);
 
   const customizable = !!product?.item_details?.tags?.find(
     (item: any) => item.code === 'custom_group',
@@ -332,6 +333,19 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         };
       }
     }
+    const imageTag = product?.item_details?.tags?.find(
+      (one: any) => one.code === 'image',
+    );
+    if (
+      imageTag?.list?.find(
+        (one: any) => one.code === 'type' && one.value === 'back_image',
+      )
+    ) {
+      const urlTag = imageTag?.list?.find((one: any) => one.code === 'url');
+      if (urlTag) {
+        setBackImage(urlTag.value);
+      }
+    }
     setPriceRange(rangePriceTag);
   }, [product]);
 
@@ -365,7 +379,9 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             <FastImage
               style={styles.image}
               source={
-                product?.item_details?.descriptor.symbol
+                backImage
+                  ? {uri: backImage}
+                  : product?.item_details?.descriptor.symbol
                   ? {uri: product?.item_details?.descriptor.symbol}
                   : NoImageAvailable
               }
