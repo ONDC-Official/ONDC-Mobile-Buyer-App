@@ -1,27 +1,21 @@
 import {Formik, FormikHelpers} from 'formik';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Text, useTheme} from 'react-native-paper';
-import React, {useState} from 'react';
+import React from 'react';
 import * as Yup from 'yup';
 import {useNetInfo} from '@react-native-community/netinfo';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
-
-import InputField from '../../../../components/input/InputField';
-import PasswordField from '../../../../components/input/PasswordField';
-import OrContainer from '../../common/OrContainer';
-import SocialMediaLogin from '../../common/GoogleLogin';
-import {showToastWithGravity} from '../../../../utils/utils';
-import useStoreUserAndNavigate from '../../../../hooks/useStoreUserAndNavigate';
+import {showToastWithGravity} from '../../../utils/utils';
+import InputField from '../../../components/input/InputField';
+import {alertWithOneButton} from '../../../utils/alerts';
 
 interface FormData {
   email: string;
-  password: string;
 }
 
 const userInfo: FormData = {
   email: '',
-  password: '',
 };
 
 const validationSchema = Yup.object({
@@ -29,53 +23,41 @@ const validationSchema = Yup.object({
     .trim()
     .email('Please enter valid email address')
     .required('Email cannot be empty.'),
-  password: Yup.string().trim().required('Password cannot be empty'),
 });
 
-const LoginWithEmail = () => {
+const ForgotForm = () => {
   const navigation = useNavigation<any>();
-  const {storeDetails} = useStoreUserAndNavigate();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
   const {isConnected, isInternetReachable} = useNetInfo();
-  const [googleLoginRequested, setGoogleLoginRequested] =
-    useState<boolean>(false);
 
   /**
    * function checks whether the email and password is valid if it is valid it creates and store token in context
    * @returns {Promise<void>}
    */
-  const login = async (
+  const requestPassword = async (
     values: FormData,
     formikHelpers: FormikHelpers<FormData>,
   ) => {
     if (isConnected && isInternetReachable) {
       try {
-        const response = await auth().signInWithEmailAndPassword(
-          values.email,
-          values.password,
+        await auth().sendPasswordResetEmail(values.email);
+        alertWithOneButton(
+          'Forgot Password',
+          'Password reset link has been send to your registered email address. Please click on the link and reset your password.',
+          'Ok',
+          () => {
+            navigation.goBack();
+          },
         );
-
-        const idTokenResult = await auth()?.currentUser?.getIdTokenResult();
-
-        await storeDetails(idTokenResult, response.user);
       } catch (error: any) {
-        if (
-          error.code === 'auth/wrong-password' ||
-          error.code === 'auth/user-not-found'
-        ) {
-          showToastWithGravity('Email Id or Password is Incorrect.');
+        console.log(error);
+        if (error.code === 'auth/user-not-found') {
+          showToastWithGravity(
+            'There is no user record corresponding to this identifier.',
+          );
         } else {
-          if (error.hasOwnProperty('message')) {
-            const message = error.message.replace(/\[.*\]/, '');
-            if (message.length > 0) {
-              showToastWithGravity(message);
-            } else {
-              showToastWithGravity('Something went wrong, please try again');
-            }
-          } else {
-            showToastWithGravity('Something went wrong, please try again');
-          }
+          showToastWithGravity('Something went wrong, please try again');
         }
       } finally {
         formikHelpers.setSubmitting(false);
@@ -90,7 +72,7 @@ const LoginWithEmail = () => {
     <Formik
       initialValues={userInfo}
       validationSchema={validationSchema}
-      onSubmit={login}>
+      onSubmit={requestPassword}>
       {({
         isSubmitting,
         values,
@@ -104,7 +86,7 @@ const LoginWithEmail = () => {
           <View style={styles.inputContainer}>
             <InputField
               inputMode={'email'}
-              disabled={googleLoginRequested || isSubmitting}
+              disabled={isSubmitting}
               name="email"
               value={values.email}
               onBlur={handleBlur('email')}
@@ -116,28 +98,6 @@ const LoginWithEmail = () => {
               onChangeText={handleChange('email')}
             />
           </View>
-          <View style={styles.inputContainer}>
-            <PasswordField
-              disabled={googleLoginRequested || isSubmitting}
-              value={values.password}
-              required
-              onBlur={handleBlur('password')}
-              inputLabel="Password*"
-              placeholder="Password"
-              secureTextEntry
-              error={!!touched.password && !!errors.password}
-              errorMessage={touched.password ? errors.password : null}
-              onChangeText={handleChange('password')}
-            />
-          </View>
-          <View style={styles.forgotPasswordContainer}>
-            <Text
-              variant={'bodyMedium'}
-              onPress={() => navigation.navigate('ForgotPassword')}>
-              Forgot Password
-            </Text>
-          </View>
-
           <View style={styles.buttonContainer}>
             <Button
               labelStyle={[theme.fonts.bodyLarge]}
@@ -146,27 +106,20 @@ const LoginWithEmail = () => {
               mode="contained"
               onPress={() => handleSubmit()}
               loading={isSubmitting}
-              disabled={googleLoginRequested || isSubmitting}>
-              Sign In
+              disabled={isSubmitting}>
+              Send
             </Button>
           </View>
 
-          <OrContainer />
-          <SocialMediaLogin
-            loginRequested={googleLoginRequested || isSubmitting}
-            googleLoginRequested={googleLoginRequested}
-            setGoogleLoginRequested={setGoogleLoginRequested}
-          />
-
           <View style={styles.loginMessage}>
             <Text variant={'bodyMedium'} style={styles.dontHaveMessage}>
-              Don't have an account?
+              Remember password?
             </Text>
             <TouchableOpacity
-              disabled={googleLoginRequested || isSubmitting}
-              onPress={() => navigation.navigate('SignUp')}>
+              disabled={isSubmitting}
+              onPress={() => navigation.goBack()}>
               <Text variant={'bodyLarge'} style={styles.signUpText}>
-                Sign up
+                Sign In
               </Text>
             </TouchableOpacity>
           </View>
@@ -180,11 +133,6 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     inputContainer: {
       marginTop: 20,
-    },
-    forgotPasswordContainer: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      marginTop: 8,
     },
     buttonContainer: {
       marginTop: 28,
@@ -207,4 +155,4 @@ const makeStyles = (colors: any) =>
     signUpText: {color: colors.primary, paddingLeft: 8},
   });
 
-export default LoginWithEmail;
+export default ForgotForm;
