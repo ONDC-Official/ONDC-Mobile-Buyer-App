@@ -66,6 +66,7 @@ const AddressForm: React.FC<AddressForm> = ({
     if (addressInfo) {
       let values = addressInfo;
       if (mapAddress) {
+        console.log(JSON.stringify(mapAddress, undefined, 4));
         values.city = mapAddress.city;
         values.areaCode = mapAddress.pincode;
         values.state = mapAddress.state;
@@ -95,6 +96,7 @@ const AddressForm: React.FC<AddressForm> = ({
             validationSchema={validationSchema}
             onSubmit={values => saveAddress(values)}>
             {({
+              submitCount,
               values,
               errors,
               handleChange,
@@ -111,7 +113,10 @@ const AddressForm: React.FC<AddressForm> = ({
                     required
                     label={'Name'}
                     placeholder={'Name'}
-                    errorMessage={touched.name ? errors.name : null}
+                    errorMessage={
+                      touched.name || submitCount > 0 ? errors.name : null
+                    }
+                    error={touched.name && errors.name}
                     onChangeText={handleChange('name')}
                     disabled={apiInProgress}
                   />
@@ -121,7 +126,10 @@ const AddressForm: React.FC<AddressForm> = ({
                     required
                     label={'Email'}
                     placeholder={'Email'}
-                    errorMessage={touched.email ? errors.email : null}
+                    errorMessage={
+                      touched.email || submitCount > 0 ? errors.email : null
+                    }
+                    error={touched.email && errors.email}
                     onChangeText={handleChange('email')}
                     disabled={apiInProgress}
                   />
@@ -133,7 +141,10 @@ const AddressForm: React.FC<AddressForm> = ({
                     onBlur={handleBlur('number')}
                     label={'Mobile Number'}
                     placeholder={'Mobile Number'}
-                    errorMessage={touched.number ? errors.number : null}
+                    errorMessage={
+                      touched.number || submitCount > 0 ? errors.number : null
+                    }
+                    error={touched.number && errors.number}
                     onChangeText={handleChange('number')}
                     disabled={apiInProgress}
                   />
@@ -142,7 +153,12 @@ const AddressForm: React.FC<AddressForm> = ({
                     onBlur={handleBlur('building')}
                     label={'Building'}
                     placeholder={'Building'}
-                    errorMessage={touched.building ? errors.building : null}
+                    errorMessage={
+                      touched.building || submitCount > 0
+                        ? errors.building
+                        : null
+                    }
+                    error={touched.building && errors.building}
                     onChangeText={handleChange('building')}
                     required
                     disabled={apiInProgress}
@@ -154,7 +170,10 @@ const AddressForm: React.FC<AddressForm> = ({
                     required
                     label={'Street'}
                     placeholder={'Street'}
-                    errorMessage={touched.street ? errors.street : null}
+                    errorMessage={
+                      touched.street || submitCount > 0 ? errors.street : null
+                    }
+                    error={touched.street && errors.street}
                     onChangeText={handleChange('street')}
                     disabled
                   />
@@ -168,7 +187,12 @@ const AddressForm: React.FC<AddressForm> = ({
                         label={'Pin Code'}
                         required
                         placeholder={'Pin Code'}
-                        errorMessage={touched.areaCode ? errors.areaCode : null}
+                        errorMessage={
+                          touched.areaCode || submitCount > 0
+                            ? errors.areaCode
+                            : null
+                        }
+                        error={touched.areaCode && errors.areaCode}
                         disabled
                       />
                     </View>
@@ -180,7 +204,10 @@ const AddressForm: React.FC<AddressForm> = ({
                         required
                         label={'City'}
                         placeholder={'City'}
-                        errorMessage={touched.city ? errors.city : null}
+                        errorMessage={
+                          touched.city || submitCount > 0 ? errors.city : null
+                        }
+                        error={touched.city && errors.city}
                         onChangeText={handleChange('city')}
                         disabled
                       />
@@ -192,7 +219,10 @@ const AddressForm: React.FC<AddressForm> = ({
                     required
                     label={'State'}
                     placeholder={'State'}
-                    errorMessage={touched.state ? errors.state : null}
+                    errorMessage={
+                      touched.state || submitCount > 0 ? errors.state : null
+                    }
+                    error={touched.state && errors.state}
                     onChangeText={handleChange('state')}
                     disabled
                   />
@@ -285,6 +315,7 @@ const styles = StyleSheet.create({
   },
   addressTagContainer: {
     marginBottom: 20,
+    marginTop: 12,
   },
   loaderContainer: {
     flex: 1,
