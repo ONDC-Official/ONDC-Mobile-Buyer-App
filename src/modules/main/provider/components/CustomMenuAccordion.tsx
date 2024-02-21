@@ -2,12 +2,17 @@ import React, {useState} from 'react';
 import {List, Text, useTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import FBProduct from './FBProduct';
+import {getFilterCategory} from '../../../../utils/utils';
 
 interface CustomMenuAccordion {
   section: any;
+  selectedFilter: string;
 }
 
-const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({section}) => {
+const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
+  section,
+  selectedFilter,
+}) => {
   const [expanded, setExpanded] = useState<boolean>(true);
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
@@ -24,16 +29,22 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({section}) => {
           {section?.items ? `(${section?.items?.length})` : ''}
         </Text>
       }>
-      {section?.items?.map((item: any, index: number) => (
-        <View key={item.id}>
-          <FBProduct product={item} />
-          {itemLength === index + 1 ? (
-            <View style={styles.lastItem} />
-          ) : (
-            <View style={styles.itemSeparator} />
-          )}
-        </View>
-      ))}
+      {section?.items
+        ?.filter(
+          (item: any) =>
+            selectedFilter.length === 0 ||
+            getFilterCategory(item?.item_details?.tags) === selectedFilter,
+        )
+        .map((item: any, index: number) => (
+          <View key={item.id}>
+            <FBProduct product={item} />
+            {itemLength === index + 1 ? (
+              <View style={styles.lastItem} />
+            ) : (
+              <View style={styles.itemSeparator} />
+            )}
+          </View>
+        ))}
     </List.Accordion>
   );
 };

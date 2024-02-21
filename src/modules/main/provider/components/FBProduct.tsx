@@ -351,8 +351,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             {priceRange
               ? `₹${priceRange?.minPrice} - ₹${priceRange?.maxPrice}`
               : `${CURRENCY_SYMBOLS[product?.item_details?.price?.currency]} ${
-                  product?.item_details?.price?.value
-                }`}
+                product?.item_details?.price?.value
+              }`}
           </Text>
           <Text variant={'bodyMedium'} style={styles.field}>
             {product?.item_details?.descriptor?.short_desc}
@@ -542,7 +542,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                       ₹{' '}
                       {item.item.hasCustomisations
                         ? Number(getPriceWithCustomisations(item)) *
-                          Number(item?.item?.quantity?.count)
+                        Number(item?.item?.quantity?.count)
                         : Number(item?.item?.product?.subtotal)}
                     </Text>
                   </View>

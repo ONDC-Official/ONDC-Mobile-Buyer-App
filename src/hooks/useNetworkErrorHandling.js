@@ -22,51 +22,53 @@ export default () => {
   };
 
   const handleApiError = (error, setError = null) => {
-    if (error.response) {
-      if (error.response.status === 401) {
-        if (!sessionExpiredMessageShown) {
-          sessionExpiredMessageShown = true;
+    if (error.code !== 'ERR_CANCELED') {
+      if (error.response) {
+        if (error.response.status === 401) {
+          if (!sessionExpiredMessageShown) {
+            sessionExpiredMessageShown = true;
+            alertWithOneButton(
+              'Session Expired',
+              'Session expired, please login again to continue',
+              'Logout',
+              () => {
+                sessionExpiredMessageShown = false;
+                clearDataAndLogout();
+              },
+            );
+          }
+        } else if (error.response.status === 426) {
           alertWithOneButton(
-            'Session Expired',
-            'Session expired, please login again to continue',
-            'Logout',
-            () => {
-              sessionExpiredMessageShown = false;
-              clearDataAndLogout();
-            },
+            'Version mismatch',
+            'Please upgrade your application to the latest version',
+            'Ok',
+            () => {},
+          );
+        } else {
+          if (setError !== null) {
+            setError(error.response.data);
+          } else {
+            showToastWithGravity(error.response.data.error.message);
+          }
+        }
+      } else if (error.request) {
+        if (setError !== null) {
+          setError(
+            'Internet connection not available. Please check internet connection.',
+          );
+        } else {
+          showToastWithGravity(
+            'Internet connection not available. Please check internet connection.',
           );
         }
-      } else if (error.response.status === 426) {
-        alertWithOneButton(
-          'Version mismatch',
-          'Please upgrade your application to the latest version',
-          'Ok',
-          () => {},
-        );
       } else {
         if (setError !== null) {
-          setError(error.response.data);
+          setError('Something went wrong, please try again after some time.');
         } else {
-          showToastWithGravity(error.response.data.error.message);
+          showToastWithGravity(
+            'Something went wrong, please try again after some time.',
+          );
         }
-      }
-    } else if (error.request) {
-      if (setError !== null) {
-        setError(
-          'Internet connection not available. Please check internet connection.',
-        );
-      } else {
-        showToastWithGravity(
-          'Internet connection not available. Please check internet connection.',
-        );
-      }
-    } else {
-      if (setError !== null) {
-        setError('Something went wrong, please try again after some time.');
-      } else {
-        showToastWithGravity(
-          'Something went wrong, please try again after some time.',
-        );
       }
     }
   };

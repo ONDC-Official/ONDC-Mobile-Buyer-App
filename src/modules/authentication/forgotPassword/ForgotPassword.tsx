@@ -1,18 +1,15 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Platform, ScrollView, StyleSheet, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
-import SignUpWithEmail from './components/SignUpWithEmail';
-import SignUpWithPhone from './components/SignUpWithPhone';
-import FormSwitch from '../common/FormSwitch';
 import PageBackground from '../common/PageBackground';
+import ForgotForm from './ForgotForm';
 
 /**
  * Component is used to render login form
  */
-const SignUp = () => {
+const ForgotPassword = () => {
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
-  const [formType, setFormType] = useState<string>('email');
 
   return (
     <>
@@ -21,33 +18,22 @@ const SignUp = () => {
         <ScrollView style={styles.flexContainer}>
           <View style={styles.container}>
             <Text variant={'headlineMedium'} style={styles.title}>
-              Sign Up
+              Forgot Password
             </Text>
             <Text variant={'bodyMedium'} style={styles.signUpMessage}>
-              Please enter details to register
+              Enter email Address or phone no. you used to register
             </Text>
             <View style={styles.formContainer}>
-              <FormSwitch formType={formType} setFormType={setFormType} />
-              {formType === 'email' ? <SignUpWithEmail /> : <SignUpWithPhone />}
+              <ForgotForm />
             </View>
           </View>
         </ScrollView>
-        <View style={styles.footerContainer}>
-          <Text variant={'labelSmall'} style={styles.textCenter}>
-            By Signing to mobile app. I accept all the
-          </Text>
-          <Text
-            variant={'labelLarge'}
-            style={[styles.textCenter, styles.terms]}>
-            Terms and Conditions
-          </Text>
-        </View>
       </View>
     </>
   );
 };
 
-export default SignUp;
+export default ForgotPassword;
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
@@ -87,16 +73,5 @@ const makeStyles = (colors: any) =>
           elevation: 8,
         },
       }),
-    },
-    footerContainer: {
-      paddingBottom: 20,
-    },
-    textCenter: {
-      textAlign: 'center',
-      color: '#686868',
-    },
-    terms: {
-      paddingVertical: 8,
-      color: colors.primary,
     },
   });

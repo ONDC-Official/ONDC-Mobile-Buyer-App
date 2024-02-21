@@ -26,6 +26,7 @@ import ReturnItem from '../modules/main/order/details/ReturnItem';
 import Complaints from '../modules/main/complaint/list/Complaints';
 import ComplaintDetails from '../modules/main/complaint/details/ComplaintDetails';
 import OrderReturnDetails from '../modules/main/order/details/OrderReturnDetails';
+import ForgotPassword from '../modules/authentication/forgotPassword/ForgotPassword';
 
 const Stack = createStackNavigator();
 
@@ -66,6 +67,11 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="Login"
           component={Login}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPassword}
           options={{headerShown: false}}
         />
         <Stack.Screen
