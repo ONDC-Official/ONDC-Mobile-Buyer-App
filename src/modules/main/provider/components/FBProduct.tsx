@@ -78,7 +78,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const [productDetails, setProductDetails] = useState<any>(null);
   const [itemQty, setItemQty] = useState<number>(1);
   const [priceRange, setPriceRange] = useState<any>(null);
-  const [backImage, setBackImage] = useState<any>(null);
 
   const customizable = !!product?.item_details?.tags?.find(
     (item: any) => item.code === 'custom_group',
@@ -333,19 +332,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         };
       }
     }
-    const imageTag = product?.item_details?.tags?.find(
-      (one: any) => one.code === 'image',
-    );
-    if (
-      imageTag?.list?.find(
-        (one: any) => one.code === 'type' && one.value === 'back_image',
-      )
-    ) {
-      const urlTag = imageTag?.list?.find((one: any) => one.code === 'url');
-      if (urlTag) {
-        setBackImage(urlTag.value);
-      }
-    }
     setPriceRange(rangePriceTag);
   }, [product]);
 
@@ -365,8 +351,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             {priceRange
               ? `₹${priceRange?.minPrice} - ₹${priceRange?.maxPrice}`
               : `${CURRENCY_SYMBOLS[product?.item_details?.price?.currency]} ${
-                  product?.item_details?.price?.value
-                }`}
+                product?.item_details?.price?.value
+              }`}
           </Text>
           <Text variant={'bodyMedium'} style={styles.field}>
             {product?.item_details?.descriptor?.short_desc}
@@ -379,9 +365,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             <FastImage
               style={styles.image}
               source={
-                backImage
-                  ? {uri: backImage}
-                  : product?.item_details?.descriptor.symbol
+                product?.item_details?.descriptor.symbol
                   ? {uri: product?.item_details?.descriptor.symbol}
                   : NoImageAvailable
               }
@@ -558,7 +542,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                       ₹{' '}
                       {item.item.hasCustomisations
                         ? Number(getPriceWithCustomisations(item)) *
-                          Number(item?.item?.quantity?.count)
+                        Number(item?.item?.quantity?.count)
                         : Number(item?.item?.product?.subtotal)}
                     </Text>
                   </View>
