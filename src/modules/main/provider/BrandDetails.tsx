@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {StyleSheet, View} from 'react-native';
-import {useTheme} from 'react-native-paper';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import moment from 'moment';
@@ -13,6 +12,7 @@ import FBBrandDetails from './components/FBBrandDetails';
 import OtherBrandDetails from './components/OtherBrandDetails';
 import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
+import {useAppTheme} from '../../../utils/theme';
 
 const CancelToken = axios.CancelToken;
 
@@ -20,7 +20,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   const isFocused = useIsFocused();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [provider, setProvider] = useState<any>(null);
   const [outlet, setOutlet] = useState<any>(null);
@@ -114,7 +114,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
     brandImage: {
       height: 268,

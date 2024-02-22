@@ -11,6 +11,7 @@ import OrderSkeleton from '../components/OrderSkeleton';
 import Order from '../components/Order';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
+import {useAppTheme} from '../../../../utils/theme';
 
 const CancelToken = axios.CancelToken;
 
@@ -20,6 +21,8 @@ const CancelToken = axios.CancelToken;
  * @returns {JSX.Element}
  */
 const Orders: React.FC<any> = () => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
   const isFocused = useIsFocused();
   const source = useRef<any>(null);
   const {getDataWithAuth} = useNetworkHandling();
@@ -148,18 +151,19 @@ const Orders: React.FC<any> = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  pageContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentContainerStyle: {paddingVertical: 10},
-  emptyContainer: {justifyContent: 'center', alignItems: 'center'},
-  divider: {
-    backgroundColor: '#E8E8E8',
-    height: 1,
-    marginVertical: 24,
-  },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    pageContainer: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
+    contentContainerStyle: {paddingVertical: 10},
+    emptyContainer: {justifyContent: 'center', alignItems: 'center'},
+    divider: {
+      backgroundColor: '#E8E8E8',
+      height: 1,
+      marginVertical: 24,
+    },
+  });
 
 export default memo(Orders);

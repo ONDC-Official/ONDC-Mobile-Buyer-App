@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {IconButton, useTheme} from 'react-native-paper';
+import {IconButton} from 'react-native-paper';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -9,6 +9,7 @@ import {showToastWithGravity} from '../../../../utils/utils';
 import {updateOrderDetails} from '../../../../redux/order/actions';
 import NonCancelledOrder from './components/NonCancelledOrder';
 import CancelledOrder from './components/CancelledOrder';
+import {useAppTheme} from '../../../../utils/theme';
 
 const CancelToken = axios.CancelToken;
 
@@ -22,6 +23,7 @@ const Skeleton = () => (
     </>
   </SkeletonPlaceholder>
 );
+
 const OrderDetails = ({
   route: {params},
   navigation,
@@ -31,7 +33,7 @@ const OrderDetails = ({
 }) => {
   const dispatch = useDispatch();
   const source = useRef<any>(null);
-  const {colors} = useTheme();
+  const {colors} = useAppTheme();
   const {getDataWithAuth} = useNetworkHandling();
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
   const [apiInProgress, setApiInProgress] = useState<boolean>(true);

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Dialog, Portal, Text, useTheme} from 'react-native-paper';
+import {Button, Dialog, Portal, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import FastImage from 'react-native-fast-image';
 
@@ -24,7 +24,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
   chartImage = '',
   isFashion = false,
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();

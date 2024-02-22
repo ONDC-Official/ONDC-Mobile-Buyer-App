@@ -1,12 +1,13 @@
 import {StyleSheet, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
 import CancelOrderButton from './CancelOrderButton';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const OrderMeta = () => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
   const {address} = orderDetails?.fulfillments[0]?.end?.location;
@@ -79,14 +80,14 @@ const makeStyles = (colors: any) =>
       marginTop: 12,
     },
     title: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       marginBottom: 12,
     },
     metaContainer: {
       marginBottom: 16,
     },
     label: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       marginBottom: 8,
     },
     value: {

@@ -37,7 +37,7 @@ const InputField: React.FC<any> = ({inputLabel, theme, ...props}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     inputLabel: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       marginBottom: 4,
     },
     outline: {

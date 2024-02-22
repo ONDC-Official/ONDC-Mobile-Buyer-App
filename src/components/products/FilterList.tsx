@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Checkbox, Text, useTheme} from 'react-native-paper';
+import {Button, Checkbox, Text} from 'react-native-paper';
 import React, {useEffect, useState} from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 
@@ -12,7 +12,7 @@ interface FilterList {
 }
 
 const ValuesSkeleton = () => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   return (
     <SkeletonPlaceholder>
@@ -31,7 +31,7 @@ const FilterList: React.FC<FilterList> = ({
   setSelectedAttributes,
   close,
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [currentAttribute, setCurrentAttribute] = useState<string>(
     attributes[0].code,
@@ -217,7 +217,7 @@ const makeStyles = (colors: any) =>
       color: colors.primary,
     },
     normalText: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     attributeText: {
       textTransform: 'capitalize',

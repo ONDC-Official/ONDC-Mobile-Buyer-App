@@ -1,19 +1,21 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {FlatList, StyleSheet, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, PROVIDERS} from '../../../../../utils/apiActions';
 import {skeletonList} from '../../../../../utils/utils';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import Brand from './Brand';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const CancelToken = axios.CancelToken;
 
 const BrandSkeleton = () => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   return (
     <View style={styles.brand}>
@@ -24,9 +26,9 @@ const BrandSkeleton = () => {
   );
 };
 
-const TopBrands = () => {
+const AllProviders = () => {
   const source = useRef<any>(null);
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [providers, setProviders] = useState<any[]>([]);
   const [apiRequested, setApiRequested] = useState<boolean>(true);
@@ -61,9 +63,21 @@ const TopBrands = () => {
 
   return (
     <View style={styles.container}>
-      <Text variant={'titleSmall'} style={styles.title}>
-        All Providers
-      </Text>
+      <View style={styles.header}>
+        <Text variant={'titleMedium'} style={styles.title}>
+          All Providers
+        </Text>
+        <TouchableOpacity style={styles.viewAllContainer}>
+          <Text variant={'bodyMedium'} style={styles.viewAllLabel}>
+            View All
+          </Text>
+          <Icon
+            name={'keyboard-arrow-right'}
+            size={18}
+            color={theme.colors.primary}
+          />
+        </TouchableOpacity>
+      </View>
       {apiRequested ? (
         <FlatList
           horizontal
@@ -87,11 +101,8 @@ const TopBrands = () => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      paddingTop: 40,
+      marginTop: 28,
       paddingHorizontal: 16,
-    },
-    title: {
-      marginBottom: 12,
     },
     brand: {
       width: 109,
@@ -106,6 +117,22 @@ const makeStyles = (colors: any) =>
       width: 109,
       height: 109,
     },
+    viewAllContainer: {
+      alignItems: 'center',
+      flexDirection: 'row',
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 12,
+    },
+    title: {
+      color: colors.neutral400,
+    },
+    viewAllLabel: {
+      color: colors.neutral400,
+    },
   });
 
-export default TopBrands;
+export default AllProviders;

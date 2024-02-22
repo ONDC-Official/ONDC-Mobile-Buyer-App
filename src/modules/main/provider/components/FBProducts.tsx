@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import axios from 'axios';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
@@ -8,10 +8,11 @@ import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import ProductSkeleton from '../../../../components/skeleton/ProductSkeleton';
 import CustomMenuAccordion from './CustomMenuAccordion';
+import {useAppTheme} from '../../../../utils/theme';
 
 const CancelToken = axios.CancelToken;
 const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const customMenuSource = useRef<any>(null);
   const [menu, setMenu] = useState<any[]>([]);

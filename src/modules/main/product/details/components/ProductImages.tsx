@@ -2,7 +2,7 @@ import PagerView from 'react-native-pager-view';
 import FastImage from 'react-native-fast-image';
 import {StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
-import {useTheme} from 'react-native-paper';
+import {useAppTheme} from '../../../../../utils/theme';
 
 interface ProductImages {
   images: any[];
@@ -13,7 +13,7 @@ const ProductImages: React.FC<ProductImages> = ({
   images,
   roundedCorner = false,
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   const [selectedMediaPosition, setSelectedMediaPosition] = useState(0);

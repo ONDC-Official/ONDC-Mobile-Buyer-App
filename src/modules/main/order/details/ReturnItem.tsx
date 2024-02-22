@@ -1,5 +1,5 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Menu, Text, useTheme} from 'react-native-paper';
+import {Button, Menu, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
 import React, {useEffect, useRef, useState} from 'react';
@@ -24,6 +24,7 @@ import {
 import {showToastWithGravity} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useUploadFile from '../../../../hooks/useUploadFile';
+import {useAppTheme} from '../../../../utils/theme';
 
 const CancelToken = axios.CancelToken;
 
@@ -36,7 +37,7 @@ const ReturnItem = ({
 }) => {
   const {item, providerId, state, orderId, bppId, bppUrl, transactionId} =
     params;
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const eventTimeOutRef = useRef<any>(null);
   const cancelEventSourceResponseRef = useRef<any[]>([]);
@@ -220,7 +221,7 @@ const ReturnItem = ({
     <View style={styles.page}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name={'clear'} color={'#1A1A1A'} size={20} />
+          <Icon name={'clear'} color={colors.neutral400} size={20} />
         </TouchableOpacity>
         <Text variant={'titleSmall'} style={styles.pageTitle}>
           Return Items
@@ -315,7 +316,7 @@ const ReturnItem = ({
                   <Icon
                     name={'keyboard-arrow-down'}
                     size={20}
-                    color={'#1A1A1A'}
+                    color={colors.neutral400}
                   />
                 </TouchableOpacity>
               }>
@@ -388,10 +389,10 @@ const makeStyles = (colors: any) =>
     },
     pageTitle: {
       marginLeft: 20,
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     message: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       marginBottom: 4,
     },
     container: {
@@ -481,10 +482,10 @@ const makeStyles = (colors: any) =>
     },
     dropdownText: {
       flex: 1,
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     menuContainer: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       marginTop: 16,
       marginRight: 32,
     },
@@ -511,7 +512,7 @@ const makeStyles = (colors: any) =>
       position: 'absolute',
       marginLeft: 62,
       marginTop: -12,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       borderRadius: 72,
     },
     buttonContainer: {

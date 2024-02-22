@@ -1,5 +1,5 @@
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
@@ -34,7 +34,7 @@ const Filters: React.FC<Filters> = ({
   const [attributesRequested, setAttributesRequested] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const refFilterSheet = useRef<any>(null);
   const styles = makeStyles(theme.colors);
 

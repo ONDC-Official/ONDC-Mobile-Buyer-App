@@ -44,7 +44,7 @@ const makeStyles = () =>
     closeButton: {
       width: 20,
       height: 20,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       borderRadius: 32,
       marginLeft: 6,
     },

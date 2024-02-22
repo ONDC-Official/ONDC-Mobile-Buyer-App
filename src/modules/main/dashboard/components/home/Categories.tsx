@@ -1,13 +1,15 @@
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {CATEGORIES} from '../../../../../utils/categories';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const Categories = () => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
@@ -17,6 +19,21 @@ const Categories = () => {
 
   return (
     <View>
+      <View style={styles.header}>
+        <Text variant={'titleMedium'} style={styles.title}>
+          Featured Categories
+        </Text>
+        <TouchableOpacity style={styles.viewAllContainer}>
+          <Text variant={'bodyMedium'} style={styles.viewAllLabel}>
+            View All
+          </Text>
+          <Icon
+            name={'keyboard-arrow-right'}
+            size={18}
+            color={theme.colors.primary}
+          />
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={CATEGORIES}
         numColumns={4}
@@ -34,11 +51,6 @@ const Categories = () => {
         )}
         keyExtractor={item => item.name}
       />
-      <View style={styles.viewAllContainer}>
-        <Button mode={'outlined'} style={styles.viewAllButton}>
-          View all
-        </Button>
-      </View>
     </View>
   );
 };
@@ -46,11 +58,12 @@ const Categories = () => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     categoryText: {
-      fontWeight: '700',
+      color: colors.neutral400,
       textAlign: 'center',
     },
     category: {
-      padding: 12,
+      marginHorizontal: 16,
+      marginTop: 12,
       flex: 1,
       alignItems: 'center',
     },
@@ -59,11 +72,21 @@ const makeStyles = (colors: any) =>
       width: 67,
     },
     viewAllContainer: {
-      paddingTop: 24,
       alignItems: 'center',
+      flexDirection: 'row',
     },
-    viewAllButton: {
-      borderColor: colors.primary,
+    header: {
+      paddingHorizontal: 16,
+      paddingTop: 20,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    title: {
+      color: colors.neutral400,
+    },
+    viewAllLabel: {
+      color: colors.neutral400,
     },
   });
 

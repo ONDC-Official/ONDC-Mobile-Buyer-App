@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import ProductImages from './components/ProductImages';
 import {FASHION_DOMAIN} from '../../../../utils/constants';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import VariationsRenderer from '../../../../components/products/VariationsRenderer';
 import AboutProduct from './components/AboutProduct';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface ProductDetails {
   product: any;
@@ -13,7 +14,7 @@ interface ProductDetails {
 }
 
 const ProductDetails: React.FC<ProductDetails> = ({product, children}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   const [variationState, setVariationState] = useState<any[]>([]);
@@ -107,7 +108,7 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 16,
     },
     description: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       fontWeight: '400',
       marginTop: 4,
       marginBottom: 8,

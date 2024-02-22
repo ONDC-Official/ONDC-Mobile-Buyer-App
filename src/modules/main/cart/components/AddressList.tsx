@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Text, useTheme} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import axios from 'axios';
 import {useDispatch} from 'react-redux';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
@@ -12,6 +12,7 @@ import {skeletonList} from '../../../../utils/utils';
 import {appStyles} from '../../../../styles/styles';
 import AddressSkeleton from '../../dashboard/components/address/AddressSkeleton';
 import {saveAddress} from '../../../../redux/address/actions';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface AddressList {
   deliveryAddress: any;
@@ -26,7 +27,7 @@ const AddressList: React.FC<AddressList> = ({
 }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const isFocused = useIsFocused();
   const source = useRef<any>(null);
   const styles = makeStyles(theme.colors);

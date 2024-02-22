@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface SubCategories {
   currentSubCategory: string;
@@ -20,7 +21,7 @@ const SubCategories: React.FC<SubCategories> = ({
   setCurrentSubCategory,
 }) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [subCategories, setSubCategories] = useState<any[]>([]);
 
@@ -80,7 +81,7 @@ const makeStyles = (colors: any) =>
     container: {
       paddingLeft: 16,
       paddingTop: 16,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       flexDirection: 'row',
     },
     categoryText: {

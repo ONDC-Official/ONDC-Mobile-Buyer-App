@@ -1,13 +1,14 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {Button, Text, useTheme} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import moment from 'moment';
 import {useNavigation} from '@react-navigation/native';
 import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {updateComplaint} from '../../../../redux/complaint/actions';
 import ComplaintStatus from './ComplaintStatus';
+import {useAppTheme} from '../../../../utils/theme';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -21,7 +22,7 @@ const categories = ISSUE_TYPES.map(item => {
 
 const Complaint = ({complaint}: {complaint: any}) => {
   const dispatch = useDispatch();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<any>();
 

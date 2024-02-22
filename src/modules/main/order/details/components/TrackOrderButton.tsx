@@ -1,4 +1,4 @@
-import {ActivityIndicator, Text, useTheme} from 'react-native-paper';
+import {ActivityIndicator, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
@@ -25,7 +25,7 @@ import {
 } from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
 import Config from '../../../../../../config';
-import {theme} from '../../../../../utils/theme';
+import {theme, useAppTheme} from '../../../../../utils/theme';
 import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
 
 interface TrackOrderButton {}
@@ -56,7 +56,7 @@ const layerStyles: any = {
 
 const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   const dispatch = useDispatch();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeButtonStyles(theme.colors);
   const trackingSheet = useRef<any>(null);
   const {orderDetails, requestingStatus, requestingTracker} = useSelector(

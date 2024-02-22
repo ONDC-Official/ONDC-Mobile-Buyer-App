@@ -1,6 +1,6 @@
 import {StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React from 'react';
 
@@ -9,7 +9,7 @@ interface StockAvailability {
 }
 
 const StockAvailability: React.FC<StockAvailability> = ({available}) => {
-  const {colors} = useTheme();
+  const {colors} = useAppTheme();
   const styles = makeStyles(colors);
 
   return available ? (

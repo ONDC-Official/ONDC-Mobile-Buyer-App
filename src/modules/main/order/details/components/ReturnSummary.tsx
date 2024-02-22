@@ -1,4 +1,4 @@
-import {Button, Modal, Portal, Text, useTheme} from 'react-native-paper';
+import {Button, Modal, Portal, Text} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import React, {useEffect, useState} from 'react';
@@ -6,9 +6,10 @@ import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import PagerView from 'react-native-pager-view';
 import {CURRENCY_SYMBOLS, RETURN_REASONS} from '../../../../../utils/constants';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
@@ -206,7 +207,7 @@ const makeStyles = (colors: any) =>
       marginRight: 8,
     },
     sectionTitle: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     callButton: {
       width: 28,
@@ -282,10 +283,10 @@ const makeStyles = (colors: any) =>
       marginBottom: 4,
     },
     taxName: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     taxValue: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       fontWeight: '700',
     },
     divider: {
@@ -301,7 +302,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 12,
     },
     grossTotalLabel: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     grossTotalValue: {
       color: colors.primary,
@@ -320,7 +321,7 @@ const makeStyles = (colors: any) =>
       height: 205,
     },
     modal: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       margin: 20,
       borderRadius: 24,
     },

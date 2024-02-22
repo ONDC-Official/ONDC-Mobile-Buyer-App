@@ -1,13 +1,14 @@
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import useLogoutUser from '../../../../../hooks/useLogoutUser';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const Profile = () => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {clearDataAndLogout} = useLogoutUser();
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -64,7 +65,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
     header: {
       paddingVertical: 14,

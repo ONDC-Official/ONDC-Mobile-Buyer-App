@@ -1,10 +1,11 @@
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {FB_DOMAIN} from '../../../../../utils/constants';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const ProviderDetails = ({
   bppId,
@@ -18,7 +19,7 @@ const ProviderDetails = ({
   cancelled?: boolean;
 }) => {
   const navigation = useNavigation<any>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   const callProvider = () => Linking.openURL('tel:+91 92729282982');

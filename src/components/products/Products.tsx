@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, PRODUCT_SEARCH} from '../../utils/apiActions';
@@ -26,7 +26,7 @@ const Products: React.FC<Products> = ({
   subCategories = [],
 }) => {
   const productSearchSource = useRef<any>(null);
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [productsRequested, setProductsRequested] = useState<boolean>(true);
   const [isGridView, setIsGridView] = useState<boolean>(true);
@@ -147,7 +147,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
     filterContainer: {
       flexDirection: 'row',

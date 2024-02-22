@@ -2,12 +2,14 @@ import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import CustomMenu from './CustomMenu';
 import Products from '../../../../components/products/Products';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface OtherBrandDetails {
   provider: any;
 }
 
 const OtherBrandDetails: React.FC<OtherBrandDetails> = ({provider}) => {
+  const {colors} = useAppTheme();
   const styles = makeStyles();
   const [selectedMenu, setSelectedMenu] = useState<any>(null);
 
@@ -28,11 +30,11 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({provider}) => {
   );
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
   });
 

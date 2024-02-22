@@ -1,13 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {useTheme} from 'react-native-paper';
 import {API_BASE_URL, CUSTOM_MENU} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {skeletonList} from '../../../../utils/utils';
 import CustomMenuSkeleton from '../../../../components/skeleton/CustomMenuSkeleton';
 import CustomMenuItem from './CustomMenuItem';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface CustomMenu {
   providerId: string;
@@ -25,7 +25,7 @@ const CustomMenu: React.FC<CustomMenu> = ({
   setSelectedMenu,
 }) => {
   const customMenuSource = useRef<any>(null);
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [menu, setMenu] = useState<any[]>([]);
   const [menuRequested, setMenuRequested] = useState<boolean>(true);

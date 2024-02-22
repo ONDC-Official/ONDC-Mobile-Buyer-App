@@ -1,7 +1,6 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React from 'react';
-import {useTheme} from 'react-native-paper';
 
 const ViewTypeSelection = ({
   isGridView,
@@ -10,7 +9,7 @@ const ViewTypeSelection = ({
   isGridView: boolean;
   setIsGridView: (value: boolean) => void;
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   return (

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
@@ -11,6 +11,7 @@ import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, PROVIDER_LOCATIONS} from '../../../utils/apiActions';
 import {appStyles} from '../../../styles/styles';
 import Page from '../../../components/page/Page';
+import {useAppTheme} from '../../../utils/theme';
 
 interface Outlets {
   navigation: any;
@@ -20,7 +21,7 @@ interface Outlets {
 const CancelToken = axios.CancelToken;
 
 const OutletSkeleton = () => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   return (
     <View style={styles.brand}>
@@ -36,7 +37,7 @@ const NoImageAvailable = require('../../../assets/noImage.png');
 const Outlets: React.FC<Outlets> = ({navigation, route: {params}}) => {
   const {address} = useSelector(({addressReducer}) => addressReducer);
   const source = useRef<any>(null);
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [locations, setLocations] = useState<any[]>([]);
   const [apiRequested, setApiRequested] = useState<boolean>(true);

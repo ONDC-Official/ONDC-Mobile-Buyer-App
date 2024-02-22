@@ -7,10 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import FBProducts from './FBProducts';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface FBBrandDetails {
   provider: any;
@@ -25,7 +26,7 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
   outlet,
   apiRequested,
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   const getDirection = async () => {

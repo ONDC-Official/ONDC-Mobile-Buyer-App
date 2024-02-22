@@ -5,14 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {
-  Button,
-  Checkbox,
-  Modal,
-  Portal,
-  Text,
-  useTheme,
-} from 'react-native-paper';
+import {Button, Checkbox, Modal, Portal, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Formik} from 'formik';
@@ -37,6 +30,7 @@ import {
   RAISE_ISSUE,
 } from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const validationSchema = yup.object({
   subcategory: yup.string().required('Subcategory is required'),
@@ -63,7 +57,7 @@ const categories = ISSUE_TYPES.map(item => {
 const CancelToken = axios.CancelToken;
 
 const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
@@ -540,7 +534,7 @@ const makeStyles = (colors: any) =>
     },
     title: {
       marginLeft: 8,
-      color: '#1A1A1A',
+      color: colors.neutral400,
       flex: 1,
     },
     header: {
@@ -594,7 +588,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
     },
     dialog: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       marginHorizontal: 16,
       borderRadius: 16,
     },

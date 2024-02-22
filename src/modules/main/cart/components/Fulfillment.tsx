@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {RadioButton, Text, useTheme} from 'react-native-paper';
+import {RadioButton, Text} from 'react-native-paper';
 import React, {useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
@@ -7,6 +7,7 @@ import PagerView from 'react-native-pager-view';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface Fulfillment {
   selectedFulfillmentList: any[];
@@ -30,7 +31,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
   showPaymentOption,
 }) => {
   const navigation = useNavigation<any>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const pagerRef = useRef<any>();
   const [page, setPage] = useState<number>(0);
@@ -368,7 +369,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       borderBottomWidth: 1,
       borderBottomColor: '#ebebeb',
     },
@@ -389,7 +390,7 @@ const makeStyles = (colors: any) =>
       marginTop: 8,
     },
     fulfilmentSummary: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       paddingHorizontal: 16,
     },
     productContainer: {
@@ -402,7 +403,7 @@ const makeStyles = (colors: any) =>
       borderRadius: 8,
     },
     productName: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       fontWeight: '500',
       marginVertical: 4,
       width: 85,
@@ -417,7 +418,7 @@ const makeStyles = (colors: any) =>
       paddingVertical: 16,
     },
     itemsTotal: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     fulfilment: {
       flexDirection: 'row',
@@ -425,7 +426,7 @@ const makeStyles = (colors: any) =>
     },
     summaryContainer: {
       padding: 16,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
     fulfilmentCountContainer: {
       flexDirection: 'row',
@@ -434,7 +435,7 @@ const makeStyles = (colors: any) =>
       paddingTop: 16,
     },
     fulfilmentCount: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     buttonContainer: {
       flexDirection: 'row',

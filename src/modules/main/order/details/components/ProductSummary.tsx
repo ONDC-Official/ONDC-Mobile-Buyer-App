@@ -1,4 +1,4 @@
-import {Button, Text, useTheme} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import React from 'react';
@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
 import DownloadIcon from '../../../../../assets/download.svg';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const ProductSummary = ({
   items,
@@ -21,7 +22,7 @@ const ProductSummary = ({
   documents?: any;
 }) => {
   const navigation = useNavigation<any>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
@@ -166,7 +167,7 @@ const makeStyles = (colors: any) =>
       marginRight: 8,
     },
     sectionTitle: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     callButton: {
       width: 28,
@@ -242,10 +243,10 @@ const makeStyles = (colors: any) =>
       marginBottom: 4,
     },
     taxName: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     taxValue: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       fontWeight: '700',
     },
     divider: {
@@ -261,7 +262,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 12,
     },
     grossTotalLabel: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     grossTotalValue: {
       color: colors.primary,

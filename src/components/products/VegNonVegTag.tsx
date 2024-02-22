@@ -1,7 +1,7 @@
 import React from 'react';
 import FastImage from 'react-native-fast-image';
 import {StyleSheet, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {getFilterCategory} from '../../utils/utils';
 
 interface VegNonVegTag {
@@ -10,7 +10,7 @@ interface VegNonVegTag {
 }
 
 const VegNonVegTag: React.FC<VegNonVegTag> = ({tags, showLabel}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   let category = getFilterCategory(tags);

@@ -1,12 +1,13 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import moment from 'moment/moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [showDetails, setShowDetails] = useState<boolean>(true);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
@@ -111,7 +112,7 @@ const makeStyles = (colors: any) =>
       color: '#686868',
     },
     arrivalDate: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       marginLeft: 8,
     },
     statusContainer: {

@@ -1,4 +1,4 @@
-import {ActivityIndicator, Button, useTheme} from 'react-native-paper';
+import {ActivityIndicator, Button} from 'react-native-paper';
 import React, {useRef, useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
@@ -16,6 +16,7 @@ import {
 } from '../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../utils/utils';
 import {SSE_TIMEOUT} from '../../../../utils/constants';
+import {useAppTheme} from '../../../../utils/theme';
 
 const CancelToken = axios.CancelToken;
 const GetStatusButton = ({
@@ -30,7 +31,7 @@ const GetStatusButton = ({
   domain: any;
 }) => {
   const {token} = useSelector(({authReducer}) => authReducer);
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const source = useRef<any>(null);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();

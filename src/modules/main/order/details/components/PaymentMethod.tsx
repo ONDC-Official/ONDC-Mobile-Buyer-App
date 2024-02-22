@@ -1,8 +1,9 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Divider, Text, useTheme} from 'react-native-paper';
+import {Divider, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const PaymentMethod = ({
   payment,
@@ -14,7 +15,7 @@ const PaymentMethod = ({
   contact: any;
 }) => {
   const navigation = useNavigation<any>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   return (

@@ -1,4 +1,4 @@
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import React, {useEffect, useState} from 'react';
@@ -12,11 +12,12 @@ import {
   RETURN_REASONS,
 } from '../../../../../utils/constants';
 import ReturnStatus from './ReturnStatus';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const today = moment();
 
 const SingleItem = ({item}: {item: any}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   return (
@@ -68,7 +69,7 @@ const ItemDetails = ({
 }) => {
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
   const navigation = useNavigation<any>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [shipmentFulfillmentList, setShipmentFulfillmentList] = useState<any[]>(
     [],

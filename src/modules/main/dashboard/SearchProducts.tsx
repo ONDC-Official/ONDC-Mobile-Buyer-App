@@ -2,16 +2,16 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useTheme} from 'react-native-paper';
 import SearchProductList from '../../../components/products/SearchProductList';
 import SearchHeader from './components/header/SearchHeader';
+import {useAppTheme} from '../../../utils/theme';
 
 interface SearchProductsProps {
   route: any;
 }
 
 const SearchProducts: React.FC<SearchProductsProps> = ({}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [searchQuery, setSearchQuery] = useState<string | ''>('');
@@ -37,6 +37,6 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
   });

@@ -1,13 +1,14 @@
 import React, {useEffect} from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {getVersion} from 'react-native-device-info';
 
 import {appStyles} from '../../../styles/styles';
 import ONDCLogo from '../../../assets/ondc.svg';
 import {tryLocalSignIn} from '../../../redux/auth/actions';
 import {getMultipleData} from '../../../utils/storage';
+import { useAppTheme } from "../../../utils/theme";
 
 interface Splash {
   navigation: any;
@@ -21,7 +22,7 @@ interface Splash {
  */
 const Splash: React.FC<Splash> = ({navigation}) => {
   const dispatch = useDispatch();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   /**

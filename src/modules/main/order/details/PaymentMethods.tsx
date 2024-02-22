@@ -1,11 +1,12 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Divider, Text, useTheme} from 'react-native-paper';
+import {Divider, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
 import {useSelector} from 'react-redux';
+import {useAppTheme} from '../../../../utils/theme';
 
 const PaymentMethods = ({navigation}: {navigation: any}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
@@ -105,7 +106,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     pageContainer: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
     header: {
       flexDirection: 'row',
@@ -138,7 +139,7 @@ const makeStyles = (colors: any) =>
       marginVertical: 12,
     },
     name: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       marginBottom: 4,
     },
     normalText: {

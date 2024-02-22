@@ -1,7 +1,8 @@
 import {StyleSheet, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import React from 'react';
 import moment from 'moment';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const return_end_states = [
   'Return_Delivered',
@@ -11,7 +12,7 @@ const return_end_states = [
 ];
 
 const ReturnStatus = ({code, fulfilment}: {code: string; fulfilment?: any}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   return (

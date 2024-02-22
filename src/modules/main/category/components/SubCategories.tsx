@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface SubCategories {
   currentCategory: string;
@@ -12,7 +13,7 @@ interface SubCategories {
 
 const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [subCategories, setSubCategories] = useState<any[]>([]);
 

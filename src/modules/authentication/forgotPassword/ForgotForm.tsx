@@ -1,6 +1,6 @@
 import {Formik, FormikHelpers} from 'formik';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Text, useTheme} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import React from 'react';
 import * as Yup from 'yup';
 import {useNetInfo} from '@react-native-community/netinfo';
@@ -9,6 +9,7 @@ import auth from '@react-native-firebase/auth';
 import {showToastWithGravity} from '../../../utils/utils';
 import InputField from '../../../components/input/InputField';
 import {alertWithOneButton} from '../../../utils/alerts';
+import {useAppTheme} from '../../../utils/theme';
 
 interface FormData {
   email: string;
@@ -27,7 +28,7 @@ const validationSchema = Yup.object({
 
 const ForgotForm = () => {
   const navigation = useNavigation<any>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {isConnected, isInternetReachable} = useNetInfo();
 
@@ -83,21 +84,19 @@ const ForgotForm = () => {
         handleSubmit,
       }) => (
         <>
-          <View style={styles.inputContainer}>
-            <InputField
-              inputMode={'email'}
-              disabled={isSubmitting}
-              name="email"
-              value={values.email}
-              onBlur={handleBlur('email')}
-              required
-              inputLabel="Email Address*"
-              placeholder="Enter email address"
-              error={!!touched.email && !!errors.email}
-              errorMessage={touched.email ? errors.email : null}
-              onChangeText={handleChange('email')}
-            />
-          </View>
+          <InputField
+            inputMode={'email'}
+            disabled={isSubmitting}
+            name="email"
+            value={values.email}
+            onBlur={handleBlur('email')}
+            required
+            inputLabel="Email Address*"
+            placeholder="Enter email address"
+            error={!!touched.email && !!errors.email}
+            errorMessage={touched.email ? errors.email : null}
+            onChangeText={handleChange('email')}
+          />
           <View style={styles.buttonContainer}>
             <Button
               labelStyle={[theme.fonts.bodyLarge]}
@@ -107,7 +106,7 @@ const ForgotForm = () => {
               onPress={() => handleSubmit()}
               loading={isSubmitting}
               disabled={isSubmitting}>
-              Send
+              Send Email
             </Button>
           </View>
 
@@ -131,9 +130,6 @@ const ForgotForm = () => {
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    inputContainer: {
-      marginTop: 20,
-    },
     buttonContainer: {
       marginTop: 28,
     },
@@ -150,7 +146,7 @@ const makeStyles = (colors: any) =>
       marginTop: 24,
     },
     dontHaveMessage: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     signUpText: {color: colors.primary, paddingLeft: 8},
   });

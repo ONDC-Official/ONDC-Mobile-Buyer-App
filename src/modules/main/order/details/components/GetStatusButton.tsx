@@ -1,4 +1,4 @@
-import {ActivityIndicator, Text, useTheme} from 'react-native-paper';
+import {ActivityIndicator, Text} from 'react-native-paper';
 import React, {useRef} from 'react';
 import {TouchableOpacity} from 'react-native';
 import axios from 'axios';
@@ -15,6 +15,7 @@ import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {makeButtonStyles} from './buttonStyles';
 import {updateRequestingStatus} from '../../../../../redux/order/actions';
+import {useAppTheme} from '../../../../../utils/theme';
 
 interface GetStatusButton {
   onUpdateOrder: (value: any) => void;
@@ -32,7 +33,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
   const eventTimeOutRef = useRef<any>(null);
   const statusEventSourceResponseRef = useRef<any>(null);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeButtonStyles(theme.colors);
 
   // use this api to get updated status of the order

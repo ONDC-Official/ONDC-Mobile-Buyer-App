@@ -1,8 +1,9 @@
 import {StyleSheet} from 'react-native';
-import {Chip, useTheme} from 'react-native-paper';
+import {Chip} from 'react-native-paper';
+import {useAppTheme} from '../../../../utils/theme';
 
 const ComplaintStatus = ({status}: {status: string}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   if (status === 'Close') {

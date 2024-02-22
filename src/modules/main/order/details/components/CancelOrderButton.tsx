@@ -1,11 +1,12 @@
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const CancelOrderButton = () => {
   const navigation = useNavigation<any>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {orderDetails, requestingStatus, requestingTracker} = useSelector(
     ({orderReducer}) => orderReducer,

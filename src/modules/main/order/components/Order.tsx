@@ -4,10 +4,11 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import FastImage from 'react-native-fast-image';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import OrderStatus from './OrderStatus';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface Order {
   order: any;
@@ -20,7 +21,7 @@ interface Order {
  * @returns {JSX.Element}
  */
 const OrderHeader: React.FC<Order> = ({order}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
@@ -139,10 +140,10 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
     },
     date: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
     amount: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       fontWeight: '700',
       alignItems: 'center',
       marginRight: 8,

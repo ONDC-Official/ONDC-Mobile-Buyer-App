@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -9,10 +9,11 @@ import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import OrderMeta from './components/OrderMeta';
 import ReturnDetails from './components/ReturnDetails';
 import ReturnSummary from './components/ReturnSummary';
+import {useAppTheme} from '../../../../utils/theme';
 
 const OrderReturnDetails = ({route: {params}}: {route: any}) => {
   const navigation = useNavigation();
-  const {colors} = useTheme();
+  const {colors} = useAppTheme();
   const styles = makeStyles(colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
@@ -53,7 +54,7 @@ const makeStyles = (colors: any) =>
       flex: 1,
     },
     header: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       paddingHorizontal: 16,
       paddingVertical: 6,
       flexDirection: 'row',
@@ -63,7 +64,7 @@ const makeStyles = (colors: any) =>
       marginLeft: 20,
     },
     orderDetailsTitle: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       marginBottom: 2,
     },
     orderStatus: {

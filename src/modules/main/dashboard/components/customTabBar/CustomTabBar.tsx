@@ -1,9 +1,10 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {useSelector} from 'react-redux';
+import {useAppTheme} from '../../../../../utils/theme';
 
 interface TabIcon {
   name: string;
@@ -36,7 +37,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
   descriptors,
   navigation,
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
 
@@ -115,7 +116,7 @@ const makeStyles = (colors: any) =>
       height: 64,
       borderTopLeftRadius: 12,
       borderTopRightRadius: 12,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
     tab: {
       flex: 1,

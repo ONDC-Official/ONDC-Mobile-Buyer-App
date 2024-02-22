@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {Button, Text, useTheme} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
@@ -36,6 +36,7 @@ import useCustomizationStateHelper from '../../../../hooks/useCustomizationState
 import CustomizationFooterButtons from './CustomizationFooterButtons';
 import FBProductDetails from '../../product/details/FBProductDetails';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface FBProduct {
   product: any;
@@ -47,7 +48,7 @@ const screenHeight: number = Dimensions.get('screen').height;
 
 const CancelToken = axios.CancelToken;
 const FBProduct: React.FC<FBProduct> = ({product}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
   const {deleteDataWithAuth, getDataWithAuth, postDataWithAuth} =
@@ -351,8 +352,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             {priceRange
               ? `₹${priceRange?.minPrice} - ₹${priceRange?.maxPrice}`
               : `${CURRENCY_SYMBOLS[product?.item_details?.price?.currency]} ${
-                product?.item_details?.price?.value
-              }`}
+                  product?.item_details?.price?.value
+                }`}
           </Text>
           <Text variant={'bodyMedium'} style={styles.field}>
             {product?.item_details?.descriptor?.short_desc}
@@ -542,7 +543,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                       ₹{' '}
                       {item.item.hasCustomisations
                         ? Number(getPriceWithCustomisations(item)) *
-                        Number(item?.item?.quantity?.count)
+                          Number(item?.item?.quantity?.count)
                         : Number(item?.item?.product?.subtotal)}
                     </Text>
                   </View>
@@ -701,7 +702,7 @@ const makeStyles = (colors: any) =>
       marginLeft: 8,
     },
     title: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       flexShrink: 1,
     },
     prize: {

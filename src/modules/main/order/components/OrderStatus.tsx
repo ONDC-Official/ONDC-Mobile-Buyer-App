@@ -1,13 +1,14 @@
 import React from 'react';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface OrderStatus {
   status: string;
 }
 
 const OrderStatus: React.FC<OrderStatus> = ({status}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   switch (status) {

@@ -2,25 +2,27 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import Header from '../header/Header';
 import Categories from '../home/Categories';
-import TopBrands from '../home/TopBrands';
+import AllProviders from '../home/AllProviders';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const Home = () => {
-  const styles = makeStyles();
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
 
   return (
     <View style={styles.container}>
       <Header />
       <Categories />
-      <TopBrands />
+      <AllProviders />
     </View>
   );
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
   });
 

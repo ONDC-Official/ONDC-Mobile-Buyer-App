@@ -1,6 +1,7 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import React from 'react';
+import { useAppTheme } from "../../../utils/theme";
 
 const FormSwitch = ({
   formType,
@@ -9,7 +10,7 @@ const FormSwitch = ({
   formType: string;
   setFormType: (value: string) => void;
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   return (
@@ -54,7 +55,7 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
       borderRadius: 25,
       marginHorizontal: 16,
     },
@@ -65,10 +66,10 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     segmentLabel: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     selectedSegmentLabel: {
-      color: '#FFFFFF',
+      color: colors.white,
     },
     selectedSegment: {
       backgroundColor: colors.primary,

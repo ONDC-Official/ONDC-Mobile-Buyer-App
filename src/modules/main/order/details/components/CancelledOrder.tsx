@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
@@ -15,10 +15,11 @@ import DownloadIcon from '../../../../../assets/download.svg';
 import ProviderDetails from './ProviderDetails';
 import ProductSummary from './ProductSummary';
 import OrderMeta from './OrderMeta';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const CancelledOrder = () => {
   const navigation = useNavigation<any>();
-  const {colors} = useTheme();
+  const {colors} = useAppTheme();
   const styles = makeStyles(colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
@@ -67,12 +68,12 @@ const makeStyles = (colors: any) =>
     header: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       paddingVertical: 12,
       paddingHorizontal: 16,
     },
     orderDetailsTitle: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       marginLeft: 20,
     },
     orderStatus: {

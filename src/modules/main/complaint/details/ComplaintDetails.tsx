@@ -5,7 +5,7 @@ import {Button, List, Modal, Portal, Text} from 'react-native-paper';
 import moment from 'moment';
 import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
-import {theme} from '../../../../utils/theme';
+import { useAppTheme } from "../../../../utils/theme";
 import GetStatusButton from '../components/GetStatusButton';
 import ComplaintStatus from '../components/ComplaintStatus';
 import EscalateForm from './components/EscalateForm';
@@ -22,6 +22,8 @@ const categories = ISSUE_TYPES.map(item => {
 }).flat();
 
 const ComplaintDetails = () => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
   const {complaintDetails} = useSelector(
     ({complaintReducer}) => complaintReducer,
   );
@@ -266,7 +268,7 @@ const ComplaintDetails = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -340,7 +342,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   actionTitle: {
-    color: '#1A1A1A',
+    color: colors.neutral400,
   },
   date: {
     color: '#8A8A8A',
@@ -362,7 +364,7 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   text: {
-    color: '#1A1A1A',
+    color: colors.neutral400,
   },
   row: {
     marginBottom: 4,

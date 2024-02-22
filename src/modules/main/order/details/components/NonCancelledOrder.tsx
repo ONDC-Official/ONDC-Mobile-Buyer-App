@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
 import React from 'react';
@@ -21,6 +21,7 @@ import ItemDetails from './ItemDetails';
 import PaymentMethod from './PaymentMethod';
 import RaiseIssueButton from './RaiseIssueButton';
 import CancelOrderButton from './CancelOrderButton';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const NonCancelledOrder = ({
   getOrderDetails,
@@ -28,7 +29,7 @@ const NonCancelledOrder = ({
   getOrderDetails: () => void;
 }) => {
   const navigation = useNavigation<any>();
-  const {colors} = useTheme();
+  const {colors} = useAppTheme();
   const styles = makeStyles(colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 

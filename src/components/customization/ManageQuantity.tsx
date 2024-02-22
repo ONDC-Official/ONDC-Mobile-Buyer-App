@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import React from 'react';
 
 interface ManageQuantity {
@@ -23,7 +23,7 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
   allowDelete = false,
   deleteCartItem = () => {},
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   const maximumQuantity = Number(

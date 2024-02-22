@@ -1,8 +1,12 @@
 import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Cart from '../../../cart/Cart';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const DashboardCart = () => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -13,14 +17,15 @@ const DashboardCart = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    padding: 16,
-  },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
+    header: {
+      padding: 16,
+    },
+  });
 
 export default DashboardCart;

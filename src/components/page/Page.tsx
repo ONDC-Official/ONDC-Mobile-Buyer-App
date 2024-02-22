@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {StyleSheet, TouchableOpacity} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import { useAppTheme } from "../../utils/theme";
 
 interface Page {
   children: React.ReactNode;
 }
 
 const Page: React.FC<Page> = ({children}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [itemQuantity, setItemQuantity] = useState<number>(0);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);

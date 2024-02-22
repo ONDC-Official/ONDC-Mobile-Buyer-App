@@ -11,6 +11,7 @@ import {API_BASE_URL, GET_ISSUES} from '../../../../utils/apiActions';
 import ComplaintSkeleton from '../components/ComplaintSkeleton';
 import ListFooter from '../../order/components/ListFooter';
 import Complaint from '../components/Complaint';
+import {useAppTheme} from '../../../../utils/theme';
 
 const CancelToken = axios.CancelToken;
 
@@ -20,6 +21,8 @@ const CancelToken = axios.CancelToken;
  * @returns {JSX.Element}
  */
 const Complaints: React.FC<any> = () => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
   const isFocused = useIsFocused();
   const source = useRef<any>(null);
   const {getDataWithAuth} = useNetworkHandling();
@@ -150,18 +153,19 @@ const Complaints: React.FC<any> = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  pageContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentContainerStyle: {paddingVertical: 10},
-  emptyContainer: {justifyContent: 'center', alignItems: 'center'},
-  divider: {
-    backgroundColor: '#E8E8E8',
-    height: 1,
-    marginVertical: 24,
-  },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    pageContainer: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
+    contentContainerStyle: {paddingVertical: 10},
+    emptyContainer: {justifyContent: 'center', alignItems: 'center'},
+    divider: {
+      backgroundColor: '#E8E8E8',
+      height: 1,
+      marginVertical: 24,
+    },
+  });
 
 export default memo(Complaints);

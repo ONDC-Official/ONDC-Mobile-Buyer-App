@@ -5,9 +5,10 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import React from 'react';
 import {makeGlobalStyles} from '../../../../styles/styles';
+import {useAppTheme} from '../../../../utils/theme';
 
 const CustomizationFooterButtons = ({
   productLoading,
@@ -28,7 +29,7 @@ const CustomizationFooterButtons = ({
   customizationPrices: any;
   update?: boolean;
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const globalStyles = makeGlobalStyles(theme.colors);
   const styles = makeStyles(theme.colors);
 

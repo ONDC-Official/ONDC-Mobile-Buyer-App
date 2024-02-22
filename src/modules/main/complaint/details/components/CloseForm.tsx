@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Text, useTheme} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import React, {useRef, useState} from 'react';
@@ -10,6 +10,7 @@ import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {showToastWithGravity} from '../../../../../utils/utils';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const CancelToken = axios.CancelToken;
 const CloseForm = ({
@@ -26,7 +27,7 @@ const CloseForm = ({
     ({complaintReducer}) => complaintReducer,
   );
   const {postDataWithAuth} = useNetworkHandling();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   const escalateComplaint = async () => {
@@ -146,7 +147,7 @@ const CloseForm = ({
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     modal: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       borderRadius: 16,
       margin: 20,
     },

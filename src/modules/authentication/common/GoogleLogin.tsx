@@ -41,7 +41,7 @@ const GoogleLogin: React.FC<GoogleLogin> = ({
       style={styles.button}
       onPress={onLoginWithGooglePress}>
       {googleLoginRequested ? (
-        <ActivityIndicator size={16} />
+        <ActivityIndicator size={36} />
       ) : (
         <GoogleIcon width={36} height={36} />
       )}
@@ -52,7 +52,7 @@ const GoogleLogin: React.FC<GoogleLogin> = ({
   );
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     button: {
       maxHeight: 48,
@@ -62,11 +62,11 @@ const makeStyles = () =>
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      borderColor: '#B5B5B5',
+      borderColor: colors.neutral200,
     },
     buttonLabel: {
       marginStart: 10,
-      color: '#1A1A1A',
+      color: colors.neutral400,
     },
   });
 

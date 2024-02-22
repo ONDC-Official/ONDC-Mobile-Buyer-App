@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import FastImage from 'react-native-fast-image';
 import {useSelector} from 'react-redux';
@@ -19,6 +19,7 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
 import {skeletonList} from '../../../../utils/utils';
 import {FB_DOMAIN} from '../../../../utils/constants';
+import { useAppTheme } from "../../../../utils/theme";
 
 interface StoresNearMe {
   domain: string;
@@ -31,7 +32,7 @@ interface StoreImage {
 const CancelToken = axios.CancelToken;
 
 const BrandSkeleton = () => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   return (
     <View style={styles.brand}>
@@ -161,7 +162,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   );
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       paddingTop: 16,

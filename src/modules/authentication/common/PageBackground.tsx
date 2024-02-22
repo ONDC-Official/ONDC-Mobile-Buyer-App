@@ -1,9 +1,9 @@
 import {StyleSheet, View} from 'react-native';
 import React from 'react';
-import {useTheme} from 'react-native-paper';
+import { useAppTheme } from "../../../utils/theme";
 
 const PageBackground = () => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   return (
@@ -24,7 +24,7 @@ const makeStyles = (colors: any) =>
       flex: 1,
     },
     whiteBackground: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       flex: 1,
     },
   });

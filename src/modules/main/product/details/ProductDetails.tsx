@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,6 +30,7 @@ import {makeGlobalStyles} from '../../../../styles/styles';
 import {updateCartItems} from '../../../../redux/cart/actions';
 import Page from '../../../../components/page/Page';
 import AboutProduct from './components/AboutProduct';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface ProductDetails {
   route: any;
@@ -66,7 +67,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const {uid} = useSelector(({authReducer}) => authReducer);
   const source = useRef<any>(null);
   const dispatch = useDispatch();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
 
@@ -526,7 +527,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
     header: {
       flexDirection: 'row',

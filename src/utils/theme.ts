@@ -11,17 +11,16 @@ export const theme: any = {
   colors: {
     ...MD3LightTheme.colors,
 
-    neutralBlack400: '#1A1A1A',
-    neutralBlack300: '#686868',
-    neutralBlack200: '#B5B5B5',
-    neutralBlack100: '#E8E8E8',
-    neutralBlack50: '#FAFAFA',
+    neutral400: '#1A1A1A',
+    neutral300: '#686868',
+    neutral200: '#B5B5B5',
+    neutral100: '#E8E8E8',
+    neutral50: '#FAFAFA',
 
     primary: '#008ECC',
-    brandPrimary300: '#023259',
-    brandPrimary200: '#06477D',
-    brandPrimary100: '#008ECC',
-    brandPrimary50: '#ECF3F8',
+    primary300: '#023259',
+    primary200: '#06477D',
+    primary50: '#ECF3F8',
 
     success600: '#419E6A',
     success400: '#A5E1BF',

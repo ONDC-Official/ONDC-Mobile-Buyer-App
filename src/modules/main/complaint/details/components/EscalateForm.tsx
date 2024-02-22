@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {Button, Text, TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
@@ -15,6 +15,7 @@ import {showToastWithGravity} from '../../../../../utils/utils';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const CancelToken = axios.CancelToken;
 const EscalateForm = ({
@@ -34,7 +35,7 @@ const EscalateForm = ({
   );
   const {token} = useSelector(({authReducer}) => authReducer);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   // on Issue api
@@ -207,7 +208,7 @@ const EscalateForm = ({
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     modal: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       borderRadius: 16,
       margin: 20,
     },

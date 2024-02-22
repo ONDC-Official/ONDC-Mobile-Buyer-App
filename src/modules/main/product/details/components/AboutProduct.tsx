@@ -1,10 +1,11 @@
-import {List, Text, useTheme} from 'react-native-paper';
+import {List, Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import moment from 'moment';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const AboutProduct = ({product}: {product: any}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [expanded, setExpanded] = useState<boolean>(true);
 

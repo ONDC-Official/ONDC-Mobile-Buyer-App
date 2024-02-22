@@ -1,9 +1,8 @@
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 
 const List = () => {
-  const theme = useTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = makeStyles();
   return (
     <View style={styles.container}>
       <Text>Coming soon</Text>
@@ -11,7 +10,7 @@ const List = () => {
   );
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     container: {
       flex: 1,

@@ -1,11 +1,5 @@
 import {Dimensions, StyleSheet, View} from 'react-native';
-import {
-  ActivityIndicator,
-  Button,
-  Card,
-  Text,
-  useTheme,
-} from 'react-native-paper';
+import {ActivityIndicator, Button, Card, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -23,11 +17,12 @@ import AddressList from './components/AddressList';
 import Payment from './components/Payment';
 import useConfirmItems from '../../../hooks/useConfirmItems';
 import CloseSheetContainer from '../../../components/bottomSheet/CloseSheetContainer';
+import {useAppTheme} from '../../../utils/theme';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
 const Cart = () => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {address} = useSelector(({addressReducer}) => addressReducer);
   const isFocused = useIsFocused();
@@ -604,7 +599,7 @@ const Cart = () => {
   );
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     pageContainer: {
       flex: 1,
@@ -619,7 +614,7 @@ const makeStyles = () =>
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
       padding: 16,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       elevation: 10,
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
@@ -650,7 +645,7 @@ const makeStyles = () =>
       backgroundColor: 'rgba(47, 47, 47, 0.75)',
     },
     addressContainer: {
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       flex: 1,
       paddingTop: 16,
       borderTopLeftRadius: 16,

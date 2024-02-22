@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {ActivityIndicator, Button, Text, useTheme} from 'react-native-paper';
+import {ActivityIndicator, Button, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import axios from 'axios';
@@ -23,6 +23,7 @@ import {
 } from '../../../../utils/apiActions';
 import {getStoredData, setStoredData} from '../../../../utils/storage';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface Payment {
   productsQuote: any;
@@ -59,7 +60,7 @@ const Payment: React.FC<Payment> = ({
   handleConfirmOrder,
   confirmOrderLoading,
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const {token} = useSelector(({authReducer}) => authReducer);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
@@ -364,7 +365,7 @@ const makeStyles = (colors: any) =>
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
       padding: 16,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -375,7 +376,7 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       padding: 16,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
     paymentOption: {
       flex: 1,
@@ -407,7 +408,7 @@ const makeStyles = (colors: any) =>
     },
     buttonContainer: {
       padding: 16,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
     },
   });
 

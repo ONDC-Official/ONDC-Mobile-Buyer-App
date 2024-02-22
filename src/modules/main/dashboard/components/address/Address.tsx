@@ -4,10 +4,11 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {RadioButton, Text, useTheme} from 'react-native-paper';
+import {RadioButton, Text} from 'react-native-paper';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
 import {clearCart} from '../../../../../redux/actions';
 import {saveAddress} from '../../../../../redux/address/actions';
+import {useAppTheme} from '../../../../../utils/theme';
 
 interface Address {
   item: any;
@@ -29,7 +30,7 @@ const Address: React.FC<Address> = ({
   params,
   onAddressSelect,
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<any>>();

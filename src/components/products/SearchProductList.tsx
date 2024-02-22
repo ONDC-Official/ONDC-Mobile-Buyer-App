@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import Product from '../../modules/main/provider/components/Product';
@@ -10,6 +10,7 @@ import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
 import ViewTypeSelection from './ViewTypeSelection';
+import { useAppTheme } from "../../utils/theme";
 
 interface SearchProductList {
   searchQuery: string;
@@ -19,7 +20,7 @@ const CancelToken = axios.CancelToken;
 
 const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   const productSearchSource = useRef<any>(null);
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();

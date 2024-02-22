@@ -1,17 +1,18 @@
 import React from 'react';
-import {Searchbar, useTheme} from 'react-native-paper';
+import {Searchbar} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import ONDCLogo from '../../../../../assets/ondc_logo.svg';
 import AddressTag from '../address/AddressTag';
+import {useAppTheme} from '../../../../../utils/theme';
 
 type HeaderProps = {
   disableAddress?: boolean;
 };
 
 const Header: React.FC<HeaderProps> = ({disableAddress}) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
@@ -55,15 +56,15 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingVertical: 10,
+      paddingVertical: 9,
     },
     searchContainer: {
       width: '100%',
-      paddingVertical: 12,
+      paddingVertical: 8,
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: colors.primary,
-      height: 68,
+      height: 60,
     },
     searchButton: {
       width: '100%',
@@ -77,9 +78,6 @@ const makeStyles = (colors: any) =>
       flex: 1,
       height: 44,
       backgroundColor: colors.white,
-    },
-    backIconContainer: {
-      marginRight: 12,
     },
   });
 export default Header;

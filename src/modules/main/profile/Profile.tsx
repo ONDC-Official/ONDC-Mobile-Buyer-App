@@ -4,6 +4,7 @@ import {useSelector} from 'react-redux';
 import {Avatar, Text} from 'react-native-paper';
 
 import {getUserInitials} from '../../../utils/utils';
+import {useAppTheme} from '../../../utils/theme';
 
 /**
  * Component to render profile screen which shows user profile
@@ -11,6 +12,8 @@ import {getUserInitials} from '../../../utils/utils';
  * @returns {JSX.Element}
  */
 const Profile = () => {
+  const {colors} = useAppTheme();
+  const styles = makeStyles(colors);
   const {name, emailId, photoURL} = useSelector(({authReducer}) => authReducer);
 
   return (
@@ -32,15 +35,16 @@ const Profile = () => {
 
 export default Profile;
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#fff',
-  },
-  name: {marginVertical: 8},
-  profileDetailsContainer: {
-    marginLeft: 8,
-  },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 16,
+      backgroundColor: colors.white,
+    },
+    name: {marginVertical: 8},
+    profileDetailsContainer: {
+      marginLeft: 8,
+    },
+  });

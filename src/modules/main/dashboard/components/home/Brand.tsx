@@ -1,11 +1,12 @@
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
+import {Text} from 'react-native-paper';
 import React, {useState} from 'react';
-import {useTheme} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import {FB_DOMAIN} from '../../../../../utils/constants';
+import {useAppTheme} from '../../../../../utils/theme';
 
 interface Brand {
   brand: any;
@@ -20,7 +21,7 @@ const Brand: React.FC<Brand> = ({brand}) => {
       : NoImageAvailable,
   );
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   const navigateToBrandDetails = (provider: any) => {
@@ -40,6 +41,27 @@ const Brand: React.FC<Brand> = ({brand}) => {
         style={styles.brandImage}
         onError={() => setImageSource(NoImageAvailable)}
       />
+      <Text
+        variant={'bodyLarge'}
+        style={styles.name}
+        ellipsizeMode={'tail'}
+        numberOfLines={1}>
+        {brand?.descriptor?.name}
+      </Text>
+      <Text
+        variant={'labelSmall'}
+        style={styles.name}
+        ellipsizeMode={'tail'}
+        numberOfLines={1}>
+        Lorem Ipsum is simply dummy text
+      </Text>
+      <Text
+        variant={'labelMedium'}
+        style={styles.name}
+        ellipsizeMode={'tail'}
+        numberOfLines={1}>
+        Lorem Ipsum is simply dummy text
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -47,17 +69,18 @@ const Brand: React.FC<Brand> = ({brand}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     brand: {
-      width: 109,
-      height: 109,
-      marginRight: 15,
-      borderRadius: 12,
-      backgroundColor: '#F5F5F5',
-      alignItems: 'center',
-      justifyContent: 'center',
+      marginRight: 11,
+      width: 113,
     },
     brandImage: {
-      width: 100,
-      height: 100,
+      width: 113,
+      height: 64,
+      borderRadius: 8,
+      marginBottom: 8,
+    },
+    name: {
+      color: colors.neutral400,
+      marginBottom: 4,
     },
   });
 

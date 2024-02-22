@@ -3,7 +3,7 @@ import {ActivityIndicator, StyleSheet, View} from 'react-native';
 // @ts-ignore
 import MapplsUIWidgets from 'mappls-search-widgets-react-native';
 import MapplsGL from 'mappls-map-react-native';
-import {Button, Chip, HelperText, Text, withTheme} from 'react-native-paper';
+import {Button, Chip, HelperText, Text} from 'react-native-paper';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from 'formik';
 import axios from 'axios';
@@ -15,11 +15,11 @@ import {API_BASE_URL, MAP_ACCESS_TOKEN} from '../../../../../utils/apiActions';
 
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import Config from '../../../../../../config';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const defaultLocation = [77.057575, 28.6833740000001];
 
 interface AddressForm {
-  theme: any;
   addressInfo: any;
   apiInProgress: boolean;
   saveAddress: (formData: any) => void;
@@ -27,11 +27,12 @@ interface AddressForm {
 
 const CancelToken = axios.CancelToken;
 const AddressForm: React.FC<AddressForm> = ({
-  theme: theme,
   addressInfo,
   apiInProgress,
   saveAddress,
 }) => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
   const source = useRef<any>(null);
   const [formValues, setFormValues] = useState<any>(addressInfo);
   const [mapAddress, setMapAddress] = useState<any>(null);
@@ -287,41 +288,42 @@ const AddressForm: React.FC<AddressForm> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  mapContainer: {flex: 1},
-  spacing: {
-    width: 20,
-  },
-  row: {
-    flexDirection: 'row',
-  },
-  buttonContainer: {
-    alignSelf: 'center',
-  },
-  formContainer: {
-    alignSelf: 'center',
-    padding: 16,
-    width: '100%',
-  },
-  tagContainer: {
-    flexDirection: 'row',
-    marginTop: 10,
-    justifyContent: 'space-between',
-  },
-  addressTagContainer: {
-    marginBottom: 20,
-    marginTop: 12,
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  searchWidgetProps: {backgroundColor: '#F0FFF0'},
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
+    mapContainer: {flex: 1},
+    spacing: {
+      width: 20,
+    },
+    row: {
+      flexDirection: 'row',
+    },
+    buttonContainer: {
+      alignSelf: 'center',
+    },
+    formContainer: {
+      alignSelf: 'center',
+      padding: 16,
+      width: '100%',
+    },
+    tagContainer: {
+      flexDirection: 'row',
+      marginTop: 10,
+      justifyContent: 'space-between',
+    },
+    addressTagContainer: {
+      marginBottom: 20,
+      marginTop: 12,
+    },
+    loaderContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    searchWidgetProps: {backgroundColor: '#F0FFF0'},
+  });
 
-export default withTheme(AddressForm);
+export default AddressForm;

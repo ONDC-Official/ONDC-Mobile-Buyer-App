@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Checkbox, Text, useTheme} from 'react-native-paper';
+import {Checkbox, Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -28,7 +28,7 @@ const CustomizationGroup = ({
   customizationGroups: any;
   handleClick: (group: any, option: any) => void;
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [showAll, setShowAll] = useState<boolean>(false);
 
@@ -170,7 +170,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     filterContainer: {
       padding: 12,
-      backgroundColor: '#fff',
+      backgroundColor: colors.white,
       borderRadius: 12,
       marginBottom: 16,
       borderWidth: 1,
@@ -200,7 +200,7 @@ const makeStyles = (colors: any) =>
       color: colors.error,
     },
     groupName: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       fontWeight: '600',
     },
     selectionLabel: {

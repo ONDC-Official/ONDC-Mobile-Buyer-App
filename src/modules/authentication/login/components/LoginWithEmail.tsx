@@ -1,6 +1,6 @@
 import {Formik, FormikHelpers} from 'formik';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Text, useTheme} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import * as Yup from 'yup';
 import {useNetInfo} from '@react-native-community/netinfo';
@@ -13,6 +13,7 @@ import OrContainer from '../../common/OrContainer';
 import SocialMediaLogin from '../../common/GoogleLogin';
 import {showToastWithGravity} from '../../../../utils/utils';
 import useStoreUserAndNavigate from '../../../../hooks/useStoreUserAndNavigate';
+import { useAppTheme } from "../../../../utils/theme";
 
 interface FormData {
   email: string;
@@ -35,7 +36,7 @@ const validationSchema = Yup.object({
 const LoginWithEmail = () => {
   const navigation = useNavigation<any>();
   const {storeDetails} = useStoreUserAndNavigate();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {isConnected, isInternetReachable} = useNetInfo();
   const [googleLoginRequested, setGoogleLoginRequested] =
@@ -202,7 +203,7 @@ const makeStyles = (colors: any) =>
       marginTop: 24,
     },
     dontHaveMessage: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     signUpText: {color: colors.primary, paddingLeft: 8},
   });

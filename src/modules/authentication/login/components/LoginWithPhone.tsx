@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {Button, Text, TextInput} from 'react-native-paper';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
@@ -13,7 +13,7 @@ import useStoreUserAndNavigate from '../../../../hooks/useStoreUserAndNavigate';
 const LoginWithPhone = () => {
   const navigation = useNavigation<any>();
   const {storeDetails} = useStoreUserAndNavigate();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [googleLoginRequested, setGoogleLoginRequested] =
     useState<boolean>(false);
@@ -201,7 +201,7 @@ const makeStyles = (colors: any) =>
       marginTop: 24,
     },
     dontHaveMessage: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     signUpText: {color: colors.primary, paddingLeft: 8},
     dontReceiveContainer: {

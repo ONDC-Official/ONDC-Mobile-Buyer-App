@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import FastImage from 'react-native-fast-image';
-import {IconButton, Text, useTheme} from 'react-native-paper';
+import {IconButton, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -30,6 +30,7 @@ import useCustomizationStateHelper from '../../../../hooks/useCustomizationState
 import CustomizationFooterButtons from '../../provider/components/CustomizationFooterButtons';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -50,7 +51,7 @@ const CartItems: React.FC<CartItems> = ({
   cartItems,
   setCartItems,
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {deleteDataWithAuth, getDataWithAuth, putDataWithAuth} =
     useNetworkHandling();
@@ -464,7 +465,7 @@ const makeStyles = (colors: any) =>
       marginLeft: 8,
     },
     title: {
-      color: '#1A1A1A',
+      color: colors.neutral400,
       flexShrink: 1,
     },
     sheetProductSymbol: {

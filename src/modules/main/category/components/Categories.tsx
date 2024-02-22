@@ -1,11 +1,12 @@
 import React from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
 import {CATEGORIES} from '../../../../utils/categories';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface Categories {
   currentCategory: string;
@@ -13,7 +14,7 @@ interface Categories {
 
 const Categories: React.FC<Categories> = ({currentCategory}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   const navigateToCategory = (category: any) => {

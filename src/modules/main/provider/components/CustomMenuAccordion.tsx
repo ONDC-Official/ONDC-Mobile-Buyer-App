@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import {List, Text, useTheme} from 'react-native-paper';
+import {List, Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import FBProduct from './FBProduct';
 import {getFilterCategory} from '../../../../utils/utils';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface CustomMenuAccordion {
   section: any;
@@ -14,7 +15,7 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
   selectedFilter,
 }) => {
   const [expanded, setExpanded] = useState<boolean>(true);
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   let itemLength = section?.items?.length;

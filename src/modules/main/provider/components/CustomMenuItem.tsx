@@ -1,7 +1,8 @@
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import {useAppTheme} from '../../../../utils/theme';
 
 interface CustomMenuItem {
   item: any;
@@ -16,7 +17,7 @@ const CustomMenuItem: React.FC<CustomMenuItem> = ({
   selected,
   setSelectedMenu,
 }) => {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   return (
