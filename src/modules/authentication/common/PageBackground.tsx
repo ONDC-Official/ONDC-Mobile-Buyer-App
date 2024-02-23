@@ -1,6 +1,6 @@
 import {StyleSheet, View} from 'react-native';
 import React from 'react';
-import { useAppTheme } from "../../../utils/theme";
+import {useAppTheme} from '../../../utils/theme';
 
 const PageBackground = () => {
   const theme = useAppTheme();

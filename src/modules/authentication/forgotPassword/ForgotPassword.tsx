@@ -4,7 +4,7 @@ import {Text} from 'react-native-paper';
 import PageBackground from '../common/PageBackground';
 import ForgotForm from './ForgotForm';
 import {makeStyles} from '../common/pageStyling';
-import { useAppTheme } from "../../../utils/theme";
+import {useAppTheme} from '../../../utils/theme';
 
 /**
  * Component is used to render login form

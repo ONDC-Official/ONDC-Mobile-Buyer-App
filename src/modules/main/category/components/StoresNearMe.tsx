@@ -1,28 +1,19 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {Text} from 'react-native-paper';
+import {FlatList, StyleSheet, View} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
 import {skeletonList} from '../../../../utils/utils';
-import {FB_DOMAIN} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
 import {saveStoresList} from '../../../../redux/stores/actions';
-import Store from "../../stores/components/Store";
+import Store from '../../stores/components/Store';
+import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
 
 interface StoresNearMe {
   domain?: string;
@@ -87,110 +78,54 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     };
   }, [domain]);
 
-  const numColumns = apiRequested
-    ? Math.ceil(skeletonList.length / 2)
-    : Math.ceil(locations.length / 2);
-
   return (
-    <View>
-      <View style={styles.header}>
-        <Text variant={'titleMedium'} style={styles.viewAllLabel}>
-          Stores Near Me
-        </Text>
-        <TouchableOpacity
-          style={styles.viewAllContainer}
-          onPress={showAllStores}>
-          <Text variant={'bodyMedium'} style={styles.viewAllLabel}>
-            View All
-          </Text>
-          <Icon
-            name={'keyboard-arrow-right'}
-            size={18}
-            color={theme.colors.primary}
-          />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.sectionContainer}>
+      <SectionHeaderWithViewAll
+        title={'Stores Near Me'}
+        viewAll={showAllStores}
+      />
 
       <View style={styles.container}>
         {apiRequested ? (
           <FlatList
+            key={'skeleton'}
             horizontal
             data={skeletonList}
             renderItem={() => <BrandSkeleton />}
             keyExtractor={item => item.id}
           />
         ) : (
-          <ScrollView
-            horizontal
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}>
-            <FlatList
-              scrollEnabled={false}
-              contentContainerStyle={{
-                alignSelf: 'flex-start',
-              }}
-              numColumns={numColumns}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              data={locations}
-              renderItem={({item}) => <Store store={item} />}
-              keyExtractor={item => item.id}
-              ListEmptyComponent={() => (
-                <Text variant={'bodyLarge'}>No stores near you</Text>
-              )}
-            />
-          </ScrollView>
+          <FlatList
+            key={'data'}
+            numColumns={4}
+            data={locations.slice(0, 8)}
+            renderItem={({item}) => <Store store={item} />}
+            keyExtractor={item => item.id}
+          />
         )}
       </View>
     </View>
   );
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     container: {
       paddingHorizontal: 16,
+      marginTop: 12,
     },
     brand: {
       width: 113,
       marginRight: 11,
       marginBottom: 15,
     },
-    brandImage: {
-      borderRadius: 8,
-      width: 113,
-      height: 64,
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: 8,
-      objectFit: 'contain',
-    },
     brandSkeleton: {
       width: 113,
       height: 108,
       marginRight: 11,
     },
-    viewAllContainer: {
-      alignItems: 'center',
-      flexDirection: 'row',
-    },
-    header: {
-      paddingHorizontal: 16,
+    sectionContainer: {
       paddingTop: 28,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginBottom: 12,
-    },
-    viewAllLabel: {
-      color: colors.neutral400,
-    },
-    name: {
-      color: colors.neutral400,
-      marginBottom: 4,
-    },
-    details: {
-      color: colors.neutral300,
     },
   });
 

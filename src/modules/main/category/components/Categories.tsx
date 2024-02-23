@@ -45,7 +45,11 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
               ]}>
               <FastImage source={item.Icon} style={styles.image} />
             </View>
-            <Text variant={'labelSmall'} style={styles.categoryText}>
+            <Text
+              variant={'labelMedium'}
+              style={styles.categoryText}
+              ellipsizeMode={'tail'}
+              numberOfLines={2}>
               {item.name}
             </Text>
           </TouchableOpacity>
@@ -63,7 +67,6 @@ const makeStyles = (colors: any) =>
       paddingTop: 16,
     },
     categoryText: {
-      fontWeight: '700',
       textAlign: 'center',
     },
     category: {
@@ -75,24 +78,22 @@ const makeStyles = (colors: any) =>
       height: 56,
       width: 56,
       marginBottom: 6,
-      backgroundColor: '#E7E7E7',
+      backgroundColor: colors.neutral100,
       padding: 6,
       justifyContent: 'center',
       alignItems: 'center',
+      borderWidth: 1,
+      borderRadius: 28,
     },
     image: {
       height: 44,
       width: 44,
     },
     selected: {
-      borderRadius: 28,
-      borderWidth: 1,
       borderColor: colors.primary,
     },
     normal: {
-      borderRadius: 28,
-      borderWidth: 1,
-      borderColor: '#E7E7E7',
+      borderColor: colors.neutral100,
     },
   });
 

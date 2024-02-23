@@ -3,10 +3,10 @@ import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {CATEGORIES} from '../../../../../utils/categories';
 import {useAppTheme} from '../../../../../utils/theme';
+import SectionHeaderWithViewAll from '../../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
 
 const Categories = () => {
   const theme = useAppTheme();
@@ -18,22 +18,11 @@ const Categories = () => {
   };
 
   return (
-    <View>
-      <View style={styles.header}>
-        <Text variant={'titleMedium'} style={styles.title}>
-          Featured Categories
-        </Text>
-        <TouchableOpacity style={styles.viewAllContainer}>
-          <Text variant={'bodyMedium'} style={styles.viewAllLabel}>
-            View All
-          </Text>
-          <Icon
-            name={'keyboard-arrow-right'}
-            size={18}
-            color={theme.colors.primary}
-          />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      <SectionHeaderWithViewAll
+        title={'Featured Categories'}
+        viewAll={() => {}}
+      />
       <FlatList
         data={CATEGORIES}
         numColumns={4}
@@ -57,6 +46,9 @@ const Categories = () => {
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
+    container: {
+      paddingTop: 20,
+    },
     categoryText: {
       color: colors.neutral400,
       textAlign: 'center',
@@ -70,23 +62,6 @@ const makeStyles = (colors: any) =>
     imageContainer: {
       height: 67,
       width: 67,
-    },
-    viewAllContainer: {
-      alignItems: 'center',
-      flexDirection: 'row',
-    },
-    header: {
-      paddingHorizontal: 16,
-      paddingTop: 20,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    title: {
-      color: colors.neutral400,
-    },
-    viewAllLabel: {
-      color: colors.neutral400,
     },
   });
 

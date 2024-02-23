@@ -4,7 +4,7 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import { useAppTheme } from "../../utils/theme";
+import {useAppTheme} from '../../utils/theme';
 
 interface Page {
   children: React.ReactNode;

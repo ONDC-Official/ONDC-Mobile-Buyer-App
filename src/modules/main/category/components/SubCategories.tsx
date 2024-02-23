@@ -1,15 +1,25 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
 import {useAppTheme} from '../../../../utils/theme';
+import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
 
 interface SubCategories {
   currentCategory: string;
 }
+
+const screenWidth = Dimensions.get('screen').width;
 
 const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -25,80 +35,70 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
   };
 
   useEffect(() => {
-    const list = PRODUCT_SUBCATEGORY[currentCategory];
-    const midPoint = Math.floor(list.length / 2);
-    const firstHalf = list.slice(0, midPoint);
-    const secondHalf = list.slice(midPoint);
-    setSubCategories([firstHalf, secondHalf]);
+    setSubCategories(PRODUCT_SUBCATEGORY[currentCategory]);
   }, [currentCategory]);
 
   return (
-    <View style={styles.container}>
-      <Text variant={'titleSmall'} style={styles.title}>
-        Shop By Category
-      </Text>
+    <View style={styles.sectionContainer}>
+      <SectionHeaderWithViewAll title={'Shop By Category'} viewAll={() => {}} />
 
-      {subCategories.length > 0 && (
-        <ScrollView
-          horizontal
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}>
-          {subCategories[0].map((item: any, index: number) => {
-            const secondItem = subCategories[1][index];
-            return (
-              <View key={`SubCategory${index}`}>
-                <TouchableOpacity
-                  style={styles.brand}
-                  onPress={() => navigateToSubCategory(item)}>
-                  <FastImage
-                    source={{uri: item?.imageUrl}}
-                    style={styles.brandImage}
-                  />
-                  <Text variant={'bodyMedium'}>{item.key}</Text>
-                </TouchableOpacity>
-                {!!secondItem && (
-                  <TouchableOpacity
-                    style={styles.brand}
-                    onPress={() => navigateToSubCategory(secondItem)}>
-                    <FastImage
-                      source={{uri: secondItem?.imageUrl}}
-                      style={styles.brandImage}
-                    />
-                    <Text variant={'bodyMedium'}>{secondItem.key}</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            );
-          })}
-        </ScrollView>
-      )}
+      <View style={styles.container}>
+        {subCategories.length > 0 &&
+          subCategories.slice(0, 8).map((item, index) => (
+            <TouchableOpacity
+              key={item.key}
+              style={[styles.brand, index < 4 ? styles.marginBottom : {}]}
+              onPress={() => navigateToSubCategory(item)}>
+              <FastImage
+                source={{uri: item?.imageUrl}}
+                style={styles.brandImage}
+              />
+              <Text variant={'labelLarge'} style={styles.name}>
+                {item.key}
+              </Text>
+            </TouchableOpacity>
+          ))}
+      </View>
     </View>
   );
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
+    sectionContainer: {
+      marginTop: 28,
+    },
     container: {
-      paddingTop: 16,
-      paddingLeft: 16,
+      paddingHorizontal: 16,
+      marginTop: 12,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
     },
     title: {
+      color: colors.neutral400,
       marginBottom: 12,
     },
     brand: {
-      width: 100,
-      marginRight: 20,
+      width: (screenWidth - 32) / 4,
+    },
+    marginBottom: {
+      marginBottom: 16,
+    },
+    secondItem: {
       marginBottom: 20,
-      alignItems: 'center',
     },
     brandImage: {
       padding: 16,
       borderRadius: 10,
-      width: 100,
-      height: 100,
+      width: 60,
+      height: 60,
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: 12,
+    },
+    name: {
+      color: colors.neutral400,
     },
   });
 export default SubCategories;

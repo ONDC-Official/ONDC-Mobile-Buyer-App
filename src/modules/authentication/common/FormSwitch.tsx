@@ -1,7 +1,7 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import React from 'react';
-import { useAppTheme } from "../../../utils/theme";
+import {useAppTheme} from '../../../utils/theme';
 
 const FormSwitch = ({
   formType,

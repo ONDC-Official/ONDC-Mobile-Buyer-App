@@ -10,7 +10,7 @@ import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
 import ViewTypeSelection from './ViewTypeSelection';
-import { useAppTheme } from "../../utils/theme";
+import {useAppTheme} from '../../utils/theme';
 
 interface SearchProductList {
   searchQuery: string;

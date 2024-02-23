@@ -5,7 +5,7 @@ import {Button, List, Modal, Portal, Text} from 'react-native-paper';
 import moment from 'moment';
 import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
-import { useAppTheme } from "../../../../utils/theme";
+import {useAppTheme} from '../../../../utils/theme';
 import GetStatusButton from '../components/GetStatusButton';
 import ComplaintStatus from '../components/ComplaintStatus';
 import EscalateForm from './components/EscalateForm';
@@ -268,144 +268,145 @@ const ComplaintDetails = () => {
   );
 };
 
-const makeStyles = (colors: any) => StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  pageContainer: {
-    padding: 16,
-  },
-  card: {
-    borderWidth: 1,
-    borderColor: '#E8E8E8',
-    borderRadius: 12,
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    marginBottom: 12,
-  },
-  accordionContainer: {
-    marginBottom: 12,
-  },
-  accordion: {
-    borderWidth: 1,
-    borderColor: '#E8E8E8',
-    borderRadius: 12,
-  },
-  accordionTitle: {
-    fontWeight: '700',
-    color: '#000000',
-  },
-  accordionDetails: {
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
-  },
-  title: {
-    marginBottom: 16,
-    color: '#000000',
-  },
-  process: {
-    flexDirection: 'row',
-  },
-  dot: {
-    width: 20,
-    height: 20,
-    borderRadius: 20,
-    backgroundColor: '#008ECC',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  innerDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 20,
-    backgroundColor: '#FFF',
-  },
-  dotContainer: {
-    marginRight: 8,
-  },
-  dottedLine: {
-    borderLeftWidth: 2,
-    borderLeftColor: '#008ECC',
-    borderStyle: 'solid',
-    height: 60,
-    marginLeft: 9,
-  },
-  processDetails: {
-    flex: 1,
-  },
-  processHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 4,
-  },
-  actionTitle: {
-    color: colors.neutral400,
-  },
-  date: {
-    color: '#8A8A8A',
-  },
-  shortDescription: {
-    marginBottom: 4,
-  },
-  orderIdRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  orderId: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    flex: 1,
-    marginRight: 16,
-  },
-  text: {
-    color: colors.neutral400,
-  },
-  row: {
-    marginBottom: 4,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  itemTitle: {
-    marginBottom: 4,
-  },
-  itemContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  itemDescription: {
-    marginBottom: 16,
-    color: '#686868',
-  },
-  qty: {
-    color: '#686868',
-  },
-  actionButton: {
-    borderRadius: 8,
-    borderColor: theme.colors.primary,
-  },
-  buttonSeparator: {
-    width: 6,
-  },
-  cancelButton: {
-    borderRadius: 8,
-    borderColor: theme.colors.error,
-  },
-  updateBy: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  actionButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    pageContainer: {
+      padding: 16,
+    },
+    card: {
+      borderWidth: 1,
+      borderColor: '#E8E8E8',
+      borderRadius: 12,
+      padding: 16,
+      backgroundColor: '#FFFFFF',
+      marginBottom: 12,
+    },
+    accordionContainer: {
+      marginBottom: 12,
+    },
+    accordion: {
+      borderWidth: 1,
+      borderColor: '#E8E8E8',
+      borderRadius: 12,
+    },
+    accordionTitle: {
+      fontWeight: '700',
+      color: '#000000',
+    },
+    accordionDetails: {
+      padding: 16,
+      backgroundColor: '#FFFFFF',
+      borderBottomLeftRadius: 16,
+      borderBottomRightRadius: 16,
+    },
+    title: {
+      marginBottom: 16,
+      color: '#000000',
+    },
+    process: {
+      flexDirection: 'row',
+    },
+    dot: {
+      width: 20,
+      height: 20,
+      borderRadius: 20,
+      backgroundColor: '#008ECC',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    innerDot: {
+      width: 10,
+      height: 10,
+      borderRadius: 20,
+      backgroundColor: '#FFF',
+    },
+    dotContainer: {
+      marginRight: 8,
+    },
+    dottedLine: {
+      borderLeftWidth: 2,
+      borderLeftColor: '#008ECC',
+      borderStyle: 'solid',
+      height: 60,
+      marginLeft: 9,
+    },
+    processDetails: {
+      flex: 1,
+    },
+    processHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 4,
+    },
+    actionTitle: {
+      color: colors.neutral400,
+    },
+    date: {
+      color: '#8A8A8A',
+    },
+    shortDescription: {
+      marginBottom: 4,
+    },
+    orderIdRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    orderId: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      flex: 1,
+      marginRight: 16,
+    },
+    text: {
+      color: colors.neutral400,
+    },
+    row: {
+      marginBottom: 4,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    itemTitle: {
+      marginBottom: 4,
+    },
+    itemContainer: {
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+      justifyContent: 'space-between',
+      marginBottom: 16,
+    },
+    itemDescription: {
+      marginBottom: 16,
+      color: '#686868',
+    },
+    qty: {
+      color: '#686868',
+    },
+    actionButton: {
+      borderRadius: 8,
+      borderColor: theme.colors.primary,
+    },
+    buttonSeparator: {
+      width: 6,
+    },
+    cancelButton: {
+      borderRadius: 8,
+      borderColor: theme.colors.error,
+    },
+    updateBy: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    actionButtonContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+  });
 
 export default ComplaintDetails;

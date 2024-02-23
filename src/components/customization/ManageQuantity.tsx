@@ -7,6 +7,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Text} from 'react-native-paper';
 import React from 'react';
+import {useAppTheme} from '../../utils/theme';
 
 interface ManageQuantity {
   cartItem: any;

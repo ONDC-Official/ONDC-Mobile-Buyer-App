@@ -6,7 +6,7 @@ import LoginWithPhone from './components/LoginWithPhone';
 import FormSwitch from '../common/FormSwitch';
 import PageBackground from '../common/PageBackground';
 import {makeStyles} from '../common/pageStyling';
-import { useAppTheme } from "../../../utils/theme";
+import {useAppTheme} from '../../../utils/theme';
 
 /**
  * Component is used to render login form

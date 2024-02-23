@@ -8,7 +8,7 @@ import {appStyles} from '../../../styles/styles';
 import ONDCLogo from '../../../assets/ondc.svg';
 import {tryLocalSignIn} from '../../../redux/auth/actions';
 import {getMultipleData} from '../../../utils/storage';
-import { useAppTheme } from "../../../utils/theme";
+import {useAppTheme} from '../../../utils/theme';
 
 interface Splash {
   navigation: any;
