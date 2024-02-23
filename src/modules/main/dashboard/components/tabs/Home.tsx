@@ -2,8 +2,8 @@ import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import Header from '../header/Header';
 import Categories from '../home/Categories';
-import AllProviders from '../home/AllProviders';
 import {useAppTheme} from '../../../../../utils/theme';
+import StoresNearMe from '../../../category/components/StoresNearMe';
 
 const Home = () => {
   const theme = useAppTheme();
@@ -13,7 +13,7 @@ const Home = () => {
     <View style={styles.container}>
       <Header />
       <Categories />
-      <AllProviders />
+      <StoresNearMe />
     </View>
   );
 };

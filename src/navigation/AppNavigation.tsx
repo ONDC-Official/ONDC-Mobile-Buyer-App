@@ -27,6 +27,7 @@ import Complaints from '../modules/main/complaint/list/Complaints';
 import ComplaintDetails from '../modules/main/complaint/details/ComplaintDetails';
 import OrderReturnDetails from '../modules/main/order/details/OrderReturnDetails';
 import ForgotPassword from '../modules/authentication/forgotPassword/ForgotPassword';
+import StoresNearMe from '../modules/main/stores/StoresNearMe';
 
 const Stack = createStackNavigator();
 
@@ -216,6 +217,13 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="SearchProducts"
           component={SearchProducts}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="StoresNearMe"
+          component={StoresNearMe}
+          options={{
+            title: 'Stores Near me',
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

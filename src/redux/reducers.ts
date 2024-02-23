@@ -4,6 +4,7 @@ import cartReducer from './cart/reducer/cart';
 import addressReducer from './address/reducer/address';
 import complaintReducer from './complaint/reducer/complaint';
 import orderReducer from './order/reducer/order';
+import storeReducer from './stores/reducer/store';
 
 // Combine all reducers into one root reducer
 export default combineReducers({
@@ -12,4 +13,5 @@ export default combineReducers({
   cartReducer,
   complaintReducer,
   orderReducer,
+  storeReducer,
 });

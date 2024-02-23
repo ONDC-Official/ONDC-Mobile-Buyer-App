@@ -10,23 +10,22 @@ import {
 import {Text} from 'react-native-paper';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import FastImage from 'react-native-fast-image';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
 import {skeletonList} from '../../../../utils/utils';
 import {FB_DOMAIN} from '../../../../utils/constants';
-import { useAppTheme } from "../../../../utils/theme";
+import {useAppTheme} from '../../../../utils/theme';
+import {saveStoresList} from '../../../../redux/stores/actions';
+import Store from "../../stores/components/Store";
 
 interface StoresNearMe {
-  domain: string;
-}
-
-interface StoreImage {
-  source: any;
+  domain?: string;
 }
 
 const CancelToken = axios.CancelToken;
@@ -43,26 +42,13 @@ const BrandSkeleton = () => {
   );
 };
 
-const NoImageAvailable = require('../../../../assets/noImage.png');
-
-const StoreImage: React.FC<StoreImage> = ({source}) => {
-  const [imageSource, setImageSource] = useState(source);
-  const styles = makeStyles();
-
-  return (
-    <FastImage
-      source={imageSource}
-      style={styles.brandImage}
-      onError={() => setImageSource(NoImageAvailable)}
-    />
-  );
-};
-
 const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
+  const dispatch = useDispatch();
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const {address} = useSelector(({addressReducer}) => addressReducer);
   const source = useRef<any>(null);
-  const styles = makeStyles();
   const [locations, setLocations] = useState<any[]>([]);
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
@@ -72,10 +58,12 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     try {
       setApiRequested(true);
       source.current = CancelToken.source();
-      const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${LOCATIONS}?domain=${domain}&latitude=${address.address.lat}&longitude=${address.address.lng}&radius=100`,
-        source.current.token,
-      );
+      const url = `${API_BASE_URL}${LOCATIONS}?latitude=${
+        address.address.lat
+      }&longitude=${address.address.lng}&radius=100${
+        domain ? `&domain=${domain}` : ''
+      }`;
+      const {data} = await getDataWithAuth(url, source.current.token);
       setLocations(data.data);
     } catch (error) {
       handleApiError(error);
@@ -84,15 +72,9 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     }
   };
 
-  const navigateToDetails = (store: any) => {
-    const routeParams: any = {
-      brandId: store.provider,
-    };
-
-    if (store.domain === FB_DOMAIN) {
-      routeParams.outletId = store.id;
-    }
-    navigation.navigate('BrandDetails', routeParams);
+  const showAllStores = () => {
+    dispatch(saveStoresList(locations));
+    navigation.navigate('StoresNearMe');
   };
 
   useEffect(() => {
@@ -110,54 +92,56 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     : Math.ceil(locations.length / 2);
 
   return (
-    <View style={styles.container}>
-      <Text variant={'titleSmall'} style={styles.title}>
-        Stores near me
-      </Text>
-      {apiRequested ? (
-        <FlatList
-          horizontal
-          data={skeletonList}
-          renderItem={() => <BrandSkeleton />}
-          keyExtractor={item => item.id}
-        />
-      ) : (
-        <ScrollView
-          horizontal
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}>
-          <FlatList
-            scrollEnabled={false}
-            contentContainerStyle={{
-              alignSelf: 'flex-start',
-            }}
-            numColumns={numColumns}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            data={locations}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                style={styles.brand}
-                onPress={() => navigateToDetails(item)}>
-                <StoreImage
-                  source={
-                    item?.provider_descriptor?.images?.length > 0
-                      ? {uri: item?.provider_descriptor?.images[0]}
-                      : NoImageAvailable
-                  }
-                />
-                <Text variant={'bodyMedium'}>
-                  {item?.provider_descriptor?.name}
-                </Text>
-              </TouchableOpacity>
-            )}
-            keyExtractor={item => item.id}
-            ListEmptyComponent={() => (
-              <Text variant={'bodyLarge'}>No stores near you</Text>
-            )}
+    <View>
+      <View style={styles.header}>
+        <Text variant={'titleMedium'} style={styles.viewAllLabel}>
+          Stores Near Me
+        </Text>
+        <TouchableOpacity
+          style={styles.viewAllContainer}
+          onPress={showAllStores}>
+          <Text variant={'bodyMedium'} style={styles.viewAllLabel}>
+            View All
+          </Text>
+          <Icon
+            name={'keyboard-arrow-right'}
+            size={18}
+            color={theme.colors.primary}
           />
-        </ScrollView>
-      )}
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.container}>
+        {apiRequested ? (
+          <FlatList
+            horizontal
+            data={skeletonList}
+            renderItem={() => <BrandSkeleton />}
+            keyExtractor={item => item.id}
+          />
+        ) : (
+          <ScrollView
+            horizontal
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}>
+            <FlatList
+              scrollEnabled={false}
+              contentContainerStyle={{
+                alignSelf: 'flex-start',
+              }}
+              numColumns={numColumns}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              data={locations}
+              renderItem={({item}) => <Store store={item} />}
+              keyExtractor={item => item.id}
+              ListEmptyComponent={() => (
+                <Text variant={'bodyLarge'}>No stores near you</Text>
+              )}
+            />
+          </ScrollView>
+        )}
+      </View>
     </View>
   );
 };
@@ -165,32 +149,48 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      paddingTop: 16,
-      paddingLeft: 16,
-    },
-    title: {
-      marginBottom: 12,
+      paddingHorizontal: 16,
     },
     brand: {
-      width: 100,
-      marginRight: 20,
-      alignItems: 'center',
-      marginBottom: 20,
+      width: 113,
+      marginRight: 11,
+      marginBottom: 15,
     },
     brandImage: {
-      padding: 16,
-      borderRadius: 10,
-      width: 100,
-      height: 100,
+      borderRadius: 8,
+      width: 113,
+      height: 64,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: '#EDEDED',
-      marginBottom: 12,
+      marginBottom: 8,
+      objectFit: 'contain',
     },
     brandSkeleton: {
-      width: 100,
-      height: 100,
-      marginRight: 20,
+      width: 113,
+      height: 108,
+      marginRight: 11,
+    },
+    viewAllContainer: {
+      alignItems: 'center',
+      flexDirection: 'row',
+    },
+    header: {
+      paddingHorizontal: 16,
+      paddingTop: 28,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: 12,
+    },
+    viewAllLabel: {
+      color: colors.neutral400,
+    },
+    name: {
+      color: colors.neutral400,
+      marginBottom: 4,
+    },
+    details: {
+      color: colors.neutral300,
     },
   });
 
