@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {HelperText, Text, TextInput, withTheme} from 'react-native-paper';
+import {HelperText, Text, TextInput} from 'react-native-paper';
 import {StyleSheet} from 'react-native';
+import {useAppTheme} from '../../utils/theme';
 
 /**
  * Component is used to render generic password input field
@@ -10,7 +11,8 @@ import {StyleSheet} from 'react-native';
  * @returns {JSX.Element}
  * @constructor
  */
-const PasswordField: React.FC<any> = ({inputLabel, theme, ...props}) => {
+const PasswordField: React.FC<any> = ({inputLabel, ...props}) => {
+  const theme = useAppTheme();
   const [hide, setHide] = useState(true);
   const styles = makeStyles(theme.colors);
 
@@ -55,4 +57,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default withTheme(PasswordField);
+export default PasswordField;

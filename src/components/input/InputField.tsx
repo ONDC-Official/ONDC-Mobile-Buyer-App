@@ -1,6 +1,7 @@
 import React from 'react';
-import {HelperText, Text, TextInput, withTheme} from 'react-native-paper';
+import {HelperText, Text, TextInput} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
+import {useAppTheme} from '../../utils/theme';
 
 /**
  * Component to render generic input field
@@ -9,7 +10,8 @@ import {StyleSheet, View} from 'react-native';
  * @returns {JSX.Element}
  * @constructor
  */
-const InputField: React.FC<any> = ({inputLabel, theme, ...props}) => {
+const InputField: React.FC<any> = ({inputLabel, ...props}) => {
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   return (
@@ -45,4 +47,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default withTheme(InputField);
+export default InputField;

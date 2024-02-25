@@ -3,6 +3,7 @@ import {Checkbox, Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {useAppTheme} from '../../../../utils/theme';
 
 const VegNonVegTag = ({category = 'veg'}) => {
   return (

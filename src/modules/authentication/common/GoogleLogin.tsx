@@ -1,11 +1,12 @@
 import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {Text, withTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {useNetInfo} from '@react-native-community/netinfo';
 
 import useLoginWithGoogle from '../hooks/useLoginWithGoogle';
 import {showToastWithGravity} from '../../../utils/utils';
 import GoogleIcon from '../../../assets/google.svg';
+import {useAppTheme} from '../../../utils/theme';
 
 interface GoogleLogin {
   theme: any;
@@ -15,11 +16,11 @@ interface GoogleLogin {
 }
 
 const GoogleLogin: React.FC<GoogleLogin> = ({
-  theme,
   loginRequested,
   googleLoginRequested,
   setGoogleLoginRequested,
 }) => {
+  const theme = useAppTheme();
   const {loginWithGoogle} = useLoginWithGoogle();
   const styles = makeStyles(theme.colors);
   const {isConnected, isInternetReachable} = useNetInfo();
@@ -70,4 +71,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default withTheme(GoogleLogin);
+export default GoogleLogin;

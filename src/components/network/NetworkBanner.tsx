@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {withTheme} from 'react-native-paper';
 import NetInfo from '@react-native-community/netinfo';
+import {useAppTheme} from '../../utils/theme';
 
 interface NetworkBanner {
   theme: any;
 }
 
-const NetworkBanner: React.FC<NetworkBanner> = ({theme}) => {
+const NetworkBanner: React.FC<NetworkBanner> = () => {
+  const theme = useAppTheme();
   const [isOffline, setOfflineStatus] = useState<boolean>(false);
   const styles = makeStyles(theme.colors);
 
@@ -35,7 +36,7 @@ const NetworkBanner: React.FC<NetworkBanner> = ({theme}) => {
   return <></>;
 };
 
-export default withTheme(NetworkBanner);
+export default NetworkBanner;
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({

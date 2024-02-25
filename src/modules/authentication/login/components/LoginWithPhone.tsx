@@ -9,6 +9,7 @@ import OrContainer from '../../common/OrContainer';
 import SocialMediaLogin from '../../common/GoogleLogin';
 import {showToastWithGravity} from '../../../../utils/utils';
 import useStoreUserAndNavigate from '../../../../hooks/useStoreUserAndNavigate';
+import {useAppTheme} from '../../../../utils/theme';
 
 const LoginWithPhone = () => {
   const navigation = useNavigation<any>();

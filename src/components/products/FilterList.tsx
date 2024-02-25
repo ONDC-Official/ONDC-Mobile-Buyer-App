@@ -2,6 +2,7 @@ import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Checkbox, Text} from 'react-native-paper';
 import React, {useEffect, useState} from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {useAppTheme} from '../../utils/theme';
 
 interface FilterList {
   attributes: any[];

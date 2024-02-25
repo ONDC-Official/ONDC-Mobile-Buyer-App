@@ -12,6 +12,7 @@ import {
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import FilterList from './FilterList';
+import {useAppTheme} from '../../utils/theme';
 
 interface Filters {
   providerId: any;

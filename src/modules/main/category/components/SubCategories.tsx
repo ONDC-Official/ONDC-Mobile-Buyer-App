@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Dimensions,
-  FlatList,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
@@ -34,13 +27,20 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
     });
   };
 
+  const navigateToAll = () => {
+    navigation.navigate('ShopByCategory', {category: currentCategory});
+  };
+
   useEffect(() => {
     setSubCategories(PRODUCT_SUBCATEGORY[currentCategory]);
   }, [currentCategory]);
 
   return (
     <View style={styles.sectionContainer}>
-      <SectionHeaderWithViewAll title={'Shop By Category'} viewAll={() => {}} />
+      <SectionHeaderWithViewAll
+        title={'Shop By Category'}
+        viewAll={navigateToAll}
+      />
 
       <View style={styles.container}>
         {subCategories.length > 0 &&

@@ -3,6 +3,7 @@ import FastImage from 'react-native-fast-image';
 import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {getFilterCategory} from '../../utils/utils';
+import {useAppTheme} from '../../utils/theme';
 
 interface VegNonVegTag {
   tags: any[];

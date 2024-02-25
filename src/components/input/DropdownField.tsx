@@ -1,14 +1,11 @@
 import DropDown from 'react-native-paper-dropdown';
-import {HelperText, Text, withTheme} from 'react-native-paper';
+import {HelperText, Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {useAppTheme} from '../../utils/theme';
 
-const DropdownField: React.FC<any> = ({
-  required = false,
-  label,
-  theme,
-  ...props
-}) => {
+const DropdownField: React.FC<any> = ({required = false, label, ...props}) => {
+  const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [showDropDown, setShowDropDown] = useState(false);
 
@@ -46,4 +43,4 @@ const makeStyles = (colors: any) =>
     required: {color: colors.red},
   });
 
-export default withTheme(DropdownField);
+export default DropdownField;

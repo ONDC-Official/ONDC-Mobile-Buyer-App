@@ -8,6 +8,7 @@ import FastImage from 'react-native-fast-image';
 
 import {COLOR_CODE_TO_NAME} from '../../utils/colorCodes';
 import {makeGlobalStyles} from '../../styles/styles';
+import {useAppTheme} from '../../utils/theme';
 
 interface VariationsRenderer {
   product: any;

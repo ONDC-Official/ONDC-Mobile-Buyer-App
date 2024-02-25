@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {withTheme} from 'react-native-paper';
 import CustomTabBar from './components/customTabBar/CustomTabBar';
 import Home from './components/tabs/Home';
 import List from './components/tabs/List';
@@ -36,4 +35,4 @@ const Dashboard: React.FC<Dashboard> = () => {
   );
 };
 
-export default withTheme(Dashboard);
+export default Dashboard;

@@ -11,6 +11,7 @@ import {skeletonList} from '../../utils/utils';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import Product from '../../modules/main/provider/components/Product';
 import ViewTypeSelection from './ViewTypeSelection';
+import {useAppTheme} from '../../utils/theme';
 
 interface Products {
   providerId: any;

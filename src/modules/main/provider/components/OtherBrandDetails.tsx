@@ -10,7 +10,7 @@ interface OtherBrandDetails {
 
 const OtherBrandDetails: React.FC<OtherBrandDetails> = ({provider}) => {
   const {colors} = useAppTheme();
-  const styles = makeStyles();
+  const styles = makeStyles(colors);
   const [selectedMenu, setSelectedMenu] = useState<any>(null);
 
   return (
