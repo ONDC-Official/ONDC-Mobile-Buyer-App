@@ -67,7 +67,7 @@ const Store = ({store}: {store: any}) => {
         variant={'labelSmall'}
         numberOfLines={1}
         ellipsizeMode={'tail'}>
-        {store?.provider_descriptor?.name}
+        {store?.categories?.join(', ')}
       </Text>
     </TouchableOpacity>
   );

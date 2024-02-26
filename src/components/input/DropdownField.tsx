@@ -39,7 +39,7 @@ const DropdownField: React.FC<any> = ({required = false, label, ...props}) => {
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    label: {backgroundColor: 'white'},
+    label: {backgroundColor: colors.white},
     required: {color: colors.red},
   });
 

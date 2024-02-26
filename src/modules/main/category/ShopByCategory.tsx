@@ -41,7 +41,7 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
           </Text>
         </TouchableOpacity>
       )}
-      keyExtractor={item => item.id}
+      keyExtractor={item => item.key}
     />
   );
 };

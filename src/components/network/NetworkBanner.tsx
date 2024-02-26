@@ -3,11 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import {useAppTheme} from '../../utils/theme';
 
-interface NetworkBanner {
-  theme: any;
-}
-
-const NetworkBanner: React.FC<NetworkBanner> = () => {
+const NetworkBanner: React.FC = () => {
   const theme = useAppTheme();
   const [isOffline, setOfflineStatus] = useState<boolean>(false);
   const styles = makeStyles(theme.colors);
@@ -46,11 +42,11 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
       alignItem: 'center',
       paddingHorizontal: 16,
-      backgroundColor: colors.warning,
+      backgroundColor: colors.error600,
     },
     messageTitle: {
       fontSize: 15,
       fontWeight: '600',
-      color: '#FFF',
+      color: colors.white,
     },
   });

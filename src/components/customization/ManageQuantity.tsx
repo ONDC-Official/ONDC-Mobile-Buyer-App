@@ -71,9 +71,9 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     quantityContainer: {
       borderRadius: 6,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       borderWidth: 1,
-      backgroundColor: '#FFF',
+      backgroundColor: colors.white,
       flexDirection: 'row',
       height: 26,
       alignItems: 'center',

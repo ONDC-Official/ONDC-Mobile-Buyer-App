@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -30,7 +30,7 @@ const Page: React.FC<Page> = ({children}) => {
   }, [cartItems]);
 
   return (
-    <>
+    <View style={styles.pageContainer}>
       {children}
       {cartItems.length > 0 && (
         <TouchableOpacity style={styles.container} onPress={navigateToCart}>
@@ -42,12 +42,16 @@ const Page: React.FC<Page> = ({children}) => {
           </Text>
         </TouchableOpacity>
       )}
-    </>
+    </View>
   );
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
+    pageContainer: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
     container: {
       flexDirection: 'row',
       justifyContent: 'space-between',
