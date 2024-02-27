@@ -3,6 +3,7 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import {Button, IconButton} from 'react-native-paper';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import SingleAddress from './Address';
@@ -50,6 +51,7 @@ interface AddressList {
 
 const CancelToken = axios.CancelToken;
 const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
+  const isFocused = useIsFocused();
   const theme = useAppTheme();
   const {address} = useSelector(({addressReducer}) => addressReducer);
   const source = useRef<any>(null);
@@ -90,6 +92,20 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
   };
 
   useEffect(() => {
+    if (isFocused) {
+      getAddressList()
+        .then(() => {})
+        .catch(() => {});
+    }
+
+    return () => {
+      if (source.current) {
+        source.current.cancel();
+      }
+    };
+  }, [isFocused]);
+
+  useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <IconButton
@@ -102,20 +118,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
         />
       ),
     });
-
-    const unsubscribeFocus = navigation.addListener('focus', () => {
-      getAddressList()
-        .then(() => {})
-        .catch(() => {});
-    });
-
-    return () => {
-      if (source.current) {
-        source.current.cancel();
-      }
-      unsubscribeFocus();
-    };
-  }, [navigation]);
+  }, []);
 
   const onAddressSelect = async (item: any) => {
     setCurrentAddress(item);
@@ -180,16 +183,13 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
 };
 
 const styles = StyleSheet.create({
-  containerStyle: {
-    marginVertical: 16,
-  },
   buttonContainer: {
     width: 300,
     marginVertical: 10,
     alignSelf: 'center',
   },
   contentContainerStyle: {
-    paddingBottom: 16,
+    padding: 16,
   },
 });
 

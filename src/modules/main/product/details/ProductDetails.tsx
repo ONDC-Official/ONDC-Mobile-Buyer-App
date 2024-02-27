@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -120,6 +119,9 @@ const ProductDetails: React.FC<ProductDetails> = ({
       }
       setPriceRange(rangePriceTag);
       setProduct(data);
+      navigation.setOptions({
+        title: data?.item_details?.descriptor?.name,
+      });
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -366,16 +368,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
-          <MaterialIcon name={'arrow-back'} size={24} color={'#000'} />
-        </TouchableOpacity>
-        <Text variant={'titleSmall'} ellipsizeMode={'tail'} numberOfLines={1}>
-          {product?.item_details?.descriptor?.name}
-        </Text>
-      </View>
       <Page>
         <ScrollView style={styles.container}>
           <ProductImages
@@ -390,23 +382,21 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 <VegNonVegTag tags={product?.item_details?.tags} showLabel />
               </View>
             )}
-            <Text variant="titleMedium" style={styles.title}>
+            <Text variant="headlineSmall" style={styles.title}>
               {product?.item_details?.descriptor?.name}
             </Text>
             {priceRange ? (
               <View style={styles.priceContainer}>
-                <Text variant="titleMedium" style={styles.price}>
+                <Text variant="headlineSmall" style={styles.price}>
                   {`₹${priceRange?.minPrice} - ₹${priceRange?.maxPrice}`}
                 </Text>
               </View>
             ) : (
               <View style={styles.priceContainer}>
-                <Text variant="titleMedium" style={styles.price}>
+                <Text variant="headlineSmall" style={styles.price}>
                   ₹{product?.item_details?.price?.value}
                 </Text>
-                <Text
-                  variant="bodyLarge"
-                  style={[styles.price, styles.maximumAmount]}>
+                <Text variant="titleSmall" style={styles.maximumAmount}>
                   ₹
                   {Number(product?.item_details?.price?.maximum_value).toFixed(
                     0,
@@ -414,7 +404,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 </Text>
               </View>
             )}
-            <View style={styles.divider} />
             <VariationsRenderer
               product={product}
               variationState={variationState}
@@ -424,7 +413,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
             />
             {product?.context?.domain === FB_DOMAIN && (
               <>
-                <View style={styles.divider} />
                 <FBProductCustomization
                   product={product}
                   customizationState={customizationState}
@@ -434,86 +422,63 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 />
               </>
             )}
-            <View style={styles.buttonContainer}>
-              {product?.context.domain !== FB_DOMAIN &&
-              isItemAvailableInCart &&
-              itemAvailableInCart ? (
-                <View style={styles.buttonGroup}>
-                  <TouchableOpacity
-                    style={styles.incrementButton}
-                    onPress={() => {
-                      if (itemAvailableInCart.item.quantity.count === 1) {
-                        deleteCartItem(itemAvailableInCart._id).then(() => {});
-                      } else {
-                        addToCart(false, false).then(() => {});
-                      }
-                    }}>
-                    <Icon name={'minus'} color={theme.colors.primary} />
-                  </TouchableOpacity>
-                  <Text>
-                    {addToCartLoading ? (
-                      <ActivityIndicator
-                        size={16}
-                        color={theme.colors.primary}
-                      />
-                    ) : (
-                      itemAvailableInCart.item.quantity.count
-                    )}
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.incrementButton}
-                    onPress={() => addToCart(false, true)}>
-                    <Icon name={'plus'} color={theme.colors.primary} />
-                  </TouchableOpacity>
-                </View>
-              ) : (
+            <View style={styles.addToCartContainer}>
+            {product?.context.domain !== FB_DOMAIN &&
+            isItemAvailableInCart &&
+            itemAvailableInCart ? (
+              <View style={styles.buttonGroup}>
                 <TouchableOpacity
-                  style={[
-                    disableActionButtons
-                      ? globalStyles.disabledOutlineButton
-                      : globalStyles.outlineButton,
-                    styles.addToCartButton,
-                  ]}
-                  onPress={() => addToCart(false, true)}
-                  disabled={disableActionButtons}>
-                  {addToCartLoading ? (
-                    <ActivityIndicator
-                      size={'small'}
-                      color={theme.colors.primary}
-                    />
-                  ) : (
-                    <Text
-                      variant={'bodyMedium'}
-                      style={
-                        disableActionButtons
-                          ? globalStyles.disabledOutlineButtonText
-                          : globalStyles.outlineButtonText
-                      }>
-                      Add to cart
-                    </Text>
-                  )}
+                  style={styles.incrementButton}
+                  onPress={() => {
+                    if (itemAvailableInCart.item.quantity.count === 1) {
+                      deleteCartItem(itemAvailableInCart._id).then(() => {});
+                    } else {
+                      addToCart(false, false).then(() => {});
+                    }
+                  }}>
+                  <Icon name={'minus'} color={theme.colors.primary} size={18} />
                 </TouchableOpacity>
-              )}
-              <View style={styles.buttonSeparator} />
+                <Text variant={'bodyLarge'} style={styles.quantity}>
+                  {addToCartLoading ? (
+                    <ActivityIndicator size={16} color={theme.colors.primary} />
+                  ) : (
+                    itemAvailableInCart.item.quantity.count
+                  )}
+                </Text>
+                <TouchableOpacity
+                  style={styles.incrementButton}
+                  onPress={() => addToCart(false, true)}>
+                  <Icon name={'plus'} color={theme.colors.primary} size={18} />
+                </TouchableOpacity>
+              </View>
+            ) : (
               <TouchableOpacity
                 style={[
                   disableActionButtons
-                    ? globalStyles.disabledContainedButton
-                    : globalStyles.containedButton,
-                  styles.orderNowButton,
+                    ? globalStyles.disabledOutlineButton
+                    : globalStyles.outlineButton,
+                  styles.addToCartButton,
                 ]}
-                disabled={disableActionButtons}
-                onPress={() => addToCart(true)}>
-                <Text
-                  variant={'bodyMedium'}
-                  style={
-                    disableActionButtons
-                      ? globalStyles.disabledContainedButtonText
-                      : globalStyles.containedButtonText
-                  }>
-                  Order now
-                </Text>
+                onPress={() => addToCart(false, true)}
+                disabled={disableActionButtons}>
+                {addToCartLoading ? (
+                  <ActivityIndicator
+                    size={'small'}
+                    color={theme.colors.primary}
+                  />
+                ) : (
+                  <Text
+                    variant={'bodyLarge'}
+                    style={
+                      disableActionButtons
+                        ? globalStyles.disabledOutlineButtonText
+                        : styles.addToCartLabel
+                    }>
+                    Add to cart
+                  </Text>
+                )}
               </TouchableOpacity>
+            )}
             </View>
             <AboutProduct product={product} />
           </View>
@@ -547,29 +512,27 @@ const makeStyles = (colors: any) =>
       padding: 16,
     },
     title: {
-      color: '#222',
-      marginBottom: 10,
+      color: colors.neutral400,
+      marginBottom: 12,
     },
     price: {
-      color: '#222',
+      color: colors.neutral400,
     },
     priceContainer: {
       flexDirection: 'row',
       alignItems: 'center',
     },
     maximumAmount: {
+      color: colors.neutral300,
       marginLeft: 12,
       textDecorationLine: 'line-through',
-    },
-    divider: {
-      height: 1,
-      width: '100%',
-      backgroundColor: '#E0E0E0',
-      marginVertical: 20,
     },
     buttonContainer: {
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    addToCartContainer: {
+      marginTop: 28,
     },
     addToCartButton: {
       flex: 1,
@@ -577,31 +540,29 @@ const makeStyles = (colors: any) =>
       borderWidth: 1,
       alignItems: 'center',
       justifyContent: 'center',
-      height: 36,
+      height: 44,
+      backgroundColor: colors.primary,
     },
-    orderNowButton: {
-      flex: 1,
-      borderRadius: 8,
-      borderWidth: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: 36,
-    },
-    buttonSeparator: {
-      width: 15,
+    addToCartLabel: {
+      color: colors.white,
     },
     buttonGroup: {
+      backgroundColor: colors.primary50,
       borderColor: colors.primary,
       flexDirection: 'row',
       alignItems: 'center',
       flex: 1,
       borderWidth: 1,
       borderRadius: 8,
-      height: 40,
-      justifyContent: 'space-between',
+      height: 44,
+      justifyContent: 'center',
     },
     incrementButton: {
       paddingHorizontal: 12,
+    },
+    quantity: {
+      color: colors.primary,
+      marginHorizontal: 20,
     },
   });
 

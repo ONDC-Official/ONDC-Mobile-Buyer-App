@@ -4,6 +4,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useAppTheme} from '../../utils/theme';
 
 interface Page {
@@ -33,14 +34,21 @@ const Page: React.FC<Page> = ({children}) => {
     <View style={styles.pageContainer}>
       {children}
       {cartItems.length > 0 && (
-        <TouchableOpacity style={styles.container} onPress={navigateToCart}>
-          <Text variant={'titleSmall'} style={styles.text}>
-            Items: {itemQuantity}
-          </Text>
-          <Text variant={'titleMedium'} style={styles.text}>
-            View Cart
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.container}>
+          <TouchableOpacity style={styles.button} onPress={navigateToCart}>
+            <Text variant={'bodyLarge'} style={styles.text}>
+              {itemQuantity > 1
+                ? `${itemQuantity} Items Added`
+                : `${itemQuantity} Item Added`}
+              , Go To Cart
+            </Text>
+            <Icon
+              name={'keyboard-arrow-right'}
+              size={18}
+              color={theme.colors.white}
+            />
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
@@ -53,10 +61,15 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.white,
     },
     container: {
+      paddingHorizontal: 16,
+    },
+    button: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       backgroundColor: colors.primary,
-      padding: 16,
+      paddingHorizontal: 16,
+      paddingVertical: 13,
+      borderRadius: 8,
     },
     text: {
       color: colors.white,

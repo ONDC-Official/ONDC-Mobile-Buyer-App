@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -72,26 +72,27 @@ const Address: React.FC<Address> = ({
   return (
     <TouchableOpacity style={styles.card} onPress={setDefaultAddress}>
       <View style={styles.header}>
-        <RadioButton.Android
-          onPress={setDefaultAddress}
-          value={item?.descriptor?.name}
-          status={isCurrentAddress ? 'checked' : 'unchecked'}
-        />
-        {item?.descriptor?.name && (
-          <Text variant="titleMedium" style={styles.name}>
-            {item?.descriptor?.name}
-          </Text>
-        )}
+        <View style={styles.titleContainer}>
+          <RadioButton.Android
+            onPress={setDefaultAddress}
+            value={item?.descriptor?.name}
+            status={isCurrentAddress ? 'checked' : 'unchecked'}
+          />
+          {item?.descriptor?.name && (
+            <Text variant="bodyLarge" style={styles.name}>
+              {item?.descriptor?.name}
+            </Text>
+          )}
+        </View>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('UpdateAddress', {address: item})}>
+          <Icon name={'pencil'} color={theme.colors.primary} size={20} />
+        </TouchableOpacity>
       </View>
-      <Text variant={'bodySmall'} style={styles.description}>
+      <Text variant={'bodyMedium'} style={styles.description}>
         {street}, {landmark ? `${landmark},` : ''} {city}, {state}, {areaCode}{' '}
         {item?.descriptor?.phone ? `phone: ${item?.descriptor?.phone}` : ''}
       </Text>
-      <TouchableOpacity
-        style={styles.editButton}
-        onPress={() => navigation.navigate('UpdateAddress', {address: item})}>
-        <Icon name={'pencil-outline'} color={theme.colors.primary} size={17} />
-      </TouchableOpacity>
     </TouchableOpacity>
   );
 };
@@ -101,32 +102,27 @@ export default Address;
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     card: {
-      backgroundColor: 'white',
-      margin: 8,
+      backgroundColor: colors.white,
+      marginBottom: 16,
       borderWidth: 1,
-      borderColor: '#196AAB',
+      borderColor: colors.neutral100,
       borderRadius: 8,
-      paddingHorizontal: 16,
-      paddingVertical: 12,
+      padding: 16,
     },
     header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    titleContainer: {
       flexDirection: 'row',
       alignItems: 'center',
     },
     name: {
       marginLeft: 8,
+      color: colors.neutral400,
     },
     description: {
-      color: '#4F4F4F',
-      marginBottom: 12,
-    },
-    editButton: {
-      borderColor: colors.primary,
-      borderWidth: 1,
-      width: 27,
-      height: 27,
-      borderRadius: 30,
-      alignItems: 'center',
-      justifyContent: 'center',
+      color: colors.neutral300,
     },
   });

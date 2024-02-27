@@ -7,11 +7,13 @@ import {useAppTheme} from '../../../../../utils/theme';
 interface ProductImages {
   images: any[];
   roundedCorner?: boolean;
+  fbProduct?: boolean;
 }
 
 const ProductImages: React.FC<ProductImages> = ({
   images,
   roundedCorner = false,
+  fbProduct = false,
 }) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -24,13 +26,17 @@ const ProductImages: React.FC<ProductImages> = ({
         onPageSelected={({nativeEvent: {position}}) =>
           setSelectedMediaPosition(position)
         }
-        style={[styles.pager]}
+        style={[styles.pager, fbProduct ? styles.fbImage : styles.otherImage]}
         initialPage={0}>
         {images?.map((uri, index) => (
           <FastImage
             key={`${index}image`}
             source={{uri}}
-            style={[styles.image, roundedCorner ? styles.roundedCorner : {}]}
+            style={[
+              styles.image,
+              fbProduct ? styles.fbImage : styles.otherImage,
+              roundedCorner ? styles.roundedCorner : {},
+            ]}
             resizeMode={'contain'}
           />
         ))}
@@ -52,7 +58,6 @@ const ProductImages: React.FC<ProductImages> = ({
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     image: {
-      height: 220,
       width: '100%',
       objectFit: 'contain',
       alignSelf: 'center',
@@ -60,7 +65,12 @@ const makeStyles = (colors: any) =>
     pagerContainer: {backgroundColor: 'white', paddingBottom: 8},
     pager: {
       zIndex: 999,
+    },
+    fbImage: {
       height: 220,
+    },
+    otherImage: {
+      height: 480,
     },
     pageIndicator: {
       alignItems: 'center',

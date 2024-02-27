@@ -6,7 +6,6 @@ import {Button, Dialog, Portal, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import FastImage from 'react-native-fast-image';
 
-import {COLOR_CODE_TO_NAME} from '../../utils/colorCodes';
 import {makeGlobalStyles} from '../../styles/styles';
 import {useAppTheme} from '../../utils/theme';
 
@@ -296,7 +295,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
       <>
         <View style={styles.group} key={groupId}>
           <View style={styles.groupHeader}>
-            <Text variant="bodyMedium" style={styles.groupTitle}>
+            <Text variant="bodyLarge" style={styles.groupTitle}>
               Available {groupName} Options
             </Text>
             {groupName === 'size' && isFashion && (
@@ -313,35 +312,55 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
           <View style={styles.groupOptions}>
             {groupData.options.map((option: any) => {
               const isSelected = groupData.selected.includes(option);
-              return (
-                <TouchableOpacity
-                  key={option}
-                  style={[
-                    isSelected
-                      ? globalStyles.containedButton
-                      : globalStyles.outlineButton,
-                    styles.customization,
-                  ]}
-                  onPress={() => {
-                    if (isUOM) {
-                      handleUOMClick(groupData, option);
-                    } else {
-                      handleVariationClick(groupData, option);
-                    }
-                  }}>
-                  <Text
-                    variant="bodyMedium"
-                    style={
+              if (groupName === 'color') {
+                return (
+                  <TouchableOpacity
+                    key={option}
+                    style={[
+                      styles.dotContainer,
+                      isSelected ? styles.selectedDotContainer : {},
+                    ]}
+                    onPress={() => {
+                      if (isUOM) {
+                        handleUOMClick(groupData, option);
+                      } else {
+                        handleVariationClick(groupData, option);
+                      }
+                    }}>
+                    <View
+                      style={[styles.colorDot, {backgroundColor: option}]}
+                    />
+                  </TouchableOpacity>
+                );
+              } else {
+                return (
+                  <TouchableOpacity
+                    key={option}
+                    style={[
                       isSelected
-                        ? globalStyles.containedButtonText
-                        : globalStyles.outlineButtonText
-                    }>
-                    {groupName === 'colour'
-                      ? COLOR_CODE_TO_NAME[option] || option
-                      : option}
-                  </Text>
-                </TouchableOpacity>
-              );
+                        ? globalStyles.containedButton
+                        : styles.outlineButton,
+                      styles.customization,
+                    ]}
+                    onPress={() => {
+                      if (isUOM) {
+                        handleUOMClick(groupData, option);
+                      } else {
+                        handleVariationClick(groupData, option);
+                      }
+                    }}>
+                    <Text
+                      variant="bodyLarge"
+                      style={
+                        isSelected
+                          ? globalStyles.containedButtonText
+                          : styles.outlineButtonText
+                      }>
+                      {option}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              }
             })}
           </View>
         </View>
@@ -371,7 +390,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     group: {
-      marginBottom: 24,
+      marginTop: 20,
     },
     groupHeader: {
       flexDirection: 'row',
@@ -379,6 +398,7 @@ const makeStyles = (colors: any) =>
     },
     groupTitle: {
       textTransform: 'capitalize',
+      color: colors.neutral400,
     },
     sizeGuide: {
       color: colors.primary,
@@ -392,16 +412,40 @@ const makeStyles = (colors: any) =>
     groupOptions: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop: 16,
+      marginTop: 12,
     },
     customization: {
       textTransform: 'capitalize',
       borderRadius: 8,
       borderWidth: 1,
       marginRight: 20,
-      padding: 8,
+      padding: 10,
       textAlign: 'center',
-      marginBottom: 8,
+    },
+    outlineButton: {
+      borderWidth: 2,
+      borderColor: colors.neutral200,
+    },
+    dotContainer: {
+      borderWidth: 2,
+      borderColor: colors.neutral200,
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: 20,
+    },
+    selectedDotContainer: {
+      borderColor: colors.primary,
+    },
+    outlineButtonText: {
+      color: colors.neutral400,
+    },
+    colorDot: {
+      width: 24,
+      height: 24,
+      borderRadius: 12,
     },
     chartImage: {
       width: '100%',

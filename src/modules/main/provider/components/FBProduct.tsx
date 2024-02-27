@@ -386,13 +386,13 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                   disabled
                     ? globalStyles.disabledOutlineButton
                     : globalStyles.outlineButton,
-                  styles.addButton,
+                  styles.quantityContainer,
                   styles.actionButton,
                 ]}>
                 <TouchableOpacity
                   onPress={removeQuantityClick}
                   disabled={disabled}>
-                  <Icon name={'minus'} color={theme.colors.primary} size={14} />
+                  <Icon name={'minus'} color={theme.colors.primary} size={18} />
                 </TouchableOpacity>
                 <Text
                   variant={'bodyLarge'}
@@ -406,7 +406,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                 <TouchableOpacity
                   disabled={disabled}
                   onPress={showQuantitySheet}>
-                  <Icon name={'plus'} color={theme.colors.primary} size={14} />
+                  <Icon name={'plus'} color={theme.colors.primary} size={18} />
                 </TouchableOpacity>
               </View>
               {customizable && (
@@ -681,13 +681,19 @@ const makeStyles = (colors: any) =>
       borderRadius: 8,
       borderWidth: 1,
       paddingVertical: 7,
-      paddingHorizontal: 17,
       backgroundColor: colors.white,
+    },
+    quantityContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 8,
     },
     addButton: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      paddingHorizontal: 17,
     },
     outOfStockContainer: {
       flexDirection: 'row',

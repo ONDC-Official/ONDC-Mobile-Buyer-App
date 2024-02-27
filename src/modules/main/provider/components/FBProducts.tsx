@@ -9,6 +9,7 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import ProductSkeleton from '../../../../components/skeleton/ProductSkeleton';
 import CustomMenuAccordion from './CustomMenuAccordion';
 import {useAppTheme} from '../../../../utils/theme';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const CancelToken = axios.CancelToken;
 const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
@@ -88,14 +89,17 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
             source={require('../../../../assets/veg.png')}
             style={styles.filterIcon}
           />
-          <Text
-            variant={'bodyMedium'}
-            style={[
-              styles.filterLabel,
-              selectedFilter === 'veg' ? styles.selectedFilterLabel : {},
-            ]}>
+          <Text variant={'bodyMedium'} style={styles.filterLabel}>
             Veg
           </Text>
+          {selectedFilter === 'veg' && (
+            <Icon
+              name={'clear'}
+              size={20}
+              color={theme.colors.primary}
+              style={styles.icon}
+            />
+          )}
         </TouchableOpacity>
         <TouchableOpacity
           style={[
@@ -111,14 +115,17 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
             source={require('../../../../assets/non_veg.png')}
             style={styles.filterIcon}
           />
-          <Text
-            variant={'bodyMedium'}
-            style={[
-              styles.filterLabel,
-              selectedFilter === 'nonveg' ? styles.selectedFilterLabel : {},
-            ]}>
+          <Text variant={'bodyMedium'} style={styles.filterLabel}>
             Non-veg
           </Text>
+          {selectedFilter === 'nonveg' && (
+            <Icon
+              name={'clear'}
+              size={20}
+              color={theme.colors.primary}
+              style={styles.icon}
+            />
+          )}
         </TouchableOpacity>
         <TouchableOpacity
           style={[
@@ -134,14 +141,17 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
             source={require('../../../../assets/non_veg.png')}
             style={styles.filterIcon}
           />
-          <Text
-            variant={'bodyMedium'}
-            style={[
-              styles.filterLabel,
-              selectedFilter === 'egg' ? styles.selectedFilterLabel : {},
-            ]}>
+          <Text variant={'bodyMedium'} style={styles.filterLabel}>
             Egg
           </Text>
+          {selectedFilter === 'egg' && (
+            <Icon
+              name={'clear'}
+              size={20}
+              color={theme.colors.primary}
+              style={styles.icon}
+            />
+          )}
         </TouchableOpacity>
       </View>
       {menu.map(section => (
@@ -175,19 +185,19 @@ const makeStyles = (colors: any) =>
       marginRight: 7,
     },
     selectedFilter: {
-      backgroundColor: '#E3F3F9',
-      borderColor: '#5DB7DE',
+      backgroundColor: colors.primary50,
+      borderColor: colors.primary,
     },
     filterIcon: {
       width: 18,
       height: 18,
     },
     filterLabel: {
-      color: '#222222',
+      color: colors.neutral400,
       marginLeft: 4,
     },
-    selectedFilterLabel: {
-      color: '#196AAB',
+    icon: {
+      marginLeft: 12,
     },
   });
 

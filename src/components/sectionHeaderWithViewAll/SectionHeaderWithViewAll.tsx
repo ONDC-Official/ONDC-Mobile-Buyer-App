@@ -15,7 +15,7 @@ const SectionHeaderWithViewAll = ({
 
   return (
     <View style={styles.header}>
-      <Text variant={'titleMedium'} style={styles.title}>
+      <Text variant={'titleLarge'} style={styles.title}>
         {title}
       </Text>
       <TouchableOpacity style={styles.viewAllContainer} onPress={viewAll}>

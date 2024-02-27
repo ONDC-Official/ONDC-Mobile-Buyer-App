@@ -24,7 +24,8 @@ const ProductDetails: React.FC<ProductDetails> = ({product, children}) => {
       <View style={styles.header}>
         <View style={styles.imagesContainer}>
           <ProductImages
-            roundedCorner={true}
+            fbProduct
+            roundedCorner
             images={[product?.item_details?.descriptor?.symbol].concat(
               product?.item_details?.descriptor?.images,
             )}
