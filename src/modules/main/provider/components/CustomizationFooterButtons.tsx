@@ -49,7 +49,7 @@ const CustomizationFooterButtons = ({
             color={productLoading ? theme.colors.border : theme.colors.primary}
           />
         </TouchableOpacity>
-        <Text variant={'bodyMedium'} style={styles.quantity}>
+        <Text variant={'titleMedium'} style={styles.quantity}>
           {itemQty}
         </Text>
         <TouchableOpacity
@@ -75,7 +75,7 @@ const CustomizationFooterButtons = ({
           <ActivityIndicator size={14} color={theme.colors.primary} />
         ) : (
           <Text
-            variant={'bodyMedium'}
+            variant={'bodyLarge'}
             style={
               itemOutOfStock || productLoading
                 ? globalStyles.disabledContainedButtonText
@@ -91,46 +91,50 @@ const CustomizationFooterButtons = ({
   );
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     product: {
       paddingHorizontal: 16,
       flexDirection: 'row',
     },
     customizationButtons: {
-      marginVertical: 8,
+      marginBottom: 8,
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingHorizontal: 16,
+      backgroundColor: colors.neutral50,
     },
     quantityContainer: {
       borderRadius: 8,
-      borderColor: '#008ECC',
+      borderColor: colors.primary,
       borderWidth: 1,
-      backgroundColor: '#ECF3F8',
+      backgroundColor: colors.primary50,
       flexDirection: 'row',
       height: 44,
+      width: 108,
       alignItems: 'center',
       marginRight: 15,
-      padding: 10,
+      padding: 12,
     },
     quantity: {
       alignItems: 'center',
       textAlign: 'center',
       minWidth: 36,
-      color: '#008ECC',
+      color: colors.primary,
     },
     decrementButton: {
       marginRight: 4,
       height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
+      width: 20,
     },
     incrementButton: {
       marginLeft: 4,
       height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
+      width: 20,
     },
     addToCardButton: {
       flex: 1,

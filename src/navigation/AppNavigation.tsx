@@ -1,6 +1,9 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {IconButton} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Login from '../modules/authentication/login/Login';
 import SignUp from '../modules/authentication/signUp/SignUp';
@@ -29,6 +32,7 @@ import OrderReturnDetails from '../modules/main/order/details/OrderReturnDetails
 import ForgotPassword from '../modules/authentication/forgotPassword/ForgotPassword';
 import StoresNearMe from '../modules/main/stores/StoresNearMe';
 import ShopByCategory from '../modules/main/category/ShopByCategory';
+import {theme} from '../utils/theme';
 
 const Stack = createStackNavigator();
 
@@ -86,7 +90,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={Cart}
           options={{
             title: 'My Cart',
-            headerStyle,
           }}
         />
         <Stack.Screen
@@ -94,7 +97,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={AddDefaultAddress}
           options={{
             title: 'Add Address',
-            headerStyle,
           }}
         />
         <Stack.Screen
@@ -102,7 +104,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={UpdateAddress}
           options={{
             title: 'Update Delivery Address',
-            headerStyle,
           }}
         />
 
@@ -111,7 +112,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={AddressList}
           options={{
             title: 'Delivery Address',
-            headerStyle,
           }}
         />
 
@@ -120,7 +120,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={Profile}
           options={{
             title: 'My Profile',
-            headerStyle,
           }}
         />
 
@@ -129,7 +128,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={Complaints}
           options={{
             title: 'Complaints',
-            headerStyle,
           }}
         />
 
@@ -138,7 +136,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={ComplaintDetails}
           options={{
             title: 'Complaint Details',
-            headerStyle,
           }}
         />
 
@@ -147,7 +144,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={Orders}
           options={{
             title: 'Order History',
-            headerStyle,
           }}
         />
 
@@ -183,7 +179,20 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="SubCategoryDetails"
           component={SubCategoryDetails}
-          options={{headerShown: false}}
+          options={({navigation}) => ({
+            title: '',
+            headerRight: () => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('SearchProducts')}
+                style={styles.searchButton}>
+                <Icon
+                  name={'search'}
+                  size={24}
+                  color={theme.colors.neutral400}
+                />
+              </TouchableOpacity>
+            ),
+          })}
         />
         <Stack.Screen
           name="CancelOrder"
@@ -204,7 +213,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="BrandDetails"
           component={BrandDetails}
           options={{
-            headerStyle,
+            title: '',
           }}
         />
         <Stack.Screen
@@ -231,11 +240,27 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={ShopByCategory}
           options={{
             title: 'Shop by Category',
+            headerRight: () => (
+              <View style={styles.actionContainer}>
+                <IconButton icon={'cards-heart-outline'} size={24} />
+                <IconButton icon={'share-variant'} size={24} />
+              </View>
+            ),
           }}
         />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  actionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  searchButton: {
+    marginRight: 16,
+  },
+});
 
 export default AppNavigation;

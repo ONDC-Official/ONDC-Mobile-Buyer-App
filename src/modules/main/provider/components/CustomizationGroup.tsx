@@ -47,7 +47,7 @@ const CustomizationGroup = ({
       <View style={styles.filterContainer}>
         <View style={styles.groupHeader}>
           <View>
-            <Text variant={'bodyMedium'} style={styles.groupName}>
+            <Text variant={'bodyLarge'} style={styles.groupName}>
               {group?.name}
             </Text>
             {customizationGroup?.minQuantity !== 0 &&
@@ -73,7 +73,7 @@ const CustomizationGroup = ({
           {group?.isMandatory && (
             <View>
               <View style={styles.mandatory}>
-                <Text variant={'labelMedium'} style={styles.mandatoryLabel}>
+                <Text variant={'labelLarge'} style={styles.mandatoryLabel}>
                   Required
                 </Text>
               </View>
@@ -92,8 +92,8 @@ const CustomizationGroup = ({
                 <View style={styles.meta}>
                   <VegNonVegTag category={option.vegNonVeg} />
                   <Text
-                    variant={'labelMedium'}
-                    style={[styles.option, selected ? styles.bold : {}]}>
+                    variant={selected ? 'labelLarge' : 'labelMedium'}
+                    style={styles.option}>
                     {option.name}
                   </Text>
                 </View>
@@ -101,8 +101,8 @@ const CustomizationGroup = ({
                   {option.inStock ? (
                     <View style={styles.optionActionContainer}>
                       <Text
-                        variant={'labelMedium'}
-                        style={[styles.option, selected ? styles.bold : {}]}>
+                        variant={selected ? 'labelLarge' : 'labelMedium'}
+                        style={styles.option}>
                         ₹{option.price}
                       </Text>
                       <Checkbox.Android
@@ -127,7 +127,7 @@ const CustomizationGroup = ({
             <TouchableOpacity
               style={styles.toggleButton}
               onPress={() => setShowAll(!showAll)}>
-              <Text variant={'labelMedium'} style={styles.toggleButtonLabel}>
+              <Text variant={'labelLarge'} style={styles.toggleButtonLabel}>
                 View Less
               </Text>
               <Icon
@@ -140,7 +140,7 @@ const CustomizationGroup = ({
             <TouchableOpacity
               style={styles.toggleButton}
               onPress={() => setShowAll(!showAll)}>
-              <Text variant={'labelMedium'} style={styles.toggleButtonLabel}>
+              <Text variant={'labelLarge'} style={styles.toggleButtonLabel}>
                 {totalRecords - options.length} more
               </Text>
               <Icon
@@ -175,7 +175,7 @@ const makeStyles = (colors: any) =>
       borderRadius: 12,
       marginBottom: 16,
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
     },
     optionContainer: {
       flexDirection: 'row',
@@ -191,21 +191,17 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     option: {
-      color: '#222',
+      color: colors.neutral400,
       paddingLeft: 8,
     },
-    bold: {
-      fontWeight: 'bold',
-    },
     outOfStock: {
-      color: colors.error,
+      color: colors.error600,
     },
     groupName: {
       color: colors.neutral400,
-      fontWeight: '600',
     },
     selectionLabel: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     groupContainer: {
       borderRadius: 2,
@@ -214,19 +210,19 @@ const makeStyles = (colors: any) =>
     groupHeader: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      borderBottomColor: '#E8E8E8',
+      borderBottomColor: colors.neutral100,
       borderBottomWidth: 1,
       alignItems: 'center',
-      paddingBottom: 13,
+      paddingBottom: 8,
     },
     mandatory: {
-      padding: 10,
+      paddingVertical: 6,
+      paddingHorizontal: 10,
       borderRadius: 6,
-      backgroundColor: '#F9C51C',
+      backgroundColor: colors.warning600,
     },
     mandatoryLabel: {
-      fontWeight: '600',
-      color: '#fff',
+      color: colors.white,
     },
     toggleButton: {
       flexDirection: 'row',
@@ -236,7 +232,6 @@ const makeStyles = (colors: any) =>
     toggleButtonLabel: {
       color: colors.primary,
       marginRight: 8,
-      fontWeight: '600',
     },
   });
 

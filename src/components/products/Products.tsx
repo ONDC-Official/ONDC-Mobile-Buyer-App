@@ -10,7 +10,6 @@ import Filters from './Filters';
 import {skeletonList} from '../../utils/utils';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import Product from '../../modules/main/provider/components/Product';
-import ViewTypeSelection from './ViewTypeSelection';
 import {useAppTheme} from '../../utils/theme';
 
 interface Products {
@@ -91,10 +90,6 @@ const Products: React.FC<Products> = ({
           providerId={providerId}
           category={subCategories.length ? subCategories[0] : null}
         />
-        <ViewTypeSelection
-          isGridView={isGridView}
-          setIsGridView={setIsGridView}
-        />
       </View>
       {productsRequested ? (
         <FlatList
@@ -104,27 +99,10 @@ const Products: React.FC<Products> = ({
           contentContainerStyle={styles.listContainer}
           keyExtractor={item => item.id}
         />
-      ) : isGridView ? (
+      ) : (
         <FlatList
           key={'grid'}
           numColumns={2}
-          data={products}
-          renderItem={({item}) => (
-            <Product product={item} isGrid={isGridView} />
-          )}
-          ListEmptyComponent={() => (
-            <View style={styles.emptyContainer}>
-              <Text variant={'bodyMedium'}>No products available</Text>
-            </View>
-          )}
-          contentContainerStyle={
-            products.length === 0 ? styles.emptyContainer : styles.listContainer
-          }
-          keyExtractor={item => item.id}
-        />
-      ) : (
-        <FlatList
-          key={'list'}
           data={products}
           renderItem={({item}) => (
             <Product product={item} isGrid={isGridView} />
@@ -155,8 +133,8 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 16,
-      paddingBottom: 16,
-      marginTop: 20,
+      marginBottom: 20,
+      marginTop: 28,
     },
     listContainer: {
       paddingHorizontal: 8,

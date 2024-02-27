@@ -345,18 +345,22 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     <>
       <View style={styles.product}>
         <TouchableOpacity style={styles.meta} onPress={showProductDetails}>
-          <Text variant={'titleSmall'} style={styles.field}>
+          <Text
+            variant={'titleMedium'}
+            style={[styles.field, styles.name]}
+            numberOfLines={2}
+            ellipsizeMode={'tail'}>
             {product?.item_details?.descriptor?.name}
           </Text>
-          <Text variant={'titleMedium'} style={styles.field}>
+          <Text variant={'bodySmall'} style={[styles.field, styles.category]}>
+            {product?.item_details?.category_id}
+          </Text>
+          <Text variant={'headlineSmall'} style={styles.price}>
             {priceRange
               ? `₹${priceRange?.minPrice} - ₹${priceRange?.maxPrice}`
               : `${CURRENCY_SYMBOLS[product?.item_details?.price?.currency]} ${
                   product?.item_details?.price?.value
                 }`}
-          </Text>
-          <Text variant={'bodyMedium'} style={styles.field}>
-            {product?.item_details?.descriptor?.short_desc}
           </Text>
         </TouchableOpacity>
         <View style={styles.actionContainer}>
@@ -376,13 +380,14 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             </View>
           </TouchableOpacity>
           {cartItemDetails?.productQuantity > 0 ? (
-            <View>
+            <View style={styles.buttonContainer}>
               <View
                 style={[
                   disabled
                     ? globalStyles.disabledOutlineButton
                     : globalStyles.outlineButton,
                   styles.addButton,
+                  styles.actionButton,
                 ]}>
                 <TouchableOpacity
                   onPress={removeQuantityClick}
@@ -390,7 +395,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                   <Icon name={'minus'} color={theme.colors.primary} size={14} />
                 </TouchableOpacity>
                 <Text
-                  variant={'titleSmall'}
+                  variant={'bodyLarge'}
                   style={[
                     disabled
                       ? globalStyles.disabledOutlineButtonText
@@ -411,18 +416,19 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               )}
             </View>
           ) : inStock ? (
-            <View>
+            <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[
                   disabled
                     ? globalStyles.disabledOutlineButton
                     : globalStyles.outlineButton,
                   styles.addButton,
+                  styles.actionButton,
                 ]}
                 onPress={addToCart}
                 disabled={disabled}>
                 <Text
-                  variant={'titleSmall'}
+                  variant={'bodyLarge'}
                   style={[
                     disabled
                       ? globalStyles.disabledOutlineButtonText
@@ -431,14 +437,14 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                   Add
                 </Text>
                 {apiInProgress ? (
-                  <ActivityIndicator size={16} />
+                  <ActivityIndicator size={18} />
                 ) : (
                   <Icon
                     name={'plus'}
                     color={
                       disabled ? theme.colors.disabled : theme.colors.primary
                     }
-                    size={16}
+                    size={18}
                   />
                 )}
               </TouchableOpacity>
@@ -449,21 +455,10 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               )}
             </View>
           ) : (
-            <View>
-              <View
-                style={[
-                  globalStyles.disabledOutlineButton,
-                  styles.outOfStockButton,
-                ]}>
-                <Text
-                  variant={'labelSmall'}
-                  style={[
-                    globalStyles.disabledOutlineButtonText,
-                    styles.outOfStock,
-                  ]}>
-                  Out of stock
-                </Text>
-              </View>
+            <View style={styles.outOfStockButtonContainer}>
+              <Text variant={'bodyLarge'} style={[styles.outOfStock]}>
+                Out of stock
+              </Text>
             </View>
           )}
         </View>
@@ -483,10 +478,14 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                 style={styles.sheetProductSymbol}
               />
               <View style={styles.titleContainer}>
-                <Text variant={'titleSmall'} style={styles.title}>
+                <Text
+                  variant={'titleMedium'}
+                  style={styles.title}
+                  numberOfLines={1}
+                  ellipsizeMode={'tail'}>
                   {product?.item_details?.descriptor?.name}
                 </Text>
-                <Text variant={'labelMedium'} style={styles.prize}>
+                <Text variant={'labelLarge'} style={styles.prize}>
                   {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
                   {product?.item_details?.price?.value}
                 </Text>
@@ -574,53 +573,54 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         }}>
         <CloseSheetContainer closeSheet={hideProductDetails}>
           <View style={styles.sheetContainer}>
-            <View style={styles.productDetails}>
-              <ScrollView style={styles.productDetails}>
-                <FBProductDetails product={productDetails}>
-                  {inStock ? (
-                    <>
-                      <FBProductCustomization
-                        hideProductDetails
-                        product={productDetails}
-                        customizationState={customizationState}
-                        setCustomizationState={setCustomizationState}
-                        setItemOutOfStock={setItemOutOfStock}
-                      />
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </FBProductDetails>
-              </ScrollView>
-              {inStock ? (
-                <CustomizationFooterButtons
-                  productLoading={productLoading}
-                  itemQty={itemQty}
-                  setItemQty={setItemQty}
-                  itemOutOfStock={itemOutOfStock}
-                  addDetailsToCart={addDetailsToCart}
-                  product={product}
-                  customizationPrices={customizationPrices}
-                />
-              ) : (
-                <View style={styles.outOfStockContainer}>
-                  <View
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={styles.productDetails}>
+              <FBProductDetails product={productDetails}>
+                {inStock ? (
+                  <>
+                    <FBProductCustomization
+                      hideProductDetails
+                      product={productDetails}
+                      customizationState={customizationState}
+                      setCustomizationState={setCustomizationState}
+                      setItemOutOfStock={setItemOutOfStock}
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
+              </FBProductDetails>
+            </ScrollView>
+            {inStock ? (
+              <CustomizationFooterButtons
+                productLoading={productLoading}
+                itemQty={itemQty}
+                setItemQty={setItemQty}
+                itemOutOfStock={itemOutOfStock}
+                addDetailsToCart={addDetailsToCart}
+                product={product}
+                customizationPrices={customizationPrices}
+              />
+            ) : (
+              <View style={styles.outOfStockContainer}>
+                <View
+                  style={[
+                    globalStyles.disabledOutlineButton,
+                    styles.actionButton,
+                    styles.outOfStockButton,
+                  ]}>
+                  <Text
+                    variant={'labelSmall'}
                     style={[
-                      globalStyles.disabledOutlineButton,
-                      styles.outOfStockButton,
+                      globalStyles.disabledOutlineButtonText,
+                      styles.outOfStock,
                     ]}>
-                    <Text
-                      variant={'labelSmall'}
-                      style={[
-                        globalStyles.disabledOutlineButtonText,
-                        styles.outOfStock,
-                      ]}>
-                      Out of stock
-                    </Text>
-                  </View>
+                    Out of stock
+                  </Text>
                 </View>
-              )}
-            </View>
+              </View>
+            )}
           </View>
         </CloseSheetContainer>
       </RBSheet>
@@ -650,16 +650,41 @@ const makeStyles = (colors: any) =>
       width: 126,
       height: 126,
       borderRadius: 15,
-      background: '#F5F5F5',
+    },
+    outOfStockButtonContainer: {
+      position: 'absolute',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.white,
+      opacity: 0.9,
+      width: 126,
+      paddingVertical: 10,
+      marginTop: 50,
+    },
+    buttonContainer: {
+      marginTop: -32,
     },
     field: {
       marginBottom: 12,
     },
-    addButton: {
-      width: 90,
+    name: {
+      color: colors.neutral400,
+    },
+    price: {
+      color: colors.neutral400,
+    },
+    category: {
+      color: colors.neutral300,
+    },
+    actionButton: {
+      width: 88,
       borderRadius: 8,
       borderWidth: 1,
-      padding: 10,
+      paddingVertical: 7,
+      paddingHorizontal: 17,
+      backgroundColor: colors.white,
+    },
+    addButton: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -670,19 +695,17 @@ const makeStyles = (colors: any) =>
       paddingBottom: 10,
     },
     outOfStockButton: {
-      width: 90,
-      borderRadius: 8,
-      borderWidth: 1,
-      padding: 10,
       alignItems: 'center',
       justifyContent: 'center',
     },
     outOfStock: {
       textAlign: 'center',
+      color: colors.error600,
     },
     customise: {
       textAlign: 'center',
-      color: '#979797',
+      color: colors.neutral300,
+      marginTop: 4,
     },
     rbSheet: {
       backgroundColor: 'rgba(47, 47, 47, 0.75)',
@@ -690,11 +713,14 @@ const makeStyles = (colors: any) =>
     sheetContainer: {
       borderTopLeftRadius: 15,
       borderTopRightRadius: 15,
-      backgroundColor: '#FFF',
+      backgroundColor: colors.neutral50,
     },
     header: {
+      borderTopLeftRadius: 15,
+      borderTopRightRadius: 15,
+      backgroundColor: colors.white,
       paddingHorizontal: 16,
-      paddingVertical: 8,
+      paddingVertical: 14,
       flexDirection: 'row',
       alignItems: 'center',
     },
@@ -706,11 +732,11 @@ const makeStyles = (colors: any) =>
       flexShrink: 1,
     },
     prize: {
-      color: '#008ECC',
+      color: colors.primary,
     },
     customizationContainer: {
       padding: 16,
-      backgroundColor: '#FAFAFA',
+      backgroundColor: colors.neutral50,
     },
     quantity: {
       alignItems: 'center',
@@ -739,7 +765,7 @@ const makeStyles = (colors: any) =>
       marginTop: 4,
     },
     productDetails: {
-      flex: 1,
+      height: screenHeight - 200,
     },
     sheetProductSymbol: {
       width: 36,

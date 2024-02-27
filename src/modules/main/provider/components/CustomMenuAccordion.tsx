@@ -25,7 +25,7 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
       expanded={expanded}
       onPress={() => setExpanded(!expanded)}
       title={
-        <Text variant={'titleMedium'}>
+        <Text variant={'headlineSmall'} style={styles.heading}>
           {section?.descriptor?.name}{' '}
           {section?.items ? `(${section?.items?.length})` : ''}
         </Text>
@@ -52,9 +52,12 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
+    heading: {
+      color: colors.neutral400,
+    },
     itemSeparator: {
       marginVertical: 24,
-      backgroundColor: '#E0E0E0',
+      backgroundColor: colors.neutral100,
       height: 1,
     },
     lastItem: {

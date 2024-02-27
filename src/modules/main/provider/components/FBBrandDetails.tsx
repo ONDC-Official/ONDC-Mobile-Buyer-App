@@ -44,7 +44,7 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <FastImage
           style={styles.brandImage}
@@ -56,23 +56,18 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
           resizeMode={FastImage.resizeMode.contain}
         />
         <View style={styles.brandDetails}>
-          <Text variant={'titleMedium'} style={styles.title}>
+          <Text variant={'headlineSmall'} style={styles.title}>
             {provider?.descriptor?.name}
           </Text>
-          {!!outlet?.description && (
-            <Text variant={'titleSmall'} style={styles.description}>
-              {outlet?.description}
-            </Text>
-          )}
           {!!outlet?.address && (
-            <Text variant={'titleSmall'} style={styles.address}>
+            <Text variant={'bodyLarge'} style={styles.address}>
               {outlet?.address?.street || '-'}, {outlet?.address?.city || '-'}
             </Text>
           )}
-          <Text variant={'bodyLarge'}>
+          <Text variant={'bodyMedium'} style={styles.timing}>
             {outlet?.isOpen && (
               <>
-                <Text variant={'titleSmall'} style={styles.open}>
+                <Text variant={'bodyLarge'} style={styles.open}>
                   Open now
                 </Text>
                 &nbsp;-&nbsp;
@@ -83,8 +78,8 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={getDirection}
-              style={styles.actionButton}>
-              <Text variant={'bodyMedium'} style={styles.buttonText}>
+              style={[styles.actionButton, styles.getDirection]}>
+              <Text variant={'bodyMedium'} style={styles.getDirectionText}>
                 Get Direction
               </Text>
             </TouchableOpacity>
@@ -112,30 +107,30 @@ const makeStyles = (colors: any) =>
     },
     brandImage: {
       height: 268,
-      backgroundColor: '#000',
+      backgroundColor: colors.black,
     },
     brandDetails: {
       paddingHorizontal: 16,
-      paddingTop: 16,
+      paddingTop: 20,
     },
     borderBottom: {
-      backgroundColor: '#E0E0E0',
+      backgroundColor: colors.neutral100,
       height: 1,
       marginTop: 24,
     },
     title: {
-      marginBottom: 10,
-    },
-    description: {
-      color: '#686868',
-      marginBottom: 8,
+      marginBottom: 12,
+      color: colors.neutral400,
     },
     address: {
-      color: colors.error,
+      color: colors.neutral300,
       marginBottom: 12,
     },
     open: {
-      color: colors.success,
+      color: colors.success600,
+    },
+    timing: {
+      color: colors.neutral300,
     },
     buttonContainer: {
       flexDirection: 'row',
@@ -155,8 +150,14 @@ const makeStyles = (colors: any) =>
       paddingVertical: 12,
       borderColor: colors.primary,
     },
+    getDirection: {
+      borderColor: colors.error400,
+    },
     buttonText: {
       color: colors.primary,
+    },
+    getDirectionText: {
+      color: colors.error400,
     },
   });
 

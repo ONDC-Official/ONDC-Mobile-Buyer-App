@@ -53,7 +53,7 @@ const AboutProduct = ({product}: {product: any}) => {
       if (value !== null && value !== undefined) {
         return (
           <View style={styles.aboutRow} key={key}>
-            <Text variant="bodyLarge" style={styles.aboutTitle}>
+            <Text variant="bodyMedium" style={styles.aboutTitle}>
               {key}
             </Text>
             <View style={styles.aboutSeparator} />
@@ -68,18 +68,19 @@ const AboutProduct = ({product}: {product: any}) => {
   };
 
   return (
-    <View style={styles.aboutContainer}>
-      <List.Accordion
-        expanded={expanded}
-        onPress={handleAccordionPress}
-        title={
-          <Text variant={'titleSmall'} style={styles.about}>
-            About
-          </Text>
-        }>
+    <List.Accordion
+      expanded={expanded}
+      left={() => <></>}
+      onPress={handleAccordionPress}
+      title={
+        <Text variant={'titleLarge'} style={styles.about}>
+          Product Details
+        </Text>
+      }>
+      <View style={styles.accordionContainer}>
         {Object.keys(product?.attributes).map(key => (
           <View style={styles.aboutRow} key={key}>
-            <Text variant="bodyLarge" style={styles.aboutTitle}>
+            <Text variant="bodyMedium" style={styles.aboutTitle}>
               {key}
             </Text>
             <View style={styles.aboutSeparator} />
@@ -89,32 +90,37 @@ const AboutProduct = ({product}: {product: any}) => {
           </View>
         ))}
         {renderItemDetails()}
-      </List.Accordion>
-    </View>
+      </View>
+    </List.Accordion>
   );
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     about: {
-      color: '#222',
+      color: colors.neutral400,
     },
-    aboutContainer: {},
+    accordionContainer: {
+      paddingLeft: 0,
+    },
     aboutRow: {
       flexDirection: 'row',
       marginBottom: 30,
+      alignItems: 'flex-start',
+      flex: 1,
     },
     aboutTitle: {
       width: 130,
-      color: '#787A80',
+      color: colors.neutral300,
       textTransform: 'capitalize',
+      textAlign: 'left',
     },
     aboutSeparator: {
       width: 28,
     },
     aboutDetails: {
       flex: 1,
-      color: '#1D1D1D',
+      color: colors.neutral400,
     },
   });
 

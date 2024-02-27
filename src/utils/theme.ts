@@ -80,11 +80,11 @@ export const theme: any = {
     // Title 4
     titleLarge: {
       fontFamily: Platform.select({
-        web: 'Inter-Bold, sans-serif',
-        ios: 'Inter-Bold',
-        default: 'Inter-Bold',
+        web: 'Inter-SemiBold, sans-serif',
+        ios: 'Inter-SemiBold',
+        default: 'Inter-SemiBold',
       }),
-      fontWeight: '700',
+      fontWeight: '600',
       fontSize: 16,
       lineHeight: 20,
     },

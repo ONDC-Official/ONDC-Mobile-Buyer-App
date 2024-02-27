@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import Header from '../dashboard/components/header/Header';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
 import Products from '../../../components/products/Products';
@@ -8,10 +7,12 @@ import Page from '../../../components/page/Page';
 
 interface SubCategoryDetails {
   route: any;
+  navigation: any;
 }
 
 const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   route: {params},
+  navigation,
 }) => {
   const [currentSubCategory, setCurrentSubCategory] = useState(
     params.subCategory,
@@ -21,10 +22,15 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
     setCurrentSubCategory(params.subCategory);
   }, [params]);
 
+  useEffect(() => {
+    navigation.setOptions({
+      title: params.subCategory,
+    });
+  }, [navigation]);
+
   return (
     <Page>
       <View style={[appStyles.container, styles.container]}>
-        <Header />
         <SubCategories
           currentSubCategory={currentSubCategory}
           category={params.category}

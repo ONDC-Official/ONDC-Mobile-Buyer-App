@@ -50,6 +50,7 @@ const SubCategories: React.FC<SubCategories> = ({
         </Text>
       </TouchableOpacity>
       <FlatList
+        showsHorizontalScrollIndicator={false}
         data={subCategories}
         horizontal
         renderItem={({item}) => (
@@ -65,7 +66,10 @@ const SubCategories: React.FC<SubCategories> = ({
               ]}>
               <FastImage source={{uri: item?.imageUrl}} style={styles.image} />
             </View>
-            <Text variant={'labelSmall'} style={styles.categoryText}>
+            <Text
+              variant={'labelLarge'}
+              style={styles.categoryText}
+              ellipsizeMode={'tail'}>
               {item?.value}
             </Text>
           </TouchableOpacity>
@@ -83,28 +87,30 @@ const makeStyles = (colors: any) =>
       paddingTop: 16,
       backgroundColor: colors.white,
       flexDirection: 'row',
+      alignItems: 'flex-end',
     },
     categoryText: {
-      fontWeight: '700',
       textAlign: 'center',
+      color: colors.neutral400,
     },
     subCategory: {
       alignItems: 'center',
       marginRight: 24,
-      width: 58,
+      width: 56,
+      height: 76,
     },
     imageContainer: {
       height: 56,
       width: 56,
       marginBottom: 6,
-      backgroundColor: '#E7E7E7',
+      backgroundColor: colors.neutral100,
       justifyContent: 'center',
       alignItems: 'center',
     },
     image: {
       height: 54,
       width: 54,
-      borderRadius: 28,
+      borderRadius: 29,
     },
     selected: {
       borderRadius: 28,
@@ -114,13 +120,15 @@ const makeStyles = (colors: any) =>
     normal: {
       borderRadius: 28,
       borderWidth: 1,
-      borderColor: '#E7E7E7',
+      borderColor: colors.neutral100,
     },
     allOptions: {
       color: colors.primary,
-      fontWeight: '600',
+      marginTop: 6,
+      textAlign: 'center',
     },
     allOptionsButton: {
+      width: 56,
       marginRight: 24,
       alignItems: 'center',
       justifyContent: 'center',

@@ -1,6 +1,7 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React from 'react';
+import {useAppTheme} from '../../utils/theme';
 
 const CloseSheetContainer = ({
   closeSheet,
@@ -9,7 +10,8 @@ const CloseSheetContainer = ({
   closeSheet: () => void;
   children: any;
 }) => {
-  const styles = makeStyles();
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
 
   return (
     <View style={styles.container}>
@@ -18,7 +20,7 @@ const CloseSheetContainer = ({
           <View style={styles.closeButton} />
           <Icon
             name={'close-circle'}
-            color={'#000'}
+            color={theme.colors.neutral400}
             size={32}
             style={styles.closeIcon}
           />
@@ -29,11 +31,11 @@ const CloseSheetContainer = ({
   );
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       justifyContent: 'flex-end',
-      flex: 1,
+      height: Dimensions.get('screen').height,
       paddingBottom: 70,
     },
     closeSheet: {

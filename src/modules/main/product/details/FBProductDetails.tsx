@@ -21,35 +21,29 @@ const ProductDetails: React.FC<ProductDetails> = ({product, children}) => {
 
   return (
     <>
-      <View style={styles.imagesContainer}>
-        <ProductImages
-          roundedCorner={true}
-          images={[product?.item_details?.descriptor?.symbol].concat(
-            product?.item_details?.descriptor?.images,
-          )}
-        />
-      </View>
-      <View style={styles.tagContainer}>
+      <View style={styles.header}>
+        <View style={styles.imagesContainer}>
+          <ProductImages
+            roundedCorner={true}
+            images={[product?.item_details?.descriptor?.symbol].concat(
+              product?.item_details?.descriptor?.images,
+            )}
+          />
+        </View>
         <VegNonVegTag tags={product?.item_details?.tags} />
-      </View>
-      <View style={styles.details}>
-        <Text variant="titleSmall" style={styles.title}>
+        <Text variant="titleLarge" style={styles.title}>
           {product?.item_details?.descriptor?.name}
         </Text>
         <View style={styles.priceContainer}>
-          <Text variant="labelMedium" style={styles.price}>
+          <Text variant="labelLarge" style={styles.price}>
             ₹{product?.item_details?.price?.value}
           </Text>
-          <Text
-            variant="labelMedium"
-            style={[styles.price, styles.maximumAmount]}>
-            ₹{Number(product?.item_details?.price?.maximum_value).toFixed(0)}
-          </Text>
         </View>
-        <Text variant={'labelMedium'} style={styles.description}>
+        <Text variant={'labelSmall'} style={styles.description}>
           {product?.item_details?.descriptor?.short_desc}
         </Text>
       </View>
+
       <View>
         <VariationsRenderer
           product={product}
@@ -74,17 +68,13 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       marginBottom: 10,
     },
-    details: {
-      padding: 16,
-    },
     title: {
-      color: '#222',
+      color: colors.neutral400,
+      marginTop: 8,
       marginBottom: 4,
-      fontWeight: '600',
     },
     price: {
       color: colors.primary,
-      fontWeight: '600',
     },
     priceContainer: {
       flexDirection: 'row',
@@ -97,21 +87,23 @@ const makeStyles = (colors: any) =>
     divider: {
       height: 1,
       width: '100%',
-      backgroundColor: '#E0E0E0',
+      backgroundColor: colors.neutral100,
       marginVertical: 20,
     },
-    tagContainer: {
-      marginLeft: 16,
+    header: {
+      paddingTop: 14,
+      paddingBottom: 8,
+      paddingHorizontal: 16,
+      borderTopLeftRadius: 15,
+      borderTopRightRadius: 15,
+      backgroundColor: colors.white,
     },
     imagesContainer: {
       borderRadius: 8,
-      paddingHorizontal: 16,
     },
     description: {
       color: colors.neutral400,
-      fontWeight: '400',
-      marginTop: 4,
-      marginBottom: 8,
+      marginTop: 8,
     },
     customizationContainer: {
       padding: 16,
