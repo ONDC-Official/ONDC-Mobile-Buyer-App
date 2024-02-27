@@ -13,6 +13,7 @@ import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import FilterList from './FilterList';
 import {useAppTheme} from '../../utils/theme';
+import FilterIcon from '../../assets/filter.svg';
 
 interface Filters {
   providerId: any;
@@ -106,10 +107,7 @@ const Filters: React.FC<Filters> = ({
             }>
             Filter
           </Text>
-          <Icon
-            name={'filter-variant'}
-            color={attributesRequested ? '#E8E8E8' : theme.colors.primary}
-          />
+          <FilterIcon width={18} height={18} />
         </TouchableOpacity>
         <RBSheet
           ref={refFilterSheet}
@@ -151,13 +149,13 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     disabledFilterButton: {
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
     },
     activeFilterButton: {
       borderColor: colors.primary,
     },
     disabledFilterLabel: {
-      color: '#E8E8E8',
+      color: colors.neutral100,
       marginRight: 8,
     },
     rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},

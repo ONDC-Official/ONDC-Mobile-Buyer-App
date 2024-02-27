@@ -24,8 +24,8 @@ const InputField: React.FC<any> = ({inputLabel, ...props}) => {
         mode="outlined"
         dense
         outlineStyle={styles.outline}
-        placeholderTextColor={'#B5B5B5'}
-        outlineColor={'#B5B5B5'}
+        placeholderTextColor={theme.colors.neutral200}
+        outlineColor={theme.colors.neutral200}
       />
       {props.error && (
         <HelperText padding="none" type="error" visible={props.error}>

@@ -34,8 +34,8 @@ const PasswordField: React.FC<any> = ({inputLabel, ...props}) => {
           />
         }
         outlineStyle={styles.outline}
-        placeholderTextColor={'#B5B5B5'}
-        outlineColor={'#B5B5B5'}
+        placeholderTextColor={theme.colors.neutral200}
+        outlineColor={theme.colors.neutral200}
       />
       {props.error && (
         <HelperText padding="none" type="error" visible={props.errorMessage}>

@@ -82,6 +82,22 @@ const Fulfillment: React.FC<Fulfillment> = ({
   // Convert Set back to an array if needed
   const unqiueFulfillments = Array.from(uniqueIdsSet);
 
+  const uniqueItems = cartItems[0]?.message?.quote?.items.filter(
+    (item: any) => {
+      const typeTag = item.tags.find((tag: any) => tag.code === 'type');
+      if (typeTag) {
+        const itemCode = typeTag.list.find((tag: any) => tag.code === 'type');
+        if (itemCode) {
+          return itemCode.value === 'item';
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    },
+  );
+
   return (
     <CloseSheetContainer closeSheet={closeFulfilment}>
       <View>
@@ -277,7 +293,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
               <View style={styles.summaryContainer}>
                 <View style={styles.summaryRow}>
                   <Text variant="labelMedium" style={styles.subTotal}>
-                    Item Total ({cartItems[0]?.message?.quote?.items?.length}{' '}
+                    Item Total ({uniqueItems?.length}{' '}
                     Items)
                   </Text>
                   <Text variant="labelMedium" style={styles.subTotal}>

@@ -81,7 +81,9 @@ const FilterList: React.FC<FilterList> = ({
   return (
     <View style={styles.container}>
       <View style={styles.sheetHeader}>
-        <Text variant={'titleSmall'}>Filters</Text>
+        <Text variant={'titleLarge'} style={styles.title}>
+          Filters
+        </Text>
         <Button mode={'text'} compact onPress={clearAll}>
           Clear all
         </Button>
@@ -146,7 +148,7 @@ const FilterList: React.FC<FilterList> = ({
             style={[styles.button, styles.closeButton]}
             onPress={close}>
             <Text
-              variant={'bodyMedium'}
+              variant={'bodyLarge'}
               style={[styles.buttonLabel, styles.closeLabel]}>
               Close
             </Text>
@@ -158,7 +160,7 @@ const FilterList: React.FC<FilterList> = ({
             style={[styles.button, styles.applyButton]}
             onPress={updateFilters}>
             <Text
-              variant={'bodyMedium'}
+              variant={'bodyLarge'}
               style={[styles.buttonLabel, styles.applyLabel]}>
               Apply
             </Text>
@@ -181,7 +183,10 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 16,
       paddingVertical: 12,
       borderBottomWidth: 1,
-      borderBottomColor: '#ebebeb',
+      borderBottomColor: colors.neutral100,
+    },
+    title: {
+      color: colors.neutral400,
     },
     filterContainer: {
       flexDirection: 'row',
@@ -189,7 +194,7 @@ const makeStyles = (colors: any) =>
     },
     attributes: {
       flex: 1,
-      borderRightColor: '#ebebeb',
+      borderRightColor: colors.neutral100,
       borderRightWidth: 1,
     },
     attributeValues: {
@@ -243,7 +248,7 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 12,
     },
     closeLabel: {
-      color: '#151515',
+      color: colors.neutral400,
     },
     applyLabel: {
       color: '#fff',
@@ -254,7 +259,7 @@ const makeStyles = (colors: any) =>
     },
     closeButton: {
       borderRadius: 8,
-      borderColor: '#151515',
+      borderColor: colors.neutral400,
       borderWidth: 1,
     },
     applyButton: {
@@ -279,7 +284,7 @@ const makeStyles = (colors: any) =>
       width: 100,
     },
     valueLabel: {
-      fontWeight: '500',
+      color: colors.neutral400,
     },
   });
 

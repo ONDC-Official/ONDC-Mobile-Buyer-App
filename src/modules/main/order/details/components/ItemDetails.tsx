@@ -20,44 +20,63 @@ const SingleItem = ({item}: {item: any}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
-  return (
-    <View key={item.id} style={styles.item}>
-      <FastImage
-        source={{uri: item?.product?.descriptor?.symbol}}
-        style={styles.itemImage}
-      />
-      <View style={styles.itemMeta}>
-        <Text variant={'labelMedium'} style={styles.itemName}>
-          {item?.product?.descriptor?.name}
-        </Text>
-        <View style={styles.itemTags}>
-          {item?.product['@ondc/org/cancellable'] ? (
-            <View style={styles.chip}>
-              <Text variant={'labelMedium'}>Cancellable</Text>
-            </View>
-          ) : (
-            <View style={styles.chip}>
-              <Text variant={'labelMedium'}>Non-cancellable</Text>
-            </View>
-          )}
-          {item?.product['@ondc/org/returnable'] ? (
-            <View style={styles.chip}>
-              <Text variant={'labelMedium'}>Returnable</Text>
-            </View>
-          ) : (
-            <View style={styles.chip}>
-              <Text variant={'labelMedium'}>Non-returnable</Text>
-            </View>
-          )}
+  let showItem = true;
+  const typeTag = item.tags.find((tag: any) => tag.code === 'type');
+  if (typeTag) {
+    const itemCode = typeTag.list.find((tag: any) => tag.code === 'type');
+    if (itemCode) {
+      showItem = itemCode.value === 'item';
+    } else {
+      showItem = false;
+    }
+  } else {
+    showItem = false;
+  }
+
+  if (showItem) {
+    return (
+      <View key={item.id} style={styles.item}>
+        <FastImage
+          source={{uri: item?.product?.descriptor?.symbol}}
+          style={styles.itemImage}
+        />
+        <View style={styles.itemMeta}>
+          <Text variant={'labelMedium'} style={styles.itemName}>
+            {item?.product?.descriptor?.name}
+          </Text>
+          <View style={styles.itemTags}>
+            {item?.product['@ondc/org/cancellable'] ? (
+              <View style={styles.chip}>
+                <Text variant={'labelMedium'}>Cancellable</Text>
+              </View>
+            ) : (
+              <View style={styles.chip}>
+                <Text variant={'labelMedium'}>Non-cancellable</Text>
+              </View>
+            )}
+            {item?.product['@ondc/org/returnable'] ? (
+              <View style={styles.chip}>
+                <Text variant={'labelMedium'}>Returnable</Text>
+              </View>
+            ) : (
+              <View style={styles.chip}>
+                <Text variant={'labelMedium'}>Non-returnable</Text>
+              </View>
+            )}
+          </View>
         </View>
+        <Text variant={'labelMedium'}>Qty {item?.quantity?.count}</Text>
+        <Text variant={'labelMedium'} style={styles.price}>
+          {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
+          {Number(item?.quantity?.count * item?.product?.price?.value).toFixed(
+            2,
+          )}
+        </Text>
       </View>
-      <Text variant={'labelMedium'}>Qty {item?.quantity?.count}</Text>
-      <Text variant={'labelMedium'} style={styles.price}>
-        {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-        {Number(item?.quantity?.count * item?.product?.price?.value).toFixed(2)}
-      </Text>
-    </View>
-  );
+    );
+  } else {
+    return <View key={item.id} />;
+  }
 };
 
 const ItemDetails = ({
