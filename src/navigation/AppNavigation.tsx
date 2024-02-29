@@ -33,6 +33,7 @@ import ForgotPassword from '../modules/authentication/forgotPassword/ForgotPassw
 import StoresNearMe from '../modules/main/stores/StoresNearMe';
 import ShopByCategory from '../modules/main/category/ShopByCategory';
 import {theme} from '../utils/theme';
+import FeaturedCategories from '../modules/main/category/FeaturedCategories';
 
 const Stack = createStackNavigator();
 
@@ -242,12 +243,13 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={ShopByCategory}
           options={{
             title: 'Shop by Category',
-            headerRight: () => (
-              <View style={styles.actionContainer}>
-                <IconButton icon={'cards-heart-outline'} size={24} />
-                <IconButton icon={'share-variant'} size={24} />
-              </View>
-            ),
+          }}
+        />
+        <Stack.Screen
+          name="FeaturedCategories"
+          component={FeaturedCategories}
+          options={{
+            title: 'Featured Categories',
           }}
         />
       </Stack.Navigator>
@@ -256,10 +258,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
 };
 
 const styles = StyleSheet.create({
-  actionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   searchButton: {
     marginRight: 16,
   },
