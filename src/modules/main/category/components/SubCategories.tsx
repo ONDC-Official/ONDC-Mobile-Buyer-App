@@ -47,15 +47,24 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
           subCategories.slice(0, 8).map((item, index) => (
             <TouchableOpacity
               key={item.key}
-              style={[styles.brand, index < 4 ? styles.marginBottom : {}]}
+              style={[
+                styles.brand,
+                index < 4 ? styles.marginBottom : {},
+                index === 1 || index === 2 || index === 5 || index === 6
+                  ? styles.alignCenter
+                  : {},
+                index === 3 || index === 7 ? styles.alignEnd : {},
+              ]}
               onPress={() => navigateToSubCategory(item)}>
-              <FastImage
-                source={{uri: item?.imageUrl}}
-                style={styles.brandImage}
-              />
-              <Text variant={'labelLarge'} style={styles.name}>
-                {item.key}
-              </Text>
+              <View>
+                <FastImage
+                  source={{uri: item?.imageUrl}}
+                  style={styles.brandImage}
+                />
+                <Text variant={'labelLarge'} style={styles.name}>
+                  {item.key}
+                </Text>
+              </View>
             </TouchableOpacity>
           ))}
       </View>
@@ -69,7 +78,7 @@ const makeStyles = (colors: any) =>
       marginTop: 28,
     },
     container: {
-      paddingHorizontal: 16,
+      paddingHorizontal: 8,
       marginTop: 12,
       flexDirection: 'row',
       flexWrap: 'wrap',
@@ -80,7 +89,14 @@ const makeStyles = (colors: any) =>
       marginBottom: 12,
     },
     brand: {
-      width: (screenWidth - 32) / 4,
+      width: (screenWidth - 32) / 4 - 16,
+      marginHorizontal: 8,
+    },
+    alignCenter: {
+      alignItems: 'center',
+    },
+    alignEnd: {
+      alignItems: 'flex-end',
     },
     marginBottom: {
       marginBottom: 16,
@@ -89,16 +105,16 @@ const makeStyles = (colors: any) =>
       marginBottom: 20,
     },
     brandImage: {
-      padding: 16,
       borderRadius: 10,
       width: 60,
       height: 60,
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: 12,
+      marginBottom: 8,
     },
     name: {
       color: colors.neutral400,
+      textAlign: 'center',
     },
   });
 export default SubCategories;

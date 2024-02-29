@@ -56,12 +56,20 @@ export const CATEGORIES: any = [
     domain: 'ONDC:RET13',
   },
   {
-    id: '*',
+    id: '8',
     name: 'Agriculture',
     shortName: 'Agriculture',
     Icon: require('../assets/categories/agriculture.png'),
     routeName: 'Agriculture',
     domain: 'ONDC:AGR10',
+  },
+  {
+    id: '9',
+    name: 'Appliances',
+    shortName: 'Appliances',
+    Icon: require('../assets/categories/agriculture.png'),
+    routeName: 'Appliances',
+    domain: 'ONDC:RET15',
   },
 ];
 export const PRODUCT_SUBCATEGORY: any = {

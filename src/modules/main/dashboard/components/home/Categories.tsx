@@ -13,6 +13,10 @@ const Categories = () => {
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
+  const navigateToList = () => {
+    navigation.navigate('FeaturedCategories');
+  };
+
   const navigateToCategoryDetails = (category: string, domain: string) => {
     navigation.navigate('CategoryDetails', {category, domain});
   };
@@ -21,10 +25,10 @@ const Categories = () => {
     <View style={styles.container}>
       <SectionHeaderWithViewAll
         title={'Featured Categories'}
-        viewAll={() => {}}
+        viewAll={navigateToList}
       />
       <FlatList
-        data={CATEGORIES}
+        data={CATEGORIES.slice(0, 8)}
         numColumns={4}
         renderItem={({item}) => (
           <TouchableOpacity
