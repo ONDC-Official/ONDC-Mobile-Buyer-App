@@ -39,15 +39,17 @@ const Product: React.FC<Product> = ({product}) => {
     <TouchableOpacity
       style={styles.container}
       onPress={navigateToProductDetails}>
-      <FastImage
-        style={styles.gridImage}
-        source={
-          product?.item_details?.descriptor?.symbol
-            ? {uri: product?.item_details?.descriptor?.symbol}
-            : NoImageAvailable
-        }
-        resizeMode={FastImage.resizeMode.contain}
-      />
+      <View style={styles.imageContainer}>
+        <FastImage
+          style={styles.gridImage}
+          source={
+            product?.item_details?.descriptor?.symbol
+              ? {uri: product?.item_details?.descriptor?.symbol}
+              : NoImageAvailable
+          }
+          resizeMode={FastImage.resizeMode.contain}
+        />
+      </View>
       {isFBDomain && (
         <View style={styles.vegNonVegContainer}>
           <VegNonVegTag tags={product.item_details.tags} />
@@ -84,11 +86,17 @@ const makeStyles = (colors: any) =>
       flex: 1,
       marginBottom: 20,
     },
+    imageContainer: {
+      paddingHorizontal: 24,
+      paddingVertical: 40,
+      backgroundColor: colors.neutral100,
+      borderRadius: 12,
+      marginBottom: 12,
+    },
     gridImage: {
       width: '100%',
-      height: 180,
+      height: 100,
       borderRadius: 12,
-      marginBottom: 10,
     },
     name: {
       color: colors.neutral400,

@@ -1,6 +1,5 @@
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -89,7 +88,7 @@ const Filters: React.FC<Filters> = ({
   if (attributes?.length > 0) {
     const attributesHeight = attributes.length * 40 + 200;
     return (
-      <>
+      <View style={styles.filterContainer}>
         <TouchableOpacity
           style={[
             styles.filterButton,
@@ -127,7 +126,7 @@ const Filters: React.FC<Filters> = ({
             close={() => refFilterSheet.current.close()}
           />
         </RBSheet>
-      </>
+      </View>
     );
   } else {
     return <View />;
@@ -159,6 +158,13 @@ const makeStyles = (colors: any) =>
       marginRight: 8,
     },
     rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
+    filterContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+      marginTop: 24,
+    },
   });
 
 export default Filters;

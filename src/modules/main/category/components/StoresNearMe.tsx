@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -86,23 +86,17 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       />
 
       <View style={styles.container}>
-        {apiRequested ? (
-          <FlatList
-            key={'skeleton'}
-            horizontal
-            data={skeletonList}
-            renderItem={() => <BrandSkeleton />}
-            keyExtractor={item => item.id}
-          />
-        ) : (
-          <FlatList
-            key={'data'}
-            numColumns={4}
-            data={locations.slice(0, 8)}
-            renderItem={({item}) => <Store store={item} />}
-            keyExtractor={item => item.id}
-          />
-        )}
+        {apiRequested
+          ? skeletonList.map(store => (
+              <View style={styles.storeContainer} key={store.id}>
+                <BrandSkeleton />
+              </View>
+            ))
+          : locations.slice(0, 8).map(store => (
+              <View style={styles.storeContainer} key={store.id}>
+                <Store store={store} />
+              </View>
+            ))}
       </View>
     </View>
   );
@@ -111,8 +105,14 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
 const makeStyles = () =>
   StyleSheet.create({
     container: {
-      paddingHorizontal: 16,
+      paddingHorizontal: 8,
       marginTop: 12,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    storeContainer: {
+      width: '33%',
+      paddingHorizontal: 8,
     },
     brand: {
       width: 113,

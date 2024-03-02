@@ -1,7 +1,8 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import axios from 'axios';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {API_BASE_URL, CUSTOM_MENU, ITEMS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -9,13 +10,14 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import ProductSkeleton from '../../../../components/skeleton/ProductSkeleton';
 import CustomMenuAccordion from './CustomMenuAccordion';
 import {useAppTheme} from '../../../../utils/theme';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import ProductSearch from '../../../../components/products/ProductSearch';
 
 const CancelToken = axios.CancelToken;
 const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const customMenuSource = useRef<any>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [menu, setMenu] = useState<any[]>([]);
   const [menuRequested, setMenuRequested] = useState<boolean>(true);
   const [selectedFilter, setSelectedFilter] = useState<string>('');
@@ -50,6 +52,23 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
       setMenuRequested(false);
     }
   };
+
+  const filteredSections = useMemo(() => {
+    const lowerSearch = searchQuery.toLowerCase();
+    // Filter products based on search query
+    return menu.map(section => {
+      const filteredSectionItems = section.items.filter(
+        (item: any) =>
+          item.item_details?.descriptor?.name
+            .toLowerCase()
+            .includes(lowerSearch) ||
+          item?.item_details?.category_id.includes(lowerSearch),
+      );
+      return Object.assign({}, section, {
+        items: filteredSectionItems,
+      });
+    });
+  }, [menu, searchQuery]);
 
   useEffect(() => {
     getCustomMenu().then(() => {});
@@ -154,7 +173,13 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
           )}
         </TouchableOpacity>
       </View>
-      {menu.map(section => (
+      <View style={styles.searchContainer}>
+        <ProductSearch
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+      </View>
+      {filteredSections.map(section => (
         <CustomMenuAccordion
           key={section.id}
           section={section}
@@ -198,6 +223,10 @@ const makeStyles = (colors: any) =>
     },
     icon: {
       marginLeft: 12,
+    },
+    searchContainer: {
+      marginTop: 24,
+      paddingHorizontal: 16,
     },
   });
 

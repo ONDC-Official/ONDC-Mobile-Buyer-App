@@ -1,32 +1,46 @@
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import CustomMenu from './CustomMenu';
 import Products from '../../../../components/products/Products';
 import {useAppTheme} from '../../../../utils/theme';
+import OutletDetails from './OutletDetails';
 
 interface OtherBrandDetails {
   provider: any;
+  outlet: any;
+  apiRequested: boolean;
 }
 
-const OtherBrandDetails: React.FC<OtherBrandDetails> = ({provider}) => {
+const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
+  provider,
+  outlet,
+  apiRequested,
+}) => {
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
   const [selectedMenu, setSelectedMenu] = useState<any>(null);
 
   return (
-    <View style={styles.container}>
-      <CustomMenu
-        providerId={provider.id}
-        providerDomain={provider.domain}
-        selectedMenu={selectedMenu}
-        setSelectedMenu={setSelectedMenu}
-      />
-      <Products
-        providerId={provider.id}
-        customMenu={selectedMenu}
-        subCategories={[]}
-      />
-    </View>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <OutletDetails
+          provider={provider}
+          outlet={outlet}
+          apiRequested={apiRequested}
+        />
+        <CustomMenu
+          providerId={provider.id}
+          providerDomain={provider.domain}
+          selectedMenu={selectedMenu}
+          setSelectedMenu={setSelectedMenu}
+        />
+        <Products
+          providerId={provider.id}
+          customMenu={selectedMenu}
+          subCategories={[]}
+        />
+      </View>
+    </ScrollView>
   );
 };
 

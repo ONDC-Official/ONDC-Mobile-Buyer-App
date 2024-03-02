@@ -423,62 +423,73 @@ const ProductDetails: React.FC<ProductDetails> = ({
               </>
             )}
             <View style={styles.addToCartContainer}>
-            {product?.context.domain !== FB_DOMAIN &&
-            isItemAvailableInCart &&
-            itemAvailableInCart ? (
-              <View style={styles.buttonGroup}>
-                <TouchableOpacity
-                  style={styles.incrementButton}
-                  onPress={() => {
-                    if (itemAvailableInCart.item.quantity.count === 1) {
-                      deleteCartItem(itemAvailableInCart._id).then(() => {});
-                    } else {
-                      addToCart(false, false).then(() => {});
-                    }
-                  }}>
-                  <Icon name={'minus'} color={theme.colors.primary} size={18} />
-                </TouchableOpacity>
-                <Text variant={'bodyLarge'} style={styles.quantity}>
-                  {addToCartLoading ? (
-                    <ActivityIndicator size={16} color={theme.colors.primary} />
-                  ) : (
-                    itemAvailableInCart.item.quantity.count
-                  )}
-                </Text>
-                <TouchableOpacity
-                  style={styles.incrementButton}
-                  onPress={() => addToCart(false, true)}>
-                  <Icon name={'plus'} color={theme.colors.primary} size={18} />
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <TouchableOpacity
-                style={[
-                  disableActionButtons
-                    ? globalStyles.disabledOutlineButton
-                    : globalStyles.outlineButton,
-                  styles.addToCartButton,
-                ]}
-                onPress={() => addToCart(false, true)}
-                disabled={disableActionButtons}>
-                {addToCartLoading ? (
-                  <ActivityIndicator
-                    size={'small'}
-                    color={theme.colors.primary}
-                  />
-                ) : (
-                  <Text
-                    variant={'bodyLarge'}
-                    style={
-                      disableActionButtons
-                        ? globalStyles.disabledOutlineButtonText
-                        : styles.addToCartLabel
-                    }>
-                    Add to cart
+              {product?.context.domain !== FB_DOMAIN &&
+              isItemAvailableInCart &&
+              itemAvailableInCart ? (
+                <View style={styles.buttonGroup}>
+                  <TouchableOpacity
+                    style={styles.incrementButton}
+                    onPress={() => {
+                      if (itemAvailableInCart.item.quantity.count === 1) {
+                        deleteCartItem(itemAvailableInCart._id).then(() => {});
+                      } else {
+                        addToCart(false, false).then(() => {});
+                      }
+                    }}>
+                    <Icon
+                      name={'minus'}
+                      color={theme.colors.primary}
+                      size={18}
+                    />
+                  </TouchableOpacity>
+                  <Text variant={'bodyLarge'} style={styles.quantity}>
+                    {addToCartLoading ? (
+                      <ActivityIndicator
+                        size={16}
+                        color={theme.colors.primary}
+                      />
+                    ) : (
+                      itemAvailableInCart.item.quantity.count
+                    )}
                   </Text>
-                )}
-              </TouchableOpacity>
-            )}
+                  <TouchableOpacity
+                    style={styles.incrementButton}
+                    onPress={() => addToCart(false, true)}>
+                    <Icon
+                      name={'plus'}
+                      color={theme.colors.primary}
+                      size={18}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={[
+                    disableActionButtons
+                      ? globalStyles.disabledOutlineButton
+                      : globalStyles.outlineButton,
+                    styles.addToCartButton,
+                  ]}
+                  onPress={() => addToCart(false, true)}
+                  disabled={disableActionButtons}>
+                  {addToCartLoading ? (
+                    <ActivityIndicator
+                      size={'small'}
+                      color={theme.colors.primary}
+                    />
+                  ) : (
+                    <Text
+                      variant={'bodyLarge'}
+                      style={
+                        disableActionButtons
+                          ? globalStyles.disabledOutlineButtonText
+                          : styles.addToCartLabel
+                      }>
+                      Add to cart
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              )}
             </View>
             <AboutProduct product={product} />
           </View>

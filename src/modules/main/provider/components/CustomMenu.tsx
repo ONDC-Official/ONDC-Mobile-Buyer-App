@@ -7,7 +7,6 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {skeletonList} from '../../../../utils/utils';
 import CustomMenuSkeleton from '../../../../components/skeleton/CustomMenuSkeleton';
 import CustomMenuItem from './CustomMenuItem';
-import {useAppTheme} from '../../../../utils/theme';
 
 interface CustomMenu {
   providerId: string;
@@ -25,8 +24,7 @@ const CustomMenu: React.FC<CustomMenu> = ({
   setSelectedMenu,
 }) => {
   const customMenuSource = useRef<any>(null);
-  const theme = useAppTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = makeStyles();
   const [menu, setMenu] = useState<any[]>([]);
   const [menuRequested, setMenuRequested] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
@@ -67,7 +65,7 @@ const CustomMenu: React.FC<CustomMenu> = ({
         keyExtractor={item => item.id}
       />
     </View>
-  ) : (
+  ) : menu.length > 0 ? (
     <View style={styles.menuContainer}>
       <FlatList
         horizontal
@@ -82,13 +80,15 @@ const CustomMenu: React.FC<CustomMenu> = ({
         )}
       />
     </View>
+  ) : (
+    <></>
   );
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     menuContainer: {
-      paddingVertical: 16,
+      paddingTop: 16,
       paddingLeft: 16,
     },
   });

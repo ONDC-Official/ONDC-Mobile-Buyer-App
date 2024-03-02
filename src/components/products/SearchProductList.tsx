@@ -9,7 +9,6 @@ import {API_BASE_URL, PRODUCT_SEARCH} from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
-import ViewTypeSelection from './ViewTypeSelection';
 import {useAppTheme} from '../../utils/theme';
 
 interface SearchProductList {
@@ -69,10 +68,6 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
     <View style={styles.container}>
       <View style={styles.filterContainer}>
         <View />
-        <ViewTypeSelection
-          isGridView={isGridView}
-          setIsGridView={setIsGridView}
-        />
       </View>
       {productsRequested ? (
         <FlatList

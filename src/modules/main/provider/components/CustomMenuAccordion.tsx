@@ -24,6 +24,7 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
     <List.Accordion
       expanded={expanded}
       onPress={() => setExpanded(!expanded)}
+      style={styles.accordion}
       title={
         <Text variant={'headlineSmall'} style={styles.heading}>
           {section?.descriptor?.name}{' '}
@@ -62,6 +63,10 @@ const makeStyles = (colors: any) =>
     },
     lastItem: {
       marginBottom: 24,
+    },
+    accordion: {
+      padding: 0,
+      backgroundColor: colors.white,
     },
   });
 

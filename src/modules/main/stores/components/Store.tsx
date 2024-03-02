@@ -5,7 +5,6 @@ import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 
 import {useAppTheme} from '../../../../utils/theme';
-import {FB_DOMAIN} from '../../../../utils/constants';
 
 interface StoreImage {
   source: any;
@@ -37,10 +36,7 @@ const Store = ({store}: {store: any}) => {
     const routeParams: any = {
       brandId: location.provider,
     };
-
-    if (location.domain === FB_DOMAIN) {
-      routeParams.outletId = location.id;
-    }
+    routeParams.outletId = location.id;
     navigation.navigate('BrandDetails', routeParams);
   };
 

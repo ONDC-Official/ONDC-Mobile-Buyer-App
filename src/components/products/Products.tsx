@@ -1,7 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import axios from 'axios';
-import {FlatList, StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, PRODUCT_SEARCH} from '../../utils/apiActions';
@@ -11,6 +10,7 @@ import {skeletonList} from '../../utils/utils';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import Product from '../../modules/main/provider/components/Product';
 import {useAppTheme} from '../../utils/theme';
+import ProductSearch from './ProductSearch';
 
 interface Products {
   providerId: any;
@@ -29,7 +29,7 @@ const Products: React.FC<Products> = ({
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [productsRequested, setProductsRequested] = useState<boolean>(true);
-  const [isGridView, setIsGridView] = useState<boolean>(true);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const [products, setProducts] = useState<any[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
@@ -71,6 +71,20 @@ const Products: React.FC<Products> = ({
     }
   };
 
+  const filteredProducts = useMemo(() => {
+    const lowerQuery = searchQuery.toLowerCase();
+    // Filter the products based on the search query
+    return products.filter(
+      product =>
+        product?.item_details?.descriptor?.name
+          .toLowerCase()
+          .includes(lowerQuery) ||
+        product?.provider_details?.descriptor?.name
+          .toLowerCase()
+          .includes(lowerQuery),
+    );
+  }, [products, searchQuery]);
+
   useEffect(() => {
     searchProducts(
       page,
@@ -83,40 +97,35 @@ const Products: React.FC<Products> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.filterContainer}>
-        <Filters
-          selectedAttributes={selectedAttributes}
-          setSelectedAttributes={setSelectedAttributes}
-          providerId={providerId}
-          category={subCategories.length ? subCategories[0] : null}
+      <Filters
+        selectedAttributes={selectedAttributes}
+        setSelectedAttributes={setSelectedAttributes}
+        providerId={providerId}
+        category={subCategories.length ? subCategories[0] : null}
+      />
+      <View style={styles.searchContainer}>
+        <ProductSearch
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
         />
       </View>
+
       {productsRequested ? (
-        <FlatList
-          numColumns={2}
-          data={skeletonList}
-          renderItem={() => <ProductSkeleton />}
-          contentContainerStyle={styles.listContainer}
-          keyExtractor={item => item.id}
-        />
-      ) : (
-        <FlatList
-          key={'grid'}
-          numColumns={2}
-          data={products}
-          renderItem={({item}) => (
-            <Product product={item} isGrid={isGridView} />
-          )}
-          ListEmptyComponent={() => (
-            <View style={styles.emptyContainer}>
-              <Text variant={'bodyMedium'}>No products available</Text>
+        <View style={styles.listContainer}>
+          {skeletonList.map(product => (
+            <View key={product.id} style={styles.productContainer}>
+              <ProductSkeleton />
             </View>
-          )}
-          contentContainerStyle={
-            products.length === 0 ? styles.emptyContainer : styles.listContainer
-          }
-          keyExtractor={item => item.id}
-        />
+          ))}
+        </View>
+      ) : (
+        <View style={styles.listContainer}>
+          {filteredProducts.map(product => (
+            <View key={product.id} style={styles.productContainer}>
+              <Product product={product} />
+            </View>
+          ))}
+        </View>
       )}
     </View>
   );
@@ -128,16 +137,25 @@ const makeStyles = (colors: any) =>
       flex: 1,
       backgroundColor: colors.white,
     },
-    filterContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+    productContainer: {
+      width: '50%',
+    },
+    searchContainer: {
+      marginTop: 24,
       paddingHorizontal: 16,
-      marginBottom: 20,
-      marginTop: 28,
+    },
+    searchBar: {
+      borderRadius: 60,
+      height: 40,
+    },
+    searchInput: {
+      paddingVertical: 0,
     },
     listContainer: {
       paddingHorizontal: 8,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginTop: 24,
     },
     emptyContainer: {
       flex: 1,

@@ -293,8 +293,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
               <View style={styles.summaryContainer}>
                 <View style={styles.summaryRow}>
                   <Text variant="labelMedium" style={styles.subTotal}>
-                    Item Total ({uniqueItems?.length}{' '}
-                    Items)
+                    Item Total ({uniqueItems?.length} Items)
                   </Text>
                   <Text variant="labelMedium" style={styles.subTotal}>
                     ₹{cartTotal}
