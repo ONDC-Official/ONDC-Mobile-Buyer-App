@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {Button, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
@@ -523,43 +523,54 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           <View style={styles.sheetContainer}>
             <View style={styles.header}>
               <Text
-                variant={'titleSmall'}
+                variant={'headlineSmall'}
                 style={styles.title}
                 ellipsizeMode={'tail'}>
-                Customizations for{' '}
+                Customization for{' '}
                 {cartItemDetails?.items[0]?.item?.product?.descriptor?.name}
               </Text>
             </View>
-            <ScrollView style={styles.customizationContainer}>
-              {cartItemDetails?.items?.map((item: any) => (
-                <View key={item?._id} style={styles.cartItem}>
-                  <View style={styles.productMeta}>
-                    <Text variant={'bodyMedium'}>
-                      {item?.item?.product?.descriptor?.name}
-                    </Text>
-                    <Customizations cartItem={item} />
-                    <Text variant="titleSmall" style={styles.cartQuantity}>
-                      ₹{' '}
-                      {item.item.hasCustomisations
-                        ? Number(getPriceWithCustomisations(item)) *
-                          Number(item?.item?.quantity?.count)
-                        : Number(item?.item?.product?.subtotal)}
-                    </Text>
-                  </View>
-                  <ManageQuantity
-                    allowDelete
-                    cartItem={item}
-                    updatingCartItem={updatingCartItem ?? itemToDelete}
-                    deleteCartItem={deleteCartItem}
-                    updateCartItem={updateSpecificItem}
-                  />
-                </View>
-              ))}
-            </ScrollView>
-            <View style={styles.addNewCustomizationButton}>
-              <Button onPress={addNewCustomization}>
-                Add new customization
-              </Button>
+            <View style={styles.customizationContainer}>
+              <View style={styles.customizationList}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                  {cartItemDetails?.items?.map((item: any) => (
+                    <View key={item?._id} style={styles.cartItem}>
+                      <View style={styles.productMeta}>
+                        <VegNonVegTag tags={item.item?.tags} />
+                        <Text
+                          variant={'bodyLarge'}
+                          style={styles.customizationName}>
+                          {item?.item?.product?.descriptor?.name}
+                        </Text>
+                        <Customizations cartItem={item} />
+                        <Text variant="bodyLarge" style={styles.cartQuantity}>
+                          ₹{' '}
+                          {item.item.hasCustomisations
+                            ? Number(getPriceWithCustomisations(item)) *
+                              Number(item?.item?.quantity?.count)
+                            : Number(item?.item?.product?.subtotal)}
+                        </Text>
+                      </View>
+                      <ManageQuantity
+                        allowDelete
+                        cartItem={item}
+                        updatingCartItem={updatingCartItem ?? itemToDelete}
+                        deleteCartItem={deleteCartItem}
+                        updateCartItem={updateSpecificItem}
+                      />
+                    </View>
+                  ))}
+                </ScrollView>
+                <TouchableOpacity
+                  style={styles.addNewCustomizationButton}
+                  onPress={addNewCustomization}>
+                  <Text
+                    variant={'bodyLarge'}
+                    style={styles.addNewCustomizationLabel}>
+                    Add new customization
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </CloseSheetContainer>
@@ -667,6 +678,11 @@ const makeStyles = (colors: any) =>
     field: {
       marginBottom: 12,
     },
+    customizationName: {
+      color: colors.neutral400,
+      marginTop: 8,
+      marginBottom: 4,
+    },
     name: {
       color: colors.neutral400,
     },
@@ -744,6 +760,13 @@ const makeStyles = (colors: any) =>
       padding: 16,
       backgroundColor: colors.neutral50,
     },
+    customizationList: {
+      backgroundColor: colors.white,
+      borderRadius: 12,
+      padding: 12,
+      borderWidth: 1,
+      borderColor: colors.neutral100,
+    },
     quantity: {
       alignItems: 'center',
       textAlign: 'center',
@@ -757,18 +780,24 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'flex-start',
-      paddingVertical: 12,
       borderBottomWidth: 1,
-      borderBottomColor: colors.border,
+      borderBottomColor: colors.neutral100,
+      marginBottom: 8,
+      paddingBottom: 8,
     },
     productMeta: {
       flex: 1,
     },
     addNewCustomizationButton: {
-      marginVertical: 16,
+      paddingVertical: 8,
+    },
+    addNewCustomizationLabel: {
+      color: colors.primary,
+      textAlign: 'center',
     },
     cartQuantity: {
       marginTop: 4,
+      color: colors.neutral400,
     },
     productDetails: {
       height: screenHeight - 200,

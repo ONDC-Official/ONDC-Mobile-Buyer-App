@@ -44,7 +44,7 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
           disabled={!!updatingCartItem || cartItem?.item?.quantity?.count === 0}
           style={styles.incrementButton}
           onPress={() => updateCartItem(cartItem.item.id, false, cartItem._id)}>
-          <Icon name={'minus'} color={theme.colors.primary} />
+          <Icon name={'minus'} color={theme.colors.primary} size={20} />
         </TouchableOpacity>
       )}
       <Text variant={'bodyMedium'} style={styles.quantity}>
@@ -61,7 +61,7 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
         }
         style={styles.incrementButton}
         onPress={() => updateCartItem(cartItem.item.id, true, cartItem._id)}>
-        <Icon name={'plus'} color={theme.colors.primary} />
+        <Icon name={'plus'} color={theme.colors.primary} size={20} />
       </TouchableOpacity>
     </View>
   );
@@ -70,24 +70,24 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     quantityContainer: {
-      borderRadius: 6,
+      borderRadius: 8,
       borderColor: colors.neutral100,
       borderWidth: 1,
       backgroundColor: colors.white,
       flexDirection: 'row',
-      height: 26,
       alignItems: 'center',
-      marginRight: 18,
-      width: 70,
+      width: 105,
+      paddingVertical: 6,
+      paddingHorizontal: 10,
     },
     quantity: {
       flex: 1,
       alignItems: 'center',
       textAlign: 'center',
+      color: colors.neutral400,
+      marginHorizontal: 4,
     },
     incrementButton: {
-      paddingHorizontal: 4,
-      height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
     },

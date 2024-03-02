@@ -70,7 +70,7 @@ const makeStyles = (colors: any) =>
       height: 220,
     },
     otherImage: {
-      height: 480,
+      height: 400,
     },
     pageIndicator: {
       alignItems: 'center',
