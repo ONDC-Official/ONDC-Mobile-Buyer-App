@@ -1,6 +1,6 @@
 import {Text} from 'react-native-paper';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import useLogoutUser from '../../../../../hooks/useLogoutUser';
@@ -30,33 +30,50 @@ const Profile = () => {
 
   const navigateToComplaints = () => navigation.navigate('Complaints');
 
+  const menu = [
+    {
+      title: 'My Profile',
+      action: navigateToProfile,
+    },
+    {
+      title: 'Order History',
+      action: navigateToOrders,
+    },
+    {
+      title: 'Complaints',
+      action: navigateToComplaints,
+    },
+    {
+      title: 'Logout',
+      action: confirmLogout,
+    },
+  ];
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text variant={'titleSmall'}>Profile</Text>
+        <Text variant={'titleLarge'} style={styles.pageTitle}>
+          Profile
+        </Text>
       </View>
-      <TouchableOpacity
-        style={[styles.menuOption, styles.borderBottom]}
-        onPress={navigateToProfile}>
-        <Text variant={'bodyLarge'}>My Profile</Text>
-        <Icon name={'chevron-right'} size={24} light />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.menuOption, styles.borderBottom]}
-        onPress={navigateToOrders}>
-        <Text variant={'bodyLarge'}>Order History</Text>
-        <Icon name={'chevron-right'} size={24} light />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.menuOption, styles.borderBottom]}
-        onPress={navigateToComplaints}>
-        <Text variant={'bodyLarge'}>Complaints</Text>
-        <Icon name={'chevron-right'} size={24} light />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.menuOption} onPress={confirmLogout}>
-        <Text variant={'bodyLarge'}>Logout</Text>
-        <Icon name={'chevron-right'} size={24} light />
-      </TouchableOpacity>
+      <FlatList
+        contentContainerStyle={styles.listContainer}
+        keyExtractor={item => item.title}
+        ItemSeparatorComponent={() => <View style={styles.divider} />}
+        data={menu}
+        renderItem={({item: {title, action}}) => (
+          <TouchableOpacity style={styles.menuOption} onPress={action}>
+            <Text variant={'titleMedium'} style={styles.menuName}>
+              {title}
+            </Text>
+            <Icon
+              name={'keyboard-arrow-right'}
+              size={24}
+              color={theme.colors.neutral400}
+            />
+          </TouchableOpacity>
+        )}
+      />
     </View>
   );
 };
@@ -72,16 +89,25 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 16,
       marginBottom: 8,
     },
+    pageTitle: {
+      color: colors.neutral400,
+    },
+    listContainer: {
+      paddingHorizontal: 16,
+    },
     menuOption: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingVertical: 20,
-      paddingHorizontal: 16,
     },
-    borderBottom: {
-      borderBottomWidth: 1,
-      borderBottomColor: '#E8E8E8',
+    menuName: {
+      color: colors.neutral400,
+    },
+    divider: {
+      width: '100%',
+      height: 1,
+      backgroundColor: colors.neutral100,
     },
   });
 
