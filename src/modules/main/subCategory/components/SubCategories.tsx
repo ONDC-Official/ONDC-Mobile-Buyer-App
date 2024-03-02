@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
@@ -20,6 +20,7 @@ const SubCategories: React.FC<SubCategories> = ({
   currentSubCategory,
   setCurrentSubCategory,
 }) => {
+  const flatListRef = useRef<any>(null);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -37,6 +38,17 @@ const SubCategories: React.FC<SubCategories> = ({
     setSubCategories(PRODUCT_SUBCATEGORY[category]);
   }, [category]);
 
+  useEffect(() => {
+    if (subCategories.length > 0 && currentSubCategory) {
+      const index = subCategories.findIndex(
+        one => one.key === currentSubCategory,
+      );
+      setTimeout(() => {
+        flatListRef.current.scrollToIndex({animated: true, index});
+      }, 50);
+    }
+  }, [subCategories, currentSubCategory]);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.allOptionsButton} onPress={goBack}>
@@ -50,6 +62,8 @@ const SubCategories: React.FC<SubCategories> = ({
         </Text>
       </TouchableOpacity>
       <FlatList
+        initialNumToRender={50}
+        ref={flatListRef}
         showsHorizontalScrollIndicator={false}
         data={subCategories}
         horizontal

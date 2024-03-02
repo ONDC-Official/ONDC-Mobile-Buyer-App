@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
 import Products from '../../../components/products/Products';
@@ -36,11 +36,13 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           category={params.category}
           setCurrentSubCategory={setCurrentSubCategory}
         />
-        <Products
-          providerId={null}
-          customMenu={null}
-          subCategories={[currentSubCategory]}
-        />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Products
+            providerId={null}
+            customMenu={null}
+            subCategories={[currentSubCategory]}
+          />
+        </ScrollView>
       </View>
     </Page>
   );

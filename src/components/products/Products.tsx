@@ -139,6 +139,8 @@ const makeStyles = (colors: any) =>
     },
     productContainer: {
       width: '50%',
+      height: 254,
+      marginBottom: 12,
     },
     searchContainer: {
       marginTop: 24,
