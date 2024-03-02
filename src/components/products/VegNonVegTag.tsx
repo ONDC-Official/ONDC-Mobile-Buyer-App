@@ -8,9 +8,10 @@ import {useAppTheme} from '../../utils/theme';
 interface VegNonVegTag {
   tags: any[];
   showLabel?: boolean;
+  size?: string;
 }
 
-const VegNonVegTag: React.FC<VegNonVegTag> = ({tags, showLabel}) => {
+const VegNonVegTag: React.FC<VegNonVegTag> = ({tags, showLabel, size = 'regular'}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -21,7 +22,7 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({tags, showLabel}) => {
       <View style={styles.iconRow}>
         <FastImage
           source={require('../../assets/veg.png')}
-          style={styles.icon}
+          style={size === 'regular' ? styles.icon : styles.smallIcon}
         />
         {showLabel && (
           <Text variant={'bodyMedium'} style={styles.veg}>
@@ -35,7 +36,7 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({tags, showLabel}) => {
       <View style={styles.iconRow}>
         <FastImage
           source={require('../../assets/non_veg.png')}
-          style={styles.icon}
+          style={size === 'regular' ? styles.icon : styles.smallIcon}
         />
         {showLabel && (
           <Text variant={'bodyMedium'} style={styles.nonVeg}>
@@ -49,7 +50,7 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({tags, showLabel}) => {
       <View style={styles.iconRow}>
         <FastImage
           source={require('../../assets/non_veg.png')}
-          style={styles.icon}
+          style={size === 'regular' ? styles.icon : styles.smallIcon}
         />
         {showLabel && (
           <Text variant={'bodyMedium'} style={styles.nonVeg}>
@@ -66,6 +67,10 @@ const makeStyles = (colors: any) =>
     icon: {
       width: 18,
       height: 18,
+    },
+    smallIcon: {
+      width: 12,
+      height: 12,
     },
     veg: {
       marginLeft: 8,

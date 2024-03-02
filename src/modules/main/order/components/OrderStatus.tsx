@@ -14,8 +14,8 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
   switch (status) {
     case 'Created':
       return (
-        <View style={styles.created}>
-          <Text variant={'labelMedium'} style={styles.createdLabel}>
+        <View style={[styles.container, styles.created]}>
+          <Text variant={'labelLarge'} style={styles.createdLabel}>
             {status}
           </Text>
         </View>
@@ -24,8 +24,8 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
     case 'Shipped':
     case 'Updated':
       return (
-        <View style={styles.shipped}>
-          <Text variant={'labelMedium'} style={styles.createdLabel}>
+        <View style={[styles.container, styles.shipped]}>
+          <Text variant={'labelLarge'} style={styles.createdLabel}>
             {status}
           </Text>
         </View>
@@ -35,8 +35,8 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
     case 'Active':
     case 'Completed':
       return (
-        <View style={styles.completed}>
-          <Text variant={'labelMedium'} style={styles.completedLabel}>
+        <View style={[styles.container, styles.completed]}>
+          <Text variant={'labelLarge'} style={styles.completedLabel}>
             {status}
           </Text>
         </View>
@@ -45,8 +45,8 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
     case 'Returned':
     case 'Cancelled':
       return (
-        <View style={styles.cancelled}>
-          <Text variant={'labelMedium'} style={styles.cancelledLabel}>
+        <View style={[styles.container, styles.cancelled]}>
+          <Text variant={'labelLarge'} style={styles.cancelledLabel}>
             {status}
           </Text>
         </View>
@@ -54,8 +54,8 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
 
     default:
       return (
-        <View style={styles.created}>
-          <Text variant={'labelMedium'} style={styles.createdLabel}>
+        <View style={[styles.container, styles.created]}>
+          <Text variant={'labelLarge'} style={styles.createdLabel}>
             {status}
           </Text>
         </View>
@@ -65,41 +65,31 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    created: {
-      backgroundColor: colors.statusBackground,
+    container: {
       paddingVertical: 4,
       paddingHorizontal: 12,
       borderRadius: 21,
+    },
+    created: {
+      backgroundColor: colors.primary50,
     },
     shipped: {
-      backgroundColor: colors.shippedBackground,
-      paddingVertical: 4,
-      paddingHorizontal: 12,
-      borderRadius: 21,
+      backgroundColor: colors.primary50,
     },
     completed: {
-      backgroundColor: colors.deliveredBackground,
-      paddingVertical: 4,
-      paddingHorizontal: 12,
-      borderRadius: 21,
+      backgroundColor: colors.success50,
     },
     cancelled: {
-      backgroundColor: colors.cancelledBackground,
-      paddingVertical: 4,
-      paddingHorizontal: 12,
-      borderRadius: 21,
+      backgroundColor: colors.error50,
     },
     createdLabel: {
       color: colors.primary,
-      fontWeight: '600',
     },
     cancelledLabel: {
-      color: colors.error,
-      fontWeight: '600',
+      color: colors.error600,
     },
     completedLabel: {
-      color: colors.success,
-      fontWeight: '600',
+      color: colors.success600,
     },
   });
 

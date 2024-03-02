@@ -48,7 +48,6 @@ const Orders: React.FC<any> = () => {
         `${API_BASE_URL}${ORDERS}?pageNumber=${currentPage}&limit=10`,
         source.current.token,
       );
-
       totalOrders.current = data.totalCount;
       setOrders(currentPage === 1 ? data.orders : [...orders, ...data.orders]);
       pageNumber.current = pageNumber.current + 1;

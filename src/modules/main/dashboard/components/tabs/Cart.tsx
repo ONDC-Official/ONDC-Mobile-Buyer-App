@@ -10,7 +10,9 @@ const DashboardCart = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text variant={'titleSmall'}>My Cart</Text>
+        <Text variant={'titleLarge'} style={styles.pageTitle}>
+          My Cart
+        </Text>
       </View>
       <Cart />
     </View>
@@ -25,6 +27,9 @@ const makeStyles = (colors: any) =>
     },
     header: {
       padding: 16,
+    },
+    pageTitle: {
+      color: colors.neutral400,
     },
   });
 

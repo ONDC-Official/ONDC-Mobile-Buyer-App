@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import FastImage from 'react-native-fast-image';
-import {IconButton, Text} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Text} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import AntIcon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -171,41 +172,91 @@ const CartItems: React.FC<CartItems> = ({
   return (
     <>
       <ScrollView
+        showsVerticalScrollIndicator={false}
         style={styles.container}
         contentContainerStyle={styles.scrollViewContent}>
-        {providerWiseItems?.map((provider: any, providerIndex: number) => (
-          <View key={provider.provider.id}>
-            <Text variant={'labelLarge'} style={styles.providerName}>
-              {provider?.provider?.descriptor?.name}
-            </Text>
-            {provider?.provider?.locations?.length > 0 && (
-              <Text variant={'labelMedium'} style={styles.providerAddress}>
-                {provider?.provider?.locations[0]?.address?.street || '-'},{' '}
-                {provider?.provider?.locations[0]?.address?.city || '-'}
-              </Text>
-            )}
-            {provider?.items?.map((cartItem: any, index: number) => (
-              <View key={cartItem._id}>
-                <View style={styles.product}>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('ProductDetails', {
-                        productId: cartItem.item.id,
-                      })
-                    }>
-                    <FastImage
-                      source={{
-                        uri: cartItem?.item?.product?.descriptor?.symbol,
-                      }}
-                      style={styles.productImage}
-                    />
-                  </TouchableOpacity>
-                  <View style={styles.productMeta}>
-                    <Text variant={'bodyMedium'}>
-                      {cartItem?.item?.product?.descriptor?.name}
-                    </Text>
-                    <Customizations cartItem={cartItem} />
-                    {cartItem.item.hasCustomisations && (
+        {providerWiseItems?.map((provider: any) => (
+          <View key={provider.provider.id} style={styles.provider}>
+            <View style={styles.providerHeader}>
+              <FastImage
+                source={{uri: provider?.provider?.descriptor?.symbol}}
+                style={styles.providerImage}
+              />
+              <View>
+                <Text variant={'titleLarge'} style={styles.providerName}>
+                  {provider?.provider?.descriptor?.name}
+                </Text>
+                {provider?.provider?.locations?.length > 0 && (
+                  <Text variant={'labelSmall'} style={styles.providerAddress}>
+                    {provider?.provider?.locations[0]?.address?.street || '-'},{' '}
+                    {provider?.provider?.locations[0]?.address?.city || '-'}
+                  </Text>
+                )}
+              </View>
+            </View>
+            <View style={styles.productsContainer}>
+              {provider?.items?.map((cartItem: any, itemIndex: number) => (
+                <View key={cartItem._id}>
+                  <View style={styles.product}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('ProductDetails', {
+                          productId: cartItem.item.id,
+                        })
+                      }>
+                      <FastImage
+                        source={{
+                          uri: cartItem?.item?.product?.descriptor?.symbol,
+                        }}
+                        style={styles.productImage}
+                      />
+                    </TouchableOpacity>
+                    <View style={styles.productMeta}>
+                      <Text variant={'bodyMedium'} style={styles.productName}>
+                        {cartItem?.item?.product?.descriptor?.name}
+                      </Text>
+                      <Customizations cartItem={cartItem} />
+                      {!cartItem.item.hasCustomisations &&
+                        cartItem.item.product?.quantity?.unitized &&
+                        Object.keys(
+                          cartItem.item.product?.quantity?.unitized,
+                        ).map(one => (
+                          <Text
+                            variant={'labelSmall'}
+                            key={
+                              cartItem.item.product?.quantity?.unitized[one]
+                                .value
+                            }>
+                            {
+                              cartItem.item.product?.quantity?.unitized[one]
+                                .value
+                            }{' '}
+                            {
+                              cartItem.item.product?.quantity?.unitized[one]
+                                .unit
+                            }
+                          </Text>
+                        ))}
+                      <View style={styles.quantityContainer}>
+                        <ManageQuantity
+                          allowDelete
+                          cartItem={cartItem}
+                          updatingCartItem={updatingCartItem}
+                          updateCartItem={updateCartItem}
+                          deleteCartItem={deleteCartItem}
+                        />
+                      </View>
+                      <Text variant="bodyLarge">
+                        ₹
+                        {cartItem.item.hasCustomisations
+                          ? Number(getPriceWithCustomisations(cartItem)) *
+                            Number(cartItem?.item?.quantity?.count)
+                          : Number(cartItem?.item?.product?.subtotal)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.productActionContainer}>
+                    {cartItem.item.hasCustomisations ? (
                       <TouchableOpacity
                         disabled={!!requestedProduct}
                         style={styles.customiseContainer}
@@ -217,102 +268,85 @@ const CartItems: React.FC<CartItems> = ({
                           />
                         ) : (
                           <Icon
-                            name={'pencil-outline'}
+                            name={'pencil'}
                             color={theme.colors.primary}
                             size={14}
                           />
                         )}
                         <Text
-                          variant={'labelMedium'}
+                          variant={'labelLarge'}
                           style={styles.customiseText}>
                           Customise
                         </Text>
                       </TouchableOpacity>
-                    )}
-                    {cartItem.item.product?.quantity?.unitized &&
-                      Object.keys(
-                        cartItem.item.product?.quantity?.unitized,
-                      ).map(one => (
-                        <Text
-                          variant={'labelSmall'}
-                          key={
-                            cartItem.item.product?.quantity?.unitized[one].value
-                          }>
-                          {cartItem.item.product?.quantity?.unitized[one].value}{' '}
-                          {cartItem.item.product?.quantity?.unitized[one].unit}
-                        </Text>
-                      ))}
-                  </View>
-
-                  <ManageQuantity
-                    allowDelete
-                    cartItem={cartItem}
-                    updatingCartItem={updatingCartItem}
-                    updateCartItem={updateCartItem}
-                    deleteCartItem={deleteCartItem}
-                  />
-
-                  <View>
-                    <Text variant="titleSmall">
-                      ₹{' '}
-                      {cartItem.item.hasCustomisations
-                        ? Number(getPriceWithCustomisations(cartItem)) *
-                          Number(cartItem?.item?.quantity?.count)
-                        : Number(cartItem?.item?.product?.subtotal)}
-                    </Text>
-                    {itemToDelete === cartItem._id ? (
-                      <ActivityIndicator
-                        size={20}
-                        color={theme.colors.primary}
-                      />
                     ) : (
-                      <IconButton
-                        icon={'delete'}
-                        iconColor={'#D83132'}
-                        onPress={() => deleteCartItem(cartItem._id)}
-                      />
+                      <TouchableOpacity
+                        disabled={!!requestedProduct}
+                        style={styles.customiseContainer}>
+                        <Icon
+                          name={'pencil'}
+                          color={theme.colors.primary}
+                          size={14}
+                        />
+                        <Text
+                          variant={'labelLarge'}
+                          style={styles.customiseText}>
+                          Edit
+                        </Text>
+                      </TouchableOpacity>
                     )}
+                    <View>
+                      {itemToDelete === cartItem._id ? (
+                        <ActivityIndicator
+                          size={20}
+                          color={theme.colors.primary}
+                        />
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => deleteCartItem(cartItem._id)}>
+                          <AntIcon
+                            name={'delete'}
+                            size={20}
+                            color={theme.colors.error600}
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
                   </View>
+                  {cartItem.item.quantity.count >
+                    cartItem.item.product.quantity.available.count && (
+                    <View style={styles.infoBox}>
+                      <Text variant={'bodyMedium'} style={styles.infoText}>
+                        Only {cartItem.item.product.quantity.available.count}{' '}
+                        available instead of {cartItem.item.quantity.count}.
+                        Update the quantity or switch to another provider.
+                      </Text>
+                    </View>
+                  )}
+                  {itemIndex !== provider?.items.length - 1 && (
+                    <View style={styles.providerBorderBottom} />
+                  )}
                 </View>
-                {cartItem.item.quantity.count >
-                  cartItem.item.product.quantity.available.count && (
-                  <View style={styles.infoBox}>
-                    <Text variant={'bodyMedium'} style={styles.infoText}>
-                      Only {cartItem.item.product.quantity.available.count}{' '}
-                      available instead of {cartItem.item.quantity.count}.
-                      Update the quantity or switch to another provider.
-                    </Text>
-                  </View>
-                )}
-                {index === provider?.items.length - 1 ? (
-                  <>
-                    {haveDistinctProviders && (
-                      <View style={styles.errorBox}>
-                        <Text variant={'bodyMedium'} style={styles.errorText}>
-                          You are ordering from different store. Please check
-                          your order again.
-                        </Text>
-                      </View>
-                    )}
-                    {isProductCategoryIsDifferent && (
-                      <View style={styles.errorBox}>
-                        <Text variant={'bodyMedium'} style={styles.errorText}>
-                          You are ordering from different category. Please check
-                          your order again.
-                        </Text>
-                      </View>
-                    )}
-                  </>
-                ) : (
-                  <View style={styles.divider} />
-                )}
-              </View>
-            ))}
-            {providerIndex !== providerWiseItems.length - 1 && (
-              <View style={styles.providerBorderBottom} />
-            )}
+              ))}
+            </View>
           </View>
         ))}
+        {haveDistinctProviders && (
+          <View style={styles.errorBox}>
+            <Text variant={'bodyMedium'} style={styles.errorText}>
+              You are ordering from different store. Please check your order
+              again.
+            </Text>
+          </View>
+        )}
+        {isProductCategoryIsDifferent && (
+          <View style={styles.errorBox}>
+            <Text variant={'bodyMedium'} style={styles.errorText}>
+              You are ordering from different category. Please check your order
+              again.
+            </Text>
+          </View>
+        )}
       </ScrollView>
 
       <RBSheet
@@ -351,7 +385,9 @@ const CartItems: React.FC<CartItems> = ({
                   '-'}
               </Text>
             )}
-            <ScrollView style={styles.customizationContainer}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={styles.customizationContainer}>
               <FBProductCustomization
                 isEditFlow
                 product={productPayload}
@@ -382,43 +418,69 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingVertical: 24,
-      paddingHorizontal: 16,
+      paddingBottom: 24,
     },
     scrollViewContent: {
       paddingBottom: 24,
     },
     providerBorderBottom: {
-      borderBottomColor: '#ababab',
+      borderBottomColor: colors.neutral100,
       borderBottomWidth: 1,
-      paddingTop: 10,
-      marginBottom: 10,
+      paddingTop: 16,
+      marginBottom: 16,
+    },
+    provider: {
+      backgroundColor: colors.white,
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+      marginBottom: 12,
+    },
+    providerHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    productsContainer: {
+      paddingVertical: 16,
+    },
+    providerImage: {
+      width: 30,
+      height: 30,
+      marginRight: 10,
     },
     providerName: {
-      marginBottom: 4,
+      color: colors.neutral400,
     },
     providerAddress: {
       marginBottom: 10,
+      color: colors.neutral300,
     },
     product: {
       flexDirection: 'row',
     },
+    productActionContainer: {
+      marginTop: 12,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
     productImage: {
-      width: 48,
-      height: 48,
-      borderRadius: 5,
-      borderColor: '#E8E8E8',
-      backgroundColor: '#E8E8E8',
+      width: 80,
+      height: 100,
+      borderRadius: 12,
     },
     productMeta: {
       flex: 1,
-      marginRight: 18,
       marginLeft: 12,
+    },
+    productName: {
+      color: colors.neutral400,
+    },
+    quantityContainer: {
+      marginVertical: 10,
     },
     customiseContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop: 12,
     },
     customiseText: {
       color: colors.primary,
@@ -435,11 +497,11 @@ const makeStyles = (colors: any) =>
       color: colors.warning,
     },
     errorBox: {
-      backgroundColor: '#FFEBEB',
-      borderRadius: 6,
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      marginTop: 20,
+      backgroundColor: colors.error50,
+      borderRadius: 8,
+      padding: 8,
+      marginTop: 12,
+      marginHorizontal: 16,
     },
     errorText: {
       color: '#D83232',

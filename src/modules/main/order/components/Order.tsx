@@ -5,10 +5,12 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import OrderStatus from './OrderStatus';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
+import {isItemCustomization} from '../../../../utils/utils';
+import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 
 interface Order {
   order: any;
@@ -32,10 +34,7 @@ const OrderHeader: React.FC<Order> = ({order}) => {
     const routeParams: any = {
       brandId: `${order?.bppId}_${order?.domain}_${order?.provider?.id}`,
     };
-
-    if (order?.domain === FB_DOMAIN) {
-      routeParams.outletId = order?.provider?.locations[0]?.id;
-    }
+    routeParams.outletId = order?.provider?.locations[0]?.id;
     navigation.navigate('BrandDetails', routeParams);
   };
 
@@ -53,34 +52,55 @@ const OrderHeader: React.FC<Order> = ({order}) => {
           style={styles.providerImage}
         />
         <View style={styles.providerNameContainer}>
-          <Text variant={'bodyMedium'}>
+          <Text variant={'bodyLarge'} style={styles.providerName}>
             {order?.provider?.descriptor?.name}
           </Text>
         </View>
         <View>{order.state && <OrderStatus status={order.state} />}</View>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.orderDetails} onPress={navigateToDetails}>
-        {order?.items?.map((item: any) => (
-          <Text
-            key={`${item?.id}${item.fulfillment_id}`}
-            variant={'labelMedium'}
-            style={styles.item}>
-            {item?.quantity?.count} x {item?.product?.descriptor?.name}
-          </Text>
-        ))}
-        <View style={styles.paymentDetails}>
-          <Text style={styles.date} variant={'labelMedium'}>
+      <View style={styles.orderDetails}>
+        {order?.items?.map((item: any) => {
+          const isCustomization = isItemCustomization(item?.tags);
+
+          if (isCustomization) {
+            return <View key={`${item?.id}${item.fulfillment_id}`} />;
+          }
+
+          return (
+            <View style={styles.itemContainer}>
+              {order.domain === FB_DOMAIN && (
+                <View style={styles.iconContainer}>
+                  <VegNonVegTag tags={item?.product?.tags} size={'small'} />
+                </View>
+              )}
+              <Text
+                key={`${item?.id}${item.fulfillment_id}`}
+                variant={'labelMedium'}
+                style={styles.item}>
+                {item?.quantity?.count} x {item?.product?.descriptor?.name}
+              </Text>
+            </View>
+          );
+        })}
+        <TouchableOpacity
+          style={styles.paymentDetails}
+          onPress={navigateToDetails}>
+          <Text style={styles.date} variant={'labelSmall'}>
             {moment(order?.createdAt).format('DD MMM YYYY hh:mm a')}
           </Text>
           <View style={styles.amountContainer}>
-            <Text style={styles.amount} variant={'labelMedium'}>
+            <Text style={styles.amount} variant={'labelLarge'}>
               {CURRENCY_SYMBOLS[order?.payment?.params?.currency]}
               {order?.payment?.params?.amount}
             </Text>
-            <Icon name={'chevron-right'} size={10} color={'#686868'} />
+            <Icon
+              name={'keyboard-arrow-right'}
+              size={16}
+              color={theme.colors.neutral300}
+            />
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -97,8 +117,9 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: '#ECF3F8',
-      padding: 12,
+      backgroundColor: colors.primary50,
+      paddingHorizontal: 12,
+      paddingVertical: 8,
       borderTopLeftRadius: 12,
       borderTopRightRadius: 12,
     },
@@ -106,13 +127,23 @@ const makeStyles = (colors: any) =>
       width: 32,
       height: 32,
     },
+    providerName: {
+      color: colors.neutral400,
+    },
     providerNameContainer: {
       flex: 1,
       paddingHorizontal: 8,
     },
+    itemContainer: {
+      marginBottom: 10,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    iconContainer: {
+      marginRight: 8,
+    },
     item: {
-      color: '#686868',
-      marginBottom: 8,
+      color: colors.neutral300,
     },
     row: {
       flexDirection: 'row',
@@ -120,20 +151,19 @@ const makeStyles = (colors: any) =>
       alignItems: 'flex-end',
     },
     orderDetails: {
-      paddingVertical: 12,
+      padding: 12,
       borderBottomWidth: 1,
-      borderLeftColor: '#E8E8E8',
-      borderRightColor: '#E8E8E8',
-      borderBottomColor: '#E8E8E8',
+      borderLeftColor: colors.neutral100,
+      borderRightColor: colors.neutral100,
+      borderBottomColor: colors.neutral100,
       borderLeftWidth: 1,
       borderRightWidth: 1,
       borderBottomLeftRadius: 12,
       borderBottomRightRadius: 12,
-      paddingHorizontal: 16,
     },
     paymentDetails: {
       borderTopWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       paddingTop: 10,
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -144,7 +174,6 @@ const makeStyles = (colors: any) =>
     },
     amount: {
       color: colors.neutral400,
-      fontWeight: '700',
       alignItems: 'center',
       marginRight: 8,
     },

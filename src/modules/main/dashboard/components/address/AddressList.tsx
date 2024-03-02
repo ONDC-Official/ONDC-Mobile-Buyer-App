@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Button, IconButton} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -14,7 +14,6 @@ import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
 import {saveAddress} from '../../../../../redux/address/actions';
-import {useAppTheme} from '../../../../../utils/theme';
 
 interface Address {
   _id: string;
@@ -52,7 +51,6 @@ interface AddressList {
 const CancelToken = axios.CancelToken;
 const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
   const isFocused = useIsFocused();
-  const theme = useAppTheme();
   const {address} = useSelector(({addressReducer}) => addressReducer);
   const source = useRef<any>(null);
   const dispatch = useDispatch();
@@ -105,20 +103,8 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
     };
   }, [isFocused]);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <IconButton
-          size={24}
-          icon={'plus-circle'}
-          iconColor={theme.colors.primary}
-          onPress={() =>
-            navigation.navigate('AddDefaultAddress', {setDefault: false})
-          }
-        />
-      ),
-    });
-  }, []);
+  const addAddress = () =>
+    navigation.navigate('AddDefaultAddress', {setDefault: false});
 
   const onAddressSelect = async (item: any) => {
     setCurrentAddress(item);
@@ -178,6 +164,9 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
           </Button>
         </View>
       )}
+      <Button style={styles.addButton} mode={'contained'} onPress={addAddress}>
+        Add Address
+      </Button>
     </View>
   );
 };
@@ -190,6 +179,10 @@ const styles = StyleSheet.create({
   },
   contentContainerStyle: {
     padding: 16,
+  },
+  addButton: {
+    borderRadius: 8,
+    marginHorizontal: 16,
   },
 });
 

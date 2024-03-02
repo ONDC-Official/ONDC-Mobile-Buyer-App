@@ -37,8 +37,8 @@ export const theme: any = {
     black: '#000',
     white: '#fff',
 
-    surfaceDisabled: '#4D4D4D',
-    onSurfaceDisabled: '#AAA',
+    surfaceDisabled: '#E8E8E8',
+    onSurfaceDisabled: '#B5B5B5',
   },
   fonts: {
     // Title 1

@@ -465,20 +465,17 @@ const Cart = () => {
                 <Card style={styles.summaryCard}>
                   <View style={styles.summaryRow}>
                     <View style={styles.address}>
-                      <Text variant={'bodyMedium'}>
-                        Delivering to {deliveryAddress?.address?.tag}
+                      <Text variant={'bodyLarge'} style={styles.addressTitle}>
+                        Delivery Address
                       </Text>
-                      <Text variant={'labelMedium'}>
+                      <Text variant={'labelMedium'} style={styles.addressLabel}>
                         {deliveryAddress?.address?.street},{' '}
                         {deliveryAddress?.address?.landmark
                           ? `${deliveryAddress?.address?.landmark},`
                           : ''}{' '}
                         {deliveryAddress?.address?.city},{' '}
                         {deliveryAddress?.address?.state},{' '}
-                        {deliveryAddress?.address?.areaCode}{' '}
-                      </Text>
-                      <Text variant={'labelMedium'}>
-                        {deliveryAddress?.descriptor?.name} (
+                        {deliveryAddress?.address?.areaCode}{' '}{deliveryAddress?.descriptor?.name} (
                         {deliveryAddress?.descriptor?.phone})
                       </Text>
                     </View>
@@ -489,6 +486,8 @@ const Cart = () => {
                         haveDistinctProviders ||
                         checkoutLoading
                       }
+                      style={styles.changeButton}
+                      labelStyle={styles.changeButtonLabel}
                       mode={'outlined'}
                       onPress={() => addressSheet.current.open()}>
                       Change
@@ -497,7 +496,7 @@ const Cart = () => {
                   <View style={styles.summaryDivider} />
                   <View style={styles.summaryRow}>
                     <View>
-                      <Text variant="bodyMedium" style={styles.total}>
+                      <Text variant="titleLarge" style={styles.total}>
                         ₹{cartTotal}
                       </Text>
                     </View>
@@ -519,6 +518,7 @@ const Cart = () => {
                             <></>
                           )
                         }
+                        style={styles.deliveryButton}
                         mode={'contained'}
                         onPress={() => onCheckoutFromCart(deliveryAddress)}>
                         View Delivery Options
@@ -601,6 +601,13 @@ const Cart = () => {
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
+    changeButton: {
+      borderRadius: 40,
+      height: 36,
+    },
+    changeButtonLabel: {
+      margin: 0,
+    },
     pageContainer: {
       flex: 1,
       backgroundColor: '#F9F9F9',
@@ -625,18 +632,22 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     summaryDivider: {
-      marginVertical: 12,
+      marginVertical: 15,
       height: 1,
-      backgroundColor: '#CACDD8',
-    },
-    buyButton: {
-      marginTop: 16,
+      backgroundColor: colors.neutral100,
     },
     address: {
       flexShrink: 1,
     },
+    addressTitle: {
+      color: colors.neutral400,
+      marginTop: 4,
+    },
+    addressLabel: {
+      color: colors.neutral300,
+    },
     total: {
-      fontWeight: '700',
+      color: colors.neutral400,
     },
     rbSheet: {
       backgroundColor: 'rgba(47, 47, 47, 0.75)',
@@ -650,6 +661,9 @@ const makeStyles = (colors: any) =>
       paddingTop: 16,
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
+    },
+    deliveryButton: {
+      borderRadius: 8,
     },
   });
 
