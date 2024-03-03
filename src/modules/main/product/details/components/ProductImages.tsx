@@ -84,7 +84,7 @@ const makeStyles = (colors: any) =>
       height: 8,
       borderRadius: 4,
       marginRight: 6,
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
     },
     selectedDot: {
       width: 24,

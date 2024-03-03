@@ -56,8 +56,8 @@ const layerStyles: any = {
 
 const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   const dispatch = useDispatch();
-  const theme = useAppTheme();
-  const styles = makeButtonStyles(theme.colors);
+  const appTheme = useAppTheme();
+  const styles = makeButtonStyles(appTheme.colors);
   const trackingSheet = useRef<any>(null);
   const {orderDetails, requestingStatus, requestingTracker} = useSelector(
     ({orderReducer}) => orderReducer,

@@ -24,11 +24,11 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
 
   return (
     <View style={styles.shippingContainer}>
-      <Text variant={'bodyLarge'} style={styles.shippingTitle}>
+      <Text variant={'titleLarge'} style={styles.shippingTitle}>
         Shipment Details ({fulfilmentIndex + 1}/
         {orderDetails?.fulfillments.length})
       </Text>
-      <Text variant={'bodyMedium'} style={styles.shippingTitle}>
+      <Text variant={'bodyLarge'} style={styles.shippingTitle}>
         {orderDetails?.items?.length} Item(s) Arriving
       </Text>
       <TouchableOpacity
@@ -56,6 +56,7 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
         <Icon
           name={showDetails ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
           size={20}
+          color={theme.colors.neutral400}
         />
       </TouchableOpacity>
       {showDetails &&
@@ -63,12 +64,16 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
           <View key={history?._id} style={styles.statusContainer}>
             <View style={styles.status}>
               <View>
-                <Icon name={'check-circle'} color={'#419E6B'} size={20} />
+                <Icon
+                  name={'check-circle'}
+                  color={theme.colors.success600}
+                  size={20}
+                />
                 {index < fulfillmentHistory.length - 1 && (
                   <View style={styles.link} />
                 )}
               </View>
-              <Text variant={'labelMedium'} style={styles.state}>
+              <Text variant={'labelLarge'} style={styles.state}>
                 {history?.state.replace(/-/g, ' ')}
               </Text>
             </View>
@@ -87,7 +92,7 @@ const makeStyles = (colors: any) =>
       borderRadius: 8,
       backgroundColor: '#FFF',
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       marginHorizontal: 16,
       paddingHorizontal: 16,
       paddingTop: 16,
@@ -96,7 +101,7 @@ const makeStyles = (colors: any) =>
     },
     shippingTitle: {
       marginBottom: 12,
-      fontWeight: '600',
+      color: colors.neutral400,
     },
     accordion: {
       flexDirection: 'row',
@@ -109,7 +114,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 12,
     },
     arrivalLabel: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     arrivalDate: {
       color: colors.neutral400,
@@ -123,20 +128,19 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
     },
     link: {
-      height: 30,
-      borderLeftColor: '#419E6B',
+      height: 28,
+      borderLeftColor: colors.success600,
       borderLeftWidth: 2,
       marginLeft: 9,
     },
     state: {
-      fontWeight: '700',
-      color: '#1D1D1D',
-      paddingTop: 4,
+      color: colors.neutral500,
+      paddingTop: 3,
       paddingLeft: 8,
     },
     timestamp: {
       paddingTop: 4,
-      color: '#8A8A8A',
+      color: colors.neutral300,
     },
   });
 

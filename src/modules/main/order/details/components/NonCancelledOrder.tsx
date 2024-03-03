@@ -40,10 +40,10 @@ const NonCancelledOrder = ({
       <View style={styles.header}>
         <View style={styles.headerRow}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name={'arrow-back'} size={24} color={'#fff'} />
+            <Icon name={'arrow-back'} size={24} color={colors.white} />
           </TouchableOpacity>
           <Text
-            variant={'titleSmall'}
+            variant={'titleLarge'}
             style={styles.orderDetailsTitle}
             ellipsizeMode={'tail'}
             numberOfLines={1}>
@@ -51,7 +51,7 @@ const NonCancelledOrder = ({
           </Text>
           <View style={styles.empty} />
         </View>
-        <Text variant={'titleMedium'} style={styles.orderStatus}>
+        <Text variant={'headlineSmall'} style={styles.orderStatus}>
           Order {orderDetails?.state}
         </Text>
       </View>
@@ -60,21 +60,21 @@ const NonCancelledOrder = ({
         contentContainerStyle={styles.scrollView}>
         <Actions onUpdateOrder={getOrderDetails} />
         <View style={styles.creationHeader}>
-          <SimpleLineIcons name={'bag'} color={colors.primary} size={24} />
+          <SimpleLineIcons name={'bag'} color={colors.primary} size={20} />
           {orderDetails?.state !== 'Completed' ? (
-            <Text variant={'bodyMedium'} style={styles.creationDate}>
+            <Text variant={'bodyLarge'} style={styles.creationDate}>
               Order placed on{' '}
               {moment(orderDetails?.createdAt).format('DD MMM hh:mm a')}
             </Text>
           ) : (
-            <Text variant={'bodyMedium'} style={styles.creationDate}>
+            <Text variant={'bodyLarge'} style={styles.creationDate}>
               Order completed on{' '}
               {moment(orderDetails?.updatedAt).format('DD MMM hh:mm a')}
             </Text>
           )}
         </View>
         <View style={styles.orderIdContainer}>
-          <Text variant={'titleSmall'} style={styles.orderId}>
+          <Text variant={'titleLarge'} style={styles.orderId}>
             {orderDetails?.id}
           </Text>
           {invoiceAvailable ? (
@@ -116,7 +116,7 @@ const makeStyles = (colors: any) =>
     },
     header: {
       backgroundColor: colors.primary,
-      paddingBottom: 10,
+      paddingBottom: 14,
     },
     headerRow: {
       paddingHorizontal: 16,
@@ -126,13 +126,12 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
     },
     orderDetailsTitle: {
-      color: '#fff',
+      color: colors.white,
       textAlign: 'center',
     },
     orderStatus: {
-      color: '#fff',
+      color: colors.white,
       textAlign: 'center',
-      marginBottom: 8,
     },
     empty: {
       width: 24,
@@ -147,7 +146,7 @@ const makeStyles = (colors: any) =>
     },
     creationHeader: {
       flexDirection: 'row',
-      marginVertical: 22,
+      marginVertical: 20,
       alignItems: 'center',
       marginHorizontal: 16,
     },
@@ -158,11 +157,11 @@ const makeStyles = (colors: any) =>
       marginHorizontal: 16,
     },
     orderId: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     creationDate: {
       marginLeft: 8,
-      color: '#686868',
+      color: colors.neutral300,
     },
   });
 

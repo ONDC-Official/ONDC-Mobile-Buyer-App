@@ -7,19 +7,16 @@ import {useSelector} from 'react-redux';
 import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
 import DownloadIcon from '../../../../../assets/download.svg';
 import {useAppTheme} from '../../../../../utils/theme';
+import {isItemCustomization} from '../../../../../utils/utils';
 
 const ProductSummary = ({
   items,
   quote,
   fulfilment,
-  cancelled = false,
-  documents = undefined,
 }: {
   items: any[];
   quote: any;
   fulfilment: any;
-  cancelled?: boolean;
-  documents?: any;
 }) => {
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
@@ -29,21 +26,20 @@ const ProductSummary = ({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text variant={'titleMedium'} style={styles.sectionTitle}>
-          Items
+        <Text variant={'headlineSmall'} style={styles.sectionTitle}>
+          Your Items
         </Text>
-        {cancelled && !!documents && (
-          <TouchableOpacity onPress={() => Linking.openURL(documents[0]?.url)}>
-            <DownloadIcon width={24} height={24} />
-          </TouchableOpacity>
-        )}
       </View>
-      {items.map(item => {
+      {items.map((item, index) => {
         const cancellable = item?.product['@ondc/org/cancellable'];
         const returnable = item?.product['@ondc/org/returnable'];
+        const itemCustomization = isItemCustomization(item.tags);
 
+        if (itemCustomization) {
+          return <View key={item.id} />;
+        }
         return (
-          <View key={item.id} style={styles.item}>
+          <View key={item.id} style={[styles.item, index > 0  ? styles.itemBorderTop : {}]}>
             <View style={styles.itemMeta}>
               <FastImage
                 source={{uri: item?.product?.descriptor?.symbol}}
@@ -51,36 +47,46 @@ const ProductSummary = ({
               />
               <View style={styles.itemDetails}>
                 <View style={styles.itemHeader}>
-                  <Text variant={'bodyMedium'} style={styles.itemName}>
+                  <Text variant={'bodyLarge'} style={styles.itemName}>
                     {item?.product?.descriptor?.name}
                   </Text>
-                  <Text variant={'labelMedium'} style={styles.quantity}>
-                    Qty {item?.quantity?.count}
-                  </Text>
-                  <Text variant={'labelLarge'} style={styles.quantity}>
-                    {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                    {Number(
-                      item?.quantity?.count * item?.product?.price?.value,
-                    ).toFixed(2)}
-                  </Text>
+                  <View style={styles.itemQuantityContainer}>
+                    <Text variant={'labelSmall'} style={styles.quantity}>
+                      Qty {item?.quantity?.count}
+                    </Text>
+                    <Text variant={'labelLarge'} style={styles.itemPrice}>
+                      {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
+                      {Number(
+                        item?.quantity?.count * item?.product?.price?.value,
+                      ).toFixed(2)}
+                    </Text>
+                  </View>
                 </View>
                 <View style={styles.chipContainer}>
                   {cancellable ? (
                     <View style={styles.chip}>
-                      <Text variant={'labelMedium'}>Cancellable</Text>
+                      <Text variant={'labelSmall'} style={styles.chipLabel}>
+                        Cancellable
+                      </Text>
                     </View>
                   ) : (
                     <View style={styles.chip}>
-                      <Text variant={'labelMedium'}>Non-cancellable</Text>
+                      <Text variant={'labelSmall'} style={styles.chipLabel}>
+                        Non-cancellable
+                      </Text>
                     </View>
                   )}
                   {returnable ? (
                     <View style={styles.chip}>
-                      <Text variant={'labelMedium'}>Returnable</Text>
+                      <Text variant={'labelSmall'} style={styles.chipLabel}>
+                        Returnable
+                      </Text>
                     </View>
                   ) : (
                     <View style={styles.chip}>
-                      <Text variant={'labelMedium'}>Non-returnable</Text>
+                      <Text variant={'labelSmall'} style={styles.chipLabel}>
+                        Non-returnable
+                      </Text>
                     </View>
                   )}
                 </View>
@@ -127,10 +133,10 @@ const ProductSummary = ({
       </View>
       <View style={styles.divider} />
       <View style={styles.grossTotal}>
-        <Text variant={'titleSmall'} style={styles.grossTotalLabel}>
+        <Text variant={'titleMedium'} style={styles.grossTotalLabel}>
           Order Total
         </Text>
-        <Text variant={'titleSmall'} style={styles.grossTotalValue}>
+        <Text variant={'headlineSmall'} style={styles.grossTotalValue}>
           {CURRENCY_SYMBOLS[quote?.price?.currency]}
           {quote?.price?.value}
         </Text>
@@ -145,7 +151,7 @@ const makeStyles = (colors: any) =>
       borderRadius: 8,
       backgroundColor: '#FFF',
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       marginHorizontal: 16,
       paddingHorizontal: 16,
       paddingTop: 16,
@@ -183,20 +189,21 @@ const makeStyles = (colors: any) =>
     },
     item: {
       paddingVertical: 12,
-      borderBottomColor: '#E8E8E8',
-      borderBottomWidth: 1,
+    },
+    itemBorderTop: {
+      borderTopColor: colors.neutral100,
+      borderTopWidth: 1,
     },
     itemImage: {
       width: 32,
       height: 32,
       borderRadius: 8,
       marginRight: 10,
-      backgroundColor: '#E8E8E8',
     },
     itemMeta: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 4,
+      marginBottom: 8,
     },
     itemDetails: {
       flex: 1,
@@ -217,21 +224,31 @@ const makeStyles = (colors: any) =>
     },
     chip: {
       marginRight: 4,
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
       paddingHorizontal: 8,
-      paddingVertical: 2,
       borderRadius: 22,
+    },
+    chipLabel: {
+      color: colors.neutral300,
     },
     quantityContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
     },
+    itemQuantityContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
     itemName: {
-      marginBottom: 4,
+      color: colors.neutral400,
     },
     quantity: {
-      color: '#686868',
+      color: colors.neutral300,
+    },
+    itemPrice: {
+      color: colors.neutral300,
+      marginLeft: 12,
     },
     summaryContainer: {
       marginTop: 12,
@@ -253,7 +270,7 @@ const makeStyles = (colors: any) =>
       marginVertical: 20,
       width: '100%',
       height: 1,
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
     },
     grossTotal: {
       flexDirection: 'row',

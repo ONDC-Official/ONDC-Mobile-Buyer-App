@@ -278,7 +278,7 @@ const makeStyles = (colors: any) =>
     },
     card: {
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       borderRadius: 12,
       padding: 16,
       backgroundColor: '#FFFFFF',
@@ -289,7 +289,7 @@ const makeStyles = (colors: any) =>
     },
     accordion: {
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       borderRadius: 12,
     },
     accordionTitle: {
@@ -383,10 +383,10 @@ const makeStyles = (colors: any) =>
     },
     itemDescription: {
       marginBottom: 16,
-      color: '#686868',
+      color: colors.neutral300,
     },
     qty: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     actionButton: {
       borderRadius: 8,

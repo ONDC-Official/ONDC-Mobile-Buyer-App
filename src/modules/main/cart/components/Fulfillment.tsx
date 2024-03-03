@@ -424,7 +424,7 @@ const makeStyles = (colors: any) =>
       width: 85,
     },
     productQuantity: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     fulfilmentTotal: {
       flexDirection: 'row',

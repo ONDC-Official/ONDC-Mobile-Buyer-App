@@ -126,7 +126,7 @@ const makeStyles = (colors: any) =>
       borderRadius: 8,
       backgroundColor: '#FFF',
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       paddingHorizontal: 16,
       paddingTop: 16,
       paddingBottom: 12,
@@ -143,7 +143,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 4,
     },
     normalText: {
-      color: '#686868',
+      color: colors.neutral300,
       marginBottom: 4,
     },
     customerDetails: {

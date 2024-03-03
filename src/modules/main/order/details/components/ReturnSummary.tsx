@@ -179,7 +179,7 @@ const makeStyles = (colors: any) =>
       borderRadius: 8,
       backgroundColor: '#FFF',
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       marginHorizontal: 16,
       paddingHorizontal: 16,
       paddingTop: 16,
@@ -195,7 +195,7 @@ const makeStyles = (colors: any) =>
       paddingTop: 12,
     },
     reason: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     providerMeta: {
       flexDirection: 'row',
@@ -223,7 +223,7 @@ const makeStyles = (colors: any) =>
     },
     item: {
       paddingVertical: 12,
-      borderBottomColor: '#E8E8E8',
+      borderBottomColor: colors.neutral100,
       borderBottomWidth: 1,
     },
     itemImage: {
@@ -231,7 +231,7 @@ const makeStyles = (colors: any) =>
       height: 32,
       borderRadius: 8,
       marginRight: 10,
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
     },
     itemMeta: {
       flexDirection: 'row',
@@ -257,7 +257,7 @@ const makeStyles = (colors: any) =>
     },
     chip: {
       marginRight: 4,
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
       paddingHorizontal: 8,
       paddingVertical: 2,
       borderRadius: 22,
@@ -271,7 +271,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 4,
     },
     quantity: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     summaryContainer: {
       marginTop: 12,
@@ -293,7 +293,7 @@ const makeStyles = (colors: any) =>
       marginVertical: 20,
       width: '100%',
       height: 1,
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
     },
     grossTotal: {
       flexDirection: 'row',

@@ -18,9 +18,9 @@ const ReturnStatus = ({code, fulfilment}: {code: string; fulfilment?: any}) => {
   return (
     <View style={styles.statusChip}>
       <Text variant={'labelMedium'} style={styles.statusText}>
-        {code}{' '}
+        {code}
         {return_end_states.includes(code)
-          ? moment(fulfilment?.updatedAt).format('Do MMM')
+          ? ` ${moment(fulfilment?.updatedAt).format('Do MMM')}`
           : ''}
       </Text>
     </View>
@@ -33,7 +33,7 @@ const makeStyles = (colors: any) =>
       borderRadius: 26,
       paddingVertical: 2,
       paddingHorizontal: 8,
-      backgroundColor: '#ECF3F8',
+      backgroundColor: colors.primary50,
     },
     statusText: {
       color: colors.primary,

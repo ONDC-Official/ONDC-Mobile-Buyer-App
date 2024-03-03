@@ -408,7 +408,7 @@ const makeStyles = (colors: any) =>
       height: 32,
       borderRadius: 8,
       marginRight: 10,
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
     },
     itemDetails: {
       flex: 1,
@@ -428,7 +428,7 @@ const makeStyles = (colors: any) =>
     },
     chip: {
       marginRight: 4,
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
       paddingHorizontal: 8,
       paddingVertical: 2,
       borderRadius: 22,
@@ -465,7 +465,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 4,
     },
     quantity: {
-      color: '#686868',
+      color: colors.neutral300,
       paddingHorizontal: 4,
     },
     selectDropdown: {

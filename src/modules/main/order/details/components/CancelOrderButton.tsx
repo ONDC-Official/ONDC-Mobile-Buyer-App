@@ -47,7 +47,7 @@ const CancelOrderButton = () => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      borderColor: colors.error,
+      borderColor: colors.error600,
       borderRadius: 8,
       height: 44,
       justifyContent: 'center',
@@ -55,11 +55,10 @@ const makeStyles = (colors: any) =>
       flex: 1,
       borderWidth: 1,
       marginTop: 24,
-      marginHorizontal: 16,
       marginBottom: 20,
     },
     label: {
-      color: colors.error,
+      color: colors.error600,
     },
   });
 

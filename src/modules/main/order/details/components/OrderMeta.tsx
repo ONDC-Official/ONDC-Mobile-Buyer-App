@@ -14,48 +14,48 @@ const OrderMeta = () => {
 
   return (
     <View style={styles.container}>
-      <Text variant={'titleMedium'} style={styles.title}>
+      <Text variant={'headlineSmall'} style={styles.title}>
         Order Details
       </Text>
       <View style={styles.metaContainer}>
-        <Text variant={'bodyMedium'} style={styles.label}>
+        <Text variant={'bodyLarge'} style={styles.label}>
           Order Number
         </Text>
-        <Text variant={'bodySmall'} style={styles.value}>
+        <Text variant={'bodyMedium'} style={styles.value}>
           {orderDetails?.id}
         </Text>
       </View>
       <View style={styles.metaContainer}>
-        <Text variant={'bodyMedium'} style={styles.label}>
+        <Text variant={'bodyLarge'} style={styles.label}>
           Payment mode
         </Text>
-        <Text variant={'bodySmall'} style={styles.value}>
+        <Text variant={'bodyMedium'} style={styles.value}>
           {orderDetails?.payment?.type === 'ON-FULFILLMENT'
             ? 'Cash on delivery'
             : 'Prepaid'}
         </Text>
       </View>
       <View style={styles.metaContainer}>
-        <Text variant={'bodyMedium'} style={styles.label}>
+        <Text variant={'bodyLarge'} style={styles.label}>
           Date
         </Text>
-        <Text variant={'bodySmall'} style={styles.value}>
+        <Text variant={'bodyMedium'} style={styles.value}>
           {moment(orderDetails?.createdAt).format('DD/MM/YY hh:mm a')}
         </Text>
       </View>
       <View style={styles.metaContainer}>
-        <Text variant={'bodyMedium'} style={styles.label}>
+        <Text variant={'bodyLarge'} style={styles.label}>
           Phone Number
         </Text>
-        <Text variant={'bodySmall'} style={styles.value}>
+        <Text variant={'bodyMedium'} style={styles.value}>
           {orderDetails?.billing?.phone}
         </Text>
       </View>
-      <View style={styles.metaContainer}>
-        <Text variant={'bodyMedium'} style={styles.label}>
+      <View>
+        <Text variant={'bodyLarge'} style={styles.label}>
           Delivery Address
         </Text>
-        <Text variant={'bodySmall'} style={styles.value}>
+        <Text variant={'bodyMedium'} style={styles.value}>
           {address?.locality}, {address?.building}, {address?.city},{' '}
           {address?.state}, {address?.country} - {address?.area_code}
         </Text>
@@ -69,9 +69,9 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       borderRadius: 8,
-      backgroundColor: '#FFF',
+      backgroundColor: colors.white,
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       marginHorizontal: 16,
       paddingHorizontal: 16,
       paddingTop: 16,
@@ -91,7 +91,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 8,
     },
     value: {
-      color: '#686868',
+      color: colors.neutral300,
     },
   });
 

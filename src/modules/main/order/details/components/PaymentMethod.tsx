@@ -22,17 +22,21 @@ const PaymentMethod = ({
     <TouchableOpacity
       style={styles.container}
       onPress={() => navigation.navigate('PaymentMethods')}>
-      <Text variant={'titleSmall'} style={styles.title}>
+      <Text variant={'titleLarge'} style={styles.title}>
         Payment Methods
       </Text>
       <View style={styles.modeContainer}>
         <Text variant={'bodySmall'} style={styles.mode}>
           {payment?.type === 'ON-FULFILLMENT' ? 'Cash On Delivery' : 'Prepaid'}
         </Text>
-        <Icon name={'chevron-right'} size={20} color={'#686868'} />
+        <Icon
+          name={'keyboard-arrow-right'}
+          size={20}
+          color={theme.colors.neutral300}
+        />
       </View>
       <Divider style={styles.divider} />
-      <Text variant={'titleSmall'} style={styles.title}>
+      <Text variant={'titleLarge'} style={styles.addressTitle}>
         Shipping Address
       </Text>
       <View style={styles.modeContainer}>
@@ -42,7 +46,11 @@ const PaymentMethod = ({
           {address?.locality}, {address?.building}, {address?.city},{' '}
           {address?.state}, {address?.country} - {address?.area_code}
         </Text>
-        <Icon name={'chevron-right'} size={20} color={'#686868'} />
+        <Icon
+          name={'keyboard-arrow-right'}
+          size={20}
+          color={theme.colors.neutral300}
+        />
       </View>
     </TouchableOpacity>
   );
@@ -52,20 +60,23 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       borderRadius: 8,
-      backgroundColor: '#FFF',
+      backgroundColor: colors.white,
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       marginHorizontal: 16,
-      paddingHorizontal: 16,
-      paddingTop: 16,
-      marginTop: 24,
-      paddingBottom: 8,
+      padding: 16,
+      marginTop: 20,
     },
     title: {
-      marginBottom: 4,
+      marginBottom: 5,
+      color: colors.neutral400,
+    },
+    addressTitle: {
+      marginBottom: 12,
+      color: colors.neutral400,
     },
     mode: {
-      color: '#686868',
+      color: colors.neutral300,
       flex: 1,
     },
     modeContainer: {

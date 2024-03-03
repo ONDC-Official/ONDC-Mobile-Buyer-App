@@ -68,7 +68,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 2,
     },
     orderStatus: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     pageContainer: {
       flex: 1,

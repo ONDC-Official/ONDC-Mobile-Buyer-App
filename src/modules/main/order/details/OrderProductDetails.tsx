@@ -21,13 +21,13 @@ const OrderProductDetails = ({route: {params}}: {route: any}) => {
     <View style={styles.orderDetails}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name={'arrow-back'} size={24} color={'#000'} />
+          <Icon name={'arrow-back'} size={24} color={colors.neutral400} />
         </TouchableOpacity>
         <View style={styles.headerTitleContainer}>
-          <Text variant={'titleSmall'} style={styles.orderDetailsTitle}>
+          <Text variant={'titleLarge'} style={styles.orderDetailsTitle}>
             {orderDetails?.id}
           </Text>
-          <Text variant={'labelMedium'} style={styles.orderStatus}>
+          <Text variant={'labelSmall'} style={styles.orderStatus}>
             {orderDetails?.state} -{' '}
             {CURRENCY_SYMBOLS[orderDetails?.payment?.params?.currency]}
             {orderDetails?.payment?.params?.amount}
@@ -81,7 +81,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 8,
     },
     orderStatus: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     empty: {
       width: 24,
@@ -89,7 +89,7 @@ const makeStyles = (colors: any) =>
     },
     pageContainer: {
       flex: 1,
-      backgroundColor: '#FAFAFA',
+      backgroundColor: colors.neutral50,
     },
     creationHeader: {
       flexDirection: 'row',
@@ -103,11 +103,11 @@ const makeStyles = (colors: any) =>
       marginHorizontal: 16,
     },
     orderId: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     creationDate: {
       marginLeft: 8,
-      color: '#686868',
+      color: colors.neutral300,
     },
     shippingContainer: {
       paddingTop: 24,
@@ -127,7 +127,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     arrivalLabel: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     arrivalDate: {
       color: colors.neutral400,

@@ -41,37 +41,51 @@ const SingleItem = ({item}: {item: any}) => {
           style={styles.itemImage}
         />
         <View style={styles.itemMeta}>
-          <Text variant={'labelMedium'} style={styles.itemName}>
-            {item?.product?.descriptor?.name}
-          </Text>
+          <View style={styles.itemTitleRow}>
+            <Text variant={'labelMedium'} style={styles.itemName}>
+              {item?.product?.descriptor?.name}
+            </Text>
+            <View style={styles.quantityContainer}>
+              <Text variant={'labelMedium'} style={styles.quantity}>
+                Qty {item?.quantity?.count}
+              </Text>
+              <Text variant={'labelLarge'} style={styles.price}>
+                {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
+                {Number(
+                  item?.quantity?.count * item?.product?.price?.value,
+                ).toFixed(2)}
+              </Text>
+            </View>
+          </View>
           <View style={styles.itemTags}>
             {item?.product['@ondc/org/cancellable'] ? (
               <View style={styles.chip}>
-                <Text variant={'labelMedium'}>Cancellable</Text>
+                <Text variant={'labelSmall'} style={styles.chipText}>
+                  Cancellable
+                </Text>
               </View>
             ) : (
               <View style={styles.chip}>
-                <Text variant={'labelMedium'}>Non-cancellable</Text>
+                <Text variant={'labelSmall'} style={styles.chipText}>
+                  Non-cancellable
+                </Text>
               </View>
             )}
             {item?.product['@ondc/org/returnable'] ? (
               <View style={styles.chip}>
-                <Text variant={'labelMedium'}>Returnable</Text>
+                <Text variant={'labelSmall'} style={styles.chipText}>
+                  Returnable
+                </Text>
               </View>
             ) : (
               <View style={styles.chip}>
-                <Text variant={'labelMedium'}>Non-returnable</Text>
+                <Text variant={'labelSmall'} style={styles.chipText}>
+                  Non-returnable
+                </Text>
               </View>
             )}
           </View>
         </View>
-        <Text variant={'labelMedium'}>Qty {item?.quantity?.count}</Text>
-        <Text variant={'labelMedium'} style={styles.price}>
-          {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-          {Number(item?.quantity?.count * item?.product?.price?.value).toFixed(
-            2,
-          )}
-        </Text>
       </View>
     );
   } else {
@@ -125,33 +139,40 @@ const ItemDetails = ({
     <>
       {shipmentFulfillmentList.length > 0 && (
         <View>
-          <Text variant={'titleSmall'} style={styles.fulfilmentTitle}>
+          <Text variant={'titleLarge'} style={styles.fulfilmentTitle}>
             Shipment Details
           </Text>
           {shipmentFulfillmentList?.map((fulfillment: any) => {
             const endDate = moment(fulfillment?.end?.time?.range?.end);
 
             return (
-              <TouchableOpacity
-                key={fulfillment.id}
-                style={styles.container}
-                onPress={() =>
-                  navigation.navigate('OrderProductDetails', {
-                    fulfillmentId: fulfillment.id,
-                  })
-                }>
-                <View style={styles.header}>
-                  <Text variant={'labelMedium'} style={styles.deliveryDate}>
-                    Items will be delivered by{' '}
-                    {today.isSame(endDate, 'day')
-                      ? endDate.format('hh:mm a')
-                      : endDate.format('Do MMM')}
-                  </Text>
+              <View key={fulfillment.id} style={styles.container}>
+                <TouchableOpacity
+                  style={styles.header}
+                  onPress={() =>
+                    navigation.navigate('OrderProductDetails', {
+                      fulfillmentId: fulfillment.id,
+                    })
+                  }>
+                  <View>
+                    <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                      Items will be delivered by{' '}
+                    </Text>
+                    <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                      {today.isSame(endDate, 'day')
+                        ? endDate.format('hh:mm a')
+                        : endDate.format('Do MMM')}
+                    </Text>
+                  </View>
                   <View style={styles.statusContainer}>
                     <ReturnStatus code={fulfillment?.state?.descriptor?.code} />
-                    <Icon name={'chevron-right'} size={20} color={'#686868'} />
+                    <Icon
+                      name={'keyboard-arrow-right'}
+                      size={20}
+                      color={theme.colors.neutral300}
+                    />
                   </View>
-                </View>
+                </TouchableOpacity>
                 {items
                   .filter(item => item.fulfillment_id === fulfillment.id)
                   .map((item, index) =>
@@ -164,7 +185,7 @@ const ItemDetails = ({
                       <View key={`${item.id}${index}ShipmentFulfillment`} />
                     ),
                   )}
-              </TouchableOpacity>
+              </View>
             );
           })}
         </View>
@@ -202,24 +223,22 @@ const ItemDetails = ({
             reasonId = reasonIdTag.value;
 
             return (
-              <TouchableOpacity
-                key={fulfillment.id}
-                style={styles.container}
-                onPress={() =>
-                  navigation.navigate('OrderReturnDetails', {
-                    fulfillmentId: fulfillment.id,
-                  })
-                }>
-                <View style={styles.header}>
-                  <Text variant={'labelMedium'} style={styles.deliveryDate}>
+              <View key={fulfillment.id} style={styles.container}>
+                <TouchableOpacity
+                  style={styles.header}
+                  onPress={() =>
+                    navigation.navigate('OrderReturnDetails', {
+                      fulfillmentId: fulfillment.id,
+                    })
+                  }>
+                  <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                    Return initiated on
+                  </Text>
+                  <Text variant={'labelSmall'} style={styles.deliveryDate}>
                     {returnInitiated
-                      ? `Return initiated on ${
-                          today.isSame(moment(returnInitiated.createdAt), 'day')
-                            ? moment(returnInitiated.createdAt).format(
-                                'hh:mm a',
-                              )
-                            : moment(returnInitiated.createdAt).format('Do MMM')
-                        }`
+                      ? today.isSame(moment(returnInitiated.createdAt), 'day')
+                        ? moment(returnInitiated.createdAt).format('hh:mm a')
+                        : moment(returnInitiated.createdAt).format('Do MMM')
                       : ''}
                   </Text>
                   <View style={styles.statusContainer}>
@@ -230,9 +249,13 @@ const ItemDetails = ({
                           one.state === fulfillment?.state?.descriptor?.code,
                       )}
                     />
-                    <Icon name={'chevron-right'} size={20} color={'#686868'} />
+                    <Icon
+                      name={'keyboard-arrow-right'}
+                      size={20}
+                      color={theme.colors.neutral300}
+                    />
                   </View>
-                </View>
+                </TouchableOpacity>
                 {fulfillment?.state?.descriptor?.code === 'Return_Initiated'
                   ? items
                       .filter(item => item.id === itemId)
@@ -251,11 +274,11 @@ const ItemDetails = ({
                         />
                       ))}
                 <View style={styles.footer}>
-                  <Text variant={'labelMedium'} style={styles.reason}>
+                  <Text variant={'labelSmall'} style={styles.reason}>
                     {RETURN_REASONS.find(one => one.key === reasonId)?.value}
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </View>
             );
           })}
         </View>
@@ -352,9 +375,9 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       borderRadius: 8,
-      backgroundColor: '#FFF',
+      backgroundColor: colors.white,
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       marginHorizontal: 16,
       paddingHorizontal: 16,
       paddingTop: 16,
@@ -367,46 +390,60 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       paddingBottom: 12,
       marginBottom: 12,
-      borderBottomColor: '#E8E8E8',
+      borderBottomColor: colors.neutral100,
       borderBottomWidth: 1,
     },
     footer: {
       paddingTop: 12,
-      borderTopColor: '#E8E8E8',
+      borderTopColor: colors.neutral100,
       borderTopWidth: 1,
     },
     reason: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     item: {
       marginBottom: 12,
       flexDirection: 'row',
     },
     itemImage: {
-      width: 32,
-      height: 32,
+      width: 44,
+      height: 44,
       borderRadius: 8,
       marginRight: 10,
-      backgroundColor: '#E8E8E8',
     },
     itemMeta: {
       flex: 1,
     },
-    itemName: {
+    itemTitleRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       marginBottom: 4,
+    },
+    quantityContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    quantity: {
+      color: colors.neutral300,
+    },
+    itemName: {
+      color: colors.neutral400,
     },
     itemTags: {
       flexDirection: 'row',
     },
     chip: {
       marginRight: 4,
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
       paddingHorizontal: 8,
-      paddingVertical: 2,
       borderRadius: 22,
     },
+    chipText: {
+      color: colors.neutral300,
+    },
     deliveryDate: {
-      color: '#686868',
+      color: colors.neutral300,
       flex: 1,
       flexWrap: 'wrap',
     },
@@ -417,12 +454,12 @@ const makeStyles = (colors: any) =>
       justifyContent: 'flex-end',
     },
     price: {
-      fontWeight: '700',
-      marginLeft: 16,
+      marginLeft: 12,
+      color: colors.neutral300,
     },
     fulfilmentTitle: {
       marginTop: 20,
-      color: '#000',
+      color: colors.neutral400,
       paddingHorizontal: 16,
     },
   });

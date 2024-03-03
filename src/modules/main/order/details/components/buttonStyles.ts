@@ -21,7 +21,7 @@ export const makeButtonStyles = (colors: any) =>
       borderTopRightRadius: 16,
     },
     draggableIcon: {
-      backgroundColor: '#000',
+      backgroundColor: colors.neutral400,
     },
     rbSheet: {
       backgroundColor: 'rgba(47, 47, 47, 0.75)',

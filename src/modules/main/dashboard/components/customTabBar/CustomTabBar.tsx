@@ -139,7 +139,7 @@ const makeStyles = (colors: any) =>
       marginLeft: 6,
     },
     tabText: {
-      color: '#686868',
+      color: colors.neutral300,
       marginLeft: 6,
     },
     badge: {

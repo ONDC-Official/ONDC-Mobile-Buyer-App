@@ -3,20 +3,21 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import GetStatusButton from './GetStatusButton';
 import TrackOrderButton from './TrackOrderButton';
+import {useAppTheme} from '../../../../../utils/theme';
 
 interface Actions {
   onUpdateOrder: (value: any) => void;
 }
 
 const Actions: React.FC<Actions> = ({onUpdateOrder}) => {
-  const styles = makeStyles();
+  const {colors} = useAppTheme();
+  const styles = makeStyles(colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
   if (orderDetails?.state !== 'Completed') {
     return (
       <View style={styles.buttonContainer}>
         <GetStatusButton onUpdateOrder={onUpdateOrder} />
-        <View style={styles.buttonSeparator} />
         <TrackOrderButton />
       </View>
     );
@@ -24,7 +25,7 @@ const Actions: React.FC<Actions> = ({onUpdateOrder}) => {
   return <></>;
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     buttonContainer: {
       flexDirection: 'row',
@@ -32,10 +33,8 @@ const makeStyles = () =>
       justifyContent: 'space-between',
       paddingHorizontal: 16,
       paddingVertical: 12,
-      backgroundColor: '#ECF3F8',
-    },
-    buttonSeparator: {
-      width: 15,
+      backgroundColor: colors.primary50,
+      gap: 15,
     },
   });
 

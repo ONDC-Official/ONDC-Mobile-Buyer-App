@@ -259,10 +259,14 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
       {orderDetails?.state !== 'Cancelled' && (
         <TouchableOpacity style={styles.container} onPress={showDialog}>
           <RaiseComplaint width={42} height={42} />
-          <Text variant={'titleSmall'} style={styles.title}>
+          <Text variant={'titleLarge'} style={styles.title}>
             Raise Issue
           </Text>
-          <Icon name={'chevron-right'} size={20} color={'#686868'} />
+          <Icon
+            name={'keyboard-arrow-right'}
+            size={20}
+            color={theme.colors.neutral300}
+          />
         </TouchableOpacity>
       )}
       <Portal>
@@ -526,10 +530,10 @@ const makeStyles = (colors: any) =>
       paddingVertical: 8,
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop: 12,
+      marginTop: 20,
       marginHorizontal: 16,
     },
     title: {
@@ -542,7 +546,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       justifyContent: 'space-between',
       padding: 16,
-      borderBottomColor: '#E8E8E8',
+      borderBottomColor: colors.neutral100,
       borderBottomWidth: 1,
     },
     details: {
@@ -567,7 +571,7 @@ const makeStyles = (colors: any) =>
     },
     quantityContainer: {
       borderRadius: 6,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       borderWidth: 1,
       backgroundColor: '#FFF',
       flexDirection: 'row',

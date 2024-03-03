@@ -218,7 +218,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       padding: 12,
       borderBottomWidth: 1,
-      borderBottomColor: '#E8E8E8',
+      borderBottomColor: colors.neutral100,
     },
     modalContainer: {
       padding: 12,

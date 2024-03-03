@@ -113,7 +113,7 @@ const makeStyles = (colors: any) =>
       color: '#222222',
     },
     address: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     row: {
       flexDirection: 'row',
@@ -121,7 +121,7 @@ const makeStyles = (colors: any) =>
       marginTop: 8,
     },
     label: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     value: {
       color: '#222222',

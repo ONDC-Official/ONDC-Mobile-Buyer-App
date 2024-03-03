@@ -11,6 +11,7 @@ export const theme: any = {
   colors: {
     ...MD3LightTheme.colors,
 
+    neutral500: '#1D1D1D',
     neutral400: '#1A1A1A',
     neutral300: '#686868',
     neutral200: '#B5B5B5',

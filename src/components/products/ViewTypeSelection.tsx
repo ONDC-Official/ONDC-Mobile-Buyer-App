@@ -64,7 +64,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.primary,
     },
     defaultReorderButton: {
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       paddingTop: 12,
     },
   });

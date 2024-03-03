@@ -159,7 +159,7 @@ const makeStyles = (colors: any) =>
     contentContainerStyle: {paddingVertical: 10},
     emptyContainer: {justifyContent: 'center', alignItems: 'center'},
     divider: {
-      backgroundColor: '#E8E8E8',
+      backgroundColor: colors.neutral100,
       height: 1,
       marginVertical: 24,
     },

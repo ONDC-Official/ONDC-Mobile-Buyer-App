@@ -97,11 +97,11 @@ const makeStyles = (colors: any) =>
       marginHorizontal: 16,
     },
     orderId: {
-      color: '#686868',
+      color: colors.neutral300,
     },
     creationDate: {
       marginLeft: 8,
-      color: '#686868',
+      color: colors.neutral300,
     },
   });
 

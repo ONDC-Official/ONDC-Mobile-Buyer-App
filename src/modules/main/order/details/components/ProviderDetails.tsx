@@ -45,7 +45,7 @@ const ProviderDetails = ({
             source={{uri: provider?.descriptor?.symbol}}
             style={styles.providerImage}
           />
-          <Text variant={'titleMedium'} style={styles.providerName}>
+          <Text variant={'headlineSmall'} style={styles.providerName}>
             {provider?.descriptor?.name}
           </Text>
         </TouchableOpacity>
@@ -69,9 +69,9 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       borderRadius: 8,
-      backgroundColor: '#FFF',
+      backgroundColor: colors.white,
       borderWidth: 1,
-      borderColor: '#E8E8E8',
+      borderColor: colors.neutral100,
       marginHorizontal: 16,
       padding: 16,
       marginTop: 12,
@@ -89,6 +89,7 @@ const makeStyles = (colors: any) =>
     },
     providerName: {
       flex: 1,
+      color: colors.neutral400,
     },
     providerImage: {
       width: 30,

@@ -40,7 +40,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
       );
       data.timings = '';
       data.isOpen = false;
-      console.log(data.time.range.start, data.time.range.end);
       if (data.time.range.start && data.time.range.end) {
         data.timings = `${moment(data.time.range.start, 'hhmm').format(
           'h:mm a',
