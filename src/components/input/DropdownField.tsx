@@ -4,25 +4,32 @@ import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useAppTheme} from '../../utils/theme';
 
-const DropdownField: React.FC<any> = ({required = false, label, ...props}) => {
+const DropdownField: React.FC<any> = ({
+  required = false,
+  label,
+  inputLabel,
+  ...props
+}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [showDropDown, setShowDropDown] = useState(false);
 
   return (
     <View>
+      <Text variant={'bodyMedium'} style={styles.inputLabel}>
+        {inputLabel}
+        {props.required && <Text style={styles.required}>*</Text>}
+      </Text>
       <DropDown
+        inputProps={{
+          dense: true,
+          outlineStyle: styles.outline,
+          placeholderTextColor: theme.colors.neutral200,
+          outlineColor: theme.colors.neutral200,
+          style: styles.inputText,
+        }}
         {...props}
-        label={
-          required ? (
-            <Text style={styles.label}>
-              {label}
-              <Text style={styles.required}> *</Text>
-            </Text>
-          ) : (
-            label
-          )
-        }
+        label={label}
         mode={'outlined'}
         visible={showDropDown}
         showDropDown={() => setShowDropDown(true)}
@@ -39,8 +46,17 @@ const DropdownField: React.FC<any> = ({required = false, label, ...props}) => {
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    label: {backgroundColor: colors.white},
-    required: {color: colors.red},
+    inputLabel: {
+      color: colors.neutral400,
+      marginBottom: 4,
+    },
+    required: {color: colors.error600},
+    outline: {
+      borderRadius: 12,
+    },
+    inputText: {
+      fontWeight: '400',
+    },
   });
 
 export default DropdownField;

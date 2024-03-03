@@ -29,7 +29,10 @@ import {
   ON_ISSUE,
   RAISE_ISSUE,
 } from '../../../../../utils/apiActions';
-import {showToastWithGravity} from '../../../../../utils/utils';
+import {
+  isItemCustomization,
+  showToastWithGravity,
+} from '../../../../../utils/utils';
 import {useAppTheme} from '../../../../../utils/theme';
 
 const validationSchema = yup.object({
@@ -275,18 +278,25 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
           onDismiss={hideDialog}
           contentContainerStyle={styles.dialog}>
           <View style={styles.header}>
-            <Text variant={'titleSmall'}>Raise an Issue</Text>
+            <Text variant={'titleLarge'} style={styles.modalTitle}>
+              Raise an Issue
+            </Text>
             <TouchableOpacity onPress={hideDialog}>
-              <Icon name={'clear'} size={20} />
+              <Icon name={'clear'} size={20} color={theme.colors.neutral400} />
             </TouchableOpacity>
           </View>
           <ScrollView>
             <View style={styles.details}>
-              <Text variant={'bodyMedium'}>
+              <Text variant={'bodyMedium'} style={styles.message}>
                 Choose items that had a problem*
               </Text>
               {productsWithIssue?.map((item: any, index: number) => {
                 const itemSelected = selectedItems.includes(item.id);
+                const itemCustomization = isItemCustomization(item.tags);
+
+                if (itemCustomization) {
+                  return <View key={item.id} />;
+                }
 
                 return (
                   <View key={item.id} style={styles.itemContainer}>
@@ -342,7 +352,7 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                       </TouchableOpacity>
                     </View>
 
-                    <Text variant={'labelMedium'} style={styles.amount}>
+                    <Text variant={'labelLarge'} style={styles.amount}>
                       {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
                       {(
                         item?.quantity?.count * item?.product?.price?.value
@@ -372,11 +382,8 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                   }) => (
                     <View style={styles.formContainer}>
                       <View style={appStyles.inputContainer}>
-                        <Text variant={'bodyMedium'} style={styles.inputLabel}>
-                          Select Issue Subcategory
-                          <Text style={styles.required}> *</Text>
-                        </Text>
                         <DropdownField
+                          inputLabel={'Select Issue Subcategory'}
                           disabled={raiseInProgress}
                           name="subcategory"
                           value={values.subcategory}
@@ -393,11 +400,9 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                         />
                       </View>
                       <View style={appStyles.inputContainer}>
-                        <Text variant={'bodyMedium'} style={styles.inputLabel}>
-                          Short Description
-                          <Text style={styles.required}> *</Text>
-                        </Text>
                         <InputField
+                          required
+                          inputLabel={'Short Description'}
                           disabled={raiseInProgress}
                           name="shortDescription"
                           value={values.shortDescription}
@@ -417,11 +422,9 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                         />
                       </View>
                       <View style={appStyles.inputContainer}>
-                        <Text variant={'bodyMedium'} style={styles.inputLabel}>
-                          Long Description
-                          <Text style={styles.required}> *</Text>
-                        </Text>
                         <InputField
+                          required
+                          inputLabel={'Long Description'}
                           disabled={raiseInProgress}
                           name="longDescription"
                           value={values.longDescription}
@@ -441,10 +444,8 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                         />
                       </View>
                       <View style={appStyles.inputContainer}>
-                        <Text variant={'bodyMedium'} style={styles.inputLabel}>
-                          Email
-                        </Text>
                         <InputField
+                          inputLabel={'Email'}
                           disabled
                           name="email"
                           value={values.email}
@@ -461,12 +462,16 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                           Images (Maximum 4)
                         </Text>
                         <View style={styles.fileContainer}>
-                          <Button
+                          <TouchableOpacity
                             disabled={raiseInProgress}
-                            mode={'contained'}
+                            style={styles.browseButton}
                             onPress={handleChoosePhoto}>
-                            Browse
-                          </Button>
+                            <Text
+                              variant={'labelMedium'}
+                              style={styles.browseButtonLabel}>
+                              Browse
+                            </Text>
+                          </TouchableOpacity>
                         </View>
                         <View style={styles.imageContainer}>
                           {photos?.map((photo, index) => (
@@ -493,6 +498,7 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
 
                       <View style={styles.buttonContainer}>
                         <Button
+                          contentStyle={styles.buttonContent}
                           style={styles.button}
                           mode="outlined"
                           onPress={hideDialog}
@@ -501,6 +507,7 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                         </Button>
                         <View style={styles.separator} />
                         <Button
+                          contentStyle={styles.buttonContent}
                           style={styles.button}
                           mode="contained"
                           onPress={() => handleSubmit()}
@@ -541,16 +548,23 @@ const makeStyles = (colors: any) =>
       color: colors.neutral400,
       flex: 1,
     },
+    modalTitle: {
+      color: colors.neutral400,
+    },
     header: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: 16,
+      paddingHorizontal: 16,
+      paddingVertical: 14,
       borderBottomColor: colors.neutral100,
       borderBottomWidth: 1,
     },
     details: {
       padding: 16,
+    },
+    message: {
+      color: colors.neutral500,
     },
     paddingZero: {
       padding: 0,
@@ -558,7 +572,7 @@ const makeStyles = (colors: any) =>
     itemContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop: 16,
+      marginTop: 12,
     },
     productImage: {
       width: 32,
@@ -567,13 +581,14 @@ const makeStyles = (colors: any) =>
     },
     productName: {
       flex: 1,
-      marginLeft: 12,
+      marginLeft: 10,
+      color: colors.neutral300,
     },
     quantityContainer: {
       borderRadius: 6,
       borderColor: colors.neutral100,
       borderWidth: 1,
-      backgroundColor: '#FFF',
+      backgroundColor: colors.white,
       flexDirection: 'row',
       height: 26,
       alignItems: 'center',
@@ -584,6 +599,7 @@ const makeStyles = (colors: any) =>
       flex: 1,
       alignItems: 'center',
       textAlign: 'center',
+      color: colors.neutral500,
     },
     incrementButton: {
       paddingHorizontal: 4,
@@ -599,11 +615,15 @@ const makeStyles = (colors: any) =>
     amount: {
       width: 50,
       textAlign: 'right',
+      color: colors.neutral300,
     },
     buttonContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       marginTop: 16,
+    },
+    buttonContent: {
+      height: 44,
     },
     button: {
       flex: 1,
@@ -619,7 +639,6 @@ const makeStyles = (colors: any) =>
     inputLabel: {
       marginBottom: 4,
     },
-    required: {color: colors.red},
     fileContainer: {
       borderWidth: 1,
       borderRadius: 12,
@@ -638,6 +657,18 @@ const makeStyles = (colors: any) =>
     },
     removeImage: {
       position: 'absolute',
+    },
+    browseButton: {
+      backgroundColor: colors.neutral100,
+      borderRadius: 4,
+      borderColor: colors.neutral300,
+      borderWidth: 1,
+      paddingHorizontal: 8,
+      paddingVertical: 6,
+      width: 65,
+    },
+    browseButtonLabel: {
+      color: colors.neutral400,
     },
   });
 

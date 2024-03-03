@@ -16,13 +16,15 @@ const InputField: React.FC<any> = ({inputLabel, ...props}) => {
 
   return (
     <View>
-      <Text variant={'bodySmall'} style={styles.inputLabel}>
+      <Text variant={'bodyMedium'} style={styles.inputLabel}>
         {inputLabel}
+        {props.required && <Text style={styles.required}>*</Text>}
       </Text>
       <TextInput
         {...props}
         mode="outlined"
         dense
+        style={styles.inputText}
         outlineStyle={styles.outline}
         placeholderTextColor={theme.colors.neutral200}
         outlineColor={theme.colors.neutral200}
@@ -44,6 +46,10 @@ const makeStyles = (colors: any) =>
     },
     outline: {
       borderRadius: 12,
+    },
+    required: {color: colors.error600},
+    inputText: {
+      fontWeight: '400',
     },
   });
 

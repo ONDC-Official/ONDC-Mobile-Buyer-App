@@ -103,7 +103,9 @@ const NonCancelledOrder = ({
           contact={orderDetails?.fulfillments[0]?.end?.contact}
         />
         <RaiseIssueButton getOrderDetails={getOrderDetails} />
-        <CancelOrderButton />
+        <View style={styles.cancelContainer}>
+          <CancelOrderButton />
+        </View>
       </ScrollView>
     </View>
   );
@@ -162,6 +164,9 @@ const makeStyles = (colors: any) =>
     creationDate: {
       marginLeft: 8,
       color: colors.neutral300,
+    },
+    cancelContainer: {
+      marginHorizontal: 16,
     },
   });
 
