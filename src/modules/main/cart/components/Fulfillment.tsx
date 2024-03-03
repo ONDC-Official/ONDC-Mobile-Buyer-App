@@ -345,7 +345,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     listContainer: {
       padding: 16,
-      backgroundColor: '#FAFAFA',
+      backgroundColor: colors.neutral50,
     },
     customerRow: {
       marginBottom: 20,

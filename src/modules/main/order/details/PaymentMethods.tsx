@@ -16,19 +16,19 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
     <View style={styles.pageContainer}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name={'arrow-back'} size={20} color={'#000'} />
+          <Icon name={'arrow-back'} size={20} color={theme.colors.neutral400} />
         </TouchableOpacity>
-        <Text variant={'titleSmall'} style={styles.pageTitle}>
+        <Text variant={'titleLarge'} style={styles.pageTitle}>
           Delivery Address
         </Text>
       </View>
       <View style={styles.pageContent}>
         <View style={styles.container}>
-          <Text variant={'titleSmall'} style={styles.title}>
+          <Text variant={'titleLarge'} style={styles.title}>
             Delivery Address
           </Text>
           {!!location?.address?.name && (
-            <Text variant={'bodyMedium'} style={styles.name}>
+            <Text variant={'bodyLarge'} style={styles.name}>
               {location?.address?.name}
             </Text>
           )}
@@ -43,24 +43,27 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
         </View>
 
         <View style={styles.container}>
-          <Text variant={'titleSmall'} style={styles.title}>
+          <Text variant={'titleLarge'} style={styles.title}>
             Payment Methods
           </Text>
-          <Text variant={'bodySmall'}>
+          <Text variant={'bodySmall'} style={styles.normalText}>
             {orderDetails?.payment?.type === 'ON-FULFILLMENT'
               ? 'Cash On Delivery'
               : 'Prepaid'}
           </Text>
           <Divider style={styles.divider} />
-          <Text variant={'titleSmall'} style={styles.title}>
+          <Text variant={'titleLarge'} style={styles.title}>
             Billed Address
           </Text>
           {!!orderDetails?.billing?.name && (
-            <Text variant={'bodyMedium'} style={styles.name}>
-              {orderDetails?.billing?.name}, {orderDetails?.billing?.phone}
+            <Text variant={'bodyLarge'} style={styles.name}>
+              {orderDetails?.billing?.name}
             </Text>
           )}
-          <Text variant={'bodySmall'}>
+          <Text variant={'bodySmall'} style={styles.normalText}>
+            {orderDetails?.billing?.email}, {orderDetails?.billing?.phone}
+          </Text>
+          <Text variant={'bodySmall'} style={styles.normalText}>
             {orderDetails?.billing?.address?.locality},{' '}
             {orderDetails?.billing?.address?.building},{' '}
             {orderDetails?.billing?.address?.city},{' '}
@@ -71,11 +74,11 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
         </View>
 
         <View style={styles.container}>
-          <Text variant={'titleSmall'} style={styles.title}>
+          <Text variant={'titleLarge'} style={styles.title}>
             Customer Details
           </Text>
           <View style={styles.customerDetails}>
-            <Text variant={'bodyMedium'} style={styles.name}>
+            <Text variant={'bodyLarge'} style={styles.name}>
               Order Number
             </Text>
             <Text variant={'bodySmall'} style={styles.normalText}>
@@ -83,14 +86,14 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
             </Text>
           </View>
           <View style={styles.customerDetails}>
-            <Text variant={'bodyMedium'} style={styles.name}>
+            <Text variant={'bodyLarge'} style={styles.name}>
               Customer Name
             </Text>
             <Text variant={'bodySmall'} style={styles.normalText}>
               {orderDetails?.billing?.name}
             </Text>
           </View>
-          <Text variant={'bodyMedium'} style={styles.name}>
+          <Text variant={'bodyLarge'} style={styles.name}>
             Phone Number
           </Text>
           <Text variant={'bodySmall'} style={styles.normalText}>
@@ -116,24 +119,24 @@ const makeStyles = (colors: any) =>
     },
     pageTitle: {
       marginLeft: 20,
+      color: colors.neutral400,
     },
     pageContent: {
-      backgroundColor: '#FAFAFA',
+      backgroundColor: colors.neutral50,
       padding: 16,
       flex: 1,
     },
     container: {
       borderRadius: 8,
-      backgroundColor: '#FFF',
+      backgroundColor: colors.white,
       borderWidth: 1,
       borderColor: colors.neutral100,
-      paddingHorizontal: 16,
-      paddingTop: 16,
-      paddingBottom: 12,
+      padding: 16,
       marginBottom: 12,
     },
     title: {
-      marginBottom: 4,
+      marginBottom: 12,
+      color: colors.neutral400,
     },
     divider: {
       marginVertical: 12,

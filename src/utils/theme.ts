@@ -114,11 +114,11 @@ export const theme: any = {
     bodyLarge: {
       fontSize: 14,
       lineHeight: 18,
-      fontWeight: '500',
+      fontWeight: '600',
       fontFamily: Platform.select({
-        web: 'Inter-Bold',
-        ios: 'Inter-Bold',
-        default: 'Inter-Bold',
+        web: 'Inter-SemiBold, sans-serif',
+        ios: 'Inter-SemiBold',
+        default: 'Inter-SemiBold',
       }),
     },
     bodyMedium: {

@@ -83,7 +83,7 @@ const makeStyles = (colors: any) =>
     },
     pageContainer: {
       flex: 1,
-      backgroundColor: '#FAFAFA',
+      backgroundColor: colors.neutral50,
     },
     creationHeader: {
       flexDirection: 'row',

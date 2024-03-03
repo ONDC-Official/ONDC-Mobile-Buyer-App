@@ -108,7 +108,7 @@ const makeStyles = (colors: any) =>
     },
     customizationContainer: {
       padding: 16,
-      backgroundColor: '#FAFAFA',
+      backgroundColor: colors.neutral50,
     },
     aboutContainer: {
       paddingHorizontal: 16,

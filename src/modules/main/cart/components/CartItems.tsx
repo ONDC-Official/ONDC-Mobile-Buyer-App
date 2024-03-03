@@ -514,7 +514,7 @@ const makeStyles = (colors: any) =>
     },
     customizationContainer: {
       padding: 16,
-      backgroundColor: '#FAFAFA',
+      backgroundColor: colors.neutral50,
     },
     rbSheet: {backgroundColor: 'rgba(47, 47, 47, 0.75)'},
     header: {
