@@ -99,7 +99,7 @@ const CancelOrder = ({
     );
     eventSource.addEventListener('on_cancel', (event: any) => {
       const data = JSON.parse(event?.data);
-      getCancelOrderDetails(data.messageId);
+      getCancelOrderDetails(data.messageId).then(r => {});
     });
 
     const timer = setTimeout(() => {
@@ -160,9 +160,9 @@ const CancelOrder = ({
       <View style={styles.page}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name={'clear'} color={colors.neutral400} size={20} />
+            <Icon name={'clear'} color={theme.colors.neutral400} size={20} />
           </TouchableOpacity>
-          <Text variant={'titleSmall'} style={styles.pageTitle}>
+          <Text variant={'titleLarge'} style={styles.pageTitle}>
             Cancel Order
           </Text>
         </View>
@@ -174,7 +174,7 @@ const CancelOrder = ({
                 Complete order
               </Text>
             </View>
-            <Text variant={'bodyMedium'} style={styles.message}>
+            <Text variant={'bodyLarge'} style={styles.message}>
               Select reason*
             </Text>
             <Menu
@@ -191,7 +191,7 @@ const CancelOrder = ({
                   <Icon
                     name={'keyboard-arrow-down'}
                     size={20}
-                    color={colors.neutral400}
+                    color={theme.colors.neutral400}
                   />
                 </TouchableOpacity>
               }>
@@ -207,7 +207,11 @@ const CancelOrder = ({
               ))}
             </Menu>
           </View>
-          <Button mode={'contained'} onPress={() => setShowConfirmation(true)}>
+          <Button
+            mode={'contained'}
+            style={styles.actionButton}
+            contentStyle={styles.actionButtonContent}
+            onPress={() => setShowConfirmation(true)}>
             Cancel
           </Button>
         </View>
@@ -219,7 +223,7 @@ const CancelOrder = ({
           contentContainerStyle={styles.modalContent}>
           <View style={styles.modalHeader}>
             <TouchableOpacity onPress={closeModal}>
-              <Icon name={'clear'} size={20} color={colors.neutral400} />
+              <Icon name={'clear'} size={20} color={theme.colors.neutral400} />
             </TouchableOpacity>
           </View>
           <View style={styles.cancelImageContainer}>
@@ -228,7 +232,7 @@ const CancelOrder = ({
               style={styles.cancelImage}
             />
           </View>
-          <Text variant={'titleLarge'} style={styles.cancelTitle}>
+          <Text variant={'headlineMedium'} style={styles.cancelTitle}>
             Cancel Order
           </Text>
           <Text variant={'bodySmall'} style={styles.cancelMessage}>
@@ -238,6 +242,7 @@ const CancelOrder = ({
             <Button
               disabled={loading}
               mode={'outlined'}
+              contentStyle={styles.actionButtonContent}
               style={styles.modalButton}
               onPress={closeModal}>
               No
@@ -253,6 +258,7 @@ const CancelOrder = ({
                 )
               }
               mode={'contained'}
+              contentStyle={styles.actionButtonContent}
               style={styles.modalButton}
               onPress={cancelOrder}>
               Yes
@@ -285,7 +291,7 @@ const makeStyles = (colors: any) =>
     },
     radioTitle: {
       marginLeft: 8,
-      color: '#4F4F4F',
+      color: colors.neutral300,
     },
     container: {
       paddingHorizontal: 16,
@@ -293,14 +299,14 @@ const makeStyles = (colors: any) =>
       flex: 1,
     },
     message: {
-      fontWeight: '600',
+      color: colors.neutral500,
       marginTop: 20,
       marginBottom: 4,
     },
     selectDropdown: {
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: '#B9B9B9',
+      borderColor: colors.neutral100,
       paddingHorizontal: 9,
       paddingVertical: 10,
       flexDirection: 'row',
@@ -358,12 +364,20 @@ const makeStyles = (colors: any) =>
     },
     modalButton: {
       flex: 1,
+      borderRadius: 8,
+      borderColor: colors.primary,
     },
     actionContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       marginBottom: 20,
       marginHorizontal: 16,
+    },
+    actionButton: {
+      borderRadius: 8,
+    },
+    actionButtonContent: {
+      height: 44,
     },
   });
 
