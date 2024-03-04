@@ -13,6 +13,7 @@ import {
 } from '../../../../../utils/constants';
 import ReturnStatus from './ReturnStatus';
 import {useAppTheme} from '../../../../../utils/theme';
+import {isItemCustomization} from '../../../../../utils/utils';
 
 const today = moment();
 
@@ -20,77 +21,66 @@ const SingleItem = ({item}: {item: any}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
-  let showItem = true;
-  const typeTag = item.tags.find((tag: any) => tag.code === 'type');
-  if (typeTag) {
-    const itemCode = typeTag.list.find((tag: any) => tag.code === 'type');
-    if (itemCode) {
-      showItem = itemCode.value === 'item';
-    } else {
-      showItem = false;
-    }
-  } else {
-    showItem = false;
-  }
+  const itemCustomization = isItemCustomization(item.tags);
 
-  if (showItem) {
-    return (
-      <View key={item.id} style={styles.item}>
-        <FastImage
-          source={{uri: item?.product?.descriptor?.symbol}}
-          style={styles.itemImage}
-        />
-        <View style={styles.itemMeta}>
-          <View style={styles.itemTitleRow}>
-            <Text variant={'labelMedium'} style={styles.itemName}>
-              {item?.product?.descriptor?.name}
-            </Text>
-            <View style={styles.quantityContainer}>
-              <Text variant={'labelMedium'} style={styles.quantity}>
-                Qty {item?.quantity?.count}
-              </Text>
-              <Text variant={'labelLarge'} style={styles.price}>
-                {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                {Number(
-                  item?.quantity?.count * item?.product?.price?.value,
-                ).toFixed(2)}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.itemTags}>
-            {item?.product['@ondc/org/cancellable'] ? (
-              <View style={styles.chip}>
-                <Text variant={'labelSmall'} style={styles.chipText}>
-                  Cancellable
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.chip}>
-                <Text variant={'labelSmall'} style={styles.chipText}>
-                  Non-cancellable
-                </Text>
-              </View>
-            )}
-            {item?.product['@ondc/org/returnable'] ? (
-              <View style={styles.chip}>
-                <Text variant={'labelSmall'} style={styles.chipText}>
-                  Returnable
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.chip}>
-                <Text variant={'labelSmall'} style={styles.chipText}>
-                  Non-returnable
-                </Text>
-              </View>
-            )}
-          </View>
-        </View>
-      </View>
-    );
-  } else {
+  if (itemCustomization) {
     return <View key={item.id} />;
   }
+
+  return (
+    <View key={item.id} style={styles.item}>
+      <FastImage
+        source={{uri: item?.product?.descriptor?.symbol}}
+        style={styles.itemImage}
+      />
+      <View style={styles.itemMeta}>
+        <View style={styles.itemTitleRow}>
+          <Text variant={'labelMedium'} style={styles.itemName}>
+            {item?.product?.descriptor?.name}
+          </Text>
+          <View style={styles.quantityContainer}>
+            <Text variant={'labelMedium'} style={styles.quantity}>
+              Qty {item?.quantity?.count}
+            </Text>
+            <Text variant={'labelLarge'} style={styles.price}>
+              {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
+              {Number(
+                item?.quantity?.count * item?.product?.price?.value,
+              ).toFixed(2)}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.itemTags}>
+          {item?.product['@ondc/org/cancellable'] ? (
+            <View style={styles.chip}>
+              <Text variant={'labelSmall'} style={styles.chipText}>
+                Cancellable
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.chip}>
+              <Text variant={'labelSmall'} style={styles.chipText}>
+                Non-cancellable
+              </Text>
+            </View>
+          )}
+          {item?.product['@ondc/org/returnable'] ? (
+            <View style={styles.chip}>
+              <Text variant={'labelSmall'} style={styles.chipText}>
+                Returnable
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.chip}>
+              <Text variant={'labelSmall'} style={styles.chipText}>
+                Non-returnable
+              </Text>
+            </View>
+          )}
+        </View>
+      </View>
+    </View>
+  );
 };
 
 const ItemDetails = ({
@@ -193,7 +183,7 @@ const ItemDetails = ({
 
       {returnFulfillmentList.length > 0 && (
         <View>
-          <Text variant={'titleSmall'} style={styles.fulfilmentTitle}>
+          <Text variant={'titleLarge'} style={styles.fulfilmentTitle}>
             Return Details
           </Text>
           {returnFulfillmentList?.map((fulfillment: any) => {
@@ -231,16 +221,18 @@ const ItemDetails = ({
                       fulfillmentId: fulfillment.id,
                     })
                   }>
-                  <Text variant={'labelSmall'} style={styles.deliveryDate}>
-                    Return initiated on
-                  </Text>
-                  <Text variant={'labelSmall'} style={styles.deliveryDate}>
-                    {returnInitiated
-                      ? today.isSame(moment(returnInitiated.createdAt), 'day')
-                        ? moment(returnInitiated.createdAt).format('hh:mm a')
-                        : moment(returnInitiated.createdAt).format('Do MMM')
-                      : ''}
-                  </Text>
+                  <View>
+                    <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                      Return initiated on
+                    </Text>
+                    <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                      {returnInitiated
+                        ? today.isSame(moment(returnInitiated.createdAt), 'day')
+                          ? moment(returnInitiated.createdAt).format('hh:mm a')
+                          : moment(returnInitiated.createdAt).format('Do MMM')
+                        : ''}
+                    </Text>
+                  </View>
                   <View style={styles.statusContainer}>
                     <ReturnStatus
                       code={fulfillment?.state?.descriptor?.code}
@@ -286,7 +278,7 @@ const ItemDetails = ({
 
       {cancelFulfillmentList.length > 0 && (
         <View>
-          <Text variant={'titleSmall'} style={styles.fulfilmentTitle}>
+          <Text variant={'titleLarge'} style={styles.fulfilmentTitle}>
             Cancel Details
           </Text>
           {cancelFulfillmentList?.map((fulfillment: any) => {
@@ -322,17 +314,16 @@ const ItemDetails = ({
             return (
               <View key={fulfillment.id} style={styles.container}>
                 <View style={styles.header}>
-                  <Text variant={'labelMedium'} style={styles.deliveryDate}>
-                    {cancelInitiated
-                      ? `Cancelled on ${
-                          today.isSame(moment(cancelInitiated.createdAt), 'day')
-                            ? moment(cancelInitiated.createdAt).format(
-                                'hh:mm a',
-                              )
-                            : moment(cancelInitiated.createdAt).format('Do MMM')
-                        }`
-                      : ''}
-                  </Text>
+                  <View>
+                    <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                      Cancelled on
+                    </Text>
+                    <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                      {today.isSame(moment(cancelInitiated.createdAt), 'day')
+                        ? moment(cancelInitiated.createdAt).format('hh:mm a')
+                        : moment(cancelInitiated.createdAt).format('Do MMM')}
+                    </Text>
+                  </View>
                   <View style={styles.statusContainer}>
                     <ReturnStatus code={fulfillment?.state?.descriptor?.code} />
                   </View>

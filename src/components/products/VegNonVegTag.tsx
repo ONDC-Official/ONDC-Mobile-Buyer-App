@@ -11,7 +11,11 @@ interface VegNonVegTag {
   size?: string;
 }
 
-const VegNonVegTag: React.FC<VegNonVegTag> = ({tags, showLabel, size = 'regular'}) => {
+const VegNonVegTag: React.FC<VegNonVegTag> = ({
+  tags,
+  showLabel,
+  size = 'regular',
+}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 

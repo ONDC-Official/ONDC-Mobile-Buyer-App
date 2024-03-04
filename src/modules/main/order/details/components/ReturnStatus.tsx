@@ -20,7 +20,7 @@ const ReturnStatus = ({code, fulfilment}: {code: string; fulfilment?: any}) => {
       <Text variant={'labelMedium'} style={styles.statusText}>
         {code}
         {return_end_states.includes(code)
-          ? ` ${moment(fulfilment?.updatedAt).format('Do MMM')}`
+          ? ` on ${moment(fulfilment?.updatedAt).format('Do MMM')}`
           : ''}
       </Text>
     </View>

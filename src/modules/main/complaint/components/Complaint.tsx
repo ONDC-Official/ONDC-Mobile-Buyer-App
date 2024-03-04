@@ -45,7 +45,11 @@ const Complaint = ({complaint}: {complaint: any}) => {
       />
       <View style={styles.details}>
         <View style={styles.titleRow}>
-          <Text variant={'bodyMedium'} style={styles.title}>
+          <Text
+            variant={'bodyLarge'}
+            style={styles.title}
+            ellipsizeMode={'tail'}
+            numberOfLines={1}>
             {order_details?.items[0]?.product?.descriptor?.name}
           </Text>
           <ComplaintStatus status={issue_status} />
@@ -55,7 +59,7 @@ const Complaint = ({complaint}: {complaint: any}) => {
           {address?.state},{address?.country} - {address?.area_code}
         </Text>
         <View style={styles.row}>
-          <Text variant={'labelMedium'} style={styles.label}>
+          <Text variant={'labelSmall'} style={styles.label}>
             {complaint?.category}:{' '}
           </Text>
           <Text variant={'labelMedium'} style={styles.value}>
@@ -64,7 +68,7 @@ const Complaint = ({complaint}: {complaint: any}) => {
           </Text>
         </View>
         <View style={styles.row}>
-          <Text variant={'labelMedium'} style={styles.label}>
+          <Text variant={'labelSmall'} style={styles.label}>
             Issue Id:{' '}
           </Text>
           <Text variant={'labelMedium'} style={styles.value}>
@@ -72,7 +76,7 @@ const Complaint = ({complaint}: {complaint: any}) => {
           </Text>
         </View>
         <View style={styles.row}>
-          <Text variant={'labelMedium'} style={styles.label}>
+          <Text variant={'labelSmall'} style={styles.label}>
             Issue Raised On:{' '}
           </Text>
           <Text variant={'labelMedium'} style={styles.value}>
@@ -104,13 +108,13 @@ const makeStyles = (colors: any) =>
       width: 52,
       height: 52,
       borderRadius: 12,
-      marginRight: 8,
+      marginRight: 12,
     },
     details: {
       flex: 1,
     },
     title: {
-      color: '#222222',
+      color: colors.neutral400,
     },
     address: {
       color: colors.neutral300,
@@ -124,7 +128,7 @@ const makeStyles = (colors: any) =>
       color: colors.neutral300,
     },
     value: {
-      color: '#222222',
+      color: colors.neutral400,
     },
     actionContainer: {
       flexDirection: 'row',

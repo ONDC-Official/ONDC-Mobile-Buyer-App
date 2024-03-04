@@ -475,7 +475,8 @@ const Cart = () => {
                           : ''}{' '}
                         {deliveryAddress?.address?.city},{' '}
                         {deliveryAddress?.address?.state},{' '}
-                        {deliveryAddress?.address?.areaCode}{' '}{deliveryAddress?.descriptor?.name} (
+                        {deliveryAddress?.address?.areaCode}{' '}
+                        {deliveryAddress?.descriptor?.name} (
                         {deliveryAddress?.descriptor?.phone})
                       </Text>
                     </View>

@@ -1,4 +1,4 @@
-import {Text} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,11 +12,13 @@ const ProviderDetails = ({
   domain,
   provider,
   cancelled = false,
+  documents,
 }: {
   bppId: any;
   domain: any;
   provider: any;
   cancelled?: boolean;
+  documents: any[];
 }) => {
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
@@ -54,12 +56,23 @@ const ProviderDetails = ({
         </TouchableOpacity>
       </View>
       {cancelled && (
-        <View style={styles.cancelContainer}>
-          <Icon name={'cancel'} size={20} color={theme.colors.error} />
-          <Text variant={'bodyMedium'} style={styles.cancelledLabel}>
-            Order Cancelled
-          </Text>
-        </View>
+        <>
+          <View style={styles.cancelContainer}>
+            <Icon name={'cancel'} size={20} color={theme.colors.error} />
+            <Text variant={'bodyMedium'} style={styles.cancelledLabel}>
+              Order Cancelled
+            </Text>
+          </View>
+          {!!documents && (
+            <Button
+              mode={'outlined'}
+              contentStyle={styles.downloadButtonContent}
+              style={styles.downloadButton}
+              onPress={() => Linking.openURL(documents[0]?.url)}>
+              Download Invoice
+            </Button>
+          )}
+        </>
       )}
     </View>
   );
@@ -106,18 +119,26 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
     },
     cancelContainer: {
-      borderColor: colors.error,
+      borderColor: colors.error600,
       borderRadius: 8,
       borderWidth: 1,
       padding: 10,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: '#FFEBEB',
+      backgroundColor: colors.error50,
       marginTop: 8,
     },
     cancelledLabel: {
-      color: colors.error,
+      color: colors.error600,
       marginLeft: 8,
+    },
+    downloadButtonContent: {
+      height: 36,
+    },
+    downloadButton: {
+      marginTop: 16,
+      borderRadius: 8,
+      borderColor: colors.primary,
     },
   });
 

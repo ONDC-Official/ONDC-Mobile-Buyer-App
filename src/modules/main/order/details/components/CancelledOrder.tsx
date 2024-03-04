@@ -1,17 +1,9 @@
-import {
-  Linking,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Text} from 'react-native-paper';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-
-import DownloadIcon from '../../../../../assets/download.svg';
 import ProviderDetails from './ProviderDetails';
 import ProductSummary from './ProductSummary';
 import OrderMeta from './OrderMeta';
@@ -29,30 +21,22 @@ const CancelledOrder = () => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name={'arrow-back'} size={24} color={'#000'} />
         </TouchableOpacity>
-        <Text variant={'titleSmall'} style={styles.orderDetailsTitle}>
+        <Text variant={'titleLarge'} style={styles.orderDetailsTitle}>
           {orderDetails?.id}
         </Text>
       </View>
       <ScrollView style={styles.pageContainer}>
-        <View style={styles.orderIdContainer}>
-          {!!orderDetails?.documents && (
-            <TouchableOpacity
-              onPress={() => Linking.openURL(orderDetails?.documents[0]?.url)}>
-              <DownloadIcon width={24} height={24} />
-            </TouchableOpacity>
-          )}
-        </View>
         <ProviderDetails
           provider={orderDetails?.provider}
           bppId={orderDetails?.bppId}
           domain={orderDetails?.domain}
           cancelled
+          documents={orderDetails?.documents}
         />
         <ProductSummary
           items={orderDetails?.items}
           quote={orderDetails?.quote}
-          cancelled
-          documents={orderDetails?.documents}
+          fulfilment={null}
         />
         <OrderMeta />
       </ScrollView>

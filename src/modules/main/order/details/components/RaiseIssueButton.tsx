@@ -627,7 +627,7 @@ const makeStyles = (colors: any) =>
     },
     button: {
       flex: 1,
-      borderRadius: 12,
+      borderRadius: 8,
       borderColor: colors.primary,
     },
     separator: {

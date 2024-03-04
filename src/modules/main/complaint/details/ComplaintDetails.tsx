@@ -70,8 +70,11 @@ const ComplaintDetails = () => {
         <View style={styles.accordionContainer}>
           <List.Accordion
             style={styles.accordion}
-            title="Complaint Details"
-            titleStyle={styles.accordionTitle}>
+            title={
+              <Text variant={'headlineSmall'} style={styles.accordionTitle}>
+                Complaint Details
+              </Text>
+            }>
             <View style={styles.accordionDetails}>
               {actions.map((action: any, actionIndex: number) => (
                 <View style={styles.process} key={action?.complainant_action}>
@@ -88,7 +91,7 @@ const ComplaintDetails = () => {
                       <Text variant={'labelLarge'} style={styles.actionTitle}>
                         {action?.respondent_action} (Issue)
                       </Text>
-                      <Text variant={'labelLarge'} style={styles.date}>
+                      <Text variant={'labelMedium'} style={styles.date}>
                         {moment(action?.updated_at).format(
                           'DD MMM YYYY hh:mma',
                         )}
@@ -100,12 +103,9 @@ const ComplaintDetails = () => {
                       {action?.short_desc}
                     </Text>
                     {!!action?.updated_by && (
-                      <View style={styles.updateBy}>
-                        <Text variant={'labelMedium'}>Updated by: </Text>
-                        <Text variant={'labelLarge'}>
-                          {action?.updated_by?.person?.name}
-                        </Text>
-                      </View>
+                      <Text variant={'labelMedium'} style={styles.updateByText}>
+                        Updated by: {action?.updated_by?.person?.name}
+                      </Text>
                     )}
                   </View>
                 </View>
@@ -119,7 +119,11 @@ const ComplaintDetails = () => {
               <Text variant={'bodySmall'} style={styles.text}>
                 Issue Id:{' '}
               </Text>
-              <Text variant={'bodyMedium'} style={styles.text}>
+              <Text
+                variant={'bodyLarge'}
+                style={styles.text}
+                ellipsizeMode={'tail'}
+                numberOfLines={1}>
                 {complaintDetails?.issueId}
               </Text>
             </View>
@@ -129,7 +133,7 @@ const ComplaintDetails = () => {
             <Text variant={'bodySmall'} style={styles.text}>
               Level:{' '}
             </Text>
-            <Text variant={'bodyMedium'} style={styles.text}>
+            <Text variant={'bodyLarge'} style={styles.text}>
               Issue
             </Text>
           </View>
@@ -137,12 +141,12 @@ const ComplaintDetails = () => {
             <Text variant={'bodySmall'} style={styles.text}>
               Order Id:{' '}
             </Text>
-            <Text variant={'bodyMedium'} style={styles.text}>
+            <Text variant={'bodyLarge'} style={styles.text}>
               {complaintDetails?.order_details?.id}
             </Text>
           </View>
           <View style={styles.row}>
-            <Text variant={'labelMedium'} style={styles.text}>
+            <Text variant={'labelLarge'} style={styles.issueRaisedOn}>
               Issue Raised On:{' '}
               {moment(complaintDetails?.created_at).format(
                 'DD MMM YYYY hh:mma',
@@ -291,14 +295,14 @@ const makeStyles = (colors: any) =>
       borderWidth: 1,
       borderColor: colors.neutral100,
       borderRadius: 12,
+      backgroundColor: colors.white,
     },
     accordionTitle: {
-      fontWeight: '700',
-      color: '#000000',
+      color: colors.neutral400,
     },
     accordionDetails: {
       padding: 16,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.white,
       borderBottomLeftRadius: 16,
       borderBottomRightRadius: 16,
     },
@@ -313,7 +317,7 @@ const makeStyles = (colors: any) =>
       width: 20,
       height: 20,
       borderRadius: 20,
-      backgroundColor: '#008ECC',
+      backgroundColor: colors.primary,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -321,14 +325,14 @@ const makeStyles = (colors: any) =>
       width: 10,
       height: 10,
       borderRadius: 20,
-      backgroundColor: '#FFF',
+      backgroundColor: colors.white,
     },
     dotContainer: {
       marginRight: 8,
     },
     dottedLine: {
       borderLeftWidth: 2,
-      borderLeftColor: '#008ECC',
+      borderLeftColor: colors.primary,
       borderStyle: 'solid',
       height: 60,
       marginLeft: 9,
@@ -346,10 +350,11 @@ const makeStyles = (colors: any) =>
       color: colors.neutral400,
     },
     date: {
-      color: '#8A8A8A',
+      color: colors.neutral300,
     },
     shortDescription: {
       marginBottom: 4,
+      color: colors.neutral400,
     },
     orderIdRow: {
       flexDirection: 'row',
@@ -367,8 +372,11 @@ const makeStyles = (colors: any) =>
     text: {
       color: colors.neutral400,
     },
+    issueRaisedOn: {
+      color: colors.neutral300,
+    },
     row: {
-      marginBottom: 4,
+      marginBottom: 8,
       flexDirection: 'row',
       flexWrap: 'wrap',
     },
@@ -390,18 +398,21 @@ const makeStyles = (colors: any) =>
     },
     actionButton: {
       borderRadius: 8,
-      borderColor: theme.colors.primary,
+      borderColor: colors.primary,
     },
     buttonSeparator: {
       width: 6,
     },
     cancelButton: {
       borderRadius: 8,
-      borderColor: theme.colors.error,
+      borderColor: colors.error,
     },
     updateBy: {
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    updateByText: {
+      color: colors.neutral400,
     },
     actionButtonContainer: {
       flexDirection: 'row',

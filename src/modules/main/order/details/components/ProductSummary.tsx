@@ -1,11 +1,10 @@
 import {Button, Text} from 'react-native-paper';
-import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
-import DownloadIcon from '../../../../../assets/download.svg';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
 
@@ -39,7 +38,9 @@ const ProductSummary = ({
           return <View key={item.id} />;
         }
         return (
-          <View key={item.id} style={[styles.item, index > 0  ? styles.itemBorderTop : {}]}>
+          <View
+            key={item.id}
+            style={[styles.item, index > 0 ? styles.itemBorderTop : {}]}>
             <View style={styles.itemMeta}>
               <FastImage
                 source={{uri: item?.product?.descriptor?.symbol}}

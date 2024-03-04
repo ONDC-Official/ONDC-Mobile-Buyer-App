@@ -32,21 +32,19 @@ const makeStyles = (colors: any) =>
     statusChip: {
       borderRadius: 21,
       paddingHorizontal: 12,
-      paddingVertical: 2,
+      paddingVertical: 4,
     },
     statusOpenChip: {
-      backgroundColor: '#FFEBEB',
+      backgroundColor: colors.error50,
     },
     statusCloseChip: {
-      backgroundColor: '#E8FCF1',
+      backgroundColor: colors.success50,
     },
     statusOpen: {
-      color: '#D83232',
-      fontSize: 11,
+      color: colors.error600,
     },
     statusClose: {
-      color: '#419E6A',
-      fontSize: 11,
+      color: colors.success600,
     },
   });
 
