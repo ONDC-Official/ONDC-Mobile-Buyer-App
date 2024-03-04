@@ -190,6 +190,7 @@ const Payment: React.FC<Payment> = ({
             transaction_id: transactionId,
             city: contextCity || deliveryAddress.address.city,
             state: deliveryAddress.address.state,
+            pincode: deliveryAddress.address.areaCode,
             domain: item[0].domain,
           },
           message: {
@@ -291,7 +292,9 @@ const Payment: React.FC<Payment> = ({
     <CloseSheetContainer closeSheet={closePaymentSheet}>
       <View>
         <View style={styles.header}>
-          <Text variant={'bodyMedium'}>Select Payment Option</Text>
+          <Text variant={'titleLarge'} style={styles.title}>
+            Select Payment Option
+          </Text>
         </View>
         <View style={styles.paymentContainer}>
           <TouchableOpacity
@@ -336,6 +339,7 @@ const Payment: React.FC<Payment> = ({
         </View>
         <View style={styles.buttonContainer}>
           <Button
+            style={styles.button}
             mode="contained"
             disabled={
               activePaymentMethod === '' ||
@@ -370,7 +374,10 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       justifyContent: 'space-between',
       borderBottomWidth: 1,
-      borderBottomColor: '#ebebeb',
+      borderBottomColor: colors.neutral100,
+    },
+    title: {
+      color: colors.neutral400,
     },
     paymentContainer: {
       flexDirection: 'row',
@@ -386,7 +393,7 @@ const makeStyles = (colors: any) =>
       paddingBottom: 16,
       paddingHorizontal: 12,
       borderRadius: 6,
-      borderColor: '#aaa',
+      borderColor: colors.neutral100,
       borderWidth: 1,
     },
     selectedOption: {
@@ -409,6 +416,9 @@ const makeStyles = (colors: any) =>
     buttonContainer: {
       padding: 16,
       backgroundColor: colors.white,
+    },
+    button: {
+      borderRadius: 8,
     },
   });
 

@@ -123,6 +123,7 @@ export default (closePaymentSheet: () => void) => {
             domain: item.domain,
             city: contextCity || deliveryAddress.address.city,
             state: deliveryAddress.address.state,
+            pincode: deliveryAddress.address.areaCode,
             parent_order_id: parentOrderIDMap.get(item?.provider?.id)
               .parent_order_id,
             transaction_id: parentOrderIDMap.get(item?.provider?.id)
