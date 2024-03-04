@@ -29,7 +29,7 @@ import ManageQuantity from '../../../../components/customization/ManageQuantity'
 import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
 import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
 import CustomizationFooterButtons from '../../provider/components/CustomizationFooterButtons';
-import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
+import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
 
@@ -256,30 +256,32 @@ const CartItems: React.FC<CartItems> = ({
                     </View>
                   </View>
                   <View style={styles.productActionContainer}>
-                    {cartItem.item.hasCustomisations ? (
-                      <TouchableOpacity
-                        disabled={!!requestedProduct}
-                        style={styles.customiseContainer}
-                        onPress={() => handleCustomiseClick(cartItem)}>
-                        {cartItem._id === requestedProduct ? (
-                          <ActivityIndicator
-                            color={theme.colors.primary}
-                            size={14}
-                          />
-                        ) : (
-                          <Icon
-                            name={'pencil'}
-                            color={theme.colors.primary}
-                            size={14}
-                          />
-                        )}
-                        <Text
-                          variant={'labelLarge'}
-                          style={styles.customiseText}>
-                          Customise
-                        </Text>
-                      </TouchableOpacity>
-                    ) : (
+                    {cartItem.item.domain === FB_DOMAIN &&
+                      cartItem.item.hasCustomisations && (
+                        <TouchableOpacity
+                          disabled={!!requestedProduct}
+                          style={styles.customiseContainer}
+                          onPress={() => handleCustomiseClick(cartItem)}>
+                          {cartItem._id === requestedProduct ? (
+                            <ActivityIndicator
+                              color={theme.colors.primary}
+                              size={14}
+                            />
+                          ) : (
+                            <Icon
+                              name={'pencil'}
+                              color={theme.colors.primary}
+                              size={14}
+                            />
+                          )}
+                          <Text
+                            variant={'labelLarge'}
+                            style={styles.customiseText}>
+                            Customise
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    {cartItem.item.domain !== FB_DOMAIN && (
                       <TouchableOpacity
                         disabled={!!requestedProduct}
                         style={styles.customiseContainer}>

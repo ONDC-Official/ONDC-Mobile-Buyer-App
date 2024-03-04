@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
@@ -14,32 +14,22 @@ interface Page {
 const Page: React.FC<Page> = ({children}) => {
   const theme = useAppTheme();
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const [itemQuantity, setItemQuantity] = useState<number>(0);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
   const styles = makeStyles(theme.colors);
 
   const navigateToCart = () => navigation.navigate('Cart');
 
-  useEffect(() => {
-    const getSum = (total: number, item: any) =>
-      total + item?.item?.quantity?.count;
-    if (cartItems) {
-      setItemQuantity(cartItems.reduce(getSum, 0));
-    } else {
-      setItemQuantity(0);
-    }
-  }, [cartItems]);
-
+  const itemCount = cartItems.length;
   return (
     <View style={styles.pageContainer}>
       {children}
-      {cartItems.length > 0 && (
+      {itemCount > 0 && (
         <View style={styles.container}>
           <TouchableOpacity style={styles.button} onPress={navigateToCart}>
             <Text variant={'bodyLarge'} style={styles.text}>
-              {itemQuantity > 1
-                ? `${itemQuantity} Items Added`
-                : `${itemQuantity} Item Added`}
+              {itemCount > 1
+                ? `${itemCount} Items Added`
+                : `${itemCount} Item Added`}
               , Go To Cart
             </Text>
             <Icon

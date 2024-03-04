@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Button} from 'react-native-paper';
+import { Button, Text } from "react-native-paper";
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -140,13 +140,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
         keyExtractor={item => item.id}
         ListEmptyComponent={() => (
           <View style={[appStyles.container, appStyles.centerContainer]}>
-            <Button
-              labelStyle={appStyles.containedButtonLabel}
-              contentStyle={appStyles.containedButtonContainer}
-              mode="outlined"
-              onPress={() => navigation.navigate('AddDefaultAddress')}>
-              Add Address
-            </Button>
+            <Text variant={'bodyMedium'}>No address available</Text>
           </View>
         )}
         contentContainerStyle={

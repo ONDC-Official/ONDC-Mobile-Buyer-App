@@ -438,6 +438,7 @@ const Cart = () => {
     setDeliveryAddress(address);
   }, []);
 
+  console.log(JSON.stringify(cartItems, undefined, 4));
   return (
     <>
       <View style={styles.pageContainer}>
@@ -499,6 +500,9 @@ const Cart = () => {
                     <View>
                       <Text variant="titleLarge" style={styles.total}>
                         ₹{cartTotal}
+                      </Text>
+                      <Text variant="bodyMedium" style={styles.itemCount}>
+                        {cartItems.length} items
                       </Text>
                     </View>
                     <View>
@@ -649,6 +653,9 @@ const makeStyles = (colors: any) =>
     },
     total: {
       color: colors.neutral400,
+    },
+    itemCount: {
+      color: colors.neutral300,
     },
     rbSheet: {
       backgroundColor: 'rgba(47, 47, 47, 0.75)',
