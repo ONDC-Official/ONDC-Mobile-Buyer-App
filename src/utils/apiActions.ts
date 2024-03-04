@@ -48,3 +48,10 @@ export const ON_ISSUE_STATUS: string =
   '/issueApis/v1/on_issue_status?messageId=';
 
 export const ORDER_EVENT: string = '/clientApis/events?messageId=';
+
+// Bhashini API
+export const ULCA_BASE_URL: string = Config.ULCA_BASE_URL ?? '';
+export const ULCA_API_KEY: string = Config.ULCA_API_KEY ?? '';
+export const ULCA_USER_ID: string = Config.ULCA_USER_ID ?? '';
+export const PIPELINE_ID: string = Config.PIPELINE_ID ?? '';
+export const MODEL_PIPELINE_ENDPOINT = '/ulca/apis/v0/model/getModelsPipeline';

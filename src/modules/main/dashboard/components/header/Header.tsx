@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import ONDCLogo from '../../../../../assets/ondc_logo.svg';
 import AddressTag from '../address/AddressTag';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type HeaderProps = {
   disableAddress?: boolean;
@@ -40,6 +41,11 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
             value={''}
           />
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={navigateToSearch}
+          style={styles.micContainer}>
+          <Icon name={'mic'} size={24} color={'#fff'} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -66,7 +72,7 @@ const makeStyles = (colors: any) =>
       height: 68,
     },
     searchButton: {
-      width: '100%',
+      width: '90%',
     },
     searchInput: {
       paddingVertical: 12,
@@ -78,8 +84,8 @@ const makeStyles = (colors: any) =>
       height: 44,
       backgroundColor: colors.white,
     },
-    backIconContainer: {
-      marginRight: 12,
+    micContainer: {
+      marginLeft: 10,
     },
   });
 export default Header;

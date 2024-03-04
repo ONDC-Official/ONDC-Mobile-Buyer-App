@@ -2,6 +2,7 @@ import React from 'react';
 import {Searchbar, useTheme} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Mic from './SearchHeaderMic';
 
 type SearchHeaderProps = {
   onSearch: (query: string) => void;
@@ -39,6 +40,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           onChangeText={onChangeSearch}
           value={searchQuery}
         />
+        <Mic onChangeSearch={onChangeSearch} />
       </View>
     </View>
   );
