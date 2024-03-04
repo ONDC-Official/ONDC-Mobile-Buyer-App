@@ -38,10 +38,10 @@ const Fulfillment: React.FC<Fulfillment> = ({
 
   const renderDeliveryLine = (quote: any, key: any) => (
     <View style={styles.summaryRow} key={`d-quote-${key}-price`}>
-      <Text variant="labelMedium" style={styles.subTotal}>
+      <Text variant="labelLarge" style={styles.subTotal}>
         {quote?.title}
       </Text>
-      <Text variant="labelMedium" style={styles.subTotal}>
+      <Text variant="labelLarge" style={styles.subTotal}>
         ₹{Number(quote?.value).toFixed(2)}
       </Text>
     </View>
@@ -102,7 +102,9 @@ const Fulfillment: React.FC<Fulfillment> = ({
     <CloseSheetContainer closeSheet={closeFulfilment}>
       <View>
         <View style={styles.header}>
-          <Text variant={'titleSmall'}>Choose delivery/pickup</Text>
+          <Text variant={'titleLarge'} style={styles.title}>
+            Choose delivery/pickup
+          </Text>
         </View>
         <View>
           {productsQuote.isError ? (
@@ -129,7 +131,10 @@ const Fulfillment: React.FC<Fulfillment> = ({
                 initialPage={page}
                 onPageSelected={onPageSelected}
                 ref={pagerRef}
-                style={{height: heightOfPager, backgroundColor: '#fff'}}>
+                style={{
+                  height: heightOfPager,
+                  backgroundColor: theme.colors.white,
+                }}>
                 {unqiueFulfillments.map((fulfillmentId: any, index) => {
                   const filteredProducts =
                     cartItems[0]?.message?.quote?.items?.filter((item: any) => {
@@ -162,12 +167,14 @@ const Fulfillment: React.FC<Fulfillment> = ({
                           <View>
                             {unqiueFulfillments.length > 1 && (
                               <Text
-                                variant={'bodyMedium'}
+                                variant={'bodyLarge'}
                                 style={styles.fulfilmentCount}>
                                 {index + 1} of {unqiueFulfillments.length}
                               </Text>
                             )}
-                            <Text variant={'labelMedium'}>
+                            <Text
+                              variant={'labelMedium'}
+                              style={styles.itemCount}>
                               {filteredProducts.length} Items
                             </Text>
                           </View>
@@ -197,9 +204,17 @@ const Fulfillment: React.FC<Fulfillment> = ({
                             const singleProduct = items?.find(
                               (one: any) => one.item.product.id === item.id,
                             );
-                            const itemTotal =
+
+                            let itemTotal =
                               singleProduct.item.product.price.value *
                               singleProduct.item.quantity.count;
+                            singleProduct.item.customisations.forEach(
+                              (customization: any) => {
+                                itemTotal +=
+                                  customization.quantity.count *
+                                  customization.item_details.price.value;
+                              },
+                            );
                             fulfillmentTotal += itemTotal;
 
                             return (
@@ -224,7 +239,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                   }
                                 </Text>
                                 <Text
-                                  variant={'labelMedium'}
+                                  variant={'labelSmall'}
                                   style={styles.productQuantity}>
                                   Qty {singleProduct?.item?.quantity?.count}
                                 </Text>
@@ -269,12 +284,14 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                 }}
                               />
                               <View style={styles.customerMeta}>
-                                <Text variant={'bodyMedium'}>
+                                <Text
+                                  variant={'bodyMedium'}
+                                  style={styles.fulfilmentCategory}>
                                   {fulfilment['@ondc/org/category']}
                                 </Text>
                                 {fulfilment.hasOwnProperty('@ondc/org/TAT') && (
                                   <Text
-                                    variant={'labelMedium'}
+                                    variant={'bodyLarge'}
                                     style={styles.duration}>
                                     {moment
                                       .duration(fulfilment['@ondc/org/TAT'])
@@ -292,10 +309,10 @@ const Fulfillment: React.FC<Fulfillment> = ({
               </PagerView>
               <View style={styles.summaryContainer}>
                 <View style={styles.summaryRow}>
-                  <Text variant="labelMedium" style={styles.subTotal}>
+                  <Text variant="bodyLarge" style={styles.subTotal}>
                     Item Total ({uniqueItems?.length} Items)
                   </Text>
-                  <Text variant="labelMedium" style={styles.subTotal}>
+                  <Text variant="bodyLarge" style={styles.subTotal}>
                     ₹{cartTotal}
                   </Text>
                 </View>
@@ -320,15 +337,17 @@ const Fulfillment: React.FC<Fulfillment> = ({
                 )}
                 <View style={styles.summaryDivider} />
                 <View style={styles.summaryRow}>
-                  <Text variant="bodyLarge">To Pay</Text>
-                  <Text variant="titleSmall" style={styles.totalOrder}>
+                  <Text variant="titleMedium" style={styles.toPay}>
+                    To Pay
+                  </Text>
+                  <Text variant="headlineSmall" style={styles.totalOrder}>
                     ₹{orderTotal}
                   </Text>
                 </View>
                 <TouchableOpacity
                   style={styles.button}
                   onPress={showPaymentOption}>
-                  <Text variant={'labelLarge'} style={styles.buttonLabel}>
+                  <Text variant={'bodyLarge'} style={styles.buttonLabel}>
                     Proceed to Pay
                   </Text>
                 </TouchableOpacity>
@@ -356,8 +375,11 @@ const makeStyles = (colors: any) =>
     customerMeta: {
       marginLeft: 12,
     },
+    fulfilmentCategory: {
+      color: colors.neutral400,
+    },
     duration: {
-      color: colors.success,
+      color: colors.success600,
       marginTop: 4,
     },
     summaryRow: {
@@ -365,6 +387,9 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       marginBottom: 12,
+    },
+    toPay: {
+      color: colors.neutral400,
     },
     active: {
       borderColor: colors.primary,
@@ -375,7 +400,7 @@ const makeStyles = (colors: any) =>
     summaryDivider: {
       marginBottom: 12,
       height: 1,
-      backgroundColor: '#CACDD8',
+      backgroundColor: colors.neutral100,
     },
     header: {
       padding: 16,
@@ -386,17 +411,21 @@ const makeStyles = (colors: any) =>
       borderTopRightRadius: 16,
       backgroundColor: colors.white,
       borderBottomWidth: 1,
-      borderBottomColor: '#ebebeb',
+      borderBottomColor: colors.neutral100,
+    },
+    title: {
+      color: colors.neutral400,
     },
     button: {
-      marginTop: 20,
+      marginTop: 28,
       backgroundColor: colors.primary,
-      borderRadius: 10,
-      padding: 12,
+      borderRadius: 8,
+      paddingVertical: 13,
       alignItems: 'center',
+      height: 44,
     },
     buttonLabel: {
-      color: '#fff',
+      color: colors.white,
     },
     errorContainer: {
       alignItems: 'center',
@@ -419,7 +448,6 @@ const makeStyles = (colors: any) =>
     },
     productName: {
       color: colors.neutral400,
-      fontWeight: '500',
       marginVertical: 4,
       width: 85,
     },
@@ -452,6 +480,9 @@ const makeStyles = (colors: any) =>
     fulfilmentCount: {
       color: colors.neutral400,
     },
+    itemCount: {
+      color: colors.neutral400,
+    },
     buttonContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -463,7 +494,7 @@ const makeStyles = (colors: any) =>
       color: colors.primary,
     },
     subTotal: {
-      fontWeight: '700',
+      color: colors.neutral400,
     },
   });
 

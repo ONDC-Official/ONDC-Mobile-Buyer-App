@@ -438,7 +438,6 @@ const Cart = () => {
     setDeliveryAddress(address);
   }, []);
 
-  console.log(JSON.stringify(cartItems, undefined, 4));
   return (
     <>
       <View style={styles.pageContainer}>

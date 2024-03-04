@@ -135,6 +135,7 @@ export default (openFulfillmentSheet: () => void) => {
           context: {
             transaction_id: transactionId,
             domain: domain,
+            pincode: address.current.address.areaCode,
             city: contextCity || address.current.address.city,
             state: address.current.address.state,
           },
