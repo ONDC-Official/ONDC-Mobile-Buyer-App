@@ -69,7 +69,6 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
       }
     } catch (err: any) {
       showToastWithGravity(err?.message);
-    } finally {
       dispatch(updateRequestingStatus(false));
     }
   };
@@ -115,7 +114,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
     );
     eventSource.addEventListener('on_status', (event: any) => {
       const data = JSON.parse(event?.data);
-      getUpdatedStatus(data.messageId);
+      getUpdatedStatus(data.messageId).then(r => {});
     });
 
     const timer = setTimeout(() => {
