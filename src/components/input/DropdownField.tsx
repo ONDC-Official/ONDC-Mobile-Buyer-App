@@ -4,12 +4,7 @@ import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useAppTheme} from '../../utils/theme';
 
-const DropdownField: React.FC<any> = ({
-  required = false,
-  label,
-  inputLabel,
-  ...props
-}) => {
+const DropdownField: React.FC<any> = ({label, inputLabel, ...props}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [showDropDown, setShowDropDown] = useState(false);
@@ -56,6 +51,7 @@ const makeStyles = (colors: any) =>
     },
     inputText: {
       fontWeight: '400',
+      backgroundColor: colors.white,
     },
   });
 

@@ -15,7 +15,7 @@ export const appStyles = StyleSheet.create({
     fontSize: 16,
   },
   containedButtonContainer: {
-    height: 50,
+    height: 44,
   },
 });
 

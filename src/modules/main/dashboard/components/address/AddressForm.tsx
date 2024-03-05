@@ -3,7 +3,7 @@ import {ActivityIndicator, StyleSheet, View} from 'react-native';
 // @ts-ignore
 import MapplsUIWidgets from 'mappls-search-widgets-react-native';
 import MapplsGL from 'mappls-map-react-native';
-import {Button, Chip, HelperText, Text} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from 'formik';
 import axios from 'axios';
@@ -16,8 +16,9 @@ import {API_BASE_URL, MAP_ACCESS_TOKEN} from '../../../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import Config from '../../../../../../config';
 import {useAppTheme} from '../../../../../utils/theme';
+import DropdownField from '../../../../../components/input/DropdownField';
 
-const defaultLocation = [77.057575, 28.6833740000001];
+const defaultLocation = [77.057575, 28.683374];
 
 interface AddressForm {
   addressInfo: any;
@@ -71,8 +72,8 @@ const AddressForm: React.FC<AddressForm> = ({
         values.areaCode = mapAddress.pincode;
         values.state = mapAddress.state;
         values.street = mapAddress.street;
-        values.lat = mapAddress.lat;
-        values.lng = mapAddress.lng;
+        values.lat = mapAddress.lat.toFixed(6);
+        values.lng = mapAddress.lng.toFixed(6);
       }
       setFormValues(values);
     }
@@ -107,160 +108,179 @@ const AddressForm: React.FC<AddressForm> = ({
             }) => {
               return (
                 <View style={styles.formContainer}>
-                  <InputField
-                    value={values.name}
-                    onBlur={handleBlur('name')}
-                    required
-                    label={'Name'}
-                    placeholder={'Name'}
-                    errorMessage={
-                      touched.name || submitCount > 0 ? errors.name : null
-                    }
-                    error={touched.name && errors.name}
-                    onChangeText={handleChange('name')}
-                    disabled={apiInProgress}
-                  />
-                  <InputField
-                    value={values.email}
-                    onBlur={handleBlur('email')}
-                    required
-                    label={'Email'}
-                    placeholder={'Email'}
-                    errorMessage={
-                      touched.email || submitCount > 0 ? errors.email : null
-                    }
-                    error={touched.email && errors.email}
-                    onChangeText={handleChange('email')}
-                    disabled={apiInProgress}
-                  />
-                  <InputField
-                    keyboardType={'numeric'}
-                    maxLength={10}
-                    value={values.number}
-                    required
-                    onBlur={handleBlur('number')}
-                    label={'Mobile Number'}
-                    placeholder={'Mobile Number'}
-                    errorMessage={
-                      touched.number || submitCount > 0 ? errors.number : null
-                    }
-                    error={touched.number && errors.number}
-                    onChangeText={handleChange('number')}
-                    disabled={apiInProgress}
-                  />
-                  <InputField
-                    value={values.building}
-                    onBlur={handleBlur('building')}
-                    label={'Building'}
-                    placeholder={'Building'}
-                    errorMessage={
-                      touched.building || submitCount > 0
-                        ? errors.building
-                        : null
-                    }
-                    error={touched.building && errors.building}
-                    onChangeText={handleChange('building')}
-                    required
-                    disabled={apiInProgress}
-                  />
-
-                  <InputField
-                    value={values.street}
-                    onBlur={handleBlur('street')}
-                    required
-                    label={'Street'}
-                    placeholder={'Street'}
-                    errorMessage={
-                      touched.street || submitCount > 0 ? errors.street : null
-                    }
-                    error={touched.street && errors.street}
-                    onChangeText={handleChange('street')}
-                    disabled
-                  />
-                  <View style={styles.row}>
-                    <View style={appStyles.container}>
-                      <InputField
-                        value={values.areaCode}
-                        keyboardType={'numeric'}
-                        maxLength={6}
-                        onBlur={handleBlur('areaCode')}
-                        label={'Pin Code'}
-                        required
-                        placeholder={'Pin Code'}
-                        errorMessage={
-                          touched.areaCode || submitCount > 0
-                            ? errors.areaCode
-                            : null
+                  <View style={appStyles.inputContainer}>
+                    <InputField
+                      inputLabel={'Name'}
+                      value={values.name}
+                      onBlur={handleBlur('name')}
+                      required
+                      label={''}
+                      placeholder={'Name'}
+                      errorMessage={
+                        touched.name || submitCount > 0 ? errors.name : null
+                      }
+                      error={touched.name && errors.name}
+                      onChangeText={handleChange('name')}
+                      disabled={apiInProgress}
+                    />
+                  </View>
+                  <View style={appStyles.inputContainer}>
+                    <InputField
+                      value={values.email}
+                      onBlur={handleBlur('email')}
+                      required
+                      inputLabel={'Email'}
+                      label={''}
+                      placeholder={'Email'}
+                      errorMessage={
+                        touched.email || submitCount > 0 ? errors.email : null
+                      }
+                      error={touched.email && errors.email}
+                      onChangeText={handleChange('email')}
+                      disabled={apiInProgress}
+                    />
+                  </View>
+                  <View style={appStyles.inputContainer}>
+                    <InputField
+                      keyboardType={'numeric'}
+                      maxLength={10}
+                      value={values.number}
+                      required
+                      onBlur={handleBlur('number')}
+                      inputLabel={'Mobile Number'}
+                      label={''}
+                      placeholder={'Mobile Number'}
+                      errorMessage={
+                        touched.number || submitCount > 0 ? errors.number : null
+                      }
+                      error={touched.number && errors.number}
+                      onChangeText={handleChange('number')}
+                      disabled={apiInProgress}
+                    />
+                  </View>
+                  <View style={appStyles.inputContainer}>
+                    <InputField
+                      value={values.building}
+                      onBlur={handleBlur('building')}
+                      inputLabel={'Building'}
+                      label={''}
+                      placeholder={'Building'}
+                      errorMessage={
+                        touched.building || submitCount > 0
+                          ? errors.building
+                          : null
+                      }
+                      error={touched.building && errors.building}
+                      onChangeText={handleChange('building')}
+                      required
+                      disabled={apiInProgress}
+                    />
+                  </View>
+                  <View style={appStyles.inputContainer}>
+                    <InputField
+                      value={values.street}
+                      onBlur={handleBlur('street')}
+                      required
+                      inputLabel={'Street'}
+                      label={''}
+                      placeholder={'Street'}
+                      errorMessage={
+                        touched.street || submitCount > 0 ? errors.street : null
+                      }
+                      error={touched.street && errors.street}
+                      onChangeText={handleChange('street')}
+                      disabled
+                    />
+                  </View>
+                  <View style={appStyles.inputContainer}>
+                    <View style={styles.row}>
+                      <View style={appStyles.container}>
+                        <InputField
+                          value={values.areaCode}
+                          keyboardType={'numeric'}
+                          maxLength={6}
+                          onBlur={handleBlur('areaCode')}
+                          inputLabel={'Pin Code'}
+                          label={''}
+                          required
+                          placeholder={'Pin Code'}
+                          errorMessage={
+                            touched.areaCode || submitCount > 0
+                              ? errors.areaCode
+                              : null
+                          }
+                          error={touched.areaCode && errors.areaCode}
+                          disabled
+                        />
+                      </View>
+                      <View style={styles.spacing} />
+                      <View style={appStyles.container}>
+                        <InputField
+                          value={values.city}
+                          onBlur={handleBlur('city')}
+                          required
+                          inputLabel={'City'}
+                          label={''}
+                          placeholder={'City'}
+                          errorMessage={
+                            touched.city || submitCount > 0 ? errors.city : null
+                          }
+                          error={touched.city && errors.city}
+                          onChangeText={handleChange('city')}
+                          disabled
+                        />
+                      </View>
+                    </View>
+                  </View>
+                  <View style={appStyles.inputContainer}>
+                    <InputField
+                      value={values.state}
+                      onBlur={handleBlur('state')}
+                      required
+                      inputLabel={'State'}
+                      label={''}
+                      placeholder={'State'}
+                      errorMessage={
+                        touched.state || submitCount > 0 ? errors.state : null
+                      }
+                      error={touched.state && errors.state}
+                      onChangeText={handleChange('state')}
+                      disabled
+                    />
+                  </View>
+                  <View style={appStyles.inputContainer}>
+                    <View style={styles.addressTagContainer}>
+                      <DropdownField
+                        inputLabel={'Address Type'}
+                        name="tag"
+                        value={values.tag}
+                        setValue={(newValue: any) =>
+                          setFieldValue('tag', newValue)
                         }
-                        error={touched.areaCode && errors.areaCode}
-                        disabled
+                        label=""
+                        required
+                        placeholder="Address Type"
+                        error={!!touched.tag && !!errors.tag}
+                        errorMessage={touched.tag ? errors.tag : null}
+                        list={addressTags.map((one: string) => {
+                          return {
+                            label: one,
+                            value: one,
+                          };
+                        })}
                       />
                     </View>
-                    <View style={styles.spacing} />
-                    <View style={appStyles.container}>
-                      <InputField
-                        value={values.city}
-                        onBlur={handleBlur('city')}
-                        required
-                        label={'City'}
-                        placeholder={'City'}
-                        errorMessage={
-                          touched.city || submitCount > 0 ? errors.city : null
-                        }
-                        error={touched.city && errors.city}
-                        onChangeText={handleChange('city')}
-                        disabled
-                      />
-                    </View>
                   </View>
-                  <InputField
-                    value={values.state}
-                    onBlur={handleBlur('state')}
-                    required
-                    label={'State'}
-                    placeholder={'State'}
-                    errorMessage={
-                      touched.state || submitCount > 0 ? errors.state : null
-                    }
-                    error={touched.state && errors.state}
-                    onChangeText={handleChange('state')}
-                    disabled
-                  />
 
-                  <View style={styles.addressTagContainer}>
-                    <Text>
-                      Address Type
-                      <Text style={{color: theme.colors.red}}> *</Text>
-                    </Text>
-                    <View style={styles.tagContainer}>
-                      {addressTags.map(tag => (
-                        <Chip
-                          key={tag}
-                          selectedColor={theme.colors.primary}
-                          mode={values.tag === tag ? 'flat' : 'outlined'}
-                          onPress={() => setFieldValue('tag', tag)}>
-                          {tag}
-                        </Chip>
-                      ))}
-                    </View>
-                    <HelperText
-                      padding="none"
-                      type="error"
-                      visible={!!errors?.tag}>
-                      {errors.tag}
-                    </HelperText>
-                  </View>
-                  <View style={styles.buttonContainer}>
-                    <Button
-                      mode="contained"
-                      contentStyle={appStyles.containedButtonContainer}
-                      labelStyle={appStyles.containedButtonLabel}
-                      onPress={() => handleSubmit()}
-                      loading={apiInProgress}
-                      disabled={apiInProgress}>
-                      Save
-                    </Button>
-                  </View>
+                  <Button
+                    mode="contained"
+                    style={styles.button}
+                    contentStyle={appStyles.containedButtonContainer}
+                    onPress={() => handleSubmit()}
+                    loading={apiInProgress}
+                    disabled={apiInProgress}>
+                    Save
+                  </Button>
                 </View>
               );
             }}
@@ -301,9 +321,6 @@ const makeStyles = (colors: any) =>
     row: {
       flexDirection: 'row',
     },
-    buttonContainer: {
-      alignSelf: 'center',
-    },
     formContainer: {
       alignSelf: 'center',
       padding: 16,
@@ -324,6 +341,9 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     searchWidgetProps: {backgroundColor: colors.white},
+    button: {
+      borderRadius: 8,
+    },
   });
 
 export default AddressForm;
