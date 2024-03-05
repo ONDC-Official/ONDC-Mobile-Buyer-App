@@ -137,13 +137,7 @@ const ItemDetails = ({
 
             return (
               <View key={fulfillment.id} style={styles.container}>
-                <TouchableOpacity
-                  style={styles.header}
-                  onPress={() =>
-                    navigation.navigate('OrderProductDetails', {
-                      fulfillmentId: fulfillment.id,
-                    })
-                  }>
+                <View style={styles.header}>
                   <View>
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
                       Items will be delivered by{' '}
@@ -154,15 +148,21 @@ const ItemDetails = ({
                         : endDate.format('Do MMM')}
                     </Text>
                   </View>
-                  <View style={styles.statusContainer}>
+                  <TouchableOpacity
+                    style={styles.statusContainer}
+                    onPress={() =>
+                      navigation.navigate('OrderProductDetails', {
+                        fulfillmentId: fulfillment.id,
+                      })
+                    }>
                     <ReturnStatus code={fulfillment?.state?.descriptor?.code} />
                     <Icon
                       name={'keyboard-arrow-right'}
                       size={20}
                       color={theme.colors.neutral300}
                     />
-                  </View>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                </View>
                 {items
                   .filter(item => item.fulfillment_id === fulfillment.id)
                   .map((item, index) =>
@@ -214,13 +214,7 @@ const ItemDetails = ({
 
             return (
               <View key={fulfillment.id} style={styles.container}>
-                <TouchableOpacity
-                  style={styles.header}
-                  onPress={() =>
-                    navigation.navigate('OrderReturnDetails', {
-                      fulfillmentId: fulfillment.id,
-                    })
-                  }>
+                <View style={styles.header}>
                   <View>
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
                       Return initiated on
@@ -233,7 +227,13 @@ const ItemDetails = ({
                         : ''}
                     </Text>
                   </View>
-                  <View style={styles.statusContainer}>
+                  <TouchableOpacity
+                    style={styles.statusContainer}
+                    onPress={() =>
+                      navigation.navigate('OrderReturnDetails', {
+                        fulfillmentId: fulfillment.id,
+                      })
+                    }>
                     <ReturnStatus
                       code={fulfillment?.state?.descriptor?.code}
                       fulfilment={fulfillmentHistory.find(
@@ -246,8 +246,8 @@ const ItemDetails = ({
                       size={20}
                       color={theme.colors.neutral300}
                     />
-                  </View>
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                </View>
                 {fulfillment?.state?.descriptor?.code === 'Return_Initiated'
                   ? items
                       .filter(item => item.id === itemId)

@@ -82,13 +82,13 @@ const OrderHeader: React.FC<Order> = ({order}) => {
             </View>
           );
         })}
-        <TouchableOpacity
-          style={styles.paymentDetails}
-          onPress={navigateToDetails}>
+        <View style={styles.paymentDetails}>
           <Text style={styles.date} variant={'labelSmall'}>
             {moment(order?.createdAt).format('DD MMM YYYY hh:mm a')}
           </Text>
-          <View style={styles.amountContainer}>
+          <TouchableOpacity
+            style={styles.amountContainer}
+            onPress={navigateToDetails}>
             <Text style={styles.amount} variant={'labelLarge'}>
               {CURRENCY_SYMBOLS[order?.payment?.params?.currency]}
               {order?.payment?.params?.amount}
@@ -98,8 +98,8 @@ const OrderHeader: React.FC<Order> = ({order}) => {
               size={16}
               color={theme.colors.neutral300}
             />
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );

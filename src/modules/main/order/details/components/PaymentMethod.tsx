@@ -19,13 +19,13 @@ const PaymentMethod = ({
   const styles = makeStyles(theme.colors);
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => navigation.navigate('PaymentMethods')}>
+    <View style={styles.container}>
       <Text variant={'titleLarge'} style={styles.title}>
         Payment Methods
       </Text>
-      <View style={styles.modeContainer}>
+      <TouchableOpacity
+        style={styles.modeContainer}
+        onPress={() => navigation.navigate('PaymentMethods')}>
         <Text variant={'bodySmall'} style={styles.mode}>
           {payment?.type === 'ON-FULFILLMENT' ? 'Cash On Delivery' : 'Prepaid'}
         </Text>
@@ -34,12 +34,14 @@ const PaymentMethod = ({
           size={20}
           color={theme.colors.neutral300}
         />
-      </View>
+      </TouchableOpacity>
       <Divider style={styles.divider} />
       <Text variant={'titleLarge'} style={styles.addressTitle}>
         Shipping Address
       </Text>
-      <View style={styles.modeContainer}>
+      <TouchableOpacity
+        style={styles.modeContainer}
+        onPress={() => navigation.navigate('PaymentMethods')}>
         <Text variant={'bodySmall'} style={styles.mode}>
           {address?.name}, {contact?.phone}
           {'\n'}
@@ -51,8 +53,8 @@ const PaymentMethod = ({
           size={20}
           color={theme.colors.neutral300}
         />
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 };
 
