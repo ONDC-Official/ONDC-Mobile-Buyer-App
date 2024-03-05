@@ -124,7 +124,6 @@ const Complaints: React.FC<any> = () => {
           data={skeletonList}
           renderItem={() => <ComplaintSkeleton />}
           keyExtractor={(item: any) => item.id}
-          contentContainerStyle={styles.contentContainerStyle}
         />
       </View>
     );
@@ -142,7 +141,7 @@ const Complaints: React.FC<any> = () => {
         onEndReached={loadMoreList}
         contentContainerStyle={
           complaints.length > 0
-            ? styles.contentContainerStyle
+            ? {}
             : [appStyles.container, styles.emptyContainer]
         }
         ListFooterComponent={props => (
@@ -157,15 +156,11 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     pageContainer: {
       flex: 1,
-      backgroundColor: colors.white,
+      backgroundColor: colors.neutral50,
+      paddingHorizontal: 16,
+      paddingVertical: 20,
     },
-    contentContainerStyle: {paddingVertical: 10},
     emptyContainer: {justifyContent: 'center', alignItems: 'center'},
-    divider: {
-      backgroundColor: colors.neutral100,
-      height: 1,
-      marginVertical: 24,
-    },
   });
 
 export default memo(Complaints);

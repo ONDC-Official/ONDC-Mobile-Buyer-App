@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Button, Text} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
@@ -62,7 +62,7 @@ const Complaint = ({complaint}: {complaint: any}) => {
           <Text variant={'labelSmall'} style={styles.label}>
             {complaint?.category}:{' '}
           </Text>
-          <Text variant={'labelMedium'} style={styles.value}>
+          <Text variant={'labelLarge'} style={styles.value} numberOfLines={2}>
             {categories.find(one => one.enums === complaint?.sub_category)
               ?.value ?? 'NA'}
           </Text>
@@ -71,7 +71,7 @@ const Complaint = ({complaint}: {complaint: any}) => {
           <Text variant={'labelSmall'} style={styles.label}>
             Issue Id:{' '}
           </Text>
-          <Text variant={'labelMedium'} style={styles.value}>
+          <Text variant={'labelLarge'} style={styles.value} numberOfLines={2}>
             {complaint?.issueId}
           </Text>
         </View>
@@ -79,17 +79,16 @@ const Complaint = ({complaint}: {complaint: any}) => {
           <Text variant={'labelSmall'} style={styles.label}>
             Issue Raised On:{' '}
           </Text>
-          <Text variant={'labelMedium'} style={styles.value}>
+          <Text variant={'labelLarge'} style={styles.value}>
             {moment(complaint?.created_at).format('DD MMM YYYY hh:mma')}
           </Text>
         </View>
         <View style={styles.actionContainer}>
-          <Button
-            mode={'outlined'}
-            onPress={navigateToDetails}
-            style={styles.button}>
-            View Summary
-          </Button>
+          <TouchableOpacity onPress={navigateToDetails} style={styles.button}>
+            <Text variant={'labelLarge'} style={styles.buttonLabel}>
+              View Summary
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -101,8 +100,12 @@ const makeStyles = (colors: any) =>
     container: {
       flexDirection: 'row',
       alignItems: 'flex-start',
-      marginTop: 16,
-      paddingHorizontal: 16,
+      padding: 16,
+      borderRadius: 8,
+      borderColor: colors.neutral100,
+      backgroundColor: colors.white,
+      borderWidth: 1,
+      marginBottom: 16,
     },
     image: {
       width: 52,
@@ -122,6 +125,7 @@ const makeStyles = (colors: any) =>
     row: {
       flexDirection: 'row',
       alignItems: 'center',
+      flexWrap: 'wrap',
       marginTop: 8,
     },
     label: {
@@ -138,6 +142,14 @@ const makeStyles = (colors: any) =>
     button: {
       borderRadius: 8,
       borderColor: colors.primary,
+      height: 28,
+      width: 117,
+      borderWidth: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    buttonLabel: {
+      color: colors.primary,
     },
     titleRow: {
       flexDirection: 'row',
