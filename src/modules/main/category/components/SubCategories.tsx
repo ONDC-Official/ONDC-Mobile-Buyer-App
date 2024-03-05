@@ -56,15 +56,13 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
                 index === 3 || index === 7 ? styles.alignEnd : {},
               ]}
               onPress={() => navigateToSubCategory(item)}>
-              <View>
-                <FastImage
-                  source={{uri: item?.imageUrl}}
-                  style={styles.brandImage}
-                />
-                <Text variant={'labelLarge'} style={styles.name}>
-                  {item.key}
-                </Text>
-              </View>
+              <FastImage
+                source={{uri: item?.imageUrl}}
+                style={styles.brandImage}
+              />
+              <Text variant={'labelLarge'} style={styles.name}>
+                {item.key}
+              </Text>
             </TouchableOpacity>
           ))}
       </View>
@@ -82,7 +80,7 @@ const makeStyles = (colors: any) =>
       marginTop: 12,
       flexDirection: 'row',
       flexWrap: 'wrap',
-      justifyContent: 'space-between',
+      // justifyContent: 'space-between',
     },
     title: {
       color: colors.neutral400,
