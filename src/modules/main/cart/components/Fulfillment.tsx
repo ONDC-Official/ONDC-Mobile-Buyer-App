@@ -1,4 +1,10 @@
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {RadioButton, Text} from 'react-native-paper';
 import React, {useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -8,6 +14,8 @@ import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
+
+const screenHeight = Dimensions.get('screen').height;
 
 interface Fulfillment {
   selectedFulfillmentList: any[];
@@ -77,30 +85,34 @@ const Fulfillment: React.FC<Fulfillment> = ({
   );
 
   const heightOfPager =
-    cartItems[0]?.message?.quote?.fulfillments.length * 70 + 170;
+    cartItems[0]?.message?.quote?.fulfillments.length * 100 + 170;
 
   // Convert Set back to an array if needed
   const unqiueFulfillments = Array.from(uniqueIdsSet);
 
   const uniqueItems = cartItems[0]?.message?.quote?.items.filter(
     (item: any) => {
-      const typeTag = item?.tags?.find((tag: any) => tag.code === 'type');
-      if (typeTag) {
-        const itemCode = typeTag.list.find((tag: any) => tag.code === 'type');
-        if (itemCode) {
-          return itemCode.value === 'item';
+      if (item.hasOwnProperty('tags')) {
+        const typeTag = item?.tags?.find((tag: any) => tag.code === 'type');
+        if (typeTag) {
+          const itemCode = typeTag.list.find((tag: any) => tag.code === 'type');
+          if (itemCode) {
+            return itemCode.value === 'item';
+          } else {
+            return false;
+          }
         } else {
           return false;
         }
       } else {
-        return false;
+        return true;
       }
     },
   );
 
   return (
     <CloseSheetContainer closeSheet={closeFulfilment}>
-      <View>
+      <View style={styles.sheetContainer}>
         <View style={styles.header}>
           <Text variant={'titleLarge'} style={styles.title}>
             Choose delivery/pickup
@@ -260,49 +272,53 @@ const Fulfillment: React.FC<Fulfillment> = ({
                           </Text>
                         </View>
                       </View>
-                      <ScrollView contentContainerStyle={styles.listContainer}>
-                        {fulfilmentList.map((fulfilment: any) => {
-                          const fulfilmentPresent: boolean =
-                            selectedFulfillmentList.includes(fulfilment.id);
-                          return (
-                            <View
-                              key={`${fulfilment.id}${fulfilment.type}`}
-                              style={styles.fulfilment}>
-                              <RadioButton.Android
-                                value={fulfilment['@ondc/org/category']}
-                                status={
-                                  fulfilmentPresent ? 'checked' : 'unchecked'
-                                }
-                                onPress={() => {
-                                  if (!fulfilmentPresent) {
-                                    setSelectedFulfillmentList(
-                                      selectedFulfillmentList.concat([
-                                        fulfilment.id,
-                                      ]),
-                                    );
+                      <View style={styles.listContainer}>
+                        <ScrollView>
+                          {fulfilmentList.map((fulfilment: any) => {
+                            const fulfilmentPresent: boolean =
+                              selectedFulfillmentList.includes(fulfilment.id);
+                            return (
+                              <View
+                                key={`${fulfilment.id}${fulfilment.type}`}
+                                style={styles.fulfilment}>
+                                <RadioButton.Android
+                                  value={fulfilment['@ondc/org/category']}
+                                  status={
+                                    fulfilmentPresent ? 'checked' : 'unchecked'
                                   }
-                                }}
-                              />
-                              <View style={styles.customerMeta}>
-                                <Text
-                                  variant={'bodyMedium'}
-                                  style={styles.fulfilmentCategory}>
-                                  {fulfilment['@ondc/org/category']}
-                                </Text>
-                                {fulfilment.hasOwnProperty('@ondc/org/TAT') && (
+                                  onPress={() => {
+                                    if (!fulfilmentPresent) {
+                                      setSelectedFulfillmentList(
+                                        selectedFulfillmentList.concat([
+                                          fulfilment.id,
+                                        ]),
+                                      );
+                                    }
+                                  }}
+                                />
+                                <View style={styles.customerMeta}>
                                   <Text
-                                    variant={'bodyLarge'}
-                                    style={styles.duration}>
-                                    {moment
-                                      .duration(fulfilment['@ondc/org/TAT'])
-                                      .humanize()}
+                                    variant={'bodyMedium'}
+                                    style={styles.fulfilmentCategory}>
+                                    {fulfilment['@ondc/org/category']}
                                   </Text>
-                                )}
+                                  {fulfilment.hasOwnProperty(
+                                    '@ondc/org/TAT',
+                                  ) && (
+                                    <Text
+                                      variant={'bodyLarge'}
+                                      style={styles.duration}>
+                                      {moment
+                                        .duration(fulfilment['@ondc/org/TAT'])
+                                        .humanize()}
+                                    </Text>
+                                  )}
+                                </View>
                               </View>
-                            </View>
-                          );
-                        })}
-                      </ScrollView>
+                            );
+                          })}
+                        </ScrollView>
+                      </View>
                     </View>
                   );
                 })}
@@ -402,14 +418,17 @@ const makeStyles = (colors: any) =>
       height: 1,
       backgroundColor: colors.neutral100,
     },
+    sheetContainer: {
+      borderTopLeftRadius: 15,
+      borderTopRightRadius: 15,
+      backgroundColor: colors.white,
+      maxHeight: screenHeight - 150,
+    },
     header: {
       padding: 16,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      borderTopLeftRadius: 16,
-      borderTopRightRadius: 16,
-      backgroundColor: colors.white,
       borderBottomWidth: 1,
       borderBottomColor: colors.neutral100,
     },
