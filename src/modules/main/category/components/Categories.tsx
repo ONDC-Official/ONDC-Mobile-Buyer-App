@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
@@ -13,6 +13,7 @@ interface Categories {
 }
 
 const Categories: React.FC<Categories> = ({currentCategory}) => {
+  const flatListRef = useRef<any>(null);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -26,9 +27,22 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
     }
   };
 
+  useEffect(() => {
+    if (currentCategory) {
+      const index = CATEGORIES.findIndex(
+        (one: any) => one.shortName === currentCategory,
+      );
+      setTimeout(() => {
+        flatListRef.current.scrollToIndex({animated: true, index});
+      }, 500);
+    }
+  }, [currentCategory]);
+
   return (
     <View style={styles.container}>
       <FlatList
+        initialNumToRender={50}
+        ref={flatListRef}
         data={CATEGORIES}
         horizontal
         showsHorizontalScrollIndicator={false}
