@@ -2,14 +2,13 @@ import {
   clearAll,
   getMultipleData,
   getStoredData,
-  saveMultipleData,
   setStoredData,
 } from '../../utils/storage';
 
 export const tryLocalSignIn = (dispatch, navigation) => {
   const payload = {};
 
-  getMultipleData(['token', 'uid', 'emailId', 'name'])
+  getMultipleData(['token', 'uid', 'emailId', 'name', 'transaction_id'])
     .then(data => {
       if (data[0][1] !== null) {
         data.forEach(item => {
@@ -58,28 +57,8 @@ export const logoutUser = dispatch => {
   });
 };
 
-export const storeLoginDetails = (dispatch, data) => {
-  const {token, emailId, uid, name, photoURL} = data;
-  saveMultipleData([
-    ['token', token],
-    ['emailId', emailId],
-    ['uid', uid],
-    ['name', name],
-    ['photoURL', photoURL],
-  ]).then(() => {
-    const payload = {
-      token: token,
-      emailId: emailId,
-      uid: uid,
-      name: name,
-      photoURL: photoURL,
-    };
-    dispatch({type: 'set_login_details', payload});
-  });
-};
-
 export const updateToken = (dispatch, token) => {
-  setStoredData('token', token).then(r => {
+  setStoredData('token', token).then(() => {
     dispatch({type: 'set_token', payload: token});
   });
 };

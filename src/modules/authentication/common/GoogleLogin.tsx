@@ -9,7 +9,6 @@ import GoogleIcon from '../../../assets/google.svg';
 import {useAppTheme} from '../../../utils/theme';
 
 interface GoogleLogin {
-  theme: any;
   setGoogleLoginRequested: (newValue: boolean) => void;
   loginRequested: boolean;
   googleLoginRequested: boolean;

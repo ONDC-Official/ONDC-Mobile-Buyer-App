@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {getStoredData, saveMultipleData} from '../utils/storage';
+import uuid from 'react-native-uuid';
 
 export default () => {
   const navigation = useNavigation<any>();
@@ -10,12 +11,14 @@ export default () => {
     try {
       const name = user?.displayName ? user?.displayName : 'Unknown';
       const photoURL = user?.photoURL ? user?.photoURL : '';
+      const transactionId: any = uuid.v4();
 
       const storageData = [
         ['token', idTokenResult?.token],
         ['uid', user?.uid],
         ['name', name],
         ['photoURL', photoURL],
+        ['transaction_id', transactionId],
       ];
 
       if (user.email) {
@@ -32,6 +35,7 @@ export default () => {
         uid: user?.uid,
         name: name,
         photoURL: photoURL,
+        transaction_id: transactionId,
       };
       dispatch({type: 'set_login_details', payload});
 

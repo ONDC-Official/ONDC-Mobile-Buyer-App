@@ -6,7 +6,10 @@ const initialState = {
   photoURL: null,
 };
 
-const authReducer = (state = initialState, action) => {
+const authReducer = (
+  state = initialState,
+  action: {type: string; payload: any},
+) => {
   switch (action.type) {
     case 'set_login_details':
       return Object.assign({}, state, {
@@ -15,6 +18,7 @@ const authReducer = (state = initialState, action) => {
         uid: action.payload.uid,
         name: action.payload.name,
         photoURL: action.payload.photoURL,
+        transaction_id: action.payload.transaction_id,
       });
 
     case 'set_token':

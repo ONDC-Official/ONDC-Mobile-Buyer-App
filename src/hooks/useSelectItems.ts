@@ -27,7 +27,7 @@ export default (openFulfillmentSheet: () => void) => {
   const dispatch = useDispatch();
   const source = useRef<any>(null);
   const address = useRef<any>(null);
-  const {token, uid} = useSelector(({authReducer}) => authReducer);
+  const {token, uid, transaction_id} = useSelector(({authReducer}) => authReducer);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const responseRef = useRef<any[]>([]);
   const eventTimeOutRef = useRef<any[]>([]);
@@ -112,8 +112,6 @@ export default (openFulfillmentSheet: () => void) => {
   };
 
   const getQuote = async (items: any[]) => {
-    const transactionId: any = uuid.v4();
-    await setStoredData('transaction_id', transactionId);
     responseRef.current = [];
     if (address.current) {
       try {
@@ -133,8 +131,8 @@ export default (openFulfillmentSheet: () => void) => {
 
         let selectPayload: any = {
           context: {
-            transaction_id: transactionId,
-            domain: domain,
+            transaction_id,
+            domain,
             pincode: address.current.address.areaCode,
             city: contextCity || address.current.address.city,
             state: address.current.address.state,

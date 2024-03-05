@@ -49,7 +49,13 @@ const Splash: React.FC<Splash> = ({navigation}) => {
       if (url) {
         clearTimeout(timeOut);
         const payload: any = {};
-        getMultipleData(['token', 'uid', 'emailId', 'name']).then(data => {
+        getMultipleData([
+          'token',
+          'uid',
+          'emailId',
+          'name',
+          'transaction_id',
+        ]).then(data => {
           if (data[0][1] !== null) {
             data.forEach((item: any) => {
               try {

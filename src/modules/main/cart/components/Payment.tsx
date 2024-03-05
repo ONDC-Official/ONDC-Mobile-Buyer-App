@@ -61,7 +61,7 @@ const Payment: React.FC<Payment> = ({
   confirmOrderLoading,
 }) => {
   const theme = useAppTheme();
-  const {token} = useSelector(({authReducer}) => authReducer);
+  const {token, transaction_id} = useSelector(({authReducer}) => authReducer);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const updatedCartItems = useRef<any[]>([]);
@@ -165,7 +165,6 @@ const Payment: React.FC<Payment> = ({
     setInitializeOrderLoading(true);
     try {
       source.current = CancelToken.source();
-      const transactionId = await getStoredData('transaction_id');
       const contextCity = await getStoredData('contextCity');
       const payload = items.map((item: any) => {
         let itemsData = Object.assign([], JSON.parse(JSON.stringify(item)));
@@ -187,7 +186,7 @@ const Payment: React.FC<Payment> = ({
 
         return {
           context: {
-            transaction_id: transactionId,
+            transaction_id,
             city: contextCity || deliveryAddress.address.city,
             state: deliveryAddress.address.state,
             pincode: deliveryAddress.address.areaCode,
