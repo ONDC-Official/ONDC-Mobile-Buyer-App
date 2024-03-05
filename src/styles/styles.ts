@@ -34,8 +34,8 @@ export const makeGlobalStyles = (colors: any) =>
       color: colors.primary,
     },
     disabledContainedButton: {
-      backgroundColor: colors.disabled,
-      borderColor: colors.disabled,
+      backgroundColor: colors.surfaceDisabled,
+      borderColor: colors.surfaceDisabled,
     },
     containedButton: {
       backgroundColor: colors.primary,
