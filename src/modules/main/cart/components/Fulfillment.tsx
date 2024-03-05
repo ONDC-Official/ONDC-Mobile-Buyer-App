@@ -84,7 +84,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
 
   const uniqueItems = cartItems[0]?.message?.quote?.items.filter(
     (item: any) => {
-      const typeTag = item.tags.find((tag: any) => tag.code === 'type');
+      const typeTag = item?.tags?.find((tag: any) => tag.code === 'type');
       if (typeTag) {
         const itemCode = typeTag.list.find((tag: any) => tag.code === 'type');
         if (itemCode) {
@@ -208,7 +208,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                             let itemTotal =
                               singleProduct.item.product.price.value *
                               singleProduct.item.quantity.count;
-                            singleProduct.item.customisations.forEach(
+                            singleProduct?.item?.customisations?.forEach(
                               (customization: any) => {
                                 itemTotal +=
                                   customization.quantity.count *

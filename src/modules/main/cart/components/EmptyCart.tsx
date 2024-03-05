@@ -3,14 +3,20 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {Button, Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useAppTheme} from '../../../../utils/theme';
 
 const EmptyCart = () => {
+  const {colors} = useAppTheme();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const styles = makeStyles();
   return (
     <View style={styles.emptyCart}>
       <View style={styles.emptyCartDetails}>
-        <Icon name={'information-outline'} color={'#F9C51B'} size={90} />
+        <Icon
+          name={'information-outline'}
+          color={colors.success600}
+          size={90}
+        />
         <Text variant={'titleSmall'}>Your Cart is Empty. Please add items</Text>
         <Text variant="bodyMedium" style={styles.emptyDescription}>
           Explore our wide selection and find something you like

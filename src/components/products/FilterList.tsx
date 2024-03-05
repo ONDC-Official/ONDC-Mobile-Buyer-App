@@ -251,7 +251,7 @@ const makeStyles = (colors: any) =>
       color: colors.neutral400,
     },
     applyLabel: {
-      color: '#fff',
+      color: colors.white,
     },
     buttonLabel: {
       fontWeight: '600',

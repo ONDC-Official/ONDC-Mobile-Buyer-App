@@ -614,7 +614,7 @@ const makeStyles = (colors: any) =>
     },
     pageContainer: {
       flex: 1,
-      backgroundColor: '#F9F9F9',
+      backgroundColor: colors.neutral50,
     },
     loadingContainer: {
       flex: 1,

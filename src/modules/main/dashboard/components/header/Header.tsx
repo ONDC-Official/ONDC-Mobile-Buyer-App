@@ -3,7 +3,7 @@ import {Searchbar} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import ONDCLogo from '../../../../../assets/ondc_logo.svg';
+import ONDCLogo from '../../../../../assets/app_logo.svg';
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
 
@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
     <View style={styles.container}>
       {!disableAddress && (
         <View style={styles.row}>
-          <ONDCLogo />
+          <ONDCLogo width={75} height={28} />
           <AddressTag />
         </View>
       )}

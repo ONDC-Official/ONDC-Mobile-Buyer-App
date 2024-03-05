@@ -5,7 +5,7 @@ import {Text} from 'react-native-paper';
 import {getVersion} from 'react-native-device-info';
 
 import {appStyles} from '../../../styles/styles';
-import ONDCLogo from '../../../assets/ondc.svg';
+import ONDCLogo from '../../../assets/app_logo.svg';
 import {tryLocalSignIn} from '../../../redux/auth/actions';
 import {getMultipleData} from '../../../utils/storage';
 import {useAppTheme} from '../../../utils/theme';

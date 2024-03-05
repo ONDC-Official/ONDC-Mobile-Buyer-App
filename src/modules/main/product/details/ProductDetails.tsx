@@ -369,7 +369,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   return (
     <View style={styles.container}>
       <Page>
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
           <ProductImages
             images={[product?.item_details?.descriptor?.symbol].concat(
               product?.item_details?.descriptor?.images,

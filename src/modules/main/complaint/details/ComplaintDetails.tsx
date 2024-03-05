@@ -287,7 +287,7 @@ const makeStyles = (colors: any) =>
       borderColor: colors.neutral100,
       borderRadius: 12,
       padding: 16,
-      backgroundColor: '#FFFFFF',
+      backgroundColor: colors.white,
       marginBottom: 12,
     },
     accordionContainer: {

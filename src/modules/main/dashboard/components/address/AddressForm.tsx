@@ -323,7 +323,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
       alignItems: 'center',
     },
-    searchWidgetProps: {backgroundColor: '#F0FFF0'},
+    searchWidgetProps: {backgroundColor: colors.white},
   });
 
 export default AddressForm;

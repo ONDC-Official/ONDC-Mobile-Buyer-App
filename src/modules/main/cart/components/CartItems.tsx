@@ -131,6 +131,10 @@ const CartItems: React.FC<CartItems> = ({
     }
   };
 
+  const handleEditClick = (cartItem: any) => {
+    navigation.navigate('ProductDetails', {productId: cartItem.item.id});
+  };
+
   const showCustomization = () => {
     customizationSheet.current.open();
   };
@@ -284,7 +288,8 @@ const CartItems: React.FC<CartItems> = ({
                     {cartItem.item.domain !== FB_DOMAIN && (
                       <TouchableOpacity
                         disabled={!!requestedProduct}
-                        style={styles.customiseContainer}>
+                        style={styles.customiseContainer}
+                        onPress={() => handleEditClick(cartItem)}>
                         <Icon
                           name={'pencil'}
                           color={theme.colors.primary}
@@ -506,13 +511,13 @@ const makeStyles = (colors: any) =>
       marginHorizontal: 16,
     },
     errorText: {
-      color: '#D83232',
+      color: colors.error600,
     },
     divider: {
       marginVertical: 20,
       width: '100%',
       height: 1,
-      backgroundColor: '#CACDD8',
+      backgroundColor: colors.neutral100,
     },
     customizationContainer: {
       padding: 16,
@@ -546,7 +551,7 @@ const makeStyles = (colors: any) =>
     sheetContainer: {
       borderTopLeftRadius: 15,
       borderTopRightRadius: 15,
-      backgroundColor: '#FFF',
+      backgroundColor: colors.white,
       height: screenHeight - 130,
     },
   });

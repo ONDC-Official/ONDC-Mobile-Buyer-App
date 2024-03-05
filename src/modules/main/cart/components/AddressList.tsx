@@ -171,7 +171,7 @@ const makeStyles = (colors: any) =>
       marginHorizontal: 16,
     },
     buttonLabel: {
-      color: '#fff',
+      color: colors.white,
     },
     contentContainerStyle: {
       paddingBottom: 16,
