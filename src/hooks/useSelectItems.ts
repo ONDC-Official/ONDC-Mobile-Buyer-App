@@ -19,6 +19,7 @@ import {
 import {setStoredData} from '../utils/storage';
 import useNetworkHandling from './useNetworkHandling';
 import {updateCartItems} from '../redux/cart/actions';
+import {updateTransactionId} from '../redux/auth/actions';
 
 const CancelToken = axios.CancelToken;
 
@@ -27,7 +28,9 @@ export default (openFulfillmentSheet: () => void) => {
   const dispatch = useDispatch();
   const source = useRef<any>(null);
   const address = useRef<any>(null);
-  const {token, uid, transaction_id} = useSelector(({authReducer}) => authReducer);
+  const {token, uid, transaction_id} = useSelector(
+    ({authReducer}) => authReducer,
+  );
   const navigation = useNavigation<StackNavigationProp<any>>();
   const responseRef = useRef<any[]>([]);
   const eventTimeOutRef = useRef<any[]>([]);
@@ -190,6 +193,15 @@ export default (openFulfillmentSheet: () => void) => {
     }
   };
 
+  const navigateToDashboard = async () => {
+    const transactionId: any = uuid.v4();
+    await setStoredData('transaction_id', transactionId);
+    dispatch(updateTransactionId(transactionId));
+    setCheckoutLoading(false);
+    showToastWithGravity('Cannot fetch details for this product');
+    navigation.navigate('Dashboard');
+  };
+
   const onFetchQuote = (messageIds: any[]) => {
     eventTimeOutRef.current = messageIds.map(messageId => {
       const eventSource = new RNEventSource(
@@ -213,10 +225,7 @@ export default (openFulfillmentSheet: () => void) => {
           clearTimeout(eventTimeout.timer);
         });
         if (responseRef.current.length <= 0) {
-          setCheckoutLoading(false);
-          showToastWithGravity('Cannot fetch details for this product');
-          navigation.navigate('Dashboard');
-          return;
+          navigateToDashboard().then(() => {});
         }
         const request_object = constructQuoteObject(cartItems);
         if (responseRef.current.length !== request_object.length) {

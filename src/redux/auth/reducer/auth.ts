@@ -26,6 +26,11 @@ const authReducer = (
         token: action.payload,
       });
 
+    case 'set_traction_id':
+      return Object.assign({}, state, {
+        transaction_id: action.payload,
+      });
+
     case 'hide_loader':
       return {...state, isLoading: false};
 

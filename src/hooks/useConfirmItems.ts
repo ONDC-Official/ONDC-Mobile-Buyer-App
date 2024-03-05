@@ -1,10 +1,11 @@
 import {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
+import uuid from 'react-native-uuid';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import {getStoredData, removeData} from '../utils/storage';
+import {getStoredData, removeData, setStoredData} from '../utils/storage';
 import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../utils/constants';
 import {
   API_BASE_URL,
@@ -15,10 +16,12 @@ import {
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import useNetworkHandling from './useNetworkHandling';
 import useNetworkErrorHandling from './useNetworkErrorHandling';
+import {updateTransactionId} from '../redux/auth/actions';
 
 const CancelToken = axios.CancelToken;
 export default (closePaymentSheet: () => void) => {
   const navigation = useNavigation<any>();
+  const dispatch = useDispatch();
   const responseRef = useRef<any[]>([]);
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any[]>([]);
@@ -222,10 +225,12 @@ export default (closePaymentSheet: () => void) => {
         ),
       );
       if (responseRef.current.length === requestObject.length) {
-        await removeData('transaction_id');
+        const transactionId: any = uuid.v4();
+        await setStoredData('transaction_id', transactionId);
         await removeData('parent_order_id');
         await removeData('checkout_details');
         await removeData('parent_and_transaction_id_map');
+        dispatch(updateTransactionId(transactionId));
         closePaymentSheet();
         navigation.navigate('OrderDetails', {
           orderId: responseRef.current[0].message?.order?.id,

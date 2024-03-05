@@ -1,3 +1,4 @@
+import {AnyAction, Dispatch} from 'redux';
 import {
   clearAll,
   getMultipleData,
@@ -5,7 +6,10 @@ import {
   setStoredData,
 } from '../../utils/storage';
 
-export const tryLocalSignIn = (dispatch, navigation) => {
+export const tryLocalSignIn = (
+  dispatch: Dispatch<AnyAction>,
+  navigation: any,
+) => {
   const payload = {};
 
   getMultipleData(['token', 'uid', 'emailId', 'name', 'transaction_id'])
@@ -49,7 +53,7 @@ export const tryLocalSignIn = (dispatch, navigation) => {
     });
 };
 
-export const logoutUser = dispatch => {
+export const logoutUser = (dispatch: Dispatch<AnyAction>) => {
   clearAll().then(() => {
     dispatch({
       type: 'logout_user',
@@ -57,8 +61,12 @@ export const logoutUser = dispatch => {
   });
 };
 
-export const updateToken = (dispatch, token) => {
+export const updateToken = (dispatch: Dispatch<AnyAction>, token: string) => {
   setStoredData('token', token).then(() => {
     dispatch({type: 'set_token', payload: token});
   });
+};
+
+export const updateTransactionId = (transactionId: string) => {
+  return {type: 'set_traction_id', payload: transactionId};
 };
