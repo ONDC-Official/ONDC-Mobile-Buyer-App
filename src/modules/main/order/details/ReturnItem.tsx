@@ -35,8 +35,16 @@ const ReturnItem = ({
   navigation: any;
   route: any;
 }) => {
-  const {item, providerId, state, orderId, bppId, bppUrl, transactionId} =
-    params;
+  const {
+    associatedItems,
+    item,
+    providerId,
+    state,
+    orderId,
+    bppId,
+    bppUrl,
+    transactionId,
+  } = params;
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const eventTimeOutRef = useRef<any>(null);
@@ -155,6 +163,46 @@ const ReturnItem = ({
         source.current.token,
       );
       await uploadFile(signedUrlResponse.data.urls, photos[0]?.uri);
+
+      const items = [
+        {
+          id: item.id,
+          quantity: {
+            count: quantity,
+          },
+          tags: {
+            update_type: 'return',
+            reason_code: '001',
+            ttl_approval: item.product['@ondc/org/return_window']
+              ? item.product['@ondc/org/return_window']
+              : '',
+            ttl_reverseqc: 'P3D',
+            image: signedUrlResponse.data.publicUrl,
+          },
+          parent_item_id: item.parent_item_id,
+        },
+      ];
+
+      if (associatedItems.length > 0) {
+        associatedItems.forEach((one: any) => {
+          items.push({
+            id: one.id,
+            quantity: {
+              count: quantity,
+            },
+            tags: {
+              update_type: 'return',
+              reason_code: '001',
+              ttl_approval: item.product['@ondc/org/return_window']
+                ? item.product['@ondc/org/return_window']
+                : '',
+              ttl_reverseqc: 'P3D',
+              image: signedUrlResponse.data.publicUrl,
+            },
+            parent_item_id: item.parent_item_id,
+          });
+        });
+      }
       const {data} = await postDataWithAuth(
         `${API_BASE_URL}${RETURN_ORDER}`,
         [
@@ -172,23 +220,7 @@ const ReturnItem = ({
                 provider: {
                   id: providerId,
                 },
-                items: [
-                  {
-                    id: item.id,
-                    quantity: {
-                      count: quantity,
-                    },
-                    tags: {
-                      update_type: 'return',
-                      reason_code: '001',
-                      ttl_approval: item.product['@ondc/org/return_window']
-                        ? item.product['@ondc/org/return_window']
-                        : '',
-                      ttl_reverseqc: 'P3D',
-                      image: signedUrlResponse.data.publicUrl,
-                    },
-                  },
-                ],
+                items: items,
               },
             },
           },
@@ -221,9 +253,9 @@ const ReturnItem = ({
     <View style={styles.page}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon name={'clear'} color={colors.neutral400} size={20} />
+          <Icon name={'clear'} color={theme.colors.neutral400} size={20} />
         </TouchableOpacity>
-        <Text variant={'titleSmall'} style={styles.pageTitle}>
+        <Text variant={'titleLarge'} style={styles.pageTitle}>
           Return Items
         </Text>
       </View>
@@ -299,7 +331,7 @@ const ReturnItem = ({
             </View>
           </View>
           <View style={styles.inputField}>
-            <Text variant={'bodyMedium'} style={styles.message}>
+            <Text variant={'bodyLarge'} style={styles.message}>
               Select reason*
             </Text>
             <Menu
@@ -316,7 +348,7 @@ const ReturnItem = ({
                   <Icon
                     name={'keyboard-arrow-down'}
                     size={20}
-                    color={colors.neutral400}
+                    color={theme.colors.neutral400}
                   />
                 </TouchableOpacity>
               }>
@@ -337,12 +369,14 @@ const ReturnItem = ({
               Upload Images*
             </Text>
             <View style={styles.fileContainer}>
-              <Button
+              <TouchableOpacity
                 disabled={apiRequested}
-                mode={'contained'}
+                style={styles.browseButton}
                 onPress={handleChoosePhoto}>
-                Browse
-              </Button>
+                <Text variant={'labelMedium'} style={styles.browseLabel}>
+                  Browse
+                </Text>
+              </TouchableOpacity>
             </View>
             <View style={styles.imageContainer}>
               {photos?.map((photo, index) => (
@@ -356,7 +390,11 @@ const ReturnItem = ({
                   <TouchableOpacity
                     style={styles.removeImage}
                     onPress={() => removePhoto(index)}>
-                    <Icon name={'cancel'} size={20} color={'#000'} />
+                    <Icon
+                      name={'cancel'}
+                      size={16}
+                      color={theme.colors.neutral400}
+                    />
                   </TouchableOpacity>
                 </View>
               ))}
@@ -367,6 +405,7 @@ const ReturnItem = ({
       <View style={styles.buttonContainer}>
         <Button
           mode={'contained'}
+          contentStyle={styles.buttonContent}
           style={styles.confirmButton}
           onPress={returnOrder}>
           Confirm
@@ -404,8 +443,8 @@ const makeStyles = (colors: any) =>
       marginBottom: 4,
     },
     itemImage: {
-      width: 32,
-      height: 32,
+      width: 44,
+      height: 44,
       borderRadius: 8,
       marginRight: 10,
       backgroundColor: colors.neutral100,
@@ -439,9 +478,9 @@ const makeStyles = (colors: any) =>
     },
     quantityContainer: {
       borderRadius: 8,
-      borderColor: '#008ECC',
+      borderColor: colors.primary,
       borderWidth: 1,
-      backgroundColor: '#ECF3F8',
+      backgroundColor: colors.white,
       flexDirection: 'row',
       height: 36,
       alignItems: 'center',
@@ -462,7 +501,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
     },
     itemName: {
-      marginBottom: 4,
+      color: colors.neutral400,
     },
     quantity: {
       color: colors.neutral300,
@@ -471,7 +510,7 @@ const makeStyles = (colors: any) =>
     selectDropdown: {
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: '#B9B9B9',
+      borderColor: colors.neutral200,
       paddingHorizontal: 9,
       paddingVertical: 10,
       flexDirection: 'row',
@@ -495,8 +534,19 @@ const makeStyles = (colors: any) =>
     fileContainer: {
       borderWidth: 1,
       borderRadius: 12,
-      borderColor: '#B9B9B9',
+      borderColor: colors.neutral200,
       padding: 8,
+    },
+    browseButton: {
+      backgroundColor: colors.neutral100,
+      borderColor: colors.neutral300,
+      padding: 8,
+      borderRadius: 4,
+      borderWidth: 1,
+      width: 65,
+    },
+    browseLabel: {
+      color: colors.neutral400,
     },
     imageContainer: {
       flexDirection: 'row',
@@ -504,22 +554,31 @@ const makeStyles = (colors: any) =>
       marginTop: 12,
     },
     image: {
-      width: 72,
-      height: 72,
+      width: 40,
+      height: 40,
       marginRight: 8,
+      borderRadius: 6,
+      borderColor: colors.neutral200,
+      borderWidth: 1,
+      objectFit: 'contain',
     },
     removeImage: {
       position: 'absolute',
-      marginLeft: 62,
-      marginTop: -12,
-      backgroundColor: colors.white,
+      marginLeft: 32,
+      marginTop: -6,
       borderRadius: 72,
+      width: 16,
+      height: 16,
+      backgroundColor: colors.white,
     },
     buttonContainer: {
       padding: 16,
     },
     confirmButton: {
       borderRadius: 12,
+    },
+    buttonContent: {
+      height: 44,
     },
   });
 

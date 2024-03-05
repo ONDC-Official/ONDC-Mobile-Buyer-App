@@ -92,6 +92,7 @@ const NonCancelledOrder = ({
           provider={orderDetails?.provider}
           bppId={orderDetails?.bppId}
           domain={orderDetails?.domain}
+          documents={[]}
         />
         <ItemDetails
           items={orderDetails?.items}

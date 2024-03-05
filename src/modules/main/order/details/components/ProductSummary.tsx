@@ -37,6 +37,8 @@ const ProductSummary = ({
         if (itemCustomization) {
           return <View key={item.id} />;
         }
+
+        const associatedItems = items.filter((one: any) => one.parent_item_id === item.parent_item_id && one.id !== item.id);
         return (
           <View
             key={item.id}
@@ -103,6 +105,7 @@ const ProductSummary = ({
                   onPress={() =>
                     navigation.navigate('ReturnItem', {
                       item,
+                      associatedItems,
                       providerId: orderDetails?.provider?.id,
                       state: orderDetails?.state,
                       orderId: orderDetails?.id,
@@ -217,6 +220,7 @@ const makeStyles = (colors: any) =>
     },
     chipContainer: {
       flexDirection: 'row',
+      marginTop: 4,
     },
     returnItem: {
       borderRadius: 8,
