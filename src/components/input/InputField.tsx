@@ -50,6 +50,7 @@ const makeStyles = (colors: any) =>
     required: {color: colors.error600},
     inputText: {
       fontWeight: '400',
+      backgroundColor: colors.white,
     },
   });
 

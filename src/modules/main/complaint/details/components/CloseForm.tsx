@@ -95,9 +95,11 @@ const CloseForm = ({
   return (
     <View style={styles.modal}>
       <View style={styles.modalHeader}>
-        <Text variant={'titleSmall'}>Close</Text>
+        <Text variant={'titleLarge'} style={styles.title}>
+          Close
+        </Text>
         <TouchableOpacity onPress={hideModal}>
-          <Icon name={'clear'} size={24} />
+          <Icon name={'clear'} size={24} color={theme.colors.neutral400} />
         </TouchableOpacity>
       </View>
       <View style={styles.modalContainer}>
@@ -111,7 +113,11 @@ const CloseForm = ({
               styles.ratingButton,
               rating === 'THUMBS-UP' ? styles.selectedRating : {},
             ]}>
-            <FontAwesomeIcon name={'thumbs-o-up'} size={24} color={'#000000'} />
+            <FontAwesomeIcon
+              name={'thumbs-o-up'}
+              size={24}
+              color={theme.colors.black}
+            />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setRating('THUMBS-DOWN')}
@@ -122,16 +128,20 @@ const CloseForm = ({
             <FontAwesomeIcon
               name={'thumbs-o-down'}
               size={24}
-              color={'#000000'}
+              color={theme.colors.black}
             />
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
-          <Button style={styles.button} mode={'outlined'} onPress={hideModal}>
+          <Button
+            style={styles.button}
+            contentStyle={styles.buttonContent}
+            mode={'outlined'}
+            onPress={hideModal}>
             Cancel
           </Button>
-          <View style={styles.separator} />
           <Button
+            contentStyle={styles.buttonContent}
             style={styles.button}
             onPress={escalateComplaint}
             mode={'contained'}
@@ -155,15 +165,19 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: 12,
+      paddingVertical: 14,
+      paddingHorizontal: 16,
       borderBottomWidth: 1,
       borderBottomColor: colors.neutral100,
     },
+    title: {
+      color: colors.neutral400,
+    },
     modalContainer: {
-      padding: 12,
+      padding: 16,
     },
     message: {
-      color: '#1D1D1D',
+      color: colors.neutral400,
     },
     ratingContainer: {
       flexDirection: 'row',
@@ -174,7 +188,7 @@ const makeStyles = (colors: any) =>
       width: 44,
       height: 44,
       marginRight: 12,
-      borderColor: '#B5B5B5',
+      borderColor: colors.neutral200,
       borderRadius: 8,
       borderWidth: 1,
       alignItems: 'center',
@@ -184,17 +198,18 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.primary,
     },
     buttonContainer: {
-      marginTop: 16,
+      marginTop: 28,
       flexDirection: 'row',
       alignItems: 'center',
+      gap: 15,
     },
     button: {
       flex: 1,
       borderRadius: 8,
       borderColor: colors.primary,
     },
-    separator: {
-      width: 15,
+    buttonContent: {
+      height: 44,
     },
   });
 

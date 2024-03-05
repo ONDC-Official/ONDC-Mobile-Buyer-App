@@ -149,6 +149,7 @@ const GetStatusButton = ({
 
   return (
     <Button
+      contentStyle={styles.actionButtonContent}
       disabled={statusLoading}
       icon={() =>
         statusLoading ? (
@@ -170,6 +171,9 @@ const makeStyles = (colors: any) =>
     actionButton: {
       borderRadius: 8,
       borderColor: colors.primary,
+    },
+    actionButtonContent: {
+      height: 36,
     },
   });
 

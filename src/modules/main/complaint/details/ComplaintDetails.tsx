@@ -213,6 +213,7 @@ const ComplaintDetails = () => {
 
             <Button
               mode="outlined"
+              contentStyle={styles.actionButtonContent}
               style={styles.actionButton}
               onPress={showEscalateModalVisible}>
               Escalate
@@ -222,6 +223,7 @@ const ComplaintDetails = () => {
               <Button
                 onPress={showCloseModal}
                 mode="outlined"
+                contentStyle={styles.actionButtonContent}
                 style={styles.cancelButton}
                 textColor={theme.colors.error}>
                 Close
@@ -401,6 +403,9 @@ const makeStyles = (colors: any) =>
     },
     itemQuantity: {
       color: colors.neutral400,
+    },
+    actionButtonContent: {
+      height: 36,
     },
     actionButton: {
       borderRadius: 8,

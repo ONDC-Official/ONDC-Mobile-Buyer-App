@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Text, TextInput} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
@@ -16,6 +16,7 @@ import {showToastWithGravity} from '../../../../../utils/utils';
 import RNEventSource from 'react-native-event-source';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
+import InputField from '../../../../../components/input/InputField';
 
 const CancelToken = axios.CancelToken;
 const EscalateForm = ({
@@ -167,32 +168,33 @@ const EscalateForm = ({
   return (
     <View style={styles.modal}>
       <View style={styles.modalHeader}>
-        <Text variant={'titleSmall'}>Escalate</Text>
+        <Text variant={'titleLarge'} style={styles.title}>
+          Escalate
+        </Text>
         <TouchableOpacity onPress={hideEscalateModalVisible}>
-          <Icon name={'clear'} size={24} />
+          <Icon name={'clear'} size={24} color={theme.colors.neutral400} />
         </TouchableOpacity>
       </View>
       <View style={styles.modalContainer}>
-        <Text variant={'bodyMedium'} style={styles.message}>
-          Remarks*
-        </Text>
-        <TextInput
+        <InputField
+          inputLabel={'Remarks'}
           dense
+          required
           value={remarks}
           mode={'outlined'}
           placeholder={'Enter the remarks'}
-          placeholderTextColor={'#B9B9B9'}
-          onChangeText={text => setRemarks(text)}
+          onChangeText={(text: string) => setRemarks(text)}
         />
         <View style={styles.buttonContainer}>
           <Button
+            contentStyle={styles.buttonContent}
             style={styles.button}
             mode={'outlined'}
             onPress={hideEscalateModalVisible}>
             Cancel
           </Button>
-          <View style={styles.separator} />
           <Button
+            contentStyle={styles.buttonContent}
             style={styles.button}
             onPress={escalateComplaint}
             mode={'contained'}
@@ -216,28 +218,30 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: 12,
+      paddingVertical: 14,
+      paddingHorizontal: 16,
       borderBottomWidth: 1,
       borderBottomColor: colors.neutral100,
     },
-    modalContainer: {
-      padding: 12,
+    title: {
+      color: colors.neutral400,
     },
-    message: {
-      color: '#1D1D1D',
+    modalContainer: {
+      padding: 16,
     },
     buttonContainer: {
-      marginTop: 16,
+      marginTop: 28,
       flexDirection: 'row',
       alignItems: 'center',
+      gap: 15,
     },
     button: {
       flex: 1,
       borderRadius: 8,
       borderColor: colors.primary,
     },
-    separator: {
-      width: 15,
+    buttonContent: {
+      height: 44,
     },
   });
 
