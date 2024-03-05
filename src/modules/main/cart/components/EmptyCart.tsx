@@ -21,9 +21,7 @@ const EmptyCart = () => {
         <Text variant="bodyMedium" style={styles.emptyDescription}>
           Explore our wide selection and find something you like
         </Text>
-        <Button
-          mode={'outlined'}
-          onPress={() => navigation.navigate('Dashboard')}>
+        <Button mode={'outlined'} onPress={() => navigation.navigate('Home')}>
           Explore Now
         </Button>
       </View>
