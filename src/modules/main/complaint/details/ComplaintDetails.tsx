@@ -158,8 +158,10 @@ const ComplaintDetails = () => {
             </Text>
           </View>
           {complaintDetails?.order_details?.items?.map((item: any) => (
-            <View key={item.id}>
-              <Text variant={'bodyMedium'} style={styles.itemTitle}>
+            <View
+              key={`${item.id}${item.fulfillment_id}`}
+              style={styles.itemRow}>
+              <Text variant={'bodyLarge'} style={styles.itemTitle}>
                 {item?.product?.descriptor?.name}
               </Text>
               <View style={styles.itemContainer}>
@@ -168,7 +170,7 @@ const ComplaintDetails = () => {
                   {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
                   {item?.product?.price?.value}
                 </Text>
-                <Text variant={'bodyMedium'}>
+                <Text variant={'bodyLarge'} style={styles.itemQuantity}>
                   {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
                   {item?.quantity?.count * item?.product?.price?.value}
                 </Text>
@@ -176,26 +178,26 @@ const ComplaintDetails = () => {
             </View>
           ))}
 
-          <Text variant={'bodyMedium'} style={styles.itemTitle}>
+          <Text variant={'bodyLarge'} style={styles.itemTitle}>
             {complaintDetails?.description?.short_desc}
           </Text>
-          <Text variant={'bodyMedium'} style={styles.itemDescription}>
+          <Text variant={'bodySmall'} style={styles.itemDescription}>
             {complaintDetails?.description?.long_desc}
           </Text>
 
-          <Text variant={'bodyMedium'} style={styles.itemTitle}>
+          <Text variant={'bodyLarge'} style={styles.itemTitle}>
             Expected Response Time
           </Text>
-          <Text variant={'bodyMedium'} style={styles.itemDescription}>
+          <Text variant={'bodySmall'} style={styles.itemDescription}>
             {moment(complaintDetails?.created_at)
               .add(moment.duration('PT1H').asMilliseconds(), 'milliseconds')
               .format('hh:mm a, MMMM Do, YYYY')}
           </Text>
 
-          <Text variant={'bodyMedium'} style={styles.itemTitle}>
+          <Text variant={'bodyLarge'} style={styles.itemTitle}>
             Expected Resolution Time
           </Text>
-          <Text variant={'bodyMedium'} style={styles.itemDescription}>
+          <Text variant={'bodySmall'} style={styles.itemDescription}>
             {moment(complaintDetails?.created_at)
               .add(moment.duration('P1D').asMilliseconds(), 'milliseconds')
               .format('hh:mm a, MMMM Do, YYYY')}
@@ -209,14 +211,12 @@ const ComplaintDetails = () => {
               domain={complaintDetails?.domain}
             />
 
-            <View style={styles.buttonSeparator} />
             <Button
               mode="outlined"
               style={styles.actionButton}
               onPress={showEscalateModalVisible}>
               Escalate
             </Button>
-            <View style={styles.buttonSeparator} />
 
             {complaintDetails?.issue_status !== 'Close' && (
               <Button
@@ -230,23 +230,23 @@ const ComplaintDetails = () => {
           </View>
         </View>
         <View style={styles.card}>
-          <Text variant={'titleMedium'} style={styles.title}>
+          <Text variant={'headlineSmall'} style={styles.title}>
             Respondent Details
           </Text>
 
-          <Text variant={'bodyMedium'} style={styles.itemTitle}>
+          <Text variant={'bodyLarge'} style={styles.itemTitle}>
             Phone
           </Text>
-          <Text variant={'bodyMedium'} style={styles.itemDescription}>
+          <Text variant={'bodySmall'} style={styles.itemDescription}>
             {complaintDetails?.issue_actions?.respondent_actions[
               complaintDetails?.issue_actions.respondent_actions.length - 1
             ]?.updated_by?.contact?.phone ?? 'N/A'}
           </Text>
 
-          <Text variant={'bodyMedium'} style={styles.itemTitle}>
+          <Text variant={'bodyLarge'} style={styles.itemTitle}>
             Email
           </Text>
-          <Text variant={'bodyMedium'} style={styles.itemDescription}>
+          <Text variant={'bodySmall'} style={styles.itemDescription}>
             {complaintDetails?.issue_actions?.respondent_actions[
               complaintDetails?.issue_actions.respondent_actions.length - 1
             ]?.updated_by?.contact?.email ?? 'N/A'}
@@ -308,7 +308,6 @@ const makeStyles = (colors: any) =>
     },
     title: {
       marginBottom: 16,
-      color: '#000000',
     },
     process: {
       flexDirection: 'row',
@@ -382,6 +381,10 @@ const makeStyles = (colors: any) =>
     },
     itemTitle: {
       marginBottom: 4,
+      color: colors.neutral400,
+    },
+    itemRow: {
+      marginTop: 16,
     },
     itemContainer: {
       flexDirection: 'row',
@@ -395,6 +398,9 @@ const makeStyles = (colors: any) =>
     },
     qty: {
       color: colors.neutral300,
+    },
+    itemQuantity: {
+      color: colors.neutral400,
     },
     actionButton: {
       borderRadius: 8,
@@ -417,6 +423,7 @@ const makeStyles = (colors: any) =>
     actionButtonContainer: {
       flexDirection: 'row',
       alignItems: 'center',
+      gap: 16,
     },
   });
 
