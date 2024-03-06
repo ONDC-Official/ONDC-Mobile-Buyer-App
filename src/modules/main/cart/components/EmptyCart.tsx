@@ -1,35 +1,27 @@
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {Button, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from '../../../../utils/theme';
+import CartIcon from '../../../../assets/cart.svg';
 
 const EmptyCart = () => {
   const {colors} = useAppTheme();
-  const navigation = useNavigation<StackNavigationProp<any>>();
-  const styles = makeStyles();
+  const styles = makeStyles(colors);
   return (
     <View style={styles.emptyCart}>
       <View style={styles.emptyCartDetails}>
-        <Icon
-          name={'information-outline'}
-          color={colors.success600}
-          size={90}
-        />
-        <Text variant={'titleSmall'}>Your Cart is Empty. Please add items</Text>
-        <Text variant="bodyMedium" style={styles.emptyDescription}>
-          Explore our wide selection and find something you like
+        <CartIcon width={128} height={128} />
+        <Text variant={'headlineSmall'} style={styles.title}>
+          Your Cart is Empty
         </Text>
-        <Button mode={'outlined'} onPress={() => navigation.navigate('Home')}>
-          Explore Now
-        </Button>
+        <Text variant="bodySmall" style={styles.emptyDescription}>
+          It seems you haven’t added any products in your cart
+        </Text>
       </View>
     </View>
   );
 };
 
-const makeStyles = () =>
+const makeStyles = (colors: any) =>
   StyleSheet.create({
     emptyCart: {
       flex: 1,
@@ -40,8 +32,13 @@ const makeStyles = () =>
       alignItems: 'center',
       paddingHorizontal: 25,
     },
+    title: {
+      color: colors.neutral400,
+      marginTop: 15,
+    },
     emptyDescription: {
       marginVertical: 8,
+      color: colors.neutral400,
     },
   });
 
