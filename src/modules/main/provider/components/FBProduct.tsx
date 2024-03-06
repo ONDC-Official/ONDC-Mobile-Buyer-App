@@ -456,7 +456,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             </View>
           ) : (
             <View style={styles.outOfStockButtonContainer}>
-              <Text variant={'bodyLarge'} style={[styles.outOfStock]}>
+              <Text variant={'bodyLarge'} style={styles.outOfStock}>
                 Out of stock
               </Text>
             </View>
@@ -722,7 +722,7 @@ const makeStyles = (colors: any) =>
     },
     outOfStock: {
       textAlign: 'center',
-      color: colors.error600,
+      color: colors.neutral300,
     },
     customise: {
       textAlign: 'center',

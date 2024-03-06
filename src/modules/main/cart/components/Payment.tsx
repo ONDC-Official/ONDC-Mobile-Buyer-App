@@ -1,7 +1,7 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ActivityIndicator, Button, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
-import FastImage from 'react-native-fast-image';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
@@ -24,6 +24,8 @@ import {
 import {getStoredData, setStoredData} from '../../../../utils/storage';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
+import CashOnDeliveryIcon from '../../../../assets/payment/cod.svg';
+import PrepaidIcon from '../../../../assets/payment/prepaid.svg';
 
 interface Payment {
   productsQuote: any;
@@ -306,14 +308,22 @@ const Payment: React.FC<Payment> = ({
                   ? styles.selectedOption
                   : {},
               ]}>
-              <FastImage
-                source={require('../../../../assets/payment/cashOnDelivery.png')}
-                style={styles.paymentImage}
-              />
-              <Text variant={'bodyMedium'} style={styles.paymentOptionText}>
-                Cash on delivery
-              </Text>
+              <View style={styles.checkContainer}>
+                {activePaymentMethod === ORDER_PAYMENT_METHODS.COD ? (
+                  <Icon
+                    name={'check-circle'}
+                    size={20}
+                    color={theme.colors.primary}
+                  />
+                ) : (
+                  <View style={styles.emptyCheck} />
+                )}
+              </View>
+              <CashOnDeliveryIcon width={110} height={100} />
             </View>
+            <Text variant={'labelLarge'} style={styles.paymentOptionText}>
+              Cash on delivery
+            </Text>
           </TouchableOpacity>
           <View style={styles.separator} />
           <TouchableOpacity
@@ -326,14 +336,22 @@ const Payment: React.FC<Payment> = ({
                   ? styles.selectedOption
                   : {},
               ]}>
-              <FastImage
-                source={require('../../../../assets/payment/prepaid.png')}
-                style={styles.paymentImage}
-              />
-              <Text variant={'bodyMedium'} style={styles.paymentOptionText}>
-                Prepaid
-              </Text>
+              <View style={styles.checkContainer}>
+                {activePaymentMethod === ORDER_PAYMENT_METHODS.JUSPAY ? (
+                  <Icon
+                    name={'check-circle'}
+                    size={20}
+                    color={theme.colors.primary}
+                  />
+                ) : (
+                  <View style={styles.emptyCheck} />
+                )}
+              </View>
+              <PrepaidIcon width={110} height={100} />
             </View>
+            <Text variant={'labelLarge'} style={styles.paymentOptionText}>
+              Prepaid
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
@@ -385,7 +403,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.white,
     },
     paymentOption: {
-      flex: 1,
+      width: (Dimensions.get('screen').width - 48) / 2,
       alignItems: 'center',
     },
     paymentOptionMeta: {
@@ -394,6 +412,8 @@ const makeStyles = (colors: any) =>
       borderRadius: 6,
       borderColor: colors.neutral100,
       borderWidth: 1,
+      paddingTop: 6,
+      width: '100%',
     },
     selectedOption: {
       borderColor: colors.primary,
@@ -409,7 +429,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 8,
     },
     paymentOptionText: {
-      fontWeight: '700',
+      marginTop: 8,
       textAlign: 'center',
     },
     buttonContainer: {
@@ -418,6 +438,18 @@ const makeStyles = (colors: any) =>
     },
     button: {
       borderRadius: 8,
+    },
+    emptyCheck: {
+      width: 20,
+      height: 20,
+      marginBottom: 4,
+    },
+    checkContainer: {
+      alignItems: 'flex-end',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      marginBottom: 4,
+      width: '100%',
     },
   });
 

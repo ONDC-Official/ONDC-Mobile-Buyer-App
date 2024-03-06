@@ -14,6 +14,7 @@ import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
+import { makeGlobalStyles } from "../../../../styles/styles";
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -41,6 +42,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
+  const globalStyles = makeGlobalStyles(theme.colors);
   const pagerRef = useRef<any>();
   const [page, setPage] = useState<number>(0);
 
@@ -361,7 +363,8 @@ const Fulfillment: React.FC<Fulfillment> = ({
                   </Text>
                 </View>
                 <TouchableOpacity
-                  style={styles.button}
+                  disabled={selectedFulfillmentList.length === 0}
+                  style={[styles.button, selectedFulfillmentList.length === 0 ? globalStyles.disabledContainedButton : {}]}
                   onPress={showPaymentOption}>
                   <Text variant={'bodyLarge'} style={styles.buttonLabel}>
                     Proceed to Pay
