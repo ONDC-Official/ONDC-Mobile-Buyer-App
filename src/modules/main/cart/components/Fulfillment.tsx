@@ -14,7 +14,7 @@ import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
-import { makeGlobalStyles } from "../../../../styles/styles";
+import {makeGlobalStyles} from '../../../../styles/styles';
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -189,7 +189,9 @@ const Fulfillment: React.FC<Fulfillment> = ({
                             <Text
                               variant={'labelMedium'}
                               style={styles.itemCount}>
-                              {filteredProducts.length} Items
+                              {filteredProducts.length > 1
+                                ? `${filteredProducts.length} Items`
+                                : `${filteredProducts.length} Item`}
                             </Text>
                           </View>
                           {unqiueFulfillments.length > 1 && (
@@ -261,18 +263,20 @@ const Fulfillment: React.FC<Fulfillment> = ({
                             );
                           })}
                         </ScrollView>
-                        <View style={styles.fulfilmentTotal}>
-                          <Text
-                            variant={'bodyMedium'}
-                            style={styles.itemsTotal}>
-                            Items Total
-                          </Text>
-                          <Text
-                            variant={'bodyMedium'}
-                            style={styles.itemsTotal}>
-                            ₹{fulfillmentTotal.toFixed(2)}
-                          </Text>
-                        </View>
+                        {unqiueFulfillments.length > 1 && (
+                          <View style={styles.fulfilmentTotal}>
+                            <Text
+                              variant={'bodyMedium'}
+                              style={styles.itemsTotal}>
+                              Items Total
+                            </Text>
+                            <Text
+                              variant={'bodyMedium'}
+                              style={styles.itemsTotal}>
+                              ₹{fulfillmentTotal.toFixed(2)}
+                            </Text>
+                          </View>
+                        )}
                       </View>
                       <View style={styles.listContainer}>
                         <ScrollView>
@@ -328,7 +332,10 @@ const Fulfillment: React.FC<Fulfillment> = ({
               <View style={styles.summaryContainer}>
                 <View style={styles.summaryRow}>
                   <Text variant="bodyLarge" style={styles.subTotal}>
-                    Item Total ({uniqueItems?.length} Items)
+                    Item Total{' '}
+                    {unqiueFulfillments.length > 0
+                      ? `(${uniqueItems?.length} Items)`
+                      : ''}
                   </Text>
                   <Text variant="bodyLarge" style={styles.subTotal}>
                     ₹{cartTotal}
@@ -364,7 +371,12 @@ const Fulfillment: React.FC<Fulfillment> = ({
                 </View>
                 <TouchableOpacity
                   disabled={selectedFulfillmentList.length === 0}
-                  style={[styles.button, selectedFulfillmentList.length === 0 ? globalStyles.disabledContainedButton : {}]}
+                  style={[
+                    styles.button,
+                    selectedFulfillmentList.length === 0
+                      ? globalStyles.disabledContainedButton
+                      : {},
+                  ]}
                   onPress={showPaymentOption}>
                   <Text variant={'bodyLarge'} style={styles.buttonLabel}>
                     Proceed to Pay
