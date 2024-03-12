@@ -6,14 +6,12 @@ import List from './components/tabs/List';
 import Profile from './components/tabs/Profile';
 import DashboardCart from './components/tabs/Cart';
 import useCartItems from '../../../hooks/useCartItems';
-import {useTranslation} from 'react-i18next';
 
 interface Dashboard {}
 
 const Tab = createBottomTabNavigator();
 
 const Dashboard: React.FC<Dashboard> = () => {
-  const {t} = useTranslation();
   const {getCartItems} = useCartItems();
 
   useEffect(() => {

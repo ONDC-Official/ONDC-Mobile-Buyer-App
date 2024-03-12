@@ -379,7 +379,13 @@ const Fulfillment: React.FC<Fulfillment> = ({
                   </Text>
                 </View>
                 <TouchableOpacity
-                  style={styles.button}
+                  disabled={selectedFulfillmentList.length === 0}
+                  style={[
+                    styles.button,
+                    selectedFulfillmentList.length === 0
+                      ? globalStyles.disabledContainedButton
+                      : {},
+                  ]}
                   onPress={showPaymentOption}>
                   <Text variant={'bodyLarge'} style={styles.buttonLabel}>
                     {t('Fulfillment.Proceed to Pay')}

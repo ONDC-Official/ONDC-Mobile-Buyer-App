@@ -724,7 +724,7 @@ const makeStyles = (colors: any) =>
     },
     outOfStock: {
       textAlign: 'center',
-      color: colors.error600,
+      color: colors.neutral300,
     },
     customise: {
       textAlign: 'center',

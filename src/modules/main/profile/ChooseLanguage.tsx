@@ -17,7 +17,7 @@ const ChooseLanguage = () => {
   const styles = makeStyles(theme.colors);
 
   const handleChangeLanguage = async (language: string) => {
-    i18n.changeLanguage(language);
+    await i18n.changeLanguage(language);
     await setStoredData('appLanguage', language);
 
     // Check if address preselected, if so directly navigate
@@ -39,19 +39,19 @@ const ChooseLanguage = () => {
     {
       title: t('Choose Language.Hindi'),
       onPress: () => {
-        handleChangeLanguage('hi');
+        handleChangeLanguage('hi').then(r => {});
       },
     },
     {
       title: t('Choose Language.English'),
       onPress: () => {
-        handleChangeLanguage('en');
+        handleChangeLanguage('en').then(r => {});
       },
     },
     {
       title: t('Choose Language.Marathi'),
       onPress: () => {
-        handleChangeLanguage('ma');
+        handleChangeLanguage('ma').then(r => {});
       },
     },
   ];
