@@ -3,6 +3,7 @@ import {Button, Checkbox, Text} from 'react-native-paper';
 import React, {useEffect, useState} from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {useAppTheme} from '../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface FilterList {
   attributes: any[];
@@ -32,6 +33,7 @@ const FilterList: React.FC<FilterList> = ({
   setSelectedAttributes,
   close,
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [currentAttribute, setCurrentAttribute] = useState<string>(
@@ -82,10 +84,10 @@ const FilterList: React.FC<FilterList> = ({
     <View style={styles.container}>
       <View style={styles.sheetHeader}>
         <Text variant={'titleLarge'} style={styles.title}>
-          Filters
+          {t('Cart.Filter List.Filters')}
         </Text>
         <Button mode={'text'} compact onPress={clearAll}>
-          Clear all
+          {t('Cart.Filter List.Clear all')}
         </Button>
       </View>
       <View style={styles.filterContainer}>
@@ -150,7 +152,7 @@ const FilterList: React.FC<FilterList> = ({
             <Text
               variant={'bodyLarge'}
               style={[styles.buttonLabel, styles.closeLabel]}>
-              Close
+              {t('Cart.Filter List.Close')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -162,7 +164,7 @@ const FilterList: React.FC<FilterList> = ({
             <Text
               variant={'bodyLarge'}
               style={[styles.buttonLabel, styles.applyLabel]}>
-              Apply
+              {t('Cart.Filter List.Apply')}
             </Text>
           </TouchableOpacity>
         </View>

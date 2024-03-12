@@ -5,6 +5,7 @@ import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {useSelector} from 'react-redux';
 import {useAppTheme} from '../../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface TabIcon {
   name: string;
@@ -37,6 +38,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
   descriptors,
   navigation,
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
@@ -84,7 +86,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
               <Text
                 variant={'labelMedium'}
                 style={isFocused ? styles.activeButtonText : styles.tabText}>
-                {label}
+                {t(`${label}.${label}`)}
               </Text>
               {route.name === 'Cart' && badge ? (
                 <View

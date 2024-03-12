@@ -34,6 +34,7 @@ import {
   showToastWithGravity,
 } from '../../../../../utils/utils';
 import {useAppTheme} from '../../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const validationSchema = yup.object({
   subcategory: yup.string().required('Subcategory is required'),
@@ -60,6 +61,7 @@ const categories = ISSUE_TYPES.map(item => {
 const CancelToken = axios.CancelToken;
 
 const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const source = useRef<any>(null);
@@ -263,7 +265,7 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
         <TouchableOpacity style={styles.container} onPress={showDialog}>
           <RaiseComplaint width={42} height={42} />
           <Text variant={'titleLarge'} style={styles.title}>
-            Raise Issue
+            {t('Profile.Raise Issue')}
           </Text>
           <Icon
             name={'keyboard-arrow-right'}

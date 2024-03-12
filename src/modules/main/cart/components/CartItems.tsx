@@ -32,6 +32,7 @@ import CustomizationFooterButtons from '../../provider/components/CustomizationF
 import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -52,6 +53,7 @@ const CartItems: React.FC<CartItems> = ({
   cartItems,
   setCartItems,
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {deleteDataWithAuth, getDataWithAuth, putDataWithAuth} =
@@ -281,7 +283,7 @@ const CartItems: React.FC<CartItems> = ({
                           <Text
                             variant={'labelLarge'}
                             style={styles.customiseText}>
-                            Customise
+                            {t('Cart.Customise')}
                           </Text>
                         </TouchableOpacity>
                       )}
@@ -298,7 +300,7 @@ const CartItems: React.FC<CartItems> = ({
                         <Text
                           variant={'labelLarge'}
                           style={styles.customiseText}>
-                          Edit
+                          {t('Cart.Edit')}
                         </Text>
                       </TouchableOpacity>
                     )}

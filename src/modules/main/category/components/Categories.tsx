@@ -7,12 +7,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 import {CATEGORIES} from '../../../../utils/categories';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface Categories {
   currentCategory: string;
 }
 
 const Categories: React.FC<Categories> = ({currentCategory}) => {
+  const {t} = useTranslation();
   const flatListRef = useRef<any>(null);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useAppTheme();
@@ -64,7 +66,7 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
               style={styles.categoryText}
               ellipsizeMode={'tail'}
               numberOfLines={2}>
-              {item.name}
+              {t(`Featured Categories.${item.name}`)}
             </Text>
           </TouchableOpacity>
         )}

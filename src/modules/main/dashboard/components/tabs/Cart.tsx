@@ -2,8 +2,10 @@ import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Cart from '../../../cart/Cart';
 import {useAppTheme} from '../../../../../utils/theme';
+import { useTranslation } from 'react-i18next';
 
 const DashboardCart = () => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -11,7 +13,7 @@ const DashboardCart = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text variant={'titleLarge'} style={styles.pageTitle}>
-          My Cart
+          {t('Cart.My Cart')}
         </Text>
       </View>
       <Cart />

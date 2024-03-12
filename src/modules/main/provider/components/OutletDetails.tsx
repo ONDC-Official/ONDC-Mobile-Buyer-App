@@ -10,6 +10,7 @@ import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface OutletDetails {
   provider: any;
@@ -24,6 +25,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
   outlet,
   apiRequested,
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -65,7 +67,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
           {outlet?.isOpen && (
             <>
               <Text variant={'bodyLarge'} style={styles.open}>
-                Open now
+                {t('Cart.Outlet Details.Open now')}
               </Text>
               &nbsp;-&nbsp;
             </>
@@ -77,13 +79,13 @@ const OutletDetails: React.FC<OutletDetails> = ({
             onPress={getDirection}
             style={[styles.actionButton, styles.getDirection]}>
             <Text variant={'bodyMedium'} style={styles.getDirectionText}>
-              Get Direction
+              {t('Cart.Outlet Details.Get Direction')}
             </Text>
           </TouchableOpacity>
           <View style={styles.separator} />
           <TouchableOpacity style={styles.actionButton} onPress={callProvider}>
             <Text variant={'bodyMedium'} style={styles.buttonText}>
-              Call Now
+              {t('Cart.Outlet Details.Call Now')}
             </Text>
           </TouchableOpacity>
         </View>

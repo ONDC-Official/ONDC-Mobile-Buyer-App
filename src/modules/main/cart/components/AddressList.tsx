@@ -13,6 +13,7 @@ import {appStyles} from '../../../../styles/styles';
 import AddressSkeleton from '../../dashboard/components/address/AddressSkeleton';
 import {saveAddress} from '../../../../redux/address/actions';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface AddressList {
   deliveryAddress: any;
@@ -25,6 +26,7 @@ const AddressList: React.FC<AddressList> = ({
   deliveryAddress,
   setDeliveryAddress,
 }) => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
@@ -78,10 +80,12 @@ const AddressList: React.FC<AddressList> = ({
   return (
     <View style={styles.addressFormContainer}>
       <View style={styles.header}>
-        <Text variant={'titleMedium'}>Select a Delivery Address</Text>
+        <Text variant={'titleMedium'}>
+          {t('Address List.Select a Delivery Address')}
+        </Text>
       </View>
       <Text variant={'labelLarge'} style={styles.shippingAddress}>
-        Saved Addresses
+        {t('Address List.Saved Addresses')}
       </Text>
       {apiInProgress ? (
         <FlatList
@@ -126,7 +130,7 @@ const AddressList: React.FC<AddressList> = ({
             style={styles.button}
             onPress={() => navigation.navigate('AddDefaultAddress')}>
             <Text variant={'labelLarge'} style={styles.buttonLabel}>
-              Add new address
+              {t('Address List.Add new address')}
             </Text>
           </TouchableOpacity>
         </>

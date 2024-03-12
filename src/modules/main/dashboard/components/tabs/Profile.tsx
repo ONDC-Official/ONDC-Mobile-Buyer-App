@@ -6,8 +6,10 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import useLogoutUser from '../../../../../hooks/useLogoutUser';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
 import {useAppTheme} from '../../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const Profile = () => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {clearDataAndLogout} = useLogoutUser();
@@ -15,11 +17,11 @@ const Profile = () => {
 
   const confirmLogout = () => {
     alertWithTwoButtons(
-      'Logout',
-      'Are you sure you want to logout?',
-      'Cancel',
+      t('Profile.Logout'),
+      t('Profile.Are you sure you want to logout?'),
+      t('Profile.Cancel'),
       () => {},
-      'Logout',
+      t('Profile.Logout'),
       () => clearDataAndLogout(),
     );
   };
@@ -30,21 +32,27 @@ const Profile = () => {
 
   const navigateToComplaints = () => navigation.navigate('Complaints');
 
+  const navigateToChooseLanguage = () => navigation.navigate('ChooseLanguage');
+
   const menu = [
     {
-      title: 'My Profile',
+      title: t('Profile.My Profile'),
       action: navigateToProfile,
     },
     {
-      title: 'Order History',
+      title: t('Profile.Order History'),
       action: navigateToOrders,
     },
     {
-      title: 'Complaints',
+      title: t('Profile.Complaints'),
       action: navigateToComplaints,
     },
     {
-      title: 'Logout',
+      title: t('Profile.Choose Language'),
+      action: navigateToChooseLanguage,
+    },
+    {
+      title: t('Profile.Logout'),
       action: confirmLogout,
     },
   ];
@@ -53,7 +61,7 @@ const Profile = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text variant={'titleLarge'} style={styles.pageTitle}>
-          Profile
+          {t('Profile.Profile')}
         </Text>
       </View>
       <FlatList

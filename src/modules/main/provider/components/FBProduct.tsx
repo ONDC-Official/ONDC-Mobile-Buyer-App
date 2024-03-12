@@ -37,6 +37,7 @@ import CustomizationFooterButtons from './CustomizationFooterButtons';
 import FBProductDetails from '../../product/details/FBProductDetails';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface FBProduct {
   product: any;
@@ -48,6 +49,7 @@ const screenHeight: number = Dimensions.get('screen').height;
 
 const CancelToken = axios.CancelToken;
 const FBProduct: React.FC<FBProduct> = ({product}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
@@ -411,7 +413,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               </View>
               {customizable && (
                 <Text variant={'labelSmall'} style={styles.customise}>
-                  Customizable
+                  {t('Cart.FBProduct.Customizable')}
                 </Text>
               )}
             </View>
@@ -434,7 +436,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                       ? globalStyles.disabledOutlineButtonText
                       : globalStyles.outlineButtonText,
                   ]}>
-                  Add
+                  {t('Cart.FBProduct.Add')}
                 </Text>
                 {apiInProgress ? (
                   <ActivityIndicator size={18} />
@@ -456,8 +458,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             </View>
           ) : (
             <View style={styles.outOfStockButtonContainer}>
-              <Text variant={'bodyLarge'} style={styles.outOfStock}>
-                Out of stock
+              <Text variant={'bodyLarge'} style={[styles.outOfStock]}>
+                {t('Cart.FBProduct.Out of stock')}
               </Text>
             </View>
           )}
@@ -722,7 +724,7 @@ const makeStyles = (colors: any) =>
     },
     outOfStock: {
       textAlign: 'center',
-      color: colors.neutral300,
+      color: colors.error600,
     },
     customise: {
       textAlign: 'center',

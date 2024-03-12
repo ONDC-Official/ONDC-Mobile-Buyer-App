@@ -6,8 +6,10 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {PRODUCT_SUBCATEGORY} from '../../../utils/categories';
 import {useAppTheme} from '../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const ShopByCategory = ({route: {params}}: {route: any}) => {
+  const {t} = useTranslation();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -37,7 +39,7 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
           onPress={() => navigateToSubCategory(item)}>
           <FastImage source={{uri: item?.imageUrl}} style={styles.brandImage} />
           <Text variant={'labelLarge'} style={styles.name}>
-            {item.key}
+            {t(`Product SubCategories.${item.key}`)}
           </Text>
         </TouchableOpacity>
       )}

@@ -20,6 +20,7 @@ import BrandDetails from '../modules/main/provider/BrandDetails';
 import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
 import Outlets from '../modules/main/provider/Outlets';
 import Orders from '../modules/main/order/list/Orders';
+import ChooseLanguage from '../modules/main/profile/ChooseLanguage';
 import CancelOrder from '../modules/main/order/details/CancelOrder';
 import SearchProducts from '../modules/main/dashboard/SearchProducts';
 import PaymentMethods from '../modules/main/order/details/PaymentMethods';
@@ -33,6 +34,7 @@ import StoresNearMe from '../modules/main/stores/StoresNearMe';
 import ShopByCategory from '../modules/main/category/ShopByCategory';
 import {theme} from '../utils/theme';
 import FeaturedCategories from '../modules/main/category/FeaturedCategories';
+import {useTranslation} from 'react-i18next';
 
 const Stack = createStackNavigator();
 
@@ -57,6 +59,7 @@ const headerStyle = {
  * @constructor
  */
 const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
+  const {t} = useTranslation();
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>
@@ -89,14 +92,14 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="Cart"
           component={Cart}
           options={{
-            title: 'My Cart',
+            title: t('Cart.My Cart'),
           }}
         />
         <Stack.Screen
           name="AddDefaultAddress"
           component={AddDefaultAddress}
           options={{
-            title: 'Add Address',
+            title: t('Address Form.Add Address'),
           }}
         />
         <Stack.Screen
@@ -111,7 +114,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="AddressList"
           component={AddressList}
           options={{
-            title: 'Delivery Address',
+            title: t('Address List.Delivery Address'),
           }}
         />
 
@@ -119,7 +122,15 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="MyProfile"
           component={Profile}
           options={{
-            title: 'My Profile',
+            title: t('Profile.My Profile'),
+          }}
+        />
+
+        <Stack.Screen
+          name="ChooseLanguage"
+          component={ChooseLanguage}
+          options={{
+            title: t('Choose Language.Choose Language'),
           }}
         />
 
@@ -127,7 +138,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="Complaints"
           component={Complaints}
           options={{
-            title: 'Complaints',
+            title: t('Profile.Complaints'),
           }}
         />
 
@@ -143,7 +154,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="Orders"
           component={Orders}
           options={{
-            title: 'Order History',
+            title: t('Profile.Order History'),
           }}
         />
 
@@ -234,21 +245,21 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="StoresNearMe"
           component={StoresNearMe}
           options={{
-            title: 'Stores Near me',
+            title: t('Stores Near me.Stores Near me'),
           }}
         />
         <Stack.Screen
           name="ShopByCategory"
           component={ShopByCategory}
           options={{
-            title: 'Shop by Category',
+            title: t('Product SubCategories.Shop by Category'),
           }}
         />
         <Stack.Screen
           name="FeaturedCategories"
           component={FeaturedCategories}
           options={{
-            title: 'Featured Categories',
+            title: t('Featured Categories.Featured Categories'),
           }}
         />
       </Stack.Navigator>

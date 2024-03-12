@@ -30,6 +30,7 @@ import {updateCartItems} from '../../../../redux/cart/actions';
 import Page from '../../../../components/page/Page';
 import AboutProduct from './components/AboutProduct';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface ProductDetails {
   route: any;
@@ -62,6 +63,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   navigation,
   route: {params},
 }) => {
+  const {t} = useTranslation();
   const firstTime = useRef<boolean>(true);
   const {uid} = useSelector(({authReducer}) => authReducer);
   const source = useRef<any>(null);
@@ -487,7 +489,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                           ? globalStyles.disabledOutlineButtonText
                           : styles.addToCartLabel
                       }>
-                      Add to cart
+                      {t('Cart.Add to cart')}
                     </Text>
                   )}
                 </TouchableOpacity>

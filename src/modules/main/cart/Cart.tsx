@@ -18,10 +18,12 @@ import Payment from './components/Payment';
 import useConfirmItems from '../../../hooks/useConfirmItems';
 import CloseSheetContainer from '../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../utils/theme';
+import { useTranslation } from 'react-i18next';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
 const Cart = () => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {address} = useSelector(({addressReducer}) => addressReducer);
@@ -466,7 +468,7 @@ const Cart = () => {
                   <View style={styles.summaryRow}>
                     <View style={styles.address}>
                       <Text variant={'bodyLarge'} style={styles.addressTitle}>
-                        Delivery Address
+                        {t('Cart.Delivery Address')}
                       </Text>
                       <Text variant={'labelMedium'} style={styles.addressLabel}>
                         {deliveryAddress?.address?.street},{' '}
@@ -491,7 +493,7 @@ const Cart = () => {
                       labelStyle={styles.changeButtonLabel}
                       mode={'outlined'}
                       onPress={() => addressSheet.current.open()}>
-                      Change
+                      {t('Cart.Change')}
                     </Button>
                   </View>
                   <View style={styles.summaryDivider} />
@@ -501,7 +503,7 @@ const Cart = () => {
                         ₹{cartTotal}
                       </Text>
                       <Text variant="bodyMedium" style={styles.itemCount}>
-                        {cartItems.length} items
+                        {cartItems.length} {t('Cart.items')}
                       </Text>
                     </View>
                     <View>
@@ -525,7 +527,7 @@ const Cart = () => {
                         style={styles.deliveryButton}
                         mode={'contained'}
                         onPress={() => onCheckoutFromCart(deliveryAddress)}>
-                        View Delivery Options
+                        {t('Cart.View Delivery Options')}
                       </Button>
                     </View>
                   </View>

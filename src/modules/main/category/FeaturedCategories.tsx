@@ -6,8 +6,10 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {CATEGORIES} from '../../../utils/categories';
 import {useAppTheme} from '../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const FeaturedCategories = () => {
+  const {t} = useTranslation();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -31,7 +33,7 @@ const FeaturedCategories = () => {
           }>
           <FastImage source={item.Icon} style={styles.brandImage} />
           <Text variant={'labelMedium'} style={styles.name}>
-            {item.name}
+            {t(`Featured Categories.${item.name}`)}
           </Text>
         </TouchableOpacity>
       )}

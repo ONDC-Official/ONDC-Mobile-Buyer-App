@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {getFilterCategory} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface VegNonVegTag {
   tags: any[];
@@ -16,6 +17,7 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({
   showLabel,
   size = 'regular',
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -30,7 +32,7 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({
         />
         {showLabel && (
           <Text variant={'bodyMedium'} style={styles.veg}>
-            Veg
+            {t('Cart.Veg')}
           </Text>
         )}
       </View>
@@ -44,7 +46,7 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({
         />
         {showLabel && (
           <Text variant={'bodyMedium'} style={styles.nonVeg}>
-            Non Veg
+            {t('Cart.Non Veg')}
           </Text>
         )}
       </View>

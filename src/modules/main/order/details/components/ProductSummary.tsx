@@ -7,6 +7,7 @@ import {useSelector} from 'react-redux';
 import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
+import {useTranslation} from 'react-i18next';
 
 const ProductSummary = ({
   items,
@@ -17,6 +18,7 @@ const ProductSummary = ({
   quote: any;
   fulfilment: any;
 }) => {
+  const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -38,7 +40,10 @@ const ProductSummary = ({
           return <View key={item.id} />;
         }
 
-        const associatedItems = items.filter((one: any) => one.parent_item_id === item.parent_item_id && one.id !== item.id);
+        const associatedItems = items.filter(
+          (one: any) =>
+            one.parent_item_id === item.parent_item_id && one.id !== item.id,
+        );
         return (
           <View
             key={item.id}
@@ -55,7 +60,7 @@ const ProductSummary = ({
                   </Text>
                   <View style={styles.itemQuantityContainer}>
                     <Text variant={'labelSmall'} style={styles.quantity}>
-                      Qty {item?.quantity?.count}
+                      {t('Fulfillment.Qty')} {item?.quantity?.count}
                     </Text>
                     <Text variant={'labelLarge'} style={styles.itemPrice}>
                       {CURRENCY_SYMBOLS[item?.product?.price?.currency]}

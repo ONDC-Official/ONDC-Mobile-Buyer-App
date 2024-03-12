@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const VegNonVegTag = ({category = 'veg'}) => {
   return (
@@ -29,6 +30,7 @@ const CustomizationGroup = ({
   customizationGroups: any;
   handleClick: (group: any, option: any) => void;
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [showAll, setShowAll] = useState<boolean>(false);
@@ -60,7 +62,8 @@ const CustomizationGroup = ({
               </Text>
             ) : customizationGroup?.minQuantity !== 0 ? (
               <Text variant={'labelSmall'} style={styles.selectionLabel}>
-                Select any {customizationGroup.minQuantity} options
+                {t('Cart.Select any')} {customizationGroup.minQuantity}{' '}
+                {t('Cart.options')}
               </Text>
             ) : customizationGroup?.maxQuantity !== 0 ? (
               <Text variant={'labelSmall'} style={styles.selectionLabel}>
@@ -74,7 +77,7 @@ const CustomizationGroup = ({
             <View>
               <View style={styles.mandatory}>
                 <Text variant={'labelLarge'} style={styles.mandatoryLabel}>
-                  Required
+                  {t('Cart.Required')}
                 </Text>
               </View>
             </View>

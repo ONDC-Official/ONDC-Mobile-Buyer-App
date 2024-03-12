@@ -14,6 +14,7 @@ import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
 import {saveAddress} from '../../../../../redux/address/actions';
+import { useTranslation } from 'react-i18next';
 
 interface Address {
   _id: string;
@@ -50,6 +51,7 @@ interface AddressList {
 
 const CancelToken = axios.CancelToken;
 const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
+  const [t] = useTranslation();
   const isFocused = useIsFocused();
   const {address} = useSelector(({addressReducer}) => addressReducer);
   const source = useRef<any>(null);
@@ -159,7 +161,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
         </View>
       )}
       <Button style={styles.addButton} mode={'contained'} onPress={addAddress}>
-        Add Address
+        {t('Address List.Add Address')}
       </Button>
     </View>
   );

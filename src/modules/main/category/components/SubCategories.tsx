@@ -7,6 +7,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
 import {useAppTheme} from '../../../../utils/theme';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
+import {useTranslation} from 'react-i18next';
 
 interface SubCategories {
   currentCategory: string;
@@ -15,6 +16,7 @@ interface SubCategories {
 const screenWidth = Dimensions.get('screen').width;
 
 const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
+  const {t} = useTranslation();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -38,7 +40,7 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
   return (
     <View style={styles.sectionContainer}>
       <SectionHeaderWithViewAll
-        title={'Shop By Category'}
+        title={t('SubCategories.Shop By Category')}
         viewAll={navigateToAll}
       />
 
@@ -61,7 +63,7 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
                 style={styles.brandImage}
               />
               <Text variant={'labelLarge'} style={styles.name}>
-                {item.key}
+                {t(`Product SubCategories.${item.key}`)}
               </Text>
             </TouchableOpacity>
           ))}

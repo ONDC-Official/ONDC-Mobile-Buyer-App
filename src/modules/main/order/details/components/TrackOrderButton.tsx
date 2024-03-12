@@ -27,6 +27,7 @@ import {showToastWithGravity} from '../../../../../utils/utils';
 import Config from '../../../../../../config';
 import {theme, useAppTheme} from '../../../../../utils/theme';
 import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
+import {useTranslation} from 'react-i18next';
 
 interface TrackOrderButton {}
 
@@ -55,6 +56,7 @@ const layerStyles: any = {
 };
 
 const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const appTheme = useAppTheme();
   const styles = makeButtonStyles(appTheme.colors);
@@ -304,7 +306,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
           <></>
         )}
         <Text variant={'bodyMedium'} style={styles.label}>
-          Track
+          {t('Profile.Track')}
         </Text>
       </TouchableOpacity>
       <RBSheet

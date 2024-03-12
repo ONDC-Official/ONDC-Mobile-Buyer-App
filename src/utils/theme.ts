@@ -51,7 +51,6 @@ export const theme: any = {
       }),
       fontWeight: '700',
       fontSize: 32,
-      lineHeight: 40,
     },
 
     // Title 2
@@ -63,7 +62,6 @@ export const theme: any = {
       }),
       fontWeight: '700',
       fontSize: 24,
-      lineHeight: 32,
     },
 
     // Title 3
@@ -75,7 +73,6 @@ export const theme: any = {
       }),
       fontWeight: '700',
       fontSize: 18,
-      lineHeight: 24,
     },
 
     // Title 4
@@ -87,7 +84,6 @@ export const theme: any = {
       }),
       fontWeight: '600',
       fontSize: 16,
-      lineHeight: 20,
     },
     titleMedium: {
       fontFamily: Platform.select({
@@ -97,7 +93,6 @@ export const theme: any = {
       }),
       fontWeight: '500',
       fontSize: 16,
-      lineHeight: 20,
     },
     titleSmall: {
       fontFamily: Platform.select({
@@ -107,13 +102,12 @@ export const theme: any = {
       }),
       fontWeight: '400',
       fontSize: 16,
-      lineHeight: 20,
     },
 
     // Body
     bodyLarge: {
       fontSize: 14,
-      lineHeight: 18,
+
       fontWeight: '600',
       fontFamily: Platform.select({
         web: 'Inter-SemiBold, sans-serif',
@@ -123,7 +117,7 @@ export const theme: any = {
     },
     bodyMedium: {
       fontSize: 14,
-      lineHeight: 18,
+
       fontWeight: '500',
       fontFamily: Platform.select({
         web: 'Inter-Medium',
@@ -133,7 +127,7 @@ export const theme: any = {
     },
     bodySmall: {
       fontSize: 14,
-      lineHeight: 18,
+
       fontFamily: Platform.select({
         web: 'Inter-Regular',
         ios: 'Inter-Regular',
@@ -150,7 +144,6 @@ export const theme: any = {
       }),
       fontWeight: '600',
       fontSize: 11,
-      lineHeight: 14,
     },
     labelMedium: {
       fontFamily: Platform.select({
@@ -159,7 +152,6 @@ export const theme: any = {
         default: 'Inter-Medium',
       }),
       fontSize: 11,
-      lineHeight: 14,
     },
     labelSmall: {
       fontFamily: Platform.select({
@@ -168,7 +160,6 @@ export const theme: any = {
         default: 'Inter-Regular',
       }),
       fontSize: 11,
-      lineHeight: 14,
     },
   },
 };

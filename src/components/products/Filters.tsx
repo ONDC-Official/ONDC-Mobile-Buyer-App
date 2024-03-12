@@ -13,6 +13,7 @@ import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import FilterList from './FilterList';
 import {useAppTheme} from '../../utils/theme';
 import FilterIcon from '../../assets/filter.svg';
+import {useTranslation} from 'react-i18next';
 
 interface Filters {
   providerId: any;
@@ -30,6 +31,7 @@ const Filters: React.FC<Filters> = ({
   selectedAttributes,
   setSelectedAttributes,
 }) => {
+  const {t} = useTranslation();
   const attributeSource = useRef<any>(null);
   const [attributes, setAttributes] = useState<any[]>([]);
   const [attributesRequested, setAttributesRequested] = useState<boolean>(true);
@@ -104,7 +106,7 @@ const Filters: React.FC<Filters> = ({
                 ? styles.disabledFilterLabel
                 : styles.filterLabel
             }>
-            Filter
+            {t('Product SubCategories.Filter')}
           </Text>
           <FilterIcon width={18} height={18} />
         </TouchableOpacity>

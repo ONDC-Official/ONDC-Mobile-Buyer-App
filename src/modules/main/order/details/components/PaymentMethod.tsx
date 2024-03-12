@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useAppTheme} from '../../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const PaymentMethod = ({
   payment,
@@ -14,6 +15,7 @@ const PaymentMethod = ({
   address: any;
   contact: any;
 }) => {
+  const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -21,7 +23,7 @@ const PaymentMethod = ({
   return (
     <View style={styles.container}>
       <Text variant={'titleLarge'} style={styles.title}>
-        Payment Methods
+        {t('Profile.Payment Methods')}
       </Text>
       <TouchableOpacity
         style={styles.modeContainer}
@@ -37,7 +39,7 @@ const PaymentMethod = ({
       </TouchableOpacity>
       <Divider style={styles.divider} />
       <Text variant={'titleLarge'} style={styles.addressTitle}>
-        Shipping Address
+        {t('Profile.Shipping Address')}
       </Text>
       <TouchableOpacity
         style={styles.modeContainer}

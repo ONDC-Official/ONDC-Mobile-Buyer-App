@@ -17,6 +17,7 @@ import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandlin
 import Config from '../../../../../../config';
 import {useAppTheme} from '../../../../../utils/theme';
 import DropdownField from '../../../../../components/input/DropdownField';
+import {useTranslation} from 'react-i18next';
 
 const defaultLocation = [77.057575, 28.683374];
 
@@ -32,6 +33,7 @@ const AddressForm: React.FC<AddressForm> = ({
   apiInProgress,
   saveAddress,
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const source = useRef<any>(null);
@@ -110,12 +112,12 @@ const AddressForm: React.FC<AddressForm> = ({
                 <View style={styles.formContainer}>
                   <View style={appStyles.inputContainer}>
                     <InputField
-                      inputLabel={'Name'}
+                      inputLabel={t('Address Form.Name')}
                       value={values.name}
                       onBlur={handleBlur('name')}
                       required
                       label={''}
-                      placeholder={'Name'}
+                      placeholder={t('Address Form.Name')}
                       errorMessage={
                         touched.name || submitCount > 0 ? errors.name : null
                       }
@@ -129,9 +131,9 @@ const AddressForm: React.FC<AddressForm> = ({
                       value={values.email}
                       onBlur={handleBlur('email')}
                       required
-                      inputLabel={'Email'}
+                      inputLabel={t('Address Form.Email')}
                       label={''}
-                      placeholder={'Email'}
+                      placeholder={t('Address Form.Email')}
                       errorMessage={
                         touched.email || submitCount > 0 ? errors.email : null
                       }
@@ -147,9 +149,9 @@ const AddressForm: React.FC<AddressForm> = ({
                       value={values.number}
                       required
                       onBlur={handleBlur('number')}
-                      inputLabel={'Mobile Number'}
+                      inputLabel={t('Address Form.Mobile Number')}
                       label={''}
-                      placeholder={'Mobile Number'}
+                      placeholder={t('Address Form.Mobile Number')}
                       errorMessage={
                         touched.number || submitCount > 0 ? errors.number : null
                       }
@@ -162,9 +164,9 @@ const AddressForm: React.FC<AddressForm> = ({
                     <InputField
                       value={values.building}
                       onBlur={handleBlur('building')}
-                      inputLabel={'Building'}
+                      inputLabel={t('Address Form.Building')}
                       label={''}
-                      placeholder={'Building'}
+                      placeholder={t('Address Form.Building')}
                       errorMessage={
                         touched.building || submitCount > 0
                           ? errors.building
@@ -181,9 +183,9 @@ const AddressForm: React.FC<AddressForm> = ({
                       value={values.street}
                       onBlur={handleBlur('street')}
                       required
-                      inputLabel={'Street'}
+                      inputLabel={t('Address Form.Street')}
                       label={''}
-                      placeholder={'Street'}
+                      placeholder={t('Address Form.Street')}
                       errorMessage={
                         touched.street || submitCount > 0 ? errors.street : null
                       }
@@ -200,10 +202,10 @@ const AddressForm: React.FC<AddressForm> = ({
                           keyboardType={'numeric'}
                           maxLength={6}
                           onBlur={handleBlur('areaCode')}
-                          inputLabel={'Pin Code'}
+                          inputLabel={t('Address Form.Pin Code')}
                           label={''}
                           required
-                          placeholder={'Pin Code'}
+                          placeholder={t('Address Form.Pin Code')}
                           errorMessage={
                             touched.areaCode || submitCount > 0
                               ? errors.areaCode
@@ -219,9 +221,9 @@ const AddressForm: React.FC<AddressForm> = ({
                           value={values.city}
                           onBlur={handleBlur('city')}
                           required
-                          inputLabel={'City'}
+                          inputLabel={t('Address Form.City')}
                           label={''}
-                          placeholder={'City'}
+                          placeholder={t('Address Form.City')}
                           errorMessage={
                             touched.city || submitCount > 0 ? errors.city : null
                           }
@@ -237,9 +239,9 @@ const AddressForm: React.FC<AddressForm> = ({
                       value={values.state}
                       onBlur={handleBlur('state')}
                       required
-                      inputLabel={'State'}
+                      inputLabel={t('Address Form.State')}
                       label={''}
-                      placeholder={'State'}
+                      placeholder={t('Address Form.State')}
                       errorMessage={
                         touched.state || submitCount > 0 ? errors.state : null
                       }
@@ -251,7 +253,7 @@ const AddressForm: React.FC<AddressForm> = ({
                   <View style={appStyles.inputContainer}>
                     <View style={styles.addressTagContainer}>
                       <DropdownField
-                        inputLabel={'Address Type'}
+                        inputLabel={t('Address Form.Address Type')}
                         name="tag"
                         value={values.tag}
                         setValue={(newValue: any) =>
@@ -259,7 +261,7 @@ const AddressForm: React.FC<AddressForm> = ({
                         }
                         label=""
                         required
-                        placeholder="Address Type"
+                        placeholder={t('Address Form.Address Type')}
                         error={!!touched.tag && !!errors.tag}
                         errorMessage={touched.tag ? errors.tag : null}
                         list={addressTags.map((one: string) => {
@@ -279,7 +281,7 @@ const AddressForm: React.FC<AddressForm> = ({
                     onPress={() => handleSubmit()}
                     loading={apiInProgress}
                     disabled={apiInProgress}>
-                    Save
+                    {t('Address Form.Save')}
                   </Button>
                 </View>
               );
@@ -340,7 +342,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
       alignItems: 'center',
     },
-    searchWidgetProps: {backgroundColor: '#F0FFF0'},
+    searchWidgetProps: {backgroundColor: colors.primary},
     button: {
       borderRadius: 8,
     },

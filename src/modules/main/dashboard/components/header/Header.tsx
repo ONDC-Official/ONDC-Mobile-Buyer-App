@@ -6,12 +6,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import ONDCLogo from '../../../../../assets/app_logo.svg';
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
+import { useTranslation } from 'react-i18next';
 
 type HeaderProps = {
   disableAddress?: boolean;
 };
 
 const Header: React.FC<HeaderProps> = ({disableAddress}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -37,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
             inputStyle={styles.searchInput}
             style={styles.search}
             placeholderTextColor={theme.colors.primary}
-            placeholder="Search"
+            placeholder={t("Home.Search")}
             value={''}
           />
         </TouchableOpacity>

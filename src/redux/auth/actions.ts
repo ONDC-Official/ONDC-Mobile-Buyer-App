@@ -5,6 +5,7 @@ import {
   getStoredData,
   setStoredData,
 } from '../../utils/storage';
+import i18n from '../../i18n';
 
 export const tryLocalSignIn = (
   dispatch: Dispatch<AnyAction>,
@@ -23,18 +24,29 @@ export const tryLocalSignIn = (
           }
         });
         dispatch({type: 'save_user', payload});
-        getStoredData('address').then(address => {
-          if (address) {
+
+        getStoredData('appLanguage').then(language => {
+          if (!language) {
             navigation.reset({
               index: 0,
-              routes: [{name: 'Dashboard'}],
+              routes: [{name: 'ChooseLanguage'}],
             });
           } else {
-            navigation.reset({
-              index: 0,
-              routes: [
-                {name: 'AddressList', params: {navigateToDashboard: true}},
-              ],
+            i18n.changeLanguage(language);
+            getStoredData('address').then(address => {
+              if (address) {
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'Dashboard'}],
+                });
+              } else {
+                navigation.reset({
+                  index: 0,
+                  routes: [
+                    {name: 'AddressList', params: {navigateToDashboard: true}},
+                  ],
+                });
+              }
             });
           }
         });

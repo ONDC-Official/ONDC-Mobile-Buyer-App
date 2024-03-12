@@ -3,8 +3,10 @@ import {StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import moment from 'moment';
 import {useAppTheme} from '../../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const AboutProduct = ({product}: {product: any}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [expanded, setExpanded] = useState<boolean>(true);
@@ -74,7 +76,7 @@ const AboutProduct = ({product}: {product: any}) => {
       onPress={handleAccordionPress}
       title={
         <Text variant={'titleLarge'} style={styles.about}>
-          Product Details
+          {t('Cart.Product Details')}
         </Text>
       }>
       <View style={styles.accordionContainer}>

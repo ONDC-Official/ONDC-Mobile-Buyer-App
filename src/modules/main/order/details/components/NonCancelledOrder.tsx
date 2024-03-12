@@ -22,12 +22,14 @@ import PaymentMethod from './PaymentMethod';
 import RaiseIssueButton from './RaiseIssueButton';
 import CancelOrderButton from './CancelOrderButton';
 import {useAppTheme} from '../../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const NonCancelledOrder = ({
   getOrderDetails,
 }: {
   getOrderDetails: () => void;
 }) => {
+  const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
@@ -63,7 +65,7 @@ const NonCancelledOrder = ({
           <SimpleLineIcons name={'bag'} color={colors.primary} size={20} />
           {orderDetails?.state !== 'Completed' ? (
             <Text variant={'bodyLarge'} style={styles.creationDate}>
-              Order placed on{' '}
+              {t('Profile.Order placed on')}{' '}
               {moment(orderDetails?.createdAt).format('DD MMM hh:mm a')}
             </Text>
           ) : (

@@ -3,6 +3,7 @@ import {Searchbar} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useAppTheme} from '../../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 type SearchHeaderProps = {
   onSearch: (query: string) => void;
@@ -14,6 +15,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
   backIconPress,
 }) => {
   const [searchQuery, setSearchQuery] = React.useState<string>('');
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -36,7 +38,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           inputStyle={styles.searchInput}
           style={styles.search}
           placeholderTextColor={theme.colors.primary}
-          placeholder="Search"
+          placeholder={t('Home.Search')}
           onChangeText={onChangeSearch}
           value={searchQuery}
         />

@@ -1,11 +1,13 @@
 import {Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const List = () => {
+  const {t} = useTranslation();
   const styles = makeStyles();
   return (
     <View style={styles.container}>
-      <Text>Coming soon</Text>
+      <Text>{t('List.Coming soon')}</Text>
     </View>
   );
 };

@@ -12,6 +12,7 @@ import ComplaintSkeleton from '../components/ComplaintSkeleton';
 import ListFooter from '../../order/components/ListFooter';
 import Complaint from '../components/Complaint';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const CancelToken = axios.CancelToken;
 
@@ -21,6 +22,7 @@ const CancelToken = axios.CancelToken;
  * @returns {JSX.Element}
  */
 const Complaints: React.FC<any> = () => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const isFocused = useIsFocused();
@@ -134,7 +136,7 @@ const Complaints: React.FC<any> = () => {
       <FlatList
         data={complaints}
         renderItem={renderItem}
-        ListEmptyComponent={() => <Text>No data found</Text>}
+        ListEmptyComponent={() => <Text>{t('Profile.No data found')}</Text>}
         refreshing={refreshInProgress}
         keyExtractor={keyExtractor}
         onRefresh={onRefreshHandler}

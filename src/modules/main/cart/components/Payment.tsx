@@ -1,7 +1,7 @@
-import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ActivityIndicator, Button, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FastImage from 'react-native-fast-image';
 import axios from 'axios';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
@@ -24,8 +24,7 @@ import {
 import {getStoredData, setStoredData} from '../../../../utils/storage';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
-import CashOnDeliveryIcon from '../../../../assets/payment/cod.svg';
-import PrepaidIcon from '../../../../assets/payment/prepaid.svg';
+import {useTranslation} from 'react-i18next';
 
 interface Payment {
   productsQuote: any;
@@ -62,6 +61,7 @@ const Payment: React.FC<Payment> = ({
   handleConfirmOrder,
   confirmOrderLoading,
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const {token, transaction_id} = useSelector(({authReducer}) => authReducer);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
@@ -294,7 +294,7 @@ const Payment: React.FC<Payment> = ({
       <View>
         <View style={styles.header}>
           <Text variant={'titleLarge'} style={styles.title}>
-            Select Payment Option
+            {t('Cart.Payment.Select Payment Option')}
           </Text>
         </View>
         <View style={styles.paymentContainer}>
@@ -308,22 +308,14 @@ const Payment: React.FC<Payment> = ({
                   ? styles.selectedOption
                   : {},
               ]}>
-              <View style={styles.checkContainer}>
-                {activePaymentMethod === ORDER_PAYMENT_METHODS.COD ? (
-                  <Icon
-                    name={'check-circle'}
-                    size={20}
-                    color={theme.colors.primary}
-                  />
-                ) : (
-                  <View style={styles.emptyCheck} />
-                )}
-              </View>
-              <CashOnDeliveryIcon width={110} height={100} />
+              <FastImage
+                source={require('../../../../assets/payment/cashOnDelivery.png')}
+                style={styles.paymentImage}
+              />
+              <Text variant={'bodyMedium'} style={styles.paymentOptionText}>
+                {t('Cart.Payment.Cash on delivery')}
+              </Text>
             </View>
-            <Text variant={'labelLarge'} style={styles.paymentOptionText}>
-              Cash on delivery
-            </Text>
           </TouchableOpacity>
           <View style={styles.separator} />
           <TouchableOpacity
@@ -336,22 +328,14 @@ const Payment: React.FC<Payment> = ({
                   ? styles.selectedOption
                   : {},
               ]}>
-              <View style={styles.checkContainer}>
-                {activePaymentMethod === ORDER_PAYMENT_METHODS.JUSPAY ? (
-                  <Icon
-                    name={'check-circle'}
-                    size={20}
-                    color={theme.colors.primary}
-                  />
-                ) : (
-                  <View style={styles.emptyCheck} />
-                )}
-              </View>
-              <PrepaidIcon width={110} height={100} />
+              <FastImage
+                source={require('../../../../assets/payment/prepaid.png')}
+                style={styles.paymentImage}
+              />
+              <Text variant={'bodyMedium'} style={styles.paymentOptionText}>
+                {t('Cart.Payment.Prepaid')}
+              </Text>
             </View>
-            <Text variant={'labelLarge'} style={styles.paymentOptionText}>
-              Prepaid
-            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
@@ -372,7 +356,7 @@ const Payment: React.FC<Payment> = ({
               )
             }
             onPress={handleConfirmOrder}>
-            Proceed to Buy
+            {t('Cart.Payment.Proceed to Buy')}
           </Button>
         </View>
       </View>
@@ -403,7 +387,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.white,
     },
     paymentOption: {
-      width: (Dimensions.get('screen').width - 48) / 2,
+      flex: 1,
       alignItems: 'center',
     },
     paymentOptionMeta: {
@@ -412,8 +396,6 @@ const makeStyles = (colors: any) =>
       borderRadius: 6,
       borderColor: colors.neutral100,
       borderWidth: 1,
-      paddingTop: 6,
-      width: '100%',
     },
     selectedOption: {
       borderColor: colors.primary,
@@ -429,7 +411,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 8,
     },
     paymentOptionText: {
-      marginTop: 8,
+      fontWeight: '700',
       textAlign: 'center',
     },
     buttonContainer: {
@@ -438,18 +420,6 @@ const makeStyles = (colors: any) =>
     },
     button: {
       borderRadius: 8,
-    },
-    emptyCheck: {
-      width: 20,
-      height: 20,
-      marginBottom: 4,
-    },
-    checkContainer: {
-      alignItems: 'flex-end',
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
-      marginBottom: 4,
-      width: '100%',
     },
   });
 

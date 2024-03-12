@@ -14,6 +14,7 @@ import {useAppTheme} from '../../../../utils/theme';
 import {saveStoresList} from '../../../../redux/stores/actions';
 import Store from '../../stores/components/Store';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
+import {useTranslation} from 'react-i18next';
 
 interface StoresNearMe {
   domain?: string;
@@ -34,6 +35,7 @@ const BrandSkeleton = () => {
 };
 
 const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -81,7 +83,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   return (
     <View style={styles.sectionContainer}>
       <SectionHeaderWithViewAll
-        title={'Stores Near Me'}
+        title={t('Home.Stores Near Me')}
         viewAll={showAllStores}
       />
 

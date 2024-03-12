@@ -2,6 +2,7 @@ import {Text} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useAppTheme} from '../../utils/theme';
+import { useTranslation } from 'react-i18next';
 
 const SectionHeaderWithViewAll = ({
   title,
@@ -10,6 +11,7 @@ const SectionHeaderWithViewAll = ({
   title: string;
   viewAll: () => void;
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -20,7 +22,7 @@ const SectionHeaderWithViewAll = ({
       </Text>
       <TouchableOpacity style={styles.viewAllContainer} onPress={viewAll}>
         <Text variant={'bodyMedium'} style={styles.viewAllLabel}>
-          View All
+          {t('Home.View All')}
         </Text>
         <Icon
           name={'keyboard-arrow-right'}

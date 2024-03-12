@@ -7,8 +7,10 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {CATEGORIES} from '../../../../../utils/categories';
 import {useAppTheme} from '../../../../../utils/theme';
 import SectionHeaderWithViewAll from '../../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
+import {useTranslation} from 'react-i18next';
 
 const Categories = () => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -24,7 +26,7 @@ const Categories = () => {
   return (
     <View style={styles.container}>
       <SectionHeaderWithViewAll
-        title={'Featured Categories'}
+        title={t('Home.Featured Categories')}
         viewAll={navigateToList}
       />
       <FlatList
@@ -38,7 +40,7 @@ const Categories = () => {
             }>
             <FastImage source={item.Icon} style={styles.imageContainer} />
             <Text variant={'labelMedium'} style={styles.categoryText}>
-              {item.name}
+              {t(`Categories.${item.name}`)}
             </Text>
           </TouchableOpacity>
         )}

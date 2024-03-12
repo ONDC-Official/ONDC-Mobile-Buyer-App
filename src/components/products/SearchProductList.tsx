@@ -10,6 +10,7 @@ import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface SearchProductList {
   searchQuery: string;
@@ -19,6 +20,7 @@ const CancelToken = axios.CancelToken;
 
 const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   const productSearchSource = useRef<any>(null);
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {getDataWithAuth} = useNetworkHandling();
@@ -85,7 +87,9 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
           renderItem={({item, index}) => renderItem(item, index)}
           ListEmptyComponent={() => (
             <View style={styles.emptyContainer}>
-              <Text variant={'bodyMedium'}>No products available</Text>
+              <Text variant={'bodyMedium'}>
+                {t('Home.Search Product List.No products available')}
+              </Text>
             </View>
           )}
           contentContainerStyle={

@@ -14,6 +14,7 @@ import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 import {makeGlobalStyles} from '../../../../styles/styles';
 
 const screenHeight = Dimensions.get('screen').height;
@@ -39,6 +40,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
   cartTotal,
   showPaymentOption,
 }) => {
+  const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -117,7 +119,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
       <View style={styles.sheetContainer}>
         <View style={styles.header}>
           <Text variant={'titleLarge'} style={styles.title}>
-            Choose delivery/pickup
+            {t('Fulfillment.Choose delivery/pickup')}
           </Text>
         </View>
         <View>
@@ -129,13 +131,15 @@ const Fulfillment: React.FC<Fulfillment> = ({
                 </View>
               ))}
               <Text variant={'labelMedium'} style={styles.errorMessage}>
-                Please try ordering from another store or try again later
+                {t(
+                  'Fulfillment.Please try ordering from another store or try again later',
+                )}
               </Text>
               <TouchableOpacity
                 style={styles.button}
                 onPress={exploreOtherStores}>
                 <Text variant={'labelLarge'} style={styles.buttonLabel}>
-                  Explore Other Stores
+                  {t('Fulfillment.Explore Other Stores')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -190,8 +194,12 @@ const Fulfillment: React.FC<Fulfillment> = ({
                               variant={'labelMedium'}
                               style={styles.itemCount}>
                               {filteredProducts.length > 1
-                                ? `${filteredProducts.length} Items`
-                                : `${filteredProducts.length} Item`}
+                                ? `${filteredProducts.length} ${t(
+                                    'Fulfillment.Items',
+                                  )}`
+                                : `${filteredProducts.length} ${t(
+                                    'Fulfillment.Item',
+                                  )}`}
                             </Text>
                           </View>
                           {unqiueFulfillments.length > 1 && (
@@ -257,7 +265,8 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                 <Text
                                   variant={'labelSmall'}
                                   style={styles.productQuantity}>
-                                  Qty {singleProduct?.item?.quantity?.count}
+                                  {t('Fulfillment.Qty')}{' '}
+                                  {singleProduct?.item?.quantity?.count}
                                 </Text>
                               </View>
                             );
@@ -268,7 +277,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                             <Text
                               variant={'bodyMedium'}
                               style={styles.itemsTotal}>
-                              Items Total
+                              {t('Fulfillment.Items Total')}
                             </Text>
                             <Text
                               variant={'bodyMedium'}
@@ -332,9 +341,9 @@ const Fulfillment: React.FC<Fulfillment> = ({
               <View style={styles.summaryContainer}>
                 <View style={styles.summaryRow}>
                   <Text variant="bodyLarge" style={styles.subTotal}>
-                    Item Total{' '}
+                    {t('Fulfillment.Item Total')}{' '}
                     {unqiueFulfillments.length > 0
-                      ? `(${uniqueItems?.length} Items)`
+                      ? `(${uniqueItems?.length} ${t('Fulfillment.Items')})`
                       : ''}
                   </Text>
                   <Text variant="bodyLarge" style={styles.subTotal}>
@@ -363,23 +372,17 @@ const Fulfillment: React.FC<Fulfillment> = ({
                 <View style={styles.summaryDivider} />
                 <View style={styles.summaryRow}>
                   <Text variant="titleMedium" style={styles.toPay}>
-                    To Pay
+                    {t('Fulfillment.To Pay')}
                   </Text>
                   <Text variant="headlineSmall" style={styles.totalOrder}>
                     ₹{orderTotal}
                   </Text>
                 </View>
                 <TouchableOpacity
-                  disabled={selectedFulfillmentList.length === 0}
-                  style={[
-                    styles.button,
-                    selectedFulfillmentList.length === 0
-                      ? globalStyles.disabledContainedButton
-                      : {},
-                  ]}
+                  style={styles.button}
                   onPress={showPaymentOption}>
                   <Text variant={'bodyLarge'} style={styles.buttonLabel}>
-                    Proceed to Pay
+                    {t('Fulfillment.Proceed to Pay')}
                   </Text>
                 </TouchableOpacity>
               </View>

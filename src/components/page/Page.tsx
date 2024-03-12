@@ -6,12 +6,14 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useAppTheme} from '../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface Page {
   children: React.ReactNode;
 }
 
 const Page: React.FC<Page> = ({children}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const {cartItems} = useSelector(({cartReducer}) => cartReducer);
@@ -28,9 +30,9 @@ const Page: React.FC<Page> = ({children}) => {
           <TouchableOpacity style={styles.button} onPress={navigateToCart}>
             <Text variant={'bodyLarge'} style={styles.text}>
               {itemCount > 1
-                ? `${itemCount} Items Added`
-                : `${itemCount} Item Added`}
-              , Go To Cart
+                ? `${itemCount} ${t('Page.Items Added')}`
+                : `${itemCount} ${t('Page.Item Added')}`}
+              {t('Page., Go To Cart')}
             </Text>
             <Icon
               name={'keyboard-arrow-right'}

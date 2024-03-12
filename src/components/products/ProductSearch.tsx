@@ -2,6 +2,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useAppTheme} from '../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const ProductSearch = ({
   searchQuery,
@@ -10,6 +11,7 @@ const ProductSearch = ({
   searchQuery: string;
   setSearchQuery: (text: string) => void;
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -20,7 +22,7 @@ const ProductSearch = ({
         mode={'outlined'}
         contentStyle={styles.input}
         style={styles.inputContainer}
-        placeholder={'Search'}
+        placeholder={t('Product SubCategories.Search')}
         placeholderTextColor={theme.colors.neutral300}
         onChangeText={text => setSearchQuery(text)}
         value={searchQuery}

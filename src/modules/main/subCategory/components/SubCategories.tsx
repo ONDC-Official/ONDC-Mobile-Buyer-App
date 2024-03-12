@@ -8,6 +8,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 
 import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface SubCategories {
   currentSubCategory: string;
@@ -20,6 +21,7 @@ const SubCategories: React.FC<SubCategories> = ({
   currentSubCategory,
   setCurrentSubCategory,
 }) => {
+  const {t} = useTranslation();
   const flatListRef = useRef<any>(null);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useAppTheme();
@@ -58,7 +60,7 @@ const SubCategories: React.FC<SubCategories> = ({
           size={20}
         />
         <Text variant={'labelLarge'} style={styles.allOptions}>
-          All Options
+          {t('Cart.All Options')}
         </Text>
       </TouchableOpacity>
       <FlatList
@@ -84,7 +86,7 @@ const SubCategories: React.FC<SubCategories> = ({
               variant={'labelLarge'}
               style={styles.categoryText}
               ellipsizeMode={'tail'}>
-              {item?.value}
+              {t(`Product SubCategories.${item?.value}`)}
             </Text>
           </TouchableOpacity>
         )}

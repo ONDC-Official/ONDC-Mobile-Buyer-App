@@ -16,6 +16,7 @@ import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {makeButtonStyles} from './buttonStyles';
 import {updateRequestingStatus} from '../../../../../redux/order/actions';
 import {useAppTheme} from '../../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 interface GetStatusButton {
   onUpdateOrder: (value: any) => void;
@@ -24,6 +25,7 @@ interface GetStatusButton {
 const CancelToken = axios.CancelToken;
 
 const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const {orderDetails, requestingStatus} = useSelector(
     ({orderReducer}) => orderReducer,
@@ -146,7 +148,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
         <></>
       )}
       <Text variant={'bodyMedium'} style={styles.label}>
-        Get Status
+        {t('Profile.Get Status')}
       </Text>
     </TouchableOpacity>
   );

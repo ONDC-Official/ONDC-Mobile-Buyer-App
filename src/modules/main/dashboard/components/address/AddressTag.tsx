@@ -6,10 +6,12 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
 import {useAppTheme} from '../../../../../utils/theme';
+import { useTranslation } from 'react-i18next';
 
 interface AddressTag {}
 
 const AddressTag: React.FC<AddressTag> = () => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {address} = useSelector(({addressReducer}) => addressReducer);
@@ -22,7 +24,7 @@ const AddressTag: React.FC<AddressTag> = () => {
         onPress={() => navigation.navigate('AddressList')}>
         <Icon name={'location-pin'} color={theme.colors.white} size={20} />
         <Text variant={'bodySmall'} style={styles.deliverTo}>
-          Deliver to
+          {t('Home.Deliver to')}
         </Text>
         <Text variant={'bodyLarge'} style={styles.address}>
           {address?.address?.areaCode

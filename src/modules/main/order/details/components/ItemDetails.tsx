@@ -14,10 +14,12 @@ import {
 import ReturnStatus from './ReturnStatus';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
+import {useTranslation} from 'react-i18next';
 
 const today = moment();
 
 const SingleItem = ({item}: {item: any}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -40,7 +42,7 @@ const SingleItem = ({item}: {item: any}) => {
           </Text>
           <View style={styles.quantityContainer}>
             <Text variant={'labelMedium'} style={styles.quantity}>
-              Qty {item?.quantity?.count}
+              {t('Fulfillment.Qty')} {item?.quantity?.count}
             </Text>
             <Text variant={'labelLarge'} style={styles.price}>
               {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
@@ -54,26 +56,26 @@ const SingleItem = ({item}: {item: any}) => {
           {item?.product['@ondc/org/cancellable'] ? (
             <View style={styles.chip}>
               <Text variant={'labelSmall'} style={styles.chipText}>
-                Cancellable
+                {t('Profile.Cancellable')}
               </Text>
             </View>
           ) : (
             <View style={styles.chip}>
               <Text variant={'labelSmall'} style={styles.chipText}>
-                Non-cancellable
+                {t('Profile.Non-cancellable')}
               </Text>
             </View>
           )}
           {item?.product['@ondc/org/returnable'] ? (
             <View style={styles.chip}>
               <Text variant={'labelSmall'} style={styles.chipText}>
-                Returnable
+                {t('Profile.Returnable')}
               </Text>
             </View>
           ) : (
             <View style={styles.chip}>
               <Text variant={'labelSmall'} style={styles.chipText}>
-                Non-returnable
+                {t('Profile.Non-returnable')}
               </Text>
             </View>
           )}
@@ -90,6 +92,7 @@ const ItemDetails = ({
   fulfillments: any[];
   items: any[];
 }) => {
+  const {t} = useTranslation();
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
@@ -130,7 +133,7 @@ const ItemDetails = ({
       {shipmentFulfillmentList.length > 0 && (
         <View>
           <Text variant={'titleLarge'} style={styles.fulfilmentTitle}>
-            Shipment Details
+            {t('Profile.Shipment Details')}
           </Text>
           {shipmentFulfillmentList?.map((fulfillment: any) => {
             const endDate = moment(fulfillment?.end?.time?.range?.end);
