@@ -1,38 +1,38 @@
 {
   "Sign In": {
-    "Please enter details to sign in": "साइन इन करने के लिए विवरण दर्ज करें",
-    "Email Address": "ईमेल पता",
-    "Phone No.": "फ़ोन नंबर",
+    "Please enter details to sign in": "साइन इन करने के लिए कृपया विवरण दर्ज करें",
+    "Email Address": "मेल पता",
+    "Phone No.": "फोन नंबर",
     "Password": "पासवर्ड",
     "Forgot Password": "पासवर्ड भूल गए",
-    "Sign In": "साइन इन करें",
-    "Don't have an account ?": "खाता नहीं है?",
+    "Sign In": "दाखिल करना",
+    "Don't have an account?": "कोई खाता नहीं है",
     "Terms and Conditions": "नियम और शर्तें",
-    "Please enter details to register": "कृपया पंजीकरण के लिए विवरण दर्ज करें ",
-    "By Signing to mobile app. I accept all the": "मोबाइल एप्लिकेशन में साइन इन करके, मैं सभी को स्वीकार करता हूँ"
+    "Please enter details to register": "कृपया पंजीकरण करने के लिए विवरण दर्ज करें",
+    "By Signing to mobile app. I accept all the": "मोबाइल ऐप पर साइन इन करके. मुझे सब स्वीकार है"
   },
   "Sign Up": {
+    "Please enter details to sign in": "साइन इन करने के लिए कृपया विवरण दर्ज करें",
     "Full Name": "पूरा नाम",
-    "Please enter details to sign in": "साइन इन करने के लिए विवरण दर्ज करें",
-    "Email Address": "ईमेल पता",
-    "Phone No.": "फ़ोन नंबर",
+    "Email Address": "मेल पता",
+    "Phone No.": "फोन नंबर",
     "Password": "पासवर्ड",
     "Forgot Password": "पासवर्ड भूल गए",
-    "Sign In": "साइन इन करें",
-    "Don't have an account": "खाता नहीं है?",
+    "Sign In": "दाखिल करना",
+    "Don't have an account": "कोई खाता नहीं है",
     "Terms and Conditions": "नियम और शर्तें",
-    "Please enter details to register": "कृपया पंजीकरण के लिए विवरण दर्ज करें ",
-    "By Signing to mobile app. I accept all the": "मोबाइल एप्लिकेशन में साइन इन करके, मैं सभी को स्वीकार करता हूँ"
+    "Please enter details to register": "कृपया पंजीकरण करने के लिए विवरण दर्ज करें",
+    "By Signing to mobile app. I accept all the": "मोबाइल ऐप पर साइन इन करके. मुझे सब स्वीकार है"
   },
   "Home": {
-    "Home": "होम",
-    "Featured Categories": "विशेष श्रेणियाँ",
+    "Home": "घर",
+    "Featured Categories": "विशेष रुप से प्रदर्शित श्रेणियाँ",
     "View All": "सभी को देखें",
     "Stores Near Me": "मेरे आस-पास के स्टोर",
-    "Deliver to": "पहुंचा देना",
+    "Deliver to": "के लिए वितरित",
     "Search": "खोज",
     "Search Product List": {
-      "No products available": "कोई उत्पाद उपलब्ध नहीं है"
+      "No products available": "कोई उत्पाद उपलब्ध नहीं"
     }
   },
   "List": {
@@ -41,80 +41,87 @@
   },
   "Cart": {
     "Cart": "कार्ट",
-    "My Cart": "कार्ट",
+    "My Cart": "मेरी गाड़ी",
     "Customise": "अनुकूलित करें",
     "Delivery Address": "डिलिवरी का पता",
-    "Change": "बदलना",
+    "Change": "परिवर्तन",
     "View Delivery Options": "डिलिवरी विकल्प देखें",
-    "items": "वस्तु",
+    "items": "सामान",
     "Add to cart": "कार्ट में जोड़ें",
     "Product Details": "उत्पाद विवरण",
-    "Select any": "कोई चुनें",
+    "Select any": "कोई भी चुनें",
     "options": "विकल्प",
     "Veg": "शाकाहारी",
-    "Non Veg": "नॉन वेज",
+    "Non Veg": "मांसाहारी",
+    "Egg": "अंडा",
     "Required": "आवश्यक",
     "All Options": "सभी विकल्प",
-    "Edit": "संपादित करें",
+    "Edit": "संपादन करना",
+    "Qty": "मात्रा",
     "Outlet Details": {
       "Get Direction": "दिशा प्राप्त करें",
-      "Call Now": "अभी कॉल करें",
-      "Open now": "अभी खुला है"
+      "Call Now": "अब कॉल करें",
+      "Open now": "अब खोलो"
     },
     "FBProduct": {
-      "Add": "जोड़ें",
-      "Out of stock": "स्टॉक में नहीं है",
-      "Customizable": "अनुकूलनीय"
+      "Add": "जोड़ना",
+      "Out of stock": "स्टॉक ख़त्म",
+      "Customizable": "अनुकूलन"
     },
     "Filter List": {
-      "Filters": "फ़िल्टर",
-      "Clear all": "सभी को हटाएं",
-      "Close": "बंद करें",
-      "Apply": "लागू करें"
+      "Filters": "फिल्टर",
+      "Clear all": "सभी साफ करें",
+      "Close": "बंद करना",
+      "Apply": "आवेदन करना"
     },
     "Payment": {
       "Select Payment Option": "भुगतान विकल्प चुनें",
-      "Cash on delivery": "डिलीवरी पर नकद",
+      "Cash on delivery": "डिलवरी पर नकदी",
       "Prepaid": "प्रीपेड",
-      "Proceed to Buy": "खरीददारी करने के लिए आगे बढ़ें"
+      "Proceed to Buy": "खरीदने के लिए आगे बढ़ें"
     }
   },
+  "Cart Items": {
+    "Only Available Of Total": "{{total}} के बजाय केवल {{quantity}} उपलब्ध है। मात्रा अपडेट करें या किसी अन्य प्रदाता पर स्विच करें।",
+    "You are ordering from different store. Please check your order again": "आप अलग-अलग स्टोर से ऑर्डर कर रहे हैं. कृपया अपना ऑर्डर दोबारा जांचें.",
+    "You are ordering from different category. Please check your order again": "आप अलग-अलग श्रेणी से ऑर्डर कर रहे हैं. कृपया अपना ऑर्डर दोबारा जांचें."
+  },
   "Profile": {
-    "Profile": "आप",
+    "Profile": "प्रोफ़ाइल",
     "My Profile": "मेरी प्रोफाइल",
-    "Order History": "ऑर्डर का इतिहास",
+    "Order History": "आदेश इतिहास",
     "Complaints": "शिकायतों",
     "Choose Language": "भाषा चुनें",
     "Logout": "लॉग आउट",
-    "View Delivery Options": "डिलिवरी विकल्प देखें",
     "No data found": "डाटा प्राप्त नहीं हुआ",
-    "Are you sure you want to logout?": "क्या आप वाकई लॉगआउट करना चाहते हैं?",
-    "Cancel": "रद्द करें",
+    "Are you sure you want to logout?": "क्या आप लॉग आउट करना चाहते हैं",
+    "Cancel": "रद्द करना",
     "Get Status": "स्थिति प्राप्त करें",
-    "Track": "ट्रैक",
-    "Order placed on": "आदेश दिनांक",
-    "Shipment Details": "शिपमेंट विवरण",
-    "Payment Methods": "भुगतान पद्धतियाँ",
+    "Track": "रास्ता",
+    "Order placed on": "ऑर्डर दिया गया",
+    "Shipment Details": "लदान विवरण",
+    "Payment Methods": "भुगतान की विधि",
     "Shipping Address": "शिपिंग पता",
-    "Raise Issue": "समस्या उठाएं",
-    "Cancellable": "रद्द किया जा सकता है",
-    "Non-cancellable": "रद्द नहीं किया जा सकता",
-    "Returnable": "वापस किया जा सकता है",
-    "Non-returnable": "वापस नहीं किया जा सकता"
+    "Raise Issue": "मुद्दा उठाओ",
+    "Cancellable": "रद्द करने योग्य",
+    "Non-cancellable": "गैर रद्द करने योग्य",
+    "Returnable": "वापस करने",
+    "Non-returnable": "नहीं लौटनेवाला"
   },
   "Choose Language": {
     "Hindi": "हिंदी",
     "English": "English",
     "Marathi": "मराठी",
     "Choose Language": "भाषा चुनें",
-    "Select a language": "किसी एक भाषा का चयन करें"
+    "Select a language": "भाषा चुनें"
   },
   "Address List": {
     "Delivery Address": "डिलिवरी का पता",
     "Add Address": "पता जोड़ें",
     "Add new address": "नया पता जोड़ें",
-    "Select a Delivery Address": "डिलीवरी पता चुनें  ",
-    "Saved Addresses": "सहेजे गए पते"
+    "Select a Delivery Address": "एक डिलिवरी पता चुनें",
+    "Saved Addresses": "सहेजे गए पते",
+    "No address available": "कोई पता उपलब्ध नहीं है"
   },
   "Address Form": {
     "Add Address": "पता जोड़ें",
@@ -122,15 +129,15 @@
     "Email": "ईमेल",
     "Mobile Number": "मोबाइल नंबर",
     "Building": "इमारत",
-    "Street": "सड़क",
+    "Street": "गली",
     "Pin Code": "पिन कोड",
     "City": "शहर",
     "State": "राज्य",
-    "Address Type": "पता प्रकार",
-    "Save": "सहेजें"
+    "Address Type": "पता मुद्रलेख",
+    "Save": "बचाना"
   },
   "Categories": {
-    "Fashion": "फ़ैशन",
+    "Fashion": "पहनावा",
     "Grocery": "किराना",
     "Electronics": "इलेक्ट्रानिक्स",
     "Food & Beverage": "खाद्य और पेय",
@@ -140,32 +147,33 @@
     "Agriculture": "कृषि"
   },
   "Stores Near me": {
-    "Stores Near me": "मेरे आस-पास के स्टोर"
+    "Stores Near me": "मेरे आस-पास की दुकानें"
   },
   "Empty Cart": {
-    "Your Cart is Empty. Please add items": "आपकी कार्ट खाली है। कृपया आइटम जोड़ें",
-    "Explore our wide selection and find something you like": "हमारे विस्तृत चयन का अन्वेषण करें और अपनी पसंद की कोई चीज़ ढूंढें",
-    "Explore Now": "अभी अन्वेषण करें"
+    "Your Cart is Empty": "आपकी गाड़ी खाली है",
+    "It seems you haven’t added any products in your cart": "ऐसा लगता है कि आपने अपने कार्ट में कोई उत्पाद नहीं जोड़ा है"
   },
   "Page": {
-    ", Go To Cart": ", कार्ट पर जाना",
+    ", Go To Cart": ", गाड़ी पर जाना",
     "Item Added": "आइटम जोड़ा गया",
     "Items Added": "आइटम जोड़े गए"
   },
   "Fulfillment": {
     "Choose delivery/pickup": "डिलीवरी/पिकअप चुनें",
-    "Proceed to Pay": "भुगतान करने के लिए आगे बढ़ें",
+    "Proceed to Pay": "चुकाने के लिए कार्रवाई शुरू करो",
     "Item Total": "आइटम का कुल",
     "Items Total": "आइटम कुल",
     "To Pay": "भुगतान करने के लिए",
-    "Items": "आइटम",
-    "Qty": "कुल",
+    "Qty": "मात्रा",
+    "Items": "सामान",
+    "Item": "वस्तु",
     "Please try ordering from another store or try again later": "कृपया किसी अन्य स्टोर से ऑर्डर करने का प्रयास करें या बाद में पुनः प्रयास करें",
-    "Explore Other Stores": "अन्य स्टोर खोजें"
+    "Explore Other Stores": "अन्य स्टोर खोजें",
+    "Fulfilment no": "{{total}} में से {{current}}"
   },
   "Featured Categories": {
-    "Featured Categories": "विशेष श्रेणियाँ",
-    "Fashion": "फ़ैशन",
+    "Featured Categories": "विशेष रुप से प्रदर्शित श्रेणियाँ",
+    "Fashion": "पहनावा",
     "Grocery": "किराना",
     "Electronics": "इलेक्ट्रानिक्स",
     "Food & Beverage": "खाद्य और पेय",
@@ -179,27 +187,26 @@
     "Search": "खोज",
     "Filter": "फ़िल्टर",
     "Shop by Category": "वर्गों के अनुसार खरीदारी",
-    "Shop By Category": "वर्गों के अनुसार खरीदारी",
-    "Fruits and Vegetables": "फल सब्जियां",
-    "Masala & Seasoning": "मसाला",
+    "Fruits and Vegetables": "फल और सब्जियां",
+    "Masala & Seasoning": "मसाला और मसाला",
     "Oil & Ghee": "तेल / घी",
     "Gourmet & World Foods": "स्वादिष्ट एवं विश्व खाद्य पदार्थ",
     "Foodgrains": "अनाज",
     "Eggs, Meat & Fish": "अंडे, मांस और मछली",
-    "Cleaning & Household": "सफ़ाई एवं घरेलू कार्य",
+    "Cleaning & Household": "सफ़ाई और घरेलू",
     "Beverages": "पेय",
-    "Beauty & Hygiene": "सौंदर्य स्वच्छता",
+    "Beauty & Hygiene": "सौंदर्य एवं स्वच्छता",
     "Bakery, Cakes & Dairy": "बेकरी, केक और डेयरी",
     "Kitchen Accessories": "रसोई की सहायक सामग्री",
     "Baby Care": "शिशु के देखभाल",
     "Snacks & Branded Foods": "नाश्ता और ब्रांडेड खाद्य पदार्थ",
-    "Pet Care": "पालतू जानवरों की देखभाल  ",
+    "Pet Care": "पालतू जानवरों की देखभाल",
     "Stationery": "लेखन सामग्री",
     "Men's Fashion Accessories": "पुरुषों के फैशन सहायक उपकरण",
     "Men's Footwear Accessories": "पुरुषों के जूते सहायक उपकरण",
     "Men's Topwear": "पुरुषों के टॉपवियर",
     "Men's Bottomwear": "पुरुषों का बॉटमवियर",
-    "Men's Innerwear & Sleepwear": "पुरुषों के स्लीपवियर",
+    "Men's Innerwear & Sleepwear": "पुरुषों के इनरवियर और स्लीपवियर",
     "Men's Bags & Luggage": "पुरुषों के बैग और सामान",
     "Men's Eyewear": "पुरुषों का चश्मा",
     "Men's Footwear": "पुरुषों के जूते",
@@ -218,12 +225,12 @@
     "Girl's Clothing": "लड़की के कपड़े",
     "Girl's Footwear": "लड़कियों के जूते",
     "Infant's Wear": "शिशु का पहनावा",
-    "Infant Care & Accessories": "शिशु की देखभाल एवं सहायक उपकरण",
-    "Infant Feeding & Nursing Essentials": "शिशु का आहार एवं देखभाल संबंधी अनिवार्यताएँ",
-    "Infant Bath Accessories": "शिशु के स्नान के सहायक उपकरण",
-    "Infant Health & Safety": "शिशु का स्वास्थ्य एवं सुरक्षा",
-    "Infant Diapers & Toilet Training": "शिशु डायपर और शौचालय प्रशिक्षण",
-    "Kid's Towels & Wrappers": "बच्चों का तौलिया और रैपर",
+    "Infant Care & Accessories": "शिशु देखभाल एवं सहायक उपकरण",
+    "Infant Feeding & Nursing Essentials": "शिशु आहार एवं नर्सिंग अनिवार्यताएँ",
+    "Infant Bath Accessories": "शिशु स्नान सहायक उपकरण",
+    "Infant Health & Safety": "शिशु स्वास्थ्य एवं सुरक्षा",
+    "Infant Diapers & Toilet Training": "शिशु डायपर एवं शौचालय प्रशिक्षण",
+    "Kid's Towels & Wrappers": "बच्चों के तौलिए और रैपर",
     "Kid's Fashion Accessories": "बच्चों के फैशन सहायक उपकरण",
     "Kid's Jewellery": "बच्चों के आभूषण",
     "Kid's Eyewear": "बच्चों का चश्मा",
@@ -241,7 +248,7 @@
     "Computer Peripheral": "कंप्यूटर परिधीय",
     "Desktop and Laptop": "डेस्कटॉप और लैपटॉप",
     "Earphone": "ईरफ़ोन",
-    "Gaming": "खेल",
+    "Gaming": "जुआ",
     "Headphone": "हेड फोन्स",
     "Mobile Phone": "चल दूरभाष",
     "Mobile Accessories": "मोबाइल से जुड़े सामान",
@@ -256,7 +263,7 @@
     "Kitchen Appliances": "रसोई उपकरण",
     "Lighting & Electric Fans": "प्रकाश एवं बिजली पंखे",
     "Refrigerators and Freezers": "रेफ्रिजरेटर और फ्रीजर",
-    "Vacuum Cleaners": "वैक्यूम क्लीनर",
+    "Vacuum Cleaners": "निर्वात मार्जक",
     "Washing Machines and Accessories": "वाशिंग मशीन और सहायक उपकरण",
     "Water Purifiers and Coolers": "जल शोधक और कूलर",
     "Inverter & Stabilizer": "इन्वर्टर और स्टेबलाइजर",
@@ -274,17 +281,17 @@
     "Chips": "चिप्स",
     "Coffee": "कॉफी",
     "Cookies": "कुकीज़",
-    "Crepes": "क्रेप",
-    "Dal": "दाल",
+    "Crepes": "Crepes",
+    "Dal": "दल",
     "Desserts": "डेसर्ट",
     "Dhokla": "ढोकला",
     "Dosa": "डोसा",
-    "Doughnuts": "डोनट",
+    "Doughnuts": "क्या पागल",
     "Eggs": "अंडे",
     "Energy Drinks": "ऊर्जा प्रदान करने वाले पेय",
     "Falafel": "फलाफिल",
     "Fresh Juice": "ताज़ा रस",
-    "Fries": "फ्रेंच फ्राइज़",
+    "Fries": "आलू",
     "Ice cream": "आइसक्रीम",
     "Idli": "इडली",
     "Kabab": "कबाब",
@@ -293,7 +300,7 @@
     "Lassi": "लस्सी",
     "Meal bowl": "भोजन का कटोरा",
     "Mezze": "मेज़",
-    "Mithai": "मिट्ठाई",
+    "Mithai": "मिठाई",
     "Momos": "मोमोज",
     "Mutton": "भेड़े का मांस",
     "Nachos": "मकई के नमकीन",
@@ -319,7 +326,7 @@
     "Soft Drink": "शीतल पेय",
     "Soup": "शोरबा",
     "Spring Roll": "स्प्रिंग रोल",
-    "Tacos": "टाको ",
+    "Tacos": "tacos",
     "Tandoori": "तंदूरी",
     "Tart": "तीखा",
     "Tea": "चाय",
@@ -330,26 +337,26 @@
     "Vada": "वड़ा",
     "Vegetables": "सब्ज़ियाँ",
     "Waffle": "वफ़ल",
-    "Wrap": "रैप",
+    "Wrap": "लपेटना",
     "Yogurt": "दही",
     "Pain Relief": "दर्द से राहत",
     "Nutrition and Fitness Supplements": "पोषण और स्वास्थ्य अनुपूरक",
     "Personal Care": "व्यक्तिगत देखभाल",
     "Speciality Care": "विशेष देखभाल",
-    "Covid Essentials": "विशेष देखभाल",
+    "Covid Essentials": "कोविड अनिवार्यताएँ",
     "Diabetes Control": "मधुमेह नियंत्रण",
     "Ayush": "आयुष",
     "Bath & Body": "बाथटब में शरीर की सफाई",
     "Feminine Care": "स्त्री देखभाल",
     "Fragrance": "खुशबू",
     "Hair Care": "बालों की देखभाल",
-    "Make Up": "मेक-अप",
+    "Make Up": "पूरा करना",
     "Men's Grooming": "पुरुषों का सौंदर्य",
     "Oral Care": "मुंह की देखभाल",
     "Skin Care": "त्वचा की देखभाल",
     "Maternity Care": "मातृत्व देखभाल",
-    "Nursing & Feeding": "नर्सिंग एवं फीडिंग",
-    "Sexual Wellness & Sensuality": "यौन कल्याण और कामुकता",
+    "Nursing & Feeding": "देखभाल एवं भोजन",
+    "Sexual Wellness & Sensuality": "यौन कल्याण एवं कामुकता",
     "Tools & Accessories": "उपकरण एवं सहायक उपकरण",
     "Seed": "बीज",
     "Pesticide": "कीटनाशक",
@@ -361,16 +368,137 @@
   },
   "SubCategories": {
     "Shop By Category": "वर्गों के अनुसार खरीदारी",
-    "Fruits and Vegetables": "फल सब्जियां",
-    "Masala & Seasoning": "मसाला",
+    "Fruits and Vegetables": "फल और सब्जियां",
+    "Masala & Seasoning": "मसाला और मसाला",
     "Oil & Ghee": "तेल / घी",
     "Gourmet & World Foods": "स्वादिष्ट एवं विश्व खाद्य पदार्थ",
     "Foodgrains": "अनाज",
     "Eggs, Meat & Fish": "अंडे, मांस और मछली",
-    "Cleaning & Household": "सफ़ाई एवं घरेलू कार्य",
+    "Cleaning & Household": "सफ़ाई और घरेलू",
     "Beverages": "पेय"
   },
+  "Store": {},
   "Network Banner": {
-    "You are offline, please verify your internet connection": "You are offline, please verify your internet connection"
+    "You are offline, please verify your internet connection": "आप ऑफ़लाइन हैं, कृपया अपना इंटरनेट कनेक्शन सत्यापित करें"
+  },
+  "Variations": {
+    "Available Options": "उपलब्ध {{groupName}} विकल्प",
+    "Size Guide": "साइज़ संदर्शिका"
+  },
+  "Complaint": {
+    "Issue Id": "अंक क्रमांक",
+    "Issue Raised On": "मुद्दा उठाया गया",
+    "View Summary": "सारांश देखें"
+  },
+  "Complaint Details": {
+    "Complaint Details": "शिकायत विवरण",
+    "Updated by": "द्वारा अपडेट",
+    "Issue Id": "अंक क्रमांक",
+    "Level": "स्तर",
+    "Issue": "मुद्दा",
+    "Order Id": "आदेश कामतत्व",
+    "Issue Raised On": "मुद्दा उठाया गया",
+    "QTY": "मात्रा",
+    "Expected Response Time": "अपेक्षित प्रतिक्रिया समय",
+    "Expected Resolution Time": "अपेक्षित समाधान समय",
+    "Respondent Details": "प्रतिवादी विवरण",
+    "Phone": "फ़ोन",
+    "Email": "ईमेल"
+  },
+  "Close Form": {
+    "Close": "बंद करना",
+    "Choose Rating": "रेटिंग चुनें"
+  },
+  "Escalate Form": {
+    "Escalate": "आगे बढ़ाएं"
+  },
+  "Cancel Order": {
+    "Cancel Order": "आदेश रद्द",
+    "Complete order": "आदेश पूरा",
+    "Select reason": "कारण चुनें",
+    "Are You sure you would like to cancel this order?": "क्या आप वाकई इस ऑर्डर को रद्द करना चाहेंगे?"
+  },
+  "Payment Methods": {
+    "Cash On Delivery": "डिलवरी पर नकदी",
+    "Prepaid": "प्रीपेड",
+    "Billed Address": "बिल किया हुआ पता",
+    "Customer Details": "ग्राहक विवरण",
+    "Order Number": "क्रम संख्या",
+    "Customer Name": "ग्राहक का नाम",
+    "Phone Number": "फ़ोन नंबर"
+  },
+  "Return Items": {
+    "Return Items": "सामान वापस करे"
+  },
+  "Return Item": {
+    "Select reason": "कारण चुनें",
+    "Upload Images": "तश्वीरें अपलोड करो",
+    "Browse": "ब्राउज़"
+  },
+  "Item Details": {
+    "Items will be delivered by": "आइटम द्वारा वितरित किया जाएगा",
+    "Return Details": "वापसी विवरण",
+    "Return initiated on": "वापसी प्रारंभ की गई",
+    "Cancel Details": "विवरण रद्द करें",
+    "Cancelled on": "पर रद्द कर दिया गया"
+  },
+  "Return Reason": {
+    "Buyer does not want product any more": "क्रेता अब उत्पाद नहीं चाहता",
+    "Product available at lower than order price": "उत्पाद ऑर्डर मूल्य से कम पर उपलब्ध है",
+    "Product damaged or not in usable state": "उत्पाद क्षतिग्रस्त है या उपयोग योग्य स्थिति में नहीं है",
+    "Product is of incorrect quantity or size": "उत्पाद ग़लत मात्रा या आकार का है",
+    "Product delivered is different from what was shown and ordered": "वितरित किया गया उत्पाद दिखाए गए और ऑर्डर किए गए उत्पाद से भिन्न है"
+  },
+  "Cancellation Reason": {
+    "Price of one or more items have changed due to which buyer was asked to make additional payment": "एक या अधिक वस्तुओं की कीमत बदल गई है जिसके कारण खरीदार को अतिरिक्त भुगतान करने के लिए कहा गया है",
+    "Product available at lower than order price": "उत्पाद ऑर्डर मूल्य से कम पर उपलब्ध है",
+    "Order not received as per buyer app TAT SLA": "खरीदार ऐप TAT SLA के अनुसार ऑर्डर प्राप्त नहीं हुआ",
+    "Wrong product delivered": "गलत उत्पाद वितरित किया गया",
+    "Buyer wants to modify address / other order details": "क्रेता पता/अन्य ऑर्डर विवरण संशोधित करना चाहता है"
+  },
+  "Non cancelled order": {
+    "Order completed on": "ऑर्डर पूरा हो गया"
+  },
+  "Order Meta": {
+    "Order Details": "ऑर्डर का विवरण",
+    "Order Number": "क्रम संख्या",
+    "Payment mode": "भुगतान का प्रकार",
+    "Date": "तारीख",
+    "Phone Number": "फ़ोन नंबर",
+    "Delivery Address": "डिलिवरी का पता"
+  },
+  "Product Summary": {
+    "Your Items": "आपके आइटम",
+    "Order Total": "कुल आर्डर"
+  },
+  "Provider Details": {
+    "Order Cancelled": "आदेश रद्द किया गया"
+  },
+  "Raise Issue": {
+    "Raise an Issue": "एक मुद्दा उठाओ",
+    "Choose items that had a problem": "वे आइटम चुनें जिनमें कोई समस्या थी",
+    "Images (Maximum 4)": "छवियाँ (अधिकतम 4)",
+    "Browse": "ब्राउज़"
+  },
+  "Return Details": {
+    "Return Details": "वापसी विवरण",
+    "Items Returned": "{{count}} आइटम लौटाए गए",
+    "Return On": "वापस लौटें"
+  },
+  "Return Summary": {
+    "Items": "सामान",
+    "Qty": "मात्रा",
+    "Reason": "कारण",
+    "Click to View Images": "छवियाँ देखने के लिए क्लिक करें",
+    "Order Total": "कुल आर्डर"
+  },
+  "Shipment Details": {
+    "Shipment Details": "लदान विवरण",
+    "Items Arriving": "{{count}} आइटम आ रहे हैं",
+    "Arriving On": "पर पहुँचना",
+    "Delivered On": "सौंप दिया"
+  },
+  "Orders": {
+    "No data found": "डाटा प्राप्त नहीं हुआ"
   }
 }
