@@ -127,10 +127,12 @@ const Fulfillment: React.FC<Fulfillment> = ({
             <View style={styles.errorContainer}>
               {productsQuote?.providers.map((provider: any, pindex: number) => (
                 <View key={`delivery${pindex}`}>
-                  <Text variant={'bodyLarge'}>{provider.error}</Text>
+                  <Text variant={'bodyLarge'} style={styles.errorTitle}>
+                    {provider.error}
+                  </Text>
                 </View>
               ))}
-              <Text variant={'labelMedium'} style={styles.errorMessage}>
+              <Text variant={'labelSmall'} style={styles.errorMessage}>
                 {t(
                   'Fulfillment.Please try ordering from another store or try again later',
                 )}
@@ -469,6 +471,7 @@ const makeStyles = (colors: any) =>
       paddingVertical: 13,
       alignItems: 'center',
       height: 44,
+      width: '100%',
     },
     buttonLabel: {
       color: colors.white,
@@ -476,8 +479,12 @@ const makeStyles = (colors: any) =>
     errorContainer: {
       alignItems: 'center',
     },
+    errorTitle: {
+      color: colors.neutral400,
+    },
     errorMessage: {
       marginTop: 8,
+      color: colors.neutral400,
     },
     fulfilmentSummary: {
       backgroundColor: colors.white,
