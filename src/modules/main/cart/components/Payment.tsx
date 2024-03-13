@@ -26,6 +26,7 @@ import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetCo
 import {useAppTheme} from '../../../../utils/theme';
 import CashOnDeliveryIcon from '../../../../assets/payment/cod.svg';
 import PrepaidIcon from '../../../../assets/payment/prepaid.svg';
+import { useTranslation } from "react-i18next";
 
 interface Payment {
   productsQuote: any;

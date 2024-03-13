@@ -343,13 +343,13 @@ const Fulfillment: React.FC<Fulfillment> = ({
               </PagerView>
               <View style={styles.summaryContainer}>
                 <View style={styles.summaryRow}>
-                  <Text variant="bodyLarge" style={styles.subTotal}>
+                  <Text variant="labelLarge" style={styles.subTotal}>
                     {t('Fulfillment.Item Total')}{' '}
-                    {unqiueFulfillments.length > 0
+                    {unqiueFulfillments.length > 1
                       ? `(${uniqueItems?.length} ${t('Fulfillment.Items')})`
                       : ''}
                   </Text>
-                  <Text variant="bodyLarge" style={styles.subTotal}>
+                  <Text variant="labelLarge" style={styles.subTotal}>
                     ₹{cartTotal}
                   </Text>
                 </View>
