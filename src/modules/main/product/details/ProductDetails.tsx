@@ -122,7 +122,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
       setPriceRange(rangePriceTag);
       setProduct(data);
       navigation.setOptions({
-        title: data?.item_details?.descriptor?.name,
+        title: data?.provider_details?.descriptor?.name,
       });
     } catch (error) {
       handleApiError(error);
