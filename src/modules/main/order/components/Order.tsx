@@ -30,14 +30,6 @@ const OrderHeader: React.FC<Order> = ({order}) => {
   const navigateToDetails = () =>
     navigation.navigate('OrderDetails', {orderId: order.id});
 
-  const navigateToProvider = () => {
-    const routeParams: any = {
-      brandId: `${order?.bppId}_${order?.domain}_${order?.provider?.id}`,
-    };
-    routeParams.outletId = order?.provider?.locations[0]?.id;
-    navigation.navigate('BrandDetails', routeParams);
-  };
-
   order.state = order.items?.every(
     (item: any) => item.cancellation_status === 'Cancelled',
   )
@@ -45,8 +37,8 @@ const OrderHeader: React.FC<Order> = ({order}) => {
     : order.state;
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.header} onPress={navigateToProvider}>
+    <TouchableOpacity onPress={navigateToDetails} style={styles.container}>
+      <View style={styles.header}>
         <FastImage
           source={{uri: order?.provider?.descriptor?.symbol}}
           style={styles.providerImage}
@@ -57,7 +49,7 @@ const OrderHeader: React.FC<Order> = ({order}) => {
           </Text>
         </View>
         <View>{order.state && <OrderStatus status={order.state} />}</View>
-      </TouchableOpacity>
+      </View>
       <View style={styles.orderDetails}>
         {order?.items?.map((item: any) => {
           const isCustomization = isItemCustomization(item?.tags);
@@ -86,9 +78,7 @@ const OrderHeader: React.FC<Order> = ({order}) => {
           <Text style={styles.date} variant={'labelSmall'}>
             {moment(order?.createdAt).format('DD MMM YYYY hh:mm a')}
           </Text>
-          <TouchableOpacity
-            style={styles.amountContainer}
-            onPress={navigateToDetails}>
+          <View style={styles.amountContainer}>
             <Text style={styles.amount} variant={'labelLarge'}>
               {CURRENCY_SYMBOLS[order?.payment?.params?.currency]}
               {order?.payment?.params?.amount}
@@ -98,10 +88,10 @@ const OrderHeader: React.FC<Order> = ({order}) => {
               size={16}
               color={theme.colors.neutral300}
             />
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
