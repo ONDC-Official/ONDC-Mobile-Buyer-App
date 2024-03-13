@@ -48,9 +48,9 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
         data={CATEGORIES}
         horizontal
         showsHorizontalScrollIndicator={false}
-        renderItem={({item}) => (
+        renderItem={({item, index}) => (
           <TouchableOpacity
-            style={styles.category}
+            style={[styles.category, index === 0 ? styles.first : {}]}
             onPress={() => navigateToCategory(item)}>
             <View
               style={[
@@ -79,7 +79,6 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      paddingLeft: 16,
       paddingTop: 16,
     },
     categoryText: {
@@ -89,6 +88,9 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       marginRight: 24,
       width: 58,
+    },
+    first: {
+      paddingLeft: 16,
     },
     imageContainer: {
       height: 56,
