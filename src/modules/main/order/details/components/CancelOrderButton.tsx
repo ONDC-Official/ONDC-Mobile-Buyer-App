@@ -3,8 +3,10 @@ import {Text} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {useAppTheme} from '../../../../../utils/theme';
+import { useTranslation } from "react-i18next";
 
 const CancelOrderButton = () => {
+  const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -35,7 +37,7 @@ const CancelOrderButton = () => {
         onPress={navigateToCancelOrder}
         disabled={requestingStatus || requestingTracker}>
         <Text variant={'bodyMedium'} style={styles.label}>
-          Cancel Order
+          {t('Cancel Order.Cancel Order')}
         </Text>
       </TouchableOpacity>
     );

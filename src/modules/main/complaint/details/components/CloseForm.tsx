@@ -11,6 +11,7 @@ import {showToastWithGravity} from '../../../../../utils/utils';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
 import {useAppTheme} from '../../../../../utils/theme';
+import { useTranslation } from "react-i18next";
 
 const CancelToken = axios.CancelToken;
 const CloseForm = ({
@@ -20,6 +21,7 @@ const CloseForm = ({
   hideModal: () => void;
   onSuccess: (data: any[]) => void;
 }) => {
+  const {t} = useTranslation();
   const source = useRef<any>(null);
   const [rating, setRating] = useState<string>('');
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
@@ -96,7 +98,7 @@ const CloseForm = ({
     <View style={styles.modal}>
       <View style={styles.modalHeader}>
         <Text variant={'titleLarge'} style={styles.title}>
-          Close
+          {t('Close Form.Close')}
         </Text>
         <TouchableOpacity onPress={hideModal}>
           <Icon name={'clear'} size={24} color={theme.colors.neutral400} />
@@ -104,7 +106,7 @@ const CloseForm = ({
       </View>
       <View style={styles.modalContainer}>
         <Text variant={'bodyMedium'} style={styles.message}>
-          Choose Rating*
+          {t('Close Form.Choose Rating')}*
         </Text>
         <View style={styles.ratingContainer}>
           <TouchableOpacity

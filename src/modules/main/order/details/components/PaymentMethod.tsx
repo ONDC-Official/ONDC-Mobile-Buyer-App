@@ -29,7 +29,9 @@ const PaymentMethod = ({
         style={styles.modeContainer}
         onPress={() => navigation.navigate('PaymentMethods')}>
         <Text variant={'bodySmall'} style={styles.mode}>
-          {payment?.type === 'ON-FULFILLMENT' ? 'Cash On Delivery' : 'Prepaid'}
+          {payment?.type === 'ON-FULFILLMENT'
+            ? t('Payment Methods.Cash On Delivery')
+            : t('Payment Methods.Prepaid')}
         </Text>
         <Icon
           name={'keyboard-arrow-right'}

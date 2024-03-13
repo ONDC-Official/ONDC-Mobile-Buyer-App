@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import { Button, Text } from "react-native-paper";
+import {Button, Text} from 'react-native-paper';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -14,7 +14,7 @@ import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
 import {saveAddress} from '../../../../../redux/address/actions';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 interface Address {
   _id: string;
@@ -142,7 +142,9 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
         keyExtractor={item => item.id}
         ListEmptyComponent={() => (
           <View style={[appStyles.container, appStyles.centerContainer]}>
-            <Text variant={'bodyMedium'}>No address available</Text>
+            <Text variant={'bodyMedium'}>
+              {t('Address List.No address available')}
+            </Text>
           </View>
         )}
         contentContainerStyle={

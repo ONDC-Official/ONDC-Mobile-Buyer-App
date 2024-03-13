@@ -10,6 +10,7 @@ import GetStatusButton from '../components/GetStatusButton';
 import ComplaintStatus from '../components/ComplaintStatus';
 import EscalateForm from './components/EscalateForm';
 import CloseForm from './components/CloseForm';
+import {useTranslation} from 'react-i18next';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -22,6 +23,7 @@ const categories = ISSUE_TYPES.map(item => {
 }).flat();
 
 const ComplaintDetails = () => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {complaintDetails} = useSelector(
@@ -72,7 +74,7 @@ const ComplaintDetails = () => {
             style={styles.accordion}
             title={
               <Text variant={'headlineSmall'} style={styles.accordionTitle}>
-                Complaint Details
+                {t('Complaint Details.Complaint Details')}
               </Text>
             }>
             <View style={styles.accordionDetails}>
@@ -104,7 +106,8 @@ const ComplaintDetails = () => {
                     </Text>
                     {!!action?.updated_by && (
                       <Text variant={'labelMedium'} style={styles.updateByText}>
-                        Updated by: {action?.updated_by?.person?.name}
+                        {t('Complaint Details.Updated by')}:{' '}
+                        {action?.updated_by?.person?.name}
                       </Text>
                     )}
                   </View>
@@ -117,7 +120,7 @@ const ComplaintDetails = () => {
           <View style={styles.orderIdRow}>
             <View style={styles.orderId}>
               <Text variant={'bodySmall'} style={styles.text}>
-                Issue Id:{' '}
+                {t('Complaint Details.Issue Id')}:{' '}
               </Text>
               <Text
                 variant={'bodyLarge'}
@@ -131,15 +134,15 @@ const ComplaintDetails = () => {
           </View>
           <View style={styles.row}>
             <Text variant={'bodySmall'} style={styles.text}>
-              Level:{' '}
+              {t('Complaint Details.Level')}:{' '}
             </Text>
             <Text variant={'bodyLarge'} style={styles.text}>
-              Issue
+              {t('Complaint Details.Issue')}
             </Text>
           </View>
           <View style={styles.row}>
             <Text variant={'bodySmall'} style={styles.text}>
-              Order Id:{' '}
+              {t('Complaint Details.Order Id')}:{' '}
             </Text>
             <Text variant={'bodyLarge'} style={styles.text}>
               {complaintDetails?.order_details?.id}
@@ -147,7 +150,7 @@ const ComplaintDetails = () => {
           </View>
           <View style={styles.row}>
             <Text variant={'labelLarge'} style={styles.issueRaisedOn}>
-              Issue Raised On:{' '}
+              {t('Complaint Details.Issue Raised On')}:{' '}
               {moment(complaintDetails?.created_at).format(
                 'DD MMM YYYY hh:mma',
               )}{' '}
@@ -166,7 +169,7 @@ const ComplaintDetails = () => {
               </Text>
               <View style={styles.itemContainer}>
                 <Text variant={'bodySmall'} style={styles.qty}>
-                  QTY: {item?.quantity?.count} X{' '}
+                  {t('Complaint Details.QTY')}: {item?.quantity?.count} X{' '}
                   {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
                   {item?.product?.price?.value}
                 </Text>
@@ -186,7 +189,7 @@ const ComplaintDetails = () => {
           </Text>
 
           <Text variant={'bodyLarge'} style={styles.itemTitle}>
-            Expected Response Time
+            {t('Complaint Details.Expected Response Time')}
           </Text>
           <Text variant={'bodySmall'} style={styles.itemDescription}>
             {moment(complaintDetails?.created_at)
@@ -195,7 +198,7 @@ const ComplaintDetails = () => {
           </Text>
 
           <Text variant={'bodyLarge'} style={styles.itemTitle}>
-            Expected Resolution Time
+            {t('Complaint Details.Expected Resolution Time')}
           </Text>
           <Text variant={'bodySmall'} style={styles.itemDescription}>
             {moment(complaintDetails?.created_at)
@@ -233,11 +236,11 @@ const ComplaintDetails = () => {
         </View>
         <View style={styles.card}>
           <Text variant={'headlineSmall'} style={styles.title}>
-            Respondent Details
+            {t('Complaint Details.Respondent Details')}
           </Text>
 
           <Text variant={'bodyLarge'} style={styles.itemTitle}>
-            Phone
+            {t('Complaint Details.Phone')}
           </Text>
           <Text variant={'bodySmall'} style={styles.itemDescription}>
             {complaintDetails?.issue_actions?.respondent_actions[
@@ -246,7 +249,7 @@ const ComplaintDetails = () => {
           </Text>
 
           <Text variant={'bodyLarge'} style={styles.itemTitle}>
-            Email
+            {t('Complaint Details.Email')}
           </Text>
           <Text variant={'bodySmall'} style={styles.itemDescription}>
             {complaintDetails?.issue_actions?.respondent_actions[

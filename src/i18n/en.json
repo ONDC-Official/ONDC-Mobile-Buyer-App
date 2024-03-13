@@ -53,6 +53,7 @@
     "options": "options",
     "Veg": "Veg",
     "Non Veg": "Non Veg",
+    "Egg": "Egg",
     "Required": "Required",
     "All Options": "All Options",
     "Edit": "Edit",
@@ -79,6 +80,11 @@
       "Prepaid": "Prepaid",
       "Proceed to Buy": "Proceed to Buy"
     }
+  },
+  "Cart Items": {
+    "Only Available Of Total": "Only {{quantity}} available instead of {{total}}. Update the quantity or switch to another provider.",
+    "You are ordering from different store. Please check your order again": "You are ordering from different store. Please check your order again.",
+    "You are ordering from different category. Please check your order again": "You are ordering from different category. Please check your order again."
   },
   "Profile": {
     "Profile": "Profile",
@@ -114,7 +120,8 @@
     "Add Address": "Add Address",
     "Add new address": "Add new address",
     "Select a Delivery Address": "Select a Delivery Address",
-    "Saved Addresses": "Saved Addresses"
+    "Saved Addresses": "Saved Addresses",
+    "No address available": "No address available"
   },
   "Address Form": {
     "Add Address": "Add Address",
@@ -143,9 +150,8 @@
     "Stores Near me": "Stores Near me"
   },
   "Empty Cart": {
-    "Your Cart is Empty. Please add items": "Your Cart is Empty. Please add items",
-    "Explore our wide selection and find something you like": "Explore our wide selection and find something you like",
-    "Explore Now": "Explore Now"
+    "Your Cart is Empty": "Your Cart is Empty",
+    "It seems you haven’t added any products in your cart": "It seems you haven’t added any products in your cart"
   },
   "Page": {
     ", Go To Cart": ", Go To Cart",
@@ -160,8 +166,10 @@
     "To Pay": "To Pay",
     "Qty": "Qty",
     "Items": "Items",
+    "Item": "Item",
     "Please try ordering from another store or try again later": "Please try ordering from another store or try again later",
-    "Explore Other Stores": "Explore Other Stores"
+    "Explore Other Stores": "Explore Other Stores",
+    "Fulfilment no": "{{current}} of {{total}}"
   },
   "Featured Categories": {
     "Featured Categories": "Featured Categories",
@@ -370,5 +378,128 @@
     "Cleaning & Household": "Cleaning & Household",
     "Beverages": "Beverages"
   },
-  "Store": {}
+  "Store": {},
+  "Network Banner": {
+    "You are offline, please verify your internet connection": "You are offline, please verify your internet connection"
+  },
+  "Variations": {
+    "Available Options": "Available {{groupName}} Options",
+    "Size Guide": "Size Guide"
+  },
+  "Complaint": {
+    "Issue Id": "Issue Id",
+    "Issue Raised On": "Issue Raised On",
+    "View Summary": "View Summary"
+  },
+  "Complaint Details": {
+    "Complaint Details": "Complaint Details",
+    "Updated by": "Updated by",
+    "Issue Id": "Issue Id",
+    "Level": "Level",
+    "Issue": "Issue",
+    "Order Id": "Order Id",
+    "Issue Raised On": "Issue Raised On",
+    "QTY": "QTY",
+    "Expected Response Time": "Expected Response Time",
+    "Expected Resolution Time": "Expected Resolution Time",
+    "Respondent Details": "Respondent Details",
+    "Phone": "Phone",
+    "Email": "Email"
+  },
+  "Close Form": {
+    "Close": "Close",
+    "Choose Rating": "Choose Rating"
+  },
+  "Escalate Form": {
+    "Escalate": "Escalate"
+  },
+  "Cancel Order": {
+    "Cancel Order": "Cancel Order",
+    "Complete order": "Complete order",
+    "Select reason": "Select reason",
+    "Are You sure you would like to cancel this order?": "Are You sure you would like to cancel this order?"
+  },
+  "Payment Methods": {
+    "Cash On Delivery": "Cash On Delivery",
+    "Prepaid": "Prepaid",
+    "Billed Address": "Billed Address",
+    "Customer Details": "Customer Details",
+    "Order Number": "Order Number",
+    "Customer Name": "Customer Name",
+    "Phone Number": "Phone Number"
+  },
+  "Return Items": {
+    "Return Items": "Return Items"
+  },
+  "Return Item": {
+    "Select reason": "Select reason",
+    "Upload Images": "Upload Images",
+    "Browse": "Browse"
+  },
+  "Item Details": {
+    "Items will be delivered by": "Items will be delivered by",
+    "Return Details": "Return Details",
+    "Return initiated on": "Return initiated on",
+    "Cancel Details": "Cancel Details",
+    "Cancelled on": "Cancelled on"
+  },
+  "Return Reason": {
+    "Buyer does not want product any more": "Buyer does not want product any more",
+    "Product available at lower than order price": "Product available at lower than order price",
+    "Product damaged or not in usable state": "Product damaged or not in usable state",
+    "Product is of incorrect quantity or size": "Product is of incorrect quantity or size",
+    "Product delivered is different from what was shown and ordered": "Product delivered is different from what was shown and ordered"
+  },
+  "Cancellation Reason": {
+    "Price of one or more items have changed due to which buyer was asked to make additional payment": "Price of one or more items have changed due to which buyer was asked to make additional payment",
+    "Product available at lower than order price": "Product available at lower than order price",
+    "Order not received as per buyer app TAT SLA": "Order not received as per buyer app TAT SLA",
+    "Wrong product delivered": "Wrong product delivered",
+    "Buyer wants to modify address / other order details": "Buyer wants to modify address / other order details"
+  },
+  "Non cancelled order": {
+    "Order completed on": "Order completed on"
+  },
+  "Order Meta": {
+    "Order Details": "Order Details",
+    "Order Number": "Order Number",
+    "Payment mode": "Payment mode",
+    "Date": "Date",
+    "Phone Number": "Phone Number",
+    "Delivery Address": "Delivery Address"
+  },
+  "Product Summary": {
+    "Your Items": "Your Items",
+    "Order Total": "Order Total"
+  },
+  "Provider Details": {
+    "Order Cancelled": "Order Cancelled"
+  },
+  "Raise Issue": {
+    "Raise an Issue": "Raise an Issue",
+    "Choose items that had a problem": "Choose items that had a problem",
+    "Images (Maximum 4)": "Images (Maximum 4)",
+    "Browse": "Browse"
+  },
+  "Return Details": {
+    "Return Details": "Return Details",
+    "Items Returned": "{{count}} Item(s) Returned",
+    "Return On": "Return On"
+  },
+  "Return Summary": {
+    "Items": "Items",
+    "Qty": "Qty",
+    "Reason": "Reason",
+    "Click to View Images": "Click to View Images",
+    "Order Total": "Order Total"
+  },
+  "Shipment Details": {
+    "Shipment Details": "Shipment Details",
+    "Items Arriving": "{{count}} Item(s) Arriving",
+    "Arriving On": "Arriving On",
+    "Delivered On": "Delivered On"
+  },
+  "Orders": {
+    "No data found": "No data found"
+  }
 }

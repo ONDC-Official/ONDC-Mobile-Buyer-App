@@ -119,7 +119,7 @@ const SignUpWithEmail = () => {
               value={values.email}
               onBlur={handleBlur('email')}
               required
-              inputLabel="Email Address*"
+              inputLabel="Email Address"
               placeholder="Enter email address"
               error={!!touched.email && !!errors.email}
               errorMessage={touched.email ? errors.email : null}
@@ -132,7 +132,7 @@ const SignUpWithEmail = () => {
               value={values.password}
               required
               onBlur={handleBlur('password')}
-              inputLabel="Password*"
+              inputLabel="Password"
               placeholder="Password"
               secureTextEntry
               error={!!touched.password && !!errors.password}

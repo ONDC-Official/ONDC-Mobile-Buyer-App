@@ -12,6 +12,7 @@ import Order from '../components/Order';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
 import {useAppTheme} from '../../../../utils/theme';
+import { useTranslation } from "react-i18next";
 
 const CancelToken = axios.CancelToken;
 
@@ -21,6 +22,7 @@ const CancelToken = axios.CancelToken;
  * @returns {JSX.Element}
  */
 const Orders: React.FC<any> = () => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const isFocused = useIsFocused();
@@ -132,7 +134,7 @@ const Orders: React.FC<any> = () => {
       <FlatList
         data={orders}
         renderItem={renderItem}
-        ListEmptyComponent={() => <Text>No data found</Text>}
+        ListEmptyComponent={() => <Text>{t('Orders.No data found')}</Text>}
         refreshing={refreshInProgress}
         keyExtractor={keyExtractor}
         onRefresh={onRefreshHandler}

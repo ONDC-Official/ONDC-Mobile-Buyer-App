@@ -25,6 +25,7 @@ import {showToastWithGravity} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useUploadFile from '../../../../hooks/useUploadFile';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const CancelToken = axios.CancelToken;
 
@@ -35,6 +36,7 @@ const ReturnItem = ({
   navigation: any;
   route: any;
 }) => {
+  const {t} = useTranslation();
   const {
     associatedItems,
     item,
@@ -256,7 +258,7 @@ const ReturnItem = ({
           <Icon name={'clear'} color={theme.colors.neutral400} size={20} />
         </TouchableOpacity>
         <Text variant={'titleLarge'} style={styles.pageTitle}>
-          Return Items
+          {t('Return Items.Return Items')}
         </Text>
       </View>
 
@@ -311,20 +313,28 @@ const ReturnItem = ({
               <View style={styles.chipContainer}>
                 {cancellable ? (
                   <View style={styles.chip}>
-                    <Text variant={'labelMedium'}>Cancellable</Text>
+                    <Text variant={'labelMedium'}>
+                      {t('Profile.Cancellable')}
+                    </Text>
                   </View>
                 ) : (
                   <View style={styles.chip}>
-                    <Text variant={'labelMedium'}>Non-cancellable</Text>
+                    <Text variant={'labelMedium'}>
+                      {t('Profile.Non-cancellable')}
+                    </Text>
                   </View>
                 )}
                 {returnable ? (
                   <View style={styles.chip}>
-                    <Text variant={'labelMedium'}>Returnable</Text>
+                    <Text variant={'labelMedium'}>
+                      {t('Profile.Returnable')}
+                    </Text>
                   </View>
                 ) : (
                   <View style={styles.chip}>
-                    <Text variant={'labelMedium'}>Non-returnable</Text>
+                    <Text variant={'labelMedium'}>
+                      {t('Profile.Non-returnable')}
+                    </Text>
                   </View>
                 )}
               </View>
@@ -332,7 +342,7 @@ const ReturnItem = ({
           </View>
           <View style={styles.inputField}>
             <Text variant={'bodyLarge'} style={styles.message}>
-              Select reason*
+              {t('Return Item.Select reason')}*
             </Text>
             <Menu
               style={styles.menuContainer}
@@ -366,7 +376,7 @@ const ReturnItem = ({
           </View>
           <View style={styles.inputField}>
             <Text variant={'bodyMedium'} style={styles.message}>
-              Upload Images*
+              {t('Return Item.Upload Images')}*
             </Text>
             <View style={styles.fileContainer}>
               <TouchableOpacity
@@ -374,7 +384,7 @@ const ReturnItem = ({
                 style={styles.browseButton}
                 onPress={handleChoosePhoto}>
                 <Text variant={'labelMedium'} style={styles.browseLabel}>
-                  Browse
+                  {t('Return Item.Browse')}
                 </Text>
               </TouchableOpacity>
             </View>

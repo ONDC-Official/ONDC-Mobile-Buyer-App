@@ -23,6 +23,7 @@ import {
 } from '../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../utils/utils';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const CancelToken = axios.CancelToken;
 
@@ -33,6 +34,7 @@ const CancelOrder = ({
   route: any;
   navigation: any;
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const eventTimeOutRef = useRef<any>(null);
@@ -163,7 +165,7 @@ const CancelOrder = ({
             <Icon name={'clear'} color={theme.colors.neutral400} size={20} />
           </TouchableOpacity>
           <Text variant={'titleLarge'} style={styles.pageTitle}>
-            Cancel Order
+            {t('Cancel Order.Cancel Order')}
           </Text>
         </View>
         <View style={styles.container}>
@@ -171,11 +173,11 @@ const CancelOrder = ({
             <View style={styles.radioContainer}>
               <RadioButton value="complete_order" status={'checked'} />
               <Text style={styles.radioTitle} variant={'bodySmall'}>
-                Complete order
+                {t('Cancel Order.Complete order')}
               </Text>
             </View>
             <Text variant={'bodyLarge'} style={styles.message}>
-              Select reason*
+              {t('Cancel Order.Select reason')}*
             </Text>
             <Menu
               style={styles.menuContainer}
@@ -233,10 +235,12 @@ const CancelOrder = ({
             />
           </View>
           <Text variant={'headlineMedium'} style={styles.cancelTitle}>
-            Cancel Order
+            {t('Cancel Order.Cancel Order')}
           </Text>
           <Text variant={'bodySmall'} style={styles.cancelMessage}>
-            Are You sure you would like to cancel this order?
+            {t(
+              'Cancel Order.Are You sure you would like to cancel this order?',
+            )}
           </Text>
           <View style={styles.actionContainer}>
             <Button

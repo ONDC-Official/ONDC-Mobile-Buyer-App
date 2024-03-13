@@ -281,7 +281,7 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
           contentContainerStyle={styles.dialog}>
           <View style={styles.header}>
             <Text variant={'titleLarge'} style={styles.modalTitle}>
-              Raise an Issue
+              {t('Raise Issue.Raise an Issue')}
             </Text>
             <TouchableOpacity onPress={hideDialog}>
               <Icon name={'clear'} size={20} color={theme.colors.neutral400} />
@@ -290,7 +290,7 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
           <ScrollView>
             <View style={styles.details}>
               <Text variant={'bodyMedium'} style={styles.message}>
-                Choose items that had a problem*
+                {t('Raise Issue.Choose items that had a problem')}*
               </Text>
               {productsWithIssue?.map((item: any, index: number) => {
                 const itemSelected = selectedItems.includes(item.id);
@@ -461,7 +461,7 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                       </View>
                       <View style={appStyles.inputContainer}>
                         <Text variant={'bodyMedium'} style={styles.inputLabel}>
-                          Images (Maximum 4)
+                          {t('Raise Issue.Images (Maximum 4)')}
                         </Text>
                         <View style={styles.fileContainer}>
                           <TouchableOpacity
@@ -471,7 +471,7 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                             <Text
                               variant={'labelMedium'}
                               style={styles.browseButtonLabel}>
-                              Browse
+                              {t('Raise Issue.Browse')}
                             </Text>
                           </TouchableOpacity>
                         </View>

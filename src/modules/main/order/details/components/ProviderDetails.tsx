@@ -6,6 +6,7 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {FB_DOMAIN} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
+import { useTranslation } from "react-i18next";
 
 const ProviderDetails = ({
   bppId,
@@ -20,6 +21,7 @@ const ProviderDetails = ({
   cancelled?: boolean;
   documents: any[];
 }) => {
+  const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -60,7 +62,7 @@ const ProviderDetails = ({
           <View style={styles.cancelContainer}>
             <Icon name={'cancel'} size={20} color={theme.colors.error} />
             <Text variant={'bodyMedium'} style={styles.cancelledLabel}>
-              Order Cancelled
+              {t('Provider Details.Order Cancelled')}
             </Text>
           </View>
           {!!documents && (

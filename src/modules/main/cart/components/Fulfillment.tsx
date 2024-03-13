@@ -187,7 +187,10 @@ const Fulfillment: React.FC<Fulfillment> = ({
                               <Text
                                 variant={'bodyLarge'}
                                 style={styles.fulfilmentCount}>
-                                {index + 1} of {unqiueFulfillments.length}
+                                {t('Fulfillment.Fulfilment no', {
+                                  current: index + 1,
+                                  total: unqiueFulfillments.length,
+                                })}
                               </Text>
                             )}
                             <Text

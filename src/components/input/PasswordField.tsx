@@ -18,8 +18,9 @@ const PasswordField: React.FC<any> = ({inputLabel, ...props}) => {
 
   return (
     <>
-      <Text variant={'bodySmall'} style={styles.inputLabel}>
+      <Text variant={'bodyMedium'} style={styles.inputLabel}>
         {inputLabel}
+        {props.required && <Text style={styles.required}>*</Text>}
       </Text>
       <TextInput
         mode="outlined"
@@ -52,6 +53,7 @@ const makeStyles = (colors: any) =>
       color: colors.neutral400,
       marginBottom: 4,
     },
+    required: {color: colors.error600},
     outline: {
       borderRadius: 12,
     },

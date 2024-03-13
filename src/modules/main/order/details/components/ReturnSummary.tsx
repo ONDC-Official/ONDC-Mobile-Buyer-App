@@ -7,8 +7,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import PagerView from 'react-native-pager-view';
 import {CURRENCY_SYMBOLS, RETURN_REASONS} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
@@ -57,13 +59,12 @@ const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
     }
   }, [orderDetails]);
 
-  console.log(images);
   return (
     <>
       <View style={styles.container}>
         <View style={styles.header}>
           <Text variant={'titleMedium'} style={styles.sectionTitle}>
-            Items
+            {t('Return Summary.Items')}
           </Text>
         </View>
         {items.map(item => {
@@ -83,7 +84,7 @@ const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
                       {item?.product?.descriptor?.name}
                     </Text>
                     <Text variant={'labelMedium'} style={styles.quantity}>
-                      Qty {quantity}
+                      {t('Return Summary.Qty')} {quantity}
                     </Text>
                     <Text variant={'labelLarge'} style={styles.quantity}>
                       {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
@@ -95,20 +96,28 @@ const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
                   <View style={styles.chipContainer}>
                     {cancellable ? (
                       <View style={styles.chip}>
-                        <Text variant={'labelMedium'}>Cancellable</Text>
+                        <Text variant={'labelMedium'}>
+                          {t('Profile.Cancellable')}
+                        </Text>
                       </View>
                     ) : (
                       <View style={styles.chip}>
-                        <Text variant={'labelMedium'}>Non-cancellable</Text>
+                        <Text variant={'labelMedium'}>
+                          {t('Profile.Non-cancellable')}
+                        </Text>
                       </View>
                     )}
                     {returnable ? (
                       <View style={styles.chip}>
-                        <Text variant={'labelMedium'}>Returnable</Text>
+                        <Text variant={'labelMedium'}>
+                          {t('Profile.Returnable')}
+                        </Text>
                       </View>
                     ) : (
                       <View style={styles.chip}>
-                        <Text variant={'labelMedium'}>Non-returnable</Text>
+                        <Text variant={'labelMedium'}>
+                          {t('Profile.Non-returnable')}
+                        </Text>
                       </View>
                     )}
                   </View>
@@ -119,10 +128,15 @@ const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
         })}
         <View style={styles.footer}>
           <Text variant={'labelMedium'} style={styles.reason}>
-            Reason: {RETURN_REASONS.find(one => one.key === reasonId)?.value}
+            {t('Return Summary.Reason')}:{' '}
+            {t(
+              `Return Reason.${
+                RETURN_REASONS.find(one => one.key === reasonId)?.value
+              }`,
+            )}
           </Text>
           <Button mode={'text'} onPress={showModal}>
-            Click to View Images
+            {t('Return Summary.Click to View Images')}
           </Button>
         </View>
         <View style={styles.summaryContainer}>
@@ -143,7 +157,7 @@ const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
         <View style={styles.divider} />
         <View style={styles.grossTotal}>
           <Text variant={'titleSmall'} style={styles.grossTotalLabel}>
-            Order Total
+            {t('Return Summary.Order Total')}
           </Text>
           <Text variant={'titleSmall'} style={styles.grossTotalValue}>
             {CURRENCY_SYMBOLS[orderDetails?.quote?.price?.currency]}

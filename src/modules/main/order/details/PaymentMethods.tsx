@@ -50,12 +50,12 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
           </Text>
           <Text variant={'bodySmall'} style={styles.normalText}>
             {orderDetails?.payment?.type === 'ON-FULFILLMENT'
-              ? 'Cash On Delivery'
-              : 'Prepaid'}
+              ? t('Payment Methods.Cash On Delivery')
+              : t('Payment Methods.Prepaid')}
           </Text>
           <Divider style={styles.divider} />
           <Text variant={'titleLarge'} style={styles.title}>
-            Billed Address
+            {t('Payment Methods.Billed Address')}
           </Text>
           {!!orderDetails?.billing?.name && (
             <Text variant={'bodyLarge'} style={styles.name}>
@@ -77,11 +77,11 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
 
         <View style={styles.container}>
           <Text variant={'titleLarge'} style={styles.title}>
-            Customer Details
+            {t('Payment Methods.Customer Details')}
           </Text>
           <View style={styles.customerDetails}>
             <Text variant={'bodyLarge'} style={styles.name}>
-              Order Number
+              {t('Payment Methods.Order Number')}
             </Text>
             <Text variant={'bodySmall'} style={styles.normalText}>
               {orderDetails?.id}
@@ -89,14 +89,14 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
           </View>
           <View style={styles.customerDetails}>
             <Text variant={'bodyLarge'} style={styles.name}>
-              Customer Name
+              {t('Payment Methods.Customer Name')}
             </Text>
             <Text variant={'bodySmall'} style={styles.normalText}>
               {orderDetails?.billing?.name}
             </Text>
           </View>
           <Text variant={'bodyLarge'} style={styles.name}>
-            Phone Number
+            {t('Payment Methods.Phone Number')}
           </Text>
           <Text variant={'bodySmall'} style={styles.normalText}>
             {orderDetails?.billing?.phone}

@@ -5,8 +5,10 @@ import {useSelector} from 'react-redux';
 import moment from 'moment';
 import CancelOrderButton from './CancelOrderButton';
 import {useAppTheme} from '../../../../../utils/theme';
+import { useTranslation } from "react-i18next";
 
 const OrderMeta = () => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
@@ -15,11 +17,11 @@ const OrderMeta = () => {
   return (
     <View style={styles.container}>
       <Text variant={'headlineSmall'} style={styles.title}>
-        Order Details
+        {t('Order Meta.Order Details')}
       </Text>
       <View style={styles.metaContainer}>
         <Text variant={'bodyLarge'} style={styles.label}>
-          Order Number
+          {t('Order Meta.Order Number')}
         </Text>
         <Text variant={'bodyMedium'} style={styles.value}>
           {orderDetails?.id}
@@ -27,17 +29,17 @@ const OrderMeta = () => {
       </View>
       <View style={styles.metaContainer}>
         <Text variant={'bodyLarge'} style={styles.label}>
-          Payment mode
+          {t('Order Meta.Payment mode')}
         </Text>
         <Text variant={'bodyMedium'} style={styles.value}>
           {orderDetails?.payment?.type === 'ON-FULFILLMENT'
-            ? 'Cash on delivery'
-            : 'Prepaid'}
+            ? t('Payment Methods.Cash on delivery')
+            : t('Payment Methods.Prepaid')}
         </Text>
       </View>
       <View style={styles.metaContainer}>
         <Text variant={'bodyLarge'} style={styles.label}>
-          Date
+          {t('Order Meta.Date')}
         </Text>
         <Text variant={'bodyMedium'} style={styles.value}>
           {moment(orderDetails?.createdAt).format('DD/MM/YY hh:mm a')}
@@ -45,7 +47,7 @@ const OrderMeta = () => {
       </View>
       <View style={styles.metaContainer}>
         <Text variant={'bodyLarge'} style={styles.label}>
-          Phone Number
+          {t('Order Meta.Phone Number')}
         </Text>
         <Text variant={'bodyMedium'} style={styles.value}>
           {orderDetails?.billing?.phone}
@@ -53,7 +55,7 @@ const OrderMeta = () => {
       </View>
       <View>
         <Text variant={'bodyLarge'} style={styles.label}>
-          Delivery Address
+          {t('Order Meta.Delivery Address')}
         </Text>
         <Text variant={'bodyMedium'} style={styles.value}>
           {address?.locality}, {address?.building}, {address?.city},{' '}

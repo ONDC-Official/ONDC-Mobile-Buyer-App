@@ -29,9 +29,8 @@ const Page: React.FC<Page> = ({children}) => {
         <View style={styles.container}>
           <TouchableOpacity style={styles.button} onPress={navigateToCart}>
             <Text variant={'bodyLarge'} style={styles.text}>
-              {itemCount > 1
-                ? `${itemCount} ${t('Page.Items Added')}`
-                : `${itemCount} ${t('Page.Item Added')}`}
+              {itemCount}{' '}
+              {itemCount > 1 ? t('Page.Items Added') : t('Page.Item Added')}
               {t('Page., Go To Cart')}
             </Text>
             <Icon

@@ -17,6 +17,7 @@ import RNEventSource from 'react-native-event-source';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
 import InputField from '../../../../../components/input/InputField';
+import { useTranslation } from "react-i18next";
 
 const CancelToken = axios.CancelToken;
 const EscalateForm = ({
@@ -26,6 +27,7 @@ const EscalateForm = ({
   hideEscalateModalVisible: () => void;
   onSuccess: (data: any[]) => void;
 }) => {
+  const {t} = useTranslation();
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
   const responseRef = useRef<any[]>([]);
@@ -169,7 +171,7 @@ const EscalateForm = ({
     <View style={styles.modal}>
       <View style={styles.modalHeader}>
         <Text variant={'titleLarge'} style={styles.title}>
-          Escalate
+          {t('Escalate Form.Escalate')}
         </Text>
         <TouchableOpacity onPress={hideEscalateModalVisible}>
           <Icon name={'clear'} size={24} color={theme.colors.neutral400} />

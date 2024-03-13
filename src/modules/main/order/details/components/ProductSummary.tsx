@@ -28,7 +28,7 @@ const ProductSummary = ({
     <View style={styles.container}>
       <View style={styles.header}>
         <Text variant={'headlineSmall'} style={styles.sectionTitle}>
-          Your Items
+          {t('Product Summary.Your Items')}
         </Text>
       </View>
       {items.map((item, index) => {
@@ -74,26 +74,26 @@ const ProductSummary = ({
                   {cancellable ? (
                     <View style={styles.chip}>
                       <Text variant={'labelSmall'} style={styles.chipLabel}>
-                        Cancellable
+                        {t('Profile.Cancellable')}
                       </Text>
                     </View>
                   ) : (
                     <View style={styles.chip}>
                       <Text variant={'labelSmall'} style={styles.chipLabel}>
-                        Non-cancellable
+                        {t('Profile.Non-cancellable')}
                       </Text>
                     </View>
                   )}
                   {returnable ? (
                     <View style={styles.chip}>
                       <Text variant={'labelSmall'} style={styles.chipLabel}>
-                        Returnable
+                        {t('Profile.Returnable')}
                       </Text>
                     </View>
                   ) : (
                     <View style={styles.chip}>
                       <Text variant={'labelSmall'} style={styles.chipLabel}>
-                        Non-returnable
+                        {t('Profile.Non-returnable')}
                       </Text>
                     </View>
                   )}
@@ -143,7 +143,7 @@ const ProductSummary = ({
       <View style={styles.divider} />
       <View style={styles.grossTotal}>
         <Text variant={'titleMedium'} style={styles.grossTotalLabel}>
-          Order Total
+          {t('Product Summary.Order Total')}
         </Text>
         <Text variant={'headlineSmall'} style={styles.grossTotalValue}>
           {CURRENCY_SYMBOLS[quote?.price?.currency]}

@@ -9,6 +9,7 @@ import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {updateComplaint} from '../../../../redux/complaint/actions';
 import ComplaintStatus from './ComplaintStatus';
 import {useAppTheme} from '../../../../utils/theme';
+import { useTranslation } from "react-i18next";
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -21,6 +22,7 @@ const categories = ISSUE_TYPES.map(item => {
 }).flat();
 
 const Complaint = ({complaint}: {complaint: any}) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -69,7 +71,7 @@ const Complaint = ({complaint}: {complaint: any}) => {
         </View>
         <View style={styles.row}>
           <Text variant={'labelSmall'} style={styles.label}>
-            Issue Id:{' '}
+            {t('Complaint.Issue Id')}:{' '}
           </Text>
           <Text variant={'labelLarge'} style={styles.value} numberOfLines={2}>
             {complaint?.issueId}
@@ -77,7 +79,7 @@ const Complaint = ({complaint}: {complaint: any}) => {
         </View>
         <View style={styles.row}>
           <Text variant={'labelSmall'} style={styles.label}>
-            Issue Raised On:{' '}
+            {t('Complaint.Issue Raised On')}:{' '}
           </Text>
           <Text variant={'labelLarge'} style={styles.value}>
             {moment(complaint?.created_at).format('DD MMM YYYY hh:mma')}
@@ -86,7 +88,7 @@ const Complaint = ({complaint}: {complaint: any}) => {
         <View style={styles.actionContainer}>
           <TouchableOpacity onPress={navigateToDetails} style={styles.button}>
             <Text variant={'labelLarge'} style={styles.buttonLabel}>
-              View Summary
+              {t('Complaint.View Summary')}
             </Text>
           </TouchableOpacity>
         </View>

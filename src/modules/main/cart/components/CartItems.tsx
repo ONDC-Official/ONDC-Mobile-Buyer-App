@@ -326,9 +326,11 @@ const CartItems: React.FC<CartItems> = ({
                     cartItem.item.product.quantity.available.count && (
                     <View style={styles.infoBox}>
                       <Text variant={'bodyMedium'} style={styles.infoText}>
-                        Only {cartItem.item.product.quantity.available.count}{' '}
-                        available instead of {cartItem.item.quantity.count}.
-                        Update the quantity or switch to another provider.
+                        {t('Cart Items.Only Available Of Total', {
+                          quantity:
+                            cartItem.item.product.quantity.available.count,
+                          total: cartItem.item.quantity.count,
+                        })}
                       </Text>
                     </View>
                   )}
@@ -343,7 +345,9 @@ const CartItems: React.FC<CartItems> = ({
         {haveDistinctProviders && (
           <View style={styles.errorBox}>
             <Text variant={'bodyMedium'} style={styles.errorText}>
-              You are ordering from different store. Please check your order
+              {t(
+                'Cart Items.You are ordering from different store. Please check your order again',
+              )}
               again.
             </Text>
           </View>
@@ -351,8 +355,9 @@ const CartItems: React.FC<CartItems> = ({
         {isProductCategoryIsDifferent && (
           <View style={styles.errorBox}>
             <Text variant={'bodyMedium'} style={styles.errorText}>
-              You are ordering from different category. Please check your order
-              again.
+              {t(
+                'Cart Items.You are ordering from different category. Please check your order again',
+              )}
             </Text>
           </View>
         )}

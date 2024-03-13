@@ -367,5 +367,8 @@
     "Eggs, Meat & Fish": "अंडी, मांस आणि मासे",
     "Cleaning & Household": "स्वच्छता आणि घरगुती",
     "Beverages": "शीतपेये"
+  },
+  "Network Banner": {
+    "You are offline, please verify your internet connection": "You are offline, please verify your internet connection"
   }
 }

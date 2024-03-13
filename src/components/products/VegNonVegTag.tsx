@@ -60,7 +60,7 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({
         />
         {showLabel && (
           <Text variant={'bodyMedium'} style={styles.nonVeg}>
-            Egg
+            {t('Cart.Egg')}
           </Text>
         )}
       </View>

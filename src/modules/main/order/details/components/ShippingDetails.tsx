@@ -5,8 +5,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useAppTheme} from '../../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [showDetails, setShowDetails] = useState<boolean>(true);
@@ -25,11 +27,13 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
   return (
     <View style={styles.shippingContainer}>
       <Text variant={'titleLarge'} style={styles.shippingTitle}>
-        Shipment Details ({fulfilmentIndex + 1}/
+        {t('Shipment Details.Shipment Details')} ({fulfilmentIndex + 1}/
         {orderDetails?.fulfillments.length})
       </Text>
       <Text variant={'bodyLarge'} style={styles.shippingTitle}>
-        {orderDetails?.items?.length} Item(s) Arriving
+        {t('Shipment Details.Items Arriving', {
+          count: orderDetails?.items?.length,
+        })}
       </Text>
       <TouchableOpacity
         style={styles.accordion}
@@ -37,7 +41,7 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
         {orderDetails?.state !== 'Completed' ? (
           <View style={styles.accordionTitle}>
             <Text variant={'labelMedium'} style={styles.arrivalLabel}>
-              Arriving On:
+              {t('Shipment Details.Arriving On')}:
             </Text>
             <Text variant={'labelMedium'} style={styles.arrivalDate}>
               {moment(fulfilment?.end?.time?.range?.end).format('DD-MM-YYYY')}
@@ -46,7 +50,7 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
         ) : (
           <View style={styles.accordionTitle}>
             <Text variant={'labelMedium'} style={styles.arrivalLabel}>
-              Delivered On:
+              {t('Shipment Details.Delivered On')}:
             </Text>
             <Text variant={'labelMedium'} style={styles.arrivalDate}>
               {moment(orderDetails?.updatedAt).format('DD-MM-YYYY')}

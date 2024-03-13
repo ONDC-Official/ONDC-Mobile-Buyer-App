@@ -103,6 +103,25 @@ const ItemDetails = ({
   const [returnFulfillmentList, setReturnFulfillmentList] = useState<any[]>([]);
   const [cancelFulfillmentList, setCancelFulfillmentList] = useState<any[]>([]);
 
+  const renderReason = (reasonId: string) => {
+    const value = RETURN_REASONS.find(one => one.key === reasonId)?.value;
+
+    return (
+      <Text variant={'labelSmall'} style={styles.reason}>
+        {t(`Return Reason.${value}`)}
+      </Text>
+    );
+  };
+
+  const renderCancelReason = (reasonId: string) => {
+    const value = CANCELLATION_REASONS.find(one => one.key === reasonId)?.value;
+    return (
+      <Text variant={'labelSmall'} style={styles.reason}>
+        {t(`Cancellation Reason.${value}`)}
+      </Text>
+    );
+  };
+
   useEffect(() => {
     const shipments: any[] = [];
     const returns: any[] = [];
@@ -143,7 +162,7 @@ const ItemDetails = ({
                 <View style={styles.header}>
                   <View>
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
-                      Items will be delivered by{' '}
+                      {t('Item Details.Items will be delivered by')}{' '}
                     </Text>
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
                       {today.isSame(endDate, 'day')
@@ -187,7 +206,7 @@ const ItemDetails = ({
       {returnFulfillmentList.length > 0 && (
         <View>
           <Text variant={'titleLarge'} style={styles.fulfilmentTitle}>
-            Return Details
+            {t('Item Details.Return Details')}
           </Text>
           {returnFulfillmentList?.map((fulfillment: any) => {
             const isReturnInitiated =
@@ -220,7 +239,7 @@ const ItemDetails = ({
                 <View style={styles.header}>
                   <View>
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
-                      Return initiated on
+                      {t('Item Details.Return initiated on')}
                     </Text>
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
                       {returnInitiated
@@ -268,11 +287,7 @@ const ItemDetails = ({
                           item={item}
                         />
                       ))}
-                <View style={styles.footer}>
-                  <Text variant={'labelSmall'} style={styles.reason}>
-                    {RETURN_REASONS.find(one => one.key === reasonId)?.value}
-                  </Text>
-                </View>
+                <View style={styles.footer}>{renderReason(reasonId)}</View>
               </View>
             );
           })}
@@ -282,7 +297,7 @@ const ItemDetails = ({
       {cancelFulfillmentList.length > 0 && (
         <View>
           <Text variant={'titleLarge'} style={styles.fulfilmentTitle}>
-            Cancel Details
+            {t('Item Details.Cancel Details')}
           </Text>
           {cancelFulfillmentList?.map((fulfillment: any) => {
             const isReturnInitiated =
@@ -319,7 +334,7 @@ const ItemDetails = ({
                 <View style={styles.header}>
                   <View>
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
-                      Cancelled on
+                      {t('Item Details.Cancelled on')}
                     </Text>
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
                       {today.isSame(moment(cancelInitiated.createdAt), 'day')
@@ -349,12 +364,7 @@ const ItemDetails = ({
                         />
                       ))}
                 <View style={styles.footer}>
-                  <Text variant={'labelMedium'} style={styles.reason}>
-                    {
-                      CANCELLATION_REASONS.find(one => one.key === cancelId)
-                        ?.value
-                    }
-                  </Text>
+                  {renderCancelReason(cancelId)}
                 </View>
               </View>
             );

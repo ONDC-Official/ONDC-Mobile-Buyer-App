@@ -70,7 +70,7 @@ const NonCancelledOrder = ({
             </Text>
           ) : (
             <Text variant={'bodyLarge'} style={styles.creationDate}>
-              Order completed on{' '}
+              {t('Non cancelled order.Order completed on')}{' '}
               {moment(orderDetails?.updatedAt).format('DD MMM hh:mm a')}
             </Text>
           )}

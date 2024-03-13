@@ -5,8 +5,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useAppTheme} from '../../../../../utils/theme';
+import { useTranslation } from "react-i18next";
 
 const ReturnDetails = ({fulfilmentId}: {fulfilmentId: string}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [showDetails, setShowDetails] = useState<boolean>(true);
@@ -33,17 +35,17 @@ const ReturnDetails = ({fulfilmentId}: {fulfilmentId: string}) => {
   return (
     <View style={styles.shippingContainer}>
       <Text variant={'bodyLarge'} style={styles.shippingTitle}>
-        Return Details
+        {t('Return Details.Return Details')}
       </Text>
       <Text variant={'bodyMedium'} style={styles.shippingTitle}>
-        {itemTag.value} Item(s) Returned
+        {t('Return Details.Items Returned', {count: itemTag.value})}
       </Text>
       <TouchableOpacity
         style={styles.accordion}
         onPress={() => setShowDetails(!showDetails)}>
         <View style={styles.accordionTitle}>
           <Text variant={'labelMedium'} style={styles.arrivalLabel}>
-            Return On:
+            {t('Return Details.Return On')}:
           </Text>
           <Text variant={'labelMedium'} style={styles.arrivalDate}>
             {moment(returnInitiated.createdAt).format('DD-MM-YYYY')}

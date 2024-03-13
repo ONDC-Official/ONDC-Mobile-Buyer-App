@@ -8,6 +8,7 @@ import FastImage from 'react-native-fast-image';
 
 import {makeGlobalStyles} from '../../styles/styles';
 import {useAppTheme} from '../../utils/theme';
+import { useTranslation } from "react-i18next";
 
 interface VariationsRenderer {
   product: any;
@@ -24,6 +25,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
   chartImage = '',
   isFashion = false,
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
@@ -296,14 +298,14 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
         <View style={styles.group} key={groupId}>
           <View style={styles.groupHeader}>
             <Text variant="bodyLarge" style={styles.groupTitle}>
-              Available {groupName} Options
+              {t('Variations.Available Options', {groupName})}
             </Text>
             {groupName === 'size' && isFashion && (
               <TouchableOpacity
                 onPress={() => setOpenSizeChart(true)}
                 style={styles.sizeChart}>
                 <Text variant={'bodyMedium'} style={styles.sizeGuide}>
-                  Size Guide
+                  {t('Variations.Size Guide')}
                 </Text>
                 <Icon name={'arrow-right'} color={theme.colors.primary} />
               </TouchableOpacity>
