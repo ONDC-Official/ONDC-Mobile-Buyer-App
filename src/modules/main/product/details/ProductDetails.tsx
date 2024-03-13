@@ -400,12 +400,15 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 <Text variant="headlineSmall" style={styles.price}>
                   ₹{product?.item_details?.price?.value}
                 </Text>
-                <Text variant="titleSmall" style={styles.maximumAmount}>
-                  ₹
-                  {Number(product?.item_details?.price?.maximum_value).toFixed(
-                    0,
-                  )}
-                </Text>
+                {Number(product?.item_details?.price?.maximum_value) !==
+                  product?.item_details?.price?.value && (
+                  <Text variant="titleSmall" style={styles.maximumAmount}>
+                    ₹
+                    {Number(
+                      product?.item_details?.price?.maximum_value,
+                    ).toFixed(0)}
+                  </Text>
+                )}
               </View>
             )}
             <VariationsRenderer
