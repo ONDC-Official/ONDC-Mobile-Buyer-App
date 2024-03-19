@@ -16,7 +16,7 @@ export const FASHION_DOMAIN: string = 'ONDC:RET12';
 export const SSE_TIMEOUT: number = 20000;
 export const ORDER_PAYMENT_METHODS: any = {
   COD: 'cash_on_delivery',
-  JUSPAY: 'juspay',
+  PREPAID: 'prepaid',
 };
 
 export const CANCELLATION_REASONS = [

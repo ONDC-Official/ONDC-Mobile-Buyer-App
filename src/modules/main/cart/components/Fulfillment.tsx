@@ -137,13 +137,15 @@ const Fulfillment: React.FC<Fulfillment> = ({
                   'Fulfillment.Please try ordering from another store or try again later',
                 )}
               </Text>
+              <View style={styles.exploreButtonContainer}>
               <TouchableOpacity
-                style={styles.button}
+                style={styles.exploreButton}
                 onPress={exploreOtherStores}>
-                <Text variant={'labelLarge'} style={styles.buttonLabel}>
+                <Text variant={'bodyLarge'} style={styles.buttonLabel}>
                   {t('Fulfillment.Explore Other Stores')}
                 </Text>
               </TouchableOpacity>
+              </View>
             </View>
           ) : (
             <>
@@ -464,6 +466,19 @@ const makeStyles = (colors: any) =>
     title: {
       color: colors.neutral400,
     },
+    exploreButtonContainer: {
+      marginVertical: 20,
+      width: '100%',
+      paddingHorizontal: 16,
+    },
+    exploreButton: {
+      alignItems: 'center',
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      paddingVertical: 13,
+      height: 44,
+      width: '100%',
+    },
     button: {
       marginTop: 28,
       backgroundColor: colors.primary,
@@ -481,6 +496,7 @@ const makeStyles = (colors: any) =>
     },
     errorTitle: {
       color: colors.neutral400,
+      marginTop: 20,
     },
     errorMessage: {
       marginTop: 8,

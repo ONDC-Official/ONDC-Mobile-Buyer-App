@@ -48,3 +48,6 @@ export const ON_ISSUE_STATUS: string =
   '/issueApis/v1/on_issue_status?messageId=';
 
 export const ORDER_EVENT: string = '/clientApis/events?messageId=';
+
+export const RAZORPAY_KEYS: string = '/clientApis/v2/razorpay/razorPay/keys';
+export const CREATE_PAYMENT: string = '/clientApis/v2/razorpay/';

@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
+import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ActivityIndicator, Button, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -26,7 +26,7 @@ import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetCo
 import {useAppTheme} from '../../../../utils/theme';
 import CashOnDeliveryIcon from '../../../../assets/payment/cod.svg';
 import PrepaidIcon from '../../../../assets/payment/prepaid.svg';
-import { useTranslation } from "react-i18next";
+import {useTranslation} from 'react-i18next';
 
 interface Payment {
   productsQuote: any;
@@ -108,6 +108,7 @@ const Payment: React.FC<Payment> = ({
         `${API_BASE_URL}${ON_INITIALIZE}${messageId}`,
         source.current.token,
       );
+      console.log('Init response', JSON.stringify(data, undefined, 4));
       responseRef.current = [...responseRef.current, data[0]];
       setEventData([...eventData, data[0]]);
 
@@ -302,16 +303,16 @@ const Payment: React.FC<Payment> = ({
         <View style={styles.paymentContainer}>
           <TouchableOpacity
             style={styles.paymentOption}
-            onPress={() => updatePaymentMethod(ORDER_PAYMENT_METHODS.JUSPAY)}>
+            onPress={() => updatePaymentMethod(ORDER_PAYMENT_METHODS.PREPAID)}>
             <View
               style={[
                 styles.paymentOptionMeta,
-                activePaymentMethod === ORDER_PAYMENT_METHODS.JUSPAY
+                activePaymentMethod === ORDER_PAYMENT_METHODS.PREPAID
                   ? styles.selectedOption
                   : {},
               ]}>
               <View style={styles.checkContainer}>
-                {activePaymentMethod === ORDER_PAYMENT_METHODS.JUSPAY ? (
+                {activePaymentMethod === ORDER_PAYMENT_METHODS.PREPAID ? (
                   <Icon
                     name={'check-circle'}
                     size={20}

@@ -101,7 +101,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
 
 export default Splash;
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     container: {alignItems: 'center', justifyContent: 'center'},
     footer: {alignItems: 'center', marginBottom: 20},
