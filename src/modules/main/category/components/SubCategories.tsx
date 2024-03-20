@@ -58,10 +58,9 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
                 index === 3 || index === 7 ? styles.alignEnd : {},
               ]}
               onPress={() => navigateToSubCategory(item)}>
-              <FastImage
-                source={{uri: item?.imageUrl}}
-                style={styles.brandImage}
-              />
+              <View style={styles.brandImage}>
+                <item.Icon width={60} height={60} />
+              </View>
               <Text variant={'labelLarge'} style={styles.name}>
                 {t(`Product SubCategories.${item.key}`)}
               </Text>

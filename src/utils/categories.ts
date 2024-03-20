@@ -1,3 +1,92 @@
+import StationeryIcon from '../assets/subCategories/grocessry/Stationery.svg';
+import SnacksBrandedFoodsIcon from '../assets/subCategories/grocessry/SnacksBrandedFoods.svg';
+import PetCareIcon from '../assets/subCategories/grocessry/PetCare.svg';
+import OilGheeIcon from '../assets/subCategories/grocessry/OilGhee.svg';
+import MasalaSeasoningIcon from '../assets/subCategories/grocessry/MasalaSeasoning.svg';
+import KitchenAccessoriesIcon from '../assets/subCategories/grocessry/KitchenAccessories.svg';
+import GourmetWorldFoodsIcon from '../assets/subCategories/grocessry/GourmetWorldFoods.svg';
+import FruitsVegetablesIcon from '../assets/subCategories/grocessry/FruitsVegetables.svg';
+import FoodgrainsIcon from '../assets/subCategories/grocessry/Foodgrains.svg';
+import EggsMeatFishIcon from '../assets/subCategories/grocessry/EggsMeatFish.svg';
+import CleaningHouseholdIcon from '../assets/subCategories/grocessry/CleaningHousehold.svg';
+import BeveragesIcon from '../assets/subCategories/grocessry/Beverages.svg';
+import BeautyHygieneIcon from '../assets/subCategories/grocessry/BeautyHygiene.svg';
+import BakeryCakesDairyIcon from '../assets/subCategories/grocessry/BakeryCakesDairy.svg';
+import BabyCareIcon from '../assets/subCategories/grocessry/BabyCare.svg';
+
+import BaklavaIcon from '../assets/subCategories/foodBeverages/Baklava.svg';
+import BaoIcon from '../assets/subCategories/foodBeverages/Bao.svg';
+import BarbecueIcon from '../assets/subCategories/foodBeverages/Barbecue.svg';
+import BiryaniIcon from '../assets/subCategories/foodBeverages/Biryani.svg';
+import BreadIcon from '../assets/subCategories/foodBeverages/Bread.svg';
+import BurgerIcon from '../assets/subCategories/foodBeverages/Burger.svg';
+import CakesIcon from '../assets/subCategories/foodBeverages/Cakes.svg';
+import ChaatIcon from '../assets/subCategories/foodBeverages/Chaat.svg';
+import CheesecakesIcon from '../assets/subCategories/foodBeverages/Cheesecakes.svg';
+import ChickenIcon from '../assets/subCategories/foodBeverages/Chicken.svg';
+import ChickenwingsIcon from '../assets/subCategories/foodBeverages/Chickenwings.svg';
+import ChipsIcon from '../assets/subCategories/foodBeverages/Chips.svg';
+import CoffeeIcon from '../assets/subCategories/foodBeverages/Coffee.svg';
+import CookiesIcon from '../assets/subCategories/foodBeverages/Cookies.svg';
+import CrepesIcon from '../assets/subCategories/foodBeverages/Crepes.svg';
+import DalIcon from '../assets/subCategories/foodBeverages/Dal.svg';
+import DessertsIcon from '../assets/subCategories/foodBeverages/Desserts.svg';
+import DhoklaIcon from '../assets/subCategories/foodBeverages/Dhokla.svg';
+import DosaIcon from '../assets/subCategories/foodBeverages/Dosa.svg';
+import DoughnutsIcon from '../assets/subCategories/foodBeverages/Doughnuts.svg';
+import EggsIcon from '../assets/subCategories/foodBeverages/Eggs.svg';
+import EnergyDrinksIcon from '../assets/subCategories/foodBeverages/EnergyDrinks.svg';
+import FalafelIcon from '../assets/subCategories/foodBeverages/Falafel.svg';
+import FreshJuiceIcon from '../assets/subCategories/foodBeverages/FreshJuice.svg';
+import FriesIcon from '../assets/subCategories/foodBeverages/Fries.svg';
+import IcecreamIcon from '../assets/subCategories/foodBeverages/Icecream.svg';
+import IdliIcon from '../assets/subCategories/foodBeverages/Idli.svg';
+import KababIcon from '../assets/subCategories/foodBeverages/Kabab.svg';
+import KachoriIcon from '../assets/subCategories/foodBeverages/Kachori.svg';
+import KulfiIcon from '../assets/subCategories/foodBeverages/Kulfi.svg';
+import LassiIcon from '../assets/subCategories/foodBeverages/Lassi.svg';
+import MealbowlIcon from '../assets/subCategories/foodBeverages/Mealbowl.svg';
+import MezzeIcon from '../assets/subCategories/foodBeverages/Mezze.svg';
+import MithaiIcon from '../assets/subCategories/foodBeverages/Mithai.svg';
+import MomosIcon from '../assets/subCategories/foodBeverages/Momos.svg';
+import MuttonIcon from '../assets/subCategories/foodBeverages/Mutton.svg';
+import NachosIcon from '../assets/subCategories/foodBeverages/Nachos.svg';
+import NoodlesIcon from '../assets/subCategories/foodBeverages/Noodles.svg';
+import PakodasIcon from '../assets/subCategories/foodBeverages/Pakodas.svg';
+import PancakesIcon from '../assets/subCategories/foodBeverages/Pancakes.svg';
+import PaneerIcon from '../assets/subCategories/foodBeverages/Paneer.svg';
+import PastaIcon from '../assets/subCategories/foodBeverages/Pasta.svg';
+import PastriesIcon from '../assets/subCategories/foodBeverages/Pastries.svg';
+import PieIcon from '../assets/subCategories/foodBeverages/Pie.svg';
+import PizzaIcon from '../assets/subCategories/foodBeverages/Pizza.svg';
+import PohaIcon from '../assets/subCategories/foodBeverages/Poha.svg';
+import RaitaIcon from '../assets/subCategories/foodBeverages/Raita.svg';
+import RiceIcon from '../assets/subCategories/foodBeverages/Rice.svg';
+import RollsIcon from '../assets/subCategories/foodBeverages/Rolls.svg';
+import RotiIcon from '../assets/subCategories/foodBeverages/Roti.svg';
+import SaladIcon from '../assets/subCategories/foodBeverages/Salad.svg';
+import SamosaIcon from '../assets/subCategories/foodBeverages/Samosa.svg';
+import SandwichIcon from '../assets/subCategories/foodBeverages/Sandwich.svg';
+import SeafoodIcon from '../assets/subCategories/foodBeverages/Seafood.svg';
+import ShakesSmoothiesIcon from '../assets/subCategories/foodBeverages/ShakesSmoothies.svg';
+import SoftDrinkIcon from '../assets/subCategories/foodBeverages/SoftDrink.svg';
+import SoupIcon from '../assets/subCategories/foodBeverages/Soup.svg';
+import SpringRollIcon from '../assets/subCategories/foodBeverages/SpringRoll.svg';
+import SushiIcon from '../assets/subCategories/foodBeverages/Sushi.svg';
+import TacosIcon from '../assets/subCategories/foodBeverages/Tacos.svg';
+import TandooriIcon from '../assets/subCategories/foodBeverages/Tandoori.svg';
+import TartIcon from '../assets/subCategories/foodBeverages/Tart.svg';
+import TeaIcon from '../assets/subCategories/foodBeverages/Tea.svg';
+import ThaliIcon from '../assets/subCategories/foodBeverages/Thali.svg';
+import TikkaIcon from '../assets/subCategories/foodBeverages/Tikka.svg';
+import UpmaIcon from '../assets/subCategories/foodBeverages/Upma.svg';
+import UttapamIcon from '../assets/subCategories/foodBeverages/Uttapam.svg';
+import VadaIcon from '../assets/subCategories/foodBeverages/Vada.svg';
+import VegetablesIcon from '../assets/subCategories/foodBeverages/Vegetables.svg';
+import WaffleIcon from '../assets/subCategories/foodBeverages/Waffle.svg';
+import WrapIcon from '../assets/subCategories/foodBeverages/Wrap.svg';
+import YogurtIcon from '../assets/subCategories/foodBeverages/Yogurt.svg';
+
 export const CATEGORIES: any = [
   {
     id: '1',
@@ -72,112 +161,98 @@ export const CATEGORIES: any = [
     domain: 'ONDC:RET15',
   },
 ];
+
 export const PRODUCT_SUBCATEGORY: any = {
   Grocery: [
     {
       value: 'Fruits and Vegetables',
       key: 'Fruits and Vegetables',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Fruits and Vegetables.png',
+      Icon: FruitsVegetablesIcon,
     },
     {
       value: 'Masala & Seasoning',
       key: 'Masala & Seasoning',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Masala And Seasoning.png',
+      Icon: MasalaSeasoningIcon,
     },
     {
       value: 'Oil & Ghee',
       key: 'Oil & Ghee',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Oil And Ghee.png',
+      Icon: OilGheeIcon,
     },
     {
       value: 'Gourmet & World Foods',
       key: 'Gourmet & World Foods',
       protocolKey: '@ondc/org/statutory_reqs_prepackaged_food',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Gourmet And World Foods.png',
+      Icon: GourmetWorldFoodsIcon,
     },
     {
       value: 'Foodgrains',
       key: 'Foodgrains',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Foodgrains.png',
+      Icon: FoodgrainsIcon,
     },
     {
       value: 'Eggs, Meat & Fish',
       key: 'Eggs, Meat & Fish',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Eggs, Meat And Fish.png',
+      Icon: EggsMeatFishIcon,
     },
     {
       value: 'Cleaning & Household',
       key: 'Cleaning & Household',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Cleaning And Household.png',
+      Icon: CleaningHouseholdIcon,
     },
     {
       value: 'Beverages',
       key: 'Beverages',
       protocolKey: '@ondc/org/statutory_reqs_prepackaged_food',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Beverages.png',
+      Icon: BeveragesIcon,
     },
     {
       value: 'Beauty & Hygiene',
       key: 'Beauty & Hygiene',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Beauty And Hygiene.png',
+      Icon: BeautyHygieneIcon,
     },
     {
       value: 'Bakery, Cakes & Dairy',
       key: 'Bakery, Cakes & Dairy',
       protocolKey: '@ondc/org/statutory_reqs_prepackaged_food',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Bakery, Cakes And Dairy.png',
+      Icon: BakeryCakesDairyIcon,
     },
     {
       value: 'Kitchen Accessories',
       key: 'Kitchen Accessories',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Kitchen Accessories.png',
+      Icon: KitchenAccessoriesIcon,
     },
     {
       value: 'Baby Care',
       key: 'Baby Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Baby Care.png',
+      Icon: BabyCareIcon,
     },
     {
       value: 'Snacks & Branded Foods',
       key: 'Snacks & Branded Foods',
       protocolKey: '@ondc/org/statutory_reqs_prepackaged_food',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Snacks And Branded Foods.png',
+      Icon: SnacksBrandedFoodsIcon,
     },
     {
       value: 'Pet Care',
       key: 'Pet Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Pet Care.png',
+      Icon: PetCareIcon,
     },
     {
       value: 'Stationery',
       key: 'Stationery',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Stationery.png',
+      Icon: StationeryIcon,
     },
   ],
   Appliances: [
@@ -676,27 +751,25 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Baklava',
       key: 'Baklava',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Baklava.png',
+      Icon: BaklavaIcon,
     },
     {
       value: 'Bao',
       key: 'Bao',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Bao.png',
+      Icon: BaoIcon,
     },
     {
       value: 'Barbecue',
       key: 'Barbecue',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Barbecue.png',
+      Icon: BarbecueIcon,
     },
     {
       value: 'Biryani',
       key: 'Biryani',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: BiryaniIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Biryani.png',
     },
@@ -704,6 +777,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Bread',
       key: 'Bread',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: BreadIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Bread.png',
     },
@@ -711,6 +785,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Burger',
       key: 'Burger',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: BurgerIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Burger.png',
     },
@@ -718,6 +793,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Cakes',
       key: 'Cakes',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: CakesIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Cakes.png',
     },
@@ -725,6 +801,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Chaat',
       key: 'Chaat',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: ChaatIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Chaat.png',
     },
@@ -732,6 +809,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Cheesecakes',
       key: 'Cheesecakes',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: CheesecakesIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Cheesecakes.png',
     },
@@ -739,6 +817,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Chicken',
       key: 'Chicken',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: ChickenIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Chicken.png',
     },
@@ -746,6 +825,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Chicken wings',
       key: 'Chicken wings',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: ChickenwingsIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Chicken wings.png',
     },
@@ -753,6 +833,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Chips',
       key: 'Chips',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: ChipsIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Chips.png',
     },
@@ -760,6 +841,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Coffee',
       key: 'Coffee',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: CoffeeIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Coffee.png',
     },
@@ -767,6 +849,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Cookies',
       key: 'Cookies',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: CookiesIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Cookies.png',
     },
@@ -774,6 +857,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Crepes',
       key: 'Crepes',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: CrepesIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Crepes.png',
     },
@@ -781,6 +865,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Dal',
       key: 'Dal',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: DalIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Dal.png',
     },
@@ -788,6 +873,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Desserts',
       key: 'Desserts',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: DessertsIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Desserts.png',
     },
@@ -795,6 +881,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Dhokla',
       key: 'Dhokla',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: DhoklaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Dhokla.png',
     },
@@ -802,6 +889,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Dosa',
       key: 'Dosa',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: DosaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Dosa.png',
     },
@@ -809,6 +897,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Doughnuts',
       key: 'Doughnuts',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: DoughnutsIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Doughnuts.png',
     },
@@ -816,6 +905,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Eggs',
       key: 'Eggs',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: EggsIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Eggs.png',
     },
@@ -823,6 +913,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Energy Drinks',
       key: 'Energy Drinks',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: EnergyDrinksIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Energy Drinks.png',
     },
@@ -830,6 +921,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Falafel',
       key: 'Falafel',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: FalafelIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Falafel.png',
     },
@@ -837,6 +929,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Fresh Juice',
       key: 'Fresh Juice',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: FreshJuiceIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Fresh Juice.png',
     },
@@ -844,6 +937,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Fries',
       key: 'Fries',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: FriesIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Fries.png',
     },
@@ -851,6 +945,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Ice cream',
       key: 'Ice cream',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: IcecreamIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Ice cream.png',
     },
@@ -858,6 +953,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Idli',
       key: 'Idli',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: IdliIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Idli.png',
     },
@@ -865,6 +961,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Kabab',
       key: 'Kabab',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: KababIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Kabab.png',
     },
@@ -872,6 +969,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Kachori',
       key: 'Kachori',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: KachoriIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Kachori.png',
     },
@@ -879,6 +977,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Kulfi',
       key: 'Kulfi',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: KulfiIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Kulfi.png',
     },
@@ -886,6 +985,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Lassi',
       key: 'Lassi',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: LassiIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Lassi.png',
     },
@@ -893,6 +993,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Meal bowl',
       key: 'Meal bowl',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: MealbowlIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Meal bowl.png',
     },
@@ -900,6 +1001,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Mezze',
       key: 'Mezze',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: MezzeIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Mezze.png',
     },
@@ -907,6 +1009,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Mithai',
       key: 'Mithai',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: MithaiIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Mithai.png',
     },
@@ -914,6 +1017,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Momos',
       key: 'Momos',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: MomosIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Momos.png',
     },
@@ -921,6 +1025,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Mutton',
       key: 'Mutton',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: MuttonIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Mutton.png',
     },
@@ -928,6 +1033,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Nachos',
       key: 'Nachos',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: NachosIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Nachos.png',
     },
@@ -935,6 +1041,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Noodles',
       key: 'Noodles',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: NoodlesIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Noodles.png',
     },
@@ -942,6 +1049,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Pakodas',
       key: 'Pakodas',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: PakodasIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pakodas.png',
     },
@@ -949,6 +1057,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Pancakes',
       key: 'Pancakes',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: PancakesIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pancakes.png',
     },
@@ -956,6 +1065,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Paneer',
       key: 'Paneer',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: PaneerIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Paneer.png',
     },
@@ -963,6 +1073,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Pasta',
       key: 'Pasta',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: PastaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pasta.png',
     },
@@ -970,6 +1081,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Pastries',
       key: 'Pastries',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: PastriesIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pastries.png',
     },
@@ -977,6 +1089,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Pie',
       key: 'Pie',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: PieIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pie.png',
     },
@@ -984,6 +1097,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Pizza',
       key: 'Pizza',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: PizzaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pizza.png',
     },
@@ -991,6 +1105,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Poha',
       key: 'Poha',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: PohaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Poha.png',
     },
@@ -998,6 +1113,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Raita',
       key: 'Raita',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: RaitaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Raita.png',
     },
@@ -1005,6 +1121,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Rice',
       key: 'Rice',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: RiceIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Rice.png',
     },
@@ -1012,6 +1129,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Rolls',
       key: 'Rolls',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: RollsIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Rolls.png',
     },
@@ -1019,6 +1137,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Roti',
       key: 'Roti',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: RotiIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Roti.png',
     },
@@ -1026,6 +1145,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Salad',
       key: 'Salad',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: SaladIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Salad.png',
     },
@@ -1033,6 +1153,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Samosa',
       key: 'Samosa',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: SamosaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Samosa.png',
     },
@@ -1040,6 +1161,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Sandwich',
       key: 'Sandwich',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: SandwichIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Sandwich.png',
     },
@@ -1047,6 +1169,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Seafood',
       key: 'Seafood',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: SeafoodIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Seafood.png',
     },
@@ -1054,6 +1177,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Shakes & Smoothies',
       key: 'Shakes & Smoothies',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: ShakesSmoothiesIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Shakes & Smoothies.png',
     },
@@ -1061,6 +1185,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Soft Drink',
       key: 'Soft Drink',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: SoftDrinkIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Soft Drink.png',
     },
@@ -1068,6 +1193,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Soup',
       key: 'Soup',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: SoupIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Soup.png',
     },
@@ -1075,6 +1201,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Spring Roll',
       key: 'Spring Roll',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: SpringRollIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Spring Roll.png',
     },
@@ -1082,6 +1209,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Sushi',
       key: 'Sushi',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: SushiIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Sushi.png',
     },
@@ -1089,6 +1217,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Tacos',
       key: 'Tacos',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: TacosIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Tacos.png',
     },
@@ -1096,6 +1225,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Tandoori',
       key: 'Tandoori',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: TandooriIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Tandoori.png',
     },
@@ -1103,6 +1233,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Tart',
       key: 'Tart',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: TartIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Tart.png',
     },
@@ -1110,6 +1241,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Tea',
       key: 'Tea',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: TeaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Tea.png',
     },
@@ -1117,6 +1249,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Thali',
       key: 'Thali',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: ThaliIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Thali.png',
     },
@@ -1124,6 +1257,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Tikka',
       key: 'Tikka',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: TikkaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Tikka.png',
     },
@@ -1131,6 +1265,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Upma',
       key: 'Upma',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: UpmaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Upma.png',
     },
@@ -1138,6 +1273,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Uttapam',
       key: 'Uttapam',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: UttapamIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Uttapam.png',
     },
@@ -1145,6 +1281,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Vada',
       key: 'Vada',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: VadaIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Vada.png',
     },
@@ -1152,6 +1289,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Vegetables',
       key: 'Vegetables',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: VegetablesIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Vegetables.png',
     },
@@ -1159,6 +1297,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Waffle',
       key: 'Waffle',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: WaffleIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Waffle.png',
     },
@@ -1166,6 +1305,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Wrap',
       key: 'Wrap',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: WrapIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Wrap.png',
     },
@@ -1173,6 +1313,7 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Yogurt',
       key: 'Yogurt',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
+      Icon: YogurtIcon,
       imageUrl:
         'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Yogurt.png',
     },
