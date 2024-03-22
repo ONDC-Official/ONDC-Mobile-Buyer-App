@@ -50,7 +50,8 @@ const PaymentMethod = ({
           {address?.name}, {contact?.phone}
           {'\n'}
           {address?.locality}, {address?.building}, {address?.city},{' '}
-          {address?.state}, {address?.country} - {address?.area_code}
+          {address?.state}, {address?.country} -{' '}
+          {address?.area_code ?? address?.areaCode}
         </Text>
         <Icon
           name={'keyboard-arrow-right'}

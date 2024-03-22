@@ -15,6 +15,7 @@ import {
   EVENTS,
   ON_CONFIRM,
   RAZORPAY_KEYS,
+  VERIFY_PAYMENT,
 } from '../utils/apiActions';
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import useNetworkHandling from './useNetworkHandling';
@@ -123,12 +124,48 @@ export default (closePaymentSheet: () => void) => {
     try {
       const item = items[0];
       const contextCity = await getStoredData('contextCity');
+      const queryParams: any = [
+        {
+          context: {
+            domain: item.domain,
+            city: contextCity || deliveryAddress.address.city,
+            state: deliveryAddress.address.state,
+            pincode: deliveryAddress.address.areaCode,
+            parent_order_id: parentOrderIDMap.get(item?.provider?.id)
+              .parent_order_id,
+            transaction_id: parentOrderIDMap.get(item?.provider?.id)
+              .transaction_id,
+          },
+          message: {
+            payment: {
+              ...payment,
+              paid_amount: Number(productQuotesForCheckout[0]?.price?.value),
+              type:
+                method === ORDER_PAYMENT_METHODS.COD
+                  ? 'ON-FULFILLMENT'
+                  : 'ON-ORDER',
+              transaction_id: parentOrderIDMap.get(item?.provider?.id)
+                .transaction_id,
+              paymentGatewayEnabled: false,
+            },
+            quote: {
+              ...productQuotesForCheckout[0],
+              price: {
+                currency: productQuotesForCheckout[0].price.currency,
+                value: String(productQuotesForCheckout[0].price.value),
+              },
+            },
+            providers: await getItemProviderId(item),
+          },
+        },
+      ];
+      source.current = CancelToken.source();
+
       if (method === ORDER_PAYMENT_METHODS.PREPAID) {
-        console.log(JSON.stringify(deliveryAddress, undefined, 4));
         source.current = CancelToken.source();
-        const createUrl = `${API_BASE_URL}${CREATE_PAYMENT}${parentOrderIDMap.get(
-          item?.provider?.id,
-        ).transaction_id}`;
+        const createUrl = `${API_BASE_URL}${CREATE_PAYMENT}${
+          parentOrderIDMap.get(item?.provider?.id).transaction_id
+        }`;
         const createPaymentResponse = await postDataWithAuth(
           createUrl,
           {
@@ -154,62 +191,36 @@ export default (closePaymentSheet: () => void) => {
           },
         };
         const razorpayResponse = await RazorpayCheckout.open(options);
-        console.log(
-          'razorpayResponse',
-          JSON.stringify(razorpayResponse, undefined, 4),
+        const {data} = await postDataWithAuth(
+          `${API_BASE_URL}${VERIFY_PAYMENT}`,
+          {
+            confirmRequest: queryParams,
+            razorPayRequest: razorpayResponse,
+          },
+          source.current.token,
         );
+        const isNACK = data.find((one: any) => one.error && one.code !== '');
+        if (isNACK) {
+          showToastWithGravity(isNACK.error.message);
+          setConfirmOrderLoading(false);
+        } else {
+          onConfirm(data?.map((txn: any) => txn?.context?.message_id));
+        }
+      } else {
+        const {data} = await postDataWithAuth(
+          `${API_BASE_URL}${CONFIRM_ORDER}`,
+          queryParams,
+          source.current.token,
+        );
+        const isNACK = data.find((one: any) => one.error && one.code !== '');
+        if (isNACK) {
+          showToastWithGravity(isNACK.error.message);
+          setConfirmOrderLoading(false);
+        } else {
+          onConfirm(data?.map((txn: any) => txn?.context?.message_id));
+        }
       }
-
-      // const queryParams: any = [
-      //   {
-      //     context: {
-      //       domain: item.domain,
-      //       city: contextCity || deliveryAddress.address.city,
-      //       state: deliveryAddress.address.state,
-      //       pincode: deliveryAddress.address.areaCode,
-      //       parent_order_id: parentOrderIDMap.get(item?.provider?.id)
-      //         .parent_order_id,
-      //       transaction_id: parentOrderIDMap.get(item?.provider?.id)
-      //         .transaction_id,
-      //     },
-      //     message: {
-      //       payment: {
-      //         ...payment,
-      //         paid_amount: Number(productQuotesForCheckout[0]?.price?.value),
-      //         type:
-      //           method === ORDER_PAYMENT_METHODS.COD
-      //             ? 'ON-FULFILLMENT'
-      //             : 'ON-ORDER',
-      //         transaction_id: parentOrderIDMap.get(item?.provider?.id)
-      //           .transaction_id,
-      //         paymentGatewayEnabled: false,
-      //       },
-      //       quote: {
-      //         ...productQuotesForCheckout[0],
-      //         price: {
-      //           currency: productQuotesForCheckout[0].price.currency,
-      //           value: String(productQuotesForCheckout[0].price.value),
-      //         },
-      //       },
-      //       providers: await getItemProviderId(item),
-      //     },
-      //   },
-      // ];
-      // source.current = CancelToken.source();
-      // const {data} = await postDataWithAuth(
-      //   `${API_BASE_URL}${CONFIRM_ORDER}`,
-      //   queryParams,
-      //   source.current.token,
-      // );
-      // const isNACK = data.find((one: any) => one.error && one.code !== '');
-      // if (isNACK) {
-      //   showToastWithGravity(isNACK.error.message);
-      //   setConfirmOrderLoading(false);
-      // } else {
-      //   onConfirm(data?.map((txn: any) => txn?.context?.message_id));
-      // }
     } catch (err: any) {
-      console.log(err);
       showToastWithGravity(err?.response?.data?.error?.message);
       setConfirmOrderLoading(false);
       handleApiError(err);

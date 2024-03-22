@@ -108,7 +108,6 @@ const Payment: React.FC<Payment> = ({
         `${API_BASE_URL}${ON_INITIALIZE}${messageId}`,
         source.current.token,
       );
-      console.log('Init response', JSON.stringify(data, undefined, 4));
       responseRef.current = [...responseRef.current, data[0]];
       setEventData([...eventData, data[0]]);
 
@@ -417,6 +416,7 @@ const makeStyles = (colors: any) =>
       borderWidth: 1,
       paddingTop: 6,
       width: '100%',
+      alignItems: 'center',
     },
     selectedOption: {
       borderColor: colors.primary,

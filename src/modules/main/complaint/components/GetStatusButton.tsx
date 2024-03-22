@@ -54,7 +54,6 @@ const GetStatusButton = ({
       ];
       setStatusLoading(false);
       if (data?.message) {
-        console.log(JSON.stringify(data.message, undefined, 4));
         // mergeRespondantArrays({
         //   respondent_actions:
         //     data.message.issue?.issue_actions.respondent_actions,

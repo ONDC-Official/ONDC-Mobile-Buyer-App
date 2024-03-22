@@ -26,7 +26,6 @@ export const tryLocalSignIn = (
         dispatch({type: 'save_user', payload});
 
         getStoredData('appLanguage').then(language => {
-          console.log('appLanguage', language);
           if (!language) {
             navigation.reset({
               index: 0,

@@ -102,7 +102,10 @@ const NonCancelledOrder = ({
         />
         <PaymentMethod
           payment={orderDetails?.payment}
-          address={orderDetails?.fulfillments[0]?.end?.location?.address}
+          address={
+            orderDetails?.fulfillments[0]?.end?.location?.address ??
+            orderDetails?.billing?.address
+          }
           contact={orderDetails?.fulfillments[0]?.end?.contact}
         />
         <RaiseIssueButton getOrderDetails={getOrderDetails} />

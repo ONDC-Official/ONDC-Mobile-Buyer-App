@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import {I18nContext, initReactI18next} from 'react-i18next';
+import {initReactI18next} from 'react-i18next';
 import en from './en.json';
 import hi from './hi.json';
 import ma from './ma.json';
@@ -29,10 +29,7 @@ i18n
       },
     },
   });
-// }
-console.log(i18n);
 
-// @TODO: Add logic to change language based on Async storage value
-i18n.changeLanguage('en');
+i18n.changeLanguage('en').then(() => {});
 
 export default i18n;
