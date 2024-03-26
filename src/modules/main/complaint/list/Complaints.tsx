@@ -2,7 +2,9 @@ import React, {memo, useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import axios from 'axios';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
+
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {keyExtractor, skeletonList} from '../../../../utils/utils';
@@ -12,7 +14,6 @@ import ComplaintSkeleton from '../components/ComplaintSkeleton';
 import ListFooter from '../../order/components/ListFooter';
 import Complaint from '../components/Complaint';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 const CancelToken = axios.CancelToken;
 
@@ -22,6 +23,7 @@ const CancelToken = axios.CancelToken;
  * @returns {JSX.Element}
  */
 const Complaints: React.FC<any> = () => {
+  const navigation = useNavigation();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -98,6 +100,12 @@ const Complaints: React.FC<any> = () => {
         });
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Profile.Complaints'),
+    });
+  }, []);
 
   const onRefreshHandler = () => {
     pageNumber.current = 1;

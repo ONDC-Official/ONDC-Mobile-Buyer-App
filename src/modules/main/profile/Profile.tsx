@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Avatar, Text} from 'react-native-paper';
 
 import {getUserInitials} from '../../../utils/utils';
 import {useAppTheme} from '../../../utils/theme';
+import {useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 /**
  * Component to render profile screen which shows user profile
@@ -12,9 +14,17 @@ import {useAppTheme} from '../../../utils/theme';
  * @returns {JSX.Element}
  */
 const Profile = () => {
+  const navigation = useNavigation();
+  const {t} = useTranslation();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
   const {name, emailId, photoURL} = useSelector(({authReducer}) => authReducer);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Profile.My Profile'),
+    });
+  }, []);
 
   return (
     <View style={styles.container}>

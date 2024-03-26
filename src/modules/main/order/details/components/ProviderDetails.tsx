@@ -6,7 +6,7 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {FB_DOMAIN} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
-import { useTranslation } from "react-i18next";
+import {useTranslation} from 'react-i18next';
 
 const ProviderDetails = ({
   bppId,

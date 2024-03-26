@@ -5,13 +5,14 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import React, {useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
+// @ts-ignore
+import RNEventSource from 'react-native-event-source';
+import {useTranslation} from 'react-i18next';
+
 import {API_BASE_URL, RAISE_ISSUE} from '../../../../../utils/apiActions';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {showToastWithGravity} from '../../../../../utils/utils';
-// @ts-ignore
-import RNEventSource from 'react-native-event-source';
 import {useAppTheme} from '../../../../../utils/theme';
-import { useTranslation } from "react-i18next";
 
 const CancelToken = axios.CancelToken;
 const CloseForm = ({

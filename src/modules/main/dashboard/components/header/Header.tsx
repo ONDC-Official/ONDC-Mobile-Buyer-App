@@ -6,7 +6,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import ONDCLogo from '../../../../../assets/app_logo.svg';
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 type HeaderProps = {
   disableAddress?: boolean;
@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
             inputStyle={styles.searchInput}
             style={styles.search}
             placeholderTextColor={theme.colors.primary}
-            placeholder={t("Home.Search")}
+            placeholder={t('Home.Search')}
             value={''}
           />
         </TouchableOpacity>

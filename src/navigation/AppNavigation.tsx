@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 
 import Login from '../modules/authentication/login/Login';
 import SignUp from '../modules/authentication/signUp/SignUp';
@@ -34,7 +35,6 @@ import StoresNearMe from '../modules/main/stores/StoresNearMe';
 import ShopByCategory from '../modules/main/category/ShopByCategory';
 import {theme} from '../utils/theme';
 import FeaturedCategories from '../modules/main/category/FeaturedCategories';
-import {useTranslation} from 'react-i18next';
 
 const Stack = createStackNavigator();
 
@@ -60,6 +60,7 @@ const headerStyle = {
  */
 const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
   const {t} = useTranslation();
+  console.log(t('Address List.Delivery Address'));
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>
@@ -92,14 +93,14 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="Cart"
           component={Cart}
           options={{
-            title: t('Cart.My Cart'),
+            title: '',
           }}
         />
         <Stack.Screen
           name="AddDefaultAddress"
           component={AddDefaultAddress}
           options={{
-            title: t('Address Form.Add Address'),
+            title: '',
           }}
         />
         <Stack.Screen
@@ -114,7 +115,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="AddressList"
           component={AddressList}
           options={{
-            title: t('Address List.Delivery Address'),
+            title: '',
           }}
         />
 
@@ -122,7 +123,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="MyProfile"
           component={Profile}
           options={{
-            title: t('Profile.My Profile'),
+            title: '',
           }}
         />
 
@@ -130,7 +131,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="ChooseLanguage"
           component={ChooseLanguage}
           options={{
-            title: t('Choose Language.Choose Language'),
+            title: '',
           }}
         />
 
@@ -138,7 +139,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="Complaints"
           component={Complaints}
           options={{
-            title: t('Profile.Complaints'),
+            title: '',
           }}
         />
 
@@ -146,7 +147,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="ComplaintDetails"
           component={ComplaintDetails}
           options={{
-            title: 'Complaint Details',
+            title: '',
           }}
         />
 
@@ -154,7 +155,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="Orders"
           component={Orders}
           options={{
-            title: t('Profile.Order History'),
+            title: '',
           }}
         />
 
@@ -245,21 +246,21 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="StoresNearMe"
           component={StoresNearMe}
           options={{
-            title: t('Stores Near me.Stores Near me'),
+            title: '',
           }}
         />
         <Stack.Screen
           name="ShopByCategory"
           component={ShopByCategory}
           options={{
-            title: t('Product SubCategories.Shop by Category'),
+            title: '',
           }}
         />
         <Stack.Screen
           name="FeaturedCategories"
           component={FeaturedCategories}
           options={{
-            title: t('Featured Categories.Featured Categories'),
+            title: '',
           }}
         />
       </Stack.Navigator>

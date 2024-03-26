@@ -138,13 +138,13 @@ const Fulfillment: React.FC<Fulfillment> = ({
                 )}
               </Text>
               <View style={styles.exploreButtonContainer}>
-              <TouchableOpacity
-                style={styles.exploreButton}
-                onPress={exploreOtherStores}>
-                <Text variant={'bodyLarge'} style={styles.buttonLabel}>
-                  {t('Fulfillment.Explore Other Stores')}
-                </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.exploreButton}
+                  onPress={exploreOtherStores}>
+                  <Text variant={'bodyLarge'} style={styles.buttonLabel}>
+                    {t('Fulfillment.Explore Other Stores')}
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           ) : (

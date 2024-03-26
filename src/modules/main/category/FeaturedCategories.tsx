@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
@@ -18,6 +18,12 @@ const FeaturedCategories = () => {
   const navigateToCategoryDetails = (category: string, domain: string) => {
     navigation.navigate('CategoryDetails', {category, domain});
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Featured Categories.Featured Categories'),
+    });
+  }, []);
 
   return (
     <FlatList

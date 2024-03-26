@@ -3,8 +3,6 @@ import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-
-import {getStoredData} from '../../../utils/storage';
 import Config from '../../../../config';
 import useStoreUserAndNavigate from '../../../hooks/useStoreUserAndNavigate';
 

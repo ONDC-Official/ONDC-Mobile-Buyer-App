@@ -5,10 +5,10 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Dialog, Portal, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import FastImage from 'react-native-fast-image';
+import {useTranslation} from 'react-i18next';
 
 import {makeGlobalStyles} from '../../styles/styles';
 import {useAppTheme} from '../../utils/theme';
-import { useTranslation } from "react-i18next";
 
 interface VariationsRenderer {
   product: any;

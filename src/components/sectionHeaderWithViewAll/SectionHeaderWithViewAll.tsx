@@ -2,7 +2,7 @@ import {Text} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useAppTheme} from '../../utils/theme';
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 const SectionHeaderWithViewAll = ({
   title,

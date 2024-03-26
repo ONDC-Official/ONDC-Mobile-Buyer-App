@@ -5,7 +5,7 @@ import {useSelector} from 'react-redux';
 import moment from 'moment';
 import CancelOrderButton from './CancelOrderButton';
 import {useAppTheme} from '../../../../../utils/theme';
-import { useTranslation } from "react-i18next";
+import {useTranslation} from 'react-i18next';
 
 const OrderMeta = () => {
   const {t} = useTranslation();

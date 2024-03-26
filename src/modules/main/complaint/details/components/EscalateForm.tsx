@@ -17,7 +17,7 @@ import RNEventSource from 'react-native-event-source';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
 import InputField from '../../../../../components/input/InputField';
-import { useTranslation } from "react-i18next";
+import {useTranslation} from 'react-i18next';
 
 const CancelToken = axios.CancelToken;
 const EscalateForm = ({
