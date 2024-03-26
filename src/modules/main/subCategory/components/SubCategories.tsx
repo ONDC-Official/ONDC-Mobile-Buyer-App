@@ -80,7 +80,7 @@ const SubCategories: React.FC<SubCategories> = ({
                   ? styles.selected
                   : styles.normal,
               ]}>
-              <FastImage source={{uri: item?.imageUrl}} style={styles.image} />
+              <FastImage source={item.imageUrl} style={styles.image} />
             </View>
             <Text
               variant={'labelLarge'}

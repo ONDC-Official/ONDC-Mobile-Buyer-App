@@ -4,9 +4,10 @@ import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
+
 import {CATEGORIES} from '../../../utils/categories';
 import {useAppTheme} from '../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 const FeaturedCategories = () => {
   const {t} = useTranslation();

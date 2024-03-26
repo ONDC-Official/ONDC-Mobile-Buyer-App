@@ -26,18 +26,6 @@ export default () => {
       const idTokenResult = await auth()?.currentUser?.getIdTokenResult();
 
       await storeDetails(idTokenResult, auth()?.currentUser);
-      const address = await getStoredData('address');
-      if (address) {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Dashboard'}],
-        });
-      } else {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'AddressList', params: {navigateToDashboard: true}}],
-        });
-      }
     } catch (error) {
       console.log(error);
     }
