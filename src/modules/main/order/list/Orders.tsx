@@ -2,7 +2,7 @@ import React, {memo, useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import axios from 'axios';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {keyExtractor, skeletonList} from '../../../../utils/utils';
@@ -12,7 +12,7 @@ import Order from '../components/Order';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
 import {useAppTheme} from '../../../../utils/theme';
-import { useTranslation } from "react-i18next";
+import {useTranslation} from 'react-i18next';
 
 const CancelToken = axios.CancelToken;
 
@@ -22,6 +22,7 @@ const CancelToken = axios.CancelToken;
  * @returns {JSX.Element}
  */
 const Orders: React.FC<any> = () => {
+  const navigation = useNavigation();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -95,6 +96,12 @@ const Orders: React.FC<any> = () => {
         });
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Profile.Order History'),
+    });
+  }, []);
 
   const onRefreshHandler = () => {
     pageNumber.current = 1;

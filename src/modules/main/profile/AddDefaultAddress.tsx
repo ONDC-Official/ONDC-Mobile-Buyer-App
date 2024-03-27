@@ -1,6 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
+import {useTranslation} from 'react-i18next';
+
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../utils/apiActions';
 import {setStoredData} from '../../../utils/storage';
@@ -29,6 +31,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
 }) => {
   const dispatch = useDispatch();
   const {} = useRefreshToken();
+  const {t} = useTranslation();
   const source = useRef<any>(null);
   const {name, emailId} = useSelector(({authReducer}) => authReducer);
   const {postDataWithAuth} = useNetworkHandling();
@@ -101,6 +104,12 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
       tag: '',
     });
   }, [emailId, name]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Address Form.Add Address'),
+    });
+  }, []);
 
   return (
     <AddressForm

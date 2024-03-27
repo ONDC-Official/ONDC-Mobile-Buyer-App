@@ -45,7 +45,6 @@ interface Address {
 
 interface AddressList {
   navigation: any;
-  theme: any;
   route: any;
 }
 
@@ -130,6 +129,12 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
       />
     );
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Address List.Delivery Address'),
+    });
+  }, []);
 
   const list = apiInProgress ? skeletonList : addresses;
 

@@ -1,18 +1,19 @@
-import React from 'react';
-import {StyleSheet, View, FlatList, TouchableOpacity} from 'react-native';
+import React, {useEffect} from 'react';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';
-import {useAppTheme} from '../../../utils/theme';
 import i18n from 'i18next';
+
+import {useAppTheme} from '../../../utils/theme';
 import {setStoredData} from '../../../utils/storage';
 
 const ChooseLanguage = () => {
   const theme = useAppTheme();
   const {address} = useSelector(({addressReducer}) => addressReducer);
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const {t} = useTranslation();
   const styles = makeStyles(theme.colors);
 
@@ -39,22 +40,28 @@ const ChooseLanguage = () => {
     {
       title: t('Choose Language.Hindi'),
       onPress: () => {
-        handleChangeLanguage('hi').then(r => {});
+        handleChangeLanguage('hi').then(() => {});
       },
     },
     {
       title: t('Choose Language.English'),
       onPress: () => {
-        handleChangeLanguage('en').then(r => {});
+        handleChangeLanguage('en').then(() => {});
       },
     },
     {
       title: t('Choose Language.Marathi'),
       onPress: () => {
-        handleChangeLanguage('ma').then(r => {});
+        handleChangeLanguage('ma').then(() => {});
       },
     },
   ];
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Choose Language.Choose Language'),
+    });
+  }, []);
 
   return (
     <View style={styles.container}>

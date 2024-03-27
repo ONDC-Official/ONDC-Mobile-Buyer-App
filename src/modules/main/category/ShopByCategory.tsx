@@ -26,6 +26,12 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
     setSubCategories(PRODUCT_SUBCATEGORY[params.category]);
   }, [params.category]);
 
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Product SubCategories.Shop by Category'),
+    });
+  }, []);
+
   return (
     <FlatList
       showsVerticalScrollIndicator={false}

@@ -4,10 +4,10 @@ import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
 import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
 import {useAppTheme} from '../../../../utils/theme';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
-import {useTranslation} from 'react-i18next';
 
 interface SubCategories {
   currentCategory: string;
@@ -58,10 +58,7 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
                 index === 3 || index === 7 ? styles.alignEnd : {},
               ]}
               onPress={() => navigateToSubCategory(item)}>
-              <FastImage
-                source={{uri: item?.imageUrl}}
-                style={styles.brandImage}
-              />
+              <FastImage source={item.imageUrl} style={styles.brandImage} />
               <Text variant={'labelLarge'} style={styles.name}>
                 {t(`Product SubCategories.${item.key}`)}
               </Text>
@@ -82,7 +79,6 @@ const makeStyles = (colors: any) =>
       marginTop: 12,
       flexDirection: 'row',
       flexWrap: 'wrap',
-      // justifyContent: 'space-between',
     },
     title: {
       color: colors.neutral400,

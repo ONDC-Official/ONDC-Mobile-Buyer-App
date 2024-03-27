@@ -1,8 +1,9 @@
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
-import {getStoredData, saveMultipleData} from '../utils/storage';
 import uuid from 'react-native-uuid';
-import i18n from '../i18n';
+
+import {saveMultipleData} from '../utils/storage';
+import {checkLanguageAndLogin} from '../redux/auth/actions';
 
 export default () => {
   const navigation = useNavigation<any>();
@@ -40,31 +41,7 @@ export default () => {
       };
       dispatch({type: 'set_login_details', payload});
 
-      getStoredData('appLanguage').then(language => {
-        if (!language) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'ChooseLanguage'}],
-          });
-        } else {
-          i18n.changeLanguage(language);
-          getStoredData('address').then(address => {
-            if (address) {
-              navigation.reset({
-                index: 0,
-                routes: [{name: 'Dashboard'}],
-              });
-            } else {
-              navigation.reset({
-                index: 0,
-                routes: [
-                  {name: 'AddressList', params: {navigateToDashboard: true}},
-                ],
-              });
-            }
-          });
-        }
-      });
+      checkLanguageAndLogin(navigation);
     } catch (error) {
       console.error(error);
     }

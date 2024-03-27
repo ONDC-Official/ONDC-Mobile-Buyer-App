@@ -2,8 +2,9 @@ import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
+
 import {useAppTheme} from '../../../../../utils/theme';
-import { useTranslation } from "react-i18next";
 
 const CancelOrderButton = () => {
   const {t} = useTranslation();

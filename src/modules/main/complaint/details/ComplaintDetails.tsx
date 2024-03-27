@@ -3,6 +3,9 @@ import {useSelector} from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import {Button, List, Modal, Portal, Text} from 'react-native-paper';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
+import {useNavigation} from '@react-navigation/native';
+
 import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
@@ -10,7 +13,6 @@ import GetStatusButton from '../components/GetStatusButton';
 import ComplaintStatus from '../components/ComplaintStatus';
 import EscalateForm from './components/EscalateForm';
 import CloseForm from './components/CloseForm';
-import {useTranslation} from 'react-i18next';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -23,6 +25,7 @@ const categories = ISSUE_TYPES.map(item => {
 }).flat();
 
 const ComplaintDetails = () => {
+  const navigation = useNavigation();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -63,6 +66,12 @@ const ComplaintDetails = () => {
       mergeIssueActions(complaintDetails?.issue_actions);
     }
   }, [complaintDetails]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Complaint Details.Complaint Details'),
+    });
+  }, []);
 
   return (
     <>

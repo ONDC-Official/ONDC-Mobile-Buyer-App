@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useAppTheme} from '../../../../../utils/theme';
-import { useTranslation } from "react-i18next";
+import {useTranslation} from 'react-i18next';
 
 const ReturnDetails = ({fulfilmentId}: {fulfilmentId: string}) => {
   const {t} = useTranslation();

@@ -2,10 +2,7 @@ import * as Yup from 'yup';
 
 export const validationSchema = Yup.object({
   name: Yup.string().trim().required('Please enter Name'),
-  email: Yup.string()
-    .trim()
-    .email('Please enter valid email address')
-    .required('Please enter Email'),
+  email: Yup.string().trim().email('Please enter valid email address'),
   number: Yup.string()
     .trim()
     .matches(/^[6-9]{1}[0-9]{9}$/, 'Invalid number')

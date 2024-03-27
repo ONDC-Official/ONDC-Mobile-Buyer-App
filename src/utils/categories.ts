@@ -72,112 +72,98 @@ export const CATEGORIES: any = [
     domain: 'ONDC:RET15',
   },
 ];
+
 export const PRODUCT_SUBCATEGORY: any = {
   Grocery: [
     {
       value: 'Fruits and Vegetables',
       key: 'Fruits and Vegetables',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Fruits and Vegetables.png',
+      imageUrl: require('../assets/subCategories/grocery/FruitsVegetables.png'),
     },
     {
       value: 'Masala & Seasoning',
       key: 'Masala & Seasoning',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Masala And Seasoning.png',
+      imageUrl: require('../assets/subCategories/grocery/MasalaSeasoning.png'),
     },
     {
       value: 'Oil & Ghee',
       key: 'Oil & Ghee',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Oil And Ghee.png',
+      imageUrl: require('../assets/subCategories/grocery/OilGhee.png'),
     },
     {
       value: 'Gourmet & World Foods',
       key: 'Gourmet & World Foods',
       protocolKey: '@ondc/org/statutory_reqs_prepackaged_food',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Gourmet And World Foods.png',
+      imageUrl: require('../assets/subCategories/grocery/GourmetWorldFoods.png'),
     },
     {
       value: 'Foodgrains',
       key: 'Foodgrains',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Foodgrains.png',
+      imageUrl: require('../assets/subCategories/grocery/Foodgrains.png'),
     },
     {
       value: 'Eggs, Meat & Fish',
       key: 'Eggs, Meat & Fish',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Eggs, Meat And Fish.png',
+      imageUrl: require('../assets/subCategories/grocery/EggsMeatFish.png'),
     },
     {
       value: 'Cleaning & Household',
       key: 'Cleaning & Household',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Cleaning And Household.png',
+      imageUrl: require('../assets/subCategories/grocery/CleaningHousehold.png'),
     },
     {
       value: 'Beverages',
       key: 'Beverages',
       protocolKey: '@ondc/org/statutory_reqs_prepackaged_food',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Beverages.png',
+      imageUrl: require('../assets/subCategories/grocery/CleaningHousehold.png'),
     },
     {
       value: 'Beauty & Hygiene',
       key: 'Beauty & Hygiene',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Beauty And Hygiene.png',
+      imageUrl: require('../assets/subCategories/grocery/BeautyHygiene.png'),
     },
     {
       value: 'Bakery, Cakes & Dairy',
       key: 'Bakery, Cakes & Dairy',
       protocolKey: '@ondc/org/statutory_reqs_prepackaged_food',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Bakery, Cakes And Dairy.png',
+      imageUrl: require('../assets/subCategories/grocery/BakeryCakesDairy.png'),
     },
     {
       value: 'Kitchen Accessories',
       key: 'Kitchen Accessories',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Kitchen Accessories.png',
+      imageUrl: require('../assets/subCategories/grocery/KitchenAccessories.png'),
     },
     {
       value: 'Baby Care',
       key: 'Baby Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Baby Care.png',
+      imageUrl: require('../assets/subCategories/grocery/BabyCare.png'),
     },
     {
       value: 'Snacks & Branded Foods',
       key: 'Snacks & Branded Foods',
       protocolKey: '@ondc/org/statutory_reqs_prepackaged_food',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Snacks And Branded Foods.png',
+      imageUrl: require('../assets/subCategories/grocery/SnacksBrandedFoods.png'),
     },
     {
       value: 'Pet Care',
       key: 'Pet Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Pet Care.png',
+      imageUrl: require('../assets/subCategories/grocery/PetCare.png'),
     },
     {
       value: 'Stationery',
       key: 'Stationery',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Grocery/Stationery.png',
+      imageUrl: require('../assets/subCategories/grocery/Stationery.png'),
     },
   ],
   Appliances: [
@@ -185,113 +171,97 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Audio',
       key: 'Audio',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Audio.png',
+      imageUrl: require('../assets/subCategories/electronics/Audio.png'),
     },
     {
       value: 'Camera and Camcorder',
       key: 'Camera and Camcorder',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Camera and Camcorder.png',
+      imageUrl: require('../assets/subCategories/electronics/CameraCamcorder.png'),
     },
     {
       value: 'Safety Security',
       key: 'Safety Security',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Safety Security.png',
+      imageUrl: require('../assets/subCategories/electronics/SafetySecurity.png'),
     },
     {
       value: 'Speaker',
       key: 'Speaker',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Speaker.png',
+      imageUrl: require('../assets/subCategories/electronics/Speaker.png'),
     },
     {
       value: 'Television',
       key: 'Television',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Television.png',
+      imageUrl: require('../assets/subCategories/electronics/Television.png'),
     },
     {
       value: 'Video',
       key: 'Video',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Video.png',
+      imageUrl: require('../assets/subCategories/electronics/Video.png'),
     },
     {
       value: 'Air Conditioning and Air Cleaners',
       key: 'Air Conditioning and Air Cleaners',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Air Conditioning and Air Cleaners.png',
+      imageUrl: require('../assets/subCategories/electronics/AirConditioningAirCleaners.png'),
     },
     {
       value: 'Health, Home and Personal Care',
       key: 'Health, Home and Personal Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Health, Home and Personal Care.png',
+      imageUrl: require('../assets/subCategories/electronics/HealthHomePersonalCare.png'),
     },
     {
       value: 'Heaters',
       key: 'Heaters',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Heaters.png',
+      imageUrl: require('../assets/subCategories/electronics/Heaters.png'),
     },
     {
       value: 'Kitchen Appliances',
       key: 'Kitchen Appliances',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Kitchen Appliances.png',
+      imageUrl: require('../assets/subCategories/electronics/KitchenAppliances.png'),
     },
     {
       value: 'Lighting & Electric Fans',
       key: 'Lighting & Electric Fans',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Lighting & Electric Fans.png',
+      imageUrl: require('../assets/subCategories/electronics/LightingElectricFans.png'),
     },
     {
       value: 'Refrigerators and Freezers',
       key: 'Refrigerators and Freezers',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Refrigerators and Freezers.png',
+      imageUrl: require('../assets/subCategories/electronics/RefrigeratorsFreezers.png'),
     },
     {
       value: 'Vacuum Cleaners',
       key: 'Vacuum Cleaners',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Vacuum Cleaners.png',
+      imageUrl: require('../assets/subCategories/electronics/VacuumCleaners.png'),
     },
     {
       value: 'Washing Machines and Accessories',
       key: 'Washing Machines and Accessories',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Washing Machines and Accessories.png',
+      imageUrl: require('../assets/subCategories/electronics/WashingMachinesAccessories.png'),
     },
     {
       value: 'Water Purifiers and Coolers',
       key: 'Water Purifiers and Coolers',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Water Purifiers and Coolers.png',
+      imageUrl: require('../assets/subCategories/electronics/WaterPurifiersCoolers.png'),
     },
     {
       value: 'Inverter & Stabilizer',
       key: 'Inverter & Stabilizer',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Inverter & Stabilizer.png',
+      imageUrl: require('../assets/subCategories/electronics/InverterStabilizer.png'),
     },
   ],
   BPC: [
@@ -299,85 +269,73 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Bath & Body',
       key: 'Bath & Body',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Bath & Body.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/BathBody.png'),
     },
     {
       value: 'Feminine Care',
       key: 'Feminine Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Feminine Care.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/FeminineCare.png'),
     },
     {
       value: 'Fragrance',
       key: 'Fragrance',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Fragrance.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/Fragrance.png'),
     },
     {
       value: 'Hair Care',
       key: 'Hair Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Hair Care.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/HairCare.png'),
     },
     {
       value: 'Make Up',
       key: 'Make Up',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Make Up.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/MakeUp.png'),
     },
     {
       value: "Men's Grooming",
       key: "Men's Grooming",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Men's Grooming.png",
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/MensGrooming.png'),
     },
     {
       value: 'Oral Care',
       key: 'Oral Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Oral Care.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/OralCare.png'),
     },
     {
       value: 'Skin Care',
       key: 'Skin Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Skin Care.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/SkinCare.png'),
     },
     {
       value: 'Maternity Care',
       key: 'Maternity Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Maternity Care.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/MaternityCare.png'),
     },
     {
       value: 'Nursing & Feeding',
       key: 'Nursing & Feeding',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Nursing & Feeding.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/NursingFeeding.png'),
     },
     {
       value: 'Sexual Wellness & Sensuality',
       key: 'Sexual Wellness & Sensuality',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Sexual Wellness & Sensuality.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/SexualWellnessSensuality.png'),
     },
     {
       value: 'Tools & Accessories',
       key: 'Tools & Accessories',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Beauty & Personal Care/Tools & Accessories.png',
+      imageUrl: require('../assets/subCategories/beautyPersonalCare/ToolsAccessories.png'),
     },
   ],
   Fashion: [
@@ -385,232 +343,199 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: "Men's Fashion Accessories",
       key: "Men's Fashion Accessories",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Men's Fashion Accessories.png",
+      imageUrl: require('../assets/subCategories/fashion/MensFashionAccessories.png'),
     },
     {
       value: "Men's Footwear Accessories",
       key: "Men's Footwear Accessories",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Men's Footwear Accessories.png",
+      imageUrl: require('../assets/subCategories/fashion/MensFootwearAccessories.png'),
     },
     {
       value: "Men's Topwear",
       key: "Men's Topwear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Men's Topwear.png",
+      imageUrl: require('../assets/subCategories/fashion/MensTopwear.png'),
     },
     {
       value: "Men's Bottomwear",
       key: "Men's Bottomwear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Men's Bottomwear.png",
+      imageUrl: require('../assets/subCategories/fashion/MensBottomwear.png'),
     },
     {
       value: "Men's Innerwear & Sleepwear",
       key: "Men's Innerwear & Sleepwear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Men's Innerwear & Sleepwear.png",
+      imageUrl: require('../assets/subCategories/fashion/MensInnerwearSleepwear.png'),
     },
     {
       value: "Men's Bags & Luggage",
       key: "Men's Bags & Luggage",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Men's Bags & Luggage.png",
+      imageUrl: require('../assets/subCategories/fashion/MensBagsLuggage.png'),
     },
     {
       value: "Men's Eyewear",
       key: "Men's Eyewear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Men's Eyewear.png",
+      imageUrl: require('../assets/subCategories/fashion/MensEyewear.png'),
     },
     {
       value: "Men's Footwear",
       key: "Men's Footwear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Men's Footwear.png",
+      imageUrl: require('../assets/subCategories/fashion/MensFootwear.png'),
     },
     {
       value: "Men's Jewellery",
       key: "Men's Jewellery",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Men's Jewellery.png",
+      imageUrl: require('../assets/subCategories/fashion/MensJewellery.png'),
     },
     {
       value: "Women's Fashion Accessories",
       key: "Women's Fashion Accessories",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Women's Fashion Accessories.png",
+      imageUrl: require('../assets/subCategories/fashion/WomensFashionAccessories.png'),
     },
     {
       value: "Women's Footwear Accessories",
       key: "Women's Footwear Accessories",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Women's Footwear Accessories.png",
+      imageUrl: require('../assets/subCategories/fashion/WomensFootwearAccessories.png'),
     },
     {
       value: "Women's Indian & Fusion Wear",
       key: "Women's Indian & Fusion Wear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Women's Indian & Fusion Wear.png",
+      imageUrl: require('../assets/subCategories/fashion/WomensIndianFusionWear.png'),
     },
     {
       value: "Women's Western Wear",
       key: "Women's Western Wear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Women's Western Wear.png",
+      imageUrl: require('../assets/subCategories/fashion/WomensWesternWear.png'),
     },
     {
       value: "Women's Lingerie & Sleepwear",
       key: "Women's Lingerie & Sleepwear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Women's Lingerie & Sleepwear.png",
+      imageUrl: require('../assets/subCategories/fashion/WomensLingerieSleepwear.png'),
     },
     {
       value: "Women's Bags & Luggage",
       key: "Women's Bags & Luggage",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Women's Bags & Luggage.png",
+      imageUrl: require('../assets/subCategories/fashion/WomensBagsLuggage.png'),
     },
     {
       value: "Women's Eyewear",
       key: "Women's Eyewear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Women's Eyewear.png",
+      imageUrl: require('../assets/subCategories/fashion/WomensEyewear.png'),
     },
     {
       value: "Women's Footwear",
       key: "Women's Footwear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Women's Footwear.png",
+      imageUrl: require('../assets/subCategories/fashion/WomensFootwear.png'),
     },
     {
       value: "Women's Jewellery",
       key: "Women's Jewellery",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Women's Jewellery.png",
+      imageUrl: require('../assets/subCategories/fashion/WomensJewellery.png'),
     },
     {
       value: "Boy's Clothing",
       key: "Boy's Clothing",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Boy's Clothing.png",
+      imageUrl: require('../assets/subCategories/fashion/BoysClothing.png'),
     },
     {
       value: "Boy's Footwear",
       key: "Boy's Footwear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Boy's Footwear.png",
+      imageUrl: require('../assets/subCategories/fashion/BoysFootwear.png'),
     },
     {
       value: "Girl's Clothing",
       key: "Girl's Clothing",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Girl's Clothing.png",
+      imageUrl: require('../assets/subCategories/fashion/GirlsClothing.png'),
     },
     {
       value: "Girl's Footwear",
       key: "Girl's Footwear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Girl's Footwear.png",
+      imageUrl: require('../assets/subCategories/fashion/GirlsFootwear.png'),
     },
     {
       value: "Infant's Wear",
       key: "Infant's Wear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Infant's Wear.png",
+      imageUrl: require('../assets/subCategories/fashion/InfantsWear.png'),
     },
     {
       value: 'Infant Care & Accessories',
       key: 'Infant Care & Accessories',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Infant Care & Accessories.png',
+      imageUrl: require('../assets/subCategories/fashion/InfantCareAccessories.png'),
     },
     {
       value: 'Infant Feeding & Nursing Essentials',
       key: 'Infant Feeding & Nursing Essentials',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Infant Feeding & Nursing Essentials.png',
+      imageUrl: require('../assets/subCategories/fashion/InfantFeedingNursingEssentials.png'),
     },
     {
       value: 'Infant Bath Accessories',
       key: 'Infant Bath Accessories',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Infant Bath Accessories.png',
+      imageUrl: require('../assets/subCategories/fashion/InfantBathAccessories.png'),
     },
     {
       value: 'Infant Health & Safety',
       key: 'Infant Health & Safety',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Infant Health & Safety.png',
+      imageUrl: require('../assets/subCategories/fashion/InfantHealthSafety.png'),
     },
     {
       value: 'Infant Diapers & Toilet Training',
       key: 'Infant Diapers & Toilet Training',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Infant Diapers & Toilet Training.png',
+      imageUrl: require('../assets/subCategories/fashion/InfantDiapersToiletTraining.png'),
     },
     {
       value: "Kid's Towels & Wrappers",
       key: "Kid's Towels & Wrappers",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Kid's Towels & Wrappers.png",
+      imageUrl: require('../assets/subCategories/fashion/KidsTowelsWrappers.png'),
     },
     {
       value: "Kid's Fashion Accessories",
       key: "Kid's Fashion Accessories",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Kid's Fashion Accessories.png",
+      imageUrl: require('../assets/subCategories/fashion/KidsFashionAccessories.png'),
     },
     {
       value: "Kid's Jewellery",
       key: "Kid's Jewellery",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Kid's Jewellery.png",
+      imageUrl: require('../assets/subCategories/fashion/KidsJewellery.png'),
     },
     {
       value: "Kid's Eyewear",
       key: "Kid's Eyewear",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Kid's Eyewear.png",
+      imageUrl: require('../assets/subCategories/fashion/KidsEyewear.png'),
     },
     {
       value: "Kid's Bags & Luggage",
       key: "Kid's Bags & Luggage",
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        "https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Fashion/Kid's Bags & Luggage.png",
+      imageUrl: require('../assets/subCategories/fashion/KidsBagsLuggage.png'),
     },
   ],
   'Home & Decor': [
@@ -618,57 +543,49 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Home Decor',
       key: 'Home Decor',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Home & Decor/Home Decor.png',
+      imageUrl: require('../assets/subCategories/homeDecor/HomeDecor.png'),
     },
     {
       value: 'Home Furnishings',
       key: 'Home Furnishings',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Home & Decor/Home Furnishings.png',
+      imageUrl: require('../assets/subCategories/homeDecor/HomeFurnishings.png'),
     },
     {
       value: 'Furniture',
       key: 'Furniture',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Home & Decor/Furniture.png',
+      imageUrl: require('../assets/subCategories/homeDecor/Furniture.png'),
     },
     {
       value: 'Garden and Outdoor Products',
       key: 'Garden and Outdoor Products',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Home & Decor/Garden and Outdoor Products.png',
+      imageUrl: require('../assets/subCategories/homeDecor/GardenOutdoorProducts.png'),
     },
     {
       value: 'Home Improvement',
       key: 'Home Improvement',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Home & Decor/Home Improvement.png',
+      imageUrl: require('../assets/subCategories/homeDecor/HomeImprovement.png'),
     },
     {
       value: 'Cookware and Dining',
       key: 'Cookware and Dining',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Home & Decor/Cookware and Dining.png',
+      imageUrl: require('../assets/subCategories/homeDecor/CookwareDining.png'),
     },
     {
       value: 'Storage and Organisation',
       key: 'Storage and Organisation',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Home & Decor/Storage and Organisation.png',
+      imageUrl: require('../assets/subCategories/homeDecor/StorageOrganisation.png'),
     },
     {
       value: 'Home and Decor',
       key: 'Home and Decor',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Home & Decor/Home and Decor.png',
+      imageUrl: require('../assets/subCategories/homeDecor/Home&Decor.png'),
     },
   ],
   'F&B': [
@@ -676,505 +593,433 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Baklava',
       key: 'Baklava',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Baklava.png',
+      imageUrl: require('../assets/subCategories/fnb/Baklava.png'),
     },
     {
       value: 'Bao',
       key: 'Bao',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Bao.png',
+      imageUrl: require('../assets/subCategories/fnb/Bao.png'),
     },
     {
       value: 'Barbecue',
       key: 'Barbecue',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Barbecue.png',
+      imageUrl: require('../assets/subCategories/fnb/Barbecue.png'),
     },
     {
       value: 'Biryani',
       key: 'Biryani',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Biryani.png',
+      imageUrl: require('../assets/subCategories/fnb/Biryani.png'),
     },
     {
       value: 'Bread',
       key: 'Bread',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Bread.png',
+      imageUrl: require('../assets/subCategories/fnb/Bread.png'),
     },
     {
       value: 'Burger',
       key: 'Burger',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Burger.png',
+      imageUrl: require('../assets/subCategories/fnb/Burger.png'),
     },
     {
       value: 'Cakes',
       key: 'Cakes',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Cakes.png',
+      imageUrl: require('../assets/subCategories/fnb/Cakes.png'),
     },
     {
       value: 'Chaat',
       key: 'Chaat',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Chaat.png',
+      imageUrl: require('../assets/subCategories/fnb/Chaat.png'),
     },
     {
       value: 'Cheesecakes',
       key: 'Cheesecakes',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Cheesecakes.png',
+      imageUrl: require('../assets/subCategories/fnb/Cheesecakes.png'),
     },
     {
       value: 'Chicken',
       key: 'Chicken',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Chicken.png',
+      imageUrl: require('../assets/subCategories/fnb/Chicken.png'),
     },
     {
       value: 'Chicken wings',
       key: 'Chicken wings',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Chicken wings.png',
+      imageUrl: require('../assets/subCategories/fnb/Chickenwings.png'),
     },
     {
       value: 'Chips',
       key: 'Chips',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Chips.png',
+      imageUrl: require('../assets/subCategories/fnb/Chips.png'),
     },
     {
       value: 'Coffee',
       key: 'Coffee',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Coffee.png',
+      imageUrl: require('../assets/subCategories/fnb/Coffee.png'),
     },
     {
       value: 'Cookies',
       key: 'Cookies',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Cookies.png',
+      imageUrl: require('../assets/subCategories/fnb/Cookies.png'),
     },
     {
       value: 'Crepes',
       key: 'Crepes',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Crepes.png',
+      imageUrl: require('../assets/subCategories/fnb/Crepes.png'),
     },
     {
       value: 'Dal',
       key: 'Dal',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Dal.png',
+      imageUrl: require('../assets/subCategories/fnb/Dal.png'),
     },
     {
       value: 'Desserts',
       key: 'Desserts',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Desserts.png',
+      imageUrl: require('../assets/subCategories/fnb/Desserts.png'),
     },
     {
       value: 'Dhokla',
       key: 'Dhokla',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Dhokla.png',
+      imageUrl: require('../assets/subCategories/fnb/Dhokla.png'),
     },
     {
       value: 'Dosa',
       key: 'Dosa',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Dosa.png',
+      imageUrl: require('../assets/subCategories/fnb/Dosa.png'),
     },
     {
       value: 'Doughnuts',
       key: 'Doughnuts',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Doughnuts.png',
+      imageUrl: require('../assets/subCategories/fnb/Doughnuts.png'),
     },
     {
       value: 'Eggs',
       key: 'Eggs',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Eggs.png',
+      imageUrl: require('../assets/subCategories/fnb/Eggs.png'),
     },
     {
       value: 'Energy Drinks',
       key: 'Energy Drinks',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Energy Drinks.png',
+      imageUrl: require('../assets/subCategories/fnb/EnergyDrinks.png'),
     },
     {
       value: 'Falafel',
       key: 'Falafel',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Falafel.png',
+      imageUrl: require('../assets/subCategories/fnb/Falafel.png'),
     },
     {
       value: 'Fresh Juice',
       key: 'Fresh Juice',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Fresh Juice.png',
+      imageUrl: require('../assets/subCategories/fnb/FreshJuice.png'),
     },
     {
       value: 'Fries',
       key: 'Fries',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Fries.png',
+      imageUrl: require('../assets/subCategories/fnb/Fries.png'),
     },
     {
       value: 'Ice cream',
       key: 'Ice cream',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Ice cream.png',
+      imageUrl: require('../assets/subCategories/fnb/Icecream.png'),
     },
     {
       value: 'Idli',
       key: 'Idli',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Idli.png',
+      imageUrl: require('../assets/subCategories/fnb/Idli.png'),
     },
     {
       value: 'Kabab',
       key: 'Kabab',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Kabab.png',
+      imageUrl: require('../assets/subCategories/fnb/Kabab.png'),
     },
     {
       value: 'Kachori',
       key: 'Kachori',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Kachori.png',
+      imageUrl: require('../assets/subCategories/fnb/Kachori.png'),
     },
     {
       value: 'Kulfi',
       key: 'Kulfi',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Kulfi.png',
+      imageUrl: require('../assets/subCategories/fnb/Kulfi.png'),
     },
     {
       value: 'Lassi',
       key: 'Lassi',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Lassi.png',
+      imageUrl: require('../assets/subCategories/fnb/Lassi.png'),
     },
     {
       value: 'Meal bowl',
       key: 'Meal bowl',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Meal bowl.png',
+      imageUrl: require('../assets/subCategories/fnb/Mealbowl.png'),
     },
     {
       value: 'Mezze',
       key: 'Mezze',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Mezze.png',
+      imageUrl: require('../assets/subCategories/fnb/Mezze.png'),
     },
     {
       value: 'Mithai',
       key: 'Mithai',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Mithai.png',
+      imageUrl: require('../assets/subCategories/fnb/Mithai.png'),
     },
     {
       value: 'Momos',
       key: 'Momos',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Momos.png',
+      imageUrl: require('../assets/subCategories/fnb/Momos.png'),
     },
     {
       value: 'Mutton',
       key: 'Mutton',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Mutton.png',
+      imageUrl: require('../assets/subCategories/fnb/Mutton.png'),
     },
     {
       value: 'Nachos',
       key: 'Nachos',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Nachos.png',
+      imageUrl: require('../assets/subCategories/fnb/Nachos.png'),
     },
     {
       value: 'Noodles',
       key: 'Noodles',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Noodles.png',
+      imageUrl: require('../assets/subCategories/fnb/Noodles.png'),
     },
     {
       value: 'Pakodas',
       key: 'Pakodas',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pakodas.png',
+      imageUrl: require('../assets/subCategories/fnb/Pakodas.png'),
     },
     {
       value: 'Pancakes',
       key: 'Pancakes',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pancakes.png',
+      imageUrl: require('../assets/subCategories/fnb/Pancakes.png'),
     },
     {
       value: 'Paneer',
       key: 'Paneer',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Paneer.png',
+      imageUrl: require('../assets/subCategories/fnb/Paneer.png'),
     },
     {
       value: 'Pasta',
       key: 'Pasta',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pasta.png',
+      imageUrl: require('../assets/subCategories/fnb/Pasta.png'),
     },
     {
       value: 'Pastries',
       key: 'Pastries',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pastries.png',
+      imageUrl: require('../assets/subCategories/fnb/Pastries.png'),
     },
     {
       value: 'Pie',
       key: 'Pie',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pie.png',
+      imageUrl: require('../assets/subCategories/fnb/Pie.png'),
     },
     {
       value: 'Pizza',
       key: 'Pizza',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Pizza.png',
+      imageUrl: require('../assets/subCategories/fnb/Pizza.png'),
     },
     {
       value: 'Poha',
       key: 'Poha',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Poha.png',
+      imageUrl: require('../assets/subCategories/fnb/Poha.png'),
     },
     {
       value: 'Raita',
       key: 'Raita',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Raita.png',
+      imageUrl: require('../assets/subCategories/fnb/Raita.png'),
     },
     {
       value: 'Rice',
       key: 'Rice',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Rice.png',
+      imageUrl: require('../assets/subCategories/fnb/Rice.png'),
     },
     {
       value: 'Rolls',
       key: 'Rolls',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Rolls.png',
+      imageUrl: require('../assets/subCategories/fnb/Rolls.png'),
     },
     {
       value: 'Roti',
       key: 'Roti',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Roti.png',
+      imageUrl: require('../assets/subCategories/fnb/Roti.png'),
     },
     {
       value: 'Salad',
       key: 'Salad',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Salad.png',
+      imageUrl: require('../assets/subCategories/fnb/Salad.png'),
     },
     {
       value: 'Samosa',
       key: 'Samosa',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Samosa.png',
+      imageUrl: require('../assets/subCategories/fnb/Samosa.png'),
     },
     {
       value: 'Sandwich',
       key: 'Sandwich',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Sandwich.png',
+      imageUrl: require('../assets/subCategories/fnb/Sandwich.png'),
     },
     {
       value: 'Seafood',
       key: 'Seafood',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Seafood.png',
+      imageUrl: require('../assets/subCategories/fnb/Seafood.png'),
     },
     {
       value: 'Shakes & Smoothies',
       key: 'Shakes & Smoothies',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Shakes & Smoothies.png',
+      imageUrl: require('../assets/subCategories/fnb/ShakesSmoothies.png'),
     },
     {
       value: 'Soft Drink',
       key: 'Soft Drink',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Soft Drink.png',
+      imageUrl: require('../assets/subCategories/fnb/SoftDrink.png'),
     },
     {
       value: 'Soup',
       key: 'Soup',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Soup.png',
+      imageUrl: require('../assets/subCategories/fnb/Soup.png'),
     },
     {
       value: 'Spring Roll',
       key: 'Spring Roll',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Spring Roll.png',
+      imageUrl: require('../assets/subCategories/fnb/SpringRoll.png'),
     },
     {
       value: 'Sushi',
       key: 'Sushi',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Sushi.png',
+      imageUrl: require('../assets/subCategories/fnb/Sushi.png'),
     },
     {
       value: 'Tacos',
       key: 'Tacos',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Tacos.png',
+      imageUrl: require('../assets/subCategories/fnb/Tacos.png'),
     },
     {
       value: 'Tandoori',
       key: 'Tandoori',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Tandoori.png',
+      imageUrl: require('../assets/subCategories/fnb/Tandoori.png'),
     },
     {
       value: 'Tart',
       key: 'Tart',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Tart.png',
+      imageUrl: require('../assets/subCategories/fnb/Tart.png'),
     },
     {
       value: 'Tea',
       key: 'Tea',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Tea.png',
+      imageUrl: require('../assets/subCategories/fnb/Tea.png'),
     },
     {
       value: 'Thali',
       key: 'Thali',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Thali.png',
+      imageUrl: require('../assets/subCategories/fnb/Thali.png'),
     },
     {
       value: 'Tikka',
       key: 'Tikka',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Tikka.png',
+      imageUrl: require('../assets/subCategories/fnb/Tikka.png'),
     },
     {
       value: 'Upma',
       key: 'Upma',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Upma.png',
+      imageUrl: require('../assets/subCategories/fnb/Upma.png'),
     },
     {
       value: 'Uttapam',
       key: 'Uttapam',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Uttapam.png',
+      imageUrl: require('../assets/subCategories/fnb/Uttapam.png'),
     },
     {
       value: 'Vada',
       key: 'Vada',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Vada.png',
+      imageUrl: require('../assets/subCategories/fnb/Vada.png'),
     },
     {
       value: 'Vegetables',
       key: 'Vegetables',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Vegetables.png',
+      imageUrl: require('../assets/subCategories/fnb/Vegetables.png'),
     },
     {
       value: 'Waffle',
       key: 'Waffle',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Waffle.png',
+      imageUrl: require('../assets/subCategories/fnb/Waffle.png'),
     },
     {
       value: 'Wrap',
       key: 'Wrap',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Wrap.png',
+      imageUrl: require('../assets/subCategories/fnb/Wrap.png'),
     },
     {
       value: 'Yogurt',
       key: 'Yogurt',
       protocolKey: '@ondc/org/mandatory_reqs_veggies_fruits',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Food & Beverage/Yogurt.png',
+      imageUrl: require('../assets/subCategories/fnb/Yogurt.png'),
     },
   ],
   Electronics: [
@@ -1182,169 +1027,145 @@ export const PRODUCT_SUBCATEGORY: any = {
       value: 'Audio',
       key: 'Audio',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Audio.png',
+      imageUrl: require('../assets/subCategories/electronics/Audio.png'),
     },
     {
       value: 'Camera and Camcorder',
       key: 'Camera and Camcorder',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Camera and Camcorder.png',
+      imageUrl: require('../assets/subCategories/electronics/CameraCamcorder.png'),
     },
     {
       value: 'Computer Peripheral',
       key: 'Computer Peripheral',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Computer Peripheral.png',
+      imageUrl: require('../assets/subCategories/electronics/ComputerPeripheral.png'),
     },
     {
       value: 'Desktop and Laptop',
       key: 'Desktop and Laptop',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Desktop and Laptop.png',
+      imageUrl: require('../assets/subCategories/electronics/DesktopLaptop.png'),
     },
     {
       value: 'Earphone',
       key: 'Earphone',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Earphone.png',
+      imageUrl: require('../assets/subCategories/electronics/Earphone.png'),
     },
     {
       value: 'Gaming',
       key: 'Gaming',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Gaming.png',
+      imageUrl: require('../assets/subCategories/electronics/Gaming.png'),
     },
     {
       value: 'Headphone',
       key: 'Headphone',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Headphone.png',
+      imageUrl: require('../assets/subCategories/electronics/Headphone.png'),
     },
     {
       value: 'Mobile Phone',
       key: 'Mobile Phone',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Mobile Phone.png',
+      imageUrl: require('../assets/subCategories/electronics/MobilePhone.png'),
     },
     {
       value: 'Mobile Accessories',
       key: 'Mobile Accessories',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Mobile Accessories.png',
+      imageUrl: require('../assets/subCategories/electronics/MobileAccessories.png'),
     },
     {
       value: 'Safety Security',
       key: 'Safety Security',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Safety Security.png',
+      imageUrl: require('../assets/subCategories/electronics/SafetySecurity.png'),
     },
     {
       value: 'Smart Watches',
       key: 'Smart Watches',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Smart Watches.png',
+      imageUrl: require('../assets/subCategories/electronics/SmartWatches.png'),
     },
     {
       value: 'Speaker',
       key: 'Speaker',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Speaker.png',
+      imageUrl: require('../assets/subCategories/electronics/Speaker.png'),
     },
     {
       value: 'Television',
       key: 'Television',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Television.png',
+      imageUrl: require('../assets/subCategories/electronics/Television.png'),
     },
     {
       value: 'Video',
       key: 'Video',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Video.png',
+      imageUrl: require('../assets/subCategories/electronics/Video.png'),
     },
     {
       value: 'Air Conditioning and Air Cleaners',
       key: 'Air Conditioning and Air Cleaners',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Air Conditioning and Air Cleaners.png',
+      imageUrl: require('../assets/subCategories/electronics/AirConditioningAirCleaners.png'),
     },
     {
       value: 'Health, Home and Personal Care',
       key: 'Health, Home and Personal Care',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Health, Home and Personal Care.png',
+      imageUrl: require('../assets/subCategories/electronics/HealthHomePersonalCare.png'),
     },
     {
       value: 'Heaters',
       key: 'Heaters',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Heaters.png',
+      imageUrl: require('../assets/subCategories/electronics/Heaters.png'),
     },
     {
       value: 'Kitchen Appliances',
       key: 'Kitchen Appliances',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Kitchen Appliances.png',
+      imageUrl: require('../assets/subCategories/electronics/KitchenAppliances.png'),
     },
     {
       value: 'Lighting & Electric Fans',
       key: 'Lighting & Electric Fans',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Lighting & Electric Fans.png',
+      imageUrl: require('../assets/subCategories/electronics/LightingElectricFans.png'),
     },
     {
       value: 'Refrigerators and Freezers',
       key: 'Refrigerators and Freezers',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Refrigerators and Freezers.png',
+      imageUrl: require('../assets/subCategories/electronics/RefrigeratorsFreezers.png'),
     },
     {
       value: 'Vacuum Cleaners',
       key: 'Vacuum Cleaners',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Vacuum Cleaners.png',
+      imageUrl: require('../assets/subCategories/electronics/VacuumCleaners.png'),
     },
     {
       value: 'Washing Machines and Accessories',
       key: 'Washing Machines and Accessories',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Washing Machines and Accessories.png',
+      imageUrl: require('../assets/subCategories/electronics/WashingMachinesAccessories.png'),
     },
     {
       value: 'Water Purifiers and Coolers',
       key: 'Water Purifiers and Coolers',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Water Purifiers and Coolers.png',
+      imageUrl: require('../assets/subCategories/electronics/WaterPurifiersCoolers.png'),
     },
     {
       value: 'Inverter & Stabilizer',
       key: 'Inverter & Stabilizer',
       protocolKey: '',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Electronics/Inverter & Stabilizer.png',
+      imageUrl: require('../assets/subCategories/electronics/InverterStabilizer.png'),
     },
   ],
   'Health & Wellness': [
@@ -1352,51 +1173,43 @@ export const PRODUCT_SUBCATEGORY: any = {
       key: 'Pain Relief',
       value: 'Pain Relief',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Pain Relief.png',
+      imageUrl: require('../assets/subCategories/healthWellness/PainRelief.png'),
     },
     {
       key: 'Nutrition and Fitness Supplements',
       value: 'Nutrition and Fitness Supplements',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Nutrition and Fitness Supplements.png',
+      imageUrl: require('../assets/subCategories/healthWellness/NutritionFitnessSupplements.png'),
     },
     {
       key: 'Personal Care',
       value: 'Personal Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Personal Care.png',
+      imageUrl: require('../assets/subCategories/healthWellness/PersonalCare.png'),
     },
     {
       key: 'Speciality Care',
       value: 'Speciality Care',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Speciality Care.png',
+      imageUrl: require('../assets/subCategories/healthWellness/SpecialityCare.png'),
     },
     {
       key: 'Covid Essentials',
       value: 'Covid Essentials',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Covid Essentials.png',
+      imageUrl: require('../assets/subCategories/healthWellness/CovidEssentials.png'),
     },
     {
       key: 'Diabetes Control',
       value: 'Diabetes Control',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Diabetes Control.png',
+      imageUrl: require('../assets/subCategories/healthWellness/DiabetesControl.png'),
     },
-    // {key: "Healthcare Devices", value: "Healthcare Devices", protocolKey: "@ondc/org/statutory_reqs_packaged_commodities", imageUrl: Health}, image not available
     {
       key: 'Ayush',
       value: 'Ayush',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Ayush.png',
+      imageUrl: require('../assets/subCategories/healthWellness/Ayush.png'),
     },
   ],
   Agriculture: [
@@ -1404,50 +1217,43 @@ export const PRODUCT_SUBCATEGORY: any = {
       key: 'Seed',
       value: 'Seed',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Pain Relief.png',
+      imageUrl: require('../assets/subCategories/agriculture/Seeds.png'),
     },
     {
       key: 'Pesticide',
       value: 'Pesticide',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Pain Relief.png',
+      imageUrl: require('../assets/subCategories/agriculture/Pesticide.png'),
     },
     {
       key: 'Fertilizer',
       value: 'Fertilizer',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Pain Relief.png',
+      imageUrl: require('../assets/subCategories/agriculture/Fertilizer.png'),
     },
     {
       key: 'Organic Crop Protection',
       value: 'Organic Crop Protection',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Pain Relief.png',
+      imageUrl: require('../assets/subCategories/agriculture/OrganicCropProtection.png'),
     },
     {
       key: 'Organic Crop Nutrition',
       value: 'Organic Crop Nutrition',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Pain Relief.png',
+      imageUrl: require('../assets/subCategories/agriculture/OrganicCropNutrition.png'),
     },
     {
       key: 'Tools and Machinery',
       value: 'Tools and Machinery',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Pain Relief.png',
+      imageUrl: require('../assets/subCategories/agriculture/ToolsandMachinery.png'),
     },
     {
       key: 'Cattle Feed',
       value: 'Cattle Feed',
       protocolKey: '@ondc/org/statutory_reqs_packaged_commodities',
-      imageUrl:
-        'https://reference-buyer-app-assets.s3-ap-south-1.amazonaws.com/public-assets/Health & Wellness/Pain Relief.png',
+      imageUrl: require('../assets/subCategories/agriculture/CattleFeed.png'),
     },
   ],
 };

@@ -1,8 +1,9 @@
 import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
+
 import Cart from '../../../cart/Cart';
 import {useAppTheme} from '../../../../../utils/theme';
-import { useTranslation } from 'react-i18next';
 
 const DashboardCart = () => {
   const {t} = useTranslation();

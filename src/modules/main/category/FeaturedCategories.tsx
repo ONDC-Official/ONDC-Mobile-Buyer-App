@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
+
 import {CATEGORIES} from '../../../utils/categories';
 import {useAppTheme} from '../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 const FeaturedCategories = () => {
   const {t} = useTranslation();
@@ -17,6 +18,12 @@ const FeaturedCategories = () => {
   const navigateToCategoryDetails = (category: string, domain: string) => {
     navigation.navigate('CategoryDetails', {category, domain});
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Featured Categories.Featured Categories'),
+    });
+  }, []);
 
   return (
     <FlatList

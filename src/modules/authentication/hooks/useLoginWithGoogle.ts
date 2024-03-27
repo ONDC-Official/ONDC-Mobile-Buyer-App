@@ -3,8 +3,6 @@ import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-
-import {getStoredData} from '../../../utils/storage';
 import Config from '../../../../config';
 import useStoreUserAndNavigate from '../../../hooks/useStoreUserAndNavigate';
 
@@ -26,18 +24,6 @@ export default () => {
       const idTokenResult = await auth()?.currentUser?.getIdTokenResult();
 
       await storeDetails(idTokenResult, auth()?.currentUser);
-      const address = await getStoredData('address');
-      if (address) {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Dashboard'}],
-        });
-      } else {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'AddressList', params: {navigateToDashboard: true}}],
-        });
-      }
     } catch (error) {
       console.log(error);
     }

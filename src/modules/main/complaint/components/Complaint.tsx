@@ -1,15 +1,15 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {Button, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {useDispatch} from 'react-redux';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {updateComplaint} from '../../../../redux/complaint/actions';
 import ComplaintStatus from './ComplaintStatus';
 import {useAppTheme} from '../../../../utils/theme';
-import { useTranslation } from "react-i18next";
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -22,7 +22,7 @@ const categories = ISSUE_TYPES.map(item => {
 }).flat();
 
 const Complaint = ({complaint}: {complaint: any}) => {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);

@@ -3,7 +3,8 @@ import {ActivityIndicator, Button, Card, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 import {
   getPriceWithCustomisations,
   isItemCustomization,
@@ -18,11 +19,11 @@ import Payment from './components/Payment';
 import useConfirmItems from '../../../hooks/useConfirmItems';
 import CloseSheetContainer from '../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../utils/theme';
-import { useTranslation } from 'react-i18next';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
 const Cart = () => {
+  const navigation = useNavigation();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -437,6 +438,9 @@ const Cart = () => {
   }, [isFocused]);
 
   useEffect(() => {
+    navigation.setOptions({
+      title: t('Cart.My Cart'),
+    });
     setDeliveryAddress(address);
   }, []);
 

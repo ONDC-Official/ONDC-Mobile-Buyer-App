@@ -5,8 +5,9 @@ import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
+
 import {useAppTheme} from '../../../../../utils/theme';
-import { useTranslation } from 'react-i18next';
 
 interface AddressTag {}
 
