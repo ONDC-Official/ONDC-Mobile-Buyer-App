@@ -4,8 +4,9 @@ import {Text} from 'react-native-paper';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {useSelector} from 'react-redux';
-import {useAppTheme} from '../../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
+
+import {useAppTheme} from '../../../../../utils/theme';
 
 interface TabIcon {
   name: string;
@@ -90,7 +91,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
               </Text>
               {route.name === 'Cart' && badge ? (
                 <View
-                  style={[styles.badge, isFocused ? styles.selectedBadge : {}]}>
+                  style={styles.badge}>
                   <Text style={styles.badgeLabel}>{badge}</Text>
                 </View>
               ) : null}
@@ -146,17 +147,14 @@ const makeStyles = (colors: any) =>
     },
     badge: {
       position: 'absolute',
-      top: 0,
-      right: 0,
-      backgroundColor: colors.primary,
-      borderRadius: 8,
+      top: -6,
+      right: -6,
+      backgroundColor: colors.primary200,
+      borderRadius: 12,
       paddingHorizontal: 6,
       paddingVertical: 2,
     },
     badgeLabel: {color: colors.white, fontSize: 10},
-    selectedBadge: {
-      backgroundColor: colors.warning,
-    },
   });
 
 export default CustomTabBar;
