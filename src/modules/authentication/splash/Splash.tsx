@@ -55,6 +55,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
           'emailId',
           'name',
           'transaction_id',
+          'language',
         ]).then(data => {
           if (data[0][1] !== null) {
             data.forEach((item: any) => {

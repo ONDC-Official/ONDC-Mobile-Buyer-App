@@ -4,6 +4,7 @@ const initialState = {
   emailId: null,
   name: null,
   photoURL: null,
+  language: 'en',
 };
 
 const authReducer = (
@@ -29,6 +30,11 @@ const authReducer = (
     case 'set_traction_id':
       return Object.assign({}, state, {
         transaction_id: action.payload,
+      });
+
+    case 'set_language':
+      return Object.assign({}, state, {
+        language: action.payload,
       });
 
     case 'hide_loader':

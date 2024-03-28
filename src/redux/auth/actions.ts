@@ -14,7 +14,14 @@ export const tryLocalSignIn = (
 ) => {
   const payload: any = {};
 
-  getMultipleData(['token', 'uid', 'emailId', 'name', 'transaction_id'])
+  getMultipleData([
+    'token',
+    'uid',
+    'emailId',
+    'name',
+    'transaction_id',
+    'language',
+  ])
     .then(data => {
       if (data[0][1] !== null) {
         data.forEach((item: any) => {
@@ -51,7 +58,7 @@ export const tryLocalSignIn = (
 };
 
 export const checkLanguageAndLogin = (navigation: any) => {
-  getStoredData('appLanguage').then(language => {
+  getStoredData('language').then(language => {
     if (!language) {
       navigation.reset({
         index: 0,
@@ -95,4 +102,8 @@ export const updateToken = (dispatch: Dispatch<AnyAction>, token: string) => {
 
 export const updateTransactionId = (transactionId: string) => {
   return {type: 'set_traction_id', payload: transactionId};
+};
+
+export const updateLanguage = (language: string) => {
+  return {type: 'set_language', payload: language};
 };

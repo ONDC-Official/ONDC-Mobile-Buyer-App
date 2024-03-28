@@ -2,12 +2,13 @@ import axios from 'axios';
 import {useSelector} from 'react-redux';
 
 export default () => {
-  const {token} = useSelector(({authReducer}) => authReducer);
+  const {token, language} = useSelector(({authReducer}) => authReducer);
 
   const getAuthConfig = (cancelToken = null) => {
     const config: any = {
       headers: {
         Authorization: `Bearer ${token}`,
+        targetlanguage: language,
       },
     };
     if (cancelToken) {
@@ -49,7 +50,7 @@ export default () => {
   const getDataWithAuth = async (url: string, cancelToken: any) => {
     try {
       const config = getAuthConfig(cancelToken);
-      console.log('Get', url);
+      console.log('Get', url, config);
       return await axios.get(encodeURI(url), config);
     } catch (e) {
       console.log(e);

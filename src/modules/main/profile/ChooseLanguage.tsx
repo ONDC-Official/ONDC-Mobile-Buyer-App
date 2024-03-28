@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';
@@ -9,8 +9,10 @@ import i18n from 'i18next';
 
 import {useAppTheme} from '../../../utils/theme';
 import {setStoredData} from '../../../utils/storage';
+import { updateLanguage } from "../../../redux/auth/actions";
 
 const ChooseLanguage = () => {
+  const dispatch = useDispatch();
   const theme = useAppTheme();
   const {address} = useSelector(({addressReducer}) => addressReducer);
   const navigation = useNavigation<any>();
@@ -19,8 +21,8 @@ const ChooseLanguage = () => {
 
   const handleChangeLanguage = async (language: string) => {
     await i18n.changeLanguage(language);
-    await setStoredData('appLanguage', language);
-
+    await setStoredData('language', language);
+    dispatch(updateLanguage(language));
     // Check if address preselected, if so directly navigate
     // to dashboard
     if (address && address.address) {
@@ -47,12 +49,6 @@ const ChooseLanguage = () => {
       title: t('Choose Language.English'),
       onPress: () => {
         handleChangeLanguage('en').then(() => {});
-      },
-    },
-    {
-      title: t('Choose Language.Marathi'),
-      onPress: () => {
-        handleChangeLanguage('ma').then(() => {});
       },
     },
   ];

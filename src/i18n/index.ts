@@ -2,7 +2,7 @@ import i18n from 'i18next';
 import {initReactI18next} from 'react-i18next';
 import en from './en.json';
 import hi from './hi.json';
-import ma from './ma.json';
+import mr from './mr.json';
 
 // if (!i18n.isInitialized) {
 i18n
@@ -24,8 +24,8 @@ i18n
       hi: {
         translation: hi,
       },
-      ma: {
-        translation: ma,
+      mr: {
+        translation: mr,
       },
     },
   });

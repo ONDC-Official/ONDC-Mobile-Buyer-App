@@ -77,10 +77,10 @@ const Products: React.FC<Products> = ({
     return products.filter(
       product =>
         product?.item_details?.descriptor?.name
-          .toLowerCase()
+          ?.toLowerCase()
           .includes(lowerQuery) ||
         product?.provider_details?.descriptor?.name
-          .toLowerCase()
+          ?.toLowerCase()
           .includes(lowerQuery),
     );
   }, [products, searchQuery]);
