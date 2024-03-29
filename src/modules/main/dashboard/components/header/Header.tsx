@@ -3,10 +3,11 @@ import {Searchbar} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import ONDCLogo from '../../../../../assets/app_logo.svg';
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 type HeaderProps = {
   disableAddress?: boolean;
@@ -43,6 +44,11 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
             value={''}
           />
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={navigateToSearch}
+          style={styles.micContainer}>
+          <Icon name={'mic'} size={24} color={'#fff'} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -69,7 +75,7 @@ const makeStyles = (colors: any) =>
       height: 60,
     },
     searchButton: {
-      width: '100%',
+      width: '90%',
     },
     searchInput: {
       paddingVertical: 12,
@@ -80,6 +86,9 @@ const makeStyles = (colors: any) =>
       flex: 1,
       height: 44,
       backgroundColor: colors.white,
+    },
+    micContainer: {
+      marginLeft: 10,
     },
   });
 export default Header;
