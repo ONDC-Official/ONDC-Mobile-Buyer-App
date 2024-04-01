@@ -5,7 +5,6 @@ import {useAppTheme} from '../../utils/theme';
 
 /**
  * Component to render generic input field
- * @param theme: theme object
  * @param props: other props
  * @returns {JSX.Element}
  * @constructor

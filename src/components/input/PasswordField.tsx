@@ -6,7 +6,6 @@ import {useAppTheme} from '../../utils/theme';
 /**
  * Component is used to render generic password input field
  * @param label: label of input field
- * @param theme: theme object
  * @param props: other props
  * @returns {JSX.Element}
  * @constructor
@@ -26,6 +25,7 @@ const PasswordField: React.FC<any> = ({inputLabel, ...props}) => {
         mode="outlined"
         {...props}
         dense
+        style={styles.inputText}
         secureTextEntry={hide}
         autoCapitalize={'none'}
         right={
@@ -56,6 +56,10 @@ const makeStyles = (colors: any) =>
     required: {color: colors.error600},
     outline: {
       borderRadius: 12,
+    },
+    inputText: {
+      fontWeight: '400',
+      backgroundColor: colors.white,
     },
   });
 

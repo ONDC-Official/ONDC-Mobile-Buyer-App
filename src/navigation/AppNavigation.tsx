@@ -3,7 +3,6 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useTranslation} from 'react-i18next';
 
 import Login from '../modules/authentication/login/Login';
 import SignUp from '../modules/authentication/signUp/SignUp';
@@ -59,8 +58,6 @@ const headerStyle = {
  * @constructor
  */
 const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
-  const {t} = useTranslation();
-  console.log(t('Address List.Delivery Address'));
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>

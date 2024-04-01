@@ -104,7 +104,7 @@ const SignUpWithEmail = () => {
               value={values.name}
               onBlur={handleBlur('name')}
               required
-              inputLabel="Full Name*"
+              inputLabel="Full Name"
               placeholder="Enter full name"
               error={!!touched.name && !!errors.name}
               errorMessage={touched.name ? errors.name : null}

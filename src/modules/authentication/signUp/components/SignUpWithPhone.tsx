@@ -90,7 +90,7 @@ const SignUpWithPhone = () => {
           name="name"
           value={name}
           required
-          inputLabel="Full Name*"
+          inputLabel="Full Name"
           placeholder="Enter full name"
           error={!!nameError}
           errorMessage={nameError ? nameError : null}
@@ -105,7 +105,7 @@ const SignUpWithPhone = () => {
           name="email"
           value={mobileNumber}
           required
-          inputLabel="Phone No.*"
+          inputLabel="Phone No."
           placeholder="Enter phone no."
           error={!!mobileError}
           errorMessage={mobileError ? mobileError : null}

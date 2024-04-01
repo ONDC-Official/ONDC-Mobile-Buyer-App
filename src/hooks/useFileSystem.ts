@@ -8,8 +8,7 @@ export default () => {
     try {
       const file = await RNFS.exists(path);
       if (file) {
-        const result = await RNFS.readFile(path, 'base64');
-        return result;
+        return await RNFS.readFile(path, 'base64');
       }
     } catch (e) {
       console.log('error from read', e);
