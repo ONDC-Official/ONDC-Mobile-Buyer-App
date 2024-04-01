@@ -198,6 +198,23 @@ const AddressForm: React.FC<AddressForm> = ({
                     <View style={styles.row}>
                       <View style={appStyles.container}>
                         <InputField
+                          value={values.city}
+                          onBlur={handleBlur('city')}
+                          required
+                          inputLabel={t('Address Form.City')}
+                          label={''}
+                          placeholder={t('Address Form.City')}
+                          errorMessage={
+                            touched.city || submitCount > 0 ? errors.city : null
+                          }
+                          error={touched.city && errors.city}
+                          onChangeText={handleChange('city')}
+                          disabled
+                        />
+                      </View>
+                      <View style={styles.spacing} />
+                      <View style={appStyles.container}>
+                        <InputField
                           value={values.areaCode}
                           keyboardType={'numeric'}
                           maxLength={6}
@@ -212,23 +229,6 @@ const AddressForm: React.FC<AddressForm> = ({
                               : null
                           }
                           error={touched.areaCode && errors.areaCode}
-                          disabled
-                        />
-                      </View>
-                      <View style={styles.spacing} />
-                      <View style={appStyles.container}>
-                        <InputField
-                          value={values.city}
-                          onBlur={handleBlur('city')}
-                          required
-                          inputLabel={t('Address Form.City')}
-                          label={''}
-                          placeholder={t('Address Form.City')}
-                          errorMessage={
-                            touched.city || submitCount > 0 ? errors.city : null
-                          }
-                          error={touched.city && errors.city}
-                          onChangeText={handleChange('city')}
                           disabled
                         />
                       </View>

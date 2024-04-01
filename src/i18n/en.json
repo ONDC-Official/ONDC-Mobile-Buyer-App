@@ -126,8 +126,8 @@
   "Address Form": {
     "Add Address": "Add Address",
     "Name": "Name",
-    "Email": "Email",
-    "Mobile Number": "Mobile Number",
+    "Email": "Email Address",
+    "Mobile Number": "Phone Number",
     "Building": "Building",
     "Street": "Street",
     "Pin Code": "Pin Code",
