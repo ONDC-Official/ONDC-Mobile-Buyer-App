@@ -7,6 +7,7 @@ import {useTranslation} from 'react-i18next';
 import ONDCLogo from '../../../../../assets/app_logo.svg';
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
+import FastImage from "react-native-fast-image";
 
 type HeaderProps = {
   disableAddress?: boolean;
@@ -24,7 +25,10 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
     <View style={styles.container}>
       {!disableAddress && (
         <View style={styles.row}>
-          <ONDCLogo width={75} height={28} />
+          <FastImage
+            source={require('../../../../../assets/app_logo.png')}
+            style={styles.headerImage}
+          />
           <AddressTag />
         </View>
       )}
@@ -85,6 +89,10 @@ const makeStyles = (colors: any) =>
     },
     micContainer: {
       marginLeft: 10,
+    },
+    headerImage: {
+      width: 75,
+      height: 30,
     },
   });
 export default Header;
