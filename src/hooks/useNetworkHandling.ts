@@ -39,7 +39,6 @@ export default () => {
   ) => {
     try {
       const config = getAuthConfig(cancelToken);
-      console.log('Put', url);
       return await axios.put(encodeURI(url), params, config);
     } catch (e) {
       console.log(e);
@@ -50,7 +49,7 @@ export default () => {
   const getDataWithAuth = async (url: string, cancelToken: any) => {
     try {
       const config = getAuthConfig(cancelToken);
-      console.log('Get', url, config);
+      console.log('Get', url);
       return await axios.get(encodeURI(url), config);
     } catch (e) {
       console.log(e);

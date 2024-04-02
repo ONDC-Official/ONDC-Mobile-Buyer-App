@@ -81,9 +81,9 @@ export const theme: any = {
     // Title 4
     titleLarge: {
       fontFamily: Platform.select({
-        web: 'Inter-Regular, sans-serif',
-        ios: 'Inter-Regular',
-        default: 'Inter-Regular',
+        web: 'Inter-SemiBold, sans-serif',
+        ios: 'Inter-SemiBold',
+        default: 'Inter-SemiBold',
       }),
       fontWeight: '600',
       fontSize: 16,
@@ -91,9 +91,9 @@ export const theme: any = {
     },
     titleMedium: {
       fontFamily: Platform.select({
-        web: 'Inter-Regular, sans-serif',
-        ios: 'Inter-Regular',
-        default: 'Inter-Regular',
+        web: 'Inter-Medium, sans-serif',
+        ios: 'Inter-Medium',
+        default: 'Inter-Medium',
       }),
       fontWeight: '500',
       fontSize: 16,
@@ -116,9 +116,9 @@ export const theme: any = {
       lineHeight: 18,
       fontWeight: '600',
       fontFamily: Platform.select({
-        web: 'Inter-Regular, sans-serif',
-        ios: 'Inter-Regular',
-        default: 'Inter-Regular',
+        web: 'Inter-SemiBold, sans-serif',
+        ios: 'Inter-SemiBold',
+        default: 'Inter-SemiBold',
       }),
     },
     bodyMedium: {
@@ -126,9 +126,9 @@ export const theme: any = {
       lineHeight: 18,
       fontWeight: '500',
       fontFamily: Platform.select({
-        web: 'Inter-Regular',
-        ios: 'Inter-Regular',
-        default: 'Inter-Regular',
+        web: 'Inter-Medium',
+        ios: 'Inter-Medium',
+        default: 'Inter-Medium',
       }),
     },
     bodySmall: {
@@ -144,9 +144,9 @@ export const theme: any = {
     // Caption 1
     labelLarge: {
       fontFamily: Platform.select({
-        web: 'Inter-Regular, sans-serif',
-        ios: 'Inter-Regular',
-        default: 'Inter-Regular',
+        web: 'Inter-SemiBold, sans-serif',
+        ios: 'Inter-SemiBold',
+        default: 'Inter-SemiBold',
       }),
       fontWeight: '600',
       fontSize: 11,
@@ -154,9 +154,9 @@ export const theme: any = {
     },
     labelMedium: {
       fontFamily: Platform.select({
-        web: 'Inter-Regular, sans-serif',
-        ios: 'Inter-Regular',
-        default: 'Inter-Regular',
+        web: 'Inter-Medium, sans-serif',
+        ios: 'Inter-Medium',
+        default: 'Inter-Medium',
       }),
       fontSize: 11,
       lineHeight: 14,

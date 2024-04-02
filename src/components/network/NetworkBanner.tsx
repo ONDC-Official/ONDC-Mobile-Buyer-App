@@ -1,11 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
-import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../utils/theme';
 
 const NetworkBanner: React.FC = () => {
-  const {t} = useTranslation();
   const theme = useAppTheme();
   const [isOffline, setOfflineStatus] = useState<boolean>(false);
   const styles = makeStyles(theme.colors);
@@ -25,9 +23,7 @@ const NetworkBanner: React.FC = () => {
     return (
       <View style={styles.bannerContainer}>
         <Text style={styles.messageTitle}>
-          {t(
-            'Network Banner.You are offline, please verify your internet connection',
-          )}
+          Network Banner.You are offline, please verify your internet connection
         </Text>
       </View>
     );

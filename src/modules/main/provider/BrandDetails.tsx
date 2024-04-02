@@ -34,10 +34,11 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     try {
       setOutletDetailsRequested(true);
       source.current = CancelToken.source();
-      const {data} = await getDataWithAuth(
+      const locationResponse = await getDataWithAuth(
         `${API_BASE_URL}${STORE_DETAILS}?id=${params.outletId}`,
         source.current.token,
       );
+      const data = locationResponse?.data?.response;
       data.timings = '';
       data.isOpen = false;
       if (data.time.range.start && data.time.range.end) {
@@ -61,10 +62,11 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     try {
       setApiRequested(true);
       source.current = CancelToken.source();
-      const {data} = await getDataWithAuth(
+      const providerResponse = await getDataWithAuth(
         `${API_BASE_URL}${PROVIDER}?id=${params.brandId}`,
         source.current.token,
       );
+      const data = providerResponse?.data?.response;
       navigation.setOptions({
         headerTitle: data?.descriptor?.name,
       });

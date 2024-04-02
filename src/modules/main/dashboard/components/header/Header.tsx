@@ -4,10 +4,10 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
-import ONDCLogo from '../../../../../assets/app_logo.svg';
+import FastImage from 'react-native-fast-image';
+
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
-import FastImage from "react-native-fast-image";
 
 type HeaderProps = {
   disableAddress?: boolean;

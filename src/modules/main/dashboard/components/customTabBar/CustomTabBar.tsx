@@ -2,10 +2,17 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {Text} from 'react-native-paper';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
+import HomeIcon from '../../../../../assets/dashboard/home.svg';
+import CartIcon from '../../../../../assets/dashboard/cart.svg';
+import ListIcon from '../../../../../assets/dashboard/list.svg';
+import ProfileIcon from '../../../../../assets/dashboard/profile.svg';
+import HomeActiveIcon from '../../../../../assets/dashboard/home_a.svg';
+import CartActiveIcon from '../../../../../assets/dashboard/cart_a.svg';
+import ListActiveIcon from '../../../../../assets/dashboard/list_a.svg';
+import ProfileActiveIcon from '../../../../../assets/dashboard/profile_a.svg';
 import {useAppTheme} from '../../../../../utils/theme';
 
 interface TabIcon {
@@ -14,23 +21,28 @@ interface TabIcon {
 }
 
 const TabIcon: React.FC<TabIcon> = ({name, isFocused}) => {
-  switch (name) {
-    case 'Home':
-      return (
-        <Icon name={'home'} color={isFocused ? '#fff' : '#686868'} size={20} />
-      );
-    case 'List':
-      return (
-        <Icon name={'heart'} color={isFocused ? '#fff' : '#686868'} size={20} />
-      );
-    case 'Cart':
-      return (
-        <Icon name={'bag'} color={isFocused ? '#fff' : '#686868'} size={20} />
-      );
-    default:
-      return (
-        <Icon name={'user'} color={isFocused ? '#fff' : '#686868'} size={20} />
-      );
+  if (isFocused) {
+    switch (name) {
+      case 'Home':
+        return <HomeActiveIcon width={20} height={20} color={'#686868'} />;
+      case 'List':
+        return <ListActiveIcon width={20} height={20} color={'#686868'} />;
+      case 'Cart':
+        return <CartActiveIcon width={20} height={20} color={'#686868'} />;
+      default:
+        return <ProfileActiveIcon width={20} height={20} color={'#686868'} />;
+    }
+  } else {
+    switch (name) {
+      case 'Home':
+        return <HomeIcon width={20} height={20} color={'#fff'} />;
+      case 'List':
+        return <ListIcon width={20} height={20} color={'#fff'} />;
+      case 'Cart':
+        return <CartIcon width={20} height={20} color={'#fff'} />;
+      default:
+        return <ProfileIcon width={20} height={20} color={'#fff'} />;
+    }
   }
 };
 
@@ -90,8 +102,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
                 {t(`${label}.${label}`)}
               </Text>
               {route.name === 'Cart' && badge ? (
-                <View
-                  style={styles.badge}>
+                <View style={styles.badge}>
                   <Text style={styles.badgeLabel}>{badge}</Text>
                 </View>
               ) : null}

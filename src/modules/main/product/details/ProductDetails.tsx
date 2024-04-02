@@ -96,10 +96,11 @@ const ProductDetails: React.FC<ProductDetails> = ({
       }
       firstTime.current = false;
       source.current = CancelToken.source();
-      const {data} = await getDataWithAuth(
+      const itemResponse = await getDataWithAuth(
         `${API_BASE_URL}${ITEM_DETAILS}?id=${params.productId}`,
         source.current.token,
       );
+      const data = itemResponse?.data?.response;
       await getCartItems(data.id);
       let rangePriceTag = null;
       if (data?.item_details?.price?.tags) {
