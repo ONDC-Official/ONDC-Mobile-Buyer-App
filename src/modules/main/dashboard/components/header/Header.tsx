@@ -4,7 +4,6 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import ONDCLogo from '../../../../../assets/app_logo.svg';
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
@@ -42,12 +41,9 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
             placeholderTextColor={theme.colors.primary}
             placeholder={t('Home.Search')}
             value={''}
+            traileringIcon={'microphone'}
+            traileringIconColor={theme.colors.primary}
           />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={navigateToSearch}
-          style={styles.micContainer}>
-          <Icon name={'mic'} size={24} color={'#fff'} />
         </TouchableOpacity>
       </View>
     </View>
@@ -75,7 +71,7 @@ const makeStyles = (colors: any) =>
       height: 60,
     },
     searchButton: {
-      width: '90%',
+      flex: 1,
     },
     searchInput: {
       paddingVertical: 12,
