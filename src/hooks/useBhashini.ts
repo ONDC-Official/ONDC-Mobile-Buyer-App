@@ -1,5 +1,7 @@
-import {useState} from 'react';
+import {useRef} from 'react';
 import axios from 'axios';
+import {useSelector} from 'react-redux';
+
 import {
   MODEL_PIPELINE_ENDPOINT,
   PIPELINE_ID,
@@ -9,15 +11,14 @@ import {
 } from '../utils/apiActions';
 import useNetworkErrorHandling from './useNetworkErrorHandling';
 
-const BHASHINI_SOURCE_LANG = 'en';
-
 export default () => {
   const {handleApiError} = useNetworkErrorHandling();
-  const [asrRequest, setAsrRequest] = useState({
-    callback_url: '',
-    compute_call_authorization_key: '',
-    compute_call_authorization_value: '',
-    asr_service_id: '',
+  const {language} = useSelector(({authReducer}) => authReducer);
+  const asrRequest = useRef({
+    callbackUrl: '',
+    authorizationKey: '',
+    authorizationValue: '',
+    serviceId: '',
   });
 
   const withoutConfigRequest = async () => {
@@ -45,31 +46,28 @@ export default () => {
         config,
       );
 
-      const index = data?.pipelineResponseConfig[0].config.findIndex(
+      const asrIndex = data?.pipelineResponseConfig[0].config.findIndex(
         (item: {language: {sourceLanguage: string}}) =>
-          item?.language.sourceLanguage === BHASHINI_SOURCE_LANG,
+          item?.language.sourceLanguage === language,
       );
 
-      setAsrRequest({
-        callback_url: data?.pipelineInferenceAPIEndPoint?.callbackUrl,
-        compute_call_authorization_key:
+      asrRequest.current = {
+        callbackUrl: data?.pipelineInferenceAPIEndPoint?.callbackUrl,
+        authorizationKey:
           data?.pipelineInferenceAPIEndPoint?.inferenceApiKey?.name,
-        compute_call_authorization_value:
+        authorizationValue:
           data?.pipelineInferenceAPIEndPoint?.inferenceApiKey?.value,
-        asr_service_id: data?.pipelineResponseConfig[0].config[index].serviceId,
-      });
+        serviceId: data?.pipelineResponseConfig[0].config[asrIndex].serviceId,
+      };
     } catch (e) {
+      console.log(e);
       handleApiError(e);
     }
   };
 
   const computeRequestASR = async (base64: string) => {
-    const {
-      callback_url,
-      compute_call_authorization_key,
-      compute_call_authorization_value,
-      asr_service_id,
-    } = asrRequest;
+    const {callbackUrl, authorizationKey, authorizationValue, serviceId} =
+      asrRequest.current;
 
     const payload = {
       pipelineTasks: [
@@ -77,9 +75,9 @@ export default () => {
           taskType: 'asr',
           config: {
             language: {
-              sourceLanguage: BHASHINI_SOURCE_LANG,
+              sourceLanguage: language,
             },
-            serviceId: asr_service_id,
+            serviceId,
             audioFormat: 'wav',
             samplingRate: 16000,
           },
@@ -98,12 +96,12 @@ export default () => {
       headers: {
         Accept: '*/*',
         'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
-        [compute_call_authorization_key]: compute_call_authorization_value,
+        [authorizationKey]: authorizationValue,
       },
     };
 
     try {
-      const {data} = await axios.post(callback_url, payload, config);
+      const {data} = await axios.post(callbackUrl, payload, config);
       return data;
     } catch (e) {
       handleApiError(e);
