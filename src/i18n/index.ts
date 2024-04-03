@@ -3,6 +3,8 @@ import {initReactI18next} from 'react-i18next';
 import en from './en.json';
 import hi from './hi.json';
 import mr from './mr.json';
+import ta from './ta.json';
+import bn from './bn.json';
 
 // if (!i18n.isInitialized) {
 i18n
@@ -26,6 +28,12 @@ i18n
       },
       mr: {
         translation: mr,
+      },
+      ta: {
+        translation: ta,
+      },
+      bn: {
+        translation: bn,
       },
     },
   });
