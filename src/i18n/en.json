@@ -503,5 +503,8 @@
   },
   "Orders": {
     "No data found": "No data found"
+  },
+  "Global": {
+    "Details not available": "Store Details not available"
   }
 }

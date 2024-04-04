@@ -503,5 +503,8 @@
   },
   "Orders": {
     "No data found": "কোন তথ্য পাওয়া যায়নি"
+  },
+  "Global": {
+    "Details not available": "বস্টোরের বিবরণ পাওয়া যায় না"
   }
 }

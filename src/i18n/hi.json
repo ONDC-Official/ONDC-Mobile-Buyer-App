@@ -502,5 +502,8 @@
   },
   "Orders": {
     "No data found": "डाटा प्राप्त नहीं हुआ"
+  },
+  "Global": {
+    "Details not available": "स्टोर विवरण उपलब्ध नहीं है"
   }
 }

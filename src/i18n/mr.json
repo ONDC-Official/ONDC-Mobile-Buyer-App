@@ -503,5 +503,8 @@
   },
   "Orders": {
     "No data found": "माहिती आढळली नाही"
+  },
+  "Global": {
+    "Details not available": "स्टोअर तपशील उपलब्ध नाहीत"
   }
 }

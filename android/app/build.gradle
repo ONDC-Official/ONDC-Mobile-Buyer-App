@@ -116,6 +116,7 @@ android {
         versionCode 1
         versionName "1.2.14"
         multiDexEnabled true
+        missingDimensionStrategy 'react-native-camera', 'general'
     }
     signingConfigs {
         debug {

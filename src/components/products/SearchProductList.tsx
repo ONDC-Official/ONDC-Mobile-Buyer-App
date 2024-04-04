@@ -116,7 +116,6 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       paddingHorizontal: 16,
       paddingBottom: 16,
-      marginTop: 20,
       width: '100%',
     },
     listContainer: {

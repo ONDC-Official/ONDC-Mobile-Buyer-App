@@ -27,6 +27,7 @@ import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandlin
 
 type SearchHeaderProps = {
   onSearch: (query: string) => void;
+  defaultQuery: string;
   backIconPress?: () => void;
 };
 
@@ -40,10 +41,11 @@ const thresholdValue: number = -20;
 
 const SearchHeader: React.FC<SearchHeaderProps> = ({
   onSearch,
+  defaultQuery,
   backIconPress,
 }) => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = React.useState<string>('');
+  const [searchQuery, setSearchQuery] = React.useState<string>(defaultQuery);
   const {t} = useTranslation();
   const {withoutConfigRequest, computeRequestASR} = useBhashiniApi();
   const {fileConvertToBase64, deleteFile} = useFileSystem();
@@ -53,7 +55,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
 
   const onChangeSearch = (query: string) => {
     setSearchQuery(query);
-    onSearch(query);
+  };
+
+  const onSearchComplete = () => {
+    onSearch(searchQuery);
   };
 
   const onStartRecord = async () => {
@@ -134,6 +139,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           <Icon name={'arrow-back'} size={24} color={'#fff'} />
         </TouchableOpacity>
         <Searchbar
+          editable
           iconColor={theme.colors.primary}
           rippleColor={theme.colors.primary}
           inputStyle={styles.searchInput}
@@ -141,10 +147,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
           placeholderTextColor={theme.colors.primary}
           placeholder={t('Home.Search')}
           onChangeText={onChangeSearch}
+          onBlur={onSearchComplete}
           value={searchQuery}
           traileringIcon={'microphone'}
           traileringIconColor={theme.colors.primary}
-          onTraileringIconPress={onStartRecord}
         />
       </View>
       <SearchModal modalVisible={modalVisible} onStopRecord={onStopRecord} />

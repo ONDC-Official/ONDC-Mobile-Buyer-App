@@ -34,6 +34,7 @@ import StoresNearMe from '../modules/main/stores/StoresNearMe';
 import ShopByCategory from '../modules/main/category/ShopByCategory';
 import {theme} from '../utils/theme';
 import FeaturedCategories from '../modules/main/category/FeaturedCategories';
+import SellerQRCode from '../modules/main/dashboard/SellerQRCode';
 
 const Stack = createStackNavigator();
 
@@ -259,6 +260,11 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           options={{
             title: '',
           }}
+        />
+        <Stack.Screen
+          name="SellerQRCode"
+          component={SellerQRCode}
+          options={{headerShown: false}}
         />
       </Stack.Navigator>
     </NavigationContainer>

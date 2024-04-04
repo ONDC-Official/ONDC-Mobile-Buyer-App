@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
 import FastImage from 'react-native-fast-image';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
@@ -18,8 +19,21 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const [searchQuery, setSearchQuery] = React.useState<string>('');
 
-  const navigateToSearch = () => navigation.navigate('SearchProducts');
+  const onChangeSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
+  const onSearchComplete = () => {
+    if (searchQuery.trim().length > 0) {
+      navigation.navigate('SearchProducts', {query: searchQuery});
+    }
+  };
+
+  const showQRScanner = () => {
+    navigation.navigate('SellerQRCode');
+  };
 
   return (
     <View style={styles.container}>
@@ -33,21 +47,25 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
         </View>
       )}
       <View style={styles.searchContainer}>
-        <TouchableOpacity
-          style={styles.searchButton}
-          onPress={navigateToSearch}>
+        <View style={styles.searchButton}>
           <Searchbar
-            editable={false}
+            editable
             iconColor={theme.colors.primary}
             rippleColor={theme.colors.primary}
             inputStyle={styles.searchInput}
             style={styles.search}
             placeholderTextColor={theme.colors.primary}
             placeholder={t('Home.Search')}
-            value={''}
-            traileringIcon={'microphone'}
-            traileringIconColor={theme.colors.primary}
+            onChangeText={onChangeSearch}
+            onBlur={onSearchComplete}
+            value={searchQuery}
           />
+        </View>
+        <TouchableOpacity>
+          <Icon name={'mic'} color={theme.colors.white} size={24} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={showQRScanner}>
+          <Icon name={'qr-code-scanner'} color={theme.colors.white} size={24} />
         </TouchableOpacity>
       </View>
     </View>
@@ -73,6 +91,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       backgroundColor: colors.primary,
       height: 60,
+      gap: 15,
     },
     searchButton: {
       flex: 1,

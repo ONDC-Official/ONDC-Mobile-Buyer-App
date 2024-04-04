@@ -10,11 +10,13 @@ interface SearchProductsProps {
   route: any;
 }
 
-const SearchProducts: React.FC<SearchProductsProps> = ({}) => {
+const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const [searchQuery, setSearchQuery] = useState<string | ''>('');
+  const [searchQuery, setSearchQuery] = useState<string | ''>(
+    params?.query ?? '',
+  );
 
   const onSearch = (query: string) => {
     setSearchQuery(query);
@@ -24,6 +26,7 @@ const SearchProducts: React.FC<SearchProductsProps> = ({}) => {
     <View style={styles.container}>
       <SearchHeader
         onSearch={onSearch}
+        defaultQuery={params?.query ?? ''}
         backIconPress={() => navigation.goBack()}
       />
       <SearchProductList searchQuery={searchQuery} />
