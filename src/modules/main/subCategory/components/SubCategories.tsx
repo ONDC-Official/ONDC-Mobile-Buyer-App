@@ -2,13 +2,13 @@ import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
 
 import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
+import AllOptionsIcon from '../../../../assets/all_options.svg';
 
 interface SubCategories {
   currentSubCategory: string;
@@ -54,11 +54,7 @@ const SubCategories: React.FC<SubCategories> = ({
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.allOptionsButton} onPress={goBack}>
-        <Icon
-          name={'view-grid-outline'}
-          color={theme.colors.primary}
-          size={20}
-        />
+        <AllOptionsIcon width={21} height={21} />
         <Text variant={'labelLarge'} style={styles.allOptions}>
           {t('Cart.All Options')}
         </Text>
