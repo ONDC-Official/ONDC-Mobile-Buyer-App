@@ -5,6 +5,7 @@ import {useAppTheme} from '../../utils/theme';
 
 /**
  * Component to render generic input field
+ * @param inputLabel
  * @param props: other props
  * @returns {JSX.Element}
  * @constructor
@@ -17,7 +18,7 @@ const InputField: React.FC<any> = ({inputLabel, ...props}) => {
     <View>
       <Text variant={'bodyMedium'} style={styles.inputLabel}>
         {inputLabel}
-        {props.required && <Text style={styles.required}>*</Text>}
+        {props.required && <Text>*</Text>}
       </Text>
       <TextInput
         {...props}
@@ -46,7 +47,6 @@ const makeStyles = (colors: any) =>
     outline: {
       borderRadius: 12,
     },
-    required: {color: colors.error600},
     inputText: {
       fontWeight: '400',
       backgroundColor: colors.white,

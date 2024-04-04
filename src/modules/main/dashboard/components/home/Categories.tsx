@@ -3,11 +3,11 @@ import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
 
 import {CATEGORIES} from '../../../../../utils/categories';
 import {useAppTheme} from '../../../../../utils/theme';
 import SectionHeaderWithViewAll from '../../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
-import {useTranslation} from 'react-i18next';
 
 const Categories = () => {
   const {t} = useTranslation();
@@ -58,6 +58,7 @@ const makeStyles = (colors: any) =>
     categoryText: {
       color: colors.neutral400,
       textAlign: 'center',
+      marginTop: 4,
     },
     category: {
       marginHorizontal: 16,

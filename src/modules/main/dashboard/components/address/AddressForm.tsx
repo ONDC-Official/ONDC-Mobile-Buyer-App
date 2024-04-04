@@ -130,7 +130,6 @@ const AddressForm: React.FC<AddressForm> = ({
                     <InputField
                       value={values.email}
                       onBlur={handleBlur('email')}
-                      required
                       inputLabel={t('Address Form.Email')}
                       label={''}
                       placeholder={t('Address Form.Email')}

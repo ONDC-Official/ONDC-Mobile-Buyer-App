@@ -13,7 +13,7 @@ const DropdownField: React.FC<any> = ({label, inputLabel, ...props}) => {
     <View>
       <Text variant={'bodyMedium'} style={styles.inputLabel}>
         {inputLabel}
-        {props.required && <Text style={styles.required}>*</Text>}
+        {props.required && <Text>*</Text>}
       </Text>
       <DropDown
         inputProps={{
@@ -45,7 +45,6 @@ const makeStyles = (colors: any) =>
       color: colors.neutral400,
       marginBottom: 4,
     },
-    required: {color: colors.error600},
     outline: {
       borderRadius: 12,
     },
