@@ -43,7 +43,7 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
           key={item.key}
           style={[styles.brand]}
           onPress={() => navigateToSubCategory(item)}>
-          <FastImage source={{uri: item?.imageUrl}} style={styles.brandImage} />
+          <FastImage source={item?.imageUrl} style={styles.brandImage} />
           <Text variant={'labelLarge'} style={styles.name}>
             {t(`Product SubCategories.${item.key}`)}
           </Text>
