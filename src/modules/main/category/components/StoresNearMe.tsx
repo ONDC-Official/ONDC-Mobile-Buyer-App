@@ -94,7 +94,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
                 <BrandSkeleton />
               </View>
             ))
-          : locations.slice(0, 8).map(store => (
+          : locations.slice(0, 9).map(store => (
               <View style={styles.storeContainer} key={store.id}>
                 <Store store={store} />
               </View>
