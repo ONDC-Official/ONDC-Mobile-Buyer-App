@@ -7,12 +7,12 @@ const makeStyles = (colors: any) =>
     },
     modalView: {
       alignSelf: 'center',
-      height: '80%',
-      width: '90%',
+      height: 350,
+      width: 300,
       margin: 20,
       backgroundColor: 'white',
       borderRadius: 20,
-      padding: 35,
+      padding: 16,
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
@@ -23,23 +23,22 @@ const makeStyles = (colors: any) =>
       elevation: 5,
     },
     micWavesContainer: {
-      width: 75,
-      height: 75,
+      width: 60,
+      height: 60,
       borderRadius: 75,
       backgroundColor: colors.primary,
       alignItems: 'center',
       justifyContent: 'center',
       alignSelf: 'center',
-      marginTop: 100,
+      marginTop: 75,
     },
     micWaves: {
       backgroundColor: 'rgba(0, 142, 204, 0.4)',
       borderRadius: 75,
     },
     labelText: {
-      marginTop: 20,
-      fontSize: 18,
-      fontWeight: '600',
+      marginTop: 100,
+      textAlign: 'center',
     },
   });
 

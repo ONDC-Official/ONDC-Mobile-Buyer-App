@@ -1,30 +1,34 @@
 import React from 'react';
-import {Modal, Portal, useTheme} from 'react-native-paper';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Modal, Text, Portal, useTheme} from 'react-native-paper';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {MotiView} from '@motify/components';
 import {Easing} from 'react-native-reanimated';
+import {useTranslation} from 'react-i18next';
 import makeStyles from './styles';
 
 type MicrProps = {
+  recognizedText: string;
   modalVisible: boolean;
   onStopRecord: () => void;
 };
 
-const SearchModal: React.FC<MicrProps> = ({modalVisible, onStopRecord}) => {
+const SearchModal: React.FC<MicrProps> = ({
+  recognizedText,
+  modalVisible,
+  onStopRecord,
+}) => {
+  const {t} = useTranslation();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
 
   return (
     <Portal>
-      <Modal visible={modalVisible}>
+      <Modal visible={modalVisible} onDismiss={onStopRecord}>
         <View style={styles.modalView}>
           <TouchableOpacity onPress={onStopRecord}>
-            <Icon name="clear" size={20} color="#1A1A1A" />
+            <Icon name="clear" size={24} color="#1A1A1A" />
           </TouchableOpacity>
-          <Text style={styles.labelText}>
-            Try Saying Something, We are Listening !
-          </Text>
           <View style={styles.micWavesContainer}>
             {[...Array(3).keys()].map(index => {
               return (
@@ -46,6 +50,11 @@ const SearchModal: React.FC<MicrProps> = ({modalVisible, onStopRecord}) => {
             })}
             <Icon name="mic" size={60} color="#fff" />
           </View>
+          <Text variant={'bodyLarge'} style={styles.labelText}>
+            {recognizedText?.length > 0
+              ? recognizedText
+              : t('Home.Try Saying Something, We are Listening')}
+          </Text>
         </View>
       </Modal>
     </Portal>

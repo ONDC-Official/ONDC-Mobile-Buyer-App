@@ -1,14 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Searchbar} from 'react-native-paper';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
 import FastImage from 'react-native-fast-image';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
+import AudioRecorder from './AudioRecorder';
+import QRButton from './QRButton';
 
 type HeaderProps = {
   disableAddress?: boolean;
@@ -19,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const [searchQuery, setSearchQuery] = React.useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const onChangeSearch = (query: string) => {
     setSearchQuery(query);
@@ -31,8 +32,10 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
     }
   };
 
-  const showQRScanner = () => {
-    navigation.navigate('SellerQRCode');
+  const onAudioSearchComplete = (query: string) => {
+    if (query.length > 0) {
+      navigation.navigate('SearchProducts', {query});
+    }
   };
 
   return (
@@ -61,12 +64,11 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
             value={searchQuery}
           />
         </View>
-        <TouchableOpacity>
-          <Icon name={'mic'} color={theme.colors.white} size={24} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={showQRScanner}>
-          <Icon name={'qr-code-scanner'} color={theme.colors.white} size={24} />
-        </TouchableOpacity>
+        <AudioRecorder
+          setSearchQuery={setSearchQuery}
+          onSearchComplete={onAudioSearchComplete}
+        />
+        <QRButton />
       </View>
     </View>
   );

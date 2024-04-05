@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
+
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import Product from '../../modules/main/provider/components/Product';
@@ -10,7 +12,6 @@ import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 interface SearchProductList {
   searchQuery: string;

@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const SellerQRCode = ({navigation}: {navigation: any}) => {
   const [torchOn, setTorchOn] = useState(false);
 
-  const onQRScan = event => {
+  const onQRScan = (event: any) => {
     if (event.data.startsWith('beckn://ondc')) {
       const url = event.data;
       const urlParams: any = {};
