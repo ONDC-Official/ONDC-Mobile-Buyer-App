@@ -12,7 +12,7 @@ const OrderMeta = () => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
-  const {address} = orderDetails?.fulfillments[0]?.end?.location;
+  const address = orderDetails?.fulfillments[0]?.end?.location?.address;
 
   return (
     <View style={styles.container}>
