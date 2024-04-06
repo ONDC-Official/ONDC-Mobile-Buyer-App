@@ -1,11 +1,11 @@
 {
   "Sign In": {
     "Please enter details to sign in": "সাইন ইন করতে অনুগ্রহ করে বিস্তারিত লিখুন",
-    "Email Address": "ইমেইল ঠিকানা",
-    "Phone No.": "ফোন নম্বর.",
+    "Email Address": "ইমেইল অ্যাড্রেস",
+    "Phone No.": "ফোন নো।",
     "Password": "পাসওয়ার্ড",
-    "Forgot Password": "পাসওয়ার্ড ভুলে গেছেন",
-    "Sign In": "সাইন ইন করুন",
+    "Forgot Password": "ফরগট পাসওয়ার্ড",
+    "Sign In": "সাইন আইএন",
     "Don't have an account?": "একটি অ্যাকাউন্ট নেই",
     "Terms and Conditions": "শর্তাবলী",
     "Please enter details to register": "নিবন্ধন করতে বিস্তারিত লিখুন",
@@ -13,12 +13,12 @@
   },
   "Sign Up": {
     "Please enter details to sign in": "সাইন ইন করতে অনুগ্রহ করে বিস্তারিত লিখুন",
-    "Full Name": "পুরো নাম",
-    "Email Address": "ইমেইল ঠিকানা",
-    "Phone No.": "ফোন নম্বর.",
+    "Full Name": "ফুল নামে",
+    "Email Address": "ইমেইল অ্যাড্রেস",
+    "Phone No.": "ফোন নো।",
     "Password": "পাসওয়ার্ড",
-    "Forgot Password": "পাসওয়ার্ড ভুলে গেছেন",
-    "Sign In": "সাইন ইন করুন",
+    "Forgot Password": "ফরগট পাসওয়ার্ড",
+    "Sign In": "সাইন আইএন",
     "Don't have an account": "একটি অ্যাকাউন্ট নেই",
     "Terms and Conditions": "শর্তাবলী",
     "Please enter details to register": "নিবন্ধন করতে বিস্তারিত লিখুন",
@@ -26,7 +26,7 @@
   },
   "Home": {
     "Home": "বাড়ি",
-    "Featured Categories": "বৈশিষ্ট্যযুক্ত বিভাগ",
+    "Featured Categories": "ফিচার্ড ক্যাটেগরিস",
     "View All": "সব দেখ",
     "Stores Near Me": "আমার কাছাকাছি দোকান",
     "Deliver to": "সরবরাহ করা",
@@ -37,28 +37,28 @@
     }
   },
   "List": {
-    "List": "তালিকা",
+    "List": "লিস্ট",
     "Coming soon": "শীঘ্রই আসছে"
   },
   "Cart": {
     "Cart": "কার্ট",
-    "My Cart": "আমার কার্ট",
+    "My Cart": "মাই কার্ট",
     "Customise": "কাস্টমাইজ করুন",
     "Delivery Address": "সরবরাহের ঠিকানা",
     "Change": "পরিবর্তন",
     "View Delivery Options": "ডেলিভারি অপশন দেখুন",
     "items": "আইটেম",
-    "Add to cart": "কার্টে যোগ করুন",
+    "Add to cart": "এড তো কার্ট",
     "Product Details": "পণ্যের বিবরণ",
     "Select any": "যেকোনো একটি নির্বাচন করুন",
     "options": "বিকল্প",
-    "Veg": "ভেজ",
-    "Non Veg": "নন ভেজ",
+    "Veg": "ভেগ",
+    "Non Veg": "নন ভেগ",
     "Egg": "ডিম",
     "Required": "প্রয়োজন",
     "All Options": "সমস্ত বিকল্প",
     "Edit": "সম্পাদনা করুন",
-    "Qty": "Qty",
+    "Qty": "কিউটি",
     "Outlet Details": {
       "Get Direction": "দিকনির্দেশ পান",
       "Call Now": "এখন ডাকো",
@@ -67,7 +67,7 @@
     "FBProduct": {
       "Add": "যোগ করুন",
       "Out of stock": "স্টক শেষ",
-      "Customizable": "কাস্টমাইজযোগ্য"
+      "Customizable": "কাস্টমাইজেবল"
     },
     "Filter List": {
       "Filters": "ফিল্টার",
@@ -77,7 +77,7 @@
     },
     "Payment": {
       "Select Payment Option": "পেমেন্ট অপশন নির্বাচন করুন",
-      "Cash on delivery": "প্রদানোত্তর পরিশোধ",
+      "Cash on delivery": "কাশ অন ডেলিভারি",
       "Prepaid": "প্রিপেইড",
       "Proceed to Buy": "কেনার জন্য এগিয়ে যান"
     }
@@ -97,12 +97,12 @@
     "No data found": "কোন তথ্য পাওয়া যায়নি",
     "Are you sure you want to logout?": "আপনি লগ আউট করতে চান",
     "Cancel": "বাতিল করুন",
-    "Get Status": "স্ট্যাটাস পান",
+    "Get Status": "গেট স্টেটাস",
     "Track": "ট্র্যাক",
     "Order placed on": "অর্ডার দেওয়া হয়েছে",
-    "Shipment Details": "চালান বিবরণ",
-    "Payment Methods": "মুল্য পরিশোধ পদ্ধতি",
-    "Shipping Address": "প্রেরণের ঠিকানা",
+    "Shipment Details": "শিপমেন্ট ডিটেইলস",
+    "Payment Methods": "পেমেন্ট মেথডস",
+    "Shipping Address": "শিপিং অ্যাড্রেস",
     "Raise Issue": "ইস্যু উত্থাপন",
     "Cancellable": "বাতিলযোগ্য",
     "Non-cancellable": "বাতিলযোগ্য নয়",
@@ -128,14 +128,14 @@
   },
   "Address Form": {
     "Add Address": "ঠিকানা যোগ করুন",
-    "Name": "নাম",
+    "Name": "নামে",
     "Email": "ইমেইল ঠিকানা",
     "Mobile Number": "ফোন নম্বর",
     "Building": "বিল্ডিং",
-    "Street": "রাস্তা",
-    "Pin Code": "পিনকোড",
-    "City": "শহর",
-    "State": "অবস্থা",
+    "Street": "স্ট্রিট",
+    "Pin Code": "পিন কোড",
+    "City": "সিটি",
+    "State": "স্টেট",
     "Address Type": "ঠিকানার ধরন",
     "Save": "সংরক্ষণ"
   },
@@ -157,25 +157,25 @@
     "It seems you haven’t added any products in your cart": "মনে হচ্ছে আপনি আপনার কার্টে কোনো পণ্য যোগ করেননি"
   },
   "Page": {
-    ", Go To Cart": ", কার্টে যান",
+    ", Go To Cart": ", গো তো কার্ট",
     "Item Added": "আইটেম যোগ করা হয়েছে",
     "Items Added": "আইটেম যোগ করা হয়েছে"
   },
   "Fulfillment": {
     "Choose delivery/pickup": "ডেলিভারি/পিকআপ বেছে নিন",
     "Proceed to Pay": "পে করতে এগিয়ে যান",
-    "Item Total": "আইটেম মোট",
-    "Items Total": "আইটেম মোট",
+    "Item Total": "আইটেম টোটাল",
+    "Items Total": "আইটেমস টোটাল",
     "To Pay": "পরিশোধ করতে",
-    "Qty": "পরিমাণ",
-    "Items": "আইটেম",
+    "Qty": "কিউটি",
+    "Items": "আইটেমস",
     "Item": "আইটেম",
     "Please try ordering from another store or try again later": "অন্য দোকান থেকে অর্ডার করার চেষ্টা করুন বা পরে আবার চেষ্টা করুন",
     "Explore Other Stores": "অন্যান্য দোকান অন্বেষণ",
     "Fulfilment no": "{{total}} এর মধ্যে {{current}}"
   },
   "Featured Categories": {
-    "Featured Categories": "বৈশিষ্ট্যযুক্ত বিভাগ",
+    "Featured Categories": "ফিচার্ড ক্যাটেগরিস",
     "Fashion": "ফ্যাশন",
     "Grocery": "মুদিখানা",
     "Electronics": "ইলেকট্রনিক্স",
@@ -189,8 +189,8 @@
   "Product SubCategories": {
     "Search": "অনুসন্ধান করুন",
     "Filter": "ছাঁকনি",
-    "Shop by Category": "বিভাগ অনুসারে কেনাকাটা করুন",
-    "Shop By Category": "বিভাগ দ্বারা কেনাকাটা",
+    "Shop by Category": "শপ বি ক্যাটেগরি",
+    "Shop By Category": "শপ বি ক্যাটেগরি",
     "Fruits and Vegetables": "ফল এবং শাকসবজি",
     "Masala & Seasoning": "মসলা এবং সিজনিং",
     "Oil & Ghee": "তেল ও ঘি",
@@ -402,7 +402,7 @@
     "Issue": "সমস্যা",
     "Order Id": "অর্ডার আইডি",
     "Issue Raised On": "ইস্যু চালু হয়েছে",
-    "QTY": "পরিমাণ",
+    "QTY": "কিউটি",
     "Expected Response Time": "প্রত্যাশিত প্রতিক্রিয়া সময়",
     "Expected Resolution Time": "প্রত্যাশিত সমাধান সময়",
     "Respondent Details": "উত্তরদাতার বিবরণ",
@@ -423,13 +423,13 @@
     "Are You sure you would like to cancel this order?": "আপনি কি নিশ্চিত আপনি এই অর্ডার বাতিল করতে চান?"
   },
   "Payment Methods": {
-    "Cash On Delivery": "প্রদানোত্তর পরিশোধ",
+    "Cash On Delivery": "কাশ অন ডেলিভারি",
     "Prepaid": "প্রিপেইড",
     "Billed Address": "বিল করা ঠিকানা",
     "Customer Details": "কাস্টমার বিস্তারিত",
     "Order Number": "অর্ডার নম্বর",
     "Customer Name": "ক্রেতার নাম",
-    "Phone Number": "ফোন নম্বর"
+    "Phone Number": "ফোন নাম্বার"
   },
   "Return Items": {
     "Return Items": "ফেরত মালামাল"
@@ -466,9 +466,9 @@
   "Order Meta": {
     "Order Details": "অর্ডার সম্পন্ন হয়েছে",
     "Order Number": "অর্ডার নম্বর",
-    "Payment mode": "পরিশোধের মাধ্যম",
+    "Payment mode": "পেমেন্ট মোড",
     "Date": "তারিখ",
-    "Phone Number": "ফোন নম্বর",
+    "Phone Number": "ফোন নাম্বার",
     "Delivery Address": "সরবরাহের ঠিকানা"
   },
   "Product Summary": {
@@ -490,8 +490,8 @@
     "Return On": "রিটার্ন অন"
   },
   "Return Summary": {
-    "Items": "আইটেম",
-    "Qty": "Qty",
+    "Items": "আইটেমস",
+    "Qty": "কিউটি",
     "Reason": "কারণ",
     "Click to View Images": "ছবি দেখতে ক্লিক করুন",
     "Order Total": "আদেশ মোট"

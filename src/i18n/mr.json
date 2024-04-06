@@ -1,11 +1,11 @@
 {
   "Sign In": {
     "Please enter details to sign in": "कृपया साइन इन करण्यासाठी तपशील प्रविष्ट करा",
-    "Email Address": "ईमेल पत्ता",
-    "Phone No.": "दूरध्वनी क्रमांक.",
+    "Email Address": "इमेल ॲड्रेस",
+    "Phone No.": "फोन नो.",
     "Password": "पासवर्ड",
-    "Forgot Password": "पासवर्ड विसरलात",
-    "Sign In": "साइन इन करा",
+    "Forgot Password": "फॉरगॉट पासवर्ड",
+    "Sign In": "साइन इन",
     "Don't have an account?": "खाते नाही",
     "Terms and Conditions": "नियम आणि अटी",
     "Please enter details to register": "कृपया नोंदणी करण्यासाठी तपशील प्रविष्ट करा",
@@ -14,11 +14,11 @@
   "Sign Up": {
     "Please enter details to sign in": "कृपया साइन इन करण्यासाठी तपशील प्रविष्ट करा",
     "Full Name": "पूर्ण नाव",
-    "Email Address": "ईमेल पत्ता",
-    "Phone No.": "दूरध्वनी क्रमांक.",
+    "Email Address": "इमेल ॲड्रेस",
+    "Phone No.": "फोन नो.",
     "Password": "पासवर्ड",
-    "Forgot Password": "पासवर्ड विसरलात",
-    "Sign In": "साइन इन करा",
+    "Forgot Password": "फॉरगॉट पासवर्ड",
+    "Sign In": "साइन इन",
     "Don't have an account": "खाते नाही",
     "Terms and Conditions": "नियम आणि अटी",
     "Please enter details to register": "कृपया नोंदणी करण्यासाठी तपशील प्रविष्ट करा",
@@ -26,7 +26,7 @@
   },
   "Home": {
     "Home": "मुख्यपृष्ठ",
-    "Featured Categories": "वैशिष्ट्यीकृत श्रेणी",
+    "Featured Categories": "फिचर्ड कॅटेगरीज",
     "View All": "सर्व पहा",
     "Stores Near Me": "माझ्या जवळची दुकाने",
     "Deliver to": "कडे वितरीत करा",
@@ -37,28 +37,28 @@
     }
   },
   "List": {
-    "List": "सूची",
+    "List": "लिस्ट",
     "Coming soon": "लवकरच येत आहे"
   },
   "Cart": {
     "Cart": "कार्ट",
-    "My Cart": "माझे कार्ट",
+    "My Cart": "माय कार्ट",
     "Customise": "सानुकूल करा",
     "Delivery Address": "वितरण पत्ता",
     "Change": "बदला",
     "View Delivery Options": "वितरण पर्याय पहा",
     "items": "आयटम",
-    "Add to cart": "कार्टमध्ये जोडा",
+    "Add to cart": "ॲड तो कार्ट",
     "Product Details": "उत्पादन तपशील",
     "Select any": "कोणतेही निवडा",
     "options": "पर्याय",
-    "Veg": "व्हेज",
-    "Non Veg": "नॉन व्हेज",
+    "Veg": "वेग",
+    "Non Veg": "नॉन वेग",
     "Egg": "अंडी",
     "Required": "आवश्यक आहे",
     "All Options": "सर्व पर्याय",
     "Edit": "सुधारणे",
-    "Qty": "प्रमाण",
+    "Qty": "क्यूटी",
     "Outlet Details": {
       "Get Direction": "दिशा मिळवा",
       "Call Now": "आता कॉल करा",
@@ -67,7 +67,7 @@
     "FBProduct": {
       "Add": "ॲड",
       "Out of stock": "स्टॉक संपला",
-      "Customizable": "सानुकूल करण्यायोग्य"
+      "Customizable": "कस्टमायझेबल"
     },
     "Filter List": {
       "Filters": "फिल्टर",
@@ -77,7 +77,7 @@
     },
     "Payment": {
       "Select Payment Option": "पेमेंट पर्याय निवडा",
-      "Cash on delivery": "घरपोच दिल्यावर रोख रक्कम",
+      "Cash on delivery": "कॅश ओन डिलिव्हरी",
       "Prepaid": "प्रीपेड",
       "Proceed to Buy": "खरेदी करण्यासाठी पुढे जा"
     }
@@ -97,12 +97,12 @@
     "No data found": "माहिती आढळली नाही",
     "Are you sure you want to logout?": "तुमची खात्री आहे की तुम्ही लॉगआउट करू इच्छिता",
     "Cancel": "रद्द करा",
-    "Get Status": "स्टेटस मिळवा",
+    "Get Status": "गेट स्टेटस",
     "Track": "ट्रॅक",
     "Order placed on": "वर ऑर्डर दिली",
-    "Shipment Details": "शिपमेंट तपशील",
-    "Payment Methods": "पेमेंट पद्धती",
-    "Shipping Address": "शिपिंग पत्ता",
+    "Shipment Details": "शिपमेंट डिटेल्स",
+    "Payment Methods": "पेमेंट मेथड्स",
+    "Shipping Address": "शिपिंग ॲड्रेस",
     "Raise Issue": "मुद्दा मांडा",
     "Cancellable": "रद्द करण्यायोग्य",
     "Non-cancellable": "रद्द करण्यायोग्य नाही",
@@ -128,14 +128,14 @@
   },
   "Address Form": {
     "Add Address": "पत्ता जोडा",
-    "Name": "नाव",
+    "Name": "नामे",
     "Email": "ईमेल",
     "Mobile Number": "मोबाईल नंबर",
-    "Building": "इमारत",
-    "Street": "रस्ता",
+    "Building": "बिल्डिंग",
+    "Street": "स्ट्रीट",
     "Pin Code": "पिन कोड",
-    "City": "शहर",
-    "State": "राज्य",
+    "City": "सिटी",
+    "State": "स्टेट",
     "Address Type": "पत्त्याचा प्रकार",
     "Save": "जतन करा"
   },
@@ -157,25 +157,25 @@
     "It seems you haven’t added any products in your cart": "तुम्ही तुमच्या कार्टमध्ये कोणतीही उत्पादने जोडलेली नाहीत असे दिसते"
   },
   "Page": {
-    ", Go To Cart": ", कार्टवर जा",
+    ", Go To Cart": ", गो तो कार्ट",
     "Item Added": "आयटम जोडला",
     "Items Added": "आयटम जोडले"
   },
   "Fulfillment": {
     "Choose delivery/pickup": "डिलिव्हरी/पिकअप निवडा",
     "Proceed to Pay": "पैसे देण्यासाठी पुढे जा",
-    "Item Total": "एकूण आयटम",
-    "Items Total": "एकूण आयटम",
+    "Item Total": "आयटेम टोटल",
+    "Items Total": "आयटेम्स टोटल",
     "To Pay": "पैसे देणे",
-    "Qty": "प्रमाण",
-    "Items": "वस्तू",
-    "Item": "आयटम",
+    "Qty": "क्यूटी",
+    "Items": "आयटेम्स",
+    "Item": "आयटेम",
     "Please try ordering from another store or try again later": "कृपया दुसऱ्या दुकानातून ऑर्डर करून पहा किंवा नंतर पुन्हा प्रयत्न करा",
     "Explore Other Stores": "इतर स्टोअर्स एक्सप्लोर करा",
     "Fulfilment no": "{{total}} पैकी {{current}}"
   },
   "Featured Categories": {
-    "Featured Categories": "वैशिष्ट्यीकृत श्रेणी",
+    "Featured Categories": "फिचर्ड कॅटेगरीज",
     "Fashion": "फॅशन",
     "Grocery": "किराणा",
     "Electronics": "इलेक्ट्रॉनिक्स",
@@ -189,8 +189,8 @@
   "Product SubCategories": {
     "Search": "शोधा",
     "Filter": "फिल्टर करा",
-    "Shop by Category": "श्रेणीनुसार खरेदी करा",
-    "Shop By Category": "श्रेणीनुसार खरेदी करा",
+    "Shop by Category": "शॉप बाय कॅटेगरी",
+    "Shop By Category": "शॉप बाय कॅटेगरी",
     "Fruits and Vegetables": "फळे आणि भाज्या",
     "Masala & Seasoning": "मसाला आणि मसाला",
     "Oil & Ghee": "तेल आणि तूप",
@@ -402,7 +402,7 @@
     "Issue": "इश्यू",
     "Order Id": "ऑर्डर आयडी",
     "Issue Raised On": "मुद्दा मांडला",
-    "QTY": "प्रमाण",
+    "QTY": "क्यूटी",
     "Expected Response Time": "अपेक्षित प्रतिसाद वेळ",
     "Expected Resolution Time": "अपेक्षित ठराव वेळ",
     "Respondent Details": "प्रतिसादकर्त्याचे तपशील",
@@ -423,7 +423,7 @@
     "Are You sure you would like to cancel this order?": "तुमची खात्री आहे की तुम्ही ही ऑर्डर रद्द करू इच्छिता?"
   },
   "Payment Methods": {
-    "Cash On Delivery": "घरपोच दिल्यावर रोख रक्कम",
+    "Cash On Delivery": "कॅश ओन डिलिव्हरी",
     "Prepaid": "प्रीपेड",
     "Billed Address": "बिल केलेला पत्ता",
     "Customer Details": "ग्राहक तपशील",
@@ -491,13 +491,13 @@
   },
   "Return Summary": {
     "Items": "वस्तू",
-    "Qty": "प्रमाण",
+    "Qty": "क्यूटी",
     "Reason": "कारण",
     "Click to View Images": "प्रतिमा पाहण्यासाठी क्लिक करा",
     "Order Total": "ऑर्डर एकूण"
   },
   "Shipment Details": {
-    "Shipment Details": "शिपमेंट तपशील",
+    "Shipment Details": "शिपमेंट डिटेल्स",
     "Items Arriving": "{{count}} आयटम येत आहेत",
     "Arriving On": "वर आगमन",
     "Delivered On": "वर वितरित"

@@ -1,11 +1,11 @@
 {
   "Sign In": {
     "Please enter details to sign in": "உள்நுழைய விவரங்களை உள்ளிடவும்",
-    "Email Address": "மின்னஞ்சல் முகவரி",
-    "Phone No.": "தொலைபேசி எண்.",
-    "Password": "கடவுச்சொல்",
-    "Forgot Password": "கடவுச்சொல்லை மறந்துவிட்டீர்களா",
-    "Sign In": "உள்நுழையவும்",
+    "Email Address": "இமெயில் அட்ரஸ்",
+    "Phone No.": "போன் நோ.",
+    "Password": "பாஸ்வேர்ட்",
+    "Forgot Password": "போர்காட் பாஸ்வேர்ட்",
+    "Sign In": "புல் நேம்",
     "Don't have an account?": "கணக்கு இல்லை",
     "Terms and Conditions": "விதிமுறைகள் மற்றும் நிபந்தனைகள்",
     "Please enter details to register": "பதிவு செய்ய விவரங்களை உள்ளிடவும்",
@@ -13,12 +13,12 @@
   },
   "Sign Up": {
     "Please enter details to sign in": "உள்நுழைய விவரங்களை உள்ளிடவும்",
-    "Full Name": "முழு பெயர்",
-    "Email Address": "மின்னஞ்சல் முகவரி",
-    "Phone No.": "தொலைபேசி எண்.",
-    "Password": "கடவுச்சொல்",
-    "Forgot Password": "கடவுச்சொல்லை மறந்துவிட்டீர்களா",
-    "Sign In": "உள்நுழையவும்",
+    "Full Name": "புல் நேம்",
+    "Email Address": "இமெயில் அட்ரஸ்",
+    "Phone No.": "போன் நோ.",
+    "Password": "பாஸ்வேர்ட்",
+    "Forgot Password": "போர்காட் பாஸ்வேர்ட்",
+    "Sign In": "புல் நேம்",
     "Don't have an account?": "கணக்கு இல்லை",
     "Terms and Conditions": "விதிமுறைகள் மற்றும் நிபந்தனைகள்",
     "Please enter details to register": "பதிவு செய்ய விவரங்களை உள்ளிடவும்",
@@ -26,7 +26,7 @@
   },
   "Home": {
     "Home": "வீடு",
-    "Featured Categories": "சிறப்பு வகைகள்",
+    "Featured Categories": "பிச்சர்ட் கேட்டகரீஸ்",
     "View All": "அனைத்தையும் காட்டு",
     "Stores Near Me": "எனக்கு அருகிலுள்ள கடைகள்",
     "Deliver to": "வழங்க",
@@ -37,28 +37,28 @@
     }
   },
   "List": {
-    "List": "பட்டியல்",
+    "List": "லிஸ்ட்",
     "Coming soon": "விரைவில் வரும்"
   },
   "Cart": {
-    "Cart": "வண்டி",
-    "My Cart": "என் வண்டி",
+    "Cart": "கார்ட்",
+    "My Cart": "மை கார்ட்",
     "Customise": "தனிப்பயனாக்கலாம்",
     "Delivery Address": "டெலிவரி முகவரி",
     "Change": "மாற்றம்",
     "View Delivery Options": "டெலிவரி விருப்பங்களைப் பார்க்கவும்",
     "items": "பொருட்களை",
-    "Add to cart": "பெட்டகத்தில் சேர்",
+    "Add to cart": "ஆட் டோ கார்ட்",
     "Product Details": "தயாரிப்பு விவரங்கள்",
     "Select any": "ஏதேனும் ஒன்றைத் தேர்ந்தெடுக்கவும்",
     "options": "விருப்பங்கள்",
-    "Veg": "காய்கறி",
-    "Non Veg": "அசைவம்",
+    "Veg": "வெக்",
+    "Non Veg": "நான் வெக்",
     "Egg": "முட்டை",
     "Required": "தேவை",
     "All Options": "அனைத்து விருப்பங்களும்",
     "Edit": "தொகு",
-    "Qty": "Qty",
+    "Qty": "குட்டி",
     "Outlet Details": {
       "Get Direction": "திசையைப் பெறுங்கள்",
       "Call Now": "இப்போது அழைக்கவும்",
@@ -67,7 +67,7 @@
     "FBProduct": {
       "Add": "கூட்டு",
       "Out of stock": "பங்கு இல்லை",
-      "Customizable": "தனிப்பயனாக்கக்கூடியது"
+      "Customizable": "கஸ்டமைசபிள்"
     },
     "Filter List": {
       "Filters": "வடிப்பான்கள்",
@@ -77,8 +77,8 @@
     },
     "Payment": {
       "Select Payment Option": "கட்டண விருப்பத்தைத் தேர்ந்தெடுக்கவும்",
-      "Cash on delivery": "டெலிவரி போது பணம்",
-      "Prepaid": "ப்ரீபெய்டு",
+      "Cash on delivery": "கேஷ் ஒன் டெலிவரி",
+      "Prepaid": "ப்ரீபெய்ட்",
       "Proceed to Buy": "வாங்க தொடரவும்"
     }
   },
@@ -97,12 +97,12 @@
     "No data found": "வேறு தகவல்கள் இல்லை",
     "Are you sure you want to logout?": "நீங்கள் நிச்சயமாக வெளியேற விரும்புகிறீர்களா",
     "Cancel": "ரத்து செய்",
-    "Get Status": "நிலையைப் பெறுங்கள்",
-    "Track": "தடம்",
+    "Get Status": "கெட் ஸ்டேட்டஸ்",
+    "Track": "டிராக்",
     "Order placed on": "ஆர்டர் செய்யப்பட்டது",
-    "Shipment Details": "ஏற்றுமதி விவரங்கள்",
-    "Payment Methods": "பணம் செலுத்தும் முறைகள்",
-    "Shipping Address": "சேரும் முகவரி",
+    "Shipment Details": "ஷிப்மெண்ட் டீட்டெயில்ஸ்",
+    "Payment Methods": "பேமெண்ட் மெத்தட்ஸ்",
+    "Shipping Address": "ஷிப்பிங் அட்ரஸ்",
     "Raise Issue": "பிரச்சினையை எழுப்புங்கள்",
     "Cancellable": "ரத்து செய்யக்கூடியது",
     "Non-cancellable": "ரத்து செய்ய முடியாதது",
@@ -128,14 +128,14 @@
   },
   "Address Form": {
     "Add Address": "முகவரியைச் சேர்க்கவும்",
-    "Name": "பெயர்",
+    "Name": "நேம்",
     "Email": "மின்னஞ்சல் முகவரி",
     "Mobile Number": "தொலைபேசி எண்",
-    "Building": "கட்டிடம்",
-    "Street": "தெரு",
-    "Pin Code": "அஞ்சல் குறியீடு",
-    "City": "நகரம்",
-    "State": "நிலை",
+    "Building": "பில்டிங்",
+    "Street": "ஸ்ட்ரீட்",
+    "Pin Code": "பின் கோடு",
+    "City": "சிட்டி",
+    "State": "ஸ்டேட்",
     "Address Type": "முகவரி வகை",
     "Save": "சேமிக்கவும்"
   },
@@ -157,25 +157,25 @@
     "It seems you haven’t added any products in your cart": "உங்கள் கார்ட்டில் நீங்கள் எந்த தயாரிப்புகளையும் சேர்க்கவில்லை என்று தெரிகிறது"
   },
   "Page": {
-    ", Go To Cart": ", வண்டிக்குச் செல்லுங்கள்",
+    ", Go To Cart": ", கோ டோ கார்ட்",
     "Item Added": "பொருள் சேர்க்கப்பட்டது",
     "Items Added": "பொருட்கள் சேர்க்கப்பட்டது"
   },
   "Fulfillment": {
     "Choose delivery/pickup": "டெலிவரி/பிக்அப் என்பதைத் தேர்ந்தெடுக்கவும்",
     "Proceed to Pay": "பணம் செலுத்த தொடரவும்",
-    "Item Total": "பொருள் மொத்தம்",
-    "Items Total": "பொருட்கள் மொத்தம்",
+    "Item Total": "ஐட்டம் டோட்டல்",
+    "Items Total": "ஐட்டம்ஸ் டோட்டல்",
     "To Pay": "செலுத்த வேண்டும்",
-    "Qty": "Qty",
-    "Items": "பொருட்களை",
-    "Item": "பொருள்",
+    "Qty": "குட்டி",
+    "Items": "ஐட்டம்ஸ்",
+    "Item": "ஐட்டம்",
     "Please try ordering from another store or try again later": "வேறொரு கடையில் ஆர்டர் செய்ய முயற்சிக்கவும் அல்லது பிறகு முயற்சிக்கவும்",
     "Explore Other Stores": "மற்ற கடைகளை ஆராயுங்கள்",
     "Fulfilment no": "{{total}} இல் {{current}}"
   },
   "Featured Categories": {
-    "Featured Categories": "சிறப்பு வகைகள்",
+    "Featured Categories": "பிச்சர்ட் கேட்டகரீஸ்",
     "Fashion": "ஃபேஷன்",
     "Grocery": "மளிகை",
     "Electronics": "மின்னணுவியல்",
@@ -189,8 +189,8 @@
   "Product SubCategories": {
     "Search": "தேடு",
     "Filter": "வடிகட்டி",
-    "Shop by Category": "வகை வாரியாக கடை",
-    "Shop By Category": "வகை மூலம் கடை",
+    "Shop by Category": "ஷாப் பை கேட்டகரி",
+    "Shop By Category": "ஷாப் பை கேட்டகரி",
     "Fruits and Vegetables": "பழங்கள் மற்றும் காய்கறிகள்",
     "Masala & Seasoning": "மசாலா & மசாலா",
     "Oil & Ghee": "எண்ணெய் & நெய்",
@@ -406,8 +406,8 @@
     "Expected Response Time": "எதிர்பார்க்கப்படும் பதில் நேரம்",
     "Expected Resolution Time": "எதிர்பார்க்கப்படும் தீர்மானம் நேரம்",
     "Respondent Details": "பதிலளித்தவரின் விவரங்கள்",
-    "Phone": "தொலைபேசி",
-    "Email": "மின்னஞ்சல்"
+    "Phone": "போன்",
+    "Email": "இமெயில்"
   },
   "Close Form": {
     "Close": "நெருக்கமான",
@@ -423,13 +423,13 @@
     "Are You sure you would like to cancel this order?": "இந்த ஆர்டரை நிச்சயமாக ரத்து செய்ய விரும்புகிறீர்களா?"
   },
   "Payment Methods": {
-    "Cash On Delivery": "டெலிவரி போது பணம்",
-    "Prepaid": "ப்ரீபெய்டு",
+    "Cash On Delivery": "கேஷ் ஒன் டெலிவரி",
+    "Prepaid": "ப்ரீபெய்ட்",
     "Billed Address": "பில் செய்யப்பட்ட முகவரி",
     "Customer Details": "வாடிக்கையாளர் விவரங்கள்",
     "Order Number": "ஆர்டர் எண்",
     "Customer Name": "வாடிக்கையாளர் பெயர்",
-    "Phone Number": "தொலைபேசி எண்"
+    "Phone Number": "போன் நம்பர்"
   },
   "Return Items": {
     "Return Items": "பொருட்களைத் திரும்பப் பெறுங்கள்"
@@ -468,7 +468,7 @@
     "Order Number": "ஆர்டர் எண்",
     "Payment mode": "கட்டண முறை",
     "Date": "தேதி",
-    "Phone Number": "தொலைபேசி எண்",
+    "Phone Number": "போன் நம்பர்",
     "Delivery Address": "டெலிவரி முகவரி"
   },
   "Product Summary": {
@@ -491,13 +491,13 @@
   },
   "Return Summary": {
     "Items": "பொருட்களை",
-    "Qty": "Qty",
+    "Qty": "குட்டி",
     "Reason": "பொருட்களை",
     "Click to View Images": "படங்களை பார்க்க கிளிக் செய்யவும்",
     "Order Total": "மொத்த ஆர்டர்"
   },
   "Shipment Details": {
-    "Shipment Details": "ஏற்றுமதி விவரங்கள்",
+    "Shipment Details": "ஷிப்மெண்ட் டீட்டெயில்ஸ்",
     "Items Arriving": "{{count}} உருப்படி(கள்) வந்து சேரும்",
     "Arriving On": "அன்று வருகை",
     "Delivered On": "அன்று வழங்கப்பட்டது"

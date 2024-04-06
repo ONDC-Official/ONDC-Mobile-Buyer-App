@@ -1,11 +1,11 @@
 {
   "Sign In": {
     "Please enter details to sign in": "साइन इन करने के लिए कृपया विवरण दर्ज करें",
-    "Email Address": "मेल पता",
+    "Email Address": "ईमेल एड्रेस",
     "Phone No.": "फोन नंबर",
     "Password": "पासवर्ड",
-    "Forgot Password": "पासवर्ड भूल गए",
-    "Sign In": "दाखिल करना",
+    "Forgot Password": "फॉरगॉट पासवर्ड",
+    "Sign In": "साइन इन",
     "Don't have an account?": "कोई खाता नहीं है",
     "Terms and Conditions": "नियम और शर्तें",
     "Please enter details to register": "कृपया पंजीकरण करने के लिए विवरण दर्ज करें",
@@ -14,11 +14,11 @@
   "Sign Up": {
     "Please enter details to sign in": "साइन इन करने के लिए कृपया विवरण दर्ज करें",
     "Full Name": "पूरा नाम",
-    "Email Address": "मेल पता",
+    "Email Address": "ईमेल एड्रेस",
     "Phone No.": "फोन नंबर",
     "Password": "पासवर्ड",
-    "Forgot Password": "पासवर्ड भूल गए",
-    "Sign In": "दाखिल करना",
+    "Forgot Password": "फॉरगॉट पासवर्ड",
+    "Sign In": "साइन इन",
     "Don't have an account": "कोई खाता नहीं है",
     "Terms and Conditions": "नियम और शर्तें",
     "Please enter details to register": "कृपया पंजीकरण करने के लिए विवरण दर्ज करें",
@@ -26,7 +26,7 @@
   },
   "Home": {
     "Home": "घर",
-    "Featured Categories": "विशेष रुप से प्रदर्शित श्रेणियाँ",
+    "Featured Categories": "फीचर्ड कैटेगरीज",
     "View All": "सभी को देखें",
     "Stores Near Me": "मेरे आस-पास के स्टोर",
     "Deliver to": "के लिए वितरित",
@@ -42,7 +42,7 @@
   },
   "Cart": {
     "Cart": "कार्ट",
-    "My Cart": "मेरी गाड़ी",
+    "My Cart": "मेरा कार्ट",
     "Customise": "अनुकूलित करें",
     "Delivery Address": "डिलिवरी का पता",
     "Change": "परिवर्तन",
@@ -52,13 +52,13 @@
     "Product Details": "उत्पाद विवरण",
     "Select any": "कोई भी चुनें",
     "options": "विकल्प",
-    "Veg": "शाकाहारी",
-    "Non Veg": "मांसाहारी",
+    "Veg": "वेग",
+    "Non Veg": "नॉन वेग",
     "Egg": "अंडा",
     "Required": "आवश्यक",
     "All Options": "सभी विकल्प",
     "Edit": "संपादन करना",
-    "Qty": "मात्रा",
+    "Qty": "क्यूटी",
     "Outlet Details": {
       "Get Direction": "दिशा प्राप्त करें",
       "Call Now": "अब कॉल करें",
@@ -67,7 +67,7 @@
     "FBProduct": {
       "Add": "जोड़ना",
       "Out of stock": "स्टॉक ख़त्म",
-      "Customizable": "अनुकूलन"
+      "Customizable": "कस्टमाइजेबल"
     },
     "Filter List": {
       "Filters": "फिल्टर",
@@ -77,7 +77,7 @@
     },
     "Payment": {
       "Select Payment Option": "भुगतान विकल्प चुनें",
-      "Cash on delivery": "डिलवरी पर नकदी",
+      "Cash on delivery": "कैश ओन डिलिवरी",
       "Prepaid": "प्रीपेड",
       "Proceed to Buy": "खरीदने के लिए आगे बढ़ें"
     }
@@ -97,12 +97,12 @@
     "No data found": "डाटा प्राप्त नहीं हुआ",
     "Are you sure you want to logout?": "क्या आप लॉग आउट करना चाहते हैं",
     "Cancel": "रद्द करना",
-    "Get Status": "स्थिति प्राप्त करें",
-    "Track": "रास्ता",
+    "Get Status": "गेट स्टेटस",
+    "Track": "ट्रैक",
     "Order placed on": "ऑर्डर दिया गया",
-    "Shipment Details": "लदान विवरण",
-    "Payment Methods": "भुगतान की विधि",
-    "Shipping Address": "शिपिंग पता",
+    "Shipment Details": "शिपमेंट डिटेल्स",
+    "Payment Methods": "पेमेंट मेथड्स",
+    "Shipping Address": "शिपिंग एड्रेस",
     "Raise Issue": "मुद्दा उठाओ",
     "Cancellable": "रद्द करने योग्य",
     "Non-cancellable": "गैर रद्द करने योग्य",
@@ -128,14 +128,14 @@
   },
   "Address Form": {
     "Add Address": "पता जोड़ें",
-    "Name": "नाम",
+    "Name": "नेम",
     "Email": "ईमेल",
     "Mobile Number": "मोबाइल नंबर",
-    "Building": "इमारत",
-    "Street": "गली",
+    "Building": "बिल्डिंग",
+    "Street": "स्ट्रीट",
     "Pin Code": "पिन कोड",
-    "City": "शहर",
-    "State": "राज्य",
+    "City": "सिटी",
+    "State": "स्टेट",
     "Address Type": "पता मुद्रलेख",
     "Save": "बचाना"
   },
@@ -157,25 +157,25 @@
     "It seems you haven’t added any products in your cart": "ऐसा लगता है कि आपने अपने कार्ट में कोई उत्पाद नहीं जोड़ा है"
   },
   "Page": {
-    ", Go To Cart": ", गाड़ी पर जाना",
+    ", Go To Cart": ", , गो तो कार्ट",
     "Item Added": "आइटम जोड़ा गया",
     "Items Added": "आइटम जोड़े गए"
   },
   "Fulfillment": {
     "Choose delivery/pickup": "डिलीवरी/पिकअप चुनें",
     "Proceed to Pay": "चुकाने के लिए कार्रवाई शुरू करो",
-    "Item Total": "आइटम का कुल",
-    "Items Total": "आइटम कुल",
+    "Item Total": "इतेम टोटल",
+    "Items Total": "आईटीईएमएस टोटल",
     "To Pay": "भुगतान करने के लिए",
-    "Qty": "मात्रा",
-    "Items": "सामान",
-    "Item": "वस्तु",
+    "Qty": "क्यूटी",
+    "Items": "आईटीईएमएस",
+    "Item": "इतेम",
     "Please try ordering from another store or try again later": "कृपया किसी अन्य स्टोर से ऑर्डर करने का प्रयास करें या बाद में पुनः प्रयास करें",
     "Explore Other Stores": "अन्य स्टोर खोजें",
     "Fulfilment no": "{{total}} में से {{current}}"
   },
   "Featured Categories": {
-    "Featured Categories": "विशेष रुप से प्रदर्शित श्रेणियाँ",
+    "Featured Categories": "फीचर्ड कैटेगरीज",
     "Fashion": "पहनावा",
     "Grocery": "किराना",
     "Electronics": "इलेक्ट्रानिक्स",
@@ -189,7 +189,7 @@
   "Product SubCategories": {
     "Search": "खोज",
     "Filter": "फ़िल्टर",
-    "Shop by Category": "वर्गों के अनुसार खरीदारी",
+    "Shop by Category": "शॉप बी कैटेगरी",
     "Fruits and Vegetables": "फल और सब्जियां",
     "Masala & Seasoning": "मसाला और मसाला",
     "Oil & Ghee": "तेल / घी",
@@ -370,7 +370,7 @@
     "Cattle Feed": "पशु का चारा"
   },
   "SubCategories": {
-    "Shop By Category": "वर्गों के अनुसार खरीदारी",
+    "Shop By Category": "शॉप बी कैटेगरी",
     "Fruits and Vegetables": "फल और सब्जियां",
     "Masala & Seasoning": "मसाला और मसाला",
     "Oil & Ghee": "तेल / घी",
@@ -405,7 +405,7 @@
     "Expected Response Time": "अपेक्षित प्रतिक्रिया समय",
     "Expected Resolution Time": "अपेक्षित समाधान समय",
     "Respondent Details": "प्रतिवादी विवरण",
-    "Phone": "फ़ोन",
+    "Phone": "फोन",
     "Email": "ईमेल"
   },
   "Close Form": {
@@ -422,13 +422,13 @@
     "Are You sure you would like to cancel this order?": "क्या आप वाकई इस ऑर्डर को रद्द करना चाहेंगे?"
   },
   "Payment Methods": {
-    "Cash On Delivery": "डिलवरी पर नकदी",
+    "Cash On Delivery": "कैश ओन डिलिवरी",
     "Prepaid": "प्रीपेड",
     "Billed Address": "बिल किया हुआ पता",
     "Customer Details": "ग्राहक विवरण",
     "Order Number": "क्रम संख्या",
     "Customer Name": "ग्राहक का नाम",
-    "Phone Number": "फ़ोन नंबर"
+    "Phone Number": "फोन नंबर"
   },
   "Return Items": {
     "Return Items": "सामान वापस करे"
@@ -465,9 +465,9 @@
   "Order Meta": {
     "Order Details": "ऑर्डर का विवरण",
     "Order Number": "क्रम संख्या",
-    "Payment mode": "भुगतान का प्रकार",
+    "Payment mode": "पेमेंट मोड",
     "Date": "तारीख",
-    "Phone Number": "फ़ोन नंबर",
+    "Phone Number": "फोन नंबर",
     "Delivery Address": "डिलिवरी का पता"
   },
   "Product Summary": {
@@ -489,14 +489,14 @@
     "Return On": "वापस लौटें"
   },
   "Return Summary": {
-    "Items": "सामान",
-    "Qty": "मात्रा",
+    "Items": "आईटीईएमएस",
+    "Qty": "क्यूटी",
     "Reason": "कारण",
     "Click to View Images": "छवियाँ देखने के लिए क्लिक करें",
     "Order Total": "कुल आर्डर"
   },
   "Shipment Details": {
-    "Shipment Details": "लदान विवरण",
+    "Shipment Details": "पेमेंट मेथड्स",
     "Items Arriving": "{{count}} आइटम आ रहे हैं",
     "Arriving On": "पर पहुँचना",
     "Delivered On": "सौंप दिया"
