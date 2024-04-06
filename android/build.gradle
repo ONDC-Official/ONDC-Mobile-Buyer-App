@@ -10,6 +10,7 @@ buildscript {
         // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
         ndkVersion = "23.1.7779620"
         kotlinVersion = "1.8.0"
+        playServicesLocationVersion = "21.2.0"
     }
     repositories {
         google()
@@ -18,7 +19,7 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath 'com.google.gms:google-services:4.4.0'
+        classpath 'com.google.gms:google-services:4.4.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0"
     }
 }
@@ -26,9 +27,14 @@ buildscript {
 allprojects {
     repositories {
         maven { url "https://maven.juspay.in/jp-build-packages/hyper-sdk/" }
-        maven { url 'https://maven.mappls.com/repository/mappls/'}
+        maven { url 'https://maven.mappls.com/repository/mappls/' }
         google()
         mavenCentral()
         maven { url 'https://www.jitpack.io' }
+        configurations.configureEach {
+            resolutionStrategy {
+                force "com.google.android.gms:play-services-location:21.0.1"
+            }
+        }
     }
 }
