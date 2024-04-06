@@ -47,6 +47,10 @@ const OrderHeader: React.FC<Order> = ({order}) => {
           <Text variant={'bodyLarge'} style={styles.providerName}>
             {order?.provider?.descriptor?.name}
           </Text>
+          <Text variant={'labelMedium'} style={styles.providerAddress}>
+            {order?.fulfillments[0]?.start?.location?.address?.locality}{' '}
+            {order?.fulfillments[0]?.start?.location?.address?.city}
+          </Text>
         </View>
         <View>{order.state && <OrderStatus status={order.state} />}</View>
       </View>
@@ -59,7 +63,9 @@ const OrderHeader: React.FC<Order> = ({order}) => {
           }
 
           return (
-            <View key={`${item?.id}${item.fulfillment_id}`} style={styles.itemContainer}>
+            <View
+              key={`${item?.id}${item.fulfillment_id}`}
+              style={styles.itemContainer}>
               {order.domain === FB_DOMAIN && (
                 <View style={styles.iconContainer}>
                   <VegNonVegTag tags={item?.product?.tags} size={'small'} />
@@ -119,6 +125,9 @@ const makeStyles = (colors: any) =>
     },
     providerName: {
       color: colors.neutral400,
+    },
+    providerAddress: {
+      color: colors.neutral300,
     },
     providerNameContainer: {
       flex: 1,
