@@ -16,6 +16,7 @@ import FastImage from 'react-native-fast-image';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
 import RNEventSource from 'react-native-event-source';
+import CheckBox from 'react-native-check-box';
 import RaiseComplaint from '../../../../../assets/raise_complaint.svg';
 import {CURRENCY_SYMBOLS, SSE_TIMEOUT} from '../../../../../utils/constants';
 import {appStyles} from '../../../../../styles/styles';
@@ -302,9 +303,9 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
 
                 return (
                   <View key={item.id} style={styles.itemContainer}>
-                    <Checkbox.Android
-                      status={itemSelected ? 'checked' : 'unchecked'}
-                      onPress={() => {
+                    <CheckBox
+                      style={styles.checkbox}
+                      onClick={() => {
                         if (itemSelected) {
                           setSelectedItems(
                             selectedItems.filter(one => one !== item.id),
@@ -313,6 +314,19 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                           setSelectedItems(selectedItems.concat([item.id]));
                         }
                       }}
+                      isChecked={itemSelected}
+                      checkedImage={
+                        <Image
+                          source={require('../../../../../assets/checkbox.png')}
+                          style={styles.checkboxImage}
+                        />
+                      }
+                      unCheckedImage={
+                        <Image
+                          source={require('../../../../../assets/emptyCheckbox.png')}
+                          style={styles.checkboxImage}
+                        />
+                      }
                     />
                     <FastImage
                       source={{uri: item?.product?.descriptor?.symbol}}
@@ -580,6 +594,13 @@ const makeStyles = (colors: any) =>
       width: 32,
       height: 32,
       borderRadius: 5,
+    },
+    checkbox: {
+      marginRight: 12,
+    },
+    checkboxImage: {
+      width: 20,
+      height: 20,
     },
     productName: {
       flex: 1,
