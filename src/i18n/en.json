@@ -503,7 +503,19 @@
     "Delivered On": "Delivered On"
   },
   "Orders": {
-    "No data found": "No data found"
+    "No data found": "No data found",
+    "Search": "Search",
+    "Filter": "Filter",
+    "Filter List": {
+      "Filters": "Filters",
+      "Clear all": "Clear all",
+      "Close": "Close",
+      "Apply": "Apply",
+      "Order Type": "Order Type",
+      "Ongoing": "Ongoing",
+      "Completed": "Completed",
+      "Cancelled": "Cancelled"
+    }
   },
   "Global": {
     "Details not available": "Store Details not available"

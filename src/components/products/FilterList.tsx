@@ -173,7 +173,7 @@ const FilterList: React.FC<FilterList> = ({
   );
 };
 
-const makeStyles = (colors: any) =>
+export const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,

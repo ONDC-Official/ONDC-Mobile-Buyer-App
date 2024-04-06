@@ -1,8 +1,10 @@
 import React, {memo, useEffect, useRef, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Searchbar, Text} from 'react-native-paper';
 import axios from 'axios';
+import {useTranslation} from 'react-i18next';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
+import RBSheet from 'react-native-raw-bottom-sheet';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {keyExtractor, skeletonList} from '../../../../utils/utils';
@@ -12,7 +14,8 @@ import Order from '../components/Order';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
+import FiltersIcon from '../../../../assets/filter.svg';
+import FilterList from '../components/FilterList';
 
 const CancelToken = axios.CancelToken;
 
@@ -22,6 +25,7 @@ const CancelToken = axios.CancelToken;
  * @returns {JSX.Element}
  */
 const Orders: React.FC<any> = () => {
+  const refFilterSheet = useRef<any>(null);
   const navigation = useNavigation();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -35,6 +39,7 @@ const Orders: React.FC<any> = () => {
   const pageNumber = useRef<number>(1);
 
   const [orders, setOrders] = useState<any>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string>('');
   const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
   const [refreshInProgress, setRefreshInProgress] = useState<boolean>(false);
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
@@ -42,13 +47,16 @@ const Orders: React.FC<any> = () => {
   /**
    * function used to request list of orders
    * @param currentPage: It specifies the number of page
+   * @param filter: selected filter
    * @returns {Promise<void>}
    */
-  const getOrderList = async (currentPage: number) => {
+  const getOrderList = async (currentPage: number, filter: string) => {
     try {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${ORDERS}?pageNumber=${currentPage}&limit=10`,
+        `${API_BASE_URL}${ORDERS}?pageNumber=${currentPage}&limit=10&${
+          filter.length > 0 ? `filter=${filter}` : ''
+        }`,
         source.current.token,
       );
       totalOrders.current = data.totalCount;
@@ -73,7 +81,7 @@ const Orders: React.FC<any> = () => {
   const loadMoreList = () => {
     if (totalOrders.current > orders?.length && !moreListRequested) {
       setMoreListRequested(true);
-      getOrderList(pageNumber.current)
+      getOrderList(pageNumber.current, selectedFilter)
         .then(() => {
           setMoreListRequested(false);
         })
@@ -87,7 +95,7 @@ const Orders: React.FC<any> = () => {
     if (isFocused) {
       setApiInProgress(true);
       pageNumber.current = 1;
-      getOrderList(pageNumber.current)
+      getOrderList(pageNumber.current, selectedFilter)
         .then(() => {
           setApiInProgress(false);
         })
@@ -95,7 +103,7 @@ const Orders: React.FC<any> = () => {
           setApiInProgress(false);
         });
     }
-  }, [isFocused]);
+  }, [isFocused, selectedFilter]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -137,25 +145,61 @@ const Orders: React.FC<any> = () => {
   }
 
   return (
-    <View style={styles.pageContainer}>
-      <FlatList
-        data={orders}
-        renderItem={renderItem}
-        ListEmptyComponent={() => <Text>{t('Orders.No data found')}</Text>}
-        refreshing={refreshInProgress}
-        keyExtractor={keyExtractor}
-        onRefresh={onRefreshHandler}
-        onEndReached={loadMoreList}
-        contentContainerStyle={
-          orders.length > 0
-            ? styles.contentContainerStyle
-            : [appStyles.container, styles.emptyContainer]
-        }
-        ListFooterComponent={props => (
-          <ListFooter moreRequested={moreListRequested} {...props} />
-        )}
-      />
-    </View>
+    <>
+      <View style={styles.pageContainer}>
+        <View style={styles.searchHeader}>
+          <Searchbar
+            editable
+            iconColor={theme.colors.neutral400}
+            rippleColor={theme.colors.neutral400}
+            inputStyle={styles.searchInput}
+            style={styles.search}
+            placeholderTextColor={theme.colors.neutral400}
+            placeholder={t('Orders.Search')}
+            // onChangeText={onChangeSearch}
+            // onBlur={onSearchComplete}
+            // value={searchQuery}
+          />
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => refFilterSheet.current.open()}>
+            <Text variant={'labelLarge'} style={styles.filterButtonText}>
+              {t('Orders.Filter')}
+            </Text>
+            <FiltersIcon width={18} height={19} />
+          </TouchableOpacity>
+        </View>
+        <FlatList
+          data={orders}
+          renderItem={renderItem}
+          ListEmptyComponent={() => <Text>{t('Orders.No data found')}</Text>}
+          refreshing={refreshInProgress}
+          keyExtractor={keyExtractor}
+          onRefresh={onRefreshHandler}
+          onEndReached={loadMoreList}
+          contentContainerStyle={
+            orders.length > 0
+              ? styles.contentContainerStyle
+              : [appStyles.container, styles.emptyContainer]
+          }
+          ListFooterComponent={props => (
+            <ListFooter moreRequested={moreListRequested} {...props} />
+          )}
+        />
+      </View>
+      <RBSheet
+        ref={refFilterSheet}
+        height={260}
+        customStyles={{
+          container: styles.rbSheet,
+        }}>
+        <FilterList
+          selectedFilter={selectedFilter}
+          setSelectedFilter={setSelectedFilter}
+          close={() => refFilterSheet.current.close()}
+        />
+      </RBSheet>
+    </>
   );
 };
 
@@ -165,6 +209,22 @@ const makeStyles = (colors: any) =>
       flex: 1,
       backgroundColor: colors.white,
     },
+    searchHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 12,
+      paddingHorizontal: 16,
+      width: '100%',
+      marginBottom: 16,
+    },
+    filterButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    filterButtonText: {
+      color: colors.primary,
+    },
     contentContainerStyle: {paddingVertical: 10},
     emptyContainer: {justifyContent: 'center', alignItems: 'center'},
     divider: {
@@ -172,6 +232,21 @@ const makeStyles = (colors: any) =>
       height: 1,
       marginVertical: 24,
     },
+    searchInput: {
+      paddingVertical: 10,
+      paddingHorizontal: 16,
+      minHeight: 40,
+      flex: 1,
+    },
+    search: {
+      flex: 1,
+      height: 40,
+      backgroundColor: colors.white,
+      borderWidth: 1,
+      borderColor: colors.neutral100,
+      borderRadius: 58,
+    },
+    rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
   });
 
 export default memo(Orders);

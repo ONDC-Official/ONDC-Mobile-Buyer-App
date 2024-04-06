@@ -502,7 +502,19 @@
     "Delivered On": "सौंप दिया"
   },
   "Orders": {
-    "No data found": "डाटा प्राप्त नहीं हुआ"
+    "No data found": "डाटा प्राप्त नहीं हुआ",
+    "Search": "खोज",
+    "Filter": "फ़िल्टर",
+    "Filter List": {
+      "Filters": "फिल्टर",
+      "Clear all": "सभी साफ करें",
+      "Close": "बंद करना",
+      "Apply": "आवेदन करना",
+      "Order Type": "आर्डर टाइप",
+      "Ongoing": "ओंगोइंग",
+      "Completed": "कंप्लीटेड",
+      "Cancelled": "कैंसल्ड"
+    }
   },
   "Global": {
     "Details not available": "स्टोर विवरण उपलब्ध नहीं है"

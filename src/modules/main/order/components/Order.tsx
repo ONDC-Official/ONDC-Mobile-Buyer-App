@@ -59,7 +59,7 @@ const OrderHeader: React.FC<Order> = ({order}) => {
           }
 
           return (
-            <View style={styles.itemContainer}>
+            <View key={`${item?.id}${item.fulfillment_id}`} style={styles.itemContainer}>
               {order.domain === FB_DOMAIN && (
                 <View style={styles.iconContainer}>
                   <VegNonVegTag tags={item?.product?.tags} size={'small'} />

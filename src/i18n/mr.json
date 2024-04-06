@@ -503,7 +503,19 @@
     "Delivered On": "वर वितरित"
   },
   "Orders": {
-    "No data found": "माहिती आढळली नाही"
+    "No data found": "माहिती आढळली नाही",
+    "Search": "शोधा",
+    "Filter": "फिल्टर करा",
+    "Filter List": {
+      "Filters": "फिल्टर",
+      "Clear all": "सर्व साफ करा",
+      "Close": "बंद",
+      "Apply": "अर्ज करा",
+      "Order Type": "ऑर्डर टाइप",
+      "Ongoing": "ऑन्गोइंग",
+      "Completed": "कंप्लिटेड",
+      "Cancelled": "कॅन्सेल्ड"
+    }
   },
   "Global": {
     "Details not available": "स्टोअर तपशील उपलब्ध नाहीत"

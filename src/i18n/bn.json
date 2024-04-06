@@ -503,7 +503,19 @@
     "Delivered On": "বিতরণ"
   },
   "Orders": {
-    "No data found": "কোন তথ্য পাওয়া যায়নি"
+    "No data found": "কোন তথ্য পাওয়া যায়নি",
+    "Search": "অনুসন্ধান করুন",
+    "Filter": "ছাঁকনি",
+    "Filter List": {
+      "Filters": "ফিল্টার",
+      "Clear all": "সব পরিষ্কার করে দাও",
+      "Close": "বন্ধ",
+      "Apply": "আবেদন করুন",
+      "Order Type": "অর্ডার টাইপ",
+      "Ongoing": "অঙ্গোইং",
+      "Completed": "কমপ্লিটেড",
+      "Cancelled": "ক্যানসেলড"
+    }
   },
   "Global": {
     "Details not available": "বস্টোরের বিবরণ পাওয়া যায় না"

@@ -503,7 +503,19 @@
     "Delivered On": "அன்று வழங்கப்பட்டது"
   },
   "Orders": {
-    "No data found": "வேறு தகவல்கள் இல்லை"
+    "No data found": "வேறு தகவல்கள் இல்லை",
+    "Search": "தேடு",
+    "Filter": "வடிகட்டி",
+    "Filter List": {
+      "Filters": "வடிப்பான்கள்",
+      "Clear all": "அனைத்தையும் அழி",
+      "Close": "நெருக்கமான",
+      "Apply": "விண்ணப்பிக்கவும்",
+      "Order Type": "ஆர்டர் டிபே",
+      "Ongoing": "ஆன்கோயிங்",
+      "Completed": "காம்ப்ளிட்டட்",
+      "Cancelled": "கேன்சல்ட்"
+    }
   },
   "Global": {
     "Details not available": "ஸ்டோர் விவரங்கள் கிடைக்கவில்லை"
