@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
@@ -29,6 +29,16 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
     });
   };
 
+  const list = useMemo(() => {
+    if (subCategories.length > 0) {
+      return subCategories.slice(0, 8);
+    } else {
+      return [];
+    }
+  }, [subCategories]);
+
+  const gap = (screenWidth - 240) / 4;
+
   const navigateToAll = () => {
     navigation.navigate('ShopByCategory', {category: currentCategory});
   };
@@ -45,25 +55,21 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
       />
 
       <View style={styles.container}>
-        {subCategories.length > 0 &&
-          subCategories.slice(0, 8).map((item, index) => (
-            <TouchableOpacity
-              key={item.key}
-              style={[
-                styles.brand,
-                index < 4 ? styles.marginBottom : {},
-                index === 1 || index === 2 || index === 5 || index === 6
-                  ? styles.alignCenter
-                  : {},
-                index === 3 || index === 7 ? styles.alignEnd : {},
-              ]}
-              onPress={() => navigateToSubCategory(item)}>
-              <FastImage source={item.imageUrl} style={styles.brandImage} />
-              <Text variant={'labelLarge'} style={styles.name}>
-                {t(`Product SubCategories.${item.key}`)}
-              </Text>
-            </TouchableOpacity>
-          ))}
+        {list.map((item, index) => (
+          <TouchableOpacity
+            key={item.key}
+            style={[
+              styles.brand,
+              index < 4 ? styles.marginBottom : {},
+              index !== 3 && index !== 7 ? {marginRight: gap} : {},
+            ]}
+            onPress={() => navigateToSubCategory(item)}>
+            <FastImage source={item.imageUrl} style={styles.brandImage} />
+            <Text variant={'labelLarge'} style={styles.name}>
+              {t(`Product SubCategories.${item.key}`)}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
@@ -75,7 +81,7 @@ const makeStyles = (colors: any) =>
       marginTop: 28,
     },
     container: {
-      paddingHorizontal: 8,
+      paddingHorizontal: 16,
       marginTop: 12,
       flexDirection: 'row',
       flexWrap: 'wrap',
@@ -85,8 +91,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 12,
     },
     brand: {
-      width: (screenWidth - 32) / 4 - 16,
-      marginHorizontal: 8,
+      width: 60,
     },
     alignCenter: {
       alignItems: 'center',
