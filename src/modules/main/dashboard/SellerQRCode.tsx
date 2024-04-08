@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {getUrlParams} from '../../../utils/utils';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
   const [torchOn, setTorchOn] = useState(false);
@@ -11,17 +12,7 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
   const onQRScan = (event: any) => {
     if (event.data.startsWith('beckn://ondc')) {
       const url = event.data;
-      const urlParams: any = {};
-      const params = url.split('?');
-      if (params.length > 0) {
-        const variables = params[1].split('&');
-        variables.forEach((one: any) => {
-          const fields = one.split('=');
-          if (fields.length > 0) {
-            urlParams[fields[0]] = fields[1];
-          }
-        });
-      }
+      const urlParams = getUrlParams(url);
       if (
         urlParams.hasOwnProperty('context.action') &&
         urlParams['context.action'] === 'search'

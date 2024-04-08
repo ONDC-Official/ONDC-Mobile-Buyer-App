@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Button, Checkbox, Modal, Portal, Text} from 'react-native-paper';
+import {Button, Modal, Portal, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Formik} from 'formik';

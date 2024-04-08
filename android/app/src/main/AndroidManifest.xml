@@ -27,13 +27,21 @@
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="ondc"
+                    android:scheme="beckn" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="ondc"
-                    android:scheme="beckn" />
+                    android:host="https"
+                    android:scheme="ref-app-buyer-staging-v2.ondc.org" />
             </intent-filter>
         </activity>
     </application>

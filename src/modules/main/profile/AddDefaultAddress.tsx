@@ -79,6 +79,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
       }
       setApiInProgress(false);
       showInfoToast('Your delivery address has been added successfully.');
+      await setStoredData('address', JSON.stringify(data));
       dispatch(saveAddress(data));
       navigation.reset({
         index: 0,

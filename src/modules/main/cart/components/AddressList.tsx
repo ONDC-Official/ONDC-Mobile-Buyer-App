@@ -3,6 +3,8 @@ import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import axios from 'axios';
 import {useDispatch} from 'react-redux';
+import {useTranslation} from 'react-i18next';
+
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import Address from '../../dashboard/components/address/Address';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -13,7 +15,7 @@ import {appStyles} from '../../../../styles/styles';
 import AddressSkeleton from '../../dashboard/components/address/AddressSkeleton';
 import {saveAddress} from '../../../../redux/address/actions';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
+import {setStoredData} from '../../../../utils/storage';
 
 interface AddressList {
   deliveryAddress: any;
@@ -38,7 +40,8 @@ const AddressList: React.FC<AddressList> = ({
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
   const [addresses, setAddresses] = useState<any[]>([]);
 
-  const updateDeliveryAddress = (newAddress: any) => {
+  const updateDeliveryAddress = async (newAddress: any) => {
+    await setStoredData('address', JSON.stringify(newAddress));
     dispatch(saveAddress(newAddress));
     setDeliveryAddress(Object.assign({}, newAddress));
   };

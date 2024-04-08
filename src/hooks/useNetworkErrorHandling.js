@@ -22,6 +22,7 @@ export default () => {
   };
 
   const handleApiError = (error, setError = null) => {
+    console.log(error);
     if (error.code !== 'ERR_CANCELED') {
       if (error.response) {
         if (error.response.status === 401) {

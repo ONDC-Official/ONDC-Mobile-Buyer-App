@@ -39,18 +39,20 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         source.current.token,
       );
       const data = locationResponse?.data?.response;
-      data.timings = '';
-      data.isOpen = false;
-      if (data.time.range.start && data.time.range.end) {
-        data.timings = `${moment(data.time.range.start, 'hhmm').format(
-          'h:mm a',
-        )} - ${moment(data.time.range.end, 'hhmm').format('h:mm a')}`;
-        const time = moment();
-        const startTime = moment(data.time.range.start, 'hh:mm');
-        const endTime = moment(data.time.range.end, 'hh:mm');
-        data.isOpen = time.isBetween(startTime, endTime);
+      if (data) {
+        data.timings = '';
+        data.isOpen = false;
+        if (data.time.range.start && data.time.range.end) {
+          data.timings = `${moment(data.time.range.start, 'hhmm').format(
+            'h:mm a',
+          )} - ${moment(data.time.range.end, 'hhmm').format('h:mm a')}`;
+          const time = moment();
+          const startTime = moment(data.time.range.start, 'hh:mm');
+          const endTime = moment(data.time.range.end, 'hh:mm');
+          data.isOpen = time.isBetween(startTime, endTime);
+        }
+        setOutlet(data);
       }
-      setOutlet(data);
     } catch (error) {
       handleApiError(error);
     } finally {

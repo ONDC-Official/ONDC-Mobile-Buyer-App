@@ -4,6 +4,7 @@ import {Button, Text} from 'react-native-paper';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import SingleAddress from './Address';
@@ -14,7 +15,6 @@ import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
 import {saveAddress} from '../../../../../redux/address/actions';
-import {useTranslation} from 'react-i18next';
 
 interface Address {
   _id: string;
@@ -49,6 +49,7 @@ interface AddressList {
 }
 
 const CancelToken = axios.CancelToken;
+
 const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
   const [t] = useTranslation();
   const isFocused = useIsFocused();
@@ -116,7 +117,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
     navigation.navigate(params.navigateToNext);
   };
 
-  const renderItem = ({item}) => {
+  const renderItem = ({item}: {item: any}) => {
     const isSelected = currentAddress?.id === item?.id;
     return item.hasOwnProperty('isSkeleton') ? (
       <AddressSkeleton />
@@ -156,17 +157,6 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
           list.length > 0 ? styles.contentContainerStyle : appStyles.container
         }
       />
-      {params?.navigateToNext && (
-        <View style={styles.buttonContainer}>
-          <Button
-            labelStyle={appStyles.containedButtonLabel}
-            contentStyle={appStyles.containedButtonContainer}
-            mode="contained"
-            onPress={onNextButtonClick}>
-            Next
-          </Button>
-        </View>
-      )}
       <Button style={styles.addButton} mode={'contained'} onPress={addAddress}>
         {t('Address List.Add Address')}
       </Button>

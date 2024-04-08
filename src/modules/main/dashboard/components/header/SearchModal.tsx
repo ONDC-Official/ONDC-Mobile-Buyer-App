@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, Text, Portal, useTheme} from 'react-native-paper';
+import {Modal, Portal, Text, useTheme} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {MotiView} from '@motify/components';

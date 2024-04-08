@@ -69,7 +69,7 @@ const AddressForm: React.FC<AddressForm> = ({
   useEffect(() => {
     if (addressInfo) {
       let values = addressInfo;
-      if (!!mapAddress) {
+      if (mapAddress) {
         values.city = mapAddress?.city;
         values.areaCode = mapAddress?.pincode;
         values.state = mapAddress?.state;

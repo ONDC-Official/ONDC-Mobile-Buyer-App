@@ -9,6 +9,7 @@ import {alertWithTwoButtons} from '../../../../../utils/alerts';
 import {clearCart} from '../../../../../redux/actions';
 import {saveAddress} from '../../../../../redux/address/actions';
 import {useAppTheme} from '../../../../../utils/theme';
+import {setStoredData} from '../../../../../utils/storage';
 
 interface Address {
   item: any;
@@ -57,7 +58,8 @@ const Address: React.FC<Address> = ({
     }
   };
 
-  const addAddressToStore = () => {
+  const addAddressToStore = async () => {
+    await setStoredData('address', JSON.stringify(item));
     dispatch(saveAddress(item));
     if (params?.navigateToDashboard) {
       navigation.reset({

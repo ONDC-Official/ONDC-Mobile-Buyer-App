@@ -8,6 +8,7 @@ import {theme} from './src/utils/theme';
 import AppNavigation from './src/navigation/AppNavigation';
 import NetworkBanner from './src/components/network/NetworkBanner';
 import {getMultipleData} from './src/utils/storage';
+import {getUrlParams} from './src/utils/utils';
 
 const App = () => {
   const navigationRef = useRef<any>(null);
@@ -18,19 +19,10 @@ const App = () => {
   useEffect(() => {
     const handleDeepLink = (url: any) => {
       if (url) {
+        console.log('Url', url);
         getMultipleData(['token', 'uid', 'emailId', 'name']).then(data => {
           if (data[0][1] !== null) {
-            const urlParams: any = {};
-            const params = url.split('?');
-            if (params.length > 0) {
-              const variables = params[1].split('&');
-              variables.forEach((one: any) => {
-                const fields = one.split('=');
-                if (fields.length > 0) {
-                  urlParams[fields[0]] = fields[1];
-                }
-              });
-            }
+            const urlParams = getUrlParams(url);
             if (
               urlParams.hasOwnProperty('context.action') &&
               urlParams['context.action'] === 'search'
@@ -54,7 +46,7 @@ const App = () => {
     const getUrlDetails = ({url}: {url: any}) => {
       handleDeepLink(url);
     };
-    Linking.getInitialURL().then(handleDeepLink);
+
     Linking.addEventListener('url', getUrlDetails);
 
     return () => {

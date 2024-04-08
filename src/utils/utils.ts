@@ -331,3 +331,18 @@ export const getFilterCategory = (tags: any) => {
 
   return category;
 };
+
+export const getUrlParams = (url: string) => {
+  const urlParams: any = {};
+  const params = url.split('?');
+  if (params.length > 0) {
+    const variables = params[1].split('&');
+    variables.forEach((one: any) => {
+      const fields = one.split('=');
+      if (fields.length > 0) {
+        urlParams[fields[0]] = fields[1];
+      }
+    });
+  }
+  return urlParams;
+};

@@ -1,61 +1,6 @@
 import {AnyAction, Dispatch} from 'redux';
-import auth from '@react-native-firebase/auth';
-import {
-  clearAll,
-  getMultipleData,
-  getStoredData,
-  setStoredData,
-} from '../../utils/storage';
+import {clearAll, getStoredData, setStoredData} from '../../utils/storage';
 import i18n from '../../i18n';
-
-export const tryLocalSignIn = (
-  dispatch: Dispatch<AnyAction>,
-  navigation: any,
-) => {
-  const payload: any = {};
-
-  getMultipleData([
-    'token',
-    'uid',
-    'emailId',
-    'name',
-    'transaction_id',
-    'language',
-  ])
-    .then(data => {
-      if (data[0][1] !== null) {
-        data.forEach((item: any) => {
-          try {
-            payload[item[0]] = JSON.parse(item[1]);
-          } catch (error) {
-            payload[item[0]] = item[1];
-          }
-        });
-        dispatch({type: 'save_user', payload});
-
-        auth()
-          .currentUser?.getIdToken(true)
-          .then(idToken => {
-            updateToken(dispatch, idToken);
-            checkLanguageAndLogin(navigation);
-          })
-          .catch(() => {
-            checkLanguageAndLogin(navigation);
-          });
-      } else {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Login'}],
-        });
-      }
-    })
-    .catch(() => {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Login'}],
-      });
-    });
-};
 
 export const checkLanguageAndLogin = (navigation: any) => {
   getStoredData('language').then(language => {
