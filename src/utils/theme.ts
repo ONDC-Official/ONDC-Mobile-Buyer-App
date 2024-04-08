@@ -158,6 +158,7 @@ export const theme: any = {
         ios: 'Inter-Medium',
         default: 'Inter-Medium',
       }),
+      fontWeight: '500',
       fontSize: 11,
       lineHeight: 14,
     },

@@ -6,7 +6,7 @@ import axios from 'axios';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
-
+import {useTranslation} from 'react-i18next';
 import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../../../../utils/constants';
 import {
   constructQuoteObject,
@@ -26,7 +26,6 @@ import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetCo
 import {useAppTheme} from '../../../../utils/theme';
 import CashOnDeliveryIcon from '../../../../assets/payment/cod.svg';
 import PrepaidIcon from '../../../../assets/payment/prepaid.svg';
-import {useTranslation} from 'react-i18next';
 
 interface Payment {
   productsQuote: any;
@@ -310,6 +309,7 @@ const Payment: React.FC<Payment> = ({
                   ? styles.selectedOption
                   : {},
               ]}>
+              <PrepaidIcon width={'100%'} height={151} />
               <View style={styles.checkContainer}>
                 {activePaymentMethod === ORDER_PAYMENT_METHODS.PREPAID ? (
                   <Icon
@@ -321,7 +321,6 @@ const Payment: React.FC<Payment> = ({
                   <View style={styles.emptyCheck} />
                 )}
               </View>
-              <PrepaidIcon width={110} height={100} />
             </View>
             <Text variant={'labelLarge'} style={styles.paymentOptionText}>
               {t('Cart.Payment.Prepaid')}
@@ -338,6 +337,7 @@ const Payment: React.FC<Payment> = ({
                   ? styles.selectedOption
                   : {},
               ]}>
+              <CashOnDeliveryIcon width={'100%'} height={151} />
               <View style={styles.checkContainer}>
                 {activePaymentMethod === ORDER_PAYMENT_METHODS.COD ? (
                   <Icon
@@ -349,7 +349,6 @@ const Payment: React.FC<Payment> = ({
                   <View style={styles.emptyCheck} />
                 )}
               </View>
-              <CashOnDeliveryIcon width={110} height={100} />
             </View>
             <Text variant={'labelLarge'} style={styles.paymentOptionText}>
               {t('Cart.Payment.Cash on delivery')}
@@ -409,8 +408,6 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     paymentOptionMeta: {
-      paddingBottom: 16,
-      paddingHorizontal: 12,
       borderRadius: 6,
       borderColor: colors.neutral100,
       borderWidth: 1,
@@ -453,6 +450,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'flex-end',
       marginBottom: 4,
       width: '100%',
+      position: 'absolute',
     },
   });
 

@@ -456,6 +456,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       flex: 1,
       justifyContent: 'flex-end',
+      gap: 8,
     },
     price: {
       marginLeft: 12,

@@ -7,12 +7,11 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Text} from 'react-native-paper';
-import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import moment from 'moment';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-
+import {useTranslation} from 'react-i18next';
 import Actions from './Actions';
 import DownloadIcon from '../../../../../assets/download.svg';
 import DownloadDisabledIcon from '../../../../../assets/download_disabled.svg';
@@ -22,7 +21,7 @@ import PaymentMethod from './PaymentMethod';
 import RaiseIssueButton from './RaiseIssueButton';
 import CancelOrderButton from './CancelOrderButton';
 import {useAppTheme} from '../../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
+import CartIcon from '../../../../../assets/cart.svg';
 
 const NonCancelledOrder = ({
   getOrderDetails,
@@ -62,7 +61,7 @@ const NonCancelledOrder = ({
         contentContainerStyle={styles.scrollView}>
         <Actions onUpdateOrder={getOrderDetails} />
         <View style={styles.creationHeader}>
-          <SimpleLineIcons name={'bag'} color={colors.primary} size={20} />
+          <CartIcon width={24} height={24} />
           {orderDetails?.state !== 'Completed' ? (
             <Text variant={'bodyLarge'} style={styles.creationDate}>
               {t('Profile.Order placed on')}{' '}
