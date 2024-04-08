@@ -316,7 +316,7 @@ export const compareDateWithDuration = (duration: any, dateStr: string) => {
 export const getFilterCategory = (tags: any) => {
   let category = 'veg';
 
-  tags.forEach((tag: any) => {
+  tags?.forEach((tag: any) => {
     if (tag.code === 'veg_nonveg') {
       const vegNonVegValue = tag.list[0].value;
       if (vegNonVegValue === 'yes' || vegNonVegValue === 'Yes') {

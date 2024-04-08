@@ -348,7 +348,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       <View style={styles.product}>
         <TouchableOpacity style={styles.meta} onPress={showProductDetails}>
           <Text
-            variant={'titleMedium'}
+            variant={'titleLarge'}
             style={[styles.field, styles.name]}
             numberOfLines={2}
             ellipsizeMode={'tail'}>
@@ -360,7 +360,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           <Text variant={'headlineSmall'} style={styles.price}>
             {priceRange
               ? `₹${priceRange?.minPrice} - ₹${priceRange?.maxPrice}`
-              : `${CURRENCY_SYMBOLS[product?.item_details?.price?.currency]} ${
+              : `${CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}${
                   product?.item_details?.price?.value
                 }`}
           </Text>
