@@ -81,6 +81,7 @@ const AboutProduct = ({product}: {product: any}) => {
     };
   });
 
+  console.log(JSON.stringify(attributes, undefined, 4));
   return (
     <View>
       <TouchableOpacity
@@ -104,7 +105,7 @@ const AboutProduct = ({product}: {product: any}) => {
               </Text>
               <View style={styles.aboutSeparator} />
               <Text variant="bodyMedium" style={styles.aboutDetails}>
-                {product?.attributes[key]}
+                {attributes[key]}
               </Text>
             </View>
           ))}
