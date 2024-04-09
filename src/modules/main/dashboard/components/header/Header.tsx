@@ -29,6 +29,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
   const onSearchComplete = () => {
     if (searchQuery.trim().length > 0) {
       navigation.navigate('SearchProducts', {query: searchQuery});
+      setSearchQuery('');
     }
   };
 

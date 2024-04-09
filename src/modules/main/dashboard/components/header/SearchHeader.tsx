@@ -94,7 +94,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.white,
     },
     backIconContainer: {
-      marginRight: 12,
+      marginRight: 4,
     },
   });
 export default SearchHeader;
