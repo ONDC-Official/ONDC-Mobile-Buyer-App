@@ -72,13 +72,13 @@ const Store = ({store}: {store: any}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     brand: {
-      width: 113,
-      marginRight: 11,
       marginBottom: 15,
+      flex: 1,
+      marginHorizontal: 8,
     },
     brandImage: {
       borderRadius: 8,
-      width: 113,
+      width: '100%',
       height: 64,
       alignItems: 'center',
       justifyContent: 'center',
@@ -87,9 +87,11 @@ const makeStyles = (colors: any) =>
     name: {
       color: colors.neutral400,
       marginBottom: 4,
+      flex: 1,
     },
     details: {
       color: colors.neutral300,
+      flex: 1,
     },
   });
 

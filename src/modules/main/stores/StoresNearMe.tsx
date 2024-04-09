@@ -1,10 +1,10 @@
 import {FlatList, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
-import Store from './components/Store';
-import {useAppTheme} from '../../../utils/theme';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import {useEffect} from 'react';
+import Store from './components/Store';
+import {useAppTheme} from '../../../utils/theme';
 
 const StoresNearMe = () => {
   const navigation = useNavigation();
@@ -38,7 +38,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       paddingVertical: 20,
-      paddingHorizontal: 16,
+      paddingHorizontal: 8,
       backgroundColor: colors.white,
     },
   });

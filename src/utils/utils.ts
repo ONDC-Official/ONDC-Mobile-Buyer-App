@@ -137,7 +137,7 @@ export const durationToHumanReadable = (value: any) => {
 export const createCustomizationAndGroupMapping = (customizations: any[]) => {
   let newCustomizationGroupMappings: any = {};
   let customizationToGroupMap: any = {};
-  customizations.forEach((customization: any) => {
+  customizations?.forEach((customization: any) => {
     const groupId = customization.parent;
     const childId = customization.id;
 

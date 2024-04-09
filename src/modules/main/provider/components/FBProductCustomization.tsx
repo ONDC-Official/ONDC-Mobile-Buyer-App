@@ -15,7 +15,7 @@ export const formatCustomizationGroups = (groups: any) => {
   return groups?.map((group: any) => {
     let minConfig, maxConfig, inputTypeConfig, seqConfig;
 
-    group.tags.forEach((tag: any) => {
+    group?.tags?.forEach((tag: any) => {
       if (tag.code === 'config') {
         tag.list.forEach((one: any) => {
           if (one.code === 'min') {
@@ -59,7 +59,7 @@ export const formatCustomizations = (items: any) => {
     let child = null;
     let vegNonVegTag: any = null;
 
-    customization.item_details.tags.forEach((tag: any) => {
+    customization?.item_details?.tags?.forEach((tag: any) => {
       if (tag.code === 'parent') {
         tag.list.forEach((one: any) => {
           if (one.code === 'default') {
@@ -132,7 +132,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
   useEffect(() => {
     if (product) {
       const {customisation_groups, customisation_items} = product;
-      const customGroup = product.item_details.tags.find(
+      const customGroup = product?.item_details?.tags?.find(
         (item: any) => item.code === 'custom_group',
       );
       if (customGroup && customGroup.list.length > 0) {

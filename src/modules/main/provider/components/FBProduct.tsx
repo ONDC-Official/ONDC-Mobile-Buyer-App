@@ -254,7 +254,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         `${API_BASE_URL}${ITEM_DETAILS}?id=${product.id}`,
         productSource.current.token,
       );
-      setProductDetails(data);
+      setProductDetails(data.response);
       if (!preventCustomizeOpening) {
         showCustomization();
       }
@@ -452,7 +452,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               </TouchableOpacity>
               {customizable && (
                 <Text variant={'labelSmall'} style={styles.customise}>
-                  Customizable
+                  {t('Cart.FBProduct.Customizable')}
                 </Text>
               )}
             </View>
