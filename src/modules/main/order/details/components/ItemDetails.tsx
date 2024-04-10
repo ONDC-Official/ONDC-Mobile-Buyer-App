@@ -156,7 +156,6 @@ const ItemDetails = ({
           </Text>
           {shipmentFulfillmentList?.map((fulfillment: any) => {
             const endDate = moment(fulfillment?.end?.time?.range?.end);
-
             return (
               <View key={fulfillment.id} style={styles.container}>
                 <View style={styles.header}>
@@ -433,6 +432,7 @@ const makeStyles = (colors: any) =>
     },
     itemName: {
       color: colors.neutral400,
+      flex: 1,
     },
     itemTags: {
       flexDirection: 'row',

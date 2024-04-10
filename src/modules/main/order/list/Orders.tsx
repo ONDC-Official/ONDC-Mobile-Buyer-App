@@ -55,7 +55,7 @@ const Orders: React.FC<any> = () => {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
         `${API_BASE_URL}${ORDERS}?pageNumber=${currentPage}&limit=10&${
-          filter.length > 0 ? `filter=${filter}` : ''
+          filter.length > 0 ? `state=${filter}` : ''
         }`,
         source.current.token,
       );

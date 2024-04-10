@@ -81,7 +81,6 @@ const AboutProduct = ({product}: {product: any}) => {
     };
   });
 
-  console.log(JSON.stringify(attributes, undefined, 4));
   return (
     <View>
       <TouchableOpacity

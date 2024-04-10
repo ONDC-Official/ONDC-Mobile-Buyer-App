@@ -116,7 +116,6 @@ const Splash: React.FC<Splash> = ({navigation}) => {
     try {
       const payload: any = await getDataFromStorage();
       const urlParams = getUrlParams(url);
-      console.log(JSON.stringify(payload, undefined, 4));
       if (
         urlParams.hasOwnProperty('context.action') &&
         urlParams['context.action'] === 'search'
@@ -128,7 +127,6 @@ const Splash: React.FC<Splash> = ({navigation}) => {
         ) {
           pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
         }
-        console.log('pageParams', pageParams);
         await checkLanguage(payload.language, pageParams);
       } else {
         await checkLanguage(payload.language, null);
@@ -143,7 +141,6 @@ const Splash: React.FC<Splash> = ({navigation}) => {
 
   useEffect(() => {
     Linking.getInitialURL().then(url => {
-      console.log('Initial URL splash', url);
       if (url) {
         processUrl(url).then(() => {});
       } else {

@@ -57,21 +57,17 @@ const AudioRecorder = ({
   }, []);
 
   const onSpeechPartialResults = (event: any) => {
-    console.log('partial');
     setRecognizedText(event.value[0]); // Set the recognized text
   };
 
   const onSpeechResults = (event: any) => {
-    console.log('onSpeechResults', event.value[0]);
     setRecognizedText(event.value[0]); // Set the recognized text
     setSearchQuery(event.value[0]);
-    console.log('Search complete called');
     onSearchComplete(event.value[0]);
     onStopRecord().then(() => {});
   };
 
   const onStopRecord = async () => {
-    console.log('stop');
     setShowVoiceModal(false);
     try {
       await Voice.stop();

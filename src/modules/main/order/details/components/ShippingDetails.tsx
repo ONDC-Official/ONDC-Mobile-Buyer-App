@@ -2,7 +2,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import moment from 'moment/moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useAppTheme} from '../../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
@@ -24,6 +24,19 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
 
   const fulfilment = orderDetails?.fulfillments[fulfilmentIndex];
 
+  const items = useMemo(() => {
+    return orderDetails?.items.filter((obj: any) => {
+      return obj.tags.some((tag: any) => {
+        return (
+          tag.code === 'type' &&
+          tag.list.some((item: any) => {
+            return item.code === 'type' && item.value === 'item';
+          })
+        );
+      });
+    });
+  }, [orderDetails?.items]);
+
   return (
     <View style={styles.shippingContainer}>
       <Text variant={'titleLarge'} style={styles.shippingTitle}>
@@ -32,7 +45,7 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
       </Text>
       <Text variant={'bodyLarge'} style={styles.shippingTitle}>
         {t('Shipment Details.Items Arriving', {
-          count: orderDetails?.items?.length,
+          count: items?.length,
         })}
       </Text>
       <TouchableOpacity
