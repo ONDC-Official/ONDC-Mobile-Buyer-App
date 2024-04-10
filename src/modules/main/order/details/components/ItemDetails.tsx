@@ -155,20 +155,35 @@ const ItemDetails = ({
             {t('Profile.Shipment Details')}
           </Text>
           {shipmentFulfillmentList?.map((fulfillment: any) => {
-            const endDate = moment(fulfillment?.end?.time?.range?.end);
+            const endDate = fulfillment?.end?.time?.timestamp
+              ? moment(fulfillment?.end?.time?.timestamp)
+              : moment(fulfillment?.end?.time?.range?.end);
             return (
               <View key={fulfillment.id} style={styles.container}>
                 <View style={styles.header}>
-                  <View>
-                    <Text variant={'labelSmall'} style={styles.deliveryDate}>
-                      {t('Item Details.Items will be delivered by')}{' '}
-                    </Text>
-                    <Text variant={'labelSmall'} style={styles.deliveryDate}>
-                      {today.isSame(endDate, 'day')
-                        ? endDate.format('hh:mm a')
-                        : endDate.format('Do MMM')}
-                    </Text>
-                  </View>
+                  {fulfillment?.end?.time?.timestamp ? (
+                    <View>
+                      <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                        {t('Shipment Details.Delivered On')}{' '}
+                      </Text>
+                      <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                        {today.isSame(endDate, 'day')
+                          ? endDate.format('hh:mm a')
+                          : endDate.format('Do MMM')}
+                      </Text>
+                    </View>
+                  ) : (
+                    <View>
+                      <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                        {t('Item Details.Items will be delivered by')}{' '}
+                      </Text>
+                      <Text variant={'labelSmall'} style={styles.deliveryDate}>
+                        {today.isSame(endDate, 'day')
+                          ? endDate.format('hh:mm a')
+                          : endDate.format('Do MMM')}
+                      </Text>
+                    </View>
+                  )}
                   <TouchableOpacity
                     style={styles.statusContainer}
                     onPress={() =>
