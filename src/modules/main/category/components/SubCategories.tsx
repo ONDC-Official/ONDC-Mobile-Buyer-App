@@ -8,6 +8,7 @@ import {useTranslation} from 'react-i18next';
 import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
 import {useAppTheme} from '../../../../utils/theme';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
+import {FlatList} from 'react-native-gesture-handler';
 
 interface SubCategories {
   currentCategory: string;
@@ -55,7 +56,7 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
       />
 
       <View style={styles.container}>
-        {list.map((item, index) => (
+        {/* {list.map((item, index) => (
           <TouchableOpacity
             key={item.key}
             style={[
@@ -69,7 +70,24 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
               {t(`Product SubCategories.${item.key}`)}
             </Text>
           </TouchableOpacity>
-        ))}
+        ))} */}
+        <FlatList
+          data={list}
+          numColumns={4}
+          renderItem={({item, index}) => {
+            return (
+              <TouchableOpacity
+                key={item.key}
+                style={[styles.brand]}
+                onPress={() => navigateToSubCategory(item)}>
+                <FastImage source={item.imageUrl} style={styles.brandImage} />
+                <Text variant={'labelLarge'} style={styles.name}>
+                  {t(`Product SubCategories.${item.key}`)}
+                </Text>
+              </TouchableOpacity>
+            );
+          }}
+        />
       </View>
     </View>
   );
@@ -82,16 +100,18 @@ const makeStyles = (colors: any) =>
     },
     container: {
       paddingHorizontal: 16,
-      marginTop: 12,
-      flexDirection: 'row',
-      flexWrap: 'wrap',
+      marginBottom: -12,
+      marginHorizontal: -20,
     },
     title: {
       color: colors.neutral400,
       marginBottom: 12,
     },
     brand: {
-      width: 60,
+      flexGrow: 1,
+      width: '25%',
+      marginVertical: 12,
+      paddingHorizontal: 20,
     },
     alignCenter: {
       alignItems: 'center',
