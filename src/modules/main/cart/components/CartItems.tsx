@@ -12,7 +12,7 @@ import axios from 'axios';
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import AntIcon from 'react-native-vector-icons/AntDesign';
+import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -32,7 +32,7 @@ import CustomizationFooterButtons from '../../provider/components/CustomizationF
 import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
+import DeleteIcon from '../../../../assets/delete.svg';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -313,11 +313,7 @@ const CartItems: React.FC<CartItems> = ({
                       ) : (
                         <TouchableOpacity
                           onPress={() => deleteCartItem(cartItem._id)}>
-                          <AntIcon
-                            name={'delete'}
-                            size={20}
-                            color={theme.colors.error600}
-                          />
+                          <DeleteIcon width={20} height={20} />
                         </TouchableOpacity>
                       )}
                     </View>

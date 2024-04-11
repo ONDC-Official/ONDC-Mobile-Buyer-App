@@ -1,10 +1,11 @@
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {ActivityIndicator, Button, Card, Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
   getPriceWithCustomisations,
   isItemCustomization,
@@ -23,7 +24,7 @@ import {useAppTheme} from '../../../utils/theme';
 const screenHeight: number = Dimensions.get('screen').height;
 
 const Cart = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -90,6 +91,10 @@ const Cart = () => {
   const updateDeliveryAddress = (newAddress: any) => {
     setDeliveryAddress(newAddress);
     addressSheet.current.close();
+  };
+
+  const navigateToHome = () => {
+    navigation.navigate('Dashboard');
   };
 
   useEffect(() => {
@@ -440,6 +445,14 @@ const Cart = () => {
   useEffect(() => {
     navigation.setOptions({
       title: t('Cart.My Cart'),
+      headerRight: () => (
+        <TouchableOpacity style={styles.addMoreItems} onPress={navigateToHome}>
+          <Icon name={'add'} size={24} color={theme.colors.primary} />
+          <Text variant={'labelMedium'} style={styles.addMoreItemsLabel}>
+            {t('Cart.Add More Items')}
+          </Text>
+        </TouchableOpacity>
+      ),
     });
     setDeliveryAddress(address);
   }, []);
@@ -677,6 +690,15 @@ const makeStyles = (colors: any) =>
     },
     deliveryButton: {
       borderRadius: 8,
+    },
+    addMoreItems: {
+      flexDirection: 'row',
+      gap: 4,
+      alignItems: 'center',
+      marginRight: 16,
+    },
+    addMoreItemsLabel: {
+      color: colors.primary,
     },
   });
 

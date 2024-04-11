@@ -114,7 +114,7 @@ const Orders: React.FC<any> = () => {
   const onRefreshHandler = () => {
     pageNumber.current = 1;
     setRefreshInProgress(true);
-    getOrderList(1)
+    getOrderList(1, selectedFilter)
       .then(() => {
         setRefreshInProgress(false);
       })
