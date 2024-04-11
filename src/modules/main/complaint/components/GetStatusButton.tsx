@@ -119,7 +119,6 @@ const GetStatusButton = ({
     setStatusLoading(true);
     try {
       source.current = CancelToken.source();
-      console.log(`${API_BASE_URL}${ISSUE_STATUS}`);
       const {data} = await postDataWithAuth(
         `${API_BASE_URL}${ISSUE_STATUS}`,
         {

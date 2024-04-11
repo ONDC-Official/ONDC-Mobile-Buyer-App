@@ -93,7 +93,6 @@ const ComplaintDetails = () => {
     });
   }, []);
 
-  console.log(JSON.stringify(actions, undefined, 4));
   return (
     <>
       <ScrollView
