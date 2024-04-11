@@ -24,13 +24,13 @@ const CancelOrderButton = () => {
       orderId: orderDetails?.id,
     });
 
-  const allNonCancellable = !orderDetails?.items.some(
-    (one: any) => one?.product['@ondc/org/cancellable'],
+  const allCancellable = orderDetails?.items.every(
+    (item: any) => item.product['@ondc/org/cancellable'],
   );
 
   if (
     (orderDetails?.state === 'Accepted' || orderDetails?.state === 'Created') &&
-    !allNonCancellable
+    allCancellable
   ) {
     return (
       <TouchableOpacity
