@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
     setSearchQuery(query);
   };
 
-  const onSearchComplete = () => {
+  const onSubmitEditing = () => {
     if (searchQuery.trim().length > 0) {
       navigation.navigate('SearchProducts', {query: searchQuery});
       setSearchQuery('');
@@ -61,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
             placeholderTextColor={theme.colors.primary}
             placeholder={t('Home.Search')}
             onChangeText={onChangeSearch}
-            onBlur={onSearchComplete}
+            onSubmitEditing={onSubmitEditing}
             value={searchQuery}
           />
         </View>
