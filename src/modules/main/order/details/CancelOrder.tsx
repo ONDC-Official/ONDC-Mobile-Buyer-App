@@ -11,6 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useRef, useState} from 'react';
 import axios from 'axios';
+import {useTranslation} from 'react-i18next';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
@@ -23,7 +24,6 @@ import {
 } from '../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../utils/utils';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 const CancelToken = axios.CancelToken;
 
@@ -65,7 +65,7 @@ const CancelOrder = ({
     try {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}/clientApis/v2/on_cancel_order?messageIds=${messageId}`,
+        `${API_BASE_URL}/clientApis/v2/on_cancel_order?messageId=${messageId}`,
         source.current.token,
       );
       cancelEventSourceResponseRef.current = [
@@ -73,6 +73,7 @@ const CancelOrder = ({
         data[0],
       ];
       if (data?.message) {
+        setShowConfirmation(false);
         navigation.goBack();
       } else {
         showToastWithGravity(
@@ -133,7 +134,7 @@ const CancelOrder = ({
           context: {
             domain: params.domain,
             bpp_id: params.bppId,
-            bppUrl: params.bppUrl,
+            bpp_uri: params.bppUrl,
             transaction_id: params.transactionId,
           },
           message: {

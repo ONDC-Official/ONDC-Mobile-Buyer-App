@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {IconButton} from 'react-native-paper';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,6 +10,7 @@ import {updateOrderDetails} from '../../../../redux/order/actions';
 import NonCancelledOrder from './components/NonCancelledOrder';
 import CancelledOrder from './components/CancelledOrder';
 import {useAppTheme} from '../../../../utils/theme';
+import {useFocusEffect} from '@react-navigation/native';
 
 const CancelToken = axios.CancelToken;
 
@@ -69,9 +70,11 @@ const OrderDetails = ({
     });
   }, [navigation]);
 
-  useEffect(() => {
-    getOrderDetails().then(() => {});
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getOrderDetails().then(() => {});
+    }, []),
+  );
 
   if (apiInProgress) {
     return <Skeleton />;
