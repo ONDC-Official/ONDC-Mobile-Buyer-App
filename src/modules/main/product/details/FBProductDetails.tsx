@@ -11,9 +11,10 @@ import {useAppTheme} from '../../../../utils/theme';
 interface ProductDetails {
   product: any;
   children: any;
+  inStock: boolean;
 }
 
-const ProductDetails: React.FC<ProductDetails> = ({product, children}) => {
+const ProductDetails: React.FC<ProductDetails> = ({product, children, inStock = true}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -23,6 +24,7 @@ const ProductDetails: React.FC<ProductDetails> = ({product, children}) => {
     <>
       <View style={styles.header}>
         <View style={styles.imagesContainer}>
+          {!inStock && <View style={styles.disableImages} />}
           <ProductImages
             fbProduct
             roundedCorner
@@ -32,15 +34,16 @@ const ProductDetails: React.FC<ProductDetails> = ({product, children}) => {
           />
         </View>
         <VegNonVegTag tags={product?.item_details?.tags} />
+        {!inStock && <View style={styles.disableTags} />}
         <Text variant="titleLarge" style={styles.title}>
           {product?.item_details?.descriptor?.name}
         </Text>
         <View style={styles.priceContainer}>
-          <Text variant="labelLarge" style={styles.price}>
+          <Text variant="labelLarge" style={[styles.price, inStock ? {} : styles.disabledText]}>
             ₹{product?.item_details?.price?.value}
           </Text>
         </View>
-        <Text variant={'labelSmall'} style={styles.description}>
+        <Text variant={'labelSmall'} style={[styles.description, inStock ? {} : styles.disabledText]}>
           {product?.item_details?.descriptor?.short_desc}
         </Text>
       </View>
@@ -55,7 +58,7 @@ const ProductDetails: React.FC<ProductDetails> = ({product, children}) => {
         />
         <View style={styles.customizationContainer}>{children}</View>
         <View style={styles.aboutContainer}>
-          <AboutProduct product={product} />
+          <AboutProduct product={product} inStock={inStock} />
         </View>
       </View>
     </>
@@ -76,6 +79,9 @@ const makeStyles = (colors: any) =>
     },
     price: {
       color: colors.primary,
+    },
+    disabledText: {
+      color: colors.neutral300,
     },
     priceContainer: {
       flexDirection: 'row',
@@ -101,6 +107,24 @@ const makeStyles = (colors: any) =>
     },
     imagesContainer: {
       borderRadius: 8,
+    },
+    disableImages: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      zIndex: 1000,
+      height: 220,
+      width: '100%',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      borderRadius: 8,
+    },
+    disableTags: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      width: 18,
+      height: 18,
+      marginTop: -18,
     },
     description: {
       color: colors.neutral400,

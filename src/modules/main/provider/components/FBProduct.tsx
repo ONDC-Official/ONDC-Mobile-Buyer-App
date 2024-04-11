@@ -589,7 +589,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             <ScrollView
               showsVerticalScrollIndicator={false}
               style={styles.productDetails}>
-              <FBProductDetails product={productDetails}>
+              <FBProductDetails product={productDetails} inStock={inStock}>
                 {inStock ? (
                   <>
                     <FBProductCustomization
@@ -617,19 +617,11 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               />
             ) : (
               <View style={styles.outOfStockContainer}>
-                <View
-                  style={[
-                    globalStyles.disabledOutlineButton,
-                    styles.actionButton,
-                    styles.outOfStockButton,
-                  ]}>
+                <View style={[styles.outOfStockSheetButton]}>
                   <Text
                     variant={'labelSmall'}
-                    style={[
-                      globalStyles.disabledOutlineButtonText,
-                      styles.outOfStock,
-                    ]}>
-                    Out of stock
+                    style={[styles.outOfStockSheetButtonText]}>
+                    {t('Cart.FBProduct.Out of stock')}
                   </Text>
                 </View>
               </View>
@@ -807,6 +799,17 @@ const makeStyles = (colors: any) =>
     sheetProductSymbol: {
       width: 36,
       height: 36,
+    },
+    outOfStockSheetButton: {
+      borderRadius: 8,
+      backgroundColor: colors.neutral300,
+      paddingVertical: 13,
+      alignItems: 'center',
+      marginHorizontal: 24,
+      width: Dimensions.get('screen').width - 48,
+    },
+    outOfStockSheetButtonText: {
+      color: colors.white,
     },
   });
 
