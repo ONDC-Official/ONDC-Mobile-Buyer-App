@@ -5,7 +5,7 @@ export const PROVIDERS: string = '/clientApis/v2/providers';
 export const DELIVERY_ADDRESS: string = '/clientApis/v1/delivery_address';
 export const BILLING_ADDRESS: string = '/clientApis/v1/billing_details';
 export const UPDATE_DELIVERY_ADDRESS: string =
-  '/clientApis/v1/update_delivery_address';
+  '/clientApis/v1/update_delivery_address/';
 export const LOCATIONS: string = '/clientApis/v2/locations';
 export const MAP_ACCESS_TOKEN: string = '/clientApis/v2/map/accesstoken';
 export const PROVIDER: string = '/clientApis/v2/provider-details';
