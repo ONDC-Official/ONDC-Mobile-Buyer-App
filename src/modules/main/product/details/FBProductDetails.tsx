@@ -14,7 +14,11 @@ interface ProductDetails {
   inStock: boolean;
 }
 
-const ProductDetails: React.FC<ProductDetails> = ({product, children, inStock = true}) => {
+const ProductDetails: React.FC<ProductDetails> = ({
+  product,
+  children,
+  inStock = true,
+}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -39,11 +43,15 @@ const ProductDetails: React.FC<ProductDetails> = ({product, children, inStock = 
           {product?.item_details?.descriptor?.name}
         </Text>
         <View style={styles.priceContainer}>
-          <Text variant="labelLarge" style={[styles.price, inStock ? {} : styles.disabledText]}>
+          <Text
+            variant="labelLarge"
+            style={[styles.price, inStock ? {} : styles.disabledText]}>
             ₹{product?.item_details?.price?.value}
           </Text>
         </View>
-        <Text variant={'labelSmall'} style={[styles.description, inStock ? {} : styles.disabledText]}>
+        <Text
+          variant={'labelSmall'}
+          style={[styles.description, inStock ? {} : styles.disabledText]}>
           {product?.item_details?.descriptor?.short_desc}
         </Text>
       </View>

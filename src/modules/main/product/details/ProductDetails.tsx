@@ -101,7 +101,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
         source.current.token,
       );
       const data = itemResponse?.data?.response;
-      await getCartItems(data.id);
       let rangePriceTag = null;
       if (data?.item_details?.price?.tags) {
         const findRangePriceTag = data?.item_details?.price?.tags.find(
@@ -125,6 +124,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
       navigation.setOptions({
         title: data?.provider_details?.descriptor?.name,
       });
+      await getCartItems(data.id);
     } catch (error) {
       handleApiError(error);
     } finally {
