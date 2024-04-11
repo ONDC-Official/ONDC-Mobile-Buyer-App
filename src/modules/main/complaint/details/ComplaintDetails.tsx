@@ -13,6 +13,7 @@ import GetStatusButton from '../components/GetStatusButton';
 import ComplaintStatus from '../components/ComplaintStatus';
 import EscalateForm from './components/EscalateForm';
 import CloseForm from './components/CloseForm';
+import {compareDateWithDuration} from '../../../../utils/utils';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -35,6 +36,7 @@ const ComplaintDetails = () => {
   const [actions, setActions] = useState<any[]>([]);
   const [escalateModalVisible, setEscalateModalVisible] =
     useState<boolean>(false);
+  const [takeAction, setTakeAction] = useState<boolean>(false);
   const [closeModalVisible, setCloseModalVisible] = useState<boolean>(false);
 
   const hideEscalateModalVisible = () => setEscalateModalVisible(false);
@@ -47,21 +49,39 @@ const ComplaintDetails = () => {
     setActions([...actions, ...list]);
   };
 
-  useEffect(() => {
-    const mergeIssueActions = (list: any) => {
-      let resActions = list.respondent_actions,
-        comActions = list.complainant_actions.map((item: any) => {
-          return {...item, respondent_action: item.complainant_action};
-        }),
-        mergedActions = [...comActions, ...resActions];
+  const mergeIssueActions = (list: any) => {
+    let resActions = list.respondent_actions,
+      comActions = list.complainant_actions.map((item: any) => {
+        return {...item, respondent_action: item.complainant_action};
+      }),
+      mergedActions = [...comActions, ...resActions];
 
-      mergedActions.sort(
-        (a, b) =>
-          new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime(),
+    mergedActions.sort(
+      (a, b) =>
+        new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime(),
+    );
+    let showTakeAction = false;
+    const lastAction =
+      mergedActions[mergedActions.length - 1]?.respondent_action;
+    if (
+      lastAction === 'PROCESSING' ||
+      lastAction === 'OPEN' ||
+      lastAction === 'ESCALATE'
+    ) {
+      showTakeAction = compareDateWithDuration(
+        process.env.EXPECTED_RESPONSE_TIME ?? 'PT1H',
+        mergedActions[mergedActions.length - 1]?.updated_at,
       );
-      setActions(mergedActions);
-    };
+    } else {
+      showTakeAction =
+        lastAction !== 'ESCALATE' &&
+        mergedActions.some(x => x.respondent_action === 'RESOLVED');
+    }
+    setTakeAction(showTakeAction);
+    setActions(mergedActions);
+  };
 
+  useEffect(() => {
     if (complaintDetails) {
       mergeIssueActions(complaintDetails?.issue_actions);
     }
@@ -73,6 +93,7 @@ const ComplaintDetails = () => {
     });
   }, []);
 
+  console.log(JSON.stringify(actions, undefined, 4));
   return (
     <>
       <ScrollView
@@ -88,7 +109,7 @@ const ComplaintDetails = () => {
             }>
             <View style={styles.accordionDetails}>
               {actions.map((action: any, actionIndex: number) => (
-                <View style={styles.process} key={action?.complainant_action}>
+                <View style={styles.process} key={action?.respondent_action}>
                   <View style={styles.dotContainer}>
                     <View style={styles.dot}>
                       <View style={styles.innerDot} />
@@ -216,30 +237,36 @@ const ComplaintDetails = () => {
           </Text>
 
           <View style={styles.actionButtonContainer}>
-            <GetStatusButton
-              transactionId={complaintDetails?.transaction_id}
-              bppId={complaintDetails?.bppId}
-              issueId={complaintDetails?.issueId}
-              domain={complaintDetails?.domain}
-            />
+            {!takeAction ? (
+              <GetStatusButton
+                mergeIssueActions={mergeIssueActions}
+                complainantActions={complaintDetails?.issue_actions?.complainant_actions}
+                transactionId={complaintDetails?.transaction_id}
+                bppId={complaintDetails?.bppId}
+                issueId={complaintDetails?.issueId}
+                domain={complaintDetails?.domain}
+              />
+            ) : (
+              <View>
+                <Button
+                  mode="outlined"
+                  contentStyle={styles.actionButtonContent}
+                  style={styles.actionButton}
+                  onPress={showEscalateModalVisible}>
+                  {t('Complaint Details.Escalate')}
+                </Button>
 
-            <Button
-              mode="outlined"
-              contentStyle={styles.actionButtonContent}
-              style={styles.actionButton}
-              onPress={showEscalateModalVisible}>
-              Escalate
-            </Button>
-
-            {complaintDetails?.issue_status !== 'Close' && (
-              <Button
-                onPress={showCloseModal}
-                mode="outlined"
-                contentStyle={styles.actionButtonContent}
-                style={styles.cancelButton}
-                textColor={theme.colors.error}>
-                Close
-              </Button>
+                {complaintDetails?.issue_status !== 'Close' && (
+                  <Button
+                    onPress={showCloseModal}
+                    mode="outlined"
+                    contentStyle={styles.actionButtonContent}
+                    style={styles.cancelButton}
+                    textColor={theme.colors.error}>
+                    {t('Complaint Details.Close')}
+                  </Button>
+                )}
+              </View>
             )}
           </View>
         </View>

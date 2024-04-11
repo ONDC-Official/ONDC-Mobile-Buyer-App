@@ -408,7 +408,10 @@
     "Expected Resolution Time": "अपेक्षित ठराव वेळ",
     "Respondent Details": "प्रतिसादकर्त्याचे तपशील",
     "Phone": "फोन",
-    "Email": "ईमेल"
+    "Email": "ईमेल",
+    "Complaint status updated successfully": "तक्रारीची स्थिती यशस्वीरीत्या अपडेट केली",
+    "Close": "बंद",
+    "Escalate": "वाढवा"
   },
   "Close Form": {
     "Close": "बंद",

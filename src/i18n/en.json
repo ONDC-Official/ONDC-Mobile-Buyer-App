@@ -408,7 +408,10 @@
     "Expected Resolution Time": "Expected Resolution Time",
     "Respondent Details": "Respondent Details",
     "Phone": "Phone",
-    "Email": "Email"
+    "Email": "Email",
+    "Complaint status updated successfully": "Complaint status updated successfully",
+    "Close": "Close",
+    "Escalate": "Escalate"
   },
   "Close Form": {
     "Close": "Close",

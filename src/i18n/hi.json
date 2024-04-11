@@ -191,6 +191,7 @@
     "Search": "खोज",
     "Filter": "फ़िल्टर",
     "Shop by Category": "शॉप बी कैटेगरी",
+    "Shop By Category": "शॉप बी कैटेगरी",
     "Fruits and Vegetables": "फल और सब्जियां",
     "Masala & Seasoning": "मसाला और मसाला",
     "Oil & Ghee": "तेल / घी",
@@ -407,7 +408,10 @@
     "Expected Resolution Time": "अपेक्षित समाधान समय",
     "Respondent Details": "प्रतिवादी विवरण",
     "Phone": "फोन",
-    "Email": "ईमेल"
+    "Email": "ईमेल",
+    "Complaint status updated successfully": "शिकायत की स्थिति सफलतापूर्वक अपडेट की गई",
+    "Close": "बंद करना",
+    "Escalate": "आगे बढ़ाएं"
   },
   "Close Form": {
     "Close": "बंद करना",

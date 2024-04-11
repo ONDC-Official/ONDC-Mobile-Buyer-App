@@ -408,7 +408,10 @@
     "Expected Resolution Time": "எதிர்பார்க்கப்படும் தீர்மானம் நேரம்",
     "Respondent Details": "பதிலளித்தவரின் விவரங்கள்",
     "Phone": "போன்",
-    "Email": "இமெயில்"
+    "Email": "இமெயில்",
+    "Complaint status updated successfully": "புகார் நிலை வெற்றிகரமாக புதுப்பிக்கப்பட்டது",
+    "Close": "நெருக்கமான",
+    "Escalate": "அதிகரிக்கும்"
   },
   "Close Form": {
     "Close": "நெருக்கமான",

@@ -408,7 +408,10 @@
     "Expected Resolution Time": "প্রত্যাশিত সমাধান সময়",
     "Respondent Details": "উত্তরদাতার বিবরণ",
     "Phone": "ফোন",
-    "Email": "ইমেইল"
+    "Email": "ইমেইল",
+    "Complaint status updated successfully": "অভিযোগের স্থিতি সফলভাবে আপডেট করা হয়েছে",
+    "Close": "বন্ধ",
+    "Escalate": "বাড়ানো"
   },
   "Close Form": {
     "Close": "বন্ধ",

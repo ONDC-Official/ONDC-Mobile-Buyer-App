@@ -17,6 +17,7 @@ import {
 import {showToastWithGravity} from '../../../../utils/utils';
 import {SSE_TIMEOUT} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
+import {useTranslation} from 'react-i18next';
 
 const CancelToken = axios.CancelToken;
 const GetStatusButton = ({
@@ -24,12 +25,17 @@ const GetStatusButton = ({
   bppId,
   issueId,
   domain,
+  complainantActions,
+  mergeIssueActions,
 }: {
   transactionId: any;
   bppId: any;
   issueId: any;
   domain: any;
+  complainantActions: any;
+  mergeIssueActions: (value: any) => void;
 }) => {
+  const {t} = useTranslation();
   const {token} = useSelector(({authReducer}) => authReducer);
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -54,19 +60,14 @@ const GetStatusButton = ({
       ];
       setStatusLoading(false);
       if (data?.message) {
-        // mergeRespondantArrays({
-        //   respondent_actions:
-        //     data.message.issue?.issue_actions.respondent_actions,
-        //   complainant_actions: issue_actions.complainant_actions,
-        // });
-        // dispatch({
-        //   type: toast_actions.ADD_TOAST,
-        //   payload: {
-        //     id: Math.floor(Math.random() * 100),
-        //     type: toast_types.success,
-        //     message: 'Complaint status updated successfully!',
-        //   },
-        // });
+        mergeIssueActions({
+          respondent_actions:
+            data.message.issue?.issue_actions.respondent_actions,
+          complainant_actions: complainantActions,
+        });
+        showToastWithGravity(
+          t('Complaint Details.Complaint status updated successfully!'),
+        );
       } else {
         showToastWithGravity(
           'Something went wrong!, issue status cannot be fetched',
@@ -118,6 +119,7 @@ const GetStatusButton = ({
     setStatusLoading(true);
     try {
       source.current = CancelToken.source();
+      console.log(`${API_BASE_URL}${ISSUE_STATUS}`);
       const {data} = await postDataWithAuth(
         `${API_BASE_URL}${ISSUE_STATUS}`,
         {
