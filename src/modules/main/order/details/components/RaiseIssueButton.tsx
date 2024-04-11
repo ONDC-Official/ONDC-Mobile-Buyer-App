@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {Button, Modal, Portal, Text} from 'react-native-paper';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Formik} from 'formik';
 import * as yup from 'yup';
@@ -260,6 +260,17 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
     }
   }, [orderDetails]);
 
+  const availableCategories = useMemo(() => {
+    if (
+      orderDetails?.state === 'Accepted' ||
+      orderDetails?.state === 'In-progress'
+    ) {
+      return categories.filter(one => one.enums === 'FLM02');
+    } else {
+      return categories;
+    }
+  }, [categories, orderDetails?.state]);
+
   return (
     <>
       {orderDetails?.state !== 'Cancelled' && (
@@ -412,7 +423,7 @@ const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
                           errorMessage={
                             touched.subcategory ? errors.subcategory : null
                           }
-                          list={categories}
+                          list={availableCategories}
                         />
                       </View>
                       <View style={appStyles.inputContainer}>
