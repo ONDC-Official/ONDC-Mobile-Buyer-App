@@ -114,8 +114,7 @@ const FilterList: React.FC<FilterList> = ({
             </>
           ) : (
             currentValues.map(value => {
-              const isSelected = selectedValue === value.value;
-
+              const isSelected = selectedValue === value.name;
               return (
                 <TouchableOpacity
                   key={value.name}
