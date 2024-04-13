@@ -83,7 +83,7 @@ const LoginWithPhone = () => {
           name="email"
           value={mobileNumber}
           required
-          inputLabel="Phone No.*"
+          inputLabel="Phone No."
           placeholder="Enter phone no."
           error={!!mobileError}
           errorMessage={mobileError ? mobileError : null}
