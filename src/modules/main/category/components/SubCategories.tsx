@@ -21,7 +21,6 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const [subCategories, setSubCategories] = useState<any[]>([]);
 
   const navigateToSubCategory = (subCategory: any) => {
     navigation.navigate('SubCategoryDetails', {
@@ -31,22 +30,26 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
   };
 
   const list = useMemo(() => {
-    if (subCategories.length > 0) {
-      return subCategories.slice(0, 8);
+    let data = PRODUCT_SUBCATEGORY[currentCategory];
+    if (data.length > 0) {
+      data = data.slice(0, 8);
+      for (let index = data.length; index < 8; index++) {
+        data.push({
+          value: 'Empty',
+          key: 'Empty',
+        });
+      }
+      return data;
     } else {
       return [];
     }
-  }, [subCategories]);
-
-  const gap = (screenWidth - 240) / 4;
+  }, [currentCategory]);
 
   const navigateToAll = () => {
     navigation.navigate('ShopByCategory', {category: currentCategory});
   };
 
-  useEffect(() => {
-    setSubCategories(PRODUCT_SUBCATEGORY[currentCategory]);
-  }, [currentCategory]);
+  console.log('Sub categories', list);
 
   return (
     <View style={styles.sectionContainer}>
@@ -56,29 +59,18 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
       />
 
       <View style={styles.container}>
-        {/* {list.map((item, index) => (
-          <TouchableOpacity
-            key={item.key}
-            style={[
-              styles.brand,
-              index < 4 ? styles.marginBottom : {},
-              index !== 3 && index !== 7 ? {marginRight: gap} : {},
-            ]}
-            onPress={() => navigateToSubCategory(item)}>
-            <FastImage source={item.imageUrl} style={styles.brandImage} />
-            <Text variant={'labelLarge'} style={styles.name}>
-              {t(`Product SubCategories.${item.key}`)}
-            </Text>
-          </TouchableOpacity>
-        ))} */}
         <FlatList
           data={list}
           numColumns={4}
-          renderItem={({item, index}) => {
+          keyExtractor={item => item.key}
+          renderItem={({item}) => {
+            if (item.value === 'Empty') {
+              return <View key={item.key} style={styles.brand} />;
+            }
             return (
               <TouchableOpacity
                 key={item.key}
-                style={[styles.brand]}
+                style={styles.brand}
                 onPress={() => navigateToSubCategory(item)}>
                 <FastImage source={item.imageUrl} style={styles.brandImage} />
                 <Text variant={'labelLarge'} style={styles.name}>
