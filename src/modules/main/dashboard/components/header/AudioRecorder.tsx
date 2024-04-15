@@ -68,6 +68,7 @@ const AudioRecorder = ({
   };
 
   const onStopRecord = async () => {
+    setRecognizedText('');
     setShowVoiceModal(false);
     try {
       await Voice.stop();

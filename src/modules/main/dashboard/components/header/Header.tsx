@@ -36,6 +36,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
   const onAudioSearchComplete = (query: string) => {
     if (query.length > 0) {
       navigation.navigate('SearchProducts', {query});
+      setSearchQuery('');
     }
   };
 
