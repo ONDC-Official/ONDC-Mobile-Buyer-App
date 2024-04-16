@@ -67,7 +67,7 @@ export const CATEGORIES: any = [
     id: '9',
     name: 'Appliances',
     shortName: 'Appliances',
-    Icon: require('../assets/categories/agriculture.png'),
+    Icon: require('../assets/categories/appliances.png'),
     routeName: 'Appliances',
     domain: 'ONDC:RET15',
   },
