@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {
   CANCELLATION_REASONS,
+  CANCELLATION_REASONS_SELLER,
   CURRENCY_SYMBOLS,
   RETURN_REASONS,
 } from '../../../../../utils/constants';
@@ -114,12 +115,24 @@ const ItemDetails = ({
   };
 
   const renderCancelReason = (reasonId: string) => {
-    const value = CANCELLATION_REASONS.find(one => one.key === reasonId)?.value;
-    return (
-      <Text variant={'labelSmall'} style={styles.reason}>
-        {t(`Cancellation Reason.${value}`)}
-      </Text>
-    );
+    let value = CANCELLATION_REASONS.find(one => one.key === reasonId)?.value;
+
+    if (value) {
+      return (
+        <Text variant={'labelSmall'} style={styles.reason}>
+          {t(`Cancellation Reason.${value}`)}
+        </Text>
+      );
+    } else {
+      value = CANCELLATION_REASONS_SELLER.find(
+        one => one.key === reasonId,
+      )?.value;
+      return (
+        <Text variant={'labelSmall'} style={styles.reason}>
+          {t(`Cancellation Reason.${value}`)}
+        </Text>
+      );
+    }
   };
 
   useEffect(() => {
@@ -362,7 +375,7 @@ const ItemDetails = ({
                 </View>
                 {fulfillment?.state?.descriptor?.code === 'Cancelled'
                   ? items
-                      .filter(item => item.id === itemId)
+                      .filter(item => item.id === itemId && item.fulfillment_id === fulfillment.id)
                       .map((item, index) => (
                         <SingleItem
                           key={`${item.id}${index}CancelFulfillment`}

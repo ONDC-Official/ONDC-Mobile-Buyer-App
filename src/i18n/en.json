@@ -463,7 +463,16 @@
     "Product available at lower than order price": "Product available at lower than order price",
     "Order not received as per buyer app TAT SLA": "Order not received as per buyer app TAT SLA",
     "Wrong product delivered": "Wrong product delivered",
-    "Buyer wants to modify address / other order details": "Buyer wants to modify address / other order details"
+    "Buyer wants to modify address / other order details": "Buyer wants to modify address / other order details",
+    "One or more items in the Order not available": "One or more items in the Order not available",
+    "Merchant rejected the order": "Merchant rejected the order",
+    "Buyer not found or cannot be contacted": "Buyer not found or cannot be contacted",
+    "Buyer does not want product any more": "Buyer does not want product any more",
+    "Buyer refused to accept delivery": "Buyer refused to accept delivery",
+    "Address not found": "Address not found",
+    "Buyer not available at location": "Buyer not available at location",
+    "Delivery pin code not serviceable": "Delivery pin code not serviceable",
+    "Pickup pin code not serviceable": "Pickup pin code not serviceable"
   },
   "Non cancelled order": {
     "Order completed on": "Order completed on"

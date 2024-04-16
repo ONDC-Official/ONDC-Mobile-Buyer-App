@@ -463,7 +463,16 @@
     "Product available at lower than order price": "ऑर्डर किमतीपेक्षा कमी दरात उत्पादन उपलब्ध आहे",
     "Order not received as per buyer app TAT SLA": "खरेदीदार ॲप TAT SLA नुसार ऑर्डर प्राप्त झाली नाही",
     "Wrong product delivered": "चुकीचे उत्पादन वितरित केले",
-    "Buyer wants to modify address / other order details": "खरेदीदार पत्ता / इतर ऑर्डर तपशील सुधारू इच्छित आहे"
+    "Buyer wants to modify address / other order details": "खरेदीदार पत्ता / इतर ऑर्डर तपशील सुधारू इच्छित आहे",
+    "One or more items in the Order not available": "ऑर्डरमधील एक किंवा अधिक आयटम उपलब्ध नाहीत",
+    "Merchant rejected the order": "व्यापाऱ्याने आदेश नाकारला",
+    "Buyer not found or cannot be contacted": "खरेदीदार सापडला नाही किंवा संपर्क केला जाऊ शकत नाही",
+    "Buyer does not want product any more": "खरेदीदाराला आणखी उत्पादन नको आहे",
+    "Buyer refused to accept delivery": "खरेदीदाराने वितरण स्वीकारण्यास नकार दिला",
+    "Address not found": "पत्ता सापडला नाही",
+    "Buyer not available at location": "ठिकाणी खरेदीदार उपलब्ध नाही",
+    "Delivery pin code not serviceable": "वितरण पिन कोड सेवायोग्य नाही",
+    "Pickup pin code not serviceable": "पिकअप पिन कोड सेवायोग्य नाही"
   },
   "Non cancelled order": {
     "Order completed on": "ऑर्डर पूर्ण झाली"

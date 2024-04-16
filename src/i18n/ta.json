@@ -463,7 +463,16 @@
     "Product available at lower than order price": "ஆர்டர் விலையை விட குறைவான விலையில் தயாரிப்பு கிடைக்கும்",
     "Order not received as per buyer app TAT SLA": "வாங்குபவர் பயன்பாட்டின் TAT SLA இன் படி ஆர்டர் பெறப்படவில்லை",
     "Wrong product delivered": "தவறான தயாரிப்பு வழங்கப்பட்டது",
-    "Buyer wants to modify address / other order details": "வாங்குபவர் முகவரி / பிற ஆர்டர் விவரங்களை மாற்ற விரும்புகிறார்"
+    "Buyer wants to modify address / other order details": "வாங்குபவர் முகவரி / பிற ஆர்டர் விவரங்களை மாற்ற விரும்புகிறார்",
+    "One or more items in the Order not available": "ஆர்டரில் உள்ள ஒன்று அல்லது அதற்கு மேற்பட்ட உருப்படிகள் கிடைக்கவில்லை",
+    "Merchant rejected the order": "வணிகர் ஆர்டரை நிராகரித்தார்",
+    "Buyer not found or cannot be contacted": "வாங்குபவர் கிடைக்கவில்லை அல்லது தொடர்பு கொள்ள முடியவில்லை",
+    "Buyer does not want product any more": "வாங்குபவர் இனி தயாரிப்புகளை விரும்பவில்லை",
+    "Buyer refused to accept delivery": "வாங்குபவர் டெலிவரியை ஏற்க மறுத்துவிட்டார்",
+    "Address not found": "முகவரி கிடைக்கவில்லை",
+    "Buyer not available at location": "இடத்தில் வாங்குபவர் கிடைக்கவில்லை",
+    "Delivery pin code not serviceable": "டெலிவரி பின் குறியீடு சேவை செய்ய முடியாது",
+    "Pickup pin code not serviceable": "பிக்கப் பின் குறியீடு சேவை செய்ய முடியாதது"
   },
   "Non cancelled order": {
     "Order completed on": "ஆர்டர் முடிந்தது"

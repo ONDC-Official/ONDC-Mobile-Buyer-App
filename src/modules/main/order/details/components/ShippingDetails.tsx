@@ -25,11 +25,11 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
   const fulfilment = orderDetails?.fulfillments[fulfilmentIndex];
 
   const items = useMemo(() => {
-    return orderDetails?.items.filter((obj: any) => {
-      return obj.tags.some((tag: any) => {
+    return orderDetails?.items?.filter((obj: any) => {
+      return obj?.tags?.some((tag: any) => {
         return (
-          tag.code === 'type' &&
-          tag.list.some((item: any) => {
+          tag?.code === 'type' &&
+          tag?.list?.some((item: any) => {
             return item.code === 'type' && item.value === 'item';
           })
         );

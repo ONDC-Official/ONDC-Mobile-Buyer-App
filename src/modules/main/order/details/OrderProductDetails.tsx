@@ -39,6 +39,7 @@ const OrderProductDetails = ({route: {params}}: {route: any}) => {
           provider={orderDetails?.provider}
           bppId={orderDetails?.bppId}
           domain={orderDetails?.domain}
+          documents={[]}
         />
         <ShippingDetails fullfillmentId={params.fulfillmentId} />
         <ProductSummary

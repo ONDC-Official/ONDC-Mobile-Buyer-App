@@ -463,7 +463,16 @@
     "Product available at lower than order price": "অর্ডার মূল্যের চেয়ে কম দামে পণ্য উপলব্ধ",
     "Order not received as per buyer app TAT SLA": "ক্রেতা অ্যাপ TAT SLA অনুযায়ী অর্ডার পাওয়া যায়নি",
     "Wrong product delivered": "ভুল পণ্য বিতরণ",
-    "Buyer wants to modify address / other order details": "ক্রেতা ঠিকানা/অন্যান্য অর্ডারের বিবরণ পরিবর্তন করতে চায়"
+    "Buyer wants to modify address / other order details": "ক্রেতা ঠিকানা/অন্যান্য অর্ডারের বিবরণ পরিবর্তন করতে চায়",
+    "One or more items in the Order not available": "অর্ডারে এক বা একাধিক আইটেম উপলব্ধ নয়",
+    "Merchant rejected the order": "বণিক আদেশ প্রত্যাখ্যান",
+    "Buyer not found or cannot be contacted": "ক্রেতা পাওয়া যায়নি বা যোগাযোগ করা যাবে না",
+    "Buyer does not want product any more": "ক্রেতা আর পণ্য চায় না",
+    "Buyer refused to accept delivery": "ক্রেতা ডেলিভারি গ্রহণ করতে অস্বীকার করেছে",
+    "Address not found": "ঠিকানা পাওয়া যায়নি",
+    "Buyer not available at location": "ক্রেতা অবস্থানে উপলব্ধ নয়",
+    "Delivery pin code not serviceable": "ডেলিভারি পিন কোড পরিষেবাযোগ্য নয়",
+    "Pickup pin code not serviceable": "পিকআপ পিন কোড পরিষেবাযোগ্য নয়"
   },
   "Non cancelled order": {
     "Order completed on": "অর্ডার সম্পন্ন হয়েছে"
