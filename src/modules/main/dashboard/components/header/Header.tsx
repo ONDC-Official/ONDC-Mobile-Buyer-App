@@ -1,7 +1,11 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Searchbar} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
 import FastImage from 'react-native-fast-image';
@@ -16,6 +20,7 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({disableAddress}) => {
+  const isFocused = useIsFocused();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -39,6 +44,12 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
       setSearchQuery('');
     }
   };
+
+  useEffect(() => {
+    if (isFocused) {
+      setSearchQuery('');
+    }
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
