@@ -344,7 +344,6 @@ const CartItems: React.FC<CartItems> = ({
               {t(
                 'Cart Items.You are ordering from different store. Please check your order again',
               )}
-              again.
             </Text>
           </View>
         )}

@@ -9,6 +9,7 @@ import AddressForm from './AddressForm';
 import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import {showInfoToast} from '../../../../../utils/utils';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
+import {useTranslation} from 'react-i18next';
 
 interface UpdateAddress {
   navigation: any;
@@ -29,6 +30,7 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
   route: {params},
 }) => {
   const {} = useRefreshToken();
+  const {t} = useTranslation();
   const source = useRef<any>(null);
   const {postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
@@ -70,7 +72,9 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
         payload,
         source.current.token,
       );
-      showInfoToast('Your delivery address has been added successfully');
+      showInfoToast(
+        t('Address Form.Your delivery address has been updated successfully'),
+      );
       navigation.goBack();
     } catch (error) {
       handleApiError(error);

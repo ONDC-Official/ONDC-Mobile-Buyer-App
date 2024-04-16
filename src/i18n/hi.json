@@ -138,7 +138,8 @@
     "City": "सिटी",
     "State": "स्टेट",
     "Address Type": "पता मुद्रलेख",
-    "Save": "बचाना"
+    "Save": "बचाना",
+    "Your delivery address has been updated successfully": "आपका डिलीवरी पता सफलतापूर्वक अपडेट कर दिया गया है"
   },
   "Categories": {
     "Fashion": "पहनावा",
