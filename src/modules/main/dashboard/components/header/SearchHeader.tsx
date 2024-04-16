@@ -34,7 +34,8 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
 
   const onAudioSearchComplete = (query: string) => {
     if (query.length > 0) {
-      onSearch(searchQuery);
+      onSearch(query);
+      setSearchQuery(query);
     }
   };
 
