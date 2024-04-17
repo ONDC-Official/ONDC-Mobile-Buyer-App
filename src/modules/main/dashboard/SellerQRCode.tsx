@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {getUrlParams} from '../../../utils/utils';
+import {getUrlParams, showToastWithGravity} from '../../../utils/utils';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
   const [torchOn, setTorchOn] = useState(false);
@@ -24,8 +24,12 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
         ) {
           pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
         }
-        navigation.navigate('BrandDetails', pageParams);
+        navigation.replace('BrandDetails', pageParams);
+      } else {
+        showToastWithGravity(`Context action search is missing in ${url}`);
       }
+    } else {
+      showToastWithGravity(`Scanned URL ${event.data}`);
     }
   };
 

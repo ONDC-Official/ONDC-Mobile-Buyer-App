@@ -49,8 +49,6 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
     navigation.navigate('ShopByCategory', {category: currentCategory});
   };
 
-  console.log('Sub categories', list);
-
   return (
     <View style={styles.sectionContainer}>
       <SectionHeaderWithViewAll

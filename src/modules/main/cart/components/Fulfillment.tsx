@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {RadioButton, Text} from 'react-native-paper';
-import React, {useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import PagerView from 'react-native-pager-view';
