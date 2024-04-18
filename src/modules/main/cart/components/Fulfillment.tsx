@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import {RadioButton, Text} from 'react-native-paper';
-import React, { useEffect, useRef, useState } from "react";
+import React, {useMemo, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import PagerView from 'react-native-pager-view';
@@ -28,6 +28,7 @@ interface Fulfillment {
   closeFulfilment: () => void;
   cartTotal: string;
   showPaymentOption: () => void;
+  updateCartItems: (value: any) => void;
 }
 
 const Fulfillment: React.FC<Fulfillment> = ({
@@ -39,6 +40,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
   closeFulfilment,
   cartTotal,
   showPaymentOption,
+  updateCartItems,
 }) => {
   const {t} = useTranslation();
   const navigation = useNavigation<any>();
@@ -82,20 +84,17 @@ const Fulfillment: React.FC<Fulfillment> = ({
   };
 
   const orderTotal = Number(productsQuote?.total_payable).toFixed(2);
-  const uniqueIdsSet = new Set(
-    cartItems[0]?.message?.quote?.fulfillments.map(
-      (fulfilment: any) => fulfilment.id,
-    ),
-  );
 
-  const heightOfPager =
-    cartItems[0]?.message?.quote?.fulfillments.length * 100 + 170;
+  const {uniqueFulfilment, uniqueItems} = useMemo(() => {
+    const fulfilmentIds = Array.from(
+      new Set(
+        cartItems[0]?.message?.quote?.items.map(
+          (item: any) => item.fulfillment_id,
+        ),
+      ),
+    );
 
-  // Convert Set back to an array if needed
-  const unqiueFulfillments = Array.from(uniqueIdsSet);
-
-  const uniqueItems = cartItems[0]?.message?.quote?.items.filter(
-    (item: any) => {
+    const itemList = cartItems[0]?.message?.quote?.items.filter((item: any) => {
       if (item.hasOwnProperty('tags')) {
         const typeTag = item?.tags?.find((tag: any) => tag.code === 'type');
         if (typeTag) {
@@ -111,8 +110,16 @@ const Fulfillment: React.FC<Fulfillment> = ({
       } else {
         return true;
       }
-    },
-  );
+    });
+
+    return {
+      uniqueFulfilment: fulfilmentIds,
+      uniqueItems: itemList,
+    };
+  }, [cartItems]);
+
+  const heightOfPager =
+    cartItems[0]?.message?.quote?.fulfillments.length * 100 + 170;
 
   return (
     <CloseSheetContainer closeSheet={closeFulfilment}>
@@ -157,7 +164,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                   height: heightOfPager,
                   backgroundColor: theme.colors.white,
                 }}>
-                {unqiueFulfillments.map((fulfillmentId: any, index) => {
+                {uniqueFulfilment.map((fulfillmentId: any, index) => {
                   const filteredProducts =
                     cartItems[0]?.message?.quote?.items?.filter((item: any) => {
                       let isItem = false;
@@ -179,7 +186,9 @@ const Fulfillment: React.FC<Fulfillment> = ({
                   let fulfillmentTotal = 0;
                   const fulfilmentList: any[] =
                     cartItems[0]?.message?.quote?.fulfillments.filter(
-                      (fulfillment: any) => fulfillment.id === fulfillmentId,
+                      (fulfillment: any) =>
+                        fulfillment.id === fulfillmentId ||
+                        !fulfillment.id.includes(fulfillmentId),
                     );
 
                   return (
@@ -187,13 +196,13 @@ const Fulfillment: React.FC<Fulfillment> = ({
                       <View style={styles.fulfilmentSummary}>
                         <View style={styles.fulfilmentCountContainer}>
                           <View>
-                            {unqiueFulfillments.length > 1 && (
+                            {uniqueFulfilment.length > 1 && (
                               <Text
                                 variant={'bodyLarge'}
                                 style={styles.fulfilmentCount}>
                                 {t('Fulfillment.Fulfilment no', {
                                   current: index + 1,
-                                  total: unqiueFulfillments.length,
+                                  total: uniqueFulfilment.length,
                                 })}
                               </Text>
                             )}
@@ -209,7 +218,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                   )}`}
                             </Text>
                           </View>
-                          {unqiueFulfillments.length > 1 && (
+                          {uniqueFulfilment.length > 1 && (
                             <View style={styles.buttonContainer}>
                               <TouchableOpacity
                                 onPress={showPreviousFulfilment}>
@@ -279,7 +288,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                             );
                           })}
                         </ScrollView>
-                        {unqiueFulfillments.length > 1 && (
+                        {uniqueFulfilment.length > 1 && (
                           <View style={styles.fulfilmentTotal}>
                             <Text
                               variant={'bodyMedium'}
@@ -296,49 +305,72 @@ const Fulfillment: React.FC<Fulfillment> = ({
                       </View>
                       <View style={styles.listContainer}>
                         <ScrollView>
-                          {fulfilmentList.map((fulfilment: any) => {
-                            const fulfilmentPresent: boolean =
-                              selectedFulfillmentList.includes(fulfilment.id);
-                            return (
-                              <View
-                                key={`${fulfilment.id}${fulfilment.type}`}
-                                style={styles.fulfilment}>
-                                <RadioButton.Android
-                                  value={fulfilment['@ondc/org/category']}
-                                  status={
-                                    fulfilmentPresent ? 'checked' : 'unchecked'
-                                  }
-                                  onPress={() => {
-                                    if (!fulfilmentPresent) {
-                                      setSelectedFulfillmentList(
-                                        selectedFulfillmentList.concat([
-                                          fulfilment.id,
-                                        ]),
-                                      );
+                          {fulfilmentList.map(
+                            (fulfilment: any, fulfilmentIndex) => {
+                              const fulfilmentPresent: boolean =
+                                selectedFulfillmentList.includes(fulfilment.id);
+                              return (
+                                <View
+                                  key={`${fulfilment.id}${fulfilment.type}`}
+                                  style={[
+                                    styles.fulfilment,
+                                    fulfilmentIndex < fulfilmentList.length - 1
+                                      ? styles.fulfilmentBorder
+                                      : {},
+                                  ]}>
+                                  <RadioButton.Android
+                                    value={fulfilment['@ondc/org/category']}
+                                    status={
+                                      fulfilmentPresent
+                                        ? 'checked'
+                                        : 'unchecked'
                                     }
-                                  }}
-                                />
-                                <View style={styles.customerMeta}>
-                                  <Text
-                                    variant={'bodyMedium'}
-                                    style={styles.fulfilmentCategory}>
-                                    {fulfilment['@ondc/org/category']}
-                                  </Text>
-                                  {fulfilment.hasOwnProperty(
-                                    '@ondc/org/TAT',
-                                  ) && (
+                                    onPress={() => {
+                                      if (!fulfilmentPresent) {
+                                        const list =
+                                          selectedFulfillmentList.filter(
+                                            one =>
+                                              fulfilmentList.findIndex(
+                                                object => object.id === one,
+                                              ) < 0,
+                                          );
+                                        setSelectedFulfillmentList(
+                                          list.concat([fulfilment.id]),
+                                        );
+                                        const updateItems = JSON.parse(
+                                          JSON.stringify(cartItems),
+                                        );
+                                        updateItems[0]?.message?.quote?.items.forEach(
+                                          (item: any) => {
+                                            item.fulfillment_id = fulfilment.id;
+                                          },
+                                        );
+                                        updateCartItems(updateItems);
+                                      }
+                                    }}
+                                  />
+                                  <View style={styles.customerMeta}>
                                     <Text
-                                      variant={'bodyLarge'}
-                                      style={styles.duration}>
-                                      {moment
-                                        .duration(fulfilment['@ondc/org/TAT'])
-                                        .humanize()}
+                                      variant={'bodyMedium'}
+                                      style={styles.fulfilmentCategory}>
+                                      {fulfilment['@ondc/org/category']}
                                     </Text>
-                                  )}
+                                    {fulfilment.hasOwnProperty(
+                                      '@ondc/org/TAT',
+                                    ) && (
+                                      <Text
+                                        variant={'bodyLarge'}
+                                        style={styles.duration}>
+                                        {moment
+                                          .duration(fulfilment['@ondc/org/TAT'])
+                                          .humanize()}
+                                      </Text>
+                                    )}
+                                  </View>
                                 </View>
-                              </View>
-                            );
-                          })}
+                              );
+                            },
+                          )}
                         </ScrollView>
                       </View>
                     </View>
@@ -349,7 +381,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                 <View style={styles.summaryRow}>
                   <Text variant="labelLarge" style={styles.subTotal}>
                     {t('Fulfillment.Item Total')}{' '}
-                    {unqiueFulfillments.length > 1
+                    {uniqueFulfilment.length > 1
                       ? `(${uniqueItems?.length} ${t('Fulfillment.Items')})`
                       : ''}
                   </Text>
@@ -534,7 +566,12 @@ const makeStyles = (colors: any) =>
     },
     fulfilment: {
       flexDirection: 'row',
-      alignItems: 'center',
+      alignItems: 'flex-start',
+      paddingVertical: 12,
+    },
+    fulfilmentBorder: {
+      borderBottomWidth: 1,
+      borderBottomColor: colors.neutral100,
     },
     summaryContainer: {
       padding: 16,

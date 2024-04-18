@@ -567,6 +567,7 @@ const Cart = () => {
           selectedFulfillmentList={selectedFulfillmentList}
           setSelectedFulfillmentList={setSelectedFulfillmentList}
           cartItems={selectedItems}
+          updateCartItems={setSelectedItems}
           productsQuote={productsQuote}
           closeFulfilment={() => fulfillmentSheet.current.close()}
           cartTotal={cartTotal}

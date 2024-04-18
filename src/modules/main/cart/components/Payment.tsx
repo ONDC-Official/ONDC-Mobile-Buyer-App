@@ -234,7 +234,7 @@ const Payment: React.FC<Payment> = ({
 
       //Error handling workflow eg, NACK
       const isNACK = data.find(
-        (item: any) => item.error && item.message.ack.status === 'NACK',
+        (item: any) => item.error && item?.message?.ack?.status === 'NACK',
       );
       if (isNACK) {
         showToastWithGravity(isNACK.error.message);
