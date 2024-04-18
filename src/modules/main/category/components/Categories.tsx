@@ -71,6 +71,15 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
           </TouchableOpacity>
         )}
         keyExtractor={item => item.name}
+        onScrollToIndexFailed={info => {
+          const wait = new Promise(resolve => setTimeout(resolve, 500));
+          wait.then(() => {
+            flatListRef.current?.scrollToIndex({
+              index: info.index,
+              animated: true,
+            });
+          });
+        }}
       />
     </View>
   );
