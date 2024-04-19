@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import {useRef, useState} from 'react';
 import axios from 'axios';
 import {useSelector} from 'react-redux';
 
@@ -14,7 +14,7 @@ import useNetworkErrorHandling from './useNetworkErrorHandling';
 export default () => {
   const {handleApiError} = useNetworkErrorHandling();
   const {language} = useSelector(({authReducer}) => authReducer);
-  const asrRequest = useRef({
+  const [transliterationRequest, setTransliterationRequest] = useState({
     callbackUrl: '',
     authorizationKey: '',
     authorizationValue: '',
@@ -25,7 +25,7 @@ export default () => {
     const payload = {
       pipelineTasks: [
         {
-          taskType: 'asr',
+          taskType: 'transliteration',
         },
       ],
       pipelineRequestConfig: {
@@ -46,47 +46,49 @@ export default () => {
         config,
       );
 
-      const asrIndex = data?.pipelineResponseConfig[0].config.findIndex(
-        (item: {language: {sourceLanguage: string}}) =>
-          item?.language.sourceLanguage === language,
-      );
+      const transliterationIndex =
+        data?.pipelineResponseConfig[0].config.findIndex(
+          (item: {language: {sourceLanguage: string}}) =>
+            item?.language.sourceLanguage === language,
+        );
 
-      asrRequest.current = {
+      setTransliterationRequest({
         callbackUrl: data?.pipelineInferenceAPIEndPoint?.callbackUrl,
         authorizationKey:
           data?.pipelineInferenceAPIEndPoint?.inferenceApiKey?.name,
         authorizationValue:
           data?.pipelineInferenceAPIEndPoint?.inferenceApiKey?.value,
-        serviceId: data?.pipelineResponseConfig[0].config[asrIndex].serviceId,
-      };
+        serviceId:
+          data?.pipelineResponseConfig[0].config[transliterationIndex]
+            .serviceId,
+      });
     } catch (e) {
       console.log(e);
       handleApiError(e);
     }
   };
 
-  const computeRequestASR = async (base64: string) => {
+  const computeRequestTransliteration = async (source: string) => {
     const {callbackUrl, authorizationKey, authorizationValue, serviceId} =
-      asrRequest.current;
+      transliterationRequest;
 
     const payload = {
       pipelineTasks: [
         {
-          taskType: 'asr',
+          taskType: 'transliteration',
           config: {
             language: {
               sourceLanguage: language,
+              targetLanguage: 'en',
             },
             serviceId,
-            audioFormat: 'wav',
-            samplingRate: 16000,
           },
         },
       ],
       inputData: {
-        audio: [
+        input: [
           {
-            audioContent: base64,
+            source,
           },
         ],
       },
@@ -108,5 +110,9 @@ export default () => {
     }
   };
 
-  return {withoutConfigRequest, computeRequestASR};
+  return {
+    withoutConfigRequest,
+    computeRequestTransliteration,
+    transliterationRequest,
+  };
 };

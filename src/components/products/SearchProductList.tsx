@@ -3,6 +3,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
+import {useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
@@ -12,6 +13,7 @@ import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
+import useBhashini from '../../hooks/useBhashini';
 
 interface SearchProductList {
   searchQuery: string;
@@ -26,6 +28,12 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   const styles = makeStyles(theme.colors);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const {language} = useSelector(({authReducer}) => authReducer);
+  const {
+    withoutConfigRequest,
+    computeRequestTransliteration,
+    transliterationRequest,
+  } = useBhashini();
 
   const [products, setProducts] = useState<any[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
@@ -39,8 +47,16 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
       if (productSearchSource.current) {
         productSearchSource.current.cancel();
       }
+      let query = searchQuery;
       productSearchSource.current = CancelToken.source();
-      let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}&name=${searchQuery}`;
+      if (language !== 'en') {
+        if (!transliterationRequest?.callbackUrl) {
+          await withoutConfigRequest();
+        }
+        const searchResponse = await computeRequestTransliteration(query);
+        query = searchResponse?.pipelineResponse[0]?.output[0]?.target[0];
+      }
+      let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}&name=${query}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
