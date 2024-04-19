@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {useSelector} from 'react-redux';
+import {getVersion} from 'react-native-device-info';
 
 export default () => {
   const {token, language} = useSelector(({authReducer}) => authReducer);
@@ -9,6 +10,7 @@ export default () => {
       headers: {
         Authorization: `Bearer ${token}`,
         targetlanguage: language,
+        appVersion: getVersion(),
       },
     };
     if (cancelToken) {
@@ -24,6 +26,7 @@ export default () => {
   ) => {
     try {
       const config = getAuthConfig(cancelToken);
+      console.log('post', url);
       return await axios.post(encodeURI(url), params, config);
     } catch (e) {
       console.log(e);
@@ -38,6 +41,7 @@ export default () => {
   ) => {
     try {
       const config = getAuthConfig(cancelToken);
+      console.log('put', url);
       return await axios.put(encodeURI(url), params, config);
     } catch (e) {
       console.log(e);
@@ -48,6 +52,7 @@ export default () => {
   const getDataWithAuth = async (url: string, cancelToken: any) => {
     try {
       const config = getAuthConfig(cancelToken);
+      console.log('get', url);
       return await axios.get(encodeURI(url), config);
     } catch (e) {
       console.log(e);
@@ -58,6 +63,7 @@ export default () => {
   const deleteDataWithAuth = async (url: string, cancelToken: any) => {
     try {
       const config = getAuthConfig(cancelToken);
+      console.log('delete', url);
       return await axios.delete(encodeURI(url), config);
     } catch (e) {
       console.log(e);
