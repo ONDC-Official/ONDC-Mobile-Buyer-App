@@ -20,6 +20,12 @@ export default () => {
     authorizationValue: '',
     serviceId: '',
   });
+  const transliterationRequestRef = useRef({
+    callbackUrl: '',
+    authorizationKey: '',
+    authorizationValue: '',
+    serviceId: '',
+  });
 
   const withoutConfigRequest = async () => {
     const payload = {
@@ -52,7 +58,7 @@ export default () => {
             item?.language.sourceLanguage === language,
         );
 
-      setTransliterationRequest({
+      const response = {
         callbackUrl: data?.pipelineInferenceAPIEndPoint?.callbackUrl,
         authorizationKey:
           data?.pipelineInferenceAPIEndPoint?.inferenceApiKey?.name,
@@ -61,7 +67,10 @@ export default () => {
         serviceId:
           data?.pipelineResponseConfig[0].config[transliterationIndex]
             .serviceId,
-      });
+      };
+
+      transliterationRequestRef.current = response;
+      setTransliterationRequest(response);
     } catch (e) {
       console.log(e);
       handleApiError(e);
@@ -70,7 +79,7 @@ export default () => {
 
   const computeRequestTransliteration = async (source: string) => {
     const {callbackUrl, authorizationKey, authorizationValue, serviceId} =
-      transliterationRequest;
+      transliterationRequestRef.current;
 
     const payload = {
       pipelineTasks: [
