@@ -21,18 +21,14 @@ const Product: React.FC<Product> = ({product}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const navigateToProductDetails = () => {
-    if (isFBDomain) {
-      const routeParams: any = {
-        brandId: product.provider_details.id,
-      };
+    const routeParams: any = {
+      brandId: product.provider_details.id,
+    };
 
-      if (product.location_details) {
-        routeParams.outletId = product.location_details.id;
-      }
-      navigation.navigate('BrandDetails', routeParams);
-    } else {
-      navigation.navigate('ProductDetails', {productId: product.id});
+    if (product.location_details) {
+      routeParams.outletId = product.location_details.id;
     }
+    navigation.navigate('BrandDetails', routeParams);
   };
 
   return (
