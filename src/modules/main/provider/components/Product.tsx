@@ -10,25 +10,30 @@ import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 
 interface Product {
   product: any;
+  search?: boolean;
 }
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
 
-const Product: React.FC<Product> = ({product}) => {
+const Product: React.FC<Product> = ({product, search = false}) => {
   const isFBDomain = product.context.domain === FB_DOMAIN;
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const navigateToProductDetails = () => {
-    const routeParams: any = {
-      brandId: product.provider_details.id,
-    };
+    if (search) {
+      const routeParams: any = {
+        brandId: product.provider_details.id,
+      };
 
-    if (product.location_details) {
-      routeParams.outletId = product.location_details.id;
+      if (product.location_details) {
+        routeParams.outletId = product.location_details.id;
+      }
+      navigation.navigate('BrandDetails', routeParams);
+    } else {
+      navigation.navigate('ProductDetails', {productId: product.id});
     }
-    navigation.navigate('BrandDetails', routeParams);
   };
 
   return (

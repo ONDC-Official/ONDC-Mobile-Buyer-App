@@ -80,7 +80,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   }, [searchQuery, page]);
 
   const renderItem = (item: any) => {
-    return <Product product={item} isGrid={isGridView} />;
+    return <Product product={item} search />;
   };
 
   return (
