@@ -174,7 +174,10 @@
     "Item": "আইটেম",
     "Please try ordering from another store or try again later": "অন্য দোকান থেকে অর্ডার করার চেষ্টা করুন বা পরে আবার চেষ্টা করুন",
     "Explore Other Stores": "অন্যান্য দোকান অন্বেষণ",
-    "Fulfilment no": "{{total}} এর মধ্যে {{current}}"
+    "Fulfilment no": "{{total}} এর মধ্যে {{current}}",
+    "Delivered Today by": "{{time}} দ্বারা আজ বিতরিত",
+    "Delivered In": "{{time}} মধ্যে বিতরণ করা হয়েছে",
+    "Delivered by": "{{date}} দ্বারা বিতরণ"
   },
   "Featured Categories": {
     "Featured Categories": "ফিচার্ড ক্যাটেগরিস",

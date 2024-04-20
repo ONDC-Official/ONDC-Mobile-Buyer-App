@@ -174,7 +174,10 @@
     "Item": "इतेम",
     "Please try ordering from another store or try again later": "कृपया किसी अन्य स्टोर से ऑर्डर करने का प्रयास करें या बाद में पुनः प्रयास करें",
     "Explore Other Stores": "अन्य स्टोर खोजें",
-    "Fulfilment no": "{{total}} में से {{current}}"
+    "Fulfilment no": "{{total}} में से {{current}}",
+    "Delivered Today by": "{{time}} द्वारा आज वितरित किया गया",
+    "Delivered In": "{{time}} में वितरित किया गया",
+    "Delivered by": "{{date}} द्वारा वितरित"
   },
   "Featured Categories": {
     "Featured Categories": "फीचर्ड कैटेगरीज",

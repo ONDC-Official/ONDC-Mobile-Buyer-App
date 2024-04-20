@@ -174,7 +174,10 @@
     "Item": "ஐட்டம்",
     "Please try ordering from another store or try again later": "வேறொரு கடையில் ஆர்டர் செய்ய முயற்சிக்கவும் அல்லது பிறகு முயற்சிக்கவும்",
     "Explore Other Stores": "மற்ற கடைகளை ஆராயுங்கள்",
-    "Fulfilment no": "{{total}} இல் {{current}}"
+    "Fulfilment no": "{{total}} இல் {{current}}",
+    "Delivered Today by": "மூலம் இன்று வழங்கப்பட்டது {{time}}",
+    "Delivered In": "உள்ளே வழங்கப்பட்டது {{time}}",
+    "Delivered by": "மூலம் அனுப்பப்படும் {{date}}"
   },
   "Featured Categories": {
     "Featured Categories": "பிச்சர்ட் கேட்டகரீஸ்",

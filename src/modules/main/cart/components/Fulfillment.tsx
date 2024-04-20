@@ -309,6 +309,35 @@ const Fulfillment: React.FC<Fulfillment> = ({
                             (fulfilment: any, fulfilmentIndex) => {
                               const fulfilmentPresent: boolean =
                                 selectedFulfillmentList.includes(fulfilment.id);
+                              const current = moment();
+                              let expectedTime = current.clone();
+                              let tatMessage = '';
+                              if (fulfilment.hasOwnProperty('@ondc/org/TAT')) {
+                                expectedTime.add(
+                                  moment.duration(fulfilment['@ondc/org/TAT']),
+                                );
+                                if (expectedTime.isSame(current, 'day')) {
+                                  if (expectedTime.diff(current, 'hour') > 1) {
+                                    tatMessage = t(
+                                      'Fulfillment.Delivered Today by',
+                                      {time: expectedTime.format('hh:mm a')},
+                                    );
+                                  } else {
+                                    tatMessage = t(
+                                      'Fulfillment.Delivered Today by',
+                                      {
+                                        time: moment
+                                          .duration(fulfilment['@ondc/org/TAT'])
+                                          .humanize(),
+                                      },
+                                    );
+                                  }
+                                } else {
+                                  tatMessage = t('Fulfillment.Delivered by', {
+                                    time: expectedTime.format('dddd D MMM'),
+                                  });
+                                }
+                              }
                               return (
                                 <View
                                   key={`${fulfilment.id}${fulfilment.type}`}
@@ -361,9 +390,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                       <Text
                                         variant={'bodyLarge'}
                                         style={styles.duration}>
-                                        {moment
-                                          .duration(fulfilment['@ondc/org/TAT'])
-                                          .humanize()}
+                                        {tatMessage}
                                       </Text>
                                     )}
                                   </View>

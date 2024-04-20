@@ -174,7 +174,10 @@
     "Item": "Item",
     "Please try ordering from another store or try again later": "Please try ordering from another store or try again later",
     "Explore Other Stores": "Explore Other Stores",
-    "Fulfilment no": "{{current}} of {{total}}"
+    "Fulfilment no": "{{current}} of {{total}}",
+    "Delivered Today by": "Delivered Today by {{time}}",
+    "Delivered In": "Delivered In {{time}}",
+    "Delivered by": "Delivered by {{date}}"
   },
   "Featured Categories": {
     "Featured Categories": "Featured Categories",
