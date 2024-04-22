@@ -317,7 +317,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                   moment.duration(fulfilment['@ondc/org/TAT']),
                                 );
                                 if (expectedTime.isSame(current, 'day')) {
-                                  if (expectedTime.diff(current, 'hour') > 1) {
+                                  if (expectedTime.diff(current, 'hour') >= 1) {
                                     tatMessage = t(
                                       'Fulfillment.Delivered Today by',
                                       {time: expectedTime.format('hh:mm a')},
