@@ -65,6 +65,7 @@ const Cart = () => {
     selectedItems,
     setSelectedItems,
     selectedItemsForInit,
+    updateSelectedItemsForInit,
   } = useSelectItems(openFulfillmentSheet);
 
   const {
@@ -84,6 +85,7 @@ const Cart = () => {
   };
 
   const showPaymentOption = () => {
+    updateSelectedItemsForInit();
     fulfillmentSheet.current.close();
     paymentSheet.current.open();
   };

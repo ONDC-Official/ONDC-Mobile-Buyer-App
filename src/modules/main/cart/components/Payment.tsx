@@ -74,6 +74,7 @@ const Payment: React.FC<Payment> = ({
   const source = useRef<any>(null);
   const styles = makeStyles(theme.colors);
   const [initializeOrderLoading, setInitializeOrderLoading] = useState(false);
+  const [initFailed, setInitFailed] = useState(false);
   const [eventData, setEventData] = useState<any[]>([]);
 
   const handleSuccess = async () => {
@@ -172,7 +173,6 @@ const Payment: React.FC<Payment> = ({
       const payload = items.map((item: any) => {
         let itemsData = Object.assign([], JSON.parse(JSON.stringify(item)));
         itemsData = itemsData.map((itemData: any) => {
-          itemData.fulfillment_id = itemData.product.fulfillment_id;
           delete itemData.product.fulfillment_id;
           if (updatedCartItems.current) {
             let findItemFromQuote =
@@ -234,12 +234,14 @@ const Payment: React.FC<Payment> = ({
 
       //Error handling workflow eg, NACK
       const isNACK = data.find(
-        (item: any) => item.error && item?.message?.ack?.status === 'NACK',
+        (item: any) => item.error || item?.message?.ack?.status === 'NACK',
       );
       if (isNACK) {
         showToastWithGravity(isNACK.error.message);
         setInitializeOrderLoading(false);
+        setInitFailed(true);
       } else {
+        setInitFailed(false);
         const parentTransactionIdMap = new Map();
         data.map((one: any) => {
           const provider_id = one?.context?.provider_id;
@@ -363,7 +365,8 @@ const Payment: React.FC<Payment> = ({
               activePaymentMethod === '' ||
               productsQuote.isError ||
               confirmOrderLoading ||
-              initializeOrderLoading
+              initializeOrderLoading ||
+              initFailed
             }
             icon={() =>
               confirmOrderLoading || initializeOrderLoading ? (

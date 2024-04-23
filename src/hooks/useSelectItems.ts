@@ -193,6 +193,16 @@ export default (openFulfillmentSheet: () => void) => {
     }
   };
 
+  const updateSelectedItemsForInit = () => {
+    const newItems = selectedItems[0]?.message?.quote.items;
+    updatedCartItems.current.forEach(one => {
+      const updatedItem = newItems.find(
+        (newItem: any) => newItem.id === one.item.local_id,
+      );
+      one.item.fulfillment_id = updatedItem.fulfillment_id;
+    });
+  };
+
   const navigateToDashboard = async () => {
     const transactionId: any = uuid.v4();
     await setStoredData('transaction_id', transactionId);
@@ -315,5 +325,6 @@ export default (openFulfillmentSheet: () => void) => {
     setSelectedItems,
     selectedItemsForInit,
     setSelectedItemsForInit,
+    updateSelectedItemsForInit,
   };
 };
