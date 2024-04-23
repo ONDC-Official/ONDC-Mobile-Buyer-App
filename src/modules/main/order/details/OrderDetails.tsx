@@ -3,6 +3,8 @@ import {IconButton} from 'react-native-paper';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {useFocusEffect} from '@react-navigation/native';
+
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../utils/utils';
@@ -10,7 +12,6 @@ import {updateOrderDetails} from '../../../../redux/order/actions';
 import NonCancelledOrder from './components/NonCancelledOrder';
 import CancelledOrder from './components/CancelledOrder';
 import {useAppTheme} from '../../../../utils/theme';
-import {useFocusEffect} from '@react-navigation/native';
 
 const CancelToken = axios.CancelToken;
 
