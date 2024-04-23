@@ -37,8 +37,7 @@ const BrandSkeleton = () => {
 const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
-  const theme = useAppTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = makeStyles();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const {address} = useSelector(({addressReducer}) => addressReducer);
   const source = useRef<any>(null);
