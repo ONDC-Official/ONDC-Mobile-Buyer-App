@@ -1,7 +1,7 @@
 import {Text} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
@@ -16,10 +16,17 @@ import ReturnStatus from './ReturnStatus';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
 import {useTranslation} from 'react-i18next';
+import product from '../../../provider/components/Product';
 
 const today = moment();
 
-const SingleItem = ({item}: {item: any}) => {
+const SingleItem = ({
+  item,
+  customizations,
+}: {
+  item: any;
+  customizations: any[];
+}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -29,6 +36,10 @@ const SingleItem = ({item}: {item: any}) => {
   if (itemCustomization) {
     return <View key={item.id} />;
   }
+
+  const itemCustomizationList = customizations?.filter(
+    (obj: any) => obj.parent_item_id === item.parent_item_id,
+  );
 
   return (
     <View key={item.id} style={styles.item}>
@@ -53,6 +64,18 @@ const SingleItem = ({item}: {item: any}) => {
             </Text>
           </View>
         </View>
+        {itemCustomizationList?.length > 0 && (
+          <Text variant={'labelSmall'} style={styles.label}>
+            {itemCustomizationList?.map((customization: any, index: number) => {
+              const isLastItem = index === itemCustomizationList?.length - 1;
+              return `${
+                customization?.product?.item_details?.descriptor?.name
+              } (₹${customization?.product?.item_details?.price?.value})${
+                isLastItem ? '' : ' + '
+              }`;
+            })}
+          </Text>
+        )}
         <View style={styles.itemTags}>
           {item?.product['@ondc/org/cancellable'] ? (
             <View style={styles.chip}>
@@ -171,6 +194,20 @@ const ItemDetails = ({
             const endDate = fulfillment?.end?.time?.timestamp
               ? moment(fulfillment?.end?.time?.timestamp)
               : moment(fulfillment?.end?.time?.range?.end);
+            const filteredItems = items.filter(
+              item => item.fulfillment_id === fulfillment.id,
+            );
+            const customizations = filteredItems.filter(obj =>
+              obj.tags.some(
+                (tag: any) =>
+                  tag.code === 'type' &&
+                  tag.list.some(
+                    (item: any) =>
+                      item.code === 'type' && item.value === 'customization',
+                  ),
+              ),
+            );
+
             return (
               <View key={fulfillment.id} style={styles.container}>
                 <View style={styles.header}>
@@ -212,18 +249,17 @@ const ItemDetails = ({
                     />
                   </TouchableOpacity>
                 </View>
-                {items
-                  .filter(item => item.fulfillment_id === fulfillment.id)
-                  .map((item, index) =>
-                    item?.quantity?.count > 0 ? (
-                      <SingleItem
-                        key={`${item.id}${index}ShipmentFulfillment`}
-                        item={item}
-                      />
-                    ) : (
-                      <View key={`${item.id}${index}ShipmentFulfillment`} />
-                    ),
-                  )}
+                {filteredItems.map((item, index) =>
+                  item?.quantity?.count > 0 ? (
+                    <SingleItem
+                      key={`${item.id}${index}ShipmentFulfillment`}
+                      item={item}
+                      customizations={customizations}
+                    />
+                  ) : (
+                    <View key={`${item.id}${index}ShipmentFulfillment`} />
+                  ),
+                )}
               </View>
             );
           })}
@@ -375,7 +411,11 @@ const ItemDetails = ({
                 </View>
                 {fulfillment?.state?.descriptor?.code === 'Cancelled'
                   ? items
-                      .filter(item => item.id === itemId && item.fulfillment_id === fulfillment.id)
+                      .filter(
+                        item =>
+                          item.id === itemId &&
+                          item.fulfillment_id === fulfillment.id,
+                      )
                       .map((item, index) => (
                         <SingleItem
                           key={`${item.id}${index}CancelFulfillment`}
@@ -488,6 +528,9 @@ const makeStyles = (colors: any) =>
     },
     price: {
       marginLeft: 12,
+      color: colors.neutral300,
+    },
+    label: {
       color: colors.neutral300,
     },
     fulfilmentTitle: {
