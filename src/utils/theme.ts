@@ -40,6 +40,9 @@ export const theme: any = {
 
     surfaceDisabled: '#E8E8E8',
     onSurfaceDisabled: '#B5B5B5',
+    elevation: {
+      level2: '#ffffff',
+    },
   },
   fonts: {
     // Title 1

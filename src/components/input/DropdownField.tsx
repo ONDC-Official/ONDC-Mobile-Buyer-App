@@ -29,6 +29,10 @@ const DropdownField: React.FC<any> = ({label, inputLabel, ...props}) => {
         visible={showDropDown}
         showDropDown={() => setShowDropDown(true)}
         onDismiss={() => setShowDropDown(false)}
+        dropDownStyle={styles.dropDown}
+        dropDownItemSelectedTextStyle={styles.selectedItem}
+        dropDownItemStyle={styles.dropdownItem}
+        dropDownItemSelectedStyle={styles.dropdownItem}
       />
       {props.error && (
         <HelperText padding="none" type="error" visible={props.error}>
@@ -51,6 +55,22 @@ const makeStyles = (colors: any) =>
     inputText: {
       fontWeight: '400',
       backgroundColor: colors.white,
+    },
+    dropDown: {
+      borderRadius: 20,
+      backgroundColor: colors.white,
+    },
+    dropdownItem: {
+      backgroundColor: colors.white,
+      paddingVertical: 7,
+      paddingHorizontal: 12,
+    },
+    dropdownText: {
+      flex: 1,
+      color: colors.neutral400,
+    },
+    selectedItem: {
+      color: colors.primary,
     },
   });
 
