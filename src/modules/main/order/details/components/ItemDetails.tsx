@@ -75,6 +75,16 @@ const SingleItem = ({
             })}
           </Text>
         )}
+        {item.product?.quantity?.unitized &&
+          Object.keys(item.product?.quantity?.unitized).map(one => (
+            <Text
+              variant={'labelSmall'}
+              style={styles.label}
+              key={item.product?.quantity?.unitized[one].value}>
+              {item.product?.quantity?.unitized[one].value}{' '}
+              {item.product?.quantity?.unitized[one].unit}
+            </Text>
+          ))}
         <View style={styles.itemTags}>
           {item?.product['@ondc/org/cancellable'] ? (
             <View style={styles.chip}>
@@ -196,13 +206,13 @@ const ItemDetails = ({
             const filteredItems = items.filter(
               item => item.fulfillment_id === fulfillment.id,
             );
-            const customizations = filteredItems.filter(obj =>
-              obj.tags.some(
+            const customizations = filteredItems?.filter(obj =>
+              obj?.tags?.some(
                 (tag: any) =>
-                  tag.code === 'type' &&
-                  tag.list.some(
+                  tag?.code === 'type' &&
+                  tag?.list?.some(
                     (item: any) =>
-                      item.code === 'type' && item.value === 'customization',
+                      item?.code === 'type' && item?.value === 'customization',
                   ),
               ),
             );

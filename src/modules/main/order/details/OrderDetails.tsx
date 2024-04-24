@@ -50,6 +50,7 @@ const OrderDetails = ({
         `${API_BASE_URL}${ORDERS}/${params.orderId}`,
         source.current.token,
       );
+      console.log(JSON.stringify(data, undefined, 4));
       dispatch(updateOrderDetails(data[0]));
     } catch (err: any) {
       showToastWithGravity(err?.response?.data?.error?.message);
