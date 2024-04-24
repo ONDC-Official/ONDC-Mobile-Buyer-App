@@ -1,7 +1,7 @@
 import {Text} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
@@ -16,7 +16,6 @@ import ReturnStatus from './ReturnStatus';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
 import {useTranslation} from 'react-i18next';
-import product from '../../../provider/components/Product';
 
 const today = moment();
 
