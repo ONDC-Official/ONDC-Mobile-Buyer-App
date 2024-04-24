@@ -8,9 +8,10 @@ import {
 } from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import {useTranslation} from 'react-i18next';
+
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 interface OutletDetails {
   provider: any;

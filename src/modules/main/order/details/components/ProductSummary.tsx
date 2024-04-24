@@ -70,6 +70,16 @@ const ProductSummary = ({
                     </Text>
                   </View>
                 </View>
+                {item.product?.quantity?.unitized &&
+                  Object.keys(item.product?.quantity?.unitized).map(one => (
+                    <Text
+                      variant={'labelSmall'}
+                      style={styles.label}
+                      key={item.product?.quantity?.unitized[one].value}>
+                      {item.product?.quantity?.unitized[one].value}{' '}
+                      {item.product?.quantity?.unitized[one].unit}
+                    </Text>
+                  ))}
                 <View style={styles.chipContainer}>
                   {cancellable ? (
                     <View style={styles.chip}>
@@ -293,6 +303,9 @@ const makeStyles = (colors: any) =>
     },
     grossTotalValue: {
       color: colors.primary,
+    },
+    label: {
+      color: colors.neutral300,
     },
   });
 

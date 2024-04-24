@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
+import {Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
+
 import CustomMenu from './CustomMenu';
 import Products from '../../../../components/products/Products';
 import {useAppTheme} from '../../../../utils/theme';
 import OutletDetails from './OutletDetails';
-import {Text} from 'react-native-paper';
-import {useTranslation} from 'react-i18next';
 
 interface OtherBrandDetails {
   provider: any;
