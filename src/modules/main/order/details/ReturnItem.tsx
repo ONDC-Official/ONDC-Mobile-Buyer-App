@@ -345,7 +345,7 @@ const ReturnItem = ({
               {t('Return Item.Select reason')}*
             </Text>
             <Menu
-              style={styles.menuContainer}
+              contentStyle={styles.menuContainer}
               visible={visible}
               onDismiss={closeMenu}
               anchor={
@@ -364,14 +364,27 @@ const ReturnItem = ({
               }>
               {RETURN_REASONS.filter(
                 (one: any) => !one.isApplicableForCancellation,
-              ).map((one: any) => (
-                <TouchableOpacity
-                  style={styles.dropdownItem}
-                  key={one.key}
-                  onPress={() => updateSelectedReason(one)}>
-                  <Text style={styles.dropdownText}>{one.value}</Text>
-                </TouchableOpacity>
-              ))}
+              ).map((one: any) => {
+                const selected = selectedReason.value === one.value;
+                return (
+                  <TouchableOpacity
+                    style={styles.dropdownItem}
+                    key={one.key}
+                    onPress={() => updateSelectedReason(one)}>
+                    {selected ? (
+                      <Text
+                        variant={'bodyLarge'}
+                        style={styles.selectedDropdownText}>
+                        {one.value}
+                      </Text>
+                    ) : (
+                      <Text variant={'bodySmall'} style={styles.dropdownText}>
+                        {one.value}
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
             </Menu>
           </View>
           <View style={styles.inputField}>
@@ -527,11 +540,15 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     dropdownItem: {
-      padding: 16,
+      paddingVertical: 7,
+      paddingHorizontal: 12,
     },
     dropdownText: {
       flex: 1,
       color: colors.neutral400,
+    },
+    selectedDropdownText: {
+      color: colors.primary,
     },
     menuContainer: {
       backgroundColor: colors.white,
