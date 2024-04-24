@@ -28,6 +28,7 @@ const InputField: React.FC<any> = ({inputLabel, ...props}) => {
         outlineStyle={styles.outline}
         placeholderTextColor={theme.colors.neutral200}
         outlineColor={theme.colors.neutral200}
+        contentStyle={styles.contant}
       />
       {props.error && (
         <HelperText padding="none" type="error" visible={props.error}>
@@ -48,9 +49,9 @@ const makeStyles = (colors: any) =>
       borderRadius: 12,
     },
     inputText: {
-      fontWeight: '400',
       backgroundColor: colors.white,
     },
+    contant: {fontFamily: 'Inter-Regular', fontWeight: '400'},
   });
 
 export default InputField;

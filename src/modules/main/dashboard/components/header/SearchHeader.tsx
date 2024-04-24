@@ -88,6 +88,8 @@ const makeStyles = (colors: any) =>
       paddingVertical: 12,
       paddingHorizontal: 16,
       minHeight: 44,
+      fontFamily: 'Inter-Regular',
+      fontWeight: '400',
     },
     search: {
       flex: 1,

@@ -33,6 +33,7 @@ const DropdownField: React.FC<any> = ({label, inputLabel, ...props}) => {
         dropDownItemSelectedTextStyle={styles.selectedItem}
         dropDownItemStyle={styles.dropdownItem}
         dropDownItemSelectedStyle={styles.dropdownItem}
+        dropDownItemTextStyle={styles.dropdownText}
       />
       {props.error && (
         <HelperText padding="none" type="error" visible={props.error}>
@@ -53,8 +54,12 @@ const makeStyles = (colors: any) =>
       borderRadius: 12,
     },
     inputText: {
-      fontWeight: '400',
       backgroundColor: colors.white,
+    },
+    dropdownText: {
+      fontFamily: 'Inter-Regular',
+      fontWeight: '400',
+      color: colors.neutral400,
     },
     dropDown: {
       borderRadius: 20,
@@ -64,10 +69,6 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.white,
       paddingVertical: 7,
       paddingHorizontal: 12,
-    },
-    dropdownText: {
-      flex: 1,
-      color: colors.neutral400,
     },
     selectedItem: {
       color: colors.primary,
