@@ -1,10 +1,12 @@
 import {ActivityIndicator, Text} from 'react-native-paper';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {TouchableOpacity} from 'react-native';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
+import {useTranslation} from 'react-i18next';
+
 import {
   API_BASE_URL,
   ORDER_EVENT,
@@ -16,10 +18,9 @@ import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {makeButtonStyles} from './buttonStyles';
 import {updateRequestingStatus} from '../../../../../redux/order/actions';
 import {useAppTheme} from '../../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 interface GetStatusButton {
-  onUpdateOrder: (value: any) => void;
+  onUpdateOrder: (value: any, selfUpdate: boolean) => void;
 }
 
 const CancelToken = axios.CancelToken;
@@ -39,9 +40,11 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
   const styles = makeButtonStyles(theme.colors);
 
   // use this api to get updated status of the order
-  const handleFetchUpdatedStatus = async () => {
+  const handleFetchUpdatedStatus = async (selfUpdate = false) => {
     statusEventSourceResponseRef.current = [];
-    dispatch(updateRequestingStatus(true));
+    if (!selfUpdate) {
+      dispatch(updateRequestingStatus(true));
+    }
     source.current = CancelToken.source();
     const transaction_id = orderDetails?.transactionId;
     const bpp_id = orderDetails?.bppId;
@@ -67,7 +70,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
         dispatch(updateRequestingStatus(false));
         showToastWithGravity(data[0].error.message);
       } else {
-        fetchStatusDataThroughEvents(data[0]?.context?.message_id);
+        fetchStatusDataThroughEvents(data[0]?.context?.message_id, selfUpdate);
       }
     } catch (err: any) {
       showToastWithGravity(err?.message);
@@ -75,7 +78,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
     }
   };
 
-  const getUpdatedStatus = async (messageId: any) => {
+  const getUpdatedStatus = async (messageId: any, selfUpdate: boolean) => {
     try {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
@@ -93,8 +96,10 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
         return;
       }
       if (message?.order) {
-        onUpdateOrder(message?.order);
-        showToastWithGravity('Order status updated successfully!');
+        onUpdateOrder(message?.order, selfUpdate);
+        if (!selfUpdate) {
+          showToastWithGravity(t('Profile.Order status updated successfully'));
+        }
       }
       dispatch(updateRequestingStatus(false));
     } catch (err: any) {
@@ -107,7 +112,10 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
 
   // STATUS APIS
   // use this function to fetch support info through events
-  const fetchStatusDataThroughEvents = (messageId: any) => {
+  const fetchStatusDataThroughEvents = (
+    messageId: any,
+    selfUpdate: boolean,
+  ) => {
     const eventSource = new RNEventSource(
       `${API_BASE_URL}${ORDER_EVENT}${messageId}`,
       {
@@ -116,7 +124,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
     );
     eventSource.addEventListener('on_status', (event: any) => {
       const data = JSON.parse(event?.data);
-      getUpdatedStatus(data.messageId).then(r => {});
+      getUpdatedStatus(data.messageId, selfUpdate).then(() => {});
     });
 
     const timer = setTimeout(() => {
@@ -136,6 +144,16 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
       timer,
     };
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleFetchUpdatedStatus(true).then(() => {});
+    }, 20000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <TouchableOpacity

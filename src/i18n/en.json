@@ -108,7 +108,8 @@
     "Cancellable": "Cancellable",
     "Non-cancellable": "Non-cancellable",
     "Returnable": "Returnable",
-    "Non-returnable": "Non-returnable"
+    "Non-returnable": "Non-returnable",
+    "Order status updated successfully": "Order status updated successfully"
   },
   "Choose Language": {
     "Hindi": "हिंदी",

@@ -6,7 +6,7 @@ import TrackOrderButton from './TrackOrderButton';
 import {useAppTheme} from '../../../../../utils/theme';
 
 interface Actions {
-  onUpdateOrder: (value: any) => void;
+  onUpdateOrder: (value: any, selfUpdate: boolean) => void;
 }
 
 const Actions: React.FC<Actions> = ({onUpdateOrder}) => {

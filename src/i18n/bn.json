@@ -108,7 +108,8 @@
     "Cancellable": "বাতিলযোগ্য",
     "Non-cancellable": "বাতিলযোগ্য নয়",
     "Returnable": "ফেরতযোগ্য",
-    "Non-returnable": "অ-ফেরত"
+    "Non-returnable": "অ-ফেরত",
+    "Order status updated successfully": "অর্ডার স্থিতি সফলভাবে আপডেট করা হয়েছে"
   },
   "Choose Language": {
     "Hindi": "हिंदी",

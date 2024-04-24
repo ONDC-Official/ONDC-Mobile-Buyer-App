@@ -108,7 +108,8 @@
     "Cancellable": "रद्द करने योग्य",
     "Non-cancellable": "गैर रद्द करने योग्य",
     "Returnable": "वापस करने",
-    "Non-returnable": "नहीं लौटनेवाला"
+    "Non-returnable": "नहीं लौटनेवाला",
+    "Order status updated successfully": "ऑर्डर स्थिति सफलतापूर्वक अपडेट की गई"
   },
   "Choose Language": {
     "Hindi": "हिंदी",

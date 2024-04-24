@@ -61,7 +61,11 @@ const categories = ISSUE_TYPES.map(item => {
 
 const CancelToken = axios.CancelToken;
 
-const RaiseIssueButton = ({getOrderDetails}: {getOrderDetails: () => void}) => {
+const RaiseIssueButton = ({
+  getOrderDetails,
+}: {
+  getOrderDetails: (selfUpdate?: boolean) => void;
+}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);

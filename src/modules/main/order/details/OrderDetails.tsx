@@ -40,9 +40,11 @@ const OrderDetails = ({
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
   const [apiInProgress, setApiInProgress] = useState<boolean>(true);
 
-  const getOrderDetails = async () => {
+  const getOrderDetails = async (selfUpdate: boolean = false) => {
     try {
-      setApiInProgress(true);
+      if (!selfUpdate) {
+        setApiInProgress(true);
+      }
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
         `${API_BASE_URL}${ORDERS}/${params.orderId}`,

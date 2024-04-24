@@ -108,7 +108,8 @@
     "Cancellable": "ரத்து செய்யக்கூடியது",
     "Non-cancellable": "ரத்து செய்ய முடியாதது",
     "Returnable": "திரும்பப் பெறக்கூடியது",
-    "Non-returnable": "திரும்பப் பெற முடியாதது"
+    "Non-returnable": "திரும்பப் பெற முடியாதது",
+    "Order status updated successfully": "ஆர்டர் நிலை வெற்றிகரமாக புதுப்பிக்கப்பட்டது"
   },
   "Choose Language": {
     "Hindi": "हिंदी",

@@ -26,7 +26,7 @@ import CartIcon from '../../../../../assets/cart.svg';
 const NonCancelledOrder = ({
   getOrderDetails,
 }: {
-  getOrderDetails: () => void;
+  getOrderDetails: (selfUpdate?: boolean) => void;
 }) => {
   const {t} = useTranslation();
   const navigation = useNavigation<any>();
