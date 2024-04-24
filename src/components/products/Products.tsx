@@ -16,6 +16,7 @@ interface Products {
   providerId: any;
   customMenu: any;
   subCategories: any[];
+  search?: boolean;
 }
 
 const CancelToken = axios.CancelToken;
@@ -24,6 +25,7 @@ const Products: React.FC<Products> = ({
   providerId = null,
   customMenu = null,
   subCategories = [],
+  search = false,
 }) => {
   const productSearchSource = useRef<any>(null);
   const theme = useAppTheme();
@@ -122,7 +124,7 @@ const Products: React.FC<Products> = ({
         <View style={styles.listContainer}>
           {filteredProducts.map(product => (
             <View key={product.id} style={styles.productContainer}>
-              <Product product={product} />
+              <Product product={product} search={search} />
             </View>
           ))}
         </View>
