@@ -3,6 +3,7 @@ import {HelperText, Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useAppTheme} from '../../utils/theme';
+import { fontConfig } from 'react-native-paper/lib/typescript/styles/fonts';
 
 const DropdownField: React.FC<any> = ({label, inputLabel, ...props}) => {
   const theme = useAppTheme();
@@ -29,6 +30,8 @@ const DropdownField: React.FC<any> = ({label, inputLabel, ...props}) => {
         visible={showDropDown}
         showDropDown={() => setShowDropDown(true)}
         onDismiss={() => setShowDropDown(false)}
+        dropDownItemTextStyle={styles.dropdownText}
+        dropDownItemSelectedTextStyle={styles.dropdownText}
       />
       {props.error && (
         <HelperText padding="none" type="error" visible={props.error}>
@@ -49,8 +52,11 @@ const makeStyles = (colors: any) =>
       borderRadius: 12,
     },
     inputText: {
-      fontWeight: '400',
       backgroundColor: colors.white,
+    },
+    dropdownText: {
+      fontFamily: 'Inter-Regular',
+      fontWeight: '400',
     },
   });
 
