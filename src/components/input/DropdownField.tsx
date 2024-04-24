@@ -63,7 +63,7 @@ const makeStyles = (colors: any) =>
     },
     dropDown: {
       borderRadius: 20,
-      backgroundColor: colors.white,
+      paddingBottom:100
     },
     dropdownItem: {
       backgroundColor: colors.white,
