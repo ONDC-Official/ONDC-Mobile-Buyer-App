@@ -7,6 +7,8 @@ import {Button} from 'react-native-paper';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from 'formik';
 import axios from 'axios';
+import {useTranslation} from 'react-i18next';
+
 import {addressTags, validationSchema} from '../../utils/addValidationSchema';
 import InputField from '../../../../../components/input/InputField';
 import {appStyles} from '../../../../../styles/styles';
@@ -17,7 +19,6 @@ import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandlin
 import Config from '../../../../../../config';
 import {useAppTheme} from '../../../../../utils/theme';
 import DropdownField from '../../../../../components/input/DropdownField';
-import {useTranslation} from 'react-i18next';
 
 const defaultLocation = [77.057575, 28.683374];
 
@@ -259,7 +260,6 @@ const AddressForm: React.FC<AddressForm> = ({
                           setFieldValue('tag', newValue)
                         }
                         label=""
-                        required
                         placeholder={t('Address Form.Address Type')}
                         error={!!touched.tag && !!errors.tag}
                         errorMessage={touched.tag ? errors.tag : null}

@@ -15,7 +15,7 @@ export const validationSchema = Yup.object({
     .required('Please enter a valid Pin Code'),
   street: Yup.string().trim().required('Please enter street'),
   building: Yup.string().trim().required('Please enter building'),
-  tag: Yup.string().trim().required('Please select tag'),
+  tag: Yup.string().trim(),
 });
 
 export const addressTags: string[] = ['Home', 'Office', 'Other'];
