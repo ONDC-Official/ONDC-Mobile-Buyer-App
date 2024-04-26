@@ -91,7 +91,7 @@ const makeStyles = (colors: any) =>
     container: {
       paddingHorizontal: 16,
       marginBottom: -12,
-      marginHorizontal: -20,
+      marginHorizontal: -16,
     },
     title: {
       color: colors.neutral400,
@@ -101,7 +101,8 @@ const makeStyles = (colors: any) =>
       flexGrow: 1,
       width: '25%',
       marginVertical: 12,
-      paddingHorizontal: 20,
+      paddingHorizontal: 16,
+      alignItems: 'center',
     },
     alignCenter: {
       alignItems: 'center',
