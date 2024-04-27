@@ -275,6 +275,7 @@ export const makeStyles = (colors: any) =>
       paddingHorizontal: 16,
       paddingVertical: 10,
       alignItems: 'center',
+      flex: 1,
     },
     checkboxSkeleton: {
       width: 16,
@@ -287,6 +288,7 @@ export const makeStyles = (colors: any) =>
     },
     valueLabel: {
       color: colors.neutral400,
+      flex: 1,
     },
   });
 
