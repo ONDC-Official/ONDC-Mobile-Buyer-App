@@ -92,14 +92,17 @@ const makeStyles = (colors: any) =>
     },
     categoryText: {
       textAlign: 'center',
+      letterSpacing: -0.5,
     },
     category: {
       alignItems: 'center',
       marginRight: 24,
-      width: 58,
+      width: 59,
+      padding: 0,
     },
     first: {
       paddingLeft: 16,
+      width: 75,
     },
     imageContainer: {
       height: 56,
