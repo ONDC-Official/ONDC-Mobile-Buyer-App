@@ -53,6 +53,7 @@ const makeStyles = (colors: any) =>
     },
     container: {
       paddingHorizontal: 16,
+      marginBottom: 16,
     },
     button: {
       flexDirection: 'row',

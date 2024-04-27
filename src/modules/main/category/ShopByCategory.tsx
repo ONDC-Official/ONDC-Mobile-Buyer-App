@@ -7,6 +7,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
 import {PRODUCT_SUBCATEGORY} from '../../../utils/categories';
 import {useAppTheme} from '../../../utils/theme';
+import Page from '../../../components/page/Page';
 
 const ShopByCategory = ({route: {params}}: {route: any}) => {
   const {t} = useTranslation();
@@ -60,14 +61,16 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
   }, []);
 
   return (
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.container}
-      numColumns={3}
-      data={subCategories}
-      renderItem={renderItem}
-      keyExtractor={item => item.key}
-    />
+    <Page>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.container}
+        numColumns={3}
+        data={subCategories}
+        renderItem={renderItem}
+        keyExtractor={item => item.key}
+      />
+    </Page>
   );
 };
 

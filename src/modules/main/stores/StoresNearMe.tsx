@@ -5,6 +5,7 @@ import {useTranslation} from 'react-i18next';
 import {useEffect} from 'react';
 import Store from './components/Store';
 import {useAppTheme} from '../../../utils/theme';
+import Page from '../../../components/page/Page';
 
 const StoresNearMe = () => {
   const navigation = useNavigation();
@@ -19,18 +20,20 @@ const StoresNearMe = () => {
     });
   }, []);
 
-  const renderItem = ({item}) => <Store store={item} />;
+  const renderItem = ({item}: {item: any}) => <Store store={item} />;
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={locations}
-        renderItem={renderItem}
-        numColumns={3}
-        keyExtractor={(item: any) => item.id}
-      />
-    </View>
+    <Page>
+      <View style={styles.container}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={locations}
+          renderItem={renderItem}
+          numColumns={3}
+          keyExtractor={(item: any) => item.id}
+        />
+      </View>
+    </Page>
   );
 };
 
@@ -40,6 +43,7 @@ const makeStyles = (colors: any) =>
       paddingVertical: 20,
       paddingHorizontal: 8,
       backgroundColor: colors.white,
+      flex: 1,
     },
   });
 
