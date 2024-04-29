@@ -311,7 +311,9 @@ const Payment: React.FC<Payment> = ({
                   ? styles.selectedOption
                   : {},
               ]}>
-              <PrepaidIcon width={'100%'} height={151} />
+              <View style={styles.imageContainer}>
+                <PrepaidIcon width={'100%'} height={100} />
+              </View>
               <View style={styles.checkContainer}>
                 {activePaymentMethod === ORDER_PAYMENT_METHODS.PREPAID ? (
                   <Icon
@@ -339,7 +341,9 @@ const Payment: React.FC<Payment> = ({
                   ? styles.selectedOption
                   : {},
               ]}>
-              <CashOnDeliveryIcon width={'100%'} height={151} />
+              <View style={styles.imageContainer}>
+                <CashOnDeliveryIcon width={'100%'} height={100} />
+              </View>
               <View style={styles.checkContainer}>
                 {activePaymentMethod === ORDER_PAYMENT_METHODS.COD ? (
                   <Icon
@@ -417,6 +421,12 @@ const makeStyles = (colors: any) =>
       paddingTop: 6,
       width: '100%',
       alignItems: 'center',
+    },
+    imageContainer: {
+      paddingTop: 28,
+      paddingBottom: 33,
+      paddingHorizontal: 30,
+      width: '100%',
     },
     selectedOption: {
       borderColor: colors.primary,
