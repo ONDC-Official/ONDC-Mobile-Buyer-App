@@ -174,7 +174,7 @@ const ReturnItem = ({
           },
           tags: {
             update_type: 'return',
-            reason_code: '001',
+            reason_code: selectedReason.key,
             ttl_approval: item.product['@ondc/org/return_window']
               ? item.product['@ondc/org/return_window']
               : '',
@@ -194,7 +194,7 @@ const ReturnItem = ({
             },
             tags: {
               update_type: 'return',
-              reason_code: '001',
+              reason_code: selectedReason.key,
               ttl_approval: item.product['@ondc/org/return_window']
                 ? item.product['@ondc/org/return_window']
                 : '',
