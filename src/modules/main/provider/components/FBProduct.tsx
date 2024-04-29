@@ -191,7 +191,9 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         await postDataWithAuth(url, payload, source.current.token);
         setCustomizationState({});
         setProductLoading(false);
-        showToastWithGravity('Item added to cart successfully.');
+        showToastWithGravity(
+          t('Product Summary.Item added to cart successfully'),
+        );
         hideCustomization();
       } else {
         const currentCount = Number(items[0].item.quantity.count);
@@ -200,7 +202,9 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         if (currentCount < maxCount) {
           if (!customisations) {
             await updateCartItem(cartItems, true, items[0]._id);
-            showToastWithGravity('Item quantity updated in your cart.');
+            showToastWithGravity(
+              t('Product Summary.Item quantity updated in your cart.'),
+            );
             setCustomizationState({});
             setProductLoading(false);
             hideCustomization();
@@ -220,7 +224,9 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
 
             if (matchingCustomisation) {
               await updateCartItem(cartItems, true, matchingCustomisation._id);
-              showToastWithGravity('Item quantity updated in your cart');
+              showToastWithGravity(
+                t('Product Summary.Item quantity updated in your cart'),
+              );
               setCustomizationState({});
               setProductLoading(false);
               hideCustomization();
@@ -228,13 +234,17 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               await postDataWithAuth(url, payload, source.current.token);
               setCustomizationState({});
               setProductLoading(false);
-              showToastWithGravity('Item added to cart successfully.');
+              showToastWithGravity(
+                t('Product Summary.Item added to cart successfully'),
+              );
               hideCustomization();
             }
           }
         } else {
           showToastWithGravity(
-            'The maximum available quantity for item is already in your cart.',
+            t(
+              'Product Summary.The maximum available quantity for item is already in your cart.',
+            ),
           );
         }
       }
@@ -569,7 +579,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                   <Text
                     variant={'bodyLarge'}
                     style={styles.addNewCustomizationLabel}>
-                    Add new customization
+                    {t('Cart.Add new customization')}
                   </Text>
                 </TouchableOpacity>
               </View>

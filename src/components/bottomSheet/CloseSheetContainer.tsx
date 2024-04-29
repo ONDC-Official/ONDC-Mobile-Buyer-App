@@ -1,6 +1,7 @@
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
+import Toast, {ErrorToast} from 'react-native-toast-message';
 import {useAppTheme} from '../../utils/theme';
 
 const CloseSheetContainer = ({
@@ -12,6 +13,9 @@ const CloseSheetContainer = ({
 }) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
+  const toastConfig = {
+    error: (props: any) => <ErrorToast {...props} text1NumberOfLines={2} />,
+  };
 
   return (
     <View style={styles.container}>
@@ -21,6 +25,7 @@ const CloseSheetContainer = ({
         </TouchableOpacity>
       </View>
       {children}
+      <Toast config={toastConfig} />
     </View>
   );
 };

@@ -60,6 +60,7 @@
     "All Options": "सर्व\nपर्याय",
     "Edit": "सुधारणे",
     "Qty": "क्यूटी",
+    "Add new customization": "नवीन सानुकूलन जोडा",
     "Outlet Details": {
       "Get Direction": "दिशा मिळवा",
       "Call Now": "आता कॉल करा",
@@ -491,7 +492,12 @@
   },
   "Product Summary": {
     "Your Items": "तुमचे आयटम",
-    "Order Total": "ऑर्डर एकूण"
+    "Order Total": "ऑर्डर एकूण",
+    "Add Item Total": "एकूण आयटम जोडा - {{total}}",
+    "Update Item Total": "एकूण आयटम अपडेट करा - {{total}}",
+    "Item added to cart successfully": "आयटम कार्टमध्ये यशस्वीरित्या जोडला गेला.",
+    "Item quantity updated in your cart": "तुमच्या कार्टमध्ये आयटमचे प्रमाण अपडेट केले आहे",
+    "The maximum available quantity for item is already in your cart": "आयटमसाठी कमाल उपलब्ध प्रमाण तुमच्या कार्टमध्ये आधीच आहे"
   },
   "Provider Details": {
     "Order Cancelled": "ऑर्डर रद्द केली"

@@ -7,6 +7,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Text} from 'react-native-paper';
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {makeGlobalStyles} from '../../../../styles/styles';
 import {useAppTheme} from '../../../../utils/theme';
 
@@ -29,6 +30,7 @@ const CustomizationFooterButtons = ({
   customizationPrices: any;
   update?: boolean;
 }) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const globalStyles = makeGlobalStyles(theme.colors);
   const styles = makeStyles(theme.colors);
@@ -81,9 +83,19 @@ const CustomizationFooterButtons = ({
                 ? globalStyles.disabledContainedButtonText
                 : globalStyles.containedButtonText
             }>
-            {update ? 'Update' : 'Add'} Item Total - ₹
-            {(product?.item_details?.price.value + customizationPrices) *
-              itemQty}
+            {update
+              ? t('Product Summary.Update Item Total', {
+                  total: `₹${
+                    (product?.item_details?.price.value + customizationPrices) *
+                    itemQty
+                  }`,
+                })
+              : t('Product Summary.Add Item Total', {
+                  total: `₹${
+                    (product?.item_details?.price.value + customizationPrices) *
+                    itemQty
+                  }`,
+                })}
           </Text>
         )}
       </TouchableOpacity>

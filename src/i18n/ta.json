@@ -60,6 +60,7 @@
     "All Options": "அனைத்து\nவிருப்பங்களும்",
     "Edit": "தொகு",
     "Qty": "குட்டி",
+    "Add new customization": "புதிய தனிப்பயனாக்கத்தைச் சேர்க்கவும்",
     "Outlet Details": {
       "Get Direction": "திசையைப் பெறுங்கள்",
       "Call Now": "இப்போது அழைக்கவும்",
@@ -491,7 +492,12 @@
   },
   "Product Summary": {
     "Your Items": "உங்கள் பொருட்கள்",
-    "Order Total": "உங்கள் பொருட்கள்"
+    "Order Total": "உங்கள் பொருட்கள்",
+    "Add Item Total": "மொத்தப் பொருளைச் சேர் - {{total}}",
+    "Update Item Total": "மொத்தப் பொருளைப் புதுப்பிக்கவும் - {{total}}",
+    "Item added to cart successfully": "கார்ட்டில் உருப்படி வெற்றிகரமாக சேர்க்கப்பட்டது.",
+    "Item quantity updated in your cart": "உங்கள் கார்ட்டில் பொருட்களின் அளவு புதுப்பிக்கப்பட்டது",
+    "The maximum available quantity for item is already in your cart": "உருப்படிக்கான அதிகபட்ச அளவு ஏற்கனவே உங்கள் கார்ட்டில் உள்ளது"
   },
   "Provider Details": {
     "Order Cancelled": "ஆர்டர் ரத்து செய்யப்பட்டது"
