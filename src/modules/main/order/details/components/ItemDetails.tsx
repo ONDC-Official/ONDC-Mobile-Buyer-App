@@ -6,6 +6,7 @@ import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 import {
   CANCELLATION_REASONS,
   CANCELLATION_REASONS_SELLER,
@@ -15,7 +16,6 @@ import {
 import ReturnStatus from './ReturnStatus';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
-import {useTranslation} from 'react-i18next';
 
 const today = moment();
 
