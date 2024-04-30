@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, View} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import {Button, List, Modal, Portal, Text} from 'react-native-paper';
 import moment from 'moment';
@@ -14,6 +14,7 @@ import ComplaintStatus from '../components/ComplaintStatus';
 import EscalateForm from './components/EscalateForm';
 import CloseForm from './components/CloseForm';
 import {compareDateWithDuration} from '../../../../utils/utils';
+import {updateComplaint} from '../../../../redux/complaint/actions';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -26,6 +27,7 @@ const categories = ISSUE_TYPES.map(item => {
 }).flat();
 
 const ComplaintDetails = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -47,6 +49,17 @@ const ComplaintDetails = () => {
 
   const escalationSuccess = (list: any) => {
     setActions([...actions, ...list]);
+  };
+
+  const closeSuccess = (list: any) => {
+    setActions([...actions, ...list]);
+    dispatch(
+      updateComplaint(
+        Object.assign({}, complaintDetails, {
+          issue_status: 'Close',
+        }),
+      ),
+    );
   };
 
   const mergeIssueActions = (list: any) => {
@@ -239,7 +252,9 @@ const ComplaintDetails = () => {
             {!takeAction ? (
               <GetStatusButton
                 mergeIssueActions={mergeIssueActions}
-                complainantActions={complaintDetails?.issue_actions?.complainant_actions}
+                complainantActions={
+                  complaintDetails?.issue_actions?.complainant_actions
+                }
                 transactionId={complaintDetails?.transaction_id}
                 bppId={complaintDetails?.bppId}
                 issueId={complaintDetails?.issueId}
@@ -305,7 +320,7 @@ const ComplaintDetails = () => {
       </Portal>
       <Portal>
         <Modal visible={closeModalVisible} onDismiss={hideCloseModal}>
-          <CloseForm hideModal={hideCloseModal} onSuccess={escalationSuccess} />
+          <CloseForm hideModal={hideCloseModal} onSuccess={closeSuccess} />
         </Modal>
       </Portal>
     </>

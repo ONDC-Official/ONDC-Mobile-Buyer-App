@@ -416,6 +416,7 @@
     "Phone": "फोन",
     "Email": "ईमेल",
     "Complaint status updated successfully": "तक्रारीची स्थिती यशस्वीरीत्या अपडेट केली",
+    "Something went wrong, issue status cannot be fetched": "काहीतरी चूक झाली आहे, समस्या स्थिती प्राप्त केली जाऊ शकत नाही",
     "Close": "बंद",
     "Escalate": "वाढवा"
   },

@@ -39,7 +39,8 @@ const CloseForm = ({
       const formData = {
         context: {
           action: 'issue',
-          time: new Date(),
+          domain: complaintDetails?.domain,
+          timestamp: new Date(),
           transaction_id: complaintDetails?.transaction_id,
         },
         message: {
@@ -66,12 +67,14 @@ const CloseForm = ({
         },
       };
 
+      console.log(JSON.stringify(formData, undefined, 4));
       source.current = CancelToken.source();
       const {data} = await postDataWithAuth(
         `${API_BASE_URL}${RAISE_ISSUE}`,
         formData,
         source.current.token,
       );
+      console.log(JSON.stringify(data, undefined, 4));
       //Error handling workflow eg, NACK
       if (data.message && data.message.ack.status === 'NACK') {
         showToastWithGravity('Something went wrong');
@@ -86,6 +89,7 @@ const CloseForm = ({
               complaintDetails.issue_actions.complainant_actions[0].updated_by,
           },
         ]);
+        hideModal();
       }
     } catch (err: any) {
       showToastWithGravity(err?.message);
@@ -148,6 +152,7 @@ const CloseForm = ({
             style={styles.button}
             onPress={escalateComplaint}
             mode={'contained'}
+            loading={apiInProgress}
             disabled={rating.length === 0 || apiInProgress}>
             Confirm
           </Button>

@@ -416,6 +416,7 @@
     "Phone": "Phone",
     "Email": "Email",
     "Complaint status updated successfully": "Complaint status updated successfully",
+    "Something went wrong, issue status cannot be fetched": "Something went wrong!, issue status cannot be fetched",
     "Close": "Close",
     "Escalate": "Escalate"
   },

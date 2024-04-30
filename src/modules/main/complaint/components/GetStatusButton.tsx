@@ -66,11 +66,13 @@ const GetStatusButton = ({
           complainant_actions: complainantActions,
         });
         showToastWithGravity(
-          t('Complaint Details.Complaint status updated successfully!'),
+          t('Complaint Details.Complaint status updated successfully'),
         );
       } else {
         showToastWithGravity(
-          'Something went wrong!, issue status cannot be fetched',
+          t(
+            'Complaint Details.Something went wrong, issue status cannot be fetched',
+          ),
         );
       }
     } catch (err: any) {

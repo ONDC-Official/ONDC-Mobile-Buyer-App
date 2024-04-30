@@ -416,6 +416,7 @@
     "Phone": "போன்",
     "Email": "இமெயில்",
     "Complaint status updated successfully": "புகார் நிலை வெற்றிகரமாக புதுப்பிக்கப்பட்டது",
+    "Something went wrong, issue status cannot be fetched": "ஏதோ தவறாகிவிட்டது, சிக்கலின் நிலையைப் பெற முடியாது",
     "Close": "நெருக்கமான",
     "Escalate": "அதிகரிக்கும்"
   },

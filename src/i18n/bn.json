@@ -416,6 +416,7 @@
     "Phone": "ফোন",
     "Email": "ইমেইল",
     "Complaint status updated successfully": "অভিযোগের স্থিতি সফলভাবে আপডেট করা হয়েছে",
+    "Something went wrong, issue status cannot be fetched": "কিছু ভুল হয়েছে, সমস্যা স্ট্যাটাস আনা যাবে না",
     "Close": "বন্ধ",
     "Escalate": "বাড়ানো"
   },
