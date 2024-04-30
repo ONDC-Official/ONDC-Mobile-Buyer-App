@@ -246,7 +246,7 @@ const ComplaintDetails = () => {
                 domain={complaintDetails?.domain}
               />
             ) : (
-              <View>
+              <View style={styles.actionButtonContainer}>
                 <Button
                   mode="outlined"
                   contentStyle={styles.actionButtonContent}

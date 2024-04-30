@@ -159,7 +159,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
     <TouchableOpacity
       style={styles.container}
       disabled={requestingStatus}
-      onPress={handleFetchUpdatedStatus}>
+      onPress={() => handleFetchUpdatedStatus()}>
       {requestingStatus ? (
         <ActivityIndicator size={14} color={theme.colors.primary} />
       ) : (
