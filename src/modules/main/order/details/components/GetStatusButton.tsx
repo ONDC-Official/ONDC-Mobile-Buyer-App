@@ -1,6 +1,6 @@
 import {ActivityIndicator, Text} from 'react-native-paper';
 import React, {useEffect, useRef} from 'react';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 // @ts-ignore
@@ -161,7 +161,9 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
       disabled={requestingStatus}
       onPress={() => handleFetchUpdatedStatus()}>
       {requestingStatus ? (
-        <ActivityIndicator size={14} color={theme.colors.primary} />
+        <View style={styles.indicatorContainer}>
+          <ActivityIndicator size={14} color={theme.colors.primary} />
+        </View>
       ) : (
         <></>
       )}

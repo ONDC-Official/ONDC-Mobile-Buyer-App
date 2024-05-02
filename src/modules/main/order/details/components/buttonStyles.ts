@@ -12,6 +12,9 @@ export const makeButtonStyles = (colors: any) =>
       flex: 1,
       borderWidth: 1,
     },
+    indicatorContainer: {
+      marginRight: 8,
+    },
     label: {
       color: colors.primary,
     },
