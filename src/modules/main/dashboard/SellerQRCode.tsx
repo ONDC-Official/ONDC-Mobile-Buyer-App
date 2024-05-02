@@ -5,8 +5,10 @@ import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {getUrlParams, showToastWithGravity} from '../../../utils/utils';
+import {useTranslation} from 'react-i18next';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
+  const {t} = useTranslation();
   const [torchOn, setTorchOn] = useState(false);
 
   const onQRScan = (event: any) => {
@@ -48,7 +50,9 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
       }}
       topContent={
         <View style={styles.header}>
-          <Text variant={'bodyLarge'}>ONDC QR se Bharat Khelega</Text>
+          <Text variant={'bodyLarge'}>
+            {t('Seller QR.ONDC QR se Bharat Khulega')}
+          </Text>
           <TouchableOpacity onPress={() => setTorchOn(!torchOn)}>
             <Icon name={torchOn ? 'flash-off' : 'flash-on'} size={24} />
           </TouchableOpacity>
