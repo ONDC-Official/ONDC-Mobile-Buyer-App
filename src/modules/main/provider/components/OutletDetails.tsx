@@ -61,7 +61,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
         </Text>
         {!!outlet?.address && (
           <Text variant={'bodyLarge'} style={styles.address}>
-            {outlet?.address?.street || '-'}, {outlet?.address?.city || '-'}
+            {outlet?.address?.locality || 'NA'}
           </Text>
         )}
         <Text variant={'bodyMedium'} style={styles.timing}>
