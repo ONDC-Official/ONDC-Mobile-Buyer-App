@@ -21,10 +21,12 @@ const today = moment();
 
 const SingleItem = ({
   item,
-  customizations,
+  customizations = [],
+  itemQuantityTag = null,
 }: {
   item: any;
-  customizations: any[];
+  customizations?: any[];
+  itemQuantityTag?: any;
 }) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -40,6 +42,9 @@ const SingleItem = ({
     (obj: any) => obj.parent_item_id === item.parent_item_id,
   );
 
+  const itemQuantity = itemQuantityTag
+    ? itemQuantityTag
+    : item?.quantity?.count;
   return (
     <View key={item.id} style={styles.item}>
       <FastImage
@@ -53,13 +58,11 @@ const SingleItem = ({
           </Text>
           <View style={styles.quantityContainer}>
             <Text variant={'labelMedium'} style={styles.quantity}>
-              {t('Fulfillment.Qty')} {item?.quantity?.count}
+              {t('Fulfillment.Qty')} {itemQuantity}
             </Text>
             <Text variant={'labelLarge'} style={styles.price}>
               {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-              {Number(
-                item?.quantity?.count * item?.product?.price?.value,
-              ).toFixed(2)}
+              {Number(itemQuantity * item?.product?.price?.value).toFixed(2)}
             </Text>
           </View>
         </View>
@@ -304,6 +307,9 @@ const ItemDetails = ({
             const reasonIdTag = returnTag.list.find(
               (tag: any) => tag.code === 'reason_id',
             );
+            const itemQuantityTag = returnTag.list.find(
+              (tag: any) => tag.code === 'item_quantity',
+            );
             reasonId = reasonIdTag.value;
 
             return (
@@ -349,6 +355,7 @@ const ItemDetails = ({
                         <SingleItem
                           key={`${item.id}${index}ReturnFulfillment`}
                           item={item}
+                          itemQuantityTag={itemQuantityTag?.value ?? 1}
                         />
                       ))
                   : items
@@ -357,6 +364,7 @@ const ItemDetails = ({
                         <SingleItem
                           key={`${item.id}${index}ReturnFulfillment`}
                           item={item}
+                          itemQuantityTag={itemQuantityTag?.value ?? 1}
                         />
                       ))}
                 <View style={styles.footer}>{renderReason(reasonId)}</View>

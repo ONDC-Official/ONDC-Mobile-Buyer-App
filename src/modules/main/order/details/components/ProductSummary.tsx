@@ -4,10 +4,10 @@ import FastImage from 'react-native-fast-image';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
-import {useTranslation} from 'react-i18next';
 
 const ProductSummary = ({
   items,
@@ -44,6 +44,28 @@ const ProductSummary = ({
           (one: any) =>
             one.parent_item_id === item.parent_item_id && one.id !== item.id,
         );
+
+        let returnedCount = 0;
+        const returnFulfilments = orderDetails.fulfillments.filter(
+          (fulfilment: any) => fulfilment.type === 'Return',
+        );
+        returnFulfilments.forEach((fulfillment: any) => {
+          const returnTag = fulfillment.tags.find(
+            (tag: any) => tag.code === 'return_request',
+          );
+          const itemTag = returnTag.list.find(
+            (tag: any) => tag.code === 'item_id',
+          );
+          const itemQuantityTag = returnTag.list.find(
+            (tag: any) => tag.code === 'item_quantity',
+          );
+          if (itemTag && itemQuantityTag) {
+            if (itemTag.value === item.id) {
+              returnedCount += Number(itemQuantityTag.value);
+            }
+          }
+        });
+
         return (
           <View
             key={item.id}
@@ -120,6 +142,7 @@ const ProductSummary = ({
                   onPress={() =>
                     navigation.navigate('ReturnItem', {
                       item,
+                      maxReturnCount: item.quantity?.count - returnedCount,
                       associatedItems,
                       providerId: orderDetails?.provider?.id,
                       state: orderDetails?.state,
@@ -129,7 +152,7 @@ const ProductSummary = ({
                       transactionId: orderDetails?.transactionId,
                     })
                   }>
-                  Return Item
+                  {t('Return Item.Return Item')}
                 </Button>
               )}
           </View>

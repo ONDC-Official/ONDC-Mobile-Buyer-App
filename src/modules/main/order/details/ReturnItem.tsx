@@ -38,6 +38,7 @@ const ReturnItem = ({
 }) => {
   const {t} = useTranslation();
   const {
+    maxReturnCount,
     associatedItems,
     item,
     providerId,
@@ -244,7 +245,7 @@ const ReturnItem = ({
 
   useEffect(() => {
     if (item) {
-      setQuantity(item.quantity.count);
+      setQuantity(maxReturnCount);
     }
   }, [item]);
 
@@ -293,7 +294,7 @@ const ReturnItem = ({
                       disabled={apiRequested}
                       style={styles.incrementButton}
                       onPress={() => {
-                        if (quantity < item.quantity?.count) {
+                        if (quantity < maxReturnCount) {
                           setQuantity(quantity + 1);
                         }
                       }}>
@@ -303,9 +304,7 @@ const ReturnItem = ({
                   <Text variant={'labelLarge'} style={styles.quantity}>
                     {CURRENCY_SYMBOLS[item.product?.price?.currency]}
                     {Number(
-                      quantity *
-                        item.quantity?.count *
-                        item.product?.price?.value,
+                      quantity * maxReturnCount * item.product?.price?.value,
                     ).toFixed(2)}
                   </Text>
                 </View>
@@ -430,6 +429,8 @@ const ReturnItem = ({
           mode={'contained'}
           contentStyle={styles.buttonContent}
           style={styles.confirmButton}
+          disabled={apiRequested}
+          loading={apiRequested}
           onPress={returnOrder}>
           Confirm
         </Button>
