@@ -22,6 +22,7 @@ const DropdownField: React.FC<any> = ({label, inputLabel, ...props}) => {
           placeholderTextColor: theme.colors.neutral200,
           outlineColor: theme.colors.neutral200,
           style: styles.inputText,
+          contentStyle:styles.selectedText
         }}
         {...props}
         label={label}
@@ -72,6 +73,12 @@ const makeStyles = (colors: any) =>
     },
     selectedItem: {
       color: colors.primary,
+      fontFamily: 'Inter-Regular',
+      fontWeight: '400',
+    },
+    selectedText: {
+      fontFamily: 'Inter-Regular',
+      fontWeight: '400',
     },
   });
 
