@@ -19,7 +19,6 @@ const App = () => {
   useEffect(() => {
     const handleDeepLink = (url: any) => {
       if (url) {
-        console.log('Url', url);
         getMultipleData(['token', 'uid', 'emailId', 'name']).then(data => {
           if (data[0][1] !== null) {
             const urlParams = getUrlParams(url);

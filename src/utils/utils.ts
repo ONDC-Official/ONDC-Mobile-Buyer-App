@@ -2,6 +2,8 @@ import {Dimensions, Platform} from 'react-native';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 import {ToastPosition} from 'react-native-toast-message/lib/src/types';
+import Config from 'react-native-config';
+import CryptoJS from 'crypto-js';
 
 export const isIOS = Platform.OS === 'ios';
 const TOAST_VISIBILITY_TIME = 3000;
@@ -345,4 +347,24 @@ export const getUrlParams = (url: string) => {
     });
   }
   return urlParams;
+};
+
+// Encryption function
+export const encryptData = (data: any) => {
+  // Convert data to string
+  const dataString = JSON.stringify(data);
+  // Encrypt data using AES encryption algorithm with the provided key
+  return CryptoJS.AES.encrypt(dataString, Config.ENCRYPTION_KEY).toString();
+};
+
+// Decryption function
+export const decryptData = (encryptedData: any) => {
+  // Decrypt data using AES decryption algorithm with the provided key
+  const decryptedData = CryptoJS.AES.decrypt(
+    encryptedData,
+    Config.ENCRYPTION_KEY,
+  ).toString(CryptoJS.enc.Utf8);
+
+  // Parse decrypted data back to JSON
+  return JSON.parse(decryptedData);
 };
