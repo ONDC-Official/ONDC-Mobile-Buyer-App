@@ -1,15 +1,20 @@
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {getUrlParams, showToastWithGravity} from '../../../utils/utils';
 import {useTranslation} from 'react-i18next';
+import {getUrlParams, showToastWithGravity} from '../../../utils/utils';
+import {useAppTheme} from '../../../utils/theme';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
+  const theme = useAppTheme();
   const {t} = useTranslation();
   const [torchOn, setTorchOn] = useState(false);
+
+  const goBack = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
 
   const onQRScan = (event: any) => {
     if (event.data.startsWith('beckn://ondc')) {
@@ -36,39 +41,89 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
   };
 
   return (
-    <QRCodeScanner
-      reactivate={false}
-      onRead={onQRScan}
-      flashMode={
-        torchOn
-          ? RNCamera.Constants.FlashMode.torch
-          : RNCamera.Constants.FlashMode.off
-      }
-      cameraStyle={{
-        width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height - 200,
-      }}
-      topContent={
+    <>
+      <QRCodeScanner
+        reactivate={false}
+        onRead={onQRScan}
+        flashMode={
+          torchOn
+            ? RNCamera.Constants.FlashMode.torch
+            : RNCamera.Constants.FlashMode.off
+        }
+        cameraStyle={styles.container}
+      />
+      <View style={[styles.container, styles.metaContainer]}>
         <View style={styles.header}>
-          <Text variant={'bodyLarge'}>
-            {t('Seller QR.ONDC QR se Bharat Khulega')}
-          </Text>
+          <TouchableOpacity onPress={goBack}>
+            <Icon name={'clear'} size={24} color={theme.colors.white} />
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => setTorchOn(!torchOn)}>
-            <Icon name={torchOn ? 'flash-off' : 'flash-on'} size={24} />
+            <Icon
+              name={torchOn ? 'flash-off' : 'flash-on'}
+              size={24}
+              color={theme.colors.white}
+            />
           </TouchableOpacity>
         </View>
-      }
-    />
+        <View style={styles.content}>
+          <View style={styles.emptyContainer} />
+          <View style={styles.cameraContainer}>
+            <View style={styles.camera} />
+          </View>
+          <View style={styles.emptyContainer} />
+        </View>
+        <View style={styles.footer} />
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: Dimensions.get('screen').width,
+    height: Dimensions.get('screen').height,
+  },
+  metaContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '100%',
     paddingHorizontal: 16,
+    paddingBottom: 66,
+    paddingVertical: 16,
+    backgroundColor: 'rgba(0, 0,0,0.5)',
+  },
+  content: {
+    flexDirection: 'row',
+    height: 276,
+  },
+  footer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0,0,0.5)',
+  },
+  cameraContainer: {
+    width: 276,
+    height: 276,
+    borderWidth: 2,
+    borderRadius: 16,
+    borderColor: '#fff',
+    padding: 18,
+  },
+  emptyContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0,0,0.5)',
+  },
+  camera: {
+    width: 240,
+    height: 240,
+    backgroundColor: 'transparent',
+    borderRadius: 16,
   },
 });
 
