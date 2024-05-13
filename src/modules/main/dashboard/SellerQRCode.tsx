@@ -3,13 +3,11 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import React, {useCallback, useState} from 'react';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useTranslation} from 'react-i18next';
 import {getUrlParams, showToastWithGravity} from '../../../utils/utils';
 import {useAppTheme} from '../../../utils/theme';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
   const theme = useAppTheme();
-  const {t} = useTranslation();
   const [torchOn, setTorchOn] = useState(false);
 
   const goBack = useCallback(() => {
