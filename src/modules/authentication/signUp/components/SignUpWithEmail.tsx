@@ -38,7 +38,7 @@ const validationSchema = Yup.object({
       /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
       'Password must contain at least one special character, one capital letter, and one digit',
     )
-    .min(5, 'Password must be at least 5 characters')
+    .min(8, 'Password must be at least 5 characters')
     .max(15, 'Password must be at most 15 characters'),
   name: Yup.string().trim().required('Full Name cannot be empty'),
 });
