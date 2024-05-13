@@ -1,5 +1,6 @@
 import {Formik, FormikHelpers} from 'formik';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import {Button, Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import * as Yup from 'yup';
@@ -30,7 +31,14 @@ const validationSchema = Yup.object({
     .trim()
     .email('Please enter valid email address')
     .required('Email cannot be empty.'),
-  password: Yup.string().trim().required('Password cannot be empty'),
+  password: Yup.string()
+    .required('Password cannot be empty')
+    .matches(
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+      'Password must contain at least one special character, one capital letter, and one digit',
+    )
+    .min(5, 'Password must be at least 5 characters')
+    .max(15, 'Password must be at most 15 characters'),
 });
 
 const LoginWithEmail = () => {
@@ -56,7 +64,7 @@ const LoginWithEmail = () => {
           values.email,
           values.password,
         );
-
+        await Clipboard.setString('');
         const idTokenResult = await auth()?.currentUser?.getIdTokenResult();
 
         await storeDetails(idTokenResult, response.user);
