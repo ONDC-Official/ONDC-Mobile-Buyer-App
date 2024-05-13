@@ -1,5 +1,7 @@
 package org.ondc.buyer;
 
+import android.view.WindowManager;
+
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
@@ -29,4 +31,17 @@ public class MainActivity extends ReactActivity {
         // If you opted-in for the New Architecture, we enable the Fabric Renderer.
         DefaultNewArchitectureEntryPoint.getFabricEnabled());
   }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+  }
+
 }
