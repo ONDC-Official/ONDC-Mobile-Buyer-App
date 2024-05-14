@@ -443,7 +443,11 @@
     "Phone Number": "Phone Number"
   },
   "Return Items": {
-    "Return Items": "Return Items"
+    "Return Items": "Return Items",
+    "Confirm": "Confirm",
+    "Something went wrong, please try again": "Something went wrong, please try again",
+    "Something went wrong, product status cannot be updated": "Something went wrong, product status cannot be updated",
+    "Cannot proceed with you request now. Please try again": "Cannot proceed with you request now. Please try again"
   },
   "Return Item": {
     "Return Item": "Return Item",

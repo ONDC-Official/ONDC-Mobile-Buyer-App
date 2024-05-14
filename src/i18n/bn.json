@@ -443,7 +443,11 @@
     "Phone Number": "ফোন নাম্বার"
   },
   "Return Items": {
-    "Return Items": "ফেরত মালামাল"
+    "Return Items": "ফেরত মালামাল",
+    "Confirm": "কনফার্ম",
+    "Something went wrong, please try again": "কিছু ভুল হয়েছে আবার চেষ্টা করুন",
+    "Something went wrong, product status cannot be updated": "কিছু ভুল হয়েছে, পণ্যের স্থিতি আপডেট করা যাবে না",
+    "Cannot proceed with you request now. Please try again": "এখন আপনার অনুরোধের সাথে এগিয়ে যাওয়া যাবে না। অনুগ্রহপূর্বক আবার চেষ্টা করুন"
   },
   "Return Item": {
     "Return Item": "রিটার্ন আইটেম",

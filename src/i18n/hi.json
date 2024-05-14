@@ -443,7 +443,11 @@
     "Phone Number": "फोन नंबर"
   },
   "Return Items": {
-    "Return Items": "सामान वापस करे"
+    "Return Items": "सामान वापस करे",
+    "Confirm": "कन्फर्म",
+    "Something went wrong, please try again": "कुछ गड़बड़ हुई है। कृपया दोबारा प्रयास करें",
+    "Something went wrong, product status cannot be updated": "कुछ ग़लत हो गया, उत्पाद स्थिति अपडेट नहीं की जा सकती",
+    "Cannot proceed with you request now. Please try again": "अब आपके अनुरोध पर आगे नहीं बढ़ा जा सकता. कृपया पुन: प्रयास करें"
   },
   "Return Item": {
     "Return Item": "रिटर्न इतेम",

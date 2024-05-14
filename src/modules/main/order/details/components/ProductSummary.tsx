@@ -134,7 +134,8 @@ const ProductSummary = ({
             </View>
             {returnable &&
               (fulfilment?.state?.descriptor?.code === 'Order-delivered' ||
-                fulfilment?.state?.descriptor?.code === 'Completed') && (
+                fulfilment?.state?.descriptor?.code === 'Completed') &&
+              item.quantity?.count - returnedCount > 0 && (
                 <Button
                   mode={'outlined'}
                   compact

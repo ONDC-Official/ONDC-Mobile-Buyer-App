@@ -443,7 +443,11 @@
     "Phone Number": "போன் நம்பர்"
   },
   "Return Items": {
-    "Return Items": "பொருட்களைத் திரும்பப் பெறுங்கள்"
+    "Return Items": "பொருட்களைத் திரும்பப் பெறுங்கள்",
+    "Confirm": "கன்ஃபர்ம்",
+    "Something went wrong, please try again": "ஏதோ தவறாகிவிட்டது, மீண்டும் முயற்சிக்கவும்",
+    "Something went wrong, product status cannot be updated": "ஏதோ தவறாகிவிட்டது, தயாரிப்பு நிலையைப் புதுப்பிக்க முடியாது",
+    "Cannot proceed with you request now. Please try again": "உங்கள் கோரிக்கையை இப்போது தொடர முடியாது. தயவு செய்து மீண்டும் முயற்சிக்கவும்"
   },
   "Return Item": {
     "Return Item": "ரிட்டர்ன் ஐட்டம்",

@@ -8,7 +8,7 @@ import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import {launchImageLibrary} from 'react-native-image-picker';
-
+import {useTranslation} from 'react-i18next';
 import {
   CURRENCY_SYMBOLS,
   RETURN_REASONS,
@@ -25,7 +25,6 @@ import {showToastWithGravity} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useUploadFile from '../../../../hooks/useUploadFile';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 const CancelToken = axios.CancelToken;
 
@@ -107,7 +106,9 @@ const ReturnItem = ({
         navigation.goBack();
       } else {
         showToastWithGravity(
-          'Something went wrong!, product status cannot be updated',
+          t(
+            'Return Items.Something went wrong, product status cannot be updated',
+          ),
         );
         setApiRequested(false);
         return;
@@ -141,7 +142,9 @@ const ReturnItem = ({
 
       if (cancelEventSourceResponseRef.current.length <= 0) {
         showToastWithGravity(
-          'Cannot proceed with you request now! Please try again',
+          t(
+            'Return Items.Cannot proceed with you request now. Please try again',
+          ),
         );
         setApiRequested(false);
       }
@@ -233,7 +236,9 @@ const ReturnItem = ({
       //Error handling workflow eg, NACK
       if (data[0].message.ack.status === 'NACK') {
         setApiRequested(false);
-        showToastWithGravity('Something went wrong, please try again');
+        showToastWithGravity(
+          t('Return Items.Something went wrong, please try again'),
+        );
       } else {
         fetchReturnDataEvents(data[0].context.message_id);
       }
@@ -432,7 +437,7 @@ const ReturnItem = ({
           disabled={apiRequested}
           loading={apiRequested}
           onPress={returnOrder}>
-          Confirm
+          {t('Return Items.Confirm')}
         </Button>
       </View>
     </View>
