@@ -77,7 +77,9 @@ const CancelOrder = ({
         navigation.goBack();
       } else {
         showToastWithGravity(
-          'Something went wrong!, product status cannot be updated',
+          t(
+            'Return Items.Something went wrong, product status cannot be updated',
+          ),
         );
         setLoading(false);
         return;
@@ -111,7 +113,9 @@ const CancelOrder = ({
 
       if (cancelEventSourceResponseRef.current.length <= 0) {
         showToastWithGravity(
-          'Cannot proceed with you request now! Please try again',
+          t(
+            'Return Items.Cannot proceed with you request now. Please try again',
+          ),
         );
         setLoading(false);
       }
@@ -147,7 +151,9 @@ const CancelOrder = ({
       //Error handling workflow eg, NACK
       if (data.message.ack.status === 'NACK') {
         setLoading(false);
-        showToastWithGravity('Something went wrong, please try again');
+        showToastWithGravity(
+          t('Return Items.Something went wrong, please try again'),
+        );
       } else {
         fetchCancelOrderDataThroughEvents(data.context.message_id);
       }
@@ -228,7 +234,7 @@ const CancelOrder = ({
             style={styles.actionButton}
             contentStyle={styles.actionButtonContent}
             onPress={() => setShowConfirmation(true)}>
-            Cancel
+            {t('Cancel Order.Cancel')}
           </Button>
         </View>
       </View>

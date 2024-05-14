@@ -429,9 +429,11 @@
   },
   "Cancel Order": {
     "Cancel Order": "ஆர்டரை ரத்து செய்",
+    "Cancel": "கேன்சல்",
     "Complete order": "முழுமையான ஆர்டர்",
     "Select reason": "காரணத்தைத் தேர்ந்தெடுக்கவும்",
-    "Are You sure you would like to cancel this order?": "இந்த ஆர்டரை நிச்சயமாக ரத்து செய்ய விரும்புகிறீர்களா?"
+    "Are You sure you would like to cancel this order?": "இந்த ஆர்டரை நிச்சயமாக ரத்து செய்ய விரும்புகிறீர்களா?",
+    "Something went wrong, product status cannot be updated": "ஏதோ தவறாகிவிட்டது, தயாரிப்பு நிலையைப் புதுப்பிக்க முடியாது"
   },
   "Payment Methods": {
     "Cash On Delivery": "கேஷ் ஒன் டெலிவரி",

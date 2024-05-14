@@ -429,9 +429,11 @@
   },
   "Cancel Order": {
     "Cancel Order": "আদেশ বাতিল",
+    "Cancel": "ক্যানসেল",
     "Complete order": "সম্পূর্ণ আদেশ",
     "Select reason": "কারণ নির্বাচন করুন",
-    "Are You sure you would like to cancel this order?": "আপনি কি নিশ্চিত আপনি এই অর্ডার বাতিল করতে চান?"
+    "Are You sure you would like to cancel this order?": "আপনি কি নিশ্চিত আপনি এই অর্ডার বাতিল করতে চান?",
+    "Something went wrong, product status cannot be updated": "কিছু ভুল হয়েছে, পণ্যের স্থিতি আপডেট করা যাবে না"
   },
   "Payment Methods": {
     "Cash On Delivery": "কাশ অন ডেলিভারি",

@@ -429,9 +429,11 @@
   },
   "Cancel Order": {
     "Cancel Order": "Cancel Order",
+    "Cancel": "Cancel",
     "Complete order": "Complete order",
     "Select reason": "Select reason",
-    "Are You sure you would like to cancel this order?": "Are You sure you would like to cancel this order?"
+    "Are You sure you would like to cancel this order?": "Are You sure you would like to cancel this order?",
+    "Something went wrong, product status cannot be updated": "Something went wrong, product status cannot be updated",
   },
   "Payment Methods": {
     "Cash On Delivery": "Cash On Delivery",
