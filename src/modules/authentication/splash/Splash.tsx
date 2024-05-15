@@ -4,6 +4,8 @@ import {useDispatch} from 'react-redux';
 import {Text} from 'react-native-paper';
 import {getVersion} from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
+import JailMonkey from 'jail-monkey';
+import {useTranslation} from 'react-i18next';
 
 import {appStyles} from '../../../styles/styles';
 import ONDCLogo from '../../../assets/app_logo.svg';
@@ -11,9 +13,7 @@ import {getMultipleData, getStoredData} from '../../../utils/storage';
 import i18n from '../../../i18n';
 import {saveAddress} from '../../../redux/address/actions';
 import {getUrlParams} from '../../../utils/utils';
-import JailMonkey from 'jail-monkey';
 import {alertWithOneButton} from '../../../utils/alerts';
-import {useTranslation} from 'react-i18next';
 
 interface Splash {
   navigation: any;
@@ -146,14 +146,11 @@ const Splash: React.FC<Splash> = ({navigation}) => {
 
   useEffect(() => {
     if (JailMonkey.isJailBroken()) {
-      console.log('isJailBroken');
       alertWithOneButton(
         'Alert',
         'You are running application on rooted device, your data may get leaked',
         'Ok',
-        () => {
-          
-        },
+        () => {},
       );
     }
     Linking.getInitialURL().then(url => {

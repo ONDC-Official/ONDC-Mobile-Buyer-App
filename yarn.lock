@@ -1743,6 +1743,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-clipboard/clipboard@^1.14.1":
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/@react-native-clipboard/clipboard/-/clipboard-1.14.1.tgz#835f82fc86881a0808a8405f2576617bb5383554"
+  integrity sha512-SM3el0A28SwoeJljVNhF217o0nI4E7RfalLmuRQcT1/7tGcxUjgFa3jyrEndYUct8/uxxK5EUNGUu1YEDqzxqw==
+
 "@react-native-community/cli-clean@11.3.10":
   version "11.3.10"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-clean/-/cli-clean-11.3.10.tgz#70d14dd998ce8ad532266b36a0e5cafe22d300ac"
@@ -5137,6 +5142,11 @@ iterator.prototype@^1.1.2:
     has-symbols "^1.0.3"
     reflect.getprototypeof "^1.0.4"
     set-function-name "^2.0.1"
+
+jail-monkey@^2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/jail-monkey/-/jail-monkey-2.8.0.tgz#ff8ce7e57c438c9351d6c97aefe1dce3269220c7"
+  integrity sha512-mz0sldKOEnt7qpqLLYM9Rwq9zGuGtj5nihz87KWBSy6PR9eu0cmyPkW3b+Exw4iVivcb2bFf6uVq0Q9aNgdIhw==
 
 jest-changed-files@^29.7.0:
   version "29.7.0"
