@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Linking, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Text} from 'react-native-paper';
-import {getVersion} from 'react-native-device-info';
+import DeviceInfo, {getVersion} from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
 import JailMonkey from 'jail-monkey';
 import {useTranslation} from 'react-i18next';
@@ -144,15 +144,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
     }
   };
 
-  useEffect(() => {
-    if (JailMonkey.isJailBroken()) {
-      alertWithOneButton(
-        'Alert',
-        'You are running application on rooted device, your data may get leaked',
-        'Ok',
-        () => {},
-      );
-    }
+  const processLink = () => {
     Linking.getInitialURL().then(url => {
       if (url) {
         processUrl(url).then(() => {});
@@ -160,6 +152,19 @@ const Splash: React.FC<Splash> = ({navigation}) => {
         checkIfUserIsLoggedIn().then(() => {});
       }
     });
+  };
+
+  useEffect(() => {
+    if (JailMonkey.isJailBroken()) {
+      alertWithOneButton(
+        'Alert',
+        'This application can not be used on the rooted device',
+        'Ok',
+        () => {},
+      );
+    } else {
+      processLink();
+    }
   }, []);
 
   return (
