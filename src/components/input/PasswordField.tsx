@@ -24,6 +24,8 @@ const PasswordField: React.FC<any> = ({inputLabel, ...props}) => {
       <TextInput
         mode="outlined"
         {...props}
+        contextMenuHidden
+        selectTextOnFocus={false}
         dense
         style={styles.inputText}
         secureTextEntry={hide}
