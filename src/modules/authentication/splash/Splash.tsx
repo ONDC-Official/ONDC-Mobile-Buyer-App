@@ -11,6 +11,9 @@ import {getMultipleData, getStoredData} from '../../../utils/storage';
 import i18n from '../../../i18n';
 import {saveAddress} from '../../../redux/address/actions';
 import {getUrlParams} from '../../../utils/utils';
+import JailMonkey from 'jail-monkey';
+import {alertWithOneButton} from '../../../utils/alerts';
+import {useTranslation} from 'react-i18next';
 
 interface Splash {
   navigation: any;
@@ -25,6 +28,8 @@ interface Splash {
 const Splash: React.FC<Splash> = ({navigation}) => {
   const dispatch = useDispatch();
   const styles = makeStyles();
+
+  const {t} = useTranslation();
 
   const checkLanguage = async (language: any, pageParams: any) => {
     if (!language) {
@@ -140,6 +145,17 @@ const Splash: React.FC<Splash> = ({navigation}) => {
   };
 
   useEffect(() => {
+    if (JailMonkey.isJailBroken()) {
+      console.log('isJailBroken');
+      alertWithOneButton(
+        'Alert',
+        'You are running application on rooted device, your data may get leaked',
+        'Ok',
+        () => {
+          
+        },
+      );
+    }
     Linking.getInitialURL().then(url => {
       if (url) {
         processUrl(url).then(() => {});
