@@ -155,16 +155,27 @@ const Splash: React.FC<Splash> = ({navigation}) => {
   };
 
   useEffect(() => {
-    if (JailMonkey.isJailBroken()) {
-      alertWithOneButton(
-        'Alert',
-        'This application can not be used on the rooted device',
-        'Ok',
-        () => {},
-      );
-    } else {
-      processLink();
-    }
+    DeviceInfo.isPinOrFingerprintSet().then(isPinOrFingerprintSet => {
+      if (!isPinOrFingerprintSet) {
+        alertWithOneButton(
+          'Alert',
+          'Please setup the device lock to access this application',
+          'Ok',
+          () => {},
+        );
+      } else {
+        if (JailMonkey.isJailBroken()) {
+          alertWithOneButton(
+            'Alert',
+            'This application can not be used on the rooted device',
+            'Ok',
+            () => {},
+          );
+        } else {
+          processLink();
+        }
+      }
+    });
   }, []);
 
   return (
