@@ -126,7 +126,7 @@ const SignUpWithPhone = () => {
             disabled={googleLoginRequested || apiInProgress}
             value={code}
             required
-            inputLabel="OTP*"
+            inputLabel="OTP"
             placeholder="Enter OTP"
             secureTextEntry
             error={!!codeError}
