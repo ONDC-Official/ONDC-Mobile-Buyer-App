@@ -129,7 +129,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
             {t('Fulfillment.Choose delivery/pickup')}
           </Text>
         </View>
-        <View>
+        <ScrollView>
           {productsQuote.isError ? (
             <View style={styles.errorContainer}>
               {productsQuote?.providers.map((provider: any, pindex: number) => (
@@ -460,7 +460,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
               </View>
             </>
           )}
-        </View>
+        </ScrollView>
       </View>
     </CloseSheetContainer>
   );
