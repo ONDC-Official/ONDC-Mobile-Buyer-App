@@ -531,6 +531,7 @@
   "Shipment Details": {
     "Shipment Details": "शिपमेंट डिटेल्स",
     "Items Arriving": "{{count}} आयटम येत आहेत",
+    "Items Delivered": "{{count}} वस्तू वितरित केल्या",
     "Arriving On": "वर आगमन",
     "Delivered On": "वर वितरित"
   },

@@ -531,6 +531,7 @@
   "Shipment Details": {
     "Shipment Details": "पेमेंट मेथड्स",
     "Items Arriving": "{{count}} आइटम आ रहे हैं",
+    "Items Delivered": "{{count}} आइटम वितरित",
     "Arriving On": "पर पहुँचना",
     "Delivered On": "सौंप दिया"
   },

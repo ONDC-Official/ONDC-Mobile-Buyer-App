@@ -531,6 +531,7 @@
   "Shipment Details": {
     "Shipment Details": "ஷிப்மெண்ட் டீட்டெயில்ஸ்",
     "Items Arriving": "{{count}} உருப்படி(கள்) வந்து சேரும்",
+    "Items Delivered": "{{count}} பொருள்(கள்) வழங்கப்பட்டது",
     "Arriving On": "அன்று வருகை",
     "Delivered On": "அன்று வழங்கப்பட்டது"
   },

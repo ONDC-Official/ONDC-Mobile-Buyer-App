@@ -4,8 +4,8 @@ import moment from 'moment/moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
-import {useAppTheme} from '../../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const ReturnDetails = ({fulfilmentId}: {fulfilmentId: string}) => {
   const {t} = useTranslation();
@@ -67,7 +67,7 @@ const ReturnDetails = ({fulfilmentId}: {fulfilmentId: string}) => {
                 )}
               </View>
               <Text variant={'labelMedium'} style={styles.state}>
-                {history?.state.replace(/-/g, ' ')}
+                {t(`Return Details.${history?.state.replace(/-/g, ' ')}`)}
               </Text>
             </View>
             <Text variant={'labelMedium'} style={styles.timestamp}>

@@ -286,6 +286,7 @@ const makeStyles = (colors: any) =>
     },
     itemName: {
       color: colors.neutral400,
+      flex: 1,
     },
     quantity: {
       color: colors.neutral300,

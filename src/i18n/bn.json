@@ -531,6 +531,7 @@
   "Shipment Details": {
     "Shipment Details": "চালান বিবরণ",
     "Items Arriving": "{{count}} আইটেম(গুলি) আসছে৷",
+    "Items Delivered": "{{count}} আইটেম(গুলি) বিতরণ করা হয়েছে৷",
     "Arriving On": "আগমন",
     "Delivered On": "বিতরণ"
   },

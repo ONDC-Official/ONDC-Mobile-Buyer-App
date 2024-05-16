@@ -4,8 +4,8 @@ import moment from 'moment/moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import React, {useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
-import {useAppTheme} from '../../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import {useAppTheme} from '../../../../../utils/theme';
 
 const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
   const {t} = useTranslation();
@@ -14,15 +14,26 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
   const [showDetails, setShowDetails] = useState<boolean>(true);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
-  const fulfilmentIndex = orderDetails?.fulfillments.findIndex(
-    (one: any) => one.id === fullfillmentId,
-  );
+  const {deliveredFulfilmentLength, fulfilmentIndex, fulfilment} =
+    useMemo(() => {
+      const filteredFulfillment = orderDetails?.fulfillments?.filter(
+        (one: any) => one.type === 'Delivery',
+      );
+      const index = filteredFulfillment?.findIndex(
+        (one: any) => one.id === fullfillmentId,
+      );
+      return {
+        deliveredFulfilmentLength: filteredFulfillment.length,
+        fulfilmentIndex: index,
+        fulfilment: filteredFulfillment[index],
+      };
+    }, [orderDetails?.fulfillments, fullfillmentId]);
 
-  const fulfillmentHistory = orderDetails?.fulfillmentHistory.filter(
-    (one: any) => one.id === fullfillmentId,
-  );
-
-  const fulfilment = orderDetails?.fulfillments[fulfilmentIndex];
+  const fulfillmentHistory = useMemo(() => {
+    return orderDetails?.fulfillmentHistory.filter(
+      (one: any) => one.id === fullfillmentId,
+    );
+  }, [orderDetails?.fulfillmentHistory, fullfillmentId]);
 
   const items = useMemo(() => {
     return orderDetails?.items?.filter((obj: any) => {
@@ -41,12 +52,16 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
     <View style={styles.shippingContainer}>
       <Text variant={'titleLarge'} style={styles.shippingTitle}>
         {t('Shipment Details.Shipment Details')} ({fulfilmentIndex + 1}/
-        {orderDetails?.fulfillments.length})
+        {deliveredFulfilmentLength})
       </Text>
       <Text variant={'bodyLarge'} style={styles.shippingTitle}>
-        {t('Shipment Details.Items Arriving', {
-          count: items?.length,
-        })}
+        {orderDetails?.state !== 'Completed'
+          ? t('Shipment Details.Items Arriving', {
+              count: items?.length,
+            })
+          : t('Shipment Details.Items Delivered', {
+              count: items?.length,
+            })}
       </Text>
       <TouchableOpacity
         style={styles.accordion}

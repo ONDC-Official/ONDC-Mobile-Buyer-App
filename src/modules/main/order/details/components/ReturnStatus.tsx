@@ -2,6 +2,7 @@ import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import React from 'react';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../../../../utils/theme';
 
 const return_end_states = [
@@ -12,13 +13,14 @@ const return_end_states = [
 ];
 
 const ReturnStatus = ({code, fulfilment}: {code: string; fulfilment?: any}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   return (
     <View style={styles.statusChip}>
       <Text variant={'labelMedium'} style={styles.statusText}>
-        {code}
+        {t(`Return Details.${code}`)}
         {return_end_states.includes(code)
           ? ` on ${moment(fulfilment?.updatedAt).format('Do MMM')}`
           : ''}

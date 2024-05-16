@@ -519,7 +519,14 @@
   "Return Details": {
     "Return Details": "Return Details",
     "Items Returned": "{{count}} Item(s) Returned",
-    "Return On": "Return On"
+    "Return On": "Returned On",
+    "Return_Initiated": "Return Initiated",
+    "Return_Approved": "Return Approved",
+    "Return_Picked": "Return Picked",
+    "Return_Delivered": "Return Delivered",
+    "Return_Pick_Failed": "Return Pick Failed",
+    "Return_Failed": "Return Failed",
+    "Return_Rejected": "Return Rejected"
   },
   "Return Summary": {
     "Items": "Items",
@@ -531,6 +538,7 @@
   "Shipment Details": {
     "Shipment Details": "Shipment Details",
     "Items Arriving": "{{count}} Item(s) Arriving",
+    "Items Delivered": "{{count}} Item(s) Delivered",
     "Arriving On": "Arriving On",
     "Delivered On": "Delivered On"
   },
