@@ -14,6 +14,7 @@ import i18n from '../../../i18n';
 import {saveAddress} from '../../../redux/address/actions';
 import {getUrlParams} from '../../../utils/utils';
 import {alertWithOneButton} from '../../../utils/alerts';
+import {isDeviceRooted} from 'react-native-detect-frida';
 
 interface Splash {
   navigation: any;
@@ -172,7 +173,18 @@ const Splash: React.FC<Splash> = ({navigation}) => {
             () => {},
           );
         } else {
-          processLink();
+          isDeviceRooted().then(result => {
+            if (result.isRooted) {
+              alertWithOneButton(
+                'Alert',
+                'This application can not be used on the rooted device',
+                'Ok',
+                () => {},
+              );
+            } else {
+              processLink();
+            }
+          });
         }
       }
     });
