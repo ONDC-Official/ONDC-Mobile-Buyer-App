@@ -1,5 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { decryptData, encryptData } from "./utils";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {decryptData, encryptData} from './utils';
 
 export const removeData = async (key: string) => {
   await AsyncStorage.removeItem(key);
