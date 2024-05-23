@@ -110,7 +110,13 @@
     "Non-cancellable": "বাতিলযোগ্য নয়",
     "Returnable": "ফেরতযোগ্য",
     "Non-returnable": "অ-ফেরত",
-    "Order status updated successfully": "অর্ডার স্থিতি সফলভাবে আপডেট করা হয়েছে"
+    "Order status updated successfully": "অর্ডার স্থিতি সফলভাবে আপডেট করা হয়েছে",
+    "Name": "নাম*",
+    "Email": "ইমেইল*",
+    "Verified": "যাচাই",
+    "Verify": "যাচাই করুন",
+    "Verify Email": "ইমেল যাচাই করুন",
+    "Email send": "আপনার ইমেল ঠিকানায় ইমেল পাঠানো হয়েছে. আপনার অ্যাকাউন্ট যাচাই করতে লিঙ্কে ক্লিক করুন"
   },
   "Choose Language": {
     "Hindi": "हिंदी",

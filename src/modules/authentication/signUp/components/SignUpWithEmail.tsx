@@ -64,15 +64,15 @@ const SignUpWithEmail = () => {
   ) => {
     if (isConnected && isInternetReachable) {
       try {
-        const response = await auth().createUserWithEmailAndPassword(
+        await auth().createUserWithEmailAndPassword(
           values.email,
           values.password,
         );
         await auth()?.currentUser?.updateProfile({displayName: values.name});
+        await auth().currentUser?.sendEmailVerification();
 
         const idTokenResult = await auth()?.currentUser?.getIdTokenResult();
-
-        await storeDetails(idTokenResult, response.user);
+        await storeDetails(idTokenResult, auth().currentUser);
       } catch (error: any) {
         if (error?.code === 'auth/email-already-in-use') {
           showToastWithGravity('Account already exist on this email-id');

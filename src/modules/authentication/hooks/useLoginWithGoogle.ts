@@ -19,7 +19,9 @@ export default () => {
       await auth().signInWithCredential(googleCredential);
 
       const idTokenResult = await auth()?.currentUser?.getIdTokenResult();
-
+      if (!auth()?.currentUser?.emailVerified) {
+        await auth().currentUser?.sendEmailVerification();
+      }
       await storeDetails(idTokenResult, auth()?.currentUser);
     } catch (error) {
       console.log(error);

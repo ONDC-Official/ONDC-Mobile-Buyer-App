@@ -110,7 +110,13 @@
     "Non-cancellable": "Non-cancellable",
     "Returnable": "Returnable",
     "Non-returnable": "Non-returnable",
-    "Order status updated successfully": "Order status updated successfully"
+    "Order status updated successfully": "Order status updated successfully",
+    "Name": "Name*",
+    "Email": "Email*",
+    "Verified": "Verified",
+    "Verify": "Verify",
+    "Verify Email": "Verify Email",
+    "Email send": "Email has been sent to your email address. Please click on the link to verify your account"
   },
   "Choose Language": {
     "Hindi": "हिंदी",

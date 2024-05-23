@@ -110,7 +110,13 @@
     "Non-cancellable": "रद्द करण्यायोग्य नाही",
     "Returnable": "परत करण्यायोग्य",
     "Non-returnable": "परत न येणारा",
-    "Order status updated successfully": "ऑर्डरची स्थिती यशस्वीरित्या अपडेट केली"
+    "Order status updated successfully": "ऑर्डरची स्थिती यशस्वीरित्या अपडेट केली",
+    "Name": "नाव*",
+    "Email": "ईमेल*",
+    "Verified": "सत्यापित",
+    "Verify": "सत्यापित करा",
+    "Verify Email": "ईमेल सत्यापित करा",
+    "Email send": "तुमच्या ईमेल पत्त्यावर ईमेल पाठवण्यात आला आहे. तुमचे खाते सत्यापित करण्यासाठी कृपया लिंकवर क्लिक करा"
   },
   "Choose Language": {
     "Hindi": "हिंदी",
