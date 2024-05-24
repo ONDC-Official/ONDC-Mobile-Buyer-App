@@ -88,12 +88,11 @@ const Address: React.FC<Address> = ({
         </View>
         <TouchableOpacity
           onPress={() => navigation.navigate('UpdateAddress', {address: item})}>
-          <Icon name={'pencil'} color={theme.colors.primary} size={20} />
+          <Icon name={'pencil'} color={theme.colors.primary} size={16} />
         </TouchableOpacity>
       </View>
       <Text variant={'bodyMedium'} style={styles.description}>
-        {street}, {landmark ? `${landmark},` : ''} {city}, {state}, {areaCode}{' '}
-        {item?.descriptor?.phone ? `phone: ${item?.descriptor?.phone}` : ''}
+        {street}, {landmark ? `${landmark},` : ''} {city}, {state}, {areaCode}
       </Text>
     </TouchableOpacity>
   );

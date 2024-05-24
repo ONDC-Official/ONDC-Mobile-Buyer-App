@@ -202,8 +202,8 @@
   "Product SubCategories": {
     "Search": "खोज",
     "Filter": "फ़िल्टर",
-    "Shop by Category": "शॉप बी कैटेगरी",
-    "Shop By Category": "शॉप बी कैटेगरी",
+    "Shop by Category": "श्रेणी के अनुसार स्टोर ढूंढें",
+    "Shop By Category": "श्रेणी के अनुसार स्टोर ढूंढें",
     "Fruits and Vegetables": "फल और सब्जियां",
     "Masala & Seasoning": "मसाला और मसाला",
     "Oil & Ghee": "तेल / घी",
@@ -384,7 +384,7 @@
     "Cattle Feed": "पशु का चारा"
   },
   "SubCategories": {
-    "Shop By Category": "शॉप बी कैटेगरी",
+    "Shop By Category": "श्रेणी के अनुसार स्टोर ढूंढें",
     "Fruits and Vegetables": "फल और सब्जियां",
     "Masala & Seasoning": "मसाला और मसाला",
     "Oil & Ghee": "तेल / घी",

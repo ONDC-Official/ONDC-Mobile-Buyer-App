@@ -29,6 +29,7 @@ const InputField: React.FC<any> = ({inputLabel, ...props}) => {
         placeholderTextColor={theme.colors.neutral200}
         outlineColor={theme.colors.neutral200}
         contentStyle={styles.contant}
+        contextMenuHidden
       />
       {props.error && (
         <HelperText padding="none" type="error" visible={props.error}>
