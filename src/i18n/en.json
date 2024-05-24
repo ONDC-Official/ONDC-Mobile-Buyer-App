@@ -185,7 +185,8 @@
     "Fulfilment no": "{{current}} of {{total}}",
     "Delivered Today by": "Delivered Today by {{time}}",
     "Delivered In": "Delivered In {{time}}",
-    "Delivered by": "Delivered by {{date}}"
+    "Delivered by": "Delivered by {{date}}",
+    "Self pickup by": "Self-Pickup by {{time}}"
   },
   "Featured Categories": {
     "Featured Categories": "Featured Categories",

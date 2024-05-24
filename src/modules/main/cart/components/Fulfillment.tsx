@@ -12,9 +12,10 @@ import FastImage from 'react-native-fast-image';
 import PagerView from 'react-native-pager-view';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
+
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 import {makeGlobalStyles} from '../../../../styles/styles';
 
 const screenHeight = Dimensions.get('screen').height;
@@ -316,26 +317,64 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                 expectedTime.add(
                                   moment.duration(fulfilment['@ondc/org/TAT']),
                                 );
-                                if (expectedTime.isSame(current, 'day')) {
-                                  if (expectedTime.diff(current, 'hour') >= 1) {
-                                    tatMessage = t(
-                                      'Fulfillment.Delivered Today by',
-                                      {time: expectedTime.format('hh:mm a')},
-                                    );
+                                if (
+                                  fulfilment['@ondc/org/category'] ===
+                                  'Takeaway'
+                                ) {
+                                  if (expectedTime.isSame(current, 'day')) {
+                                    if (
+                                      expectedTime.diff(current, 'hour') >= 1
+                                    ) {
+                                      tatMessage = t(
+                                        'Fulfillment.Self pickup by',
+                                        {time: expectedTime.format('hh:mm a')},
+                                      );
+                                    } else {
+                                      tatMessage = t(
+                                        'Fulfillment.Self pickup by',
+                                        {
+                                          time: moment
+                                            .duration(
+                                              fulfilment['@ondc/org/TAT'],
+                                            )
+                                            .humanize(),
+                                        },
+                                      );
+                                    }
                                   } else {
                                     tatMessage = t(
-                                      'Fulfillment.Delivered Today by',
+                                      'Fulfillment.Self pickup by',
                                       {
-                                        time: moment
-                                          .duration(fulfilment['@ondc/org/TAT'])
-                                          .humanize(),
+                                        time: expectedTime.format('dddd D MMM'),
                                       },
                                     );
                                   }
                                 } else {
-                                  tatMessage = t('Fulfillment.Delivered by', {
-                                    time: expectedTime.format('dddd D MMM'),
-                                  });
+                                  if (expectedTime.isSame(current, 'day')) {
+                                    if (
+                                      expectedTime.diff(current, 'hour') >= 1
+                                    ) {
+                                      tatMessage = t(
+                                        'Fulfillment.Delivered Today by',
+                                        {time: expectedTime.format('hh:mm a')},
+                                      );
+                                    } else {
+                                      tatMessage = t(
+                                        'Fulfillment.Delivered Today by',
+                                        {
+                                          time: moment
+                                            .duration(
+                                              fulfilment['@ondc/org/TAT'],
+                                            )
+                                            .humanize(),
+                                        },
+                                      );
+                                    }
+                                  } else {
+                                    tatMessage = t('Fulfillment.Delivered by', {
+                                      time: expectedTime.format('dddd D MMM'),
+                                    });
+                                  }
                                 }
                               }
                               return (
@@ -379,11 +418,6 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                     }}
                                   />
                                   <View style={styles.customerMeta}>
-                                    <Text
-                                      variant={'bodyMedium'}
-                                      style={styles.fulfilmentCategory}>
-                                      {fulfilment['@ondc/org/category']}
-                                    </Text>
                                     {fulfilment.hasOwnProperty(
                                       '@ondc/org/TAT',
                                     ) && (
@@ -593,7 +627,7 @@ const makeStyles = (colors: any) =>
     },
     fulfilment: {
       flexDirection: 'row',
-      alignItems: 'flex-start',
+      alignItems: 'center',
       paddingVertical: 12,
     },
     fulfilmentBorder: {

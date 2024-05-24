@@ -185,7 +185,8 @@
     "Fulfilment no": "{{total}} இல் {{current}}",
     "Delivered Today by": "மூலம் இன்று வழங்கப்பட்டது {{time}}",
     "Delivered In": "உள்ளே வழங்கப்பட்டது {{time}}",
-    "Delivered by": "மூலம் அனுப்பப்படும் {{date}}"
+    "Delivered by": "மூலம் அனுப்பப்படும் {{date}}",
+    "Self pickup by": "{{time}} மூலம் சுய-பிக்அப்"
   },
   "Featured Categories": {
     "Featured Categories": "பிச்சர்ட் கேட்டகரீஸ்",

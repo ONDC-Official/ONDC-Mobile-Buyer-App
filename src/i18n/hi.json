@@ -185,7 +185,8 @@
     "Fulfilment no": "{{total}} में से {{current}}",
     "Delivered Today by": "{{time}} द्वारा आज वितरित किया गया",
     "Delivered In": "{{time}} में वितरित किया गया",
-    "Delivered by": "{{date}} द्वारा वितरित"
+    "Delivered by": "{{date}} द्वारा वितरित",
+    "Self pickup by": "{{time}} द्वारा स्व-चयन करें"
   },
   "Featured Categories": {
     "Featured Categories": "फीचर्ड कैटेगरीज",

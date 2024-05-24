@@ -185,7 +185,8 @@
     "Fulfilment no": "{{total}} এর মধ্যে {{current}}",
     "Delivered Today by": "{{time}} দ্বারা আজ বিতরিত",
     "Delivered In": "{{time}} মধ্যে বিতরণ করা হয়েছে",
-    "Delivered by": "{{date}} দ্বারা বিতরণ"
+    "Delivered by": "{{date}} দ্বারা বিতরণ",
+    "Self pickup by": "{{time}} দ্বারা স্ব-বাছাই"
   },
   "Featured Categories": {
     "Featured Categories": "ফিচার্ড ক্যাটেগরিস",
