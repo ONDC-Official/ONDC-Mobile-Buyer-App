@@ -562,5 +562,30 @@
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ओएनडीसी क्यूआर से भारत खुलेगा"
+  },
+  "Fulfilment Status": {
+    "Return_Initiated": "वापसी शुरू की गई",
+    "Return_Approved": "वापसी स्वीकृत",
+    "Return_Picked": "वापस चुना गया",
+    "Return_Delivered": "वापसी पहुँचाई गई",
+    "Return_Pick_Failed": "वापसी चुनने में विफल",
+    "Return_Failed": "वापसी असफल",
+    "Return_Rejected": "वापसी अस्वीकृत",
+    "Pending": "लंबित है।",
+    "Packed": "पैक किया गया",
+    "Agent-assigned": "नियुक्त अभिकर्ता",
+    "Out-for-pickup": "पिकअप के लिए बाहर",
+    "Pickup-failed": "उठान असफल",
+    "Order-picked-up": "ऑर्डर उठा लिया गया",
+    "In-transit": "पारगमन में",
+    "At-destination-hub": "गंतव्य केंद्र में",
+    "Out-for-delivery": "डिलीवरी के लिए बाहर",
+    "Delivery-failed": "वितरण विफल रहा",
+    "Order-delivered": "ऑर्डर दिया गया",
+    "Cancelled": "रद्द किया गया",
+    "RTO-Initiated": "आर. टी. ओ. की शुरुआत",
+    "RTO-Delivered": "आर. टी. ओ. वितरित",
+    "RTO-Disposed": "आर. टी. ओ. का निपटारा",
+    "on time": "{{time}}"
   }
 }

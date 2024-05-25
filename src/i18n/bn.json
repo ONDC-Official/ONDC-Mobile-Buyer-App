@@ -562,5 +562,30 @@
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ওএনডিসি কিউআর সে ভারত খুলেগা"
+  },
+  "Fulfilment Status": {
+    "Return_Initiated": "প্রত্যাবর্তন শুরু হয়েছে",
+    "Return_Approved": "ফেরত অনুমোদিত",
+    "Return_Picked": "রিটার্ন বাছাই করা হয়েছে",
+    "Return_Delivered": "ফেরত পাঠানো হয়েছে",
+    "Return_Pick_Failed": "রিটার্ন পিক ব্যর্থ হয়েছে",
+    "Return_Failed": "প্রত্যাবর্তন ব্যর্থ",
+    "Return_Rejected": "প্রত্যাখ্যাত ফেরত",
+    "Pending": "মুলতুবি",
+    "Packed" : "প্যাক করা।",
+    "Agent-assigned": "নিযুক্ত প্রতিনিধি",
+    "Out-for-pickup": "পিকআপের জন্য বাইরে",
+    "Pickup-failed": "সংগ্রহ ব্যর্থ হয়েছে",
+    "Order-picked-up": "অর্ডার নেওয়া হয়েছে।",
+    "In-transit": "যাতায়াতের পথে।",
+    "At-destination-hub": "গন্তব্য কেন্দ্রে",
+    "Out-for-delivery": "ডেলিভারির জন্য বাইরে",
+    "Delivery-failed": "ডেলিভারি ব্যর্থ",
+    "Order-delivered": "অর্ডার পাঠানো হয়েছে।",
+    "Cancelled": "বাতিল করা হয়েছে।",
+    "RTO-Initiated": "আর. টি. ও শুরু হয়েছে",
+    "RTO-Delivered": "আরটিও বিতরণ করা হয়েছে",
+    "RTO-Disposed": "আর. টি. ও নিষ্পত্তি করা হয়েছে",
+    "on time": "{{time}}"
   }
 }

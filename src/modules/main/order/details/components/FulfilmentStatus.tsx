@@ -12,17 +12,26 @@ const return_end_states = [
   'Return_Failed',
 ];
 
-const ReturnStatus = ({code, fulfilment}: {code: string; fulfilment?: any}) => {
+const FulfilmentStatus = ({
+  code,
+  fulfilment,
+}: {
+  code: string;
+  fulfilment?: any;
+}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
+  const returnPresent = return_end_states.includes(code);
   return (
     <View style={styles.statusChip}>
       <Text variant={'labelMedium'} style={styles.statusText}>
-        {t(`Return Details.${code}`)}
-        {return_end_states.includes(code)
-          ? ` on ${moment(fulfilment?.updatedAt).format('Do MMM')}`
+        {t(`Fulfilment Status.${code}`)}
+        {returnPresent
+          ? t('Fulfilment Status.on time', {
+              time: moment(fulfilment?.updatedAt).format('Do MMM'),
+            })
           : ''}
       </Text>
     </View>
@@ -42,4 +51,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default ReturnStatus;
+export default FulfilmentStatus;

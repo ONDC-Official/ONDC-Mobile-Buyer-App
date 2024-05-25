@@ -13,7 +13,7 @@ import {
   CURRENCY_SYMBOLS,
   RETURN_REASONS,
 } from '../../../../../utils/constants';
-import ReturnStatus from './ReturnStatus';
+import FulfilmentStatus from './FulfilmentStatus';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
 
@@ -45,6 +45,7 @@ const SingleItem = ({
   const itemQuantity = itemQuantityTag
     ? itemQuantityTag
     : item?.quantity?.count;
+
   return (
     <View key={item.id} style={styles.item}>
       <FastImage
@@ -253,7 +254,9 @@ const ItemDetails = ({
                         fulfillmentId: fulfillment.id,
                       })
                     }>
-                    <ReturnStatus code={fulfillment?.state?.descriptor?.code} />
+                    <FulfilmentStatus
+                      code={fulfillment?.state?.descriptor?.code}
+                    />
                     <Icon
                       name={'keyboard-arrow-right'}
                       size={20}
@@ -334,7 +337,7 @@ const ItemDetails = ({
                         fulfillmentId: fulfillment.id,
                       })
                     }>
-                    <ReturnStatus
+                    <FulfilmentStatus
                       code={fulfillment?.state?.descriptor?.code}
                       fulfilment={fulfillmentHistory.find(
                         (one: any) =>
@@ -423,7 +426,9 @@ const ItemDetails = ({
                     </Text>
                   </View>
                   <View style={styles.statusContainer}>
-                    <ReturnStatus code={fulfillment?.state?.descriptor?.code} />
+                    <FulfilmentStatus
+                      code={fulfillment?.state?.descriptor?.code}
+                    />
                   </View>
                 </View>
                 {fulfillment?.state?.descriptor?.code === 'Cancelled'

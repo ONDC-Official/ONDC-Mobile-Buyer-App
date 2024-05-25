@@ -562,5 +562,30 @@
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ஒஎன்டிசி கியூஆர் சே பாரத் குலேகா"
+  },
+  "Fulfilment Status": {
+    "Return_Initiated": "திரும்புதல் தொடங்கப்பட்டது",
+    "Return_Approved": "திரும்பப் பெறுதல் அங்கீகரிக்கப்பட்டது",
+    "Return_Picked": "திரும்பப் பெறப்பட்டது",
+    "Return_Delivered": "திருப்பி அனுப்பப்பட்டது",
+    "Return_Pick_Failed": "திரும்பும் தேர்வு தோல்வியடைந்தது",
+    "Return_Failed": "திருப்பி அனுப்பத் தவறிவிட்டது",
+    "Return_Rejected": "திருப்பி அனுப்ப மறுப்பு",
+    "Pending": "நிலுவையில் உள்ளது.",
+    "Packed": "பேக் செய்யப்பட்டது.",
+    "Agent-assigned": "நியமிக்கப்பட்ட முகவர்",
+    "Out-for-pickup": "வாங்குவதற்காக வெளியே செல்லுங்கள்",
+    "Pickup-failed": "எடுத்தல் தோல்வியடைந்தது",
+    "Order-picked-up": "ஆர்டர் எடுக்கப்பட்டது",
+    "In-transit": "போக்குவரத்தில்",
+    "At-destination-hub": "இலக்கு மையத்தில்",
+    "Out-for-delivery": "டெலிவரிக்கு வெளியே",
+    "Delivery-failed": "டெலிவரி செய்ய முடியவில்லை",
+    "Order-delivered": "ஆர்டர் வழங்கப்பட்டது",
+    "Cancelled": "ரத்து செய்யப்பட்டது.",
+    "RTO-Initiated": "ஆர்டிஓ தொடங்கப்பட்டது",
+    "RTO-Delivered": "ஆர்டிஓ டெலிவரி செய்யப்பட்டது",
+    "RTO-Disposed": "ஆர். டி. ஓ அகற்றப்பட்டது",
+    "on time": "{{time}}"
   }
 }
