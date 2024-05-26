@@ -15,7 +15,9 @@ import {useSelector} from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import {launchImageLibrary} from 'react-native-image-picker';
 import axios from 'axios';
+// @ts-ignore
 import RNEventSource from 'react-native-event-source';
+// @ts-ignore
 import CheckBox from 'react-native-check-box';
 import RaiseComplaint from '../../../../../assets/raise_complaint.svg';
 import {CURRENCY_SYMBOLS, SSE_TIMEOUT} from '../../../../../utils/constants';

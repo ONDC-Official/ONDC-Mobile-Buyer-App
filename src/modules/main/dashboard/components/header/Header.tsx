@@ -1,19 +1,15 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Searchbar} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
-import {
-  useFocusEffect,
-  useIsFocused,
-  useNavigation,
-} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
-import FastImage from 'react-native-fast-image';
 
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
 import AudioRecorder from './AudioRecorder';
 import QRButton from './QRButton';
+import HeaderLogo from '../../../../../assets/header_logo.svg';
 
 type HeaderProps = {
   disableAddress?: boolean;
@@ -55,10 +51,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
     <View style={styles.container}>
       {!disableAddress && (
         <View style={styles.row}>
-          <FastImage
-            source={require('../../../../../assets/app_logo.png')}
-            style={styles.headerImage}
-          />
+          <HeaderLogo width={75} height={75} />
           <AddressTag />
         </View>
       )}
@@ -90,21 +83,21 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      backgroundColor: colors.primary,
       paddingHorizontal: 16,
     },
     row: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingVertical: 9,
+    },
+    headerTitle: {
+      color: colors.white,
     },
     searchContainer: {
       width: '100%',
-      paddingVertical: 8,
+      paddingBottom: 8,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: colors.primary,
       height: 60,
       gap: 15,
     },
@@ -120,6 +113,8 @@ const makeStyles = (colors: any) =>
       flex: 1,
       height: 44,
       backgroundColor: colors.white,
+      borderWidth: 1,
+      borderColor: colors.primary,
     },
     micContainer: {
       marginLeft: 10,

@@ -6,15 +6,15 @@ import DeviceInfo, {getVersion} from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
 import JailMonkey from 'jail-monkey';
 import {useTranslation} from 'react-i18next';
+import {isDeviceRooted} from 'react-native-detect-frida';
 
 import {appStyles} from '../../../styles/styles';
-import ONDCLogo from '../../../assets/app_logo.svg';
 import {getMultipleData, getStoredData} from '../../../utils/storage';
 import i18n from '../../../i18n';
 import {saveAddress} from '../../../redux/address/actions';
 import {getUrlParams} from '../../../utils/utils';
 import {alertWithOneButton} from '../../../utils/alerts';
-import {isDeviceRooted} from 'react-native-detect-frida';
+import AppLogo from '../../../assets/app_logo.svg';
 
 interface Splash {
   navigation: any;
@@ -193,7 +193,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
   return (
     <View style={[appStyles.container, appStyles.backgroundWhite]}>
       <View style={[appStyles.container, styles.container]}>
-        <ONDCLogo width={240} height={95} />
+        <AppLogo width={240} height={240} />
       </View>
       <View style={styles.footer}>
         <Text>Version: {getVersion()}</Text>
