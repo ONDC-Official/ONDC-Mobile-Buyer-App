@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
 import Products from '../../../components/products/Products';
@@ -14,6 +15,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   route: {params},
   navigation,
 }) => {
+  const {t} = useTranslation();
   const [currentSubCategory, setCurrentSubCategory] = useState(
     params.subCategory,
   );
@@ -24,7 +26,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
 
   useEffect(() => {
     navigation.setOptions({
-      title: params.subCategory,
+      title: t(`Product SubCategories.${params.subCategory}`),
     });
   }, [navigation]);
 
