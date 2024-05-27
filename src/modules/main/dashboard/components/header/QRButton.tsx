@@ -16,7 +16,7 @@ const QRButton = () => {
 
   return (
     <TouchableOpacity onPress={showQRScanner}>
-      <Icon name={'qr-code-scanner'} color={theme.colors.primary} size={24} />
+      <Icon name={'qr-code-scanner'} color={theme.colors.white} size={24} />
     </TouchableOpacity>
   );
 };

@@ -23,7 +23,7 @@ const AddressTag: React.FC<AddressTag> = () => {
       <TouchableOpacity
         style={styles.addressContainer}
         onPress={() => navigation.navigate('AddressList')}>
-        <Icon name={'location-pin'} color={theme.colors.primary} size={20} />
+        <Icon name={'location-pin'} color={theme.colors.white} size={20} />
         <Text variant={'bodySmall'} style={styles.deliverTo}>
           {t('Home.Deliver to')}
         </Text>
@@ -32,7 +32,7 @@ const AddressTag: React.FC<AddressTag> = () => {
             ? address?.address?.areaCode
             : address?.address?.city}
         </Text>
-        <Icon name={'arrow-down'} color={theme.colors.primary} />
+        <Icon name={'arrow-down'} color={theme.colors.neutral50} />
       </TouchableOpacity>
     );
   } else {
@@ -48,11 +48,11 @@ const makeStyles = (colors: any) =>
     },
     deliverTo: {
       marginHorizontal: 4,
-      color: colors.primary,
+      color: colors.neutral50,
     },
     address: {
       marginEnd: 8,
-      color: colors.primary,
+      color: colors.neutral50,
     },
   });
 
