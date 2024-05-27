@@ -123,3 +123,9 @@ export const CANCELLATION_REASONS_SELLER = [
     isApplicableForCancellation: false,
   },
 ];
+
+export const START_AUDIO_LISTENER_COMMAND = [
+  'hello sarthi',
+  'hello sarathi',
+  'hello saarathi',
+];

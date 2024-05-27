@@ -368,3 +368,31 @@ export const decryptData = (encryptedData: any) => {
   // Parse decrypted data back to JSON
   return JSON.parse(decryptedData);
 };
+
+export const getLocale = (code: string) => {
+  switch (code) {
+    case 'en':
+      return 'en-US';
+
+    case 'hi':
+      return 'hi-IN';
+
+    case 'mr':
+      return 'mr-IN';
+
+    case 'ta':
+      return 'ta-IN';
+
+    case 'bn':
+      return 'bn-IN';
+  }
+};
+
+export const compareIgnoringSpaces = (str1: string, str2: string) => {
+  // Remove all spaces from the strings
+  const cleanedStr1 = str1.replace(/\s+/g, '');
+  const cleanedStr2 = str2.replace(/\s+/g, '');
+
+  // Compare the cleaned strings
+  return cleanedStr1 === cleanedStr2;
+}

@@ -8,30 +8,12 @@ import {useTranslation} from 'react-i18next';
 import Voice from '@react-native-voice/voice';
 import {useSelector} from 'react-redux';
 import makeStyles from './styles';
+import {getLocale} from '../../../../../utils/utils';
 
 type MicrProps = {
   modalVisible: boolean;
   onSearchComplete: (value: string) => void;
   closeModal: () => void;
-};
-
-const getLocale = (code: string) => {
-  switch (code) {
-    case 'en':
-      return 'en-US';
-
-    case 'hi':
-      return 'hi-IN';
-
-    case 'mr':
-      return 'mr-IN';
-
-    case 'ta':
-      return 'ta-IN';
-
-    case 'bn':
-      return 'bn-IN';
-  }
 };
 
 const SearchModal: React.FC<MicrProps> = ({
