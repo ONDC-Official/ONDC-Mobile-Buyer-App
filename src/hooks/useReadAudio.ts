@@ -11,7 +11,6 @@ export default (language: string) => {
   const allowRestart = useRef<boolean>(true);
 
   const onSpeechResults = async (event: any) => {
-    console.log('onSpeechResults', userInteractionStarted, event.value);
     if (!userLatestInteraction.current) {
       const isPresent = START_AUDIO_LISTENER_COMMAND.includes(
         event.value[0].toLowerCase(),
@@ -26,7 +25,6 @@ export default (language: string) => {
 
   const restartVoice = async () => {
     try {
-      console.log('allowRestart.current', allowRestart.current);
       if (allowRestart.current) {
         await Voice.stop();
         await startVoice();
@@ -37,7 +35,6 @@ export default (language: string) => {
   };
 
   const startVoice = async () => {
-    console.log('Start voice');
     try {
       await Voice.destroy();
       const locale = getLocale(language);
@@ -47,18 +44,12 @@ export default (language: string) => {
     }
   };
 
-  const onSpeechEnd = async () => {
-    console.log('onSpeechEnd');
-  };
-
   const onSpeechError = async () => {
-    console.log('onSpeechError');
     await restartVoice();
   };
 
   const stopAndDestroyVoiceListener = async () => {
     try {
-      console.log('Inside stop and destroy');
       setUserInteractionStarted(false);
       userLatestInteraction.current = false;
       allowRestart.current = false;
@@ -70,13 +61,11 @@ export default (language: string) => {
   };
 
   const setAllowRestarts = () => {
-    console.log('Set Allow restart called');
     allowRestart.current = true;
   };
 
   useEffect(() => {
     Voice.onSpeechResults = onSpeechResults;
-    Voice.onSpeechEnd = onSpeechEnd;
     Voice.onSpeechError = onSpeechError;
 
     return () => {

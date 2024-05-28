@@ -253,7 +253,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
   const addToCart = async (navigate = false, isIncrement = true) => {
     try {
-      console.log('Add to cart');
       setAddToCartLoading(true);
       source.current = CancelToken.source();
       const url = `${API_BASE_URL}${CART}/${uid}`;
@@ -375,14 +374,12 @@ const ProductDetails: React.FC<ProductDetails> = ({
   };
 
   const addQuantitiesToCart = async (max: number) => {
-    console.log('Add quantities to cart', max);
     for (let index = 0; index < max; index++) {
       await addToCart(false, true);
     }
   };
 
   const removeQuantitiesToCart = async (max: number) => {
-    console.log('Remove quantities to cart', max);
     for (let index = 0; index < max; index++) {
       if (currentCartItem.current.item.quantity.count === 1) {
         await deleteCartItem(currentCartItem.current._id);
@@ -413,7 +410,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
         // Use match method to find matches
         const match = quantityMessage.match(regex);
-        console.log('quantityMessage', quantityMessage, match);
         if (match) {
           const value = match[1];
           const max = parseInt(value, 10) || numberWords[value.toLowerCase()];

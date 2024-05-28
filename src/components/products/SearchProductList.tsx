@@ -100,8 +100,8 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
           .trim();
         let filteredProducts = [];
         if (inputArray.length > 1) {
-          filteredProducts = products.filter(
-            product =>
+          filteredProducts = products.filter(product => {
+            return (
               compareIgnoringSpaces(
                 product?.item_details?.descriptor?.name.toLowerCase(),
                 productName,
@@ -109,8 +109,9 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
               compareIgnoringSpaces(
                 product?.provider_details?.descriptor?.name.toLowerCase(),
                 inputArray[1].trim(),
-              ),
-          );
+              )
+            );
+          });
         } else {
           filteredProducts = products.filter(product =>
             compareIgnoringSpaces(
@@ -123,7 +124,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
           showToastWithGravity(
             'There are more than 1 product, please provide more details',
           );
-        } else {
+        } else if (filteredProducts.length === 1) {
           const product = filteredProducts[0];
           const routeParams: any = {
             brandId: product.provider_details.id,

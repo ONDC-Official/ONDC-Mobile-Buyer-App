@@ -9,6 +9,7 @@ import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../../../../utils/constants';
 import {
+  compareIgnoringSpaces,
   constructQuoteObject,
   removeNullValues,
   showToastWithGravity,
@@ -28,6 +29,7 @@ import CashOnDeliveryIcon from '../../../../assets/payment/cod.svg';
 import PrepaidIcon from '../../../../assets/payment/prepaid.svg';
 
 interface Payment {
+  userInput: string;
   productsQuote: any;
   cartItems: any[];
   responseReceivedIds: string[];
@@ -47,6 +49,7 @@ interface Payment {
 const CancelToken = axios.CancelToken;
 
 const Payment: React.FC<Payment> = ({
+  userInput,
   activePaymentMethod,
   setActivePaymentMethod,
   closePaymentSheet,
@@ -287,6 +290,50 @@ const Payment: React.FC<Payment> = ({
   };
 
   useEffect(() => {
+    if (
+      !(
+        activePaymentMethod === '' ||
+        productsQuote.isError ||
+        confirmOrderLoading ||
+        initializeOrderLoading ||
+        initFailed
+      )
+    ) {
+      if (userInput) {
+        const input = userInput.toLowerCase();
+        if (compareIgnoringSpaces('proceed to pay', input)) {
+          handleConfirmOrder();
+        }
+      }
+    } else if (userInput) {
+      const input = userInput.toLowerCase();
+      if (!initializeOrderLoading) {
+        if (/^(select|choose)\b/i.test(input)) {
+          const paymentOption = input
+            .replace('select', '')
+            .replace('choose', '')
+            .trim();
+          if (
+            compareIgnoringSpaces(paymentOption, 'prepaid') ||
+            compareIgnoringSpaces(paymentOption, 'prepared')
+          ) {
+            updatePaymentMethod(ORDER_PAYMENT_METHODS.PREPAID);
+          } else if (compareIgnoringSpaces(paymentOption, 'cash on delivery')) {
+            updatePaymentMethod(ORDER_PAYMENT_METHODS.COD);
+          }
+        }
+      }
+    }
+  }, [
+    userInput,
+    activePaymentMethod,
+    productsQuote,
+    confirmOrderLoading,
+    initializeOrderLoading,
+    initFailed,
+  ]);
+
+  useEffect(() => {
     if (updatedCartItemsData) {
       updatedCartItems.current = updatedCartItemsData;
     }
@@ -302,6 +349,7 @@ const Payment: React.FC<Payment> = ({
         </View>
         <View style={styles.paymentContainer}>
           <TouchableOpacity
+            disabled={initializeOrderLoading}
             style={styles.paymentOption}
             onPress={() => updatePaymentMethod(ORDER_PAYMENT_METHODS.PREPAID)}>
             <View
@@ -332,6 +380,7 @@ const Payment: React.FC<Payment> = ({
           </TouchableOpacity>
           <View style={styles.separator} />
           <TouchableOpacity
+            disabled={initializeOrderLoading}
             style={styles.paymentOption}
             onPress={() => updatePaymentMethod(ORDER_PAYMENT_METHODS.COD)}>
             <View

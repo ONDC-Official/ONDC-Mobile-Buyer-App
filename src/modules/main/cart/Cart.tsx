@@ -1,5 +1,11 @@
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {ActivityIndicator, Button, Card, Text} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Button,
+  Card,
+  ProgressBar,
+  Text,
+} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -7,6 +13,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
+  compareIgnoringSpaces,
   getPriceWithCustomisations,
   isItemCustomization,
   showToastWithGravity,
@@ -20,6 +27,8 @@ import Payment from './components/Payment';
 import useConfirmItems from '../../../hooks/useConfirmItems';
 import CloseSheetContainer from '../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../utils/theme';
+import useReadAudio from '../../../hooks/useReadAudio';
+import {VIEW_DELIVERY_OPTIONS_COMMAND} from '../../../utils/constants';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
@@ -32,6 +41,7 @@ const Cart = () => {
   const isFocused = useIsFocused();
   const addressSheet = useRef<any>();
   const fulfillmentSheet = useRef<any>();
+  const fulfillmentSheetShown = useRef<boolean>(false);
   const paymentSheet = useRef<any>();
   const [selectedFulfillmentList, setSelectedFulfillmentList] = useState<any[]>(
     [],
@@ -45,7 +55,10 @@ const Cart = () => {
   const [cartTotal, setCartTotal] = useState<string>('0');
   const [providerWiseItems, setProviderWiseItems] = useState<any[]>([]);
 
-  const openFulfillmentSheet = () => fulfillmentSheet.current.open();
+  const openFulfillmentSheet = () => {
+    fulfillmentSheet.current.open();
+    fulfillmentSheetShown.current = true;
+  };
 
   const closePaymentSheet = () => {
     setActivePaymentMethod('');
@@ -77,6 +90,15 @@ const Cart = () => {
     setActivePaymentMethod,
   } = useConfirmItems(closePaymentSheet);
 
+  const {language} = useSelector(({authReducer}) => authReducer);
+  const {
+    startVoice,
+    userInteractionStarted,
+    userInput,
+    stopAndDestroyVoiceListener,
+    setAllowRestarts,
+  } = useReadAudio(language);
+
   const showQuoteError = () => {
     let msg: string = quoteItemProcessing
       ? `Looks like Quote mapping for item: ${quoteItemProcessing} is invalid! Please check!`
@@ -85,6 +107,7 @@ const Cart = () => {
   };
 
   const showPaymentOption = () => {
+    fulfillmentSheetShown.current = false;
     updateSelectedItemsForInit();
     fulfillmentSheet.current.close();
     paymentSheet.current.open();
@@ -98,6 +121,20 @@ const Cart = () => {
   const navigateToHome = () => {
     navigation.navigate('Dashboard');
   };
+
+  useEffect(() => {
+    if (userInput.length > 0) {
+      const input = userInput.toLowerCase();
+      if (VIEW_DELIVERY_OPTIONS_COMMAND.includes(input)) {
+        onCheckoutFromCart(deliveryAddress).then(() => {});
+      } else if (
+        fulfillmentSheetShown.current &&
+        compareIgnoringSpaces('proceed to pay', input)
+      ) {
+        showPaymentOption();
+      }
+    }
+  }, [userInput, deliveryAddress]);
 
   useEffect(() => {
     try {
@@ -440,7 +477,9 @@ const Cart = () => {
 
   useEffect(() => {
     if (isFocused) {
-      getCartItems().then(() => {});
+      getCartItems().then(() => {
+        startVoice().then(() => {});
+      });
     }
   }, [isFocused]);
 
@@ -461,6 +500,9 @@ const Cart = () => {
 
   return (
     <>
+      {userInteractionStarted && (
+        <ProgressBar indeterminate color={theme.colors.success600} />
+      )}
       <View style={styles.pageContainer}>
         {loading ? (
           <View style={styles.loadingContainer}>
@@ -599,6 +641,7 @@ const Cart = () => {
           container: styles.rbSheet,
         }}>
         <Payment
+          userInput={userInput}
           productsQuote={productsQuote}
           cartItems={selectedItemsForInit}
           updatedCartItemsData={selectedItems}

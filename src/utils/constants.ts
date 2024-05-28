@@ -130,6 +130,11 @@ export const START_AUDIO_LISTENER_COMMAND: string[] = [
   'hello saarathi',
 ];
 
+export const VIEW_DELIVERY_OPTIONS_COMMAND: string[] = [
+  'view delivery options',
+  'view delivery option',
+];
+
 export const numberWords: any = {
   one: 1,
   two: 2,
