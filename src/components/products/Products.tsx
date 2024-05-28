@@ -143,6 +143,10 @@ const Products: React.FC<Products> = ({
             navigation.navigate('ProductDetails', {productId: product.id});
           });
         }
+      } else if (compareIgnoringSpaces('go to cart', input)) {
+        stopAndDestroyVoiceListener().then(() => {
+          navigation.navigate('Cart');
+        });
       }
     }
   }, [userInput, products]);

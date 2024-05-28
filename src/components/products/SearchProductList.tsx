@@ -136,6 +136,10 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
             navigation.navigate('BrandDetails', routeParams);
           });
         }
+      } else if (compareIgnoringSpaces('go to cart', input)) {
+        stopAndDestroyVoiceListener().then(() => {
+          navigation.navigate('Cart');
+        });
       }
     }
   }, [userInput, products]);

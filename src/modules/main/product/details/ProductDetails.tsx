@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {
   ActivityIndicator,
@@ -7,10 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Text} from 'react-native-paper';
+import {ProgressBar, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
+import {useFocusEffect} from '@react-navigation/native';
+
 import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -20,17 +22,22 @@ import {
   FASHION_DOMAIN,
   FB_DOMAIN,
   GROCERY_DOMAIN,
+  numberWords,
 } from '../../../../utils/constants';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import VariationsRenderer from '../../../../components/products/VariationsRenderer';
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
-import {showToastWithGravity} from '../../../../utils/utils';
+import {
+  compareIgnoringSpaces,
+  showToastWithGravity,
+} from '../../../../utils/utils';
 import {makeGlobalStyles} from '../../../../styles/styles';
 import {updateCartItems} from '../../../../redux/cart/actions';
 import Page from '../../../../components/page/Page';
 import AboutProduct from './components/AboutProduct';
 import {useAppTheme} from '../../../../utils/theme';
+import useReadAudio from '../../../../hooks/useReadAudio';
 
 interface ProductDetails {
   route: any;
@@ -63,6 +70,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   navigation,
   route: {params},
 }) => {
+  const voiceDetectionStarted = useRef<boolean>(false);
   const {t} = useTranslation();
   const firstTime = useRef<boolean>(true);
   const {uid} = useSelector(({authReducer}) => authReducer);
@@ -71,6 +79,15 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
+  const {language} = useSelector(({authReducer}) => authReducer);
+  const {
+    startVoice,
+    userInteractionStarted,
+    userInput,
+    stopAndDestroyVoiceListener,
+    setAllowRestarts,
+  } = useReadAudio(language);
+  const currentCartItem = useRef<any>(null);
 
   const [product, setProduct] = useState<any>(null);
   const [apiRequested, setApiRequested] = useState<boolean>(true);
@@ -124,6 +141,8 @@ const ProductDetails: React.FC<ProductDetails> = ({
       navigation.setOptions({
         title: data?.provider_details?.descriptor?.name,
       });
+      voiceDetectionStarted.current = true;
+      startVoice().then(() => {});
       await getCartItems(data.id);
     } catch (error) {
       handleApiError(error);
@@ -207,9 +226,11 @@ const ProductDetails: React.FC<ProductDetails> = ({
         if (findItem) {
           isItemAvailable = true;
           setItemAvailableInCart(findItem);
+          currentCartItem.current = findItem;
         }
         setIsItemAvailableInCart(isItemAvailable);
       } else {
+        currentCartItem.current = null;
         setItemAvailableInCart(null);
         setIsItemAvailableInCart(false);
       }
@@ -232,6 +253,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
   const addToCart = async (navigate = false, isIncrement = true) => {
     try {
+      console.log('Add to cart');
       setAddToCartLoading(true);
       source.current = CancelToken.source();
       const url = `${API_BASE_URL}${CART}/${uid}`;
@@ -343,10 +365,31 @@ const ProductDetails: React.FC<ProductDetails> = ({
         }
       }
       if (navigate) {
-        navigation.navigate('Cart');
+        stopAndDestroyVoiceListener().then(() => {
+          navigation.navigate('Cart');
+        });
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const addQuantitiesToCart = async (max: number) => {
+    console.log('Add quantities to cart', max);
+    for (let index = 0; index < max; index++) {
+      await addToCart(false, true);
+    }
+  };
+
+  const removeQuantitiesToCart = async (max: number) => {
+    console.log('Remove quantities to cart', max);
+    for (let index = 0; index < max; index++) {
+      if (currentCartItem.current.item.quantity.count === 1) {
+        await deleteCartItem(currentCartItem.current._id);
+        break;
+      } else {
+        await addToCart(false, false);
+      }
     }
   };
 
@@ -360,6 +403,57 @@ const ProductDetails: React.FC<ProductDetails> = ({
     };
   }, [params]);
 
+  useEffect(() => {
+    if (userInput.length > 0) {
+      const input = userInput.toLowerCase();
+      if (/^(add)\b/i.test(input)) {
+        const quantityMessage = input.replace('add', '').trim();
+        const regex =
+          /(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+quantit(?:y|ies)\b/;
+
+        // Use match method to find matches
+        const match = quantityMessage.match(regex);
+        console.log('quantityMessage', quantityMessage, match);
+        if (match) {
+          const value = match[1];
+          const max = parseInt(value, 10) || numberWords[value.toLowerCase()];
+          if (max > 0) {
+            addQuantitiesToCart(max).then(() => {});
+          }
+        }
+      } else if (/^(remove|substract)\b/i.test(input)) {
+        const quantityMessage = input
+          .replace('remove', '')
+          .replace('substract', '')
+          .trim();
+        const regex =
+          /(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+quantit(?:y|ies)\b/;
+
+        // Use match method to find matches
+        const match = quantityMessage.match(regex);
+        if (match) {
+          const value = match[1];
+          const max = parseInt(value, 10) || numberWords[value.toLowerCase()];
+          if (max > 0) {
+            removeQuantitiesToCart(max).then(() => {});
+          }
+        }
+      } else if (compareIgnoringSpaces('go to cart', input)) {
+        stopAndDestroyVoiceListener().then(() => {
+          navigation.navigate('Cart');
+        });
+      }
+    }
+  }, [userInput]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (voiceDetectionStarted.current) {
+        setAllowRestarts();
+      }
+    }, []),
+  );
+
   if (apiRequested) {
     return <ProductSkeleton />;
   }
@@ -372,6 +466,9 @@ const ProductDetails: React.FC<ProductDetails> = ({
   return (
     <View style={styles.container}>
       <Page>
+        {userInteractionStarted && (
+          <ProgressBar indeterminate color={theme.colors.success600} />
+        )}
         <ScrollView
           style={styles.container}
           showsVerticalScrollIndicator={false}>
