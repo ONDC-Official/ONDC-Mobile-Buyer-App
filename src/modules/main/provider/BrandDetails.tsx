@@ -82,7 +82,9 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   };
 
   useEffect(() => {
-    getProviderDetails().then(() => {});
+    if (isFocused) {
+      getProviderDetails().then(() => {});
+    }
 
     return () => {
       if (source.current) {

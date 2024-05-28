@@ -10,10 +10,6 @@ export default (language: string) => {
   const [userInput, setUserInput] = useState<string>('');
   const allowRestart = useRef<boolean>(true);
 
-  const onSpeechPartialResults = (event: any) => {
-    console.log('onSpeechPartialResults', event.value);
-  };
-
   const onSpeechResults = async (event: any) => {
     console.log('onSpeechResults', userInteractionStarted, event.value);
     if (!userLatestInteraction.current) {
@@ -30,6 +26,7 @@ export default (language: string) => {
 
   const restartVoice = async () => {
     try {
+      console.log('allowRestart.current', allowRestart.current);
       if (allowRestart.current) {
         await Voice.stop();
         await startVoice();
@@ -73,13 +70,12 @@ export default (language: string) => {
   };
 
   const setAllowRestarts = () => {
+    console.log('Set Allow restart called');
     allowRestart.current = true;
   };
 
   useEffect(() => {
-    console.log('Use Effect');
     Voice.onSpeechResults = onSpeechResults;
-    Voice.onSpeechPartialResults = onSpeechPartialResults;
     Voice.onSpeechEnd = onSpeechEnd;
     Voice.onSpeechError = onSpeechError;
 

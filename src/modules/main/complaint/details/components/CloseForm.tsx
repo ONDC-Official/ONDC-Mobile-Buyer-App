@@ -67,14 +67,12 @@ const CloseForm = ({
         },
       };
 
-      console.log(JSON.stringify(formData, undefined, 4));
       source.current = CancelToken.source();
       const {data} = await postDataWithAuth(
         `${API_BASE_URL}${RAISE_ISSUE}`,
         formData,
         source.current.token,
       );
-      console.log(JSON.stringify(data, undefined, 4));
       //Error handling workflow eg, NACK
       if (data.message && data.message.ack.status === 'NACK') {
         showToastWithGravity('Something went wrong');

@@ -28,6 +28,7 @@ interface SearchProductList {
 const CancelToken = axios.CancelToken;
 
 const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
+  const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
   const productSearchSource = useRef<any>(null);
   const {t} = useTranslation();
@@ -142,6 +143,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   useEffect(() => {
     if (searchQuery?.length > 2) {
       searchProducts(page).then(() => {
+        voiceDetectionStarted.current = true;
         startVoice().then(() => {});
       });
     } else {
@@ -152,7 +154,9 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
 
   useFocusEffect(
     useCallback(() => {
-      setAllowRestarts();
+      if (voiceDetectionStarted.current) {
+        setAllowRestarts();
+      }
     }, []),
   );
 
