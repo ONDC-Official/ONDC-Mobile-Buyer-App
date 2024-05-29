@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Linking, StyleSheet, View} from 'react-native';
+import {Linking, NativeModules, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Text} from 'react-native-paper';
 import DeviceInfo, {getVersion} from 'react-native-device-info';
@@ -15,6 +15,7 @@ import {saveAddress} from '../../../redux/address/actions';
 import {getUrlParams} from '../../../utils/utils';
 import {alertWithOneButton} from '../../../utils/alerts';
 import AppLogo from '../../../assets/app_logo.svg';
+const {RootCheck} = NativeModules;
 
 interface Splash {
   navigation: any;
@@ -31,6 +32,10 @@ const Splash: React.FC<Splash> = ({navigation}) => {
   const styles = makeStyles();
 
   const {t} = useTranslation();
+
+  const checkMagisk = async () => {
+    return await RootCheck.isMagiskPresent();
+  };
 
   const checkLanguage = async (language: any, pageParams: any) => {
     if (!language) {
@@ -182,7 +187,18 @@ const Splash: React.FC<Splash> = ({navigation}) => {
                 () => {},
               );
             } else {
-              processLink();
+              checkMagisk().then(isPresent => {
+                if (isPresent) {
+                  alertWithOneButton(
+                    'Alert',
+                    'This application can not be used on the rooted device',
+                    'Ok',
+                    () => {},
+                  );
+                } else {
+                  processLink();
+                }
+              });
             }
           });
         }
