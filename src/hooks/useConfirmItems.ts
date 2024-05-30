@@ -23,7 +23,7 @@ import useNetworkErrorHandling from './useNetworkErrorHandling';
 import {updateTransactionId} from '../redux/auth/actions';
 
 const CancelToken = axios.CancelToken;
-export default (closePaymentSheet: () => void) => {
+export default (closePaymentSheet: () => void, stopAndDestroyVoiceListener: () => void) => {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
   const responseRef = useRef<any[]>([]);
@@ -283,6 +283,7 @@ export default (closePaymentSheet: () => void) => {
         await removeData('parent_and_transaction_id_map');
         dispatch(updateTransactionId(transactionId));
         closePaymentSheet();
+        stopAndDestroyVoiceListener();
         navigation.navigate('OrderDetails', {
           orderId: responseRef.current[0].message?.order?.id,
         });

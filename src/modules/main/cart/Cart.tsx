@@ -6,10 +6,14 @@ import {
   ProgressBar,
   Text,
 } from 'react-native-paper';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
@@ -33,6 +37,7 @@ import {VIEW_DELIVERY_OPTIONS_COMMAND} from '../../../utils/constants';
 const screenHeight: number = Dimensions.get('screen').height;
 
 const Cart = () => {
+  const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -81,15 +86,6 @@ const Cart = () => {
     updateSelectedItemsForInit,
   } = useSelectItems(openFulfillmentSheet);
 
-  const {
-    confirmOrderLoading,
-    handleConfirmOrder,
-    deliveryAddress,
-    setDeliveryAddress,
-    activePaymentMethod,
-    setActivePaymentMethod,
-  } = useConfirmItems(closePaymentSheet);
-
   const {language} = useSelector(({authReducer}) => authReducer);
   const {
     startVoice,
@@ -98,6 +94,15 @@ const Cart = () => {
     stopAndDestroyVoiceListener,
     setAllowRestarts,
   } = useReadAudio(language);
+
+  const {
+    confirmOrderLoading,
+    handleConfirmOrder,
+    deliveryAddress,
+    setDeliveryAddress,
+    activePaymentMethod,
+    setActivePaymentMethod,
+  } = useConfirmItems(closePaymentSheet, stopAndDestroyVoiceListener);
 
   const showQuoteError = () => {
     let msg: string = quoteItemProcessing
@@ -119,8 +124,18 @@ const Cart = () => {
   };
 
   const navigateToHome = () => {
-    navigation.navigate('Dashboard');
+    stopAndDestroyVoiceListener().then(() => {
+      navigation.navigate('Dashboard');
+    });
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (voiceDetectionStarted.current) {
+        setAllowRestarts();
+      }
+    }, []),
+  );
 
   useEffect(() => {
     if (userInput.length > 0) {
@@ -478,6 +493,7 @@ const Cart = () => {
   useEffect(() => {
     if (isFocused) {
       getCartItems().then(() => {
+        voiceDetectionStarted.current = true;
         startVoice().then(() => {});
       });
     }
