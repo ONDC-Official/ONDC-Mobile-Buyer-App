@@ -82,6 +82,11 @@
       "Cash on delivery": "कॅश ओन डिलिव्हरी",
       "Prepaid": "प्रीपेड",
       "Proceed to Buy": "पैसे भरण्यासाठी पुढे जा"
+    },
+    "Reference": {
+      "reference app": "संदर्भ अॅप",
+      "This is reference app": "हे केवळ एक संदर्भ अॅप आहे, त्यामुळे आम्ही सध्या ऑर्डर देऊ शकत नाही.",
+      "ok": "ठीक आहे."
     }
   },
   "Cart Items": {

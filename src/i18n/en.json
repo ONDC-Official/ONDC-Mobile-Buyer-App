@@ -82,6 +82,11 @@
       "Cash on delivery": "Cash on delivery",
       "Prepaid": "Prepaid",
       "Proceed to Buy": "Proceed to Pay"
+    },
+    "Reference": {
+      "reference app": "Reference app",
+      "This is reference app": "This is only a reference app, so we cant place the order at the moment",
+      "ok": "Ok"
     }
   },
   "Cart Items": {
