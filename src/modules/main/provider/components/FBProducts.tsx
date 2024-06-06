@@ -4,6 +4,7 @@ import FastImage from 'react-native-fast-image';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {API_BASE_URL, CUSTOM_MENU, ITEMS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -14,6 +15,7 @@ import ProductSearch from '../../../../components/products/ProductSearch';
 
 const CancelToken = axios.CancelToken;
 const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const customMenuSource = useRef<any>(null);
@@ -109,7 +111,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
             style={styles.filterIcon}
           />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>
-            Veg
+            {t('Cart.Veg')}
           </Text>
           {selectedFilter === 'veg' && (
             <Icon
@@ -135,7 +137,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
             style={styles.filterIcon}
           />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>
-            Non-veg
+            {t('Cart.Non Veg')}
           </Text>
           {selectedFilter === 'nonveg' && (
             <Icon
@@ -161,7 +163,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
             style={styles.filterIcon}
           />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>
-            Egg
+            {t('Cart.Egg')}
           </Text>
           {selectedFilter === 'egg' && (
             <Icon
