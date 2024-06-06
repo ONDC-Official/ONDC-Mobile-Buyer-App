@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {List, Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import FBProduct from './FBProduct';
@@ -14,7 +14,6 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
   section,
   selectedFilter,
 }) => {
-  const [expanded, setExpanded] = useState<boolean>(true);
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -22,8 +21,7 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
 
   return (
     <List.Accordion
-      expanded={expanded}
-      onPress={() => setExpanded(!expanded)}
+      id={section.id}
       style={styles.accordion}
       title={
         <Text variant={'headlineSmall'} style={styles.heading}>

@@ -98,16 +98,49 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
 
   const removeQuantityClick = () => {
     if (cartItemDetails?.items.length === 1) {
-      const cartItem = cartItems[0];
+      const cartItem = cartItemDetails?.items[0];
       if (cartItem?.item?.quantity?.count === 1) {
-        deleteCartItem(cartItem?._id).then(() => {});
+        setProductLoading(true);
+        deleteCartItem(cartItem?._id)
+          .then(() => {
+            setProductLoading(false);
+          })
+          .catch(() => {
+            setProductLoading(false);
+          });
       } else {
-        updateSpecificItem(cartItem?.item?.id, false, cartItem?._id).then(
-          () => {},
-        );
+        setProductLoading(true);
+        updateSpecificItem(cartItem?.item?.id, false, cartItem?._id)
+          .then(() => {
+            setProductLoading(false);
+          })
+          .catch(() => {
+            setProductLoading(false);
+          });
       }
     } else {
       showQuantitySheet();
+    }
+  };
+
+  const incrementProductQuantity = async () => {
+    if (customizable) {
+      showQuantitySheet();
+    } else {
+      let items: any[] = cartItems.filter(
+        (ci: any) => ci.item.id === product.id,
+      );
+      console.log(items.length);
+      if (items.length > 0) {
+        try {
+          setProductLoading(true);
+          await updateSpecificItem(items[0]?.item?.id, true, items[0]?._id);
+        } catch (e) {
+          console.log(e);
+        } finally {
+          setProductLoading(false);
+        }
+      }
     }
   };
 
@@ -134,7 +167,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         await getProductDetails();
       }
     } else {
-      showToastWithGravity('Product added to cart');
+      await addNonCustomizableProduct();
     }
   };
 
@@ -256,6 +289,62 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     }
   };
 
+  const addNonCustomizableProduct = async () => {
+    try {
+      setApiInProgress(true);
+      productSource.current = CancelToken.source();
+      const {data} = await getDataWithAuth(
+        `${API_BASE_URL}${ITEM_DETAILS}?id=${product.id}`,
+        productSource.current.token,
+      );
+      const details = data.response;
+      setProductDetails(details);
+
+      const url = `${API_BASE_URL}${CART}/${uid}`;
+
+      const subtotal = details?.item_details?.price?.value;
+
+      const payload: any = {
+        id: details.id,
+        local_id: details.local_id,
+        bpp_id: details.bpp_details.bpp_id,
+        bpp_uri: details.context.bpp_uri,
+        contextCity: details.context.city,
+        domain: details.context.domain,
+        tags: details.item_details.tags,
+        customisationState: customizationState,
+        quantity: {
+          count: itemQty,
+        },
+        provider: {
+          id: details.bpp_details.bpp_id,
+          locations: details.locations,
+          ...details.provider_details,
+        },
+        product: {
+          id: details.id,
+          subtotal,
+          ...details.item_details,
+        },
+        customisations: null,
+        hasCustomisations: false,
+      };
+
+      source.current = CancelToken.source();
+      await postDataWithAuth(url, payload, source.current.token);
+      setCustomizationState({});
+      showToastWithGravity(
+        t('Product Summary.Item added to cart successfully'),
+      );
+      await getCartItems();
+      setProductLoading(false);
+    } catch (error) {
+      handleApiError(error);
+    } finally {
+      setApiInProgress(false);
+    }
+  };
+
   const getProductDetails = async (preventCustomizeOpening = false) => {
     try {
       setApiInProgress(true);
@@ -301,9 +390,12 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         `${API_BASE_URL}${CART}/${uid}/${itemId}`,
         source.current.token,
       );
+      console.log('Before', cartItems.length);
       const list = cartItems.filter((item: any) => item._id !== itemId);
+      console.log('After', list.length);
       dispatch(updateCartItems(list));
     } catch (error) {
+      console.log(error);
     } finally {
       setItemToDelete(null);
     }
@@ -321,6 +413,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       );
       setCartItemDetails({items, productQuantity});
     } else {
+      console.log('Set product quantity 0');
       setCartItemDetails({items: [], productQuantity: 0});
       quantitySheet.current.close();
     }
@@ -413,11 +506,15 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                       ? globalStyles.disabledOutlineButtonText
                       : globalStyles.outlineButtonText,
                   ]}>
-                  {cartItemDetails?.productQuantity}
+                  {productLoading ? (
+                    <ActivityIndicator size={18} />
+                  ) : (
+                    cartItemDetails?.productQuantity
+                  )}
                 </Text>
                 <TouchableOpacity
                   disabled={disabled}
-                  onPress={showQuantitySheet}>
+                  onPress={incrementProductQuantity}>
                   <Icon name={'plus'} color={theme.colors.primary} size={18} />
                 </TouchableOpacity>
               </View>
@@ -448,7 +545,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                   ]}>
                   {t('Cart.FBProduct.Add')}
                 </Text>
-                {apiInProgress ? (
+                {apiInProgress || productLoading ? (
                   <ActivityIndicator size={18} />
                 ) : (
                   <Icon

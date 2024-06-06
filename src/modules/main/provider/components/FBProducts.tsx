@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {Text} from 'react-native-paper';
+import {List, Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -23,6 +23,9 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
   const [menu, setMenu] = useState<any[]>([]);
   const [menuRequested, setMenuRequested] = useState<boolean>(true);
   const [selectedFilter, setSelectedFilter] = useState<string>('');
+  const [expandedAccordionId, setExpandedAccordionId] = useState<
+    string | number
+  >('');
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -42,12 +45,15 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
           ),
         ),
       );
-      setMenu(
-        data.data.map((one: any, index: number) => {
-          one.items = menuResponses[index].data.data;
-          return one;
-        }),
-      );
+      const list = data.data.map((one: any, index: number) => {
+        one.items = menuResponses[index].data.data;
+        return one;
+      });
+
+      if (list.length > 0) {
+        setExpandedAccordionId(list[0].id);
+      }
+      setMenu(list);
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -181,13 +187,17 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
           setSearchQuery={setSearchQuery}
         />
       </View>
-      {filteredSections.map(section => (
-        <CustomMenuAccordion
-          key={section.id}
-          section={section}
-          selectedFilter={selectedFilter}
-        />
-      ))}
+      <List.AccordionGroup
+        expandedId={expandedAccordionId}
+        onAccordionPress={expandedId => setExpandedAccordionId(expandedId)}>
+        {filteredSections.map(section => (
+          <CustomMenuAccordion
+            key={section.id}
+            section={section}
+            selectedFilter={selectedFilter}
+          />
+        ))}
+      </List.AccordionGroup>
     </View>
   );
 };

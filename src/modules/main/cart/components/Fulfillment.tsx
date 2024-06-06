@@ -372,7 +372,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                     }
                                   } else {
                                     tatMessage = t('Fulfillment.Delivered by', {
-                                      time: expectedTime.format('dddd D MMM'),
+                                      date: expectedTime.format('dddd D MMM'),
                                     });
                                   }
                                 }
