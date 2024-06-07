@@ -24,6 +24,45 @@ const ProductSummary = ({
   const styles = makeStyles(theme.colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
+  const renderTaxes = () => {
+    const data = quote?.breakup?.filter(
+      (one: any) => one['@ondc/org/title_type'] !== 'item',
+    );
+    const summedData = data.reduce((acc, curr) => {
+      const title = curr.title;
+      const value = parseFloat(curr.price.value);
+
+      if (!acc[title]) {
+        acc[title] = {
+          title: title,
+          price: {
+            currency: curr.price.currency,
+            value: 0,
+          },
+        };
+      }
+
+      acc[title].price.value += value;
+
+      return acc;
+    }, {});
+
+    return (
+      <View style={styles.summaryContainer}>
+        {Object.values(summedData)?.map((one: any) => (
+          <View key={one?.title} style={styles.summaryRow}>
+            <Text variant={'labelMedium'} style={styles.taxName}>
+              {one?.title}
+            </Text>
+            <Text variant={'labelMedium'} style={styles.taxValue}>
+              {CURRENCY_SYMBOLS[one?.price?.currency]}
+              {one?.price?.value.toFixed(2)}
+            </Text>
+          </View>
+        ))}
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -159,21 +198,7 @@ const ProductSummary = ({
           </View>
         );
       })}
-      <View style={styles.summaryContainer}>
-        {quote?.breakup
-          ?.filter((one: any) => one['@ondc/org/title_type'] !== 'item')
-          .map((one: any) => (
-            <View key={one?.title} style={styles.summaryRow}>
-              <Text variant={'labelMedium'} style={styles.taxName}>
-                {one?.title}
-              </Text>
-              <Text variant={'labelMedium'} style={styles.taxValue}>
-                {CURRENCY_SYMBOLS[one?.price?.currency]}
-                {one?.price?.value}
-              </Text>
-            </View>
-          ))}
-      </View>
+      {renderTaxes()}
       <View style={styles.divider} />
       <View style={styles.grossTotal}>
         <Text variant={'titleMedium'} style={styles.grossTotalLabel}>

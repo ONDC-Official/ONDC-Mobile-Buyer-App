@@ -130,7 +130,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       let items: any[] = cartItems.filter(
         (ci: any) => ci.item.id === product.id,
       );
-      console.log(items.length);
       if (items.length > 0) {
         try {
           setProductLoading(true);
@@ -390,9 +389,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         `${API_BASE_URL}${CART}/${uid}/${itemId}`,
         source.current.token,
       );
-      console.log('Before', cartItems.length);
       const list = cartItems.filter((item: any) => item._id !== itemId);
-      console.log('After', list.length);
       dispatch(updateCartItems(list));
     } catch (error) {
       console.log(error);
@@ -413,7 +410,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       );
       setCartItemDetails({items, productQuantity});
     } else {
-      console.log('Set product quantity 0');
       setCartItemDetails({items: [], productQuantity: 0});
       quantitySheet.current.close();
     }

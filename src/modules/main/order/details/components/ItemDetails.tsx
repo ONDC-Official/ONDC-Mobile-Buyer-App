@@ -204,9 +204,14 @@ const ItemDetails = ({
             {t('Profile.Shipment Details')}
           </Text>
           {shipmentFulfillmentList?.map((fulfillment: any) => {
-            const endDate = fulfillment?.end?.time?.timestamp
-              ? moment(fulfillment?.end?.time?.timestamp)
-              : moment(fulfillment?.end?.time?.range?.end);
+            let endDate = moment();
+            if (fulfillment.hasOwnProperty('@ondc/org/TAT')) {
+              endDate.add(moment.duration(fulfillment['@ondc/org/TAT']));
+            } else {
+              endDate = fulfillment?.end?.time?.timestamp
+                ? moment(fulfillment?.end?.time?.timestamp)
+                : moment(fulfillment?.end?.time?.range?.end);
+            }
             const filteredItems = items.filter(
               item => item.fulfillment_id === fulfillment.id,
             );
