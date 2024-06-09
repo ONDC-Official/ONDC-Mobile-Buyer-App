@@ -35,6 +35,6 @@ public class MainActivity extends ReactActivity {
   protected void onStart() {
     super.onStart();
     // Set WindowManager.LayoutParams flags to secure and no_history
-    getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+//    getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
   }
 }

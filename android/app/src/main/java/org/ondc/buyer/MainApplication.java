@@ -60,6 +60,6 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
-    OkHttpClientProvider.setOkHttpClientFactory(new SSLPinningFactory());
+//    OkHttpClientProvider.setOkHttpClientFactory(new SSLPinningFactory());
   }
 }
