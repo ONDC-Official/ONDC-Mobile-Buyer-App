@@ -6,8 +6,10 @@ import moment from 'moment';
 import CancelOrderButton from './CancelOrderButton';
 import {useAppTheme} from '../../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import useFormatDate from '../../../../../hooks/useFormatDate';
 
 const OrderMeta = () => {
+  const {formatDate} = useFormatDate();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -42,7 +44,7 @@ const OrderMeta = () => {
           {t('Order Meta.Date')}
         </Text>
         <Text variant={'bodyMedium'} style={styles.value}>
-          {moment(orderDetails?.createdAt).format('DD/MM/YY hh:mm a')}
+          {formatDate(moment(orderDetails?.createdAt), 'DD/MM/YY hh:mm a')}
         </Text>
       </View>
       <View style={styles.metaContainer}>

@@ -6,8 +6,10 @@ import React, {useMemo, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../../../../utils/theme';
+import useFormatDate from '../../../../../hooks/useFormatDate';
 
 const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
+  const {formatDate} = useFormatDate();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -72,7 +74,10 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
               {t('Shipment Details.Arriving On')}:
             </Text>
             <Text variant={'labelMedium'} style={styles.arrivalDate}>
-              {moment(fulfilment?.end?.time?.range?.end).format('DD-MM-YYYY')}
+              {formatDate(
+                moment(fulfilment?.end?.time?.range?.end),
+                'DD-MM-YYYY',
+              )}
             </Text>
           </View>
         ) : (
@@ -81,7 +86,7 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
               {t('Shipment Details.Delivered On')}:
             </Text>
             <Text variant={'labelMedium'} style={styles.arrivalDate}>
-              {moment(orderDetails?.updatedAt).format('DD-MM-YYYY')}
+              {formatDate(moment(orderDetails?.updatedAt), 'DD-MM-YYYY')}
             </Text>
           </View>
         )}
@@ -110,7 +115,7 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
               </Text>
             </View>
             <Text variant={'labelMedium'} style={styles.timestamp}>
-              {moment(history?.createdAt).format('ddd, DD MMM hh:mm A')}
+              {formatDate(moment(history?.createdAt), 'ddd, DD MMM hh:mm A')}
             </Text>
           </View>
         ))}

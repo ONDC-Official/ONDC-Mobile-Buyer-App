@@ -6,8 +6,10 @@ import React, {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../../../../utils/theme';
+import useFormatDate from '../../../../../hooks/useFormatDate';
 
 const ReturnDetails = ({fulfilmentId}: {fulfilmentId: string}) => {
+  const {formatDate} = useFormatDate();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -48,7 +50,7 @@ const ReturnDetails = ({fulfilmentId}: {fulfilmentId: string}) => {
             {t('Return Details.Return On')}:
           </Text>
           <Text variant={'labelMedium'} style={styles.arrivalDate}>
-            {moment(returnInitiated.createdAt).format('DD-MM-YYYY')}
+            {formatDate(moment(returnInitiated.createdAt), 'DD-MM-YYYY')}
           </Text>
         </View>
         <Icon
@@ -71,7 +73,7 @@ const ReturnDetails = ({fulfilmentId}: {fulfilmentId: string}) => {
               </Text>
             </View>
             <Text variant={'labelMedium'} style={styles.timestamp}>
-              {moment(history?.createdAt).format('ddd, DD MMM hh:mm A')}
+              {formatDate(moment(history?.createdAt), 'ddd, DD MMM hh:mm A')}
             </Text>
           </View>
         ))}

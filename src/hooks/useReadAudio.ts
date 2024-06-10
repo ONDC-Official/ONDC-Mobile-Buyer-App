@@ -1,6 +1,5 @@
 import Voice from '@react-native-voice/voice';
 import {useEffect, useRef, useState} from 'react';
-import {getLocale} from '../utils/utils';
 import {START_AUDIO_LISTENER_COMMAND} from '../utils/constants';
 
 export default (language: string) => {

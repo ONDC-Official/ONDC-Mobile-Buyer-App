@@ -183,8 +183,8 @@
     "Please try ordering from another store or try again later": "অন্য দোকান থেকে অর্ডার করার চেষ্টা করুন বা পরে আবার চেষ্টা করুন",
     "Explore Other Stores": "অন্যান্য দোকান অন্বেষণ",
     "Fulfilment no": "{{total}} এর মধ্যে {{current}}",
-    "Delivered Today by": "{{time}} দ্বারা আজ বিতরিত",
-    "Delivered In": "{{time}} মধ্যে বিতরণ করা হয়েছে",
+    "Delivered Today by": "{{time}} আজ ডেলিভারি",
+    "Delivered In": "ডেলিভারি ইন {{time}}",
     "Delivered by": "{{date}} দ্বারা বিতরণ",
     "Self pickup by": "{{time}} দ্বারা স্ব-বাছাই"
   },
@@ -401,7 +401,7 @@
   },
   "Variations": {
     "Available Options": "উপলব্ধ {{groupName}} বিকল্প",
-    "Size Guide": "আকার গাইড"
+    "Size Guide": "আকারের তালিকা"
   },
   "Complaint": {
     "Issue Id": "ইস্যু আইডি",
@@ -572,7 +572,7 @@
     "Return_Failed": "প্রত্যাবর্তন ব্যর্থ",
     "Return_Rejected": "প্রত্যাখ্যাত ফেরত",
     "Pending": "মুলতুবি",
-    "Packed" : "প্যাক করা।",
+    "Packed": "প্যাক করা।",
     "Agent-assigned": "নিযুক্ত প্রতিনিধি",
     "Out-for-pickup": "পিকআপের জন্য বাইরে",
     "Pickup-failed": "সংগ্রহ ব্যর্থ হয়েছে",

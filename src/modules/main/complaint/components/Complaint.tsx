@@ -10,6 +10,7 @@ import {ISSUE_TYPES} from '../../../../utils/issueTypes';
 import {updateComplaint} from '../../../../redux/complaint/actions';
 import ComplaintStatus from './ComplaintStatus';
 import {useAppTheme} from '../../../../utils/theme';
+import useFormatDate from '../../../../hooks/useFormatDate';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -22,6 +23,7 @@ const categories = ISSUE_TYPES.map(item => {
 }).flat();
 
 const Complaint = ({complaint}: {complaint: any}) => {
+  const {formatDate} = useFormatDate();
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const theme = useAppTheme();
@@ -82,7 +84,7 @@ const Complaint = ({complaint}: {complaint: any}) => {
             {t('Complaint.Issue Raised On')}:{' '}
           </Text>
           <Text variant={'labelLarge'} style={styles.value}>
-            {moment(complaint?.created_at).format('DD MMM YYYY hh:mma')}
+            {formatDate(moment(complaint?.created_at), 'DD MMM YYYY hh:mma')}
           </Text>
         </View>
         <View style={styles.actionContainer}>

@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useMemo} from 'react';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
@@ -13,8 +13,6 @@ import {FlatList} from 'react-native-gesture-handler';
 interface SubCategories {
   currentCategory: string;
 }
-
-const screenWidth = Dimensions.get('screen').width;
 
 const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
   const {t} = useTranslation();

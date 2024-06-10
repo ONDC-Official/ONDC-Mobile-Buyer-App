@@ -17,6 +17,7 @@ import {useTranslation} from 'react-i18next';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
 import {makeGlobalStyles} from '../../../../styles/styles';
+import useFormatDate from '../../../../hooks/useFormatDate';
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -45,6 +46,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
 }) => {
   const {t} = useTranslation();
   const navigation = useNavigation<any>();
+  const {formatDate} = useFormatDate();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
@@ -327,7 +329,12 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                     ) {
                                       tatMessage = t(
                                         'Fulfillment.Self pickup by',
-                                        {time: expectedTime.format('hh:mm a')},
+                                        {
+                                          time: formatDate(
+                                            expectedTime,
+                                            'hh:mm a',
+                                          ),
+                                        },
                                       );
                                     } else {
                                       tatMessage = t(
@@ -345,7 +352,10 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                     tatMessage = t(
                                       'Fulfillment.Self pickup by',
                                       {
-                                        time: expectedTime.format('dddd D MMM'),
+                                        time: formatDate(
+                                          expectedTime,
+                                          'dddd D MMM',
+                                        ),
                                       },
                                     );
                                   }
@@ -356,7 +366,12 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                     ) {
                                       tatMessage = t(
                                         'Fulfillment.Delivered Today by',
-                                        {time: expectedTime.format('hh:mm a')},
+                                        {
+                                          time: formatDate(
+                                            expectedTime,
+                                            'hh:mm a',
+                                          ),
+                                        },
                                       );
                                     } else {
                                       tatMessage = t(
@@ -372,7 +387,10 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                     }
                                   } else {
                                     tatMessage = t('Fulfillment.Delivered by', {
-                                      date: expectedTime.format('dddd D MMM'),
+                                      date: formatDate(
+                                        expectedTime,
+                                        'dddd D MMM',
+                                      ),
                                     });
                                   }
                                 }

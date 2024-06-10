@@ -167,7 +167,7 @@
     "It seems you haven’t added any products in your cart": "ऐसा लगता है कि आपने अपने कार्ट में कोई उत्पाद नहीं जोड़ा है"
   },
   "Page": {
-    ", Go To Cart": ", , गो तो कार्ट",
+    ", Go To Cart": ", गो तो कार्ट",
     "Item Added": "आइटम जोड़ा गया",
     "Items Added": "आइटम जोड़े गए"
   },
@@ -183,8 +183,8 @@
     "Please try ordering from another store or try again later": "कृपया किसी अन्य स्टोर से ऑर्डर करने का प्रयास करें या बाद में पुनः प्रयास करें",
     "Explore Other Stores": "अन्य स्टोर खोजें",
     "Fulfilment no": "{{total}} में से {{current}}",
-    "Delivered Today by": "{{time}} द्वारा आज वितरित किया गया",
-    "Delivered In": "{{time}} में वितरित किया गया",
+    "Delivered Today by": "आज {{time}} बजे तक डिलीवरी",
+    "Delivered In": "डिलीवरी इन {{time}}",
     "Delivered by": "{{date}} द्वारा वितरित",
     "Self pickup by": "{{time}} द्वारा स्व-चयन करें"
   },
@@ -401,7 +401,7 @@
   },
   "Variations": {
     "Available Options": "उपलब्ध {{groupName}} विकल्प",
-    "Size Guide": "साइज़ संदर्शिका"
+    "Size Guide": "आकार चार्ट"
   },
   "Complaint": {
     "Issue Id": "अंक क्रमांक",

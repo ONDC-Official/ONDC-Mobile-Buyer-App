@@ -11,7 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {useAppTheme} from '../../../../../utils/theme';
 
-const AboutProduct = ({product, inStock}: {product: any, inStock: boolean}) => {
+const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -86,7 +86,9 @@ const AboutProduct = ({product, inStock}: {product: any, inStock: boolean}) => {
       <TouchableOpacity
         style={styles.accordionHeader}
         onPress={toggleAccordion}>
-        <Text variant={'titleLarge'} style={[styles.about, inStock ? {} : styles.disabledText]}>
+        <Text
+          variant={'titleLarge'}
+          style={[styles.about, inStock ? {} : styles.disabledText]}>
           {t('Cart.Product Details')}
         </Text>
         <Icon
@@ -103,7 +105,12 @@ const AboutProduct = ({product, inStock}: {product: any, inStock: boolean}) => {
                 {key}
               </Text>
               <View style={styles.aboutSeparator} />
-              <Text variant="bodyMedium" style={[styles.aboutDetails, inStock ? {} : styles.disabledText]}>
+              <Text
+                variant="bodyMedium"
+                style={[
+                  styles.aboutDetails,
+                  inStock ? {} : styles.disabledText,
+                ]}>
                 {attributes[key]}
               </Text>
             </View>

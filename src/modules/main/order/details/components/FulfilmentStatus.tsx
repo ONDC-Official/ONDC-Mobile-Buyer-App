@@ -4,6 +4,7 @@ import React from 'react';
 import moment from 'moment';
 import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../../../../utils/theme';
+import useFormatDate from '../../../../../hooks/useFormatDate';
 
 const return_end_states = [
   'Return_Delivered',
@@ -19,6 +20,7 @@ const FulfilmentStatus = ({
   code: string;
   fulfilment?: any;
 }) => {
+  const {formatDate} = useFormatDate();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -30,7 +32,7 @@ const FulfilmentStatus = ({
         {t(`Fulfilment Status.${code}`)}
         {returnPresent
           ? t('Fulfilment Status.on time', {
-              time: moment(fulfilment?.updatedAt).format('Do MMM'),
+              time: formatDate(moment(fulfilment?.updatedAt), 'Do MMM'),
             })
           : ''}
       </Text>

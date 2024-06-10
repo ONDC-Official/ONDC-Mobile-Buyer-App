@@ -16,6 +16,7 @@ import {
 import FulfilmentStatus from './FulfilmentStatus';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
+import useFormatDate from '../../../../../hooks/useFormatDate';
 
 const today = moment();
 
@@ -129,6 +130,7 @@ const ItemDetails = ({
   fulfillments: any[];
   items: any[];
 }) => {
+  const {formatDate} = useFormatDate();
   const {t} = useTranslation();
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
   const navigation = useNavigation<any>();
@@ -236,8 +238,8 @@ const ItemDetails = ({
                       </Text>
                       <Text variant={'labelSmall'} style={styles.deliveryDate}>
                         {today.isSame(endDate, 'day')
-                          ? endDate.format('hh:mm a')
-                          : endDate.format('Do MMM')}
+                          ? formatDate(endDate, 'hh:mm a')
+                          : formatDate(endDate, 'Do MMM')}
                       </Text>
                     </View>
                   ) : (
@@ -247,8 +249,8 @@ const ItemDetails = ({
                       </Text>
                       <Text variant={'labelSmall'} style={styles.deliveryDate}>
                         {today.isSame(endDate, 'day')
-                          ? endDate.format('hh:mm a')
-                          : endDate.format('Do MMM')}
+                          ? formatDate(endDate, 'hh:mm a')
+                          : formatDate(endDate, 'Do MMM')}
                       </Text>
                     </View>
                   )}
@@ -330,8 +332,14 @@ const ItemDetails = ({
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
                       {returnInitiated
                         ? today.isSame(moment(returnInitiated.createdAt), 'day')
-                          ? moment(returnInitiated.createdAt).format('hh:mm a')
-                          : moment(returnInitiated.createdAt).format('Do MMM')
+                          ? formatDate(
+                              moment(returnInitiated.createdAt),
+                              'hh:mm a',
+                            )
+                          : formatDate(
+                              moment(returnInitiated.createdAt),
+                              'Do MMM',
+                            )
                         : ''}
                     </Text>
                   </View>
@@ -426,8 +434,14 @@ const ItemDetails = ({
                     </Text>
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
                       {today.isSame(moment(cancelInitiated.createdAt), 'day')
-                        ? moment(cancelInitiated.createdAt).format('hh:mm a')
-                        : moment(cancelInitiated.createdAt).format('Do MMM')}
+                        ? formatDate(
+                            moment(cancelInitiated.createdAt),
+                            'hh:mm a',
+                          )
+                        : formatDate(
+                            moment(cancelInitiated.createdAt),
+                            'Do MMM',
+                          )}
                     </Text>
                   </View>
                   <View style={styles.statusContainer}>

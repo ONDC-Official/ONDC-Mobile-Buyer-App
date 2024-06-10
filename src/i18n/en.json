@@ -183,9 +183,9 @@
     "Please try ordering from another store or try again later": "Please try ordering from another store or try again later",
     "Explore Other Stores": "Explore Other Stores",
     "Fulfilment no": "{{current}} of {{total}}",
-    "Delivered Today by": "Delivered Today by {{time}}",
-    "Delivered In": "Delivered In {{time}}",
-    "Delivered by": "Delivered by {{date}}",
+    "Delivered Today by": "Delivery Today by {{time}}",
+    "Delivered In": "Delivery In {{time}}",
+    "Delivered by": "Delivery by {{date}}",
     "Self pickup by": "Self-Pickup by {{time}}"
   },
   "Featured Categories": {
@@ -401,7 +401,7 @@
   },
   "Variations": {
     "Available Options": "Available {{groupName}} Options",
-    "Size Guide": "Size Guide"
+    "Size Guide": "Size Chart"
   },
   "Complaint": {
     "Issue Id": "Issue Id",
@@ -572,7 +572,7 @@
     "Return_Failed": "Return Failed",
     "Return_Rejected": "Return Rejected",
     "Pending": "Pending",
-    "Packed" : "Packed",
+    "Packed": "Packed",
     "Agent-assigned": "Agent assigned",
     "Out-for-pickup": "Out for pickup",
     "Pickup-failed": "Pickup failed",

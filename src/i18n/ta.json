@@ -183,8 +183,8 @@
     "Please try ordering from another store or try again later": "வேறொரு கடையில் ஆர்டர் செய்ய முயற்சிக்கவும் அல்லது பிறகு முயற்சிக்கவும்",
     "Explore Other Stores": "மற்ற கடைகளை ஆராயுங்கள்",
     "Fulfilment no": "{{total}} இல் {{current}}",
-    "Delivered Today by": "மூலம் இன்று வழங்கப்பட்டது {{time}}",
-    "Delivered In": "உள்ளே வழங்கப்பட்டது {{time}}",
+    "Delivered Today by": "இன்று {{time}} மணிக்கு டெலிவரி",
+    "Delivered In": "டெலிவரி இன் {{time}}",
     "Delivered by": "மூலம் அனுப்பப்படும் {{date}}",
     "Self pickup by": "{{time}} மூலம் சுய-பிக்அப்"
   },
@@ -401,7 +401,7 @@
   },
   "Variations": {
     "Available Options": "{{groupName}} விருப்பங்கள் உள்ளன",
-    "Size Guide": "அளவு வழிகாட்டி"
+    "Size Guide": "அளவு விளக்கப்படம்"
   },
   "Complaint": {
     "Issue Id": "ஐடி வெளியீடு",

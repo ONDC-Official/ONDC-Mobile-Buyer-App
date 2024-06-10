@@ -183,8 +183,8 @@
     "Please try ordering from another store or try again later": "कृपया दुसऱ्या दुकानातून ऑर्डर करून पहा किंवा नंतर पुन्हा प्रयत्न करा",
     "Explore Other Stores": "इतर स्टोअर्स एक्सप्लोर करा",
     "Fulfilment no": "{{total}} पैकी {{current}}",
-    "Delivered Today by": "{{time}} वितरित केले",
-    "Delivered In": "{{time}} वितरित",
+    "Delivered Today by": "आज {{time}} वाजेपर्यंत वितरण",
+    "Delivered In": "डिलीवरी इन {{time}}",
     "Delivered by": "{{date}} द्वारा वितरित",
     "Self pickup by": "{{time}} द्वारे स्व-उचल"
   },
@@ -401,7 +401,7 @@
   },
   "Variations": {
     "Available Options": "उपलब्ध {{groupName}} पर्याय",
-    "Size Guide": "आकार मार्गदर्शक"
+    "Size Guide": "आकार तक्ता"
   },
   "Complaint": {
     "Issue Id": "अंक आयडी",
