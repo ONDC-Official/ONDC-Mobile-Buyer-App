@@ -22,8 +22,6 @@ import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import useNetworkHandling from './useNetworkHandling';
 import useNetworkErrorHandling from './useNetworkErrorHandling';
 import {updateTransactionId} from '../redux/auth/actions';
-import {alertWithOneButton} from '../utils/alerts';
-import {useTranslation} from 'react-i18next';
 
 const CancelToken = axios.CancelToken;
 export default (

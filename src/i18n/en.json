@@ -86,8 +86,9 @@
     },
     "Reference": {
       "reference app": "Reference app",
-      "This is reference app": "This is only a reference app, so we cant place the order at the moment",
-      "ok": "Ok"
+      "Reference App Message": "This is a White Labelled Reference App. Orders cannot be placed",
+      "Refer manual": "Refer to the user manual for more details",
+      "ok": "Okay"
     }
   },
   "Cart Items": {

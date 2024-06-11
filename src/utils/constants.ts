@@ -147,3 +147,6 @@ export const numberWords: any = {
   nine: 9,
   ten: 10,
 };
+
+export const MANUAL_LINK =
+  'https://docs.google.com/document/d/1ICRM0BwlyBUPlH2WOT4WcochudtFGiGZKCUk_n4XtvQ/edit?usp=drivesdk';

@@ -201,7 +201,7 @@ export default (openFulfillmentSheet: () => void) => {
       const updatedItem = newItems.find(
         (newItem: any) => newItem.id === one.item.local_id,
       );
-      one.item.fulfillment_id = updatedItem.fulfillment_id;
+      one.item.fulfillment_id = updatedItem?.fulfillment_id;
     });
   };
 

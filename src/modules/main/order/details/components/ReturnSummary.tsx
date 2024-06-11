@@ -175,7 +175,7 @@ const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
             <View>
               <View style={styles.closeContainer}>
                 <TouchableOpacity onPress={hideModal}>
-                  <Icon name={'clear'} size={20} color={'#000,'} />
+                  <Icon name={'clear'} size={20} color={'#000'} />
                 </TouchableOpacity>
               </View>
               <PagerView style={styles.pager}>
