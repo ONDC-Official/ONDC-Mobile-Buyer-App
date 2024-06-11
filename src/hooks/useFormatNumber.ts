@@ -11,7 +11,6 @@ export default () => {
   };
 
   const formatNumber = (number: any) => {
-    console.log('formatNumber', number);
     const digits = String(number).split('');
     const mapping = digitMappings[i18n.language] || digitMappings.en;
     return digits
