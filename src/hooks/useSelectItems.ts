@@ -6,6 +6,7 @@ import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
 
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import {SSE_TIMEOUT} from '../utils/constants';
@@ -24,6 +25,7 @@ import {updateTransactionId} from '../redux/auth/actions';
 const CancelToken = axios.CancelToken;
 
 export default (openFulfillmentSheet: () => void) => {
+  const {t} = useTranslation();
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const dispatch = useDispatch();
   const source = useRef<any>(null);
@@ -188,7 +190,7 @@ export default (openFulfillmentSheet: () => void) => {
         setCheckoutLoading(false);
       }
     } else {
-      showToastWithGravity('Please select address');
+      showToastWithGravity(t('Global.Please select address'));
       setCheckoutLoading(false);
     }
   };
@@ -208,7 +210,9 @@ export default (openFulfillmentSheet: () => void) => {
     await setStoredData('transaction_id', transactionId);
     dispatch(updateTransactionId(transactionId));
     setCheckoutLoading(false);
-    showToastWithGravity('Cannot fetch details for this product');
+    showToastWithGravity(
+      t('Global.Cannot fetch details for this product. Please try again'),
+    );
     navigation.navigate('Dashboard');
   };
 
@@ -240,7 +244,9 @@ export default (openFulfillmentSheet: () => void) => {
         const request_object = constructQuoteObject(cartItems);
         if (responseRef.current.length !== request_object.length) {
           showToastWithGravity(
-            'Cannot fetch details for some product those products will be ignored!',
+            t(
+              'Global.Cannot fetch details for some product, those products will be ignored',
+            ),
           );
         }
       }, SSE_TIMEOUT);

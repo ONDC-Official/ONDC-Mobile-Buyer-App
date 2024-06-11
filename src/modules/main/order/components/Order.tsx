@@ -12,6 +12,7 @@ import {useAppTheme} from '../../../../utils/theme';
 import {isItemCustomization} from '../../../../utils/utils';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useFormatDate from '../../../../hooks/useFormatDate';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface Order {
   order: any;
@@ -24,6 +25,7 @@ interface Order {
  * @returns {JSX.Element}
  */
 const OrderHeader: React.FC<Order> = ({order}) => {
+  const {formatNumber} = useFormatNumber();
   const {formatDate} = useFormatDate();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -89,7 +91,7 @@ const OrderHeader: React.FC<Order> = ({order}) => {
           <View style={styles.amountContainer}>
             <Text style={styles.amount} variant={'labelLarge'}>
               {CURRENCY_SYMBOLS[order?.payment?.params?.currency]}
-              {order?.payment?.params?.amount}
+              {formatNumber(order?.payment?.params?.amount)}
             </Text>
             <Icon
               name={'keyboard-arrow-right'}

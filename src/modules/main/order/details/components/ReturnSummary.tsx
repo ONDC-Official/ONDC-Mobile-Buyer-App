@@ -8,8 +8,10 @@ import PagerView from 'react-native-pager-view';
 import {CURRENCY_SYMBOLS, RETURN_REASONS} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import useFormatNumber from '../../../../../hooks/useFormatNumber';
 
 const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -88,8 +90,10 @@ const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
                     </Text>
                     <Text variant={'labelLarge'} style={styles.quantity}>
                       {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                      {Number(quantity * item?.product?.price?.value).toFixed(
-                        2,
+                      {formatNumber(
+                        Number(quantity * item?.product?.price?.value).toFixed(
+                          2,
+                        ),
                       )}
                     </Text>
                   </View>
@@ -149,7 +153,7 @@ const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
                 </Text>
                 <Text variant={'labelMedium'} style={styles.taxValue}>
                   {CURRENCY_SYMBOLS[one?.price?.currency]}
-                  {one?.price?.value}
+                  {formatNumber(one?.price?.value)}
                 </Text>
               </View>
             ))}
@@ -161,7 +165,7 @@ const ReturnSummary = ({fulfilmentId}: {fulfilmentId: any}) => {
           </Text>
           <Text variant={'titleSmall'} style={styles.grossTotalValue}>
             {CURRENCY_SYMBOLS[orderDetails?.quote?.price?.currency]}
-            {orderDetails?.quote?.price?.value}
+            {formatNumber(orderDetails?.quote?.price?.value)}
           </Text>
         </View>
       </View>

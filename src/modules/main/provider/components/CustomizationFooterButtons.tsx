@@ -10,6 +10,7 @@ import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {makeGlobalStyles} from '../../../../styles/styles';
 import {useAppTheme} from '../../../../utils/theme';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 const CustomizationFooterButtons = ({
   productLoading,
@@ -30,6 +31,7 @@ const CustomizationFooterButtons = ({
   customizationPrices: any;
   update?: boolean;
 }) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const globalStyles = makeGlobalStyles(theme.colors);
@@ -52,7 +54,7 @@ const CustomizationFooterButtons = ({
           />
         </TouchableOpacity>
         <Text variant={'titleMedium'} style={styles.quantity}>
-          {itemQty}
+          {formatNumber(itemQty)}
         </Text>
         <TouchableOpacity
           disabled={productLoading || itemOutOfStock}
@@ -85,16 +87,16 @@ const CustomizationFooterButtons = ({
             }>
             {update
               ? t('Product Summary.Update Item Total', {
-                  total: `₹${
+                  total: `₹${formatNumber(
                     (product?.item_details?.price.value + customizationPrices) *
-                    itemQty
-                  }`,
+                      itemQty,
+                  )}`,
                 })
               : t('Product Summary.Add Item Total', {
-                  total: `₹${
+                  total: `₹${formatNumber(
                     (product?.item_details?.price.value + customizationPrices) *
-                    itemQty
-                  }`,
+                      itemQty,
+                  )}`,
                 })}
           </Text>
         )}

@@ -16,6 +16,7 @@ import CloseForm from './components/CloseForm';
 import {compareDateWithDuration} from '../../../../utils/utils';
 import {updateComplaint} from '../../../../redux/complaint/actions';
 import useFormatDate from '../../../../hooks/useFormatDate';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -28,6 +29,7 @@ const categories = ISSUE_TYPES.map(item => {
 }).flat();
 
 const ComplaintDetails = () => {
+  const {formatNumber} = useFormatNumber();
   const {formatDate} = useFormatDate();
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -217,11 +219,13 @@ const ComplaintDetails = () => {
                 <Text variant={'bodySmall'} style={styles.qty}>
                   {t('Complaint Details.QTY')}: {item?.quantity?.count} X{' '}
                   {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                  {item?.product?.price?.value}
+                  {formatNumber(item?.product?.price?.value)}
                 </Text>
                 <Text variant={'bodyLarge'} style={styles.itemQuantity}>
                   {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                  {item?.quantity?.count * item?.product?.price?.value}
+                  {formatNumber(
+                    item?.quantity?.count * item?.product?.price?.value,
+                  )}
                 </Text>
               </View>
             </View>

@@ -8,6 +8,7 @@ import {useTranslation} from 'react-i18next';
 import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
+import useFormatNumber from '../../../../../hooks/useFormatNumber';
 
 const ProductSummary = ({
   items,
@@ -18,6 +19,7 @@ const ProductSummary = ({
   quote: any;
   fulfilment: any;
 }) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
@@ -56,7 +58,7 @@ const ProductSummary = ({
             </Text>
             <Text variant={'labelMedium'} style={styles.taxValue}>
               {CURRENCY_SYMBOLS[one?.price?.currency]}
-              {one?.price?.value.toFixed(2)}
+              {formatNumber(one?.price?.value.toFixed(2))}
             </Text>
           </View>
         ))}
@@ -125,9 +127,11 @@ const ProductSummary = ({
                     </Text>
                     <Text variant={'labelLarge'} style={styles.itemPrice}>
                       {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                      {Number(
-                        item?.quantity?.count * item?.product?.price?.value,
-                      ).toFixed(2)}
+                      {formatNumber(
+                        Number(
+                          item?.quantity?.count * item?.product?.price?.value,
+                        ).toFixed(2),
+                      )}
                     </Text>
                   </View>
                 </View>
@@ -206,7 +210,7 @@ const ProductSummary = ({
         </Text>
         <Text variant={'headlineSmall'} style={styles.grossTotalValue}>
           {CURRENCY_SYMBOLS[quote?.price?.currency]}
-          {quote?.price?.value}
+          {formatNumber(quote?.price?.value)}
         </Text>
       </View>
     </View>

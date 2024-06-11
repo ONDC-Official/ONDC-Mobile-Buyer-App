@@ -38,6 +38,7 @@ import FBProductDetails from '../../product/details/FBProductDetails';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface FBProduct {
   product: any;
@@ -49,6 +50,7 @@ const screenHeight: number = Dimensions.get('screen').height;
 
 const CancelToken = axios.CancelToken;
 const FBProduct: React.FC<FBProduct> = ({product}) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -235,7 +237,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           if (!customisations) {
             await updateCartItem(cartItems, true, items[0]._id);
             showToastWithGravity(
-              t('Product Summary.Item quantity updated in your cart.'),
+              t('Product Summary.Item quantity updated in your cart'),
             );
             setCustomizationState({});
             setProductLoading(false);
@@ -458,10 +460,12 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           </Text>
           <Text variant={'headlineSmall'} style={styles.price}>
             {priceRange
-              ? `₹${priceRange?.minPrice} - ₹${priceRange?.maxPrice}`
-              : `${CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}${
-                  product?.item_details?.price?.value
-                }`}
+              ? `₹${formatNumber(priceRange?.minPrice)} - ₹${formatNumber(
+                  priceRange?.maxPrice,
+                )}`
+              : `${
+                  CURRENCY_SYMBOLS[product?.item_details?.price?.currency]
+                }${formatNumber(product?.item_details?.price?.value)}`}
           </Text>
         </TouchableOpacity>
         <View style={styles.actionContainer}>
@@ -505,7 +509,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                   {productLoading ? (
                     <ActivityIndicator size={18} />
                   ) : (
-                    cartItemDetails?.productQuantity
+                    formatNumber(cartItemDetails?.productQuantity)
                   )}
                 </Text>
                 <TouchableOpacity
@@ -592,7 +596,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                 </Text>
                 <Text variant={'labelLarge'} style={styles.prize}>
                   {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
-                  {product?.item_details?.price?.value}
+                  {formatNumber(product?.item_details?.price?.value)}
                 </Text>
               </View>
             </View>
@@ -649,11 +653,13 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                         </Text>
                         <Customizations cartItem={item} />
                         <Text variant="bodyLarge" style={styles.cartQuantity}>
-                          ₹{' '}
+                          ₹
                           {item.item.hasCustomisations
-                            ? Number(getPriceWithCustomisations(item)) *
-                              Number(item?.item?.quantity?.count)
-                            : Number(item?.item?.product?.subtotal)}
+                            ? formatNumber(
+                                getPriceWithCustomisations(item) *
+                                  Number(item?.item?.quantity?.count),
+                              )
+                            : formatNumber(item?.item?.product?.subtotal)}
                         </Text>
                       </View>
                       <ManageQuantity

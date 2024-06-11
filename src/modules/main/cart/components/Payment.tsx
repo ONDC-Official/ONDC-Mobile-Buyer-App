@@ -151,11 +151,13 @@ const Payment: React.FC<Payment> = ({
         });
         if (responseRef.current.length <= 0) {
           setInitializeOrderLoading(false);
-          showToastWithGravity('Cannot fetch details for this product');
+          showToastWithGravity(
+            t('Global.Cannot fetch details for this product. Please try again'),
+          );
           return;
         }
         if (requestCount.current !== responseRef.current.length) {
-          showToastWithGravity('Some orders are not initialized!');
+          showToastWithGravity(t('Global.Some orders are not initialized'));
         }
       }, SSE_TIMEOUT);
 

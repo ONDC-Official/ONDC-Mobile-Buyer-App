@@ -33,10 +33,12 @@ import CloseSheetContainer from '../../../components/bottomSheet/CloseSheetConta
 import {useAppTheme} from '../../../utils/theme';
 import useReadAudio from '../../../hooks/useReadAudio';
 import {VIEW_DELIVERY_OPTIONS_COMMAND} from '../../../utils/constants';
+import useFormatNumber from '../../../hooks/useFormatNumber';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
 const Cart = () => {
+  const {formatNumber} = useFormatNumber();
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
   const {t} = useTranslation();
@@ -577,10 +579,10 @@ const Cart = () => {
                   <View style={styles.summaryRow}>
                     <View>
                       <Text variant="titleLarge" style={styles.total}>
-                        ₹{cartTotal}
+                        ₹{formatNumber(cartTotal)}
                       </Text>
                       <Text variant="bodyMedium" style={styles.itemCount}>
-                        {cartItems.length} {t('Cart.items')}
+                        {formatNumber(cartItems.length)} {t('Cart.items')}
                       </Text>
                     </View>
                     <View>

@@ -57,6 +57,7 @@
     "Non Veg": "নন ভেগ",
     "Egg": "ডিম",
     "Required": "প্রয়োজন",
+    "Maximum allowed quantity": "সর্বাধিক অনুমোদিত পরিমাণ হল {{count}}",
     "All Options": "সমস্ত\nবিকল্প",
     "Edit": "সম্পাদনা করুন",
     "Qty": "কিউটি",
@@ -406,7 +407,8 @@
   "Complaint": {
     "Issue Id": "ইস্যু আইডি",
     "Issue Raised On": "ইস্যু চালু হয়েছে",
-    "View Summary": "সারাংশ দেখুন"
+    "View Summary": "সারাংশ দেখুন",
+    "Complaint raised successfully": "অভিযোগ সফলভাবে উত্থাপিত হয়েছে"
   },
   "Complaint Details": {
     "Complaint Details": "অভিযোগের বিবরণ",
@@ -555,10 +557,24 @@
       "Ongoing": "অঙ্গোইং",
       "Completed": "কমপ্লিটেড",
       "Cancelled": "ক্যানসেলড"
-    }
+    },
+    "Cannot get status for this product": "এই পণ্যের জন্য স্থিতি পাওয়া যাচ্ছে না",
+    "Tracking information is not provided by the provider": "ট্র্যাকিং তথ্য সরবরাহকারী দ্বারা সরবরাহ করা হয় না"
   },
   "Global": {
-    "Details not available": "বস্টোরের বিবরণ পাওয়া যায় না"
+    "Details not available": "বস্টোরের বিবরণ পাওয়া যায় না",
+    "Cannot fetch details for this product. Please try again": "এই পণ্যের বিবরণ পাওয়া যাচ্ছে না। দয়া করে আবার চেষ্টা করুন।",
+    "Please select payment": "অনুগ্রহ করে অর্থপ্রদানের বিকল্প নির্বাচন করুন",
+    "Please select address": "অনুগ্রহ করে ঠিকানা নির্বাচন করুন",
+    "Cannot fetch details for some product, those products will be ignored": "কিছু পণ্যের বিবরণ সংগ্রহ করা সম্ভব নয়, সেই পণ্যগুলি উপেক্ষা করা হবে।",
+    "Session Expired": "অধিবেশনের মেয়াদ শেষ হয়েছে",
+    "Session expired, please login again to continue": "অধিবেশনের মেয়াদ শেষ, চালিয়ে যাওয়ার জন্য দয়া করে আবার লগইন করুন",
+    "Logout": "লগআউট",
+    "Version mismatch": "সংস্করণের অসামঞ্জস্য",
+    "Please upgrade your application to the latest version": "অনুগ্রহ করে আপনার অ্যাপ্লিকেশনটিকে সর্বশেষ সংস্করণে উন্নীত করুন।",
+    "Internet connection not available. Please check internet connection": "ইন্টারনেট সংযোগ পাওয়া যায় না। অনুগ্রহ করে ইন্টারনেট সংযোগ পরীক্ষা করুন",
+    "Something went wrong, please try again after some time": "কিছু ভুল হয়েছে, দয়া করে কিছু সময় পরে আবার চেষ্টা করুন",
+    "Some orders are not initialized": "কিছু অর্ডার আরম্ভ করা হয় না।"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ওএনডিসি কিউআর সে ভারত খুলেগা"

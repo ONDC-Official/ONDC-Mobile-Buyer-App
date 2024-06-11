@@ -10,8 +10,10 @@ import OrderMeta from './components/OrderMeta';
 import ReturnDetails from './components/ReturnDetails';
 import ReturnSummary from './components/ReturnSummary';
 import {useAppTheme} from '../../../../utils/theme';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 const OrderReturnDetails = ({route: {params}}: {route: any}) => {
+  const {formatNumber} = useFormatNumber();
   const navigation = useNavigation();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
@@ -30,7 +32,7 @@ const OrderReturnDetails = ({route: {params}}: {route: any}) => {
           <Text variant={'labelMedium'} style={styles.orderStatus}>
             {orderDetails?.state} -{' '}
             {CURRENCY_SYMBOLS[orderDetails?.payment?.params?.currency]}
-            {orderDetails?.payment?.params?.amount}
+            {formatNumber(orderDetails?.payment?.params?.amount)}
           </Text>
         </View>
       </View>

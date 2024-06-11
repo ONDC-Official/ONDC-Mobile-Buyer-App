@@ -17,6 +17,7 @@ import FulfilmentStatus from './FulfilmentStatus';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
 import useFormatDate from '../../../../../hooks/useFormatDate';
+import useFormatNumber from '../../../../../hooks/useFormatNumber';
 
 const today = moment();
 
@@ -29,6 +30,7 @@ const SingleItem = ({
   customizations?: any[];
   itemQuantityTag?: any;
 }) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -64,7 +66,9 @@ const SingleItem = ({
             </Text>
             <Text variant={'labelLarge'} style={styles.price}>
               {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-              {Number(itemQuantity * item?.product?.price?.value).toFixed(2)}
+              {formatNumber(
+                Number(itemQuantity * item?.product?.price?.value).toFixed(2),
+              )}
             </Text>
           </View>
         </View>
@@ -74,9 +78,9 @@ const SingleItem = ({
               const isLastItem = index === itemCustomizationList?.length - 1;
               return `${
                 customization?.product?.item_details?.descriptor?.name
-              } (₹${customization?.product?.item_details?.price?.value})${
-                isLastItem ? '' : ' + '
-              }`;
+              } (₹${formatNumber(
+                customization?.product?.item_details?.price?.value,
+              )})${isLastItem ? '' : ' + '}`;
             })}
           </Text>
         )}

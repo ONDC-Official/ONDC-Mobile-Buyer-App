@@ -6,6 +6,7 @@ import RNEventSource from 'react-native-event-source';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import RazorpayCheckout from 'react-native-razorpay';
+import {useTranslation} from 'react-i18next';
 import {getStoredData, removeData, setStoredData} from '../utils/storage';
 import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../utils/constants';
 import {
@@ -27,6 +28,7 @@ export default (
   closePaymentSheet: () => void,
   stopAndDestroyVoiceListener: () => void,
 ) => {
+  const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
   const responseRef = useRef<any[]>([]);
@@ -99,7 +101,7 @@ export default (
         if (responseRef.current.length <= 0) {
           setConfirmOrderLoading(false);
           showToastWithGravity(
-            'Cannot fetch details for this product Please try again!',
+            t('Global.Cannot fetch details for this product. Please try again'),
           );
           return;
         }
@@ -260,7 +262,7 @@ export default (
           );
         }
       } else {
-        showToastWithGravity('Please select payment.');
+        showToastWithGravity(t('Global.Please select payment'));
       }
     } catch (e) {
       console.log(e);
