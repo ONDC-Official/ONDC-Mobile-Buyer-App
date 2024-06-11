@@ -18,7 +18,9 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
         <Header />
         <ScrollView style={appStyles.container}>
           <Categories currentCategory={params.category} />
-          <SubCategories currentCategory={params.category} />
+          {params.category !== 'F&B' && (
+            <SubCategories currentCategory={params.category} />
+          )}
           <StoresNearMe domain={params.domain} />
         </ScrollView>
       </View>

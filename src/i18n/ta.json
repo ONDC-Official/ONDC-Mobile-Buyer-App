@@ -187,7 +187,8 @@
     "Delivered Today by": "இன்று {{time}} மணிக்கு டெலிவரி",
     "Delivered In": "டெலிவரி இன் {{time}}",
     "Delivered by": "மூலம் அனுப்பப்படும் {{date}}",
-    "Self pickup by": "{{time}} மூலம் சுய-பிக்அப்"
+    "Self pickup by": "{{time}} மூலம் சுய-பிக்அப்",
+    "minutes": "நிமிடங்கள்"
   },
   "Featured Categories": {
     "Featured Categories": "பிச்சர்ட் கேட்டகரீஸ்",

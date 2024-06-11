@@ -187,7 +187,8 @@
     "Delivered Today by": "Delivery Today by {{time}}",
     "Delivered In": "Delivery In {{time}}",
     "Delivered by": "Delivery by {{date}}",
-    "Self pickup by": "Self-Pickup by {{time}}"
+    "Self pickup by": "Self-Pickup by {{time}}",
+    "minutes": "minutes"
   },
   "Featured Categories": {
     "Featured Categories": "Featured Categories",

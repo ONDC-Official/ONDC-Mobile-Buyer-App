@@ -187,7 +187,8 @@
     "Delivered Today by": "{{time}} আজ ডেলিভারি",
     "Delivered In": "ডেলিভারি ইন {{time}}",
     "Delivered by": "{{date}} দ্বারা বিতরণ",
-    "Self pickup by": "{{time}} দ্বারা স্ব-বাছাই"
+    "Self pickup by": "{{time}} দ্বারা স্ব-বাছাই",
+    "minutes": "মিনিট"
   },
   "Featured Categories": {
     "Featured Categories": "ফিচার্ড ক্যাটেগরিস",

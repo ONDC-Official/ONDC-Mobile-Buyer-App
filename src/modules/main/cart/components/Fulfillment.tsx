@@ -13,6 +13,7 @@ import PagerView from 'react-native-pager-view';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';
+import 'moment-duration-format';
 
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
@@ -342,11 +343,13 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                       tatMessage = t(
                                         'Fulfillment.Self pickup by',
                                         {
-                                          time: moment
-                                            .duration(
-                                              fulfilment['@ondc/org/TAT'],
-                                            )
-                                            .humanize(),
+                                          time: `${formatNumber(
+                                            moment
+                                              .duration(
+                                                fulfilment['@ondc/org/TAT'],
+                                              )
+                                              .format('m'),
+                                          )} ${t('Fulfillment.minutes')}`,
                                         },
                                       );
                                     }
@@ -379,11 +382,13 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                       tatMessage = t(
                                         'Fulfillment.Delivered Today by',
                                         {
-                                          time: moment
-                                            .duration(
-                                              fulfilment['@ondc/org/TAT'],
-                                            )
-                                            .humanize(),
+                                          time: `${formatNumber(
+                                            moment
+                                              .duration(
+                                                fulfilment['@ondc/org/TAT'],
+                                              )
+                                              .format('m'),
+                                          )} ${t('Fulfillment.minutes')}`,
                                         },
                                       );
                                     }

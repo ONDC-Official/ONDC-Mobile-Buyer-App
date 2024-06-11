@@ -187,7 +187,8 @@
     "Delivered Today by": "आज {{time}} बजे तक डिलीवरी",
     "Delivered In": "डिलीवरी इन {{time}}",
     "Delivered by": "{{date}} द्वारा वितरित",
-    "Self pickup by": "{{time}} द्वारा स्व-चयन करें"
+    "Self pickup by": "{{time}} द्वारा स्व-चयन करें",
+    "minutes": "मिनट"
   },
   "Featured Categories": {
     "Featured Categories": "फीचर्ड कैटेगरीज",

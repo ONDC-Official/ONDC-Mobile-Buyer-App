@@ -15,6 +15,7 @@ import {useAppTheme} from '../../../../utils/theme';
 import {saveStoresList} from '../../../../redux/stores/actions';
 import Store from '../../stores/components/Store';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
+import { FB_DOMAIN } from "../../../../utils/constants";
 
 interface StoresNearMe {
   domain?: string;
@@ -71,7 +72,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
 
   const list = useMemo(() => {
     if (locations) {
-      return locations.slice(0, 9);
+      return locations.slice(0, domain === FB_DOMAIN ? 12 : 9);
     } else {
       return [];
     }
