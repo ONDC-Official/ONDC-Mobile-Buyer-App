@@ -2,7 +2,6 @@ import React from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import FBProducts from './FBProducts';
-import {useAppTheme} from '../../../../utils/theme';
 import OutletDetails from './OutletDetails';
 
 interface FBBrandDetails {
@@ -16,8 +15,7 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
   outlet,
   apiRequested,
 }) => {
-  const theme = useAppTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = makeStyles();
 
   if (apiRequested) {
     return <BrandSkeleton />;
@@ -37,7 +35,7 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
   );
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     container: {
       flex: 1,

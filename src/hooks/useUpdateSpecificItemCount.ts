@@ -1,6 +1,8 @@
 import {useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
+import {useTranslation} from 'react-i18next';
+
 import {API_BASE_URL, CART} from '../utils/apiActions';
 import {showToastWithGravity} from '../utils/utils';
 import useNetworkHandling from './useNetworkHandling';
@@ -8,6 +10,7 @@ import useNetworkHandling from './useNetworkHandling';
 const CancelToken = axios.CancelToken;
 
 export default () => {
+  const {t} = useTranslation();
   const [updatingCartItem, setUpdatingCartItem] = useState<any>(null);
   const {putDataWithAuth} = useNetworkHandling();
   const {uid} = useSelector(({authReducer}) => authReducer);
@@ -62,7 +65,9 @@ export default () => {
               await putDataWithAuth(url, updatedCartItem, source.current.token);
             } else {
               showToastWithGravity(
-                `Maximum allowed quantity is ${updatedCartItem.item.quantity.count}`,
+                t('Cart.Maximum allowed quantity', {
+                  count: updatedCartItem.item.quantity.count,
+                }),
               );
             }
           } else {

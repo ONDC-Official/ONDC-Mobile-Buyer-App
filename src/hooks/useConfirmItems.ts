@@ -6,6 +6,7 @@ import RNEventSource from 'react-native-event-source';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import RazorpayCheckout from 'react-native-razorpay';
+import {useTranslation} from 'react-i18next';
 import {getStoredData, removeData, setStoredData} from '../utils/storage';
 import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../utils/constants';
 import {
@@ -102,7 +103,7 @@ export default (
         if (responseRef.current.length <= 0) {
           setConfirmOrderLoading(false);
           showToastWithGravity(
-            'Cannot fetch details for this product Please try again!',
+            t('Global.Cannot fetch details for this product. Please try again'),
           );
           return;
         }
@@ -237,43 +238,37 @@ export default (
     cartItems: any[],
     updatedCartItems: any[],
   ) => {
-    alertWithOneButton(
-      t('Cart.Reference.reference app'),
-      t('Cart.Reference.This is reference app'),
-      t('Cart.Reference.ok'),
-      () => {},
-    );
-    // try {
-    //   if (activePaymentMethod) {
-    //     confirmCartItems.current = cartItems.concat([]);
-    //     const checkoutDetails = await getStoredData('checkout_details');
-    //     const {successOrderIds} = JSON.parse(checkoutDetails || '{}');
-    //     setConfirmOrderLoading(true);
-    //     let items = cartItems.map((item: any) => item.item);
-    //     const request_object = constructQuoteObject(
-    //       items.filter(({provider}: {provider: any}) =>
-    //         successOrderIds.includes(provider.local_id.toString()),
-    //       ),
-    //     );
-    //     if (activePaymentMethod === ORDER_PAYMENT_METHODS.PREPAID) {
-    //       await confirmOrder(
-    //         request_object[0],
-    //         ORDER_PAYMENT_METHODS.PREPAID,
-    //         updatedCartItems[0].message.quote.payment,
-    //       );
-    //     } else {
-    //       await confirmOrder(
-    //         request_object[0],
-    //         ORDER_PAYMENT_METHODS.COD,
-    //         updatedCartItems[0].message.quote.payment,
-    //       );
-    //     }
-    //   } else {
-    //     showToastWithGravity('Please select payment.');
-    //   }
-    // } catch (e) {
-    //   console.log(e);
-    // }
+    try {
+      if (activePaymentMethod) {
+        confirmCartItems.current = cartItems.concat([]);
+        const checkoutDetails = await getStoredData('checkout_details');
+        const {successOrderIds} = JSON.parse(checkoutDetails || '{}');
+        setConfirmOrderLoading(true);
+        let items = cartItems.map((item: any) => item.item);
+        const request_object = constructQuoteObject(
+          items.filter(({provider}: {provider: any}) =>
+            successOrderIds.includes(provider.local_id.toString()),
+          ),
+        );
+        if (activePaymentMethod === ORDER_PAYMENT_METHODS.PREPAID) {
+          await confirmOrder(
+            request_object[0],
+            ORDER_PAYMENT_METHODS.PREPAID,
+            updatedCartItems[0].message.quote.payment,
+          );
+        } else {
+          await confirmOrder(
+            request_object[0],
+            ORDER_PAYMENT_METHODS.COD,
+            updatedCartItems[0].message.quote.payment,
+          );
+        }
+      } else {
+        showToastWithGravity(t('Global.Please select payment'));
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const clearDataAndNavigate = async () => {

@@ -31,7 +31,7 @@ export default () => {
     const payload = {
       pipelineTasks: [
         {
-          taskType: 'transliteration',
+          taskType: 'translation',
         },
       ],
       pipelineRequestConfig: {
@@ -84,7 +84,7 @@ export default () => {
     const payload = {
       pipelineTasks: [
         {
-          taskType: 'transliteration',
+          taskType: 'translation',
           config: {
             language: {
               sourceLanguage: language,

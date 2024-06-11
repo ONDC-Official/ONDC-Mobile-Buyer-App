@@ -395,4 +395,4 @@ export const compareIgnoringSpaces = (str1: string, str2: string) => {
 
   // Compare the cleaned strings
   return cleanedStr1 === cleanedStr2;
-}
+};

@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 import {clearAllData} from '../redux/actions';
 import {alertWithOneButton} from '../utils/alerts';
 import {showToastWithGravity} from '../utils/utils';
@@ -8,6 +9,7 @@ import {logoutUser} from '../redux/auth/actions';
 let sessionExpiredMessageShown = false;
 
 export default () => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -29,9 +31,9 @@ export default () => {
           if (!sessionExpiredMessageShown) {
             sessionExpiredMessageShown = true;
             alertWithOneButton(
-              'Session Expired',
-              'Session expired, please login again to continue',
-              'Logout',
+              t('Global.Session Expired'),
+              t('Global.Session expired, please login again to continue'),
+              t('Global.Logout'),
               () => {
                 sessionExpiredMessageShown = false;
                 clearDataAndLogout();
@@ -40,8 +42,8 @@ export default () => {
           }
         } else if (error.response.status === 426) {
           alertWithOneButton(
-            'Version mismatch',
-            'Please upgrade your application to the latest version',
+            t('Global.Version mismatch'),
+            t('Global.Please upgrade your application to the latest version'),
             'Ok',
             () => {},
           );
@@ -55,19 +57,25 @@ export default () => {
       } else if (error.request) {
         if (setError !== null) {
           setError(
-            'Internet connection not available. Please check internet connection.',
+            t(
+              'Global.Internet connection not available. Please check internet connection',
+            ),
           );
         } else {
           showToastWithGravity(
-            'Internet connection not available. Please check internet connection.',
+            t(
+              'Global.Internet connection not available. Please check internet connection',
+            ),
           );
         }
       } else {
         if (setError !== null) {
-          setError('Something went wrong, please try again after some time.');
+          setError(
+            t('Global.Something went wrong, please try again after some time'),
+          );
         } else {
           showToastWithGravity(
-            'Something went wrong, please try again after some time.',
+            t('Global.Something went wrong, please try again after some time'),
           );
         }
       }

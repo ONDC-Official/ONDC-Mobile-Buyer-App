@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Text} from 'react-native-paper';
 import React from 'react';
 import {useAppTheme} from '../../utils/theme';
+import useFormatNumber from '../../hooks/useFormatNumber';
 
 interface ManageQuantity {
   cartItem: any;
@@ -24,6 +25,7 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
   allowDelete = false,
   deleteCartItem = () => {},
 }) => {
+  const {formatNumber} = useFormatNumber();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -51,7 +53,7 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
         {updatingCartItem === cartItem._id ? (
           <ActivityIndicator color={theme.colors.primary} size={14} />
         ) : (
-          cartItem?.item?.quantity?.count
+          formatNumber(cartItem?.item?.quantity?.count)
         )}
       </Text>
       <TouchableOpacity

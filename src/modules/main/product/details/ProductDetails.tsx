@@ -38,6 +38,7 @@ import Page from '../../../../components/page/Page';
 import AboutProduct from './components/AboutProduct';
 import {useAppTheme} from '../../../../utils/theme';
 import useReadAudio from '../../../../hooks/useReadAudio';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface ProductDetails {
   route: any;
@@ -70,6 +71,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   navigation,
   route: {params},
 }) => {
+  const {formatNumber} = useFormatNumber();
   const voiceDetectionStarted = useRef<boolean>(false);
   const {t} = useTranslation();
   const firstTime = useRef<boolean>(true);
@@ -325,7 +327,9 @@ const ProductDetails: React.FC<ProductDetails> = ({
         if (currentCount < maxCount || !isIncrement) {
           if (!customisations) {
             await updateCartItem(cartItems, isIncrement, cartItem[0]._id);
-            showToastWithGravity('Item quantity updated in your cart.');
+            showToastWithGravity(
+              t('Product Summary.Item quantity updated in your cart'),
+            );
             setAddToCartLoading(false);
           } else {
             const currentIds = customisations.map(item => item.id);
@@ -347,18 +351,24 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 isIncrement,
                 matchingCustomisation._id,
               );
-              showToastWithGravity('Item quantity updated in your cart.');
+              showToastWithGravity(
+                t('Product Summary.Item quantity updated in your cart'),
+              );
               setAddToCartLoading(false);
             } else {
               await postDataWithAuth(url, payload, source.current.token);
-              showToastWithGravity('Item added to cart successfully.');
+              showToastWithGravity(
+                t('Product Summary.Item added to cart successfully'),
+              );
               setAddToCartLoading(false);
               await getCartItems(product.id);
             }
           }
         } else {
           showToastWithGravity(
-            'The maximum available quantity for item is already in your cart.',
+            t(
+              'Product Summary.The maximum available quantity for item is already in your cart',
+            ),
           );
           setAddToCartLoading(false);
         }
@@ -486,21 +496,25 @@ const ProductDetails: React.FC<ProductDetails> = ({
             {priceRange ? (
               <View style={styles.priceContainer}>
                 <Text variant="headlineSmall" style={styles.price}>
-                  {`₹${priceRange?.minPrice} - ₹${priceRange?.maxPrice}`}
+                  {`₹${formatNumber(priceRange?.minPrice)} - ₹${formatNumber(
+                    priceRange?.maxPrice,
+                  )}`}
                 </Text>
               </View>
             ) : (
               <View style={styles.priceContainer}>
                 <Text variant="headlineSmall" style={styles.price}>
-                  ₹{product?.item_details?.price?.value}
+                  ₹{formatNumber(product?.item_details?.price?.value)}
                 </Text>
                 {Number(product?.item_details?.price?.maximum_value) !==
                   product?.item_details?.price?.value && (
                   <Text variant="titleSmall" style={styles.maximumAmount}>
                     ₹
-                    {Number(
-                      product?.item_details?.price?.maximum_value,
-                    ).toFixed(0)}
+                    {formatNumber(
+                      Number(
+                        product?.item_details?.price?.maximum_value,
+                      ).toFixed(0),
+                    )}
                   </Text>
                 )}
               </View>
@@ -550,7 +564,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                         color={theme.colors.primary}
                       />
                     ) : (
-                      itemAvailableInCart.item.quantity.count
+                      formatNumber(itemAvailableInCart.item.quantity.count)
                     )}
                   </Text>
                   <TouchableOpacity

@@ -22,12 +22,14 @@ import RaiseIssueButton from './RaiseIssueButton';
 import CancelOrderButton from './CancelOrderButton';
 import {useAppTheme} from '../../../../../utils/theme';
 import CartIcon from '../../../../../assets/cart.svg';
+import useFormatDate from '../../../../../hooks/useFormatDate';
 
 const NonCancelledOrder = ({
   getOrderDetails,
 }: {
   getOrderDetails: (selfUpdate?: boolean) => void;
 }) => {
+  const {formatDate} = useFormatDate();
   const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const {colors} = useAppTheme();
@@ -65,12 +67,12 @@ const NonCancelledOrder = ({
           {orderDetails?.state !== 'Completed' ? (
             <Text variant={'bodyLarge'} style={styles.creationDate}>
               {t('Profile.Order placed on')}{' '}
-              {moment(orderDetails?.createdAt).format('DD MMM hh:mm a')}
+              {formatDate(moment(orderDetails?.createdAt), 'DD MMM hh:mm a')}
             </Text>
           ) : (
             <Text variant={'bodyLarge'} style={styles.creationDate}>
               {t('Non cancelled order.Order completed on')}{' '}
-              {moment(orderDetails?.updatedAt).format('DD MMM hh:mm a')}
+              {formatDate(moment(orderDetails?.updatedAt), 'DD MMM hh:mm a')}
             </Text>
           )}
         </View>

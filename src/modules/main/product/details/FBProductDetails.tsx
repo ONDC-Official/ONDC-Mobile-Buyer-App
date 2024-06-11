@@ -7,6 +7,7 @@ import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import VariationsRenderer from '../../../../components/products/VariationsRenderer';
 import AboutProduct from './components/AboutProduct';
 import {useAppTheme} from '../../../../utils/theme';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface ProductDetails {
   product: any;
@@ -19,6 +20,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   children,
   inStock = true,
 }) => {
+  const {formatNumber} = useFormatNumber();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -46,7 +48,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           <Text
             variant="labelLarge"
             style={[styles.price, inStock ? {} : styles.disabledText]}>
-            ₹{product?.item_details?.price?.value}
+            ₹{formatNumber(product?.item_details?.price?.value)}
           </Text>
         </View>
         <Text

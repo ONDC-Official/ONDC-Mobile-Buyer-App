@@ -57,6 +57,7 @@
     "Non Veg": "Non Veg",
     "Egg": "Egg",
     "Required": "Required",
+    "Maximum allowed quantity": "Maximum allowed quantity is {{count}}",
     "All Options": "All\nOptions",
     "Edit": "Edit",
     "Qty": "Qty",
@@ -188,9 +189,9 @@
     "Please try ordering from another store or try again later": "Please try ordering from another store or try again later",
     "Explore Other Stores": "Explore Other Stores",
     "Fulfilment no": "{{current}} of {{total}}",
-    "Delivered Today by": "Delivered Today by {{time}}",
-    "Delivered In": "Delivered In {{time}}",
-    "Delivered by": "Delivered by {{date}}",
+    "Delivered Today by": "Delivery Today by {{time}}",
+    "Delivered In": "Delivery In {{time}}",
+    "Delivered by": "Delivery by {{date}}",
     "Self pickup by": "Self-Pickup by {{time}}"
   },
   "Featured Categories": {
@@ -406,12 +407,13 @@
   },
   "Variations": {
     "Available Options": "Available {{groupName}} Options",
-    "Size Guide": "Size Guide"
+    "Size Guide": "Size Chart"
   },
   "Complaint": {
     "Issue Id": "Issue Id",
     "Issue Raised On": "Issue Raised On",
-    "View Summary": "View Summary"
+    "View Summary": "View Summary",
+    "Complaint raised successfully": "Complaint raised successfully"
   },
   "Complaint Details": {
     "Complaint Details": "Complaint Details",
@@ -560,10 +562,24 @@
       "Ongoing": "Ongoing",
       "Completed": "Completed",
       "Cancelled": "Cancelled"
-    }
+    },
+    "Cannot get status for this product": "Cannot get status for this product",
+    "Tracking information is not provided by the provider": "Tracking information is not provided by the provider"
   },
   "Global": {
-    "Details not available": "Store Details not available"
+    "Details not available": "Store Details not available",
+    "Cannot fetch details for this product. Please try again": "Cannot fetch details for this product. Please try again",
+    "Please select payment": "Please select payment",
+    "Please select address": "Please select address",
+    "Cannot fetch details for some product, those products will be ignored": "Cannot fetch details for some product, those products will be ignored",
+    "Session Expired": "Session Expired",
+    "Session expired, please login again to continue": "Session expired, please login again to continue",
+    "Logout": "Logout",
+    "Version mismatch": "Version mismatch",
+    "Please upgrade your application to the latest version": "Please upgrade your application to the latest version",
+    "Internet connection not available. Please check internet connection": "Internet connection not available. Please check internet connection",
+    "Something went wrong, please try again after some time": "Something went wrong, please try again after some time",
+    "Some orders are not initialized": "Some orders are not initialized"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ONDC QR se Bharat Khulega"
@@ -577,7 +593,7 @@
     "Return_Failed": "Return Failed",
     "Return_Rejected": "Return Rejected",
     "Pending": "Pending",
-    "Packed" : "Packed",
+    "Packed": "Packed",
     "Agent-assigned": "Agent assigned",
     "Out-for-pickup": "Out for pickup",
     "Pickup-failed": "Pickup failed",

@@ -25,6 +25,7 @@ import {showToastWithGravity} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useUploadFile from '../../../../hooks/useUploadFile';
 import {useAppTheme} from '../../../../utils/theme';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 const CancelToken = axios.CancelToken;
 
@@ -35,6 +36,7 @@ const ReturnItem = ({
   navigation: any;
   route: any;
 }) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const {
     maxReturnCount,
@@ -293,7 +295,7 @@ const ReturnItem = ({
                       <FontIcon name={'minus'} color={theme.colors.primary} />
                     </TouchableOpacity>
                     <Text variant={'bodyMedium'} style={styles.quantity}>
-                      {quantity}
+                      {formatNumber(quantity)}
                     </Text>
                     <TouchableOpacity
                       disabled={apiRequested}
@@ -308,9 +310,11 @@ const ReturnItem = ({
                   </View>
                   <Text variant={'labelLarge'} style={styles.quantity}>
                     {CURRENCY_SYMBOLS[item.product?.price?.currency]}
-                    {Number(
-                      quantity * maxReturnCount * item.product?.price?.value,
-                    ).toFixed(2)}
+                    {formatNumber(
+                      Number(
+                        quantity * maxReturnCount * item.product?.price?.value,
+                      ).toFixed(2),
+                    )}
                   </Text>
                 </View>
               </View>

@@ -8,6 +8,7 @@ import {useTranslation} from 'react-i18next';
 import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
+import useFormatNumber from '../../../../../hooks/useFormatNumber';
 
 const ProductSummary = ({
   items,
@@ -18,12 +19,52 @@ const ProductSummary = ({
   quote: any;
   fulfilment: any;
 }) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
 
+  const renderTaxes = () => {
+    const data = quote?.breakup?.filter(
+      (one: any) => one['@ondc/org/title_type'] !== 'item',
+    );
+    const summedData = data.reduce((acc, curr) => {
+      const title = curr.title;
+      const value = parseFloat(curr.price.value);
+
+      if (!acc[title]) {
+        acc[title] = {
+          title: title,
+          price: {
+            currency: curr.price.currency,
+            value: 0,
+          },
+        };
+      }
+
+      acc[title].price.value += value;
+
+      return acc;
+    }, {});
+
+    return (
+      <View style={styles.summaryContainer}>
+        {Object.values(summedData)?.map((one: any) => (
+          <View key={one?.title} style={styles.summaryRow}>
+            <Text variant={'labelMedium'} style={styles.taxName}>
+              {one?.title}
+            </Text>
+            <Text variant={'labelMedium'} style={styles.taxValue}>
+              {CURRENCY_SYMBOLS[one?.price?.currency]}
+              {formatNumber(one?.price?.value.toFixed(2))}
+            </Text>
+          </View>
+        ))}
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -86,9 +127,11 @@ const ProductSummary = ({
                     </Text>
                     <Text variant={'labelLarge'} style={styles.itemPrice}>
                       {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                      {Number(
-                        item?.quantity?.count * item?.product?.price?.value,
-                      ).toFixed(2)}
+                      {formatNumber(
+                        Number(
+                          item?.quantity?.count * item?.product?.price?.value,
+                        ).toFixed(2),
+                      )}
                     </Text>
                   </View>
                 </View>
@@ -159,21 +202,7 @@ const ProductSummary = ({
           </View>
         );
       })}
-      <View style={styles.summaryContainer}>
-        {quote?.breakup
-          ?.filter((one: any) => one['@ondc/org/title_type'] !== 'item')
-          .map((one: any) => (
-            <View key={one?.title} style={styles.summaryRow}>
-              <Text variant={'labelMedium'} style={styles.taxName}>
-                {one?.title}
-              </Text>
-              <Text variant={'labelMedium'} style={styles.taxValue}>
-                {CURRENCY_SYMBOLS[one?.price?.currency]}
-                {one?.price?.value}
-              </Text>
-            </View>
-          ))}
-      </View>
+      {renderTaxes()}
       <View style={styles.divider} />
       <View style={styles.grossTotal}>
         <Text variant={'titleMedium'} style={styles.grossTotalLabel}>
@@ -181,7 +210,7 @@ const ProductSummary = ({
         </Text>
         <Text variant={'headlineSmall'} style={styles.grossTotalValue}>
           {CURRENCY_SYMBOLS[quote?.price?.currency]}
-          {quote?.price?.value}
+          {formatNumber(quote?.price?.value)}
         </Text>
       </View>
     </View>

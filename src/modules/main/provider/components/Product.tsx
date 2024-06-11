@@ -7,6 +7,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface Product {
   product: any;
@@ -16,6 +17,7 @@ interface Product {
 const NoImageAvailable = require('../../../../assets/noImage.png');
 
 const Product: React.FC<Product> = ({product, search = false}) => {
+  const {formatNumber} = useFormatNumber();
   const isFBDomain = product.context.domain === FB_DOMAIN;
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -71,7 +73,7 @@ const Product: React.FC<Product> = ({product, search = false}) => {
       <View style={styles.row}>
         <Text variant={'bodyLarge'} style={styles.amount}>
           {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
-          {product?.item_details?.price?.value}
+          {formatNumber(product?.item_details?.price?.value)}
         </Text>
       </View>
     </TouchableOpacity>

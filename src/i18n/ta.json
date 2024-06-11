@@ -57,6 +57,7 @@
     "Non Veg": "நான் வெக்",
     "Egg": "முட்டை",
     "Required": "தேவை",
+    "Maximum allowed quantity": "அனுமதிக்கப்பட்ட அதிகபட்ச அளவு {{count}}",
     "All Options": "அனைத்து\nவிருப்பங்களும்",
     "Edit": "தொகு",
     "Qty": "குட்டி",
@@ -188,8 +189,8 @@
     "Please try ordering from another store or try again later": "வேறொரு கடையில் ஆர்டர் செய்ய முயற்சிக்கவும் அல்லது பிறகு முயற்சிக்கவும்",
     "Explore Other Stores": "மற்ற கடைகளை ஆராயுங்கள்",
     "Fulfilment no": "{{total}} இல் {{current}}",
-    "Delivered Today by": "மூலம் இன்று வழங்கப்பட்டது {{time}}",
-    "Delivered In": "உள்ளே வழங்கப்பட்டது {{time}}",
+    "Delivered Today by": "இன்று {{time}} மணிக்கு டெலிவரி",
+    "Delivered In": "டெலிவரி இன் {{time}}",
     "Delivered by": "மூலம் அனுப்பப்படும் {{date}}",
     "Self pickup by": "{{time}} மூலம் சுய-பிக்அப்"
   },
@@ -406,12 +407,13 @@
   },
   "Variations": {
     "Available Options": "{{groupName}} விருப்பங்கள் உள்ளன",
-    "Size Guide": "அளவு வழிகாட்டி"
+    "Size Guide": "அளவு விளக்கப்படம்"
   },
   "Complaint": {
     "Issue Id": "ஐடி வெளியீடு",
     "Issue Raised On": "பிரச்சினை எழுப்பப்பட்டது",
-    "View Summary": "சுருக்கத்தைப் பார்க்கவும்"
+    "View Summary": "சுருக்கத்தைப் பார்க்கவும்",
+    "Complaint raised successfully": "புகார் வெற்றிகரமாக எழுப்பப்பட்டது"
   },
   "Complaint Details": {
     "Complaint Details": "புகார் விவரங்கள்",
@@ -560,10 +562,24 @@
       "Ongoing": "ஆன்கோயிங்",
       "Completed": "காம்ப்ளிட்டட்",
       "Cancelled": "கேன்சல்ட்"
-    }
+    },
+    "Cannot get status for this product": "இந்த தயாரிப்புக்கான நிலையை பெற முடியவில்லை",
+    "Tracking information is not provided by the provider": "கண்காணிப்பு தகவல் வழங்குநரால் வழங்கப்படவில்லை"
   },
   "Global": {
-    "Details not available": "ஸ்டோர் விவரங்கள் கிடைக்கவில்லை"
+    "Details not available": "ஸ்டோர் விவரங்கள் கிடைக்கவில்லை",
+    "Cannot fetch details for this product. Please try again": "இந்த தயாரிப்புக்கான விவரங்களை பெற முடியவில்லை. தயவுசெய்து மீண்டும் முயற்சிக்கவும்",
+    "Please select payment": "பணம் செலுத்தும் விருப்பத்தைத் தேர்ந்தெடுக்கவும்",
+    "Please select address": "தயவுசெய்து முகவரியைத் தேர்ந்தெடுக்கவும்",
+    "Cannot fetch details for some product, those products will be ignored": "சில தயாரிப்புகளுக்கான விவரங்களைப் பெற முடியவில்லை, அந்த தயாரிப்புகள் புறக்கணிக்கப்படும்",
+    "Session Expired": "அமர்வு காலாவதியாகிவிட்டது",
+    "Session expired, please login again to continue": "அமர்வு காலாவதியானது, தொடர மீண்டும் உள்நுழையவும்",
+    "Logout": "வெளியேறு",
+    "Version mismatch": "பதிப்பு பொருந்தாதது",
+    "Please upgrade your application to the latest version": "உங்கள் பயன்பாட்டை சமீபத்திய பதிப்பிற்கு மேம்படுத்தவும்",
+    "Internet connection not available. Please check internet connection": "இணைய இணைப்பு இல்லை. இணைய இணைப்பை சரிபார்க்கவும்",
+    "Something went wrong, please try again after some time": "ஏதோ தவறு நடந்தது, சிறிது நேரத்திற்குப் பிறகு மீண்டும் முயற்சிக்கவும்",
+    "Some orders are not initialized": "சில ஆர்டர்கள் துவக்கப்படவில்லை."
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ஒஎன்டிசி கியூஆர் சே பாரத் குலேகா"

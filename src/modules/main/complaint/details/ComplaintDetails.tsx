@@ -15,6 +15,8 @@ import EscalateForm from './components/EscalateForm';
 import CloseForm from './components/CloseForm';
 import {compareDateWithDuration} from '../../../../utils/utils';
 import {updateComplaint} from '../../../../redux/complaint/actions';
+import useFormatDate from '../../../../hooks/useFormatDate';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -27,6 +29,8 @@ const categories = ISSUE_TYPES.map(item => {
 }).flat();
 
 const ComplaintDetails = () => {
+  const {formatNumber} = useFormatNumber();
+  const {formatDate} = useFormatDate();
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {t} = useTranslation();
@@ -136,7 +140,8 @@ const ComplaintDetails = () => {
                         {action?.respondent_action} (Issue)
                       </Text>
                       <Text variant={'labelMedium'} style={styles.date}>
-                        {moment(action?.updated_at).format(
+                        {formatDate(
+                          moment(action?.updated_at),
                           'DD MMM YYYY hh:mma',
                         )}
                       </Text>
@@ -193,7 +198,8 @@ const ComplaintDetails = () => {
           <View style={styles.row}>
             <Text variant={'labelLarge'} style={styles.issueRaisedOn}>
               {t('Complaint Details.Issue Raised On')}:{' '}
-              {moment(complaintDetails?.created_at).format(
+              {formatDate(
+                moment(complaintDetails?.created_at),
                 'DD MMM YYYY hh:mma',
               )}{' '}
               | Fulfillment :{' '}
@@ -213,11 +219,13 @@ const ComplaintDetails = () => {
                 <Text variant={'bodySmall'} style={styles.qty}>
                   {t('Complaint Details.QTY')}: {item?.quantity?.count} X{' '}
                   {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                  {item?.product?.price?.value}
+                  {formatNumber(item?.product?.price?.value)}
                 </Text>
                 <Text variant={'bodyLarge'} style={styles.itemQuantity}>
                   {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                  {item?.quantity?.count * item?.product?.price?.value}
+                  {formatNumber(
+                    item?.quantity?.count * item?.product?.price?.value,
+                  )}
                 </Text>
               </View>
             </View>
@@ -234,18 +242,26 @@ const ComplaintDetails = () => {
             {t('Complaint Details.Expected Response Time')}
           </Text>
           <Text variant={'bodySmall'} style={styles.itemDescription}>
-            {moment(complaintDetails?.created_at)
-              .add(moment.duration('PT1H').asMilliseconds(), 'milliseconds')
-              .format('hh:mm a, MMMM Do, YYYY')}
+            {formatDate(
+              moment(complaintDetails?.created_at).add(
+                moment.duration('PT1H').asMilliseconds(),
+                'milliseconds',
+              ),
+              'hh:mm a, MMMM Do, YYYY',
+            )}
           </Text>
 
           <Text variant={'bodyLarge'} style={styles.itemTitle}>
             {t('Complaint Details.Expected Resolution Time')}
           </Text>
           <Text variant={'bodySmall'} style={styles.itemDescription}>
-            {moment(complaintDetails?.created_at)
-              .add(moment.duration('P1D').asMilliseconds(), 'milliseconds')
-              .format('hh:mm a, MMMM Do, YYYY')}
+            {formatDate(
+              moment(complaintDetails?.created_at).add(
+                moment.duration('P1D').asMilliseconds(),
+                'milliseconds',
+              ),
+              'hh:mm a, MMMM Do, YYYY',
+            )}
           </Text>
 
           <View style={styles.actionButtonContainer}>

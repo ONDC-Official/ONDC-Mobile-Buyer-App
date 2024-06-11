@@ -124,7 +124,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
 
       if (trackEventSourceResponseRef.current.length <= 0) {
         showToastWithGravity(
-          'Cannot proceed with you request now! Please try again',
+          'Return Items.Cannot proceed with you request now. Please try again',
         );
         dispatch(updateRequestingTracker(false));
       }
@@ -153,7 +153,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
       if (message.tracking.status === 'active' && message.tracking.url === '') {
         dispatch(updateRequestingTracker(false));
         showToastWithGravity(
-          'Tracking information is not provided by the provider.',
+          t('Orders.Tracking information is not provided by the provider'),
         );
         return;
       } else if (
@@ -196,7 +196,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
       } else {
         dispatch(updateRequestingTracker(false));
         showToastWithGravity(
-          'Tracking information is not provided by the provider.',
+          t('Orders.Tracking information is not provided by the provider'),
         );
         return;
       }

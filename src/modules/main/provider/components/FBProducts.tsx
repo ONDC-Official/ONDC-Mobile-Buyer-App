@@ -1,9 +1,10 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {Text} from 'react-native-paper';
+import {List, Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {API_BASE_URL, CUSTOM_MENU, ITEMS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -14,6 +15,7 @@ import ProductSearch from '../../../../components/products/ProductSearch';
 
 const CancelToken = axios.CancelToken;
 const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const customMenuSource = useRef<any>(null);
@@ -21,6 +23,9 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
   const [menu, setMenu] = useState<any[]>([]);
   const [menuRequested, setMenuRequested] = useState<boolean>(true);
   const [selectedFilter, setSelectedFilter] = useState<string>('');
+  const [expandedAccordionId, setExpandedAccordionId] = useState<
+    string | number
+  >('');
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -40,12 +45,15 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
           ),
         ),
       );
-      setMenu(
-        data.data.map((one: any, index: number) => {
-          one.items = menuResponses[index].data.data;
-          return one;
-        }),
-      );
+      const list = data.data.map((one: any, index: number) => {
+        one.items = menuResponses[index].data.data;
+        return one;
+      });
+
+      if (list.length > 0) {
+        setExpandedAccordionId(list[0].id);
+      }
+      setMenu(list);
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -109,7 +117,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
             style={styles.filterIcon}
           />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>
-            Veg
+            {t('Cart.Veg')}
           </Text>
           {selectedFilter === 'veg' && (
             <Icon
@@ -135,7 +143,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
             style={styles.filterIcon}
           />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>
-            Non-veg
+            {t('Cart.Non Veg')}
           </Text>
           {selectedFilter === 'nonveg' && (
             <Icon
@@ -161,7 +169,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
             style={styles.filterIcon}
           />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>
-            Egg
+            {t('Cart.Egg')}
           </Text>
           {selectedFilter === 'egg' && (
             <Icon
@@ -179,13 +187,17 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
           setSearchQuery={setSearchQuery}
         />
       </View>
-      {filteredSections.map(section => (
-        <CustomMenuAccordion
-          key={section.id}
-          section={section}
-          selectedFilter={selectedFilter}
-        />
-      ))}
+      <List.AccordionGroup
+        expandedId={expandedAccordionId}
+        onAccordionPress={expandedId => setExpandedAccordionId(expandedId)}>
+        {filteredSections.map(section => (
+          <CustomMenuAccordion
+            key={section.id}
+            section={section}
+            selectedFilter={selectedFilter}
+          />
+        ))}
+      </List.AccordionGroup>
     </View>
   );
 };

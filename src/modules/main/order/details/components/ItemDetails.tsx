@@ -16,6 +16,8 @@ import {
 import FulfilmentStatus from './FulfilmentStatus';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
+import useFormatDate from '../../../../../hooks/useFormatDate';
+import useFormatNumber from '../../../../../hooks/useFormatNumber';
 
 const today = moment();
 
@@ -28,6 +30,7 @@ const SingleItem = ({
   customizations?: any[];
   itemQuantityTag?: any;
 }) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -63,7 +66,9 @@ const SingleItem = ({
             </Text>
             <Text variant={'labelLarge'} style={styles.price}>
               {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-              {Number(itemQuantity * item?.product?.price?.value).toFixed(2)}
+              {formatNumber(
+                Number(itemQuantity * item?.product?.price?.value).toFixed(2),
+              )}
             </Text>
           </View>
         </View>
@@ -73,9 +78,9 @@ const SingleItem = ({
               const isLastItem = index === itemCustomizationList?.length - 1;
               return `${
                 customization?.product?.item_details?.descriptor?.name
-              } (₹${customization?.product?.item_details?.price?.value})${
-                isLastItem ? '' : ' + '
-              }`;
+              } (₹${formatNumber(
+                customization?.product?.item_details?.price?.value,
+              )})${isLastItem ? '' : ' + '}`;
             })}
           </Text>
         )}
@@ -129,6 +134,7 @@ const ItemDetails = ({
   fulfillments: any[];
   items: any[];
 }) => {
+  const {formatDate} = useFormatDate();
   const {t} = useTranslation();
   const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
   const navigation = useNavigation<any>();
@@ -204,9 +210,14 @@ const ItemDetails = ({
             {t('Profile.Shipment Details')}
           </Text>
           {shipmentFulfillmentList?.map((fulfillment: any) => {
-            const endDate = fulfillment?.end?.time?.timestamp
-              ? moment(fulfillment?.end?.time?.timestamp)
-              : moment(fulfillment?.end?.time?.range?.end);
+            let endDate = moment();
+            if (fulfillment.hasOwnProperty('@ondc/org/TAT')) {
+              endDate.add(moment.duration(fulfillment['@ondc/org/TAT']));
+            } else {
+              endDate = fulfillment?.end?.time?.timestamp
+                ? moment(fulfillment?.end?.time?.timestamp)
+                : moment(fulfillment?.end?.time?.range?.end);
+            }
             const filteredItems = items.filter(
               item => item.fulfillment_id === fulfillment.id,
             );
@@ -231,8 +242,8 @@ const ItemDetails = ({
                       </Text>
                       <Text variant={'labelSmall'} style={styles.deliveryDate}>
                         {today.isSame(endDate, 'day')
-                          ? endDate.format('hh:mm a')
-                          : endDate.format('Do MMM')}
+                          ? formatDate(endDate, 'hh:mm a')
+                          : formatDate(endDate, 'Do MMM')}
                       </Text>
                     </View>
                   ) : (
@@ -242,8 +253,8 @@ const ItemDetails = ({
                       </Text>
                       <Text variant={'labelSmall'} style={styles.deliveryDate}>
                         {today.isSame(endDate, 'day')
-                          ? endDate.format('hh:mm a')
-                          : endDate.format('Do MMM')}
+                          ? formatDate(endDate, 'hh:mm a')
+                          : formatDate(endDate, 'Do MMM')}
                       </Text>
                     </View>
                   )}
@@ -325,8 +336,14 @@ const ItemDetails = ({
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
                       {returnInitiated
                         ? today.isSame(moment(returnInitiated.createdAt), 'day')
-                          ? moment(returnInitiated.createdAt).format('hh:mm a')
-                          : moment(returnInitiated.createdAt).format('Do MMM')
+                          ? formatDate(
+                              moment(returnInitiated.createdAt),
+                              'hh:mm a',
+                            )
+                          : formatDate(
+                              moment(returnInitiated.createdAt),
+                              'Do MMM',
+                            )
                         : ''}
                     </Text>
                   </View>
@@ -421,8 +438,14 @@ const ItemDetails = ({
                     </Text>
                     <Text variant={'labelSmall'} style={styles.deliveryDate}>
                       {today.isSame(moment(cancelInitiated.createdAt), 'day')
-                        ? moment(cancelInitiated.createdAt).format('hh:mm a')
-                        : moment(cancelInitiated.createdAt).format('Do MMM')}
+                        ? formatDate(
+                            moment(cancelInitiated.createdAt),
+                            'hh:mm a',
+                          )
+                        : formatDate(
+                            moment(cancelInitiated.createdAt),
+                            'Do MMM',
+                          )}
                     </Text>
                   </View>
                   <View style={styles.statusContainer}>

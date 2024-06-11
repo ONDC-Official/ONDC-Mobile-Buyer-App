@@ -38,6 +38,7 @@ import {
 } from '../../../../../utils/utils';
 import {useAppTheme} from '../../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import useFormatNumber from '../../../../../hooks/useFormatNumber';
 
 const validationSchema = yup.object({
   subcategory: yup.string().required('Subcategory is required'),
@@ -68,6 +69,7 @@ const RaiseIssueButton = ({
 }: {
   getOrderDetails: (selfUpdate?: boolean) => void;
 }) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -122,7 +124,7 @@ const RaiseIssueButton = ({
 
   const onSuccess = () => {
     hideDialog();
-    showToastWithGravity('Complaint raised successfully!');
+    showToastWithGravity(t('Complaint.Complaint raised successfully'));
     getOrderDetails();
   };
 
@@ -249,7 +251,9 @@ const RaiseIssueButton = ({
       );
       //Error handling workflow eg, NACK
       if (data.message && data.message.ack.status === 'NACK') {
-        showToastWithGravity('Something went wrong');
+        showToastWithGravity(
+          t('Global.Something went wrong, please try again after some time'),
+        );
         setRaiseInProgress(false);
       } else {
         onRaiseIssue(data.context?.message_id, createdDateTime);
@@ -368,7 +372,7 @@ const RaiseIssueButton = ({
                         />
                       </TouchableOpacity>
                       <Text variant={'labelMedium'} style={styles.quantity}>
-                        {item?.quantity?.count}
+                        {formatNumber(item?.quantity?.count)}
                       </Text>
                       <TouchableOpacity
                         disabled={
@@ -387,9 +391,10 @@ const RaiseIssueButton = ({
 
                     <Text variant={'labelLarge'} style={styles.amount}>
                       {CURRENCY_SYMBOLS[item?.product?.price?.currency]}
-                      {(
-                        item?.quantity?.count * item?.product?.price?.value
-                      ).toFixed(2)}
+                      {formatNumber(
+                        item?.quantity?.count *
+                          item?.product?.price?.value.toFixed(2),
+                      )}
                     </Text>
                   </View>
                 );

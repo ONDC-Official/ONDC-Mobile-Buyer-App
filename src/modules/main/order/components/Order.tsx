@@ -11,6 +11,8 @@ import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
 import {isItemCustomization} from '../../../../utils/utils';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
+import useFormatDate from '../../../../hooks/useFormatDate';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface Order {
   order: any;
@@ -23,6 +25,8 @@ interface Order {
  * @returns {JSX.Element}
  */
 const OrderHeader: React.FC<Order> = ({order}) => {
+  const {formatNumber} = useFormatNumber();
+  const {formatDate} = useFormatDate();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -82,12 +86,12 @@ const OrderHeader: React.FC<Order> = ({order}) => {
         })}
         <View style={styles.paymentDetails}>
           <Text style={styles.date} variant={'labelSmall'}>
-            {moment(order?.createdAt).format('DD MMM YYYY hh:mm a')}
+            {formatDate(moment(order?.createdAt), 'DD MMM YYYY hh:mm a')}
           </Text>
           <View style={styles.amountContainer}>
             <Text style={styles.amount} variant={'labelLarge'}>
               {CURRENCY_SYMBOLS[order?.payment?.params?.currency]}
-              {order?.payment?.params?.amount}
+              {formatNumber(order?.payment?.params?.amount)}
             </Text>
             <Icon
               name={'keyboard-arrow-right'}

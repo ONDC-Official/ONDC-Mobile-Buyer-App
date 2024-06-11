@@ -57,6 +57,7 @@
     "Non Veg": "नॉन वेग",
     "Egg": "अंडी",
     "Required": "आवश्यक आहे",
+    "Maximum allowed quantity": "जास्तीत जास्त परवानगी असलेले प्रमाण {{count}} आहे",
     "All Options": "सर्व\nपर्याय",
     "Edit": "सुधारणे",
     "Qty": "क्यूटी",
@@ -188,8 +189,8 @@
     "Please try ordering from another store or try again later": "कृपया दुसऱ्या दुकानातून ऑर्डर करून पहा किंवा नंतर पुन्हा प्रयत्न करा",
     "Explore Other Stores": "इतर स्टोअर्स एक्सप्लोर करा",
     "Fulfilment no": "{{total}} पैकी {{current}}",
-    "Delivered Today by": "{{time}} वितरित केले",
-    "Delivered In": "{{time}} वितरित",
+    "Delivered Today by": "आज {{time}} वाजेपर्यंत वितरण",
+    "Delivered In": "डिलीवरी इन {{time}}",
     "Delivered by": "{{date}} द्वारा वितरित",
     "Self pickup by": "{{time}} द्वारे स्व-उचल"
   },
@@ -406,12 +407,13 @@
   },
   "Variations": {
     "Available Options": "उपलब्ध {{groupName}} पर्याय",
-    "Size Guide": "आकार मार्गदर्शक"
+    "Size Guide": "आकार तक्ता"
   },
   "Complaint": {
     "Issue Id": "अंक आयडी",
     "Issue Raised On": "मुद्दा मांडला",
-    "View Summary": "सारांश पहा"
+    "View Summary": "सारांश पहा",
+    "Complaint raised successfully": "तक्रार यशस्वीरित्या दाखल करण्यात आली"
   },
   "Complaint Details": {
     "Complaint Details": "तक्रारीचे तपशील",
@@ -560,10 +562,24 @@
       "Ongoing": "ऑन्गोइंग",
       "Completed": "कंप्लिटेड",
       "Cancelled": "कॅन्सेल्ड"
-    }
+    },
+    "Cannot get status for this product": "या उत्पादनाची स्थिती मिळू शकली नाही",
+    "Tracking information is not provided by the provider": "मागोवा घेण्याची माहिती पुरवठादाराद्वारे पुरवली जात नाही"
   },
   "Global": {
-    "Details not available": "स्टोअर तपशील उपलब्ध नाहीत"
+    "Details not available": "स्टोअर तपशील उपलब्ध नाहीत",
+    "Cannot fetch details for this product. Please try again": "या उत्पादनासाठी तपशील मिळवता येत नाही. कृपया पुन्हा प्रयत्न करा.",
+    "Please select payment": "कृपया भरणा पर्याय निवडा",
+    "Please select address": "कृपया पत्ता निवडा",
+    "Cannot fetch details for some product, those products will be ignored": "काही उत्पादनाचा तपशील मिळवता येत नाही, त्या उत्पादनांकडे दुर्लक्ष केले जाईल",
+    "Session Expired": "सत्राची मुदत संपली",
+    "Session expired, please login again to continue": "सत्राची मुदत संपली, कृपया पुढे जाण्यासाठी पुन्हा प्रवेश करा",
+    "Logout": "लॉगआऊट करा",
+    "Version mismatch": "आवृत्ती विसंगती",
+    "Please upgrade your application to the latest version": "कृपया तुमचा अनुप्रयोग नवीनतम आवृत्तीमध्ये सुधारित करा",
+    "Internet connection not available. Please check internet connection": "इंटरनेट जोडणी उपलब्ध नाही. कृपया इंटरनेट जोडणी तपासा",
+    "Something went wrong, please try again after some time": "काहीतरी चूक झाली आहे, कृपया काही काळानंतर पुन्हा प्रयत्न करा",
+    "Some orders are not initialized": "काही ऑर्डर सुरू केल्या जात नाहीत."
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ओएनडीसी क्यूआर से भारत खुलेगा"

@@ -69,7 +69,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
           await withoutConfigRequest();
         }
         const searchResponse = await computeRequestTransliteration(query);
-        query = searchResponse?.pipelineResponse[0]?.output[0]?.target[0];
+        query = searchResponse?.pipelineResponse[0]?.output[0]?.target;
       }
       let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}&name=${query}`;
       const {data} = await getDataWithAuth(

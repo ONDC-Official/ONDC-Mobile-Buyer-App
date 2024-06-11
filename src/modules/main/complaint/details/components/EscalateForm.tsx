@@ -151,7 +151,9 @@ const EscalateForm = ({
       );
       //Error handling workflow eg, NACK
       if (data.message && data.message.ack.status === 'NACK') {
-        showToastWithGravity('Something went wrong');
+        showToastWithGravity(
+          t('Global.Something went wrong, please try again after some time'),
+        );
         setApiInProgress(false);
       } else {
         onEscalateIssue(

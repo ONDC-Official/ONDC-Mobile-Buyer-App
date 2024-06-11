@@ -57,6 +57,7 @@
     "Non Veg": "नॉन वेग",
     "Egg": "अंडा",
     "Required": "आवश्यक",
+    "Maximum allowed quantity": "अधिकतम अनुमत मात्रा {{count}} है",
     "All Options": "सभी\nविकल्प",
     "Edit": "संपादन करना",
     "Qty": "क्यूटी",
@@ -172,7 +173,7 @@
     "It seems you haven’t added any products in your cart": "ऐसा लगता है कि आपने अपने कार्ट में कोई उत्पाद नहीं जोड़ा है"
   },
   "Page": {
-    ", Go To Cart": ", , गो तो कार्ट",
+    ", Go To Cart": ", गो तो कार्ट",
     "Item Added": "आइटम जोड़ा गया",
     "Items Added": "आइटम जोड़े गए"
   },
@@ -188,8 +189,8 @@
     "Please try ordering from another store or try again later": "कृपया किसी अन्य स्टोर से ऑर्डर करने का प्रयास करें या बाद में पुनः प्रयास करें",
     "Explore Other Stores": "अन्य स्टोर खोजें",
     "Fulfilment no": "{{total}} में से {{current}}",
-    "Delivered Today by": "{{time}} द्वारा आज वितरित किया गया",
-    "Delivered In": "{{time}} में वितरित किया गया",
+    "Delivered Today by": "आज {{time}} बजे तक डिलीवरी",
+    "Delivered In": "डिलीवरी इन {{time}}",
     "Delivered by": "{{date}} द्वारा वितरित",
     "Self pickup by": "{{time}} द्वारा स्व-चयन करें"
   },
@@ -406,12 +407,13 @@
   },
   "Variations": {
     "Available Options": "उपलब्ध {{groupName}} विकल्प",
-    "Size Guide": "साइज़ संदर्शिका"
+    "Size Guide": "आकार चार्ट"
   },
   "Complaint": {
     "Issue Id": "अंक क्रमांक",
     "Issue Raised On": "मुद्दा उठाया गया",
-    "View Summary": "सारांश देखें"
+    "View Summary": "सारांश देखें",
+    "Complaint raised successfully": "शिकायत सफलतापूर्वक उठाई गई"
   },
   "Complaint Details": {
     "Complaint Details": "शिकायत विवरण",
@@ -560,10 +562,24 @@
       "Ongoing": "ओंगोइंग",
       "Completed": "कंप्लीटेड",
       "Cancelled": "कैंसल्ड"
-    }
+    },
+    "Cannot get status for this product": "इस उत्पाद के लिए स्थिति प्राप्त नहीं कर सकता है",
+    "Tracking information is not provided by the provider": "ट्रैकिंग जानकारी प्रदाता द्वारा प्रदान नहीं की जाती है"
   },
   "Global": {
-    "Details not available": "स्टोर विवरण उपलब्ध नहीं है"
+    "Details not available": "स्टोर विवरण उपलब्ध नहीं है",
+    "Cannot fetch details for this product. Please try again": "इस उत्पाद के लिए विवरण प्राप्त नहीं कर सकते हैं। कृपया फिर से प्रयास करें।",
+    "Please select payment": "कृपया भुगतान विकल्प चुनें",
+    "Please select address": "कृपया पता चुनें",
+    "Cannot fetch details for some product, those products will be ignored": "किसी उत्पाद के लिए विवरण प्राप्त नहीं कर सकते हैं, उन उत्पादों को नजरअंदाज कर दिया जाएगा",
+    "Session Expired": "सत्र समाप्त हो गया",
+    "Session expired, please login again to continue": "सत्र समाप्त हो गया है, कृपया जारी रखने के लिए फिर से लॉगिन करें",
+    "Logout": "लॉगआउट करें",
+    "Version mismatch": "संस्करण बेमेल",
+    "Please upgrade your application to the latest version": "कृपया अपने अनुप्रयोग को नवीनतम संस्करण में उन्नत करें",
+    "Internet connection not available. Please check internet connection": "इंटरनेट कनेक्शन उपलब्ध नहीं है। कृपया इंटरनेट कनेक्शन की जाँच करें",
+    "Something went wrong, please try again after some time": "कुछ गलत हुआ, कृपया कुछ समय बाद फिर से प्रयास करें",
+    "Some orders are not initialized": "कुछ ऑर्डर आरंभ नहीं किए जाते हैं।"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ओएनडीसी क्यूआर से भारत खुलेगा"

@@ -27,11 +27,14 @@ public class RootCheckModule extends ReactContextBaseJavaModule {
     private boolean checkForMagisk() {
         // Implement your logic to detect Magisk
         String[] paths = {
-                "/sbin/magisk",
-                "/sbin/magiskhide",
-                "/sbin/.magisk",
-                "/cache/magisk.log",
-                "/data/magisk"
+                "/sbin/su",
+                "/system/bin/su",
+                "/system/xbin/su",
+                "/data/local/xbin/su",
+                "/data/local/bin/su",
+                "/system/sd/xbin/su",
+                "/system/bin/failsafe/su",
+                "/data/local/su"
         };
 
         for (String path : paths) {

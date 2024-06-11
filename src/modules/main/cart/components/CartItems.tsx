@@ -33,6 +33,7 @@ import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
 import DeleteIcon from '../../../../assets/delete.svg';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -53,6 +54,7 @@ const CartItems: React.FC<CartItems> = ({
   cartItems,
   setCartItems,
 }) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -255,9 +257,11 @@ const CartItems: React.FC<CartItems> = ({
                       <Text variant="bodyLarge">
                         ₹
                         {cartItem.item.hasCustomisations
-                          ? Number(getPriceWithCustomisations(cartItem)) *
-                            Number(cartItem?.item?.quantity?.count)
-                          : Number(cartItem?.item?.product?.subtotal)}
+                          ? formatNumber(
+                              getPriceWithCustomisations(cartItem) *
+                                Number(cartItem?.item?.quantity?.count),
+                            )
+                          : formatNumber(cartItem?.item?.product?.subtotal)}
                       </Text>
                     </View>
                   </View>
@@ -381,7 +385,7 @@ const CartItems: React.FC<CartItems> = ({
                       productPayload?.item_details?.price?.currency
                     ]
                   }
-                  {productPayload?.item_details?.price?.value}
+                  {formatNumber(productPayload?.item_details?.price?.value)}
                 </Text>
               </View>
             </View>

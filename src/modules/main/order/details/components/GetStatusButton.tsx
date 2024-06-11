@@ -91,7 +91,7 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
       ];
       const {message, error = {}} = data[0];
       if (error?.message) {
-        showToastWithGravity('Cannot get status for this product');
+        showToastWithGravity(t('Orders.Cannot get status for this product'));
         dispatch(updateRequestingStatus(false));
         return;
       }
@@ -133,7 +133,9 @@ const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
 
       if (statusEventSourceResponseRef.current.length <= 0) {
         showToastWithGravity(
-          'Cannot proceed with you request now! Please try again',
+          t(
+            'Return Items.Cannot proceed with you request now. Please try again',
+          ),
         );
         dispatch(updateRequestingStatus(false));
       }

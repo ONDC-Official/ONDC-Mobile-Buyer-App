@@ -7,12 +7,14 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useAppTheme} from '../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import useFormatNumber from '../../hooks/useFormatNumber';
 
 interface Page {
   children: React.ReactNode;
 }
 
 const Page: React.FC<Page> = ({children}) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -29,7 +31,7 @@ const Page: React.FC<Page> = ({children}) => {
         <View style={styles.container}>
           <TouchableOpacity style={styles.button} onPress={navigateToCart}>
             <Text variant={'bodyLarge'} style={styles.text}>
-              {itemCount}{' '}
+              {formatNumber(itemCount)}{' '}
               {itemCount > 1 ? t('Page.Items Added') : t('Page.Item Added')}
               {t('Page., Go To Cart')}
             </Text>

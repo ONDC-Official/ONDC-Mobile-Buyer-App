@@ -5,7 +5,6 @@ import {Text} from 'react-native-paper';
 import DeviceInfo, {getVersion} from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
 import JailMonkey from 'jail-monkey';
-import {useTranslation} from 'react-i18next';
 import {isDeviceRooted} from 'react-native-detect-frida';
 
 import {appStyles} from '../../../styles/styles';
@@ -15,6 +14,7 @@ import {saveAddress} from '../../../redux/address/actions';
 import {getUrlParams} from '../../../utils/utils';
 import {alertWithOneButton} from '../../../utils/alerts';
 import AppLogo from '../../../assets/app_logo.svg';
+
 const {RootCheck} = NativeModules;
 
 interface Splash {
@@ -30,8 +30,6 @@ interface Splash {
 const Splash: React.FC<Splash> = ({navigation}) => {
   const dispatch = useDispatch();
   const styles = makeStyles();
-
-  const {t} = useTranslation();
 
   const checkMagisk = async () => {
     return await RootCheck.isMagiskPresent();

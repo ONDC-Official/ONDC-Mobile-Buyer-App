@@ -13,10 +13,12 @@ import OtherBrandDetails from './components/OtherBrandDetails';
 import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
+import useFormatDate from '../../../hooks/useFormatDate';
 
 const CancelToken = axios.CancelToken;
 
 const BrandDetails = ({route: {params}}: {route: any}) => {
+  const {formatDate} = useFormatDate();
   const isFocused = useIsFocused();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
@@ -43,9 +45,10 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         data.timings = '';
         data.isOpen = false;
         if (data.time.range.start && data.time.range.end) {
-          data.timings = `${moment(data.time.range.start, 'hhmm').format(
+          data.timings = `${formatDate(
+            moment(data.time.range.start, 'hhmm'),
             'h:mm a',
-          )} - ${moment(data.time.range.end, 'hhmm').format('h:mm a')}`;
+          )} - ${formatDate(moment(data.time.range.end, 'hhmm'), 'h:mm a')}`;
           const time = moment();
           const startTime = moment(data.time.range.start, 'hh:mm');
           const endTime = moment(data.time.range.end, 'hh:mm');

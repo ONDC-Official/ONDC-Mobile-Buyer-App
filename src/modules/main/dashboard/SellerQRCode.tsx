@@ -3,7 +3,7 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import React, {useCallback, useState} from 'react';
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {getUrlParams, showToastWithGravity} from '../../../utils/utils';
+import {getUrlParams} from '../../../utils/utils';
 import {useAppTheme} from '../../../utils/theme';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
@@ -30,11 +30,7 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
           pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
         }
         navigation.replace('BrandDetails', pageParams);
-      } else {
-        showToastWithGravity(`Context action search is missing in ${url}`);
       }
-    } else {
-      showToastWithGravity(`Scanned URL ${event.data}`);
     }
   };
 

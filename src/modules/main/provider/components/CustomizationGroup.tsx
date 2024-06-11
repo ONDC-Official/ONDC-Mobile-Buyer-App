@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useAppTheme} from '../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 const VegNonVegTag = ({category = 'veg'}) => {
   return (
@@ -30,6 +31,7 @@ const CustomizationGroup = ({
   customizationGroups: any;
   handleClick: (group: any, option: any) => void;
 }) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -106,7 +108,7 @@ const CustomizationGroup = ({
                       <Text
                         variant={selected ? 'labelLarge' : 'labelMedium'}
                         style={styles.option}>
-                        ₹{option.price}
+                        ₹{formatNumber(option.price)}
                       </Text>
                       <Checkbox.Android
                         status={selected ? 'checked' : 'unchecked'}

@@ -17,6 +17,8 @@ import {useTranslation} from 'react-i18next';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
 import {makeGlobalStyles} from '../../../../styles/styles';
+import useFormatDate from '../../../../hooks/useFormatDate';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -43,8 +45,10 @@ const Fulfillment: React.FC<Fulfillment> = ({
   showPaymentOption,
   updateCartItems,
 }) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const navigation = useNavigation<any>();
+  const {formatDate} = useFormatDate();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
@@ -57,7 +61,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
         {quote?.title}
       </Text>
       <Text variant="labelLarge" style={styles.subTotal}>
-        ₹{Number(quote?.value).toFixed(2)}
+        ₹{formatNumber(Number(quote?.value).toFixed(2))}
       </Text>
     </View>
   );
@@ -299,7 +303,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                             <Text
                               variant={'bodyMedium'}
                               style={styles.itemsTotal}>
-                              ₹{fulfillmentTotal.toFixed(2)}
+                              ₹{formatNumber(fulfillmentTotal.toFixed(2))}
                             </Text>
                           </View>
                         )}
@@ -327,7 +331,12 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                     ) {
                                       tatMessage = t(
                                         'Fulfillment.Self pickup by',
-                                        {time: expectedTime.format('hh:mm a')},
+                                        {
+                                          time: formatDate(
+                                            expectedTime,
+                                            'hh:mm a',
+                                          ),
+                                        },
                                       );
                                     } else {
                                       tatMessage = t(
@@ -345,7 +354,10 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                     tatMessage = t(
                                       'Fulfillment.Self pickup by',
                                       {
-                                        time: expectedTime.format('dddd D MMM'),
+                                        time: formatDate(
+                                          expectedTime,
+                                          'dddd D MMM',
+                                        ),
                                       },
                                     );
                                   }
@@ -356,7 +368,12 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                     ) {
                                       tatMessage = t(
                                         'Fulfillment.Delivered Today by',
-                                        {time: expectedTime.format('hh:mm a')},
+                                        {
+                                          time: formatDate(
+                                            expectedTime,
+                                            'hh:mm a',
+                                          ),
+                                        },
                                       );
                                     } else {
                                       tatMessage = t(
@@ -372,7 +389,10 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                     }
                                   } else {
                                     tatMessage = t('Fulfillment.Delivered by', {
-                                      time: expectedTime.format('dddd D MMM'),
+                                      date: formatDate(
+                                        expectedTime,
+                                        'dddd D MMM',
+                                      ),
                                     });
                                   }
                                 }
@@ -447,7 +467,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                       : ''}
                   </Text>
                   <Text variant="labelLarge" style={styles.subTotal}>
-                    ₹{cartTotal}
+                    ₹{formatNumber(cartTotal)}
                   </Text>
                 </View>
                 {productsQuote?.providers.map(
@@ -475,7 +495,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                     {t('Fulfillment.To Pay')}
                   </Text>
                   <Text variant="headlineSmall" style={styles.totalOrder}>
-                    ₹{orderTotal}
+                    ₹{formatNumber(orderTotal)}
                   </Text>
                 </View>
                 <TouchableOpacity
