@@ -131,6 +131,10 @@ const Cart = () => {
     });
   };
 
+  const detectAddressNavigation = () => {
+    addressSheet.current.close();
+  };
+
   useFocusEffect(
     useCallback(() => {
       if (voiceDetectionStarted.current) {
@@ -138,6 +142,10 @@ const Cart = () => {
       }
     }, []),
   );
+
+  useEffect(() => {
+    setDeliveryAddress(address);
+  }, [address]);
 
   useEffect(() => {
     if (userInput.length > 0) {
@@ -647,6 +655,7 @@ const Cart = () => {
             <AddressList
               deliveryAddress={deliveryAddress}
               setDeliveryAddress={updateDeliveryAddress}
+              detectAddressNavigation={detectAddressNavigation}
             />
           </View>
         </CloseSheetContainer>
