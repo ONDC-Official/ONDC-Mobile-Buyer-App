@@ -177,8 +177,8 @@ const Payment: React.FC<Payment> = ({
       const contextCity = await getStoredData('contextCity');
       const payload = items.map((item: any) => {
         let itemsData = Object.assign([], JSON.parse(JSON.stringify(item)));
-        itemsData = itemsData.map((itemData: any) => {
-          delete itemData.product.fulfillment_id;
+        itemsData = itemsData?.map((itemData: any) => {
+          delete itemData?.product?.fulfillment_id;
           if (updatedCartItems.current) {
             let findItemFromQuote =
               updatedCartItems.current[0].message.quote.items.find(

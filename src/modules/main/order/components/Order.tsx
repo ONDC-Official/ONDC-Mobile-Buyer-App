@@ -59,16 +59,16 @@ const OrderHeader: React.FC<Order> = ({order}) => {
         <View>{order.state && <OrderStatus status={order.state} />}</View>
       </View>
       <View style={styles.orderDetails}>
-        {order?.items?.map((item: any) => {
+        {order?.items?.map((item: any, index: number) => {
           const isCustomization = isItemCustomization(item?.tags);
 
           if (isCustomization) {
-            return <View key={`${item?.id}${item.fulfillment_id}`} />;
+            return <View key={`${item?.id}${item.fulfillment_id}${index}`} />;
           }
 
           return (
             <View
-              key={`${item?.id}${item.fulfillment_id}`}
+              key={`${item?.id}${item.fulfillment_id}${index}`}
               style={styles.itemContainer}>
               {order.domain === FB_DOMAIN && (
                 <View style={styles.iconContainer}>

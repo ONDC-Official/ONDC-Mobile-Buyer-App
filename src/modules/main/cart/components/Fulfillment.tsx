@@ -94,8 +94,8 @@ const Fulfillment: React.FC<Fulfillment> = ({
   const {uniqueFulfilment, uniqueItems} = useMemo(() => {
     const fulfilmentIds = Array.from(
       new Set(
-        cartItems[0]?.message?.quote?.items.map(
-          (item: any) => item.fulfillment_id,
+        cartItems[0]?.message?.quote?.items?.map(
+          (item: any) => item?.fulfillment_id,
         ),
       ),
     );
@@ -187,7 +187,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                       } else {
                         isItem = true;
                       }
-                      return isItem && item.fulfillment_id === fulfillmentId;
+                      return isItem && item?.fulfillment_id === fulfillmentId;
                     });
                   let fulfillmentTotal = 0;
                   const fulfilmentList: any[] =
@@ -433,7 +433,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                                         const updateItems = JSON.parse(
                                           JSON.stringify(cartItems),
                                         );
-                                        updateItems[0]?.message?.quote?.items.forEach(
+                                        updateItems[0]?.message?.quote?.items?.forEach(
                                           (item: any) => {
                                             item.fulfillment_id = fulfilment.id;
                                           },

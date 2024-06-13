@@ -413,20 +413,20 @@ const ItemDetails = ({
             let itemId: any = null;
             let cancelId: any = null;
             if (isReturnInitiated) {
-              const cancelTag = fulfillment.tags.find(
+              const cancelTag = fulfillment?.tags?.find(
                 (tag: any) => tag.code === 'cancel_request',
               );
-              const returnTag = fulfillment.tags.find(
+              const returnTag = fulfillment?.tags?.find(
                 (tag: any) => tag.code === 'quote_trail',
               );
-              const reasonIdTag = cancelTag.list.find(
+              const reasonIdTag = cancelTag?.list?.find(
                 (tag: any) => tag.code === 'reason_id',
               );
-              const itemTag = returnTag.list.find(
+              const itemTag = returnTag?.list?.find(
                 (tag: any) => tag.code === 'id',
               );
-              itemId = itemTag.value;
-              cancelId = reasonIdTag.value;
+              itemId = itemTag?.value;
+              cancelId = reasonIdTag?.value;
             }
 
             return (

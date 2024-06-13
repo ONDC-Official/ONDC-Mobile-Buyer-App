@@ -39,14 +39,18 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
 
   const items = useMemo(() => {
     return orderDetails?.items?.filter((obj: any) => {
-      return obj?.tags?.some((tag: any) => {
-        return (
-          tag?.code === 'type' &&
-          tag?.list?.some((item: any) => {
-            return item.code === 'type' && item.value === 'item';
-          })
-        );
-      });
+      if (obj.hasOwnProperty('tags')) {
+        return obj?.tags?.some((tag: any) => {
+          return (
+            tag?.code === 'type' &&
+            tag?.list?.some((item: any) => {
+              return item.code === 'type' && item.value === 'item';
+            })
+          );
+        });
+      } else {
+        return true;
+      }
     });
   }, [orderDetails?.items]);
 
