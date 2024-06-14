@@ -115,27 +115,6 @@ export const cleanFormData = (initialObject: any) => {
   return object;
 };
 
-export const stringToDecimal = (value: string) => {
-  const number = Number(value);
-  return number.toFixed(2);
-};
-
-export const durationToHumanReadable = (value: any) => {
-  const duration = moment.duration(value);
-  const minutes = duration.asMinutes();
-  if (minutes > 60) {
-    const hours = duration.asHours();
-    if (hours > 24) {
-      const days = duration.asDays();
-      return {timeDuration: days, unit: 'days'};
-    } else {
-      return {timeDuration: hours, unit: 'hrs'};
-    }
-  } else {
-    return {timeDuration: minutes, unit: 'min'};
-  }
-};
-
 export const createCustomizationAndGroupMapping = (customizations: any[]) => {
   let newCustomizationGroupMappings: any = {};
   let customizationToGroupMap: any = {};

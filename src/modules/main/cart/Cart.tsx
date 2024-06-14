@@ -136,6 +136,10 @@ const Cart = () => {
     });
   };
 
+  const detectAddressNavigation = () => {
+    addressSheet.current.close();
+  };
+
   const hideConfirmModal = () => {
     setConfirmModalVisible(false);
   };
@@ -151,6 +155,10 @@ const Cart = () => {
       }
     }, []),
   );
+
+  useEffect(() => {
+    setDeliveryAddress(address);
+  }, [address]);
 
   useEffect(() => {
     if (userInput.length > 0) {
@@ -660,6 +668,7 @@ const Cart = () => {
             <AddressList
               deliveryAddress={deliveryAddress}
               setDeliveryAddress={updateDeliveryAddress}
+              detectAddressNavigation={detectAddressNavigation}
             />
           </View>
         </CloseSheetContainer>

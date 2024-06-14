@@ -18,6 +18,7 @@ import {useAppTheme} from '../../../../utils/theme';
 import {setStoredData} from '../../../../utils/storage';
 
 interface AddressList {
+  detectAddressNavigation: () => void;
   deliveryAddress: any;
   setDeliveryAddress: (newAddress: any) => void;
 }
@@ -25,6 +26,7 @@ interface AddressList {
 const CancelToken = axios.CancelToken;
 
 const AddressList: React.FC<AddressList> = ({
+  detectAddressNavigation,
   deliveryAddress,
   setDeliveryAddress,
 }) => {
@@ -74,6 +76,11 @@ const AddressList: React.FC<AddressList> = ({
     }
   };
 
+  const navigateToAddAddress = () => {
+    navigation.navigate('AddDefaultAddress', {setDefaultAddress: false});
+    detectAddressNavigation();
+  };
+
   useEffect(() => {
     if (isFocused) {
       getAddressList().then(() => {});
@@ -118,8 +125,8 @@ const AddressList: React.FC<AddressList> = ({
                   labelStyle={appStyles.containedButtonLabel}
                   contentStyle={appStyles.containedButtonContainer}
                   mode="outlined"
-                  onPress={() => navigation.navigate('AddDefaultAddress')}>
-                  Add Address
+                  onPress={navigateToAddAddress}>
+                  {t('Address List.Add new address')}
                 </Button>
               </View>
             )}
@@ -131,7 +138,7 @@ const AddressList: React.FC<AddressList> = ({
           />
           <TouchableOpacity
             style={styles.button}
-            onPress={() => navigation.navigate('AddDefaultAddress')}>
+            onPress={navigateToAddAddress}>
             <Text variant={'labelLarge'} style={styles.buttonLabel}>
               {t('Address List.Add new address')}
             </Text>

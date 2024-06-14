@@ -74,17 +74,20 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
         payload,
         source.current.token,
       );
-      if (!params) {
-        await setStoredData('address', JSON.stringify(data));
-      }
-      setApiInProgress(false);
-      showInfoToast('Your delivery address has been added successfully.');
+      showInfoToast(
+        t('Address Form.Your delivery address has been added successfully'),
+      );
       await setStoredData('address', JSON.stringify(data));
       dispatch(saveAddress(data));
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Dashboard'}],
-      });
+      if (!params) {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Dashboard'}],
+        });
+      } else {
+        navigation.goBack();
+      }
+      setApiInProgress(false);
     } catch (error) {
       handleApiError(error);
     } finally {
