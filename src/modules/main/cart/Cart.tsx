@@ -1,4 +1,10 @@
-import { Dimensions, Linking, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  Linking,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {
   ActivityIndicator,
   Button,
@@ -34,7 +40,10 @@ import useConfirmItems from '../../../hooks/useConfirmItems';
 import CloseSheetContainer from '../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../utils/theme';
 import useReadAudio from '../../../hooks/useReadAudio';
-import { MANUAL_LINK, VIEW_DELIVERY_OPTIONS_COMMAND } from "../../../utils/constants";
+import {
+  MANUAL_LINK,
+  VIEW_DELIVERY_OPTIONS_COMMAND,
+} from '../../../utils/constants';
 import useFormatNumber from '../../../hooks/useFormatNumber';
 import ReferenceIcon from '../../../assets/reference.svg';
 
@@ -723,7 +732,10 @@ const Cart = () => {
                   <Text variant={'bodySmall'} style={styles.message}>
                     {t('Cart.Reference.Reference App Message')}
                   </Text>
-                  <Text variant={'bodySmall'} style={styles.link} onPress={linkToManual}>
+                  <Text
+                    variant={'bodySmall'}
+                    style={styles.link}
+                    onPress={linkToManual}>
                     {t('Cart.Reference.Refer manual')}
                   </Text>
                 </View>
