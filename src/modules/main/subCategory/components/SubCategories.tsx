@@ -82,7 +82,7 @@ const SubCategories: React.FC<SubCategories> = ({
               variant={'labelLarge'}
               style={styles.categoryText}
               ellipsizeMode={'tail'}>
-              {t(`Product SubCategories.${item?.value}`)}
+              {t(`Product SubCategories.${item?.key}`)}
             </Text>
           </TouchableOpacity>
         )}
