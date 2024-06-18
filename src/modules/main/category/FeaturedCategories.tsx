@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
@@ -19,6 +19,28 @@ const FeaturedCategories = () => {
     navigation.navigate('CategoryDetails', {category, domain});
   };
 
+  // Memoize the keyExtractor to avoid unnecessary re-renders
+  const keyExtractor = useCallback((item: any) => item.id, []);
+
+  const renderItem = useCallback(
+    ({item}: {item: any}) => {
+      return (
+        <TouchableOpacity
+          key={item.key}
+          style={[styles.brand]}
+          onPress={() => {
+            navigateToCategoryDetails(item.shortName, item.domain);
+          }}>
+          <FastImage source={{uri: item.Icon}} style={styles.brandImage} />
+          <Text variant={'labelMedium'} style={styles.name}>
+            {t(`Featured Categories.${item.name}`)}
+          </Text>
+        </TouchableOpacity>
+      );
+    },
+    [navigateToCategoryDetails, styles, t],
+  );
+
   useEffect(() => {
     navigation.setOptions({
       title: t('Featured Categories.Featured Categories'),
@@ -31,20 +53,8 @@ const FeaturedCategories = () => {
       contentContainerStyle={styles.container}
       numColumns={3}
       data={CATEGORIES}
-      renderItem={({item}) => (
-        <TouchableOpacity
-          key={item.key}
-          style={[styles.brand]}
-          onPress={() =>
-            navigateToCategoryDetails(item.shortName, item.domain)
-          }>
-          <FastImage source={item.Icon} style={styles.brandImage} />
-          <Text variant={'labelMedium'} style={styles.name}>
-            {t(`Featured Categories.${item.name}`)}
-          </Text>
-        </TouchableOpacity>
-      )}
-      keyExtractor={item => item.id}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
     />
   );
 };
