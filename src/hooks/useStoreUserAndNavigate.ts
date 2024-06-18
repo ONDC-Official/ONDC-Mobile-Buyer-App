@@ -2,12 +2,42 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import uuid from 'react-native-uuid';
 
-import {saveMultipleData} from '../utils/storage';
-import {checkLanguageAndLogin} from '../redux/auth/actions';
+import {getStoredData, saveMultipleData} from '../utils/storage';
+import {setLoginDetails} from '../toolkit/reducer/auth';
+import i18n from '../i18n';
 
 export default () => {
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
+
+  const checkLanguageAndLogin = () => {
+    getStoredData('language').then(language => {
+      if (!language) {
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'ChooseLanguage'}],
+        });
+      } else {
+        i18n.changeLanguage(language).then(() => {
+          getStoredData('address').then(address => {
+            if (address) {
+              navigation.reset({
+                index: 0,
+                routes: [{name: 'Dashboard'}],
+              });
+            } else {
+              navigation.reset({
+                index: 0,
+                routes: [
+                  {name: 'AddressList', params: {navigateToDashboard: true}},
+                ],
+              });
+            }
+          });
+        });
+      }
+    });
+  };
 
   const storeDetails = async (idTokenResult: any, user: any) => {
     try {
@@ -39,9 +69,8 @@ export default () => {
         photoURL: photoURL,
         transaction_id: transactionId,
       };
-      dispatch({type: 'set_login_details', payload});
-
-      checkLanguageAndLogin(navigation);
+      dispatch(setLoginDetails(payload));
+      checkLanguageAndLogin();
     } catch (error) {
       console.error(error);
     }

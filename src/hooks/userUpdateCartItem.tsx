@@ -3,13 +3,13 @@ import {useRef} from 'react';
 import axios from 'axios';
 import useNetworkHandling from './useNetworkHandling';
 import {API_BASE_URL, CART} from '../utils/apiActions';
-import {updateCartItems} from '../redux/cart/actions';
+import {updateCartItems} from '../toolkit/reducer/cart';
 
 const CancelToken = axios.CancelToken;
 
 export default () => {
   const source = useRef<any>(null);
-  const {uid} = useSelector(({authReducer}) => authReducer);
+  const {uid} = useSelector(({auth}) => auth);
   const {putDataWithAuth} = useNetworkHandling();
   const dispatch = useDispatch();
 
@@ -36,7 +36,7 @@ export default () => {
             let customisations = updatedCartItem.item.customisations;
 
             if (customisations) {
-              customisations = customisations.map(c => {
+              customisations = customisations.map((c: any) => {
                 return {
                   ...c,
                   quantity: {...c.quantity, count: c.quantity.count + 1},
@@ -61,7 +61,7 @@ export default () => {
 
           let customisations = updatedCartItem.item.customisations;
           if (customisations) {
-            customisations = customisations.map(c => {
+            customisations = customisations.map((c: any) => {
               return {
                 ...c,
                 quantity: {...c.quantity, count: c.quantity.count - 1},

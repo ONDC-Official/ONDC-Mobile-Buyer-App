@@ -18,7 +18,7 @@ const Page: React.FC<Page> = ({children}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+  const {cartItems} = useSelector(({cart}) => cart);
   const styles = makeStyles(theme.colors);
 
   const navigateToCart = () => navigation.navigate('Cart');

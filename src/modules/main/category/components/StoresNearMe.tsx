@@ -12,10 +12,10 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
 import {skeletonList} from '../../../../utils/utils';
 import {useAppTheme} from '../../../../utils/theme';
-import {saveStoresList} from '../../../../redux/stores/actions';
 import Store from '../../stores/components/Store';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
-import { FB_DOMAIN } from "../../../../utils/constants";
+import {FB_DOMAIN} from '../../../../utils/constants';
+import {saveStoresList} from '../../../../toolkit/reducer/stores';
 
 interface StoresNearMe {
   domain?: string;
@@ -40,7 +40,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const dispatch = useDispatch();
   const styles = makeStyles();
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const {address} = useSelector(({addressReducer}) => addressReducer);
+  const {address} = useSelector(({address}) => address);
   const source = useRef<any>(null);
   const [locations, setLocations] = useState<any[]>([]);
   const [apiRequested, setApiRequested] = useState<boolean>(true);

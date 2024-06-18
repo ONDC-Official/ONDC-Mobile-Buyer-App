@@ -13,7 +13,7 @@ export default () => {
   const {t} = useTranslation();
   const [updatingCartItem, setUpdatingCartItem] = useState<any>(null);
   const {putDataWithAuth} = useNetworkHandling();
-  const {uid} = useSelector(({authReducer}) => authReducer);
+  const {uid} = useSelector(({auth}) => auth);
   const source = useRef<any>(null);
 
   const updateSpecificCartItem = async (

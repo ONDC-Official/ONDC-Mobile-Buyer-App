@@ -24,7 +24,7 @@ const SearchModal: React.FC<MicrProps> = ({
   const {t} = useTranslation();
   const theme = useTheme();
   const styles = makeStyles(theme.colors);
-  const {language} = useSelector(({authReducer}) => authReducer);
+  const {language} = useSelector(({auth}) => auth);
   const [recognizedText, setRecognizedText] = useState('');
 
   const startVoice = async () => {

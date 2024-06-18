@@ -13,7 +13,7 @@ const OrderMeta = () => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
   const address = orderDetails?.fulfillments[0]?.end?.location?.address;
 
   return (

@@ -40,7 +40,7 @@ const CancelOrder = ({
   const eventTimeOutRef = useRef<any>(null);
   const cancelEventSourceResponseRef = useRef<any[]>([]);
   const source = useRef<any>(null);
-  const {token} = useSelector(({authReducer}) => authReducer);
+  const {token} = useSelector(({auth}) => auth);
   const [visible, setVisible] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [showConfirmation, setShowConfirmation] = React.useState(false);

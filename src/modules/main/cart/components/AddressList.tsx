@@ -13,9 +13,9 @@ import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {skeletonList} from '../../../../utils/utils';
 import {appStyles} from '../../../../styles/styles';
 import AddressSkeleton from '../../dashboard/components/address/AddressSkeleton';
-import {saveAddress} from '../../../../redux/address/actions';
 import {useAppTheme} from '../../../../utils/theme';
 import {setStoredData} from '../../../../utils/storage';
+import {setAddress} from '../../../../toolkit/reducer/address';
 
 interface AddressList {
   detectAddressNavigation: () => void;
@@ -44,7 +44,7 @@ const AddressList: React.FC<AddressList> = ({
 
   const updateDeliveryAddress = async (newAddress: any) => {
     await setStoredData('address', JSON.stringify(newAddress));
-    dispatch(saveAddress(newAddress));
+    dispatch(setAddress(newAddress));
     setDeliveryAddress(Object.assign({}, newAddress));
   };
 

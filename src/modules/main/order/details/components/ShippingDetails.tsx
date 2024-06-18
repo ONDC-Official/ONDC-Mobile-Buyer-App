@@ -14,7 +14,7 @@ const ShippingDetails = ({fullfillmentId}: {fullfillmentId: string}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [showDetails, setShowDetails] = useState<boolean>(true);
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
 
   const {deliveredFulfilmentLength, fulfilmentIndex, fulfilment} =
     useMemo(() => {

@@ -23,7 +23,6 @@ import {
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
-import {updateCartItems} from '../../../../redux/cart/actions';
 import Customizations from '../../../../components/customization/Customizations';
 import ManageQuantity from '../../../../components/customization/ManageQuantity';
 import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
@@ -34,6 +33,7 @@ import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetCo
 import {useAppTheme} from '../../../../utils/theme';
 import DeleteIcon from '../../../../assets/delete.svg';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
+import {updateCartItems} from '../../../../toolkit/reducer/cart';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -65,7 +65,7 @@ const CartItems: React.FC<CartItems> = ({
   const {updatingCartItem, updateSpecificCartItem} =
     useUpdateSpecificItemCount();
   const dispatch = useDispatch();
-  const {uid} = useSelector(({authReducer}) => authReducer);
+  const {uid} = useSelector(({auth}) => auth);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const customizationSheet = useRef<any>(null);
   const source = useRef<any>(null);

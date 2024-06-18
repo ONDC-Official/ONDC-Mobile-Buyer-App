@@ -136,7 +136,7 @@ const ItemDetails = ({
 }) => {
   const {formatDate} = useFormatDate();
   const {t} = useTranslation();
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);

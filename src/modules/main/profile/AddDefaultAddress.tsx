@@ -10,7 +10,7 @@ import AddressForm from '../dashboard/components/address/AddressForm';
 import useRefreshToken from '../../../hooks/useRefreshToken';
 import {showInfoToast} from '../../../utils/utils';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
-import {saveAddress} from '../../../redux/address/actions';
+import {setAddress} from '../../../toolkit/reducer/address';
 
 interface AddDefaultAddress {
   navigation: any;
@@ -33,7 +33,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
   const {} = useRefreshToken();
   const {t} = useTranslation();
   const source = useRef<any>(null);
-  const {name, emailId} = useSelector(({authReducer}) => authReducer);
+  const {name, emailId} = useSelector(({auth}) => auth);
   const {postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
@@ -78,7 +78,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
         t('Address Form.Your delivery address has been added successfully'),
       );
       await setStoredData('address', JSON.stringify(data));
-      dispatch(saveAddress(data));
+      dispatch(setAddress(data));
       if (!params) {
         navigation.reset({
           index: 0,

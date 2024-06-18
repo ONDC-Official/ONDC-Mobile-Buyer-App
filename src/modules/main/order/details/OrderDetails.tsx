@@ -8,10 +8,10 @@ import {useFocusEffect} from '@react-navigation/native';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../utils/utils';
-import {updateOrderDetails} from '../../../../redux/order/actions';
 import NonCancelledOrder from './components/NonCancelledOrder';
 import CancelledOrder from './components/CancelledOrder';
 import {useAppTheme} from '../../../../utils/theme';
+import {updateOrderDetails} from '../../../../toolkit/reducer/order';
 
 const CancelToken = axios.CancelToken;
 
@@ -37,7 +37,7 @@ const OrderDetails = ({
   const source = useRef<any>(null);
   const {colors} = useAppTheme();
   const {getDataWithAuth} = useNetworkHandling();
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
   const [apiInProgress, setApiInProgress] = useState<boolean>(true);
 
   const getOrderDetails = async (selfUpdate: boolean = false) => {

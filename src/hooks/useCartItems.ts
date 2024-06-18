@@ -4,12 +4,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useEffect, useRef} from 'react';
 import useNetworkHandling from './useNetworkHandling';
 import useNetworkErrorHandling from './useNetworkErrorHandling';
-import {updateCartItems} from '../redux/cart/actions';
+import {updateCartItems} from '../toolkit/reducer/cart';
 
 const CancelToken = axios.CancelToken;
 
 export default () => {
-  const {uid} = useSelector(({authReducer}) => authReducer);
+  const {uid} = useSelector(({auth}) => auth);
   const dispatch = useDispatch();
   const source = useRef<any>(null);
   const {getDataWithAuth} = useNetworkHandling();

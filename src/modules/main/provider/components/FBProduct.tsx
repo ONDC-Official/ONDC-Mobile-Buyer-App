@@ -13,6 +13,7 @@ import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {
   getCustomizations,
@@ -31,14 +32,13 @@ import {makeGlobalStyles} from '../../../../styles/styles';
 import Customizations from '../../../../components/customization/Customizations';
 import ManageQuantity from '../../../../components/customization/ManageQuantity';
 import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
-import {updateCartItems} from '../../../../redux/cart/actions';
 import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
 import CustomizationFooterButtons from './CustomizationFooterButtons';
 import FBProductDetails from '../../product/details/FBProductDetails';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
+import {updateCartItems} from '../../../../toolkit/reducer/cart';
 
 interface FBProduct {
   product: any;
@@ -58,8 +58,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const {deleteDataWithAuth, getDataWithAuth, postDataWithAuth} =
     useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const {uid} = useSelector(({authReducer}) => authReducer);
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+  const {uid} = useSelector(({auth}) => auth);
+  const {cartItems} = useSelector(({cart}) => cart);
   const {getCartItems} = useCartItems();
   const {updateCartItem} = userUpdateCartItem();
   const {updatingCartItem, updateSpecificCartItem} =

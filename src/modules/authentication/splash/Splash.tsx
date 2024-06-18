@@ -10,10 +10,11 @@ import {isDeviceRooted} from 'react-native-detect-frida';
 import {appStyles} from '../../../styles/styles';
 import {getMultipleData, getStoredData} from '../../../utils/storage';
 import i18n from '../../../i18n';
-import {saveAddress} from '../../../redux/address/actions';
 import {getUrlParams} from '../../../utils/utils';
 import {alertWithOneButton} from '../../../utils/alerts';
 import AppLogo from '../../../assets/app_logo.svg';
+import {setAddress} from '../../../toolkit/reducer/address';
+import {saveUser, setToken} from '../../../toolkit/reducer/auth';
 
 const {RootCheck} = NativeModules;
 
@@ -46,7 +47,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
       const addressString = await getStoredData('address');
       if (addressString) {
         const address = JSON.parse(addressString);
-        dispatch(saveAddress(address));
+        dispatch(setAddress(address));
         if (pageParams) {
           navigation.reset({
             index: 0,
@@ -86,9 +87,9 @@ const Splash: React.FC<Splash> = ({navigation}) => {
             payload[item[0]] = item[1];
           }
         });
-        dispatch({type: 'save_user', payload});
+        dispatch(saveUser(payload));
         const idToken = await auth().currentUser?.getIdToken(true);
-        dispatch({type: 'set_token', payload: idToken});
+        dispatch(setToken(idToken));
         return payload;
       } else {
         return null;

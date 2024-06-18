@@ -76,13 +76,13 @@ const RaiseIssueButton = ({
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
   const responseRef = useRef<any[]>([]);
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
-  const {token} = useSelector(({authReducer}) => authReducer);
+  const {orderDetails} = useSelector(({order}) => order);
+  const {token} = useSelector(({auth}) => auth);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const [visible, setVisible] = React.useState(false);
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [productsWithIssue, setProductsWithIssue] = useState<any[]>([]);
-  const [photos, setPhotos] = useState<any[]>([]);
+  const [photos, setPhotos] = useState<any>([]);
   const [raiseInProgress, setRaiseInProgress] = useState<boolean>(false);
 
   const showDialog = () => {
@@ -129,11 +129,14 @@ const RaiseIssueButton = ({
   };
 
   const removePhoto = (photoIndex: number) => {
-    setPhotos(photos.filter((one, index) => photoIndex !== index));
+    setPhotos(photos.filter((one: any, index: number) => photoIndex !== index));
   };
 
   // on Issue api
-  const getPartialCancelOrderDetails = async (message_id, createdDateTime) => {
+  const getPartialCancelOrderDetails = async (
+    message_id: any,
+    createdDateTime: any,
+  ) => {
     try {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
@@ -512,7 +515,7 @@ const RaiseIssueButton = ({
                           </TouchableOpacity>
                         </View>
                         <View style={styles.imageContainer}>
-                          {photos?.map((photo, index) => (
+                          {photos?.map((photo: any, index: number) => (
                             <View key={`Image${index}`}>
                               <Image
                                 source={{

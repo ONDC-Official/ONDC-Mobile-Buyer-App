@@ -16,8 +16,8 @@ import {showToastWithGravity} from '../../../../../utils/utils';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {makeButtonStyles} from './buttonStyles';
-import {updateRequestingStatus} from '../../../../../redux/order/actions';
 import {useAppTheme} from '../../../../../utils/theme';
+import {updateRequestingStatus} from '../../../../../toolkit/reducer/order';
 
 interface GetStatusButton {
   onUpdateOrder: (value: any, selfUpdate: boolean) => void;
@@ -28,10 +28,8 @@ const CancelToken = axios.CancelToken;
 const GetStatusButton: React.FC<GetStatusButton> = ({onUpdateOrder}) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
-  const {orderDetails, requestingStatus} = useSelector(
-    ({orderReducer}) => orderReducer,
-  );
-  const {token} = useSelector(({authReducer}) => authReducer);
+  const {orderDetails, requestingStatus} = useSelector(({order}) => order);
+  const {token} = useSelector(({auth}) => auth);
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
   const statusEventSourceResponseRef = useRef<any>(null);

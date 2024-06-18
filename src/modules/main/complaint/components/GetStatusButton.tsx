@@ -36,7 +36,7 @@ const GetStatusButton = ({
   mergeIssueActions: (value: any) => void;
 }) => {
   const {t} = useTranslation();
-  const {token} = useSelector(({authReducer}) => authReducer);
+  const {token} = useSelector(({auth}) => auth);
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const source = useRef<any>(null);

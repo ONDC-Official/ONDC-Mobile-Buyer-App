@@ -19,7 +19,7 @@ const Profile = () => {
   const {t} = useTranslation();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
-  const {name, emailId} = useSelector(({authReducer}) => authReducer);
+  const {name, emailId} = useSelector(({auth}) => auth);
   const [modalVisible, setModalVisible] = useState<boolean>(true);
 
   const verifyEmail = async () => {

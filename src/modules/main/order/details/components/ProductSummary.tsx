@@ -24,7 +24,7 @@ const ProductSummary = ({
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
 
   const renderTaxes = () => {
     const data = quote?.breakup?.filter(

@@ -12,7 +12,7 @@ const StoresNearMe = () => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {locations} = useSelector(({storeReducer}) => storeReducer);
+  const {locations} = useSelector(({stores}) => stores);
 
   useEffect(() => {
     navigation.setOptions({

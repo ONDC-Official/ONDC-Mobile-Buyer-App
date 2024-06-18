@@ -9,12 +9,12 @@ import i18n from 'i18next';
 
 import {useAppTheme} from '../../../utils/theme';
 import {setStoredData} from '../../../utils/storage';
-import {updateLanguage} from '../../../redux/auth/actions';
+import {updateLanguage} from '../../../toolkit/reducer/auth';
 
 const ChooseLanguage = () => {
   const dispatch = useDispatch();
   const theme = useAppTheme();
-  const {address} = useSelector(({addressReducer}) => addressReducer);
+  const {address} = useSelector(({address}) => address);
   const navigation = useNavigation<any>();
   const {t} = useTranslation();
   const styles = makeStyles(theme.colors);

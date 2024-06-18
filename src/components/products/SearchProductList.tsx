@@ -36,7 +36,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   const styles = makeStyles(theme.colors);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const {language} = useSelector(({authReducer}) => authReducer);
+  const {language} = useSelector(({auth}) => auth);
   const {
     startVoice,
     userInteractionStarted,
@@ -85,7 +85,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
     }
   };
 
-  const renderItem = useCallback(({item}) => {
+  const renderItem = useCallback(({item}: {item: any}) => {
     return <Product product={item} search />;
   }, []);
 

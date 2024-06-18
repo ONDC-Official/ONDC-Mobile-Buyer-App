@@ -33,12 +33,12 @@ import {
   showToastWithGravity,
 } from '../../../../utils/utils';
 import {makeGlobalStyles} from '../../../../styles/styles';
-import {updateCartItems} from '../../../../redux/cart/actions';
 import Page from '../../../../components/page/Page';
 import AboutProduct from './components/AboutProduct';
 import {useAppTheme} from '../../../../utils/theme';
 import useReadAudio from '../../../../hooks/useReadAudio';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
+import {updateCartItems} from '../../../../toolkit/reducer/cart';
 
 interface ProductDetails {
   route: any;
@@ -75,13 +75,13 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const voiceDetectionStarted = useRef<boolean>(false);
   const {t} = useTranslation();
   const firstTime = useRef<boolean>(true);
-  const {uid} = useSelector(({authReducer}) => authReducer);
+  const {uid} = useSelector(({auth}) => auth);
   const source = useRef<any>(null);
   const dispatch = useDispatch();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
-  const {language} = useSelector(({authReducer}) => authReducer);
+  const {language} = useSelector(({auth}) => auth);
   const {
     startVoice,
     userInteractionStarted,
@@ -161,7 +161,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
     let prices = group.selected.map((s: any) => s.price);
     setCustomizationPrices(prevState => {
-      return prevState + prices.reduce((a, b) => a + b, 0);
+      return prevState + prices.reduce((a: any, b: any) => a + b, 0);
     });
 
     group?.childs?.map((child: any) => {
@@ -606,7 +606,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 </TouchableOpacity>
               )}
             </View>
-            <AboutProduct product={product} />
+            <AboutProduct product={product} inStock />
           </View>
         </ScrollView>
       </Page>
