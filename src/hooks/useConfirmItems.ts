@@ -22,6 +22,7 @@ import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import useNetworkHandling from './useNetworkHandling';
 import useNetworkErrorHandling from './useNetworkErrorHandling';
 import {setTransactionId} from '../toolkit/reducer/auth';
+import {clearCart} from '../toolkit/reducer/cart';
 
 const CancelToken = axios.CancelToken;
 export default (
@@ -289,6 +290,7 @@ export default (
         dispatch(setTransactionId(transactionId));
         closePaymentSheet();
         stopAndDestroyVoiceListener();
+        dispatch(clearCart());
         navigation.navigate('OrderDetails', {
           orderId: responseRef.current[0].message?.order?.id,
         });

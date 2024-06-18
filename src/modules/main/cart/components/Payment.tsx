@@ -186,6 +186,7 @@ const Payment: React.FC<Payment> = ({
               );
             if (findItemFromQuote) {
               itemData.parent_item_id = findItemFromQuote.parent_item_id;
+              itemData.fulfillment_id = findItemFromQuote.fulfillment_id;
             }
           }
           return itemData;
