@@ -718,7 +718,8 @@
     "The maximum available quantity for item is already in your cart": "आयटमसाठी कमाल उपलब्ध प्रमाण तुमच्या कार्टमध्ये आधीच आहे"
   },
   "Provider Details": {
-    "Order Cancelled": "ऑर्डर रद्द केली"
+    "Order Cancelled": "ऑर्डर रद्द केली",
+    "Download Invoice": "चलन डाऊनलोड करा"
   },
   "Raise Issue": {
     "Raise an Issue": "मुद्दा मांडा",

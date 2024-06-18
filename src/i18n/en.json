@@ -718,7 +718,8 @@
     "The maximum available quantity for item is already in your cart": "The maximum available quantity for item is already in your cart"
   },
   "Provider Details": {
-    "Order Cancelled": "Order Cancelled"
+    "Order Cancelled": "Order Cancelled",
+    "Download Invoice": "Download Invoice"
   },
   "Raise Issue": {
     "Raise an Issue": "Raise an Issue",
