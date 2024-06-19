@@ -40,7 +40,7 @@ const Products: React.FC<Products> = ({
   const productSearchSource = useRef<any>(null);
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {language} = useSelector(({authReducer}) => authReducer);
+  const {language} = useSelector(({auth}) => auth);
   const {
     startVoice,
     userInteractionStarted,

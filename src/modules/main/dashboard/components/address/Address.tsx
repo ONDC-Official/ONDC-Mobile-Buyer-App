@@ -6,10 +6,10 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RadioButton, Text} from 'react-native-paper';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
-import {clearCart} from '../../../../../redux/actions';
-import {saveAddress} from '../../../../../redux/address/actions';
 import {useAppTheme} from '../../../../../utils/theme';
 import {setStoredData} from '../../../../../utils/storage';
+import {setAddress} from '../../../../../toolkit/reducer/address';
+import {clearCart} from '../../../../../toolkit/reducer/cart';
 
 interface Address {
   item: any;
@@ -36,7 +36,7 @@ const Address: React.FC<Address> = ({
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const {street, landmark, city, state, areaCode} = item.address;
-  const {cartItems} = useSelector(({cartReducer}) => cartReducer);
+  const {cartItems} = useSelector(({cart}) => cart);
 
   const setDefaultAddress = async () => {
     if (params?.navigateToNext) {
@@ -60,7 +60,7 @@ const Address: React.FC<Address> = ({
 
   const addAddressToStore = async () => {
     await setStoredData('address', JSON.stringify(item));
-    dispatch(saveAddress(item));
+    dispatch(setAddress(item));
     if (params?.navigateToDashboard) {
       navigation.reset({
         index: 0,

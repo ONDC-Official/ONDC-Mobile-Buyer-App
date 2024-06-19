@@ -59,7 +59,7 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
                   ? styles.selected
                   : styles.normal,
               ]}>
-              <FastImage source={item.Icon} style={styles.image} />
+              <FastImage source={{uri: item.Icon}} style={styles.image} />
             </View>
             <Text
               variant={'labelMedium'}

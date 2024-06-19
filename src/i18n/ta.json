@@ -724,7 +724,8 @@
     "The maximum available quantity for item is already in your cart": "உருப்படிக்கான அதிகபட்ச அளவு ஏற்கனவே உங்கள் கார்ட்டில் உள்ளது"
   },
   "Provider Details": {
-    "Order Cancelled": "ஆர்டர் ரத்து செய்யப்பட்டது"
+    "Order Cancelled": "ஆர்டர் ரத்து செய்யப்பட்டது",
+    "Download Invoice": "விலைப்பட்டியலைப் பதிவிறக்கவும்"
   },
   "Raise Issue": {
     "Raise an Issue": "ஒரு பிரச்சினையை எழுப்புங்கள்",

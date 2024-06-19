@@ -9,6 +9,7 @@ import {CURRENCY_SYMBOLS} from '../../../../../utils/constants';
 import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
 import useFormatNumber from '../../../../../hooks/useFormatNumber';
+import ItemCustomization from './ItemCustomization';
 
 const ProductSummary = ({
   items,
@@ -24,13 +25,13 @@ const ProductSummary = ({
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
 
   const renderTaxes = () => {
     const data = quote?.breakup?.filter(
       (one: any) => one['@ondc/org/title_type'] !== 'item',
     );
-    const summedData = data.reduce((acc, curr) => {
+    const summedData = data.reduce((acc: any, curr: any) => {
       const title = curr.title;
       const value = parseFloat(curr.price.value);
 
@@ -65,6 +66,7 @@ const ProductSummary = ({
       </View>
     );
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -80,6 +82,21 @@ const ProductSummary = ({
         if (itemCustomization) {
           return <View key={item.id} />;
         }
+
+        const customizations = items?.filter(obj =>
+          obj?.tags?.some(
+            (tag: any) =>
+              tag?.code === 'type' &&
+              tag?.list?.some(
+                (item: any) =>
+                  item?.code === 'type' && item?.value === 'customization',
+              ),
+          ),
+        );
+
+        const itemCustomizationList = customizations?.filter(
+          (obj: any) => obj.parent_item_id === item.parent_item_id,
+        );
 
         const associatedItems = items.filter(
           (one: any) =>
@@ -135,7 +152,12 @@ const ProductSummary = ({
                     </Text>
                   </View>
                 </View>
-                {item.product?.quantity?.unitized &&
+                {itemCustomizationList?.length > 0 ? (
+                  <ItemCustomization
+                    itemCustomizationList={itemCustomizationList}
+                  />
+                ) : (
+                  item.product?.quantity?.unitized &&
                   Object.keys(item.product?.quantity?.unitized).map(one => (
                     <Text
                       variant={'labelSmall'}
@@ -144,7 +166,8 @@ const ProductSummary = ({
                       {item.product?.quantity?.unitized[one].value}{' '}
                       {item.product?.quantity?.unitized[one].unit}
                     </Text>
-                  ))}
+                  ))
+                )}
                 <View style={styles.chipContainer}>
                   {cancellable ? (
                     <View style={styles.chip}>

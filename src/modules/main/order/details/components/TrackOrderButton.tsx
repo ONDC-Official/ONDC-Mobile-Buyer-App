@@ -16,7 +16,6 @@ import RNEventSource from 'react-native-event-source';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {SSE_TIMEOUT} from '../../../../../utils/constants';
 import {makeButtonStyles} from './buttonStyles';
-import {updateRequestingTracker} from '../../../../../redux/order/actions';
 import {
   API_BASE_URL,
   MAP_ACCESS_TOKEN,
@@ -28,6 +27,7 @@ import Config from '../../../../../../config';
 import {theme, useAppTheme} from '../../../../../utils/theme';
 import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
 import {useTranslation} from 'react-i18next';
+import {updateRequestingTracker} from '../../../../../toolkit/reducer/order';
 
 interface TrackOrderButton {}
 
@@ -62,10 +62,10 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
   const styles = makeButtonStyles(appTheme.colors);
   const trackingSheet = useRef<any>(null);
   const {orderDetails, requestingStatus, requestingTracker} = useSelector(
-    ({orderReducer}) => orderReducer,
+    ({order}) => order,
   );
   const trackEventSourceResponseRef = useRef<any>(null);
-  const {token} = useSelector(({authReducer}) => authReducer);
+  const {token} = useSelector(({auth}) => auth);
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any>(null);
   const [trackingUrl, setTrackingUrl] = useState<string>('');

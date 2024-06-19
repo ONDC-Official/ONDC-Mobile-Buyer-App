@@ -34,7 +34,7 @@ const NonCancelledOrder = ({
   const navigation = useNavigation<any>();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
 
   const invoiceAvailable = !!orderDetails?.documents;
 

@@ -724,7 +724,8 @@
     "The maximum available quantity for item is already in your cart": "আইটেমের জন্য সর্বাধিক উপলব্ধ পরিমাণ ইতিমধ্যেই আপনার কার্টে রয়েছে৷"
   },
   "Provider Details": {
-    "Order Cancelled": "অর্ডার বাতিল"
+    "Order Cancelled": "অর্ডার বাতিল",
+    "Download Invoice": "চালান ডাউনলোড করুন"
   },
   "Raise Issue": {
     "Raise an Issue": "একটি প্রসঙ্গ তুলে ধরুন",

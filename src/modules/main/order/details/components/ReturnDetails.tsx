@@ -14,7 +14,7 @@ const ReturnDetails = ({fulfilmentId}: {fulfilmentId: string}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [showDetails, setShowDetails] = useState<boolean>(true);
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
 
   const fulfillmentHistory = orderDetails?.fulfillmentHistory.filter(
     (one: any) => one.id === fulfilmentId,

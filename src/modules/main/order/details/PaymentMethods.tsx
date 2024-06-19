@@ -10,7 +10,7 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
 
   const {location, contact} = orderDetails?.fulfillments[0]?.end;
 

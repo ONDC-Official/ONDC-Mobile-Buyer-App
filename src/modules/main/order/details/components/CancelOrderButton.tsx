@@ -12,7 +12,7 @@ const CancelOrderButton = () => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {orderDetails, requestingStatus, requestingTracker} = useSelector(
-    ({orderReducer}) => orderReducer,
+    ({order}) => order,
   );
 
   const navigateToCancelOrder = () =>

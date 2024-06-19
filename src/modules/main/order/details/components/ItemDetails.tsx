@@ -18,6 +18,7 @@ import {useAppTheme} from '../../../../../utils/theme';
 import {isItemCustomization} from '../../../../../utils/utils';
 import useFormatDate from '../../../../../hooks/useFormatDate';
 import useFormatNumber from '../../../../../hooks/useFormatNumber';
+import ItemCustomization from './ItemCustomization';
 
 const today = moment();
 
@@ -72,19 +73,10 @@ const SingleItem = ({
             </Text>
           </View>
         </View>
-        {itemCustomizationList?.length > 0 && (
-          <Text variant={'labelSmall'} style={styles.label}>
-            {itemCustomizationList?.map((customization: any, index: number) => {
-              const isLastItem = index === itemCustomizationList?.length - 1;
-              return `${
-                customization?.product?.item_details?.descriptor?.name
-              } (₹${formatNumber(
-                customization?.product?.item_details?.price?.value,
-              )})${isLastItem ? '' : ' + '}`;
-            })}
-          </Text>
-        )}
-        {item.product?.quantity?.unitized &&
+        {itemCustomizationList?.length > 0 ? (
+          <ItemCustomization itemCustomizationList={itemCustomizationList} />
+        ) : (
+          item.product?.quantity?.unitized &&
           Object.keys(item.product?.quantity?.unitized).map(one => (
             <Text
               variant={'labelSmall'}
@@ -93,7 +85,8 @@ const SingleItem = ({
               {item.product?.quantity?.unitized[one].value}{' '}
               {item.product?.quantity?.unitized[one].unit}
             </Text>
-          ))}
+          ))
+        )}
         <View style={styles.itemTags}>
           {item?.product['@ondc/org/cancellable'] ? (
             <View style={styles.chip}>
@@ -136,7 +129,7 @@ const ItemDetails = ({
 }) => {
   const {formatDate} = useFormatDate();
   const {t} = useTranslation();
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);

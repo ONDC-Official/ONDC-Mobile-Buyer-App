@@ -15,7 +15,7 @@ const AddressTag: React.FC<AddressTag> = () => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {address} = useSelector(({addressReducer}) => addressReducer);
+  const {address} = useSelector(({address}) => address);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   if (address) {

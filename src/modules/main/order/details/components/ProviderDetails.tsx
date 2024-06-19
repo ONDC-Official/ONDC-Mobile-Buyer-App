@@ -71,7 +71,7 @@ const ProviderDetails = ({
               contentStyle={styles.downloadButtonContent}
               style={styles.downloadButton}
               onPress={() => Linking.openURL(documents[0]?.url)}>
-              Download Invoice
+              {t('Provider Details.Download Invoice')}
             </Button>
           )}
         </>

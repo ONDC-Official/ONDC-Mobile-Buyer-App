@@ -14,7 +14,6 @@ import {appStyles} from '../../../../../styles/styles';
 import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
-import {saveAddress} from '../../../../../redux/address/actions';
 
 interface Address {
   _id: string;
@@ -53,7 +52,7 @@ const CancelToken = axios.CancelToken;
 const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
   const [t] = useTranslation();
   const isFocused = useIsFocused();
-  const {address} = useSelector(({addressReducer}) => addressReducer);
+  const {address} = useSelector(({address}) => address);
   const source = useRef<any>(null);
   const dispatch = useDispatch();
   const {} = useRefreshToken();
@@ -110,11 +109,6 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
 
   const onAddressSelect = async (item: any) => {
     setCurrentAddress(item);
-  };
-
-  const onNextButtonClick = async () => {
-    dispatch(saveAddress(currentAddress));
-    navigation.navigate(params.navigateToNext);
   };
 
   const renderItem = ({item}: {item: any}) => {

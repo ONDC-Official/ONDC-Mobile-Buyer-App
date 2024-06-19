@@ -1,11 +1,12 @@
 import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import moment from 'moment';
+import {useTranslation} from 'react-i18next';
+
 import CancelOrderButton from './CancelOrderButton';
 import {useAppTheme} from '../../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 import useFormatDate from '../../../../../hooks/useFormatDate';
 
 const OrderMeta = () => {
@@ -13,8 +14,14 @@ const OrderMeta = () => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
-  const address = orderDetails?.fulfillments[0]?.end?.location?.address;
+  const {orderDetails} = useSelector(({order}) => order);
+
+  const address = useMemo(() => {
+    return (
+      orderDetails?.fulfillments[0]?.end?.location?.address ??
+      orderDetails?.billing?.address
+    );
+  }, [orderDetails]);
 
   return (
     <View style={styles.container}>
@@ -61,7 +68,8 @@ const OrderMeta = () => {
         </Text>
         <Text variant={'bodyMedium'} style={styles.value}>
           {address?.locality}, {address?.building}, {address?.city},{' '}
-          {address?.state}, {address?.country} - {address?.area_code}
+          {address?.state}, {address?.country} -{' '}
+          {address?.area_code ?? address?.areaCode}
         </Text>
       </View>
       <CancelOrderButton />

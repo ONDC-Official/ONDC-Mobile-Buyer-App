@@ -7,10 +7,10 @@ import moment from 'moment';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {ISSUE_TYPES} from '../../../../utils/issueTypes';
-import {updateComplaint} from '../../../../redux/complaint/actions';
 import ComplaintStatus from './ComplaintStatus';
 import {useAppTheme} from '../../../../utils/theme';
 import useFormatDate from '../../../../hooks/useFormatDate';
+import {updateComplaint} from '../../../../toolkit/reducer/complaint';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {

@@ -54,7 +54,7 @@ const ReturnItem = ({
   const eventTimeOutRef = useRef<any>(null);
   const cancelEventSourceResponseRef = useRef<any[]>([]);
   const source = useRef<any>(null);
-  const {token} = useSelector(({authReducer}) => authReducer);
+  const {token} = useSelector(({auth}) => auth);
   const [quantity, setQuantity] = useState<number>(0);
   const [apiRequested, setApiRequested] = useState<boolean>(false);
   const [visible, setVisible] = React.useState(false);

@@ -67,7 +67,7 @@ const Payment: React.FC<Payment> = ({
 }) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
-  const {token, transaction_id} = useSelector(({authReducer}) => authReducer);
+  const {token, transaction_id} = useSelector(({auth}) => auth);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const updatedCartItems = useRef<any[]>([]);
@@ -186,8 +186,8 @@ const Payment: React.FC<Payment> = ({
               );
             if (findItemFromQuote) {
               itemData.parent_item_id = findItemFromQuote.parent_item_id;
+              itemData.fulfillment_id = findItemFromQuote.fulfillment_id;
             }
-          } else {
           }
           return itemData;
         });

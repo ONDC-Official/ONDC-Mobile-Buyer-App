@@ -13,7 +13,7 @@ const CancelledOrder = () => {
   const navigation = useNavigation<any>();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
-  const {orderDetails} = useSelector(({orderReducer}) => orderReducer);
+  const {orderDetails} = useSelector(({order}) => order);
 
   return (
     <View style={styles.orderDetails}>

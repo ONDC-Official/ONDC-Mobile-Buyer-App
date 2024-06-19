@@ -14,9 +14,9 @@ import ComplaintStatus from '../components/ComplaintStatus';
 import EscalateForm from './components/EscalateForm';
 import CloseForm from './components/CloseForm';
 import {compareDateWithDuration} from '../../../../utils/utils';
-import {updateComplaint} from '../../../../redux/complaint/actions';
 import useFormatDate from '../../../../hooks/useFormatDate';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
+import {updateComplaint} from '../../../../toolkit/reducer/complaint';
 
 const categories = ISSUE_TYPES.map(item => {
   return item.subCategory.map(subcategoryItem => {
@@ -36,9 +36,7 @@ const ComplaintDetails = () => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {complaintDetails} = useSelector(
-    ({complaintReducer}) => complaintReducer,
-  );
+  const {complaintDetails} = useSelector(({complaint}) => complaint);
   const [actions, setActions] = useState<any[]>([]);
   const [escalateModalVisible, setEscalateModalVisible] =
     useState<boolean>(false);

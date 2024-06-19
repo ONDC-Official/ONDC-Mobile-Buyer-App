@@ -21,7 +21,8 @@ import {
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import useNetworkHandling from './useNetworkHandling';
 import useNetworkErrorHandling from './useNetworkErrorHandling';
-import {updateTransactionId} from '../redux/auth/actions';
+import {setTransactionId} from '../toolkit/reducer/auth';
+import {clearCart} from '../toolkit/reducer/cart';
 
 const CancelToken = axios.CancelToken;
 export default (
@@ -34,7 +35,7 @@ export default (
   const responseRef = useRef<any[]>([]);
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any[]>([]);
-  const {token} = useSelector(({authReducer}) => authReducer);
+  const {token} = useSelector(({auth}) => auth);
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const [deliveryAddress, setDeliveryAddress] = useState<any>(null);
@@ -286,9 +287,10 @@ export default (
         await removeData('parent_order_id');
         await removeData('checkout_details');
         await removeData('parent_and_transaction_id_map');
-        dispatch(updateTransactionId(transactionId));
+        dispatch(setTransactionId(transactionId));
         closePaymentSheet();
         stopAndDestroyVoiceListener();
+        dispatch(clearCart());
         navigation.navigate('OrderDetails', {
           orderId: responseRef.current[0].message?.order?.id,
         });
