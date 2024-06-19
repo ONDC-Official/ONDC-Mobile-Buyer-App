@@ -1,6 +1,10 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import axios from 'axios';
 import {StyleSheet, View} from 'react-native';
+import {useSelector} from 'react-redux';
+import {ProgressBar} from 'react-native-paper';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, PRODUCT_SEARCH} from '../../utils/apiActions';
@@ -16,9 +20,6 @@ import Product from '../../modules/main/provider/components/Product';
 import {useAppTheme} from '../../utils/theme';
 import ProductSearch from './ProductSearch';
 import useReadAudio from '../../hooks/useReadAudio';
-import {useSelector} from 'react-redux';
-import {ProgressBar} from 'react-native-paper';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 interface Products {
   providerId: any;
