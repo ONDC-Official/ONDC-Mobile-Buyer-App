@@ -8,18 +8,14 @@ import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
-import Product from '../../modules/main/provider/components/Product';
-import {API_BASE_URL, GLOBAL_SEARCH_ITEMS} from '../../utils/apiActions';
+import {API_BASE_URL, GLOBAL_SEARCH_STORES} from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
-import {
-  compareIgnoringSpaces,
-  showToastWithGravity,
-  skeletonList,
-} from '../../utils/utils';
+import {skeletonList} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
 import useBhashini from '../../hooks/useBhashini';
 import useReadAudio from '../../hooks/useReadAudio';
+import Provider from './Provider';
 
 interface SearchProductList {
   searchQuery: string;
@@ -27,7 +23,7 @@ interface SearchProductList {
 
 const CancelToken = axios.CancelToken;
 
-const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
+const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
   const productSearchSource = useRef<any>(null);
@@ -51,9 +47,9 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
     transliterationRequest,
   } = useBhashini();
 
-  const totalProducts = useRef<number>(0);
+  const totalProviders = useRef<number>(0);
   const pageNumber = useRef<number>(1);
-  const [products, setProducts] = useState<any[]>([]);
+  const [providers, setProviders] = useState<any[]>([]);
   const [productsRequested, setProductsRequested] = useState<boolean>(false);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
 
@@ -61,21 +57,21 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
    * Function is called when to get next list of elements on infinite scroll
    */
   const loadMoreList = () => {
-    if (totalProducts.current > products?.length && !moreListRequested) {
-      pageNumber.current = pageNumber.current + 1;
-      setMoreListRequested(true);
-      searchProducts()
-        .then(() => {
-          setMoreListRequested(false);
-        })
-        .catch(() => {
-          setMoreListRequested(false);
-          pageNumber.current = pageNumber.current - 1;
-        });
-    }
+    // if (totalProviders.current > providers?.length && !moreListRequested) {
+    //   pageNumber.current = pageNumber.current + 1;
+    //   setMoreListRequested(true);
+    //   searchProviders()
+    //     .then(() => {
+    //       setMoreListRequested(false);
+    //     })
+    //     .catch(() => {
+    //       setMoreListRequested(false);
+    //       pageNumber.current = pageNumber.current - 1;
+    //     });
+    // }
   };
 
-  const searchProducts = async () => {
+  const searchProviders = async () => {
     try {
       if (productSearchSource.current) {
         productSearchSource.current.cancel();
@@ -90,14 +86,14 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
         query = searchResponse?.pipelineResponse[0]?.output[0]?.target;
       }
 
-      let url = `${API_BASE_URL}${GLOBAL_SEARCH_ITEMS}?pageNumber=${pageNumber.current}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&name=${query}`;
+      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?pageNumber=${pageNumber.current}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&name=${query}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
       );
-      totalProducts.current = data.count;
-      setProducts(
-        pageNumber.current === 1 ? data.data : [...products, ...data.data],
+      totalProviders.current = data.count;
+      setProviders(
+        pageNumber.current === 1 ? data.data : [...providers, ...data.data],
       );
     } catch (error) {
       handleApiError(error);
@@ -107,76 +103,20 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   };
 
   const renderItem = useCallback(({item}: {item: any}) => {
-    return <Product product={item} search />;
+    return <Provider provider={item} />;
   }, []);
-
-  useEffect(() => {
-    if (userInput.length > 0) {
-      const input = userInput.toLowerCase();
-      if (/^(select|choose)\b/i.test(input)) {
-        const inputArray = input.split('from');
-        const productName = inputArray[0]
-          .replace('select', '')
-          .replace('choose', '')
-          .trim();
-        let filteredProducts = [];
-        if (inputArray.length > 1) {
-          filteredProducts = products.filter(product => {
-            return (
-              compareIgnoringSpaces(
-                product?.item_details?.descriptor?.name.toLowerCase(),
-                productName,
-              ) &&
-              compareIgnoringSpaces(
-                product?.provider_details?.descriptor?.name.toLowerCase(),
-                inputArray[1].trim(),
-              )
-            );
-          });
-        } else {
-          filteredProducts = products.filter(product =>
-            compareIgnoringSpaces(
-              product?.item_details?.descriptor?.name.toLowerCase(),
-              productName,
-            ),
-          );
-        }
-        if (filteredProducts.length > 1) {
-          showToastWithGravity(
-            'There are more than 1 product, please provide more details',
-          );
-        } else if (filteredProducts.length === 1) {
-          const product = filteredProducts[0];
-          const routeParams: any = {
-            brandId: product.provider_details.id,
-          };
-
-          if (product.location_details) {
-            routeParams.outletId = product.location_details.id;
-          }
-          stopAndDestroyVoiceListener().then(() => {
-            navigation.navigate('BrandDetails', routeParams);
-          });
-        }
-      } else if (compareIgnoringSpaces('go to cart', input)) {
-        stopAndDestroyVoiceListener().then(() => {
-          navigation.navigate('Cart');
-        });
-      }
-    }
-  }, [userInput, products]);
 
   useEffect(() => {
     if (searchQuery?.length > 2) {
       pageNumber.current = 1;
       setProductsRequested(true);
-      searchProducts().then(() => {
+      searchProviders().then(() => {
         voiceDetectionStarted.current = true;
         startVoice().then(() => {});
       });
     } else {
-      totalProducts.current = 0;
-      setProducts([]);
+      totalProviders.current = 0;
+      setProviders([]);
     }
   }, [searchQuery]);
 
@@ -198,7 +138,6 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
       </View>
       {productsRequested ? (
         <FlatList
-          numColumns={2}
           data={skeletonList}
           renderItem={() => <ProductSkeleton />}
           contentContainerStyle={styles.listContainer}
@@ -206,19 +145,20 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
         />
       ) : (
         <FlatList
-          numColumns={2}
-          data={products}
+          data={providers}
           renderItem={renderItem}
           onEndReached={loadMoreList}
           ListEmptyComponent={() => (
             <View style={styles.emptyContainer}>
               <Text variant={'bodyMedium'}>
-                {t('Home.Search Product List.No products available')}
+                {t('Home.Search Provider List.No providers available')}
               </Text>
             </View>
           )}
           contentContainerStyle={
-            products.length === 0 ? styles.emptyContainer : styles.listContainer
+            providers.length === 0
+              ? styles.emptyContainer
+              : styles.listContainer
           }
           keyExtractor={item => item.id}
         />
@@ -227,7 +167,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   );
 };
 
-export default SearchProducts;
+export default SearchProviders;
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({

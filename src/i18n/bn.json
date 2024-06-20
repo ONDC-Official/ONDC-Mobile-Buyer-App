@@ -34,6 +34,9 @@
     "Try Saying Something, We are Listening": "কিছু বলার চেষ্টা করুন, আমরা শুনছি",
     "Search Product List": {
       "No products available": "কোন পণ্য উপলব্ধ"
+    },
+    "Search Provider List": {
+      "No providers available": "কোনও সরবরাহকারী উপলব্ধ নেই"
     }
   },
   "List": {
@@ -805,5 +808,9 @@
     "RTO-Delivered": "আরটিও বিতরণ করা হয়েছে",
     "RTO-Disposed": "আর. টি. ও নিষ্পত্তি করা হয়েছে",
     "on time": "{{time}}"
+  },
+  "Search": {
+    "Products": "পণ্য",
+    "Stores": "দোকানপাট।"
   }
 }

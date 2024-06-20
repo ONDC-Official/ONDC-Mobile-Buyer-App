@@ -302,7 +302,6 @@ const AddressForm: React.FC<AddressForm> = ({
         zoom={10}
         searchWidgetProps={styles.searchWidgetProps}
         resultCallback={(res: any) => {
-          console.log('Result callback');
           setMapAddress(res);
         }}
       />

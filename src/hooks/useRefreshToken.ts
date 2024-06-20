@@ -9,10 +9,8 @@ export default () => {
 
   useEffect(() => {
     const getUserToken = async () => {
-      console.log('getUserToken');
       try {
         const idToken = await auth().currentUser?.getIdToken(true);
-        console.log('idToken', idToken);
         if (idToken) {
           await setStoredData('token', idToken);
           dispatch(setToken(idToken));

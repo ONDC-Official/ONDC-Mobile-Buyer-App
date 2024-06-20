@@ -34,6 +34,9 @@
     "Try Saying Something, We are Listening": "काहीतरी सांगण्याचा प्रयत्न करा, आम्ही ऐकत आहोत",
     "Search Product List": {
       "No products available": "कोई उत्पाद उपलब्ध नहीं"
+    },
+    "Search Provider List": {
+      "No providers available": "पुरवठादार उपलब्ध नाहीत"
     }
   },
   "List": {
@@ -805,5 +808,9 @@
     "RTO-Delivered": "आरटीओ वितरित केले",
     "RTO-Disposed": "आरटीओचा निपटारा",
     "on time": "{{time}}"
+  },
+  "Search": {
+    "Products": "उत्पादने",
+    "Stores": "दुकाने"
   }
 }

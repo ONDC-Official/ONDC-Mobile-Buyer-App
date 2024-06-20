@@ -1,9 +1,7 @@
 import Config from 'react-native-config';
 
 export const API_BASE_URL: string = Config.API_BASE_URL ?? '';
-export const PROVIDERS: string = '/clientApis/v2/providers';
 export const DELIVERY_ADDRESS: string = '/clientApis/v1/delivery_address';
-export const BILLING_ADDRESS: string = '/clientApis/v1/billing_details';
 export const UPDATE_DELIVERY_ADDRESS: string =
   '/clientApis/v1/update_delivery_address/';
 export const LOCATIONS: string = '/clientApis/v2/locations';
@@ -52,6 +50,10 @@ export const ORDER_EVENT: string = '/clientApis/events?messageId=';
 
 export const RAZORPAY_KEYS: string = '/clientApis/v2/razorpay/razorPay/keys';
 export const CREATE_PAYMENT: string = '/clientApis/v2/razorpay/';
+
+export const GLOBAL_SEARCH_STORES: string =
+  '/clientApis/v2/search/global/providers';
+export const GLOBAL_SEARCH_ITEMS: string = '/clientApis/v2/search/global/items';
 
 // Bhashini API
 export const ULCA_BASE_URL: string = Config.ULCA_BASE_URL ?? '';

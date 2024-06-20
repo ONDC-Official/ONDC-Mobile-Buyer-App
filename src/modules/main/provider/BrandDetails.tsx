@@ -36,11 +36,10 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     try {
       setOutletDetailsRequested(true);
       source.current = CancelToken.source();
-      const locationResponse = await getDataWithAuth(
+      const {data} = await getDataWithAuth(
         `${API_BASE_URL}${STORE_DETAILS}?id=${params.outletId}`,
         source.current.token,
       );
-      const data = locationResponse?.data?.response;
       if (data) {
         data.timings = '';
         data.isOpen = false;
@@ -67,11 +66,10 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     try {
       setApiRequested(true);
       source.current = CancelToken.source();
-      const providerResponse = await getDataWithAuth(
+      const {data} = await getDataWithAuth(
         `${API_BASE_URL}${PROVIDER}?id=${params.brandId}`,
         source.current.token,
       );
-      const data = providerResponse?.data?.response;
       navigation.setOptions({
         headerTitle: data?.descriptor?.name,
       });

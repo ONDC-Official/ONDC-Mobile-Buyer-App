@@ -34,6 +34,9 @@
     "Try Saying Something, We are Listening": "Try Saying Something, We are Listening",
     "Search Product List": {
       "No products available": "No products available"
+    },
+    "Search Provider List": {
+      "No providers available": "No providers available"
     }
   },
   "List": {
@@ -805,5 +808,9 @@
     "RTO-Delivered": "RTO Delivered",
     "RTO-Disposed": "RTO Disposed",
     "on time": "on {{time}}"
+  },
+  "Search": {
+    "Products": "Products",
+    "Stores": "Stores"
   }
 }
