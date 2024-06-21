@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import axios from 'axios';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {
@@ -35,7 +35,6 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
   const {postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
-  const [addressInfo, setAddressInfo] = useState<any>(null);
 
   /**
    * Function is used to save new address
@@ -83,28 +82,13 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
     }
   };
 
-  useEffect(() => {
-    const {descriptor, address} = params.address;
-    setAddressInfo({
-      email: descriptor.email,
-      name: descriptor.name,
-      number: descriptor.phone,
-      building: address.building,
-      city: address.city,
-      state: address.state,
-      pin: address.areaCode,
-      landMark: address.locality,
-      street: address.street,
-      tag: address.tag,
-      defaultAddress: address.defaultAddress,
-      lat: address.lat,
-      lng: address.lng,
-    });
-  }, [params]);
+  const {descriptor, address} = params.address;
 
   return (
     <AddressForm
-      addressInfo={addressInfo}
+      name={descriptor.name}
+      email={descriptor.email}
+      address={address}
       apiInProgress={apiInProgress}
       saveAddress={saveAddress}
     />

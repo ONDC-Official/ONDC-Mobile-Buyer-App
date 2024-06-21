@@ -20,11 +20,10 @@ import Config from '../../../../../../config';
 import {useAppTheme} from '../../../../../utils/theme';
 import DropdownField from '../../../../../components/input/DropdownField';
 
-const defaultLocation = [77.057575, 28.683374];
-
 interface AddressForm {
   name: string;
   email: string;
+  address: any;
   apiInProgress: boolean;
   saveAddress: (formData: any) => void;
 }
@@ -33,6 +32,7 @@ const CancelToken = axios.CancelToken;
 const AddressForm: React.FC<AddressForm> = ({
   name,
   email,
+  address,
   apiInProgress,
   saveAddress,
 }) => {
@@ -51,6 +51,9 @@ const AddressForm: React.FC<AddressForm> = ({
     building: '',
     tag: '',
   });
+  const [defaultLocation, setDefaultLocation] = useState<any>([
+    77.057575, 28.683374,
+  ]);
   const [mapAddress, setMapAddress] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
@@ -79,20 +82,14 @@ const AddressForm: React.FC<AddressForm> = ({
     getMapMeta().then(() => {});
   }, []);
 
-  // useEffect(() => {
-  //   const values = formValues;
-  //   console.log('mapAddress :: ',mapAddress)
-  //   if (mapAddress) {
-  //     values.city = mapAddress?.city;
-  //     values.areaCode = mapAddress?.pincode;
-  //     values.state = mapAddress?.state;
-  //     values.street = mapAddress.street;
-  //     values.lat = mapAddress?.lat?.toFixed(6);
-  //     values.lng = mapAddress?.lng?.toFixed(6);
-  //   }
-  //   console.log('values :: ',values)
-  //   setFormValues(values);
-  // }, [mapAddress]);
+  useEffect(() => {
+    if (address) {
+      let data = [];
+      data.push(JSON.parse(address.lng));
+      data.push(JSON.parse(address.lat));
+      setDefaultLocation(data);
+    }
+  }, []);
 
   if (loading) {
     return (
@@ -121,7 +118,6 @@ const AddressForm: React.FC<AddressForm> = ({
               handleSubmit,
               setFieldValue,
             }) => {
-              console.log('formik values : ', values);
               return (
                 <View style={styles.formContainer}>
                   <View style={appStyles.inputContainer}>
@@ -315,7 +311,6 @@ const AddressForm: React.FC<AddressForm> = ({
         zoom={10}
         searchWidgetProps={styles.searchWidgetProps}
         resultCallback={(res: any) => {
-          console.log('res : ', res);
           const values = formValues;
           values.city = res?.city;
           values.areaCode = res?.pincode;
@@ -323,7 +318,6 @@ const AddressForm: React.FC<AddressForm> = ({
           values.street = res?.street;
           values.lat = res?.lat?.toFixed(6);
           values.lng = res?.lng?.toFixed(6);
-          console.log('values :: ', values);
           setFormValues(values);
           setMapAddress(res);
         }}

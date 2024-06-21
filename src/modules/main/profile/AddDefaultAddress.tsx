@@ -104,6 +104,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
     <AddressForm
       name={name}
       email={emailId}
+      address={null}
       apiInProgress={apiInProgress}
       saveAddress={saveToServer}
     />
