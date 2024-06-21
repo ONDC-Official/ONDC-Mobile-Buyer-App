@@ -19,6 +19,7 @@ import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandlin
 import Config from '../../../../../../config';
 import {useAppTheme} from '../../../../../utils/theme';
 import DropdownField from '../../../../../components/input/DropdownField';
+import useLocationBackgroundFetch from '../../../../../hooks/useLocationBackgroundFetch';
 
 interface AddressForm {
   name: string;
@@ -58,6 +59,7 @@ const AddressForm: React.FC<AddressForm> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const {getCurrentLocation} = useLocationBackgroundFetch();
 
   const getMapMeta = async () => {
     try {
@@ -83,12 +85,26 @@ const AddressForm: React.FC<AddressForm> = ({
   }, []);
 
   useEffect(() => {
-    if (address) {
-      let data = [];
-      data.push(JSON.parse(address.lng));
-      data.push(JSON.parse(address.lat));
-      setDefaultLocation(data);
-    }
+    (async function () {
+      try {
+        console.log('here');
+        const location = await getCurrentLocation();
+        if (location) {
+          let data = [];
+          if (address) {
+            data.push(JSON.parse(address.lng));
+            data.push(JSON.parse(address.lat));
+          } else {
+            data.push(location.latitude);
+            data.push(location.longitude);
+          }
+          console.log('location : ', data);
+          setDefaultLocation(data);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    })();
   }, []);
 
   if (loading) {
