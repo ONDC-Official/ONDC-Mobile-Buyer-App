@@ -23,6 +23,7 @@ import DropdownField from '../../../../../components/input/DropdownField';
 interface AddressForm {
   name: string;
   email: string;
+  phone: string;
   address: any;
   apiInProgress: boolean;
   saveAddress: (formData: any) => void;
@@ -32,6 +33,7 @@ const CancelToken = axios.CancelToken;
 const AddressForm: React.FC<AddressForm> = ({
   name,
   email,
+  phone,
   address,
   apiInProgress,
   saveAddress,
@@ -84,10 +86,7 @@ const AddressForm: React.FC<AddressForm> = ({
 
   useEffect(() => {
     if (address) {
-      let data = [];
-      data.push(JSON.parse(address.lng));
-      data.push(JSON.parse(address.lat));
-      setDefaultLocation(data);
+      setDefaultLocation([JSON.parse(address.lng), JSON.parse(address.lat)]);
     }
   }, []);
 
@@ -311,13 +310,18 @@ const AddressForm: React.FC<AddressForm> = ({
         zoom={10}
         searchWidgetProps={styles.searchWidgetProps}
         resultCallback={(res: any) => {
-          const values = formValues;
+          const values = Object.assign({}, formValues);
           values.city = res?.city;
           values.areaCode = res?.pincode;
           values.state = res?.state;
           values.street = res?.street;
           values.lat = res?.lat?.toFixed(6);
           values.lng = res?.lng?.toFixed(6);
+          if (address) {
+            values.building = address.building;
+            values.tag = address.tag;
+            values.number = phone;
+          }
           setFormValues(values);
           setMapAddress(res);
         }}

@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
 import axios from 'axios';
+import {useTranslation} from 'react-i18next';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {
   API_BASE_URL,
@@ -9,7 +10,6 @@ import AddressForm from './AddressForm';
 import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import {showInfoToast} from '../../../../../utils/utils';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
-import {useTranslation} from 'react-i18next';
 
 interface UpdateAddress {
   navigation: any;
@@ -88,6 +88,7 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
     <AddressForm
       name={descriptor.name}
       email={descriptor.email}
+      phone={descriptor.phone}
       address={address}
       apiInProgress={apiInProgress}
       saveAddress={saveAddress}
