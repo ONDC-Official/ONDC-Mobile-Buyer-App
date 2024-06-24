@@ -61,10 +61,10 @@ const Provider = ({provider}: {provider: any}) => {
   }, []);
 
   return (
-    <TouchableOpacity
-      onPress={navigateToProviderDetails}
-      style={styles.container}>
-      <View style={styles.header}>
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.header}
+        onPress={navigateToProviderDetails}>
         <FastImage
           source={{uri: provider?.provider_descriptor?.symbol}}
           style={styles.image}
@@ -77,7 +77,7 @@ const Provider = ({provider}: {provider: any}) => {
             {provider?.address?.locality}
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
       <FlatList
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
@@ -86,7 +86,7 @@ const Provider = ({provider}: {provider: any}) => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-    </TouchableOpacity>
+    </View>
   );
 };
 

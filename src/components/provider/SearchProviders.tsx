@@ -4,7 +4,7 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import {ProgressBar, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
@@ -25,7 +25,6 @@ const CancelToken = axios.CancelToken;
 
 const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
   const voiceDetectionStarted = useRef<boolean>(false);
-  const navigation = useNavigation<any>();
   const productSearchSource = useRef<any>(null);
   const {t} = useTranslation();
   const theme = useAppTheme();
