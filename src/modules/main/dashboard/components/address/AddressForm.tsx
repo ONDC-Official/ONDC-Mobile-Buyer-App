@@ -83,20 +83,20 @@ const AddressForm: React.FC<AddressForm> = ({
   };
 
   useEffect(() => {
-    getMapMeta().then(() => {});
-  }, []);
-
-  useEffect(() => {
     if (address) {
       setDefaultLocation([JSON.parse(address.lng), JSON.parse(address.lat)]);
+      getMapMeta().then(() => {});
     } else {
       getCurrentLocation()
-        .then(location => {
+        .then((location: any) => {
           if (location) {
             setDefaultLocation([location.longitude, location.latitude]);
+            getMapMeta().then(() => {});
           }
         })
-        .catch(error => {});
+        .catch(() => {
+          getMapMeta().then(() => {});
+        });
     }
   }, []);
 
