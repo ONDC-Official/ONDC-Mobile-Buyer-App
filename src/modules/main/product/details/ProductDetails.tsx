@@ -75,13 +75,12 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const voiceDetectionStarted = useRef<boolean>(false);
   const {t} = useTranslation();
   const firstTime = useRef<boolean>(true);
-  const {uid} = useSelector(({auth}) => auth);
+  const {uid, language} = useSelector(({auth}) => auth);
   const source = useRef<any>(null);
   const dispatch = useDispatch();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
-  const {language} = useSelector(({auth}) => auth);
   const {
     startVoice,
     userInteractionStarted,

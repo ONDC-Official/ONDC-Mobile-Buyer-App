@@ -56,6 +56,7 @@ const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
           product.item_details?.[
             '@ondc/org/statutory_reqs_packaged_commodities'
           ]?.manufacturer_or_packer_address,
+        Description: product.item_details?.descriptor?.long_desc ?? '',
       };
 
       data = Object.assign({}, data, product?.attributes);
