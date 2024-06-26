@@ -67,7 +67,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
 
   const showAllStores = () => {
     dispatch(saveStoresList(locations));
-    navigation.navigate('StoresNearMe');
+    navigation.navigate('StoresNearMe',{domain});
   };
 
   const list = useMemo(() => {

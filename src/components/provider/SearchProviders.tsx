@@ -4,7 +4,7 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import {ProgressBar, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
@@ -25,7 +25,6 @@ const CancelToken = axios.CancelToken;
 
 const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
   const voiceDetectionStarted = useRef<boolean>(false);
-  const navigation = useNavigation<any>();
   const productSearchSource = useRef<any>(null);
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -48,27 +47,25 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
   } = useBhashini();
 
   const totalProviders = useRef<number>(0);
-  const pageNumber = useRef<number>(1);
   const [providers, setProviders] = useState<any[]>([]);
   const [productsRequested, setProductsRequested] = useState<boolean>(false);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
+  const [providerId, setProviderId] = useState<string>('');
 
   /**
    * Function is called when to get next list of elements on infinite scroll
    */
   const loadMoreList = () => {
-    // if (totalProviders.current > providers?.length && !moreListRequested) {
-    //   pageNumber.current = pageNumber.current + 1;
-    //   setMoreListRequested(true);
-    //   searchProviders()
-    //     .then(() => {
-    //       setMoreListRequested(false);
-    //     })
-    //     .catch(() => {
-    //       setMoreListRequested(false);
-    //       pageNumber.current = pageNumber.current - 1;
-    //     });
-    // }
+    if (totalProviders.current > providers?.length && !moreListRequested) {
+      setMoreListRequested(true);
+      searchProviders()
+        .then(() => {
+          setMoreListRequested(false);
+        })
+        .catch(() => {
+          setMoreListRequested(false);
+        });
+    }
   };
 
   const searchProviders = async () => {
@@ -86,15 +83,14 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
         query = searchResponse?.pipelineResponse[0]?.output[0]?.target;
       }
 
-      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?pageNumber=${pageNumber.current}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&name=${query}`;
+      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?afterKey=${providerId}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&name=${query}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
       );
-      totalProviders.current = data.count;
-      setProviders(
-        pageNumber.current === 1 ? data.data : [...providers, ...data.data],
-      );
+      totalProviders.current = data.response.count;
+      setProviderId(data?.response?.afterKey?.provider_id);
+      setProviders([...providers, ...data?.response?.data]);
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -108,7 +104,6 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
 
   useEffect(() => {
     if (searchQuery?.length > 2) {
-      pageNumber.current = 1;
       setProductsRequested(true);
       searchProviders().then(() => {
         voiceDetectionStarted.current = true;

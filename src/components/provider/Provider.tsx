@@ -66,15 +66,15 @@ const Provider = ({provider}: {provider: any}) => {
       style={styles.container}>
       <View style={styles.header}>
         <FastImage
-          source={{uri: provider?.provider_descriptor?.symbol}}
+          source={{uri: provider?.descriptor?.symbol}}
           style={styles.image}
         />
         <View style={styles.providerMeta}>
           <Text variant={'titleLarge'} style={styles.providerName}>
-            {provider?.provider_descriptor?.name}
+            {provider?.descriptor?.name}
           </Text>
           <Text variant={'labelMedium'} style={styles.providerLocality}>
-            {provider?.address?.locality}
+            {provider?.descriptor?.short_desc}
           </Text>
         </View>
       </View>
