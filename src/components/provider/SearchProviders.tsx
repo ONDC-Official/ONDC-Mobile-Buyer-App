@@ -47,27 +47,25 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
   } = useBhashini();
 
   const totalProviders = useRef<number>(0);
-  const pageNumber = useRef<number>(1);
   const [providers, setProviders] = useState<any[]>([]);
   const [productsRequested, setProductsRequested] = useState<boolean>(false);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
+  const [providerId, setProviderId] = useState<string>('');
 
   /**
    * Function is called when to get next list of elements on infinite scroll
    */
   const loadMoreList = () => {
-    // if (totalProviders.current > providers?.length && !moreListRequested) {
-    //   pageNumber.current = pageNumber.current + 1;
-    //   setMoreListRequested(true);
-    //   searchProviders()
-    //     .then(() => {
-    //       setMoreListRequested(false);
-    //     })
-    //     .catch(() => {
-    //       setMoreListRequested(false);
-    //       pageNumber.current = pageNumber.current - 1;
-    //     });
-    // }
+    if (totalProviders.current > providers?.length && !moreListRequested) {
+      setMoreListRequested(true);
+      searchProviders()
+        .then(() => {
+          setMoreListRequested(false);
+        })
+        .catch(() => {
+          setMoreListRequested(false);
+        });
+    }
   };
 
   const searchProviders = async () => {
@@ -85,15 +83,14 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
         query = searchResponse?.pipelineResponse[0]?.output[0]?.target;
       }
 
-      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?pageNumber=${pageNumber.current}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&name=${query}`;
+      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?afterKey=${providerId}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&name=${query}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
       );
-      totalProviders.current = data.count;
-      setProviders(
-        pageNumber.current === 1 ? data.data : [...providers, ...data.data],
-      );
+      totalProviders.current = data.response.count;
+      setProviderId(data?.response?.afterKey?.provider_id);
+      setProviders([...providers, ...data?.response?.data]);
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -107,7 +104,6 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
 
   useEffect(() => {
     if (searchQuery?.length > 2) {
-      pageNumber.current = 1;
       setProductsRequested(true);
       searchProviders().then(() => {
         voiceDetectionStarted.current = true;
