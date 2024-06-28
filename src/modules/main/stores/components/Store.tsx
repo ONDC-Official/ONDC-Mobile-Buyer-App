@@ -65,6 +65,13 @@ const Store = ({store}: {store: any}) => {
         ellipsizeMode={'tail'}>
         {store?.address?.locality}
       </Text>
+      <Text
+        style={styles.details}
+        variant={'labelSmall'}
+        numberOfLines={1}
+        ellipsizeMode={'tail'}>
+        {store?.distance}
+      </Text>
     </TouchableOpacity>
   );
 };
