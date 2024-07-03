@@ -1,5 +1,6 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import axios from 'axios';
+import {useTranslation} from 'react-i18next';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {
   API_BASE_URL,
@@ -9,7 +10,6 @@ import AddressForm from './AddressForm';
 import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import {showInfoToast} from '../../../../../utils/utils';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
-import {useTranslation} from 'react-i18next';
 
 interface UpdateAddress {
   navigation: any;
@@ -35,7 +35,6 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
   const {postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
-  const [addressInfo, setAddressInfo] = useState<any>(null);
 
   /**
    * Function is used to save new address
@@ -83,28 +82,14 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
     }
   };
 
-  useEffect(() => {
-    const {descriptor, address} = params.address;
-    setAddressInfo({
-      email: descriptor.email,
-      name: descriptor.name,
-      number: descriptor.phone,
-      building: address.building,
-      city: address.city,
-      state: address.state,
-      pin: address.areaCode,
-      landMark: address.locality,
-      street: address.street,
-      tag: address.tag,
-      defaultAddress: address.defaultAddress,
-      lat: address.lat,
-      lng: address.lng,
-    });
-  }, [params]);
+  const {descriptor, address} = params.address;
 
   return (
     <AddressForm
-      addressInfo={addressInfo}
+      name={descriptor.name}
+      email={descriptor.email}
+      phone={descriptor.phone}
+      address={address}
       apiInProgress={apiInProgress}
       saveAddress={saveAddress}
     />

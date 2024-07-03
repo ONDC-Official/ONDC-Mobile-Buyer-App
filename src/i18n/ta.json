@@ -34,6 +34,9 @@
     "Try Saying Something, We are Listening": "ஏதாவது சொல்ல முயற்சிக்கவும், நாங்கள் கேட்கிறோம்",
     "Search Product List": {
       "No products available": "தயாரிப்புகள் எதுவும் கிடைக்கவில்லை"
+    },
+    "Search Provider List": {
+      "No providers available": "வழங்குநர்கள் இல்லை"
     }
   },
   "List": {
@@ -603,7 +606,9 @@
     "Cleaning & Household": "சுத்தம் மற்றும் வீட்டுவசதி",
     "Beverages": "பானங்கள்"
   },
-  "Store": {},
+  "Store": {
+    "km": "{{distance}} km"
+  },
   "Network Banner": {
     "You are offline, please verify your internet connection": "நீங்கள் ஆஃப்லைனில் உள்ளீர்கள், உங்கள் இணைய இணைப்பைச் சரிபார்க்கவும்"
   },
@@ -811,5 +816,9 @@
     "RTO-Delivered": "ஆர்டிஓ டெலிவரி செய்யப்பட்டது",
     "RTO-Disposed": "ஆர். டி. ஓ அகற்றப்பட்டது",
     "on time": "{{time}}"
+  },
+  "Search": {
+    "Products": "தயாரிப்புகள்",
+    "Stores": "கடைகள்."
   }
 }

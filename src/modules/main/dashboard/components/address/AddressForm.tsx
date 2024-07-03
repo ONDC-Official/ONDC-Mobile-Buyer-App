@@ -19,18 +19,23 @@ import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandlin
 import Config from '../../../../../../config';
 import {useAppTheme} from '../../../../../utils/theme';
 import DropdownField from '../../../../../components/input/DropdownField';
-
-const defaultLocation = [77.057575, 28.683374];
+import useLocationBackgroundFetch from '../../../../../hooks/useLocationBackgroundFetch';
 
 interface AddressForm {
-  addressInfo: any;
+  name: string;
+  email: string;
+  phone: string;
+  address: any;
   apiInProgress: boolean;
   saveAddress: (formData: any) => void;
 }
 
 const CancelToken = axios.CancelToken;
 const AddressForm: React.FC<AddressForm> = ({
-  addressInfo,
+  name,
+  email,
+  phone,
+  address,
   apiInProgress,
   saveAddress,
 }) => {
@@ -38,11 +43,25 @@ const AddressForm: React.FC<AddressForm> = ({
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const source = useRef<any>(null);
-  const [formValues, setFormValues] = useState<any>(addressInfo);
+  const [formValues, setFormValues] = useState<any>({
+    name: name,
+    email: email,
+    number: '',
+    city: '',
+    state: '',
+    areaCode: '',
+    street: '',
+    building: '',
+    tag: '',
+  });
+  const [defaultLocation, setDefaultLocation] = useState<any>([
+    77.057575, 28.683374,
+  ]);
   const [mapAddress, setMapAddress] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const {getCurrentLocation} = useLocationBackgroundFetch();
 
   const getMapMeta = async () => {
     try {
@@ -64,23 +83,22 @@ const AddressForm: React.FC<AddressForm> = ({
   };
 
   useEffect(() => {
-    getMapMeta().then(() => {});
-  }, []);
-
-  useEffect(() => {
-    if (addressInfo) {
-      let values = addressInfo;
-      if (mapAddress) {
-        values.city = mapAddress?.city;
-        values.areaCode = mapAddress?.pincode;
-        values.state = mapAddress?.state;
-        values.street = mapAddress.street;
-        values.lat = mapAddress?.lat?.toFixed(6);
-        values.lng = mapAddress?.lng?.toFixed(6);
-      }
-      setFormValues(values);
+    if (address) {
+      setDefaultLocation([JSON.parse(address.lng), JSON.parse(address.lat)]);
+      getMapMeta().then(() => {});
+    } else {
+      getCurrentLocation()
+        .then((location: any) => {
+          if (location) {
+            setDefaultLocation([location.longitude, location.latitude]);
+            getMapMeta().then(() => {});
+          }
+        })
+        .catch(() => {
+          getMapMeta().then(() => {});
+        });
     }
-  }, [addressInfo, mapAddress]);
+  }, []);
 
   if (loading) {
     return (
@@ -295,14 +313,26 @@ const AddressForm: React.FC<AddressForm> = ({
     <View style={styles.mapContainer}>
       <MapplsUIWidgets.PlacePicker
         center={
-          addressInfo && addressInfo.lng
-            ? [Number(addressInfo.lng), Number(addressInfo.lat)]
+          formValues && formValues.lng
+            ? [Number(formValues.lng), Number(formValues.lat)]
             : defaultLocation
         }
         zoom={10}
         searchWidgetProps={styles.searchWidgetProps}
         resultCallback={(res: any) => {
-          console.log('Result callback');
+          const values = Object.assign({}, formValues);
+          values.city = res?.city;
+          values.areaCode = res?.pincode;
+          values.state = res?.state;
+          values.street = res?.street;
+          values.lat = res?.lat?.toFixed(6);
+          values.lng = res?.lng?.toFixed(6);
+          if (address) {
+            values.building = address.building;
+            values.tag = address.tag;
+            values.number = phone;
+          }
+          setFormValues(values);
           setMapAddress(res);
         }}
       />

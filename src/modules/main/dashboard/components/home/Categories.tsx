@@ -38,7 +38,10 @@ const Categories = () => {
             onPress={() =>
               navigateToCategoryDetails(item.shortName, item.domain)
             }>
-            <FastImage source={{uri: item.Icon}} style={styles.imageContainer} />
+            <FastImage
+              source={{uri: item.Icon}}
+              style={styles.imageContainer}
+            />
             <Text variant={'labelMedium'} style={styles.categoryText}>
               {t(`Categories.${item.name}`)}
             </Text>

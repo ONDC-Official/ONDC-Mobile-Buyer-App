@@ -1,8 +1,9 @@
-import {StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
 
 import {useAppTheme} from '../../../../utils/theme';
 
@@ -28,6 +29,7 @@ const StoreImage: React.FC<StoreImage> = ({source}) => {
 };
 
 const Store = ({store}: {store: any}) => {
+  const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
@@ -58,13 +60,19 @@ const Store = ({store}: {store: any}) => {
         ellipsizeMode={'tail'}>
         {store?.provider_descriptor?.name}
       </Text>
-      <Text
-        style={styles.details}
-        variant={'labelSmall'}
-        numberOfLines={1}
-        ellipsizeMode={'tail'}>
-        {store?.address?.locality}
-      </Text>
+      <View style={styles.addressContainer}>
+        <Text
+          style={styles.details}
+          variant={'labelSmall'}
+          numberOfLines={1}
+          ellipsizeMode={'tail'}>
+          {store?.address?.locality}
+        </Text>
+        {/*<View style={styles.dot} />*/}
+        {/*<Text style={styles.distance} variant={'labelSmall'} numberOfLines={1}>*/}
+        {/*  {t('Store.km', {distance: store?.distance})}*/}
+        {/*</Text>*/}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -92,6 +100,20 @@ const makeStyles = (colors: any) =>
     details: {
       color: colors.neutral300,
       flex: 1,
+    },
+    distance: {
+      color: colors.neutral300,
+    },
+    addressContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    dot: {
+      width: 4,
+      height: 4,
+      borderRadius: 2,
+      backgroundColor: colors.neutral300,
+      marginHorizontal: 4,
     },
   });
 

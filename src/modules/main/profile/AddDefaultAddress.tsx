@@ -37,7 +37,6 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
   const {postDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
-  const [addressInfo, setAddressInfo] = useState<any>(null);
 
   /**
    * Function is used to save new address
@@ -96,20 +95,6 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
   };
 
   useEffect(() => {
-    setAddressInfo({
-      email: emailId || '',
-      name: name || '',
-      number: '',
-      city: '',
-      state: '',
-      areaCode: '',
-      street: '',
-      building: '',
-      tag: '',
-    });
-  }, [emailId, name]);
-
-  useEffect(() => {
     navigation.setOptions({
       title: t('Address Form.Add Address'),
     });
@@ -117,7 +102,10 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
 
   return (
     <AddressForm
-      addressInfo={addressInfo}
+      name={name || ''}
+      email={emailId || ''}
+      phone={''}
+      address={null}
       apiInProgress={apiInProgress}
       saveAddress={saveToServer}
     />

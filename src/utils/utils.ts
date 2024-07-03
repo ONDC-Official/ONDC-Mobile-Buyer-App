@@ -4,6 +4,7 @@ import moment from 'moment';
 import {ToastPosition} from 'react-native-toast-message/lib/src/types';
 import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
+import getDistance from 'geolib/es/getDistance';
 
 export const isIOS = Platform.OS === 'ios';
 const TOAST_VISIBILITY_TIME = 3000;
@@ -374,4 +375,30 @@ export const compareIgnoringSpaces = (str1: string, str2: string) => {
 
   // Compare the cleaned strings
   return cleanedStr1 === cleanedStr2;
+};
+
+export const calculateDistance = (
+  list: any,
+  location: {latitude: number; longitude: number},
+) => {
+  return list.map((item: any) => {
+    const latLong = item.gps.split(/\s*,\s*/);
+    const distance =
+      getDistance(location, {
+        latitude: latLong[0],
+        longitude: latLong[1],
+      }) / 1000;
+    const distanceString = Number.isInteger(distance)
+      ? String(distance)
+      : distance.toFixed(1);
+    return {...item, ...{distance: distanceString}};
+  });
+};
+
+export const calculateDistanceBetweenPoints = (
+  firstPoint: {latitude: number; longitude: number},
+  secondPoint: {latitude: number; longitude: number},
+) => {
+  const distance = getDistance(firstPoint, secondPoint) / 1000;
+  return Number.isInteger(distance) ? String(distance) : distance.toFixed(1);
 };

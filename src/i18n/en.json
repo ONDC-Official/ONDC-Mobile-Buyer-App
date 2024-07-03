@@ -34,6 +34,9 @@
     "Try Saying Something, We are Listening": "Try Saying Something, We are Listening",
     "Search Product List": {
       "No products available": "No products available"
+    },
+    "Search Provider List": {
+      "No providers available": "No providers available"
     }
   },
   "List": {
@@ -603,7 +606,9 @@
     "Cleaning & Household": "Cleaning & Household",
     "Beverages": "Beverages"
   },
-  "Store": {},
+  "Store": {
+    "km": "{{distance}} km"
+  },
   "Network Banner": {
     "You are offline, please verify your internet connection": "You are offline, please verify your internet connection"
   },
@@ -811,5 +816,9 @@
     "RTO-Delivered": "RTO Delivered",
     "RTO-Disposed": "RTO Disposed",
     "on time": "on {{time}}"
+  },
+  "Search": {
+    "Products": "Products",
+    "Stores": "Stores"
   }
 }

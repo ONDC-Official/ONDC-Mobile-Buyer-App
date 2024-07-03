@@ -34,6 +34,9 @@
     "Try Saying Something, We are Listening": "কিছু বলার চেষ্টা করুন, আমরা শুনছি",
     "Search Product List": {
       "No products available": "কোন পণ্য উপলব্ধ"
+    },
+    "Search Provider List": {
+      "No providers available": "কোনও সরবরাহকারী উপলব্ধ নেই"
     }
   },
   "List": {
@@ -603,7 +606,9 @@
     "Cleaning & Household": "পরিচ্ছন্নতা ও গৃহস্থালী",
     "Beverages": "পানীয়"
   },
-  "Store": {},
+  "Store": {
+    "km": "{{distance}} km"
+  },
   "Network Banner": {
     "You are offline, please verify your internet connection": "আপনি অফলাইন, আপনার ইন্টারনেট সংযোগ যাচাই করুন"
   },
@@ -811,5 +816,9 @@
     "RTO-Delivered": "আরটিও বিতরণ করা হয়েছে",
     "RTO-Disposed": "আর. টি. ও নিষ্পত্তি করা হয়েছে",
     "on time": "{{time}}"
+  },
+  "Search": {
+    "Products": "পণ্য",
+    "Stores": "দোকানপাট।"
   }
 }

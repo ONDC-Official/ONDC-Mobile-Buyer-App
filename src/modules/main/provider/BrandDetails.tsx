@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import moment from 'moment';
+import {useSelector} from 'react-redux';
 import {API_BASE_URL, PROVIDER, STORE_DETAILS} from '../../../utils/apiActions';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
@@ -14,10 +15,12 @@ import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
 import useFormatDate from '../../../hooks/useFormatDate';
+import {calculateDistanceBetweenPoints} from '../../../utils/utils';
 
 const CancelToken = axios.CancelToken;
 
 const BrandDetails = ({route: {params}}: {route: any}) => {
+  const {address} = useSelector(({address}) => address);
   const {formatDate} = useFormatDate();
   const isFocused = useIsFocused();
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -36,11 +39,10 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     try {
       setOutletDetailsRequested(true);
       source.current = CancelToken.source();
-      const locationResponse = await getDataWithAuth(
+      const {data} = await getDataWithAuth(
         `${API_BASE_URL}${STORE_DETAILS}?id=${params.outletId}`,
         source.current.token,
       );
-      const data = locationResponse?.data?.response;
       if (data) {
         data.timings = '';
         data.isOpen = false;
@@ -54,7 +56,24 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
           const endTime = moment(data.time.range.end, 'hh:mm');
           data.isOpen = time.isBetween(startTime, endTime);
         }
-        setOutlet(data);
+
+        const latLong = data.gps.split(/\s*,\s*/);
+        const distance = calculateDistanceBetweenPoints(
+          {
+            latitude: address.address.lat,
+            longitude: address.address.lng,
+          },
+          {
+            latitude: latLong[0],
+            longitude: latLong[1],
+          },
+        );
+        setOutlet({
+          ...data,
+          ...{
+            distance,
+          },
+        });
       }
     } catch (error) {
       handleApiError(error);
@@ -67,11 +86,10 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     try {
       setApiRequested(true);
       source.current = CancelToken.source();
-      const providerResponse = await getDataWithAuth(
+      const {data} = await getDataWithAuth(
         `${API_BASE_URL}${PROVIDER}?id=${params.brandId}`,
         source.current.token,
       );
-      const data = providerResponse?.data?.response;
       navigation.setOptions({
         headerTitle: data?.descriptor?.name,
       });
