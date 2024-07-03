@@ -34,6 +34,9 @@
     "Try Saying Something, We are Listening": "काहीतरी सांगण्याचा प्रयत्न करा, आम्ही ऐकत आहोत",
     "Search Product List": {
       "No products available": "कोई उत्पाद उपलब्ध नहीं"
+    },
+    "Search Provider List": {
+      "No providers available": "पुरवठादार उपलब्ध नाहीत"
     }
   },
   "List": {
@@ -597,7 +600,9 @@
     "Cleaning & Household": "स्वच्छता आणि घरगुती",
     "Beverages": "शीतपेये"
   },
-  "Store": {},
+  "Store": {
+    "km": "{{distance}} km"
+  },
   "Network Banner": {
     "You are offline, please verify your internet connection": "तुम्ही ऑफलाइन आहात, कृपया तुमचे इंटरनेट कनेक्शन सत्यापित करा"
   },
@@ -805,5 +810,9 @@
     "RTO-Delivered": "आरटीओ वितरित केले",
     "RTO-Disposed": "आरटीओचा निपटारा",
     "on time": "{{time}}"
+  },
+  "Search": {
+    "Products": "उत्पादने",
+    "Stores": "दुकाने"
   }
 }

@@ -28,7 +28,7 @@ export default () => {
       const config = getAuthConfig(cancelToken);
       return await axios.post(encodeURI(url), params, config);
     } catch (e) {
-      console.log(e);
+      console.log(e, url);
       throw e;
     }
   };
@@ -42,7 +42,7 @@ export default () => {
       const config = getAuthConfig(cancelToken);
       return await axios.put(encodeURI(url), params, config);
     } catch (e) {
-      console.log(e);
+      console.log(e, url);
       throw e;
     }
   };
@@ -52,7 +52,7 @@ export default () => {
       const config = getAuthConfig(cancelToken);
       return await axios.get(encodeURI(url), config);
     } catch (e) {
-      console.log(e);
+      console.log(e, url);
       throw e;
     }
   };
@@ -62,7 +62,7 @@ export default () => {
       const config = getAuthConfig(cancelToken);
       return await axios.delete(encodeURI(url), config);
     } catch (e) {
-      console.log(e);
+      console.log(e, url);
       throw e;
     }
   };

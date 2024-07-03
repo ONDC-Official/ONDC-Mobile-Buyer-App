@@ -114,11 +114,10 @@ const ProductDetails: React.FC<ProductDetails> = ({
       }
       firstTime.current = false;
       source.current = CancelToken.source();
-      const itemResponse = await getDataWithAuth(
+      const {data} = await getDataWithAuth(
         `${API_BASE_URL}${ITEM_DETAILS}?id=${params.productId}`,
         source.current.token,
       );
-      const data = itemResponse?.data?.response;
       let rangePriceTag = null;
       if (data?.item_details?.price?.tags) {
         const findRangePriceTag = data?.item_details?.price?.tags.find(

@@ -71,5 +71,6 @@ config.ts
 .env.preprod
 .env.staging
 .env.production
+.env.development
 android/app/google-services.json
 ios/ONDCReferenceBuyerApp/GoogleService-Info.plist

@@ -34,6 +34,9 @@
     "Try Saying Something, We are Listening": "कुछ कहने की कोशिश करो, हम सुन रहे हैं",
     "Search Product List": {
       "No products available": "कोई उत्पाद उपलब्ध नहीं"
+    },
+    "Search Provider List": {
+      "No providers available": "कोई प्रदाता उपलब्ध नहीं है"
     }
   },
   "List": {
@@ -597,7 +600,9 @@
     "Cleaning & Household": "सफ़ाई और घरेलू",
     "Beverages": "पेय"
   },
-  "Store": {},
+  "Store": {
+    "km": "{{distance}} km"
+  },
   "Network Banner": {
     "You are offline, please verify your internet connection": "आप ऑफ़लाइन हैं, कृपया अपना इंटरनेट कनेक्शन सत्यापित करें"
   },
@@ -805,5 +810,9 @@
     "RTO-Delivered": "आर. टी. ओ. वितरित",
     "RTO-Disposed": "आर. टी. ओ. का निपटारा",
     "on time": "{{time}}"
+  },
+  "Search": {
+    "Products": "उत्पाद",
+    "Stores": "दुकानें"
   }
 }

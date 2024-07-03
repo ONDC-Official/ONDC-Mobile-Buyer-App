@@ -10,7 +10,7 @@ import {useTranslation} from 'react-i18next';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
-import {skeletonList} from '../../../../utils/utils';
+import {calculateDistance, skeletonList} from '../../../../utils/utils';
 import {useAppTheme} from '../../../../utils/theme';
 import Store from '../../stores/components/Store';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
@@ -25,7 +25,7 @@ const CancelToken = axios.CancelToken;
 
 const BrandSkeleton = () => {
   const theme = useAppTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = makeStyles();
   return (
     <View style={styles.brand}>
       <SkeletonPlaceholder>
@@ -57,7 +57,13 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
         domain ? `&domain=${domain}` : ''
       }`;
       const {data} = await getDataWithAuth(url, source.current.token);
-      setLocations(data.data);
+
+      setLocations(
+        calculateDistance(data.data, {
+          latitude: address.address.lat,
+          longitude: address.address.lng,
+        }),
+      );
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -67,7 +73,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
 
   const showAllStores = () => {
     dispatch(saveStoresList(locations));
-    navigation.navigate('StoresNearMe');
+    navigation.navigate('StoresNearMe', {domain});
   };
 
   const list = useMemo(() => {
@@ -86,7 +92,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
         source.current.cancel();
       }
     };
-  }, [domain]);
+  }, [domain, address]);
 
   return (
     <View style={styles.sectionContainer}>

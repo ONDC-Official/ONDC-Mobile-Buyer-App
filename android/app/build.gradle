@@ -4,10 +4,12 @@ apply plugin: "com.android.application"
 project.ext.envConfigFiles = [
         productiondebug: ".env.production",
         productionrelease: ".env.production",
-        developmentrelease: ".env.preprod",
-        developmentdebug: ".env.preprod",
+        preprodrelease: ".env.preprod",
+        preproddebug: ".env.preprod",
         stagingrelease: ".env.staging",
-        stagingdebug: ".env.staging"
+        stagingdebug: ".env.staging",
+        developmentrelease: ".env.development",
+        developmentdebug: ".env.development"
 ]
 
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle" // <- add this line
@@ -103,6 +105,12 @@ android {
         development {
             minSdkVersion rootProject.ext.minSdkVersion
             applicationId "org.ondc.buyer.dev"
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "org.ondc.buyer"
+        }
+        preprod {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId "org.ondc.buyer.preprod"
             targetSdkVersion rootProject.ext.targetSdkVersion
             resValue "string", "build_config_package", "org.ondc.buyer"
         }

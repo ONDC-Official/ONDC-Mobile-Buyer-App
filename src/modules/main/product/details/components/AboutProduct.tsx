@@ -9,9 +9,12 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
+import 'moment-duration-format';
 import {useAppTheme} from '../../../../../utils/theme';
+import useFormatNumber from '../../../../../hooks/useFormatNumber';
 
 const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
+  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -27,8 +30,9 @@ const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
           product.item_details?.['@ondc/org/return_window'],
         );
 
-        // Get the number of hours from the duration object
-        returnWindowValue = duration.humanize();
+        returnWindowValue = `${formatNumber(duration.format('m'))} ${t(
+          'Fulfillment.minutes',
+        )}`;
       }
 
       let data: any = {
