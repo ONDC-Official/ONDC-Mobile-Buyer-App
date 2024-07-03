@@ -64,7 +64,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
             {outlet?.address?.locality || 'NA'}
           </Text>
         )}
-        <Text variant={'bodyMedium'} style={styles.timing}>
+        <Text variant={'bodyMedium'} style={styles.address}>
           {outlet?.isOpen && (
             <>
               <Text variant={'bodyLarge'} style={styles.open}>
@@ -74,6 +74,10 @@ const OutletDetails: React.FC<OutletDetails> = ({
             </>
           )}
           {outlet?.timings}
+        </Text>
+
+        <Text variant={'bodyMedium'} style={styles.timing}>
+          {outlet?.distance}
         </Text>
         <View style={styles.buttonContainer}>
           <TouchableOpacity

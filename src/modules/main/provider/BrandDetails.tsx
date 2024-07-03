@@ -14,6 +14,8 @@ import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
 import useFormatDate from '../../../hooks/useFormatDate';
+import getDistance from 'geolib/es/getDistance';
+import useLocationBackgroundFetch from '../../../hooks/useLocationBackgroundFetch';
 
 const CancelToken = axios.CancelToken;
 
@@ -31,6 +33,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const {getCurrentLocation} = useLocationBackgroundFetch();
 
   const getOutletDetails = async () => {
     try {
@@ -53,7 +56,38 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
           const endTime = moment(data.time.range.end, 'hh:mm');
           data.isOpen = time.isBetween(startTime, endTime);
         }
-        setOutlet(data);
+
+        getCurrentLocation()
+          .then(location => {
+            if (location) {
+              console.log({
+                latitude: location.longitude,
+                longitude: location.latitude,
+              },
+              {
+                latitude: data.gps.split(/\s*,\s*/)[0],
+                longitude: data.gps.split(/\s*,\s*/)[1],
+              },)
+              setOutlet({
+                ...data,
+                ...{
+                  distance: (
+                    getDistance(
+                      {
+                        latitude: location.longitude,
+                        longitude: location.latitude,
+                      },
+                      {
+                        latitude: data.gps.split(/\s*,\s*/)[0],
+                        longitude: data.gps.split(/\s*,\s*/)[1],
+                      },
+                    ) / 1000
+                  ).toFixed(2) + " km",
+                },
+              });
+            }
+          })
+          .catch(error => {});
       }
     } catch (error) {
       handleApiError(error);

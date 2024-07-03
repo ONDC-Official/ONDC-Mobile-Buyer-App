@@ -10,6 +10,8 @@ import axios from 'axios';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
+import getDistance from 'geolib/es/getDistance';
+import useLocationBackgroundFetch from '../../../hooks/useLocationBackgroundFetch';
 
 interface StoresNearMe {
   domain?: string;
@@ -31,6 +33,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const [providerId, setProviderId] = useState<string>('');
   const [locations, setLocations] = useState<any[]>([]);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
+  const {getCurrentLocation} = useLocationBackgroundFetch();
 
   useEffect(() => {
     navigation.setOptions({
@@ -65,7 +68,30 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       const {data} = await getDataWithAuth(url, source.current.token);
       totalLocations.current = data.count;
       setProviderId(data?.afterKey?.location_id);
-      setLocations([...locations, ...data.data]);
+
+      getCurrentLocation()
+        .then(location => {
+          if (location) {
+            const disData = data.data.map((item: any) => {
+              const distance =
+                (
+                  getDistance(
+                    {
+                      latitude: location.longitude,
+                      longitude: location.latitude,
+                    },
+                    {
+                      latitude: item.gps.split(/\s*,\s*/)[0],
+                      longitude: item.gps.split(/\s*,\s*/)[1],
+                    },
+                  ) / 1000
+                ).toFixed(2) + ' km';
+              return {...item, ...{distance: distance}};
+            });
+            setLocations([...locations, ...disData]);
+          }
+        })
+        .catch(error => {});
     } catch (error) {
       handleApiError(error);
     } finally {

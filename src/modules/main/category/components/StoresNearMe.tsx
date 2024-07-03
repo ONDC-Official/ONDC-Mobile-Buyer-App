@@ -16,6 +16,8 @@ import Store from '../../stores/components/Store';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
 import {FB_DOMAIN} from '../../../../utils/constants';
 import {saveStoresList} from '../../../../toolkit/reducer/stores';
+import getDistance from 'geolib/es/getDistance';
+import useLocationBackgroundFetch from '../../../../hooks/useLocationBackgroundFetch';
 
 interface StoresNearMe {
   domain?: string;
@@ -46,6 +48,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const {getCurrentLocation} = useLocationBackgroundFetch();
 
   const getAllLocations = async () => {
     try {
@@ -57,7 +60,33 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
         domain ? `&domain=${domain}` : ''
       }`;
       const {data} = await getDataWithAuth(url, source.current.token);
-      setLocations(data.data);
+
+      getCurrentLocation()
+        .then(location => {
+          if (location) {
+            setLocations(
+              data.data.map((item: any) => {
+                const distance =
+                  (
+                    getDistance(
+                      {
+                        latitude: location.longitude,
+                        longitude: location.latitude,
+                      },
+                      {
+                        latitude: item.gps.split(/\s*,\s*/)[0],
+                        longitude: item.gps.split(/\s*,\s*/)[1],
+                      },
+                    ) / 1000
+                  ).toFixed(2) + ' km';
+                return {...item, ...{distance: distance}};
+              }),
+            );
+          }
+        })
+        .catch(error => {});
+
+      // setLocations(data.data);
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -67,7 +96,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
 
   const showAllStores = () => {
     dispatch(saveStoresList(locations));
-    navigation.navigate('StoresNearMe',{domain});
+    navigation.navigate('StoresNearMe', {domain});
   };
 
   const list = useMemo(() => {
@@ -86,7 +115,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
         source.current.cancel();
       }
     };
-  }, [domain]);
+  }, [domain,address]);
 
   return (
     <View style={styles.sectionContainer}>
