@@ -82,13 +82,13 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
       }
       let query = searchQuery;
       productSearchSource.current = CancelToken.source();
-      if (language !== 'en') {
-        if (!transliterationRequest?.callbackUrl) {
-          await withoutConfigRequest();
-        }
-        const searchResponse = await computeRequestTransliteration(query);
-        query = searchResponse?.pipelineResponse[0]?.output[0]?.target;
-      }
+      // if (language !== 'en') {
+      //   if (!transliterationRequest?.callbackUrl) {
+      //     await withoutConfigRequest();
+      //   }
+      //   const searchResponse = await computeRequestTransliteration(query);
+      //   query = searchResponse?.pipelineResponse[0]?.output[0]?.target;
+      // }
 
       let url = `${API_BASE_URL}${GLOBAL_SEARCH_ITEMS}?pageNumber=${pageNumber.current}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&name=${query}`;
       const {data} = await getDataWithAuth(
