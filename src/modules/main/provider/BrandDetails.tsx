@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import moment from 'moment';
+import {useSelector} from 'react-redux';
 import {API_BASE_URL, PROVIDER, STORE_DETAILS} from '../../../utils/apiActions';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
@@ -14,12 +15,12 @@ import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
 import useFormatDate from '../../../hooks/useFormatDate';
-import getDistance from 'geolib/es/getDistance';
-import useLocationBackgroundFetch from '../../../hooks/useLocationBackgroundFetch';
+import {calculateDistanceBetweenPoints} from '../../../utils/utils';
 
 const CancelToken = axios.CancelToken;
 
 const BrandDetails = ({route: {params}}: {route: any}) => {
+  const {address} = useSelector(({address}) => address);
   const {formatDate} = useFormatDate();
   const isFocused = useIsFocused();
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -33,7 +34,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const {getCurrentLocation} = useLocationBackgroundFetch();
 
   const getOutletDetails = async () => {
     try {
@@ -57,37 +57,23 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
           data.isOpen = time.isBetween(startTime, endTime);
         }
 
-        getCurrentLocation()
-          .then(location => {
-            if (location) {
-              console.log({
-                latitude: location.longitude,
-                longitude: location.latitude,
-              },
-              {
-                latitude: data.gps.split(/\s*,\s*/)[0],
-                longitude: data.gps.split(/\s*,\s*/)[1],
-              },)
-              setOutlet({
-                ...data,
-                ...{
-                  distance: (
-                    getDistance(
-                      {
-                        latitude: location.longitude,
-                        longitude: location.latitude,
-                      },
-                      {
-                        latitude: data.gps.split(/\s*,\s*/)[0],
-                        longitude: data.gps.split(/\s*,\s*/)[1],
-                      },
-                    ) / 1000
-                  ).toFixed(2) + " km",
-                },
-              });
-            }
-          })
-          .catch(error => {});
+        const latLong = data.gps.split(/\s*,\s*/);
+        const distance = calculateDistanceBetweenPoints(
+          {
+            latitude: address.address.lat,
+            longitude: address.address.lng,
+          },
+          {
+            latitude: latLong[0],
+            longitude: latLong[1],
+          },
+        );
+        setOutlet({
+          ...data,
+          ...{
+            distance,
+          },
+        });
       }
     } catch (error) {
       handleApiError(error);

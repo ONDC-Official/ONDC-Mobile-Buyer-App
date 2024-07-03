@@ -600,7 +600,9 @@
     "Cleaning & Household": "சுத்தம் மற்றும் வீட்டுவசதி",
     "Beverages": "பானங்கள்"
   },
-  "Store": {},
+  "Store": {
+    "km": "{{distance}} km"
+  },
   "Network Banner": {
     "You are offline, please verify your internet connection": "நீங்கள் ஆஃப்லைனில் உள்ளீர்கள், உங்கள் இணைய இணைப்பைச் சரிபார்க்கவும்"
   },

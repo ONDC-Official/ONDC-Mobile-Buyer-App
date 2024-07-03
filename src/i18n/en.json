@@ -600,7 +600,9 @@
     "Cleaning & Household": "Cleaning & Household",
     "Beverages": "Beverages"
   },
-  "Store": {},
+  "Store": {
+    "km": "{{distance}} km"
+  },
   "Network Banner": {
     "You are offline, please verify your internet connection": "You are offline, please verify your internet connection"
   },

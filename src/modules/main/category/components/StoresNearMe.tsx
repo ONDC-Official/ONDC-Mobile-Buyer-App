@@ -10,14 +10,12 @@ import {useTranslation} from 'react-i18next';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
-import {skeletonList} from '../../../../utils/utils';
+import {calculateDistance, skeletonList} from '../../../../utils/utils';
 import {useAppTheme} from '../../../../utils/theme';
 import Store from '../../stores/components/Store';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
 import {FB_DOMAIN} from '../../../../utils/constants';
 import {saveStoresList} from '../../../../toolkit/reducer/stores';
-import getDistance from 'geolib/es/getDistance';
-import useLocationBackgroundFetch from '../../../../hooks/useLocationBackgroundFetch';
 
 interface StoresNearMe {
   domain?: string;
@@ -27,7 +25,7 @@ const CancelToken = axios.CancelToken;
 
 const BrandSkeleton = () => {
   const theme = useAppTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = makeStyles();
   return (
     <View style={styles.brand}>
       <SkeletonPlaceholder>
@@ -48,7 +46,6 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const {getCurrentLocation} = useLocationBackgroundFetch();
 
   const getAllLocations = async () => {
     try {
@@ -61,32 +58,12 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       }`;
       const {data} = await getDataWithAuth(url, source.current.token);
 
-      getCurrentLocation()
-        .then(location => {
-          if (location) {
-            setLocations(
-              data.data.map((item: any) => {
-                const distance =
-                  (
-                    getDistance(
-                      {
-                        latitude: location.longitude,
-                        longitude: location.latitude,
-                      },
-                      {
-                        latitude: item.gps.split(/\s*,\s*/)[0],
-                        longitude: item.gps.split(/\s*,\s*/)[1],
-                      },
-                    ) / 1000
-                  ).toFixed(2) + ' km';
-                return {...item, ...{distance: distance}};
-              }),
-            );
-          }
-        })
-        .catch(error => {});
-
-      // setLocations(data.data);
+      setLocations(
+        calculateDistance(data.data, {
+          latitude: address.address.lat,
+          longitude: address.address.lng,
+        }),
+      );
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -115,7 +92,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
         source.current.cancel();
       }
     };
-  }, [domain,address]);
+  }, [domain, address]);
 
   return (
     <View style={styles.sectionContainer}>

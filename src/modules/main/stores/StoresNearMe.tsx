@@ -10,8 +10,7 @@ import axios from 'axios';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import getDistance from 'geolib/es/getDistance';
-import useLocationBackgroundFetch from '../../../hooks/useLocationBackgroundFetch';
+import {calculateDistance} from '../../../utils/utils';
 
 interface StoresNearMe {
   domain?: string;
@@ -24,7 +23,6 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  // const {locations} = useSelector(({stores}) => stores);
   const {address} = useSelector(({address}) => address);
   const source = useRef<any>(null);
   const totalLocations = useRef<number>(0);
@@ -33,13 +31,12 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const [providerId, setProviderId] = useState<string>('');
   const [locations, setLocations] = useState<any[]>([]);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
-  const {getCurrentLocation} = useLocationBackgroundFetch();
 
   useEffect(() => {
     navigation.setOptions({
       title: t('Stores Near me.Stores Near me'),
     });
-    getAllLocations();
+    getAllLocations().then(() => {});
   }, []);
 
   const loadMoreList = () => {
@@ -69,29 +66,11 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       totalLocations.current = data.count;
       setProviderId(data?.afterKey?.location_id);
 
-      getCurrentLocation()
-        .then(location => {
-          if (location) {
-            const disData = data.data.map((item: any) => {
-              const distance =
-                (
-                  getDistance(
-                    {
-                      latitude: location.longitude,
-                      longitude: location.latitude,
-                    },
-                    {
-                      latitude: item.gps.split(/\s*,\s*/)[0],
-                      longitude: item.gps.split(/\s*,\s*/)[1],
-                    },
-                  ) / 1000
-                ).toFixed(2) + ' km';
-              return {...item, ...{distance: distance}};
-            });
-            setLocations([...locations, ...disData]);
-          }
-        })
-        .catch(error => {});
+      const distanceData = calculateDistance(data.data, {
+        latitude: address.address.lat,
+        longitude: address.address.lng,
+      });
+      setLocations([...locations, ...distanceData]);
     } catch (error) {
       handleApiError(error);
     } finally {
