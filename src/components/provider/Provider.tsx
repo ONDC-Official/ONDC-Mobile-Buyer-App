@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
@@ -59,6 +59,8 @@ const Provider = ({provider}: {provider: any}) => {
       </View>
     );
   }, []);
+
+  useEffect(() => {}, [provider]);
 
   return (
     <View style={styles.container}>

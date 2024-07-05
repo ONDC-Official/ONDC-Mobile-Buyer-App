@@ -83,7 +83,8 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
         query = searchResponse?.pipelineResponse[0]?.output[0]?.target;
       }
 
-      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?afterKey=${providerId}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&name=${query}`;
+      const afterString = providerId ? `&afterKey=${providerId}` : '';
+      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&name=${query}${afterString}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,

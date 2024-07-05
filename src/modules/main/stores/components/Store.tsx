@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 
 import {useAppTheme} from '../../../../utils/theme';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface StoreImage {
   source: any;
@@ -30,6 +31,7 @@ const StoreImage: React.FC<StoreImage> = ({source}) => {
 
 const Store = ({store}: {store: any}) => {
   const {t} = useTranslation();
+  const {formatNumber} = useFormatNumber();
   const navigation = useNavigation<any>();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
@@ -68,10 +70,10 @@ const Store = ({store}: {store: any}) => {
           ellipsizeMode={'tail'}>
           {store?.address?.locality}
         </Text>
-        {/*<View style={styles.dot} />*/}
-        {/*<Text style={styles.distance} variant={'labelSmall'} numberOfLines={1}>*/}
-        {/*  {t('Store.km', {distance: store?.distance})}*/}
-        {/*</Text>*/}
+        <View style={styles.dot} />
+        <Text style={styles.distance} variant={'labelSmall'} numberOfLines={1}>
+          {t('Store.km', {distance: formatNumber(store?.distance)})}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -81,7 +83,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     brand: {
       marginBottom: 15,
-      flex: 1,
+      flex: 1 / 3,
       marginHorizontal: 8,
     },
     brandImage: {
@@ -99,7 +101,7 @@ const makeStyles = (colors: any) =>
     },
     details: {
       color: colors.neutral300,
-      flex: 1,
+      flexShrink: 1,
     },
     distance: {
       color: colors.neutral300,
