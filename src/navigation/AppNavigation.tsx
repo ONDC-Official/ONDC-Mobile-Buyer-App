@@ -10,7 +10,7 @@ import Splash from '../modules/authentication/splash/Splash';
 import AddDefaultAddress from '../modules/main/profile/AddDefaultAddress';
 import Dashboard from '../modules/main/dashboard/Dashboard';
 import AddressList from '../modules/main/dashboard/components/address/AddressList';
-import Cart from '../modules/main/cart/Cart';
+import SubCart from '../modules/main/cart/SubCart';
 import ProductDetails from '../modules/main/product/details/ProductDetails';
 import Profile from '../modules/main/profile/Profile';
 import OrderDetails from '../modules/main/order/details/OrderDetails';
@@ -88,8 +88,8 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Cart"
-          component={Cart}
+          name="SubCart"
+          component={SubCart}
           options={{
             title: '',
           }}

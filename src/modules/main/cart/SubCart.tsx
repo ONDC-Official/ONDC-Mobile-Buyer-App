@@ -7,7 +7,7 @@ import {
   Text,
 } from 'react-native-paper';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {
   useFocusEffect,
@@ -34,10 +34,13 @@ import {useAppTheme} from '../../../utils/theme';
 import useReadAudio from '../../../hooks/useReadAudio';
 import {VIEW_DELIVERY_OPTIONS_COMMAND} from '../../../utils/constants';
 import useFormatNumber from '../../../hooks/useFormatNumber';
+import {updateCartItems} from '../../../toolkit/reducer/cart';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
-const Cart = () => {
+const SubCart = ({
+  route: {params},
+}:any) => {
   const {formatNumber} = useFormatNumber();
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
@@ -45,6 +48,7 @@ const Cart = () => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {address} = useSelector(({address}) => address);
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const addressSheet = useRef<any>();
   const fulfillmentSheet = useRef<any>();
@@ -61,6 +65,17 @@ const Cart = () => {
   const [quoteItemProcessing, setQuoteItemProcessing] = useState<any>(null);
   const [cartTotal, setCartTotal] = useState<string>('0');
   const [providerWiseItems, setProviderWiseItems] = useState<any[]>([]);
+  const cartData = useSelector(({cart}) => cart);
+
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    console.log('cartData : ',cartData?.cartItems[params.index])
+    if(cartData?.cartItems[params.index]?.items !== undefined){
+      setCartItems(cartData?.cartItems[params.index]?.items)
+    }
+    
+  },[cartData])
 
   const openFulfillmentSheet = () => {
     fulfillmentSheet.current.open();
@@ -74,14 +89,11 @@ const Cart = () => {
 
   const {
     loading,
-    cartItems,
     checkoutLoading,
-    getCartItems,
     onCheckoutFromCart,
     haveDistinctProviders,
     isProductAvailableQuantityIsZero,
     isProductCategoryIsDifferent,
-    setCartItems,
     selectedItems,
     setSelectedItems,
     selectedItemsForInit,
@@ -501,15 +513,6 @@ const Cart = () => {
   }, [cartItems]);
 
   useEffect(() => {
-    if (isFocused) {
-      getCartItems().then(() => {
-        voiceDetectionStarted.current = true;
-        startVoice().then(() => {});
-      });
-    }
-  }, [isFocused]);
-
-  useEffect(() => {
     navigation.setOptions({
       title: t('Cart.My Cart'),
       headerRight: () => (
@@ -523,6 +526,10 @@ const Cart = () => {
     });
     setDeliveryAddress(address);
   }, []);
+
+  const UpdateData = (item: any) => {
+    setCartItems(item)
+  };
 
   return (
     <>
@@ -546,7 +553,7 @@ const Cart = () => {
                   <CartItems
                     providerWiseItems={providerWiseItems}
                     cartItems={cartItems}
-                    setCartItems={setCartItems}
+                    setCartItems={UpdateData}
                     haveDistinctProviders={haveDistinctProviders}
                     isProductCategoryIsDifferent={isProductCategoryIsDifferent}
                   />
@@ -775,4 +782,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default Cart;
+export default SubCart;

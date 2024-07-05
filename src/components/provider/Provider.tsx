@@ -1,5 +1,11 @@
-import React, {useCallback, useEffect} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
@@ -10,17 +16,29 @@ import {
   FB_DOMAIN,
   GROCERY_DOMAIN,
 } from '../../utils/constants';
+import moment from 'moment';
+import 'moment-duration-format';
+import {useSelector} from 'react-redux';
+import {calculateDistanceBetweenPoints} from '../../utils/utils';
+
+const Location = require('../../assets/location.png');
+const Timer = require('../../assets/timer.png');
 
 const Provider = ({provider}: {provider: any}) => {
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
+  const [minutes, setMinutes] = useState(0);
+  const [distance, setDistance] = useState(0);
+  const [addressres, setAddressRes] = useState(0);
+  const {address} = useSelector(({address}) => address);
 
   const navigateToProviderDetails = () => {
     if (!!provider.items && provider.items.length > 0) {
       const latestItem = provider.items[0];
       const routeParams: any = {
         brandId: latestItem.provider_details.id,
+        minutes: minutes,
       };
 
       if (latestItem.location_details) {
@@ -60,7 +78,49 @@ const Provider = ({provider}: {provider: any}) => {
     );
   }, []);
 
-  useEffect(() => {}, [provider]);
+  useEffect(() => {
+    let highMin = 0;
+    let latLong;
+    let locality = '';
+    provider?.items.forEach(item => {
+      const isoDuration = item?.item_details?.['@ondc/org/time_to_ship'];
+      const duration = moment.duration(isoDuration);
+      let minutes = duration.format('m');
+      minutes = minutes.replace(/\,/g, '');
+
+      if (highMin < minutes) {
+        highMin = minutes;
+        latLong = item.location_details?.gps.split(/\s*,\s*/);
+        locality = item.location_details?.address?.locality;
+      }
+    });
+
+    const distance = calculateDistanceBetweenPoints(
+      {
+        latitude: address.address.lat,
+        longitude: address.address.lng,
+      },
+      {
+        latitude: latLong[0],
+        longitude: latLong[1],
+      },
+    );
+    setDistance(distance);
+
+    let totalMinutes = highMin + (distance / 15) * 60;
+    const days = Math.floor(totalMinutes / (60 * 24));
+    const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+    const minutes = totalMinutes % 60;
+
+    let fixMinutes =
+      days > 0
+        ? days + ' days '
+        : hours > 0
+        ? hours + ' hours '
+        : minutes.toFixed(0) + ' minutes ';
+    setMinutes(fixMinutes);
+    setAddressRes(locality);
+  }, [provider]);
 
   return (
     <View style={styles.container}>
@@ -75,9 +135,21 @@ const Provider = ({provider}: {provider: any}) => {
           <Text variant={'titleLarge'} style={styles.providerName}>
             {provider?.descriptor?.name}
           </Text>
-          <Text variant={'labelMedium'} style={styles.providerLocality}>
-            {provider?.descriptor?.short_desc}
-          </Text>
+          <View style={styles.providerLocalityView}>
+            <Text variant={'labelMedium'} style={styles.providerLocality}>
+              {addressres}
+            </Text>
+            <View style={styles.dotView} />
+            <Image style={styles.imageIcon} source={Location} />
+            <Text variant={'labelMedium'} style={styles.providerLocality}>
+              {distance + ' Km'}
+            </Text>
+            <View style={styles.dotView} />
+            <Image style={styles.imageIcon} source={Timer} />
+            <Text variant={'labelMedium'} style={styles.providerLocality}>
+              {minutes}
+            </Text>
+          </View>
         </View>
       </TouchableOpacity>
       <FlatList
@@ -116,6 +188,18 @@ const makeStyles = (colors: any) =>
     providerName: {
       marginBottom: 8,
       color: colors.neutral400,
+    },
+    providerLocalityView: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    imageIcon: {marginRight: 5},
+    dotView: {
+      height: 3,
+      width: 3,
+      borderRadius: 3,
+      backgroundColor: colors.neutral300,
+      marginHorizontal: 5,
     },
     providerLocality: {
       color: colors.neutral300,

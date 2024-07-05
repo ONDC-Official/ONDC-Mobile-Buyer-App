@@ -19,7 +19,7 @@ export default () => {
     try {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${CART}/${uid}`,
+        `${API_BASE_URL}${CART}/${uid}/all`,
         source.current.token,
       );
       dispatch(updateCartItems(data));

@@ -72,6 +72,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
           ...data,
           ...{
             distance,
+            minutes:params.minutes
           },
         });
       }
