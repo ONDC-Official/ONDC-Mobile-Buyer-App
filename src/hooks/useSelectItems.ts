@@ -86,24 +86,6 @@ export default (openFulfillmentSheet: () => void) => {
     checkDifferentCategory(items);
   };
 
-  const getCartItems = async () => {
-    try {
-      setLoading(true);
-      source.current = CancelToken.source();
-      const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${CART}/${uid}`,
-        source.current.token,
-      );
-      setCartItems(data);
-      dispatch(updateCartItems(data));
-      updatedCartItems.current = data;
-    } catch (error) {
-      console.log('Error fetching cart items:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const getProviderIds = async (qoute: any[]) => {
     let providers: any[] = [];
     qoute.forEach(item => {
@@ -319,7 +301,6 @@ export default (openFulfillmentSheet: () => void) => {
     loading,
     cartItems,
     checkoutLoading,
-    getCartItems,
     onCheckoutFromCart,
     haveDistinctProviders,
     isProductAvailableQuantityIsZero,

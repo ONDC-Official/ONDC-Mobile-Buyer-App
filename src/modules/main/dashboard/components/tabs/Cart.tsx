@@ -33,7 +33,6 @@ const DashboardCart = ({navigation}: any) => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const {uid} = useSelector(({auth}) => auth);
-  console.log('uid : ',uid)
   const source = useRef<any>(null);
 
   const [allCart, setAllCart] = useState<any>([]);
@@ -43,17 +42,19 @@ const DashboardCart = ({navigation}: any) => {
       source.current = CancelToken.source();
 
       console.log(`${API_BASE_URL}${CART}/${uid}`);
-      const {data} = await deleteDataWithAuth(
+      await deleteDataWithAuth(
         `${API_BASE_URL}${CART}/${uid}/${id}/clear`,
         source.current.token,
       );
-      getAllCartList()
-        .then(() => {
-          // setApiInProgress(false);
-        })
-        .catch(() => {
-          // setApiInProgress(false);
-        });
+      var response = allCart.filter((item: any) => {
+        console.log(item.items.length);
+        if (item._id !== id) {
+          return item;
+        }
+      });
+
+      setAllCart(response);
+      dispatch(updateCartItems(response));
     } catch (error: any) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -73,8 +74,18 @@ const DashboardCart = ({navigation}: any) => {
         `${API_BASE_URL}${CART}/${uid}/all`,
         source.current.token,
       );
-      setAllCart(data);
-      dispatch(updateCartItems(data));
+
+      var response = data.filter((item: any) => {
+        console.log(item.items.length);
+        if (item.items.length > 0) {
+          return item;
+        } else {
+          deleteStore(item?._id);
+        }
+      });
+
+      setAllCart(response);
+      dispatch(updateCartItems(response));
     } catch (error: any) {
       if (error.response) {
         if (error.response.status === 404) {
@@ -100,11 +111,10 @@ const DashboardCart = ({navigation}: any) => {
   }, [isFocused]);
 
   const goToViewCart = (index: number) => {
-    navigation.navigate('SubCart',{index:index});
+    navigation.navigate('SubCart', {index: index});
   };
 
   const renderItems = ({item, index}: any) => {
-    console.log('item?._id :: ', item?._id);
     return (
       <View style={styles.mainItemView}>
         {/* header */}
@@ -192,6 +202,9 @@ const DashboardCart = ({navigation}: any) => {
         data={allCart}
         renderItem={renderItems}
         contentContainerStyle={styles.subContainer}
+        ListEmptyComponent={() => (
+          <Text style={styles.emptyText}>Store Items not found</Text>
+        )}
       />
     </View>
   );
@@ -208,6 +221,11 @@ const makeStyles = (colors: any) =>
     },
     pageTitle: {
       color: colors.neutral400,
+    },
+    emptyText: {
+      flex: 1,
+      textAlign: 'center',
+      textAlignVertical: 'center',
     },
     subContainer: {
       flexGrow: 1,
