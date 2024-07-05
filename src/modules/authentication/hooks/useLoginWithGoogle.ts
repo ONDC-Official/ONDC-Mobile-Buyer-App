@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import Config from '../../../../config';
+import Config from 'react-native-config';
 import useStoreUserAndNavigate from '../../../hooks/useStoreUserAndNavigate';
 
 export default () => {

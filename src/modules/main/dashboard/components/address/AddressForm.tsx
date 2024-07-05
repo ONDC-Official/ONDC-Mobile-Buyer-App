@@ -16,7 +16,7 @@ import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, MAP_ACCESS_TOKEN} from '../../../../../utils/apiActions';
 
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
-import Config from '../../../../../../config';
+import Config from 'react-native-config';
 import {useAppTheme} from '../../../../../utils/theme';
 import DropdownField from '../../../../../components/input/DropdownField';
 import useLocationBackgroundFetch from '../../../../../hooks/useLocationBackgroundFetch';

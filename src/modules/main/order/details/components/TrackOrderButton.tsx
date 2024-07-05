@@ -23,7 +23,7 @@ import {
   TRACK_ORDER,
 } from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
-import Config from '../../../../../../config';
+import Config from 'react-native-config';
 import {theme, useAppTheme} from '../../../../../utils/theme';
 import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
 import {useTranslation} from 'react-i18next';
