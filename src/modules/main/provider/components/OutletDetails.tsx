@@ -13,6 +13,7 @@ import {useTranslation} from 'react-i18next';
 
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import {useAppTheme} from '../../../../utils/theme';
+import {Grayscale} from 'react-native-color-matrix-image-filters';
 
 interface OutletDetails {
   provider: any;
@@ -51,7 +52,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
 
   return (
     <View>
-      {!outlet?.isOpen && (
+      {!provider?.isOpen && (
         <FastImage
           style={styles.brandImage}
           source={Closed}
@@ -69,20 +70,20 @@ const OutletDetails: React.FC<OutletDetails> = ({
                 <TouchableOpacity
                   onPress={callProvider}
                   style={styles.actionButton}>
-                    <Image source={Call}/>
-                  </TouchableOpacity>
+                  <Image source={Call} />
+                </TouchableOpacity>
                 <View style={styles.separator} />
                 <TouchableOpacity
                   style={styles.actionButton}
                   onPress={getDirection}>
-                    <Image source={Direction}/>
-                  </TouchableOpacity>
+                  <Image source={Direction} />
+                </TouchableOpacity>
               </View>
             </View>
             <View style={styles.providerLocalityView}>
               <Image source={Location} style={styles.imageIcon} />
               <Text variant={'labelLarge'} style={styles.timing}>
-                {outlet?.distance}
+                {outlet?.distance} km
               </Text>
               <View style={styles.dotView} />
               {!!outlet?.address && (
@@ -96,13 +97,31 @@ const OutletDetails: React.FC<OutletDetails> = ({
               <Text variant={'labelLarge'} style={styles.address}>
                 {outlet?.minutes}
               </Text>
+              {!provider?.isOpen && (
+                <>
+                <View style={styles.dotView} />
+                <Text variant={'labelLarge'} style={styles.address}>
+                  Opens at {provider?.time_from}
+                </Text>
+                </>
+              )}
             </View>
           </View>
-          <FastImage
-            style={{height: 80, width: 80, borderRadius: 15}}
-            source={Closed}
-            resizeMode={FastImage.resizeMode.cover}
-          />
+          {!provider?.isOpen ? (
+            <Grayscale>
+              <FastImage
+                style={styles.headerImage}
+                source={{uri: outlet?.provider_descriptor.symbol}}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+            </Grayscale>
+          ) : (
+            <FastImage
+              style={styles.headerImage}
+              source={{uri: outlet?.provider_descriptor.symbol}}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+          )}
         </View>
         <View style={styles.borderBottom} />
       </View>
@@ -151,6 +170,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.neutral300,
       marginHorizontal: 5,
     },
+    headerImage: {height: 80, width: 80, borderRadius: 15},
     buttonContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -166,9 +186,9 @@ const makeStyles = (colors: any) =>
       borderRadius: 28,
       borderWidth: 1,
       alignItems: 'center',
-      justifyContent:'center',
+      justifyContent: 'center',
       borderColor: colors.primary,
-      backgroundColor:'rgba(236, 243, 248, 1)',
+      backgroundColor: 'rgba(236, 243, 248, 1)',
     },
     getDirection: {
       borderColor: colors.error400,

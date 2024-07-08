@@ -41,7 +41,9 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
           />
           <Products
             providerId={provider.id}
+            provider={provider}
             customMenu={selectedMenu}
+            outlet={outlet}
             subCategories={[]}
           />
         </View>

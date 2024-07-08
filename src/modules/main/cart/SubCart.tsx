@@ -70,7 +70,6 @@ const SubCart = ({
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    console.log('cartData : ',cartData?.cartItems[params.index])
     if(cartData?.cartItems[params.index]?.items !== undefined){
       setCartItems(cartData?.cartItems[params.index]?.items)
     }
