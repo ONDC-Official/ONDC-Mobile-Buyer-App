@@ -8,15 +8,18 @@ import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
+import {Grayscale} from 'react-native-color-matrix-image-filters';
 
 interface Product {
   product: any;
   search?: boolean;
+  outlet: any;
+  provider: any;
 }
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
 
-const Product: React.FC<Product> = ({product, search = false}) => {
+const Product: React.FC<Product> = ({product, search = false, outlet, provider}) => {
   const {formatNumber} = useFormatNumber();
   const isFBDomain = product.context.domain === FB_DOMAIN;
   const theme = useAppTheme();
@@ -41,16 +44,32 @@ const Product: React.FC<Product> = ({product, search = false}) => {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={navigateToProductDetails}>
-      <FastImage
-        style={styles.gridImage}
-        source={
-          product?.item_details?.descriptor?.symbol
-            ? {uri: product?.item_details?.descriptor?.symbol}
-            : NoImageAvailable
-        }
-        resizeMode={FastImage.resizeMode.contain}
-      />
+      onPress={navigateToProductDetails}
+      disabled={!provider?.isOpen ? true : false}>
+      {!provider?.isOpen ? (
+        <Grayscale>
+          <FastImage
+            style={styles.gridImage}
+            source={
+              product?.item_details?.descriptor?.symbol
+                ? {uri: product?.item_details?.descriptor?.symbol}
+                : NoImageAvailable
+            }
+            resizeMode={FastImage.resizeMode.cover}
+          />
+        </Grayscale>
+      ) : (
+        <FastImage
+          style={styles.gridImage}
+          source={
+            product?.item_details?.descriptor?.symbol
+              ? {uri: product?.item_details?.descriptor?.symbol}
+              : NoImageAvailable
+          }
+          resizeMode={FastImage.resizeMode.cover}
+        />
+      )}
+
       {isFBDomain && (
         <View style={styles.vegNonVegContainer}>
           <VegNonVegTag tags={product.item_details.tags} />

@@ -44,19 +44,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         source.current.token,
       );
       if (data) {
-        data.timings = '';
-        data.isOpen = false;
-        if (data.time.range.start && data.time.range.end) {
-          data.timings = `${formatDate(
-            moment(data.time.range.start, 'hhmm'),
-            'h:mm a',
-          )} - ${formatDate(moment(data.time.range.end, 'hhmm'), 'h:mm a')}`;
-          const time = moment();
-          const startTime = moment(data.time.range.start, 'hh:mm');
-          const endTime = moment(data.time.range.end, 'hh:mm');
-          data.isOpen = time.isBetween(startTime, endTime);
-        }
-
         const latLong = data.gps.split(/\s*,\s*/);
         const distance = calculateDistanceBetweenPoints(
           {
@@ -68,11 +55,24 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
             longitude: latLong[1],
           },
         );
+
+        let totalMinutes = (distance / 15) * 60;
+        const days = Math.floor(totalMinutes / (60 * 24));
+        const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+        const minutes = totalMinutes % 60;
+
+        let getMinutes =
+          days > 0
+            ? days + ' days '
+            : hours > 0
+            ? hours + ' hours '
+            : minutes.toFixed(0) + ' minutes ';
+
         setOutlet({
           ...data,
           ...{
             distance,
-            minutes:params.minutes
+            minutes: getMinutes,
           },
         });
       }
@@ -91,11 +91,48 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         `${API_BASE_URL}${PROVIDER}?id=${params.brandId}`,
         source.current.token,
       );
+
+      let time_from;
+      let time_to;
+
+      data?.tags?.forEach((item: any) => {
+        if (item.code === 'timing') {
+          item?.list?.forEach((element: any) => {
+            if (element.code === 'time_from') {
+              time_from = element?.value;
+              console.log('element : ', element);
+            }
+            if (element.code === 'time_to') {
+              time_to = element?.value;
+              console.log('element : ', element);
+            }
+          });
+        }
+      });
+
+      const time = moment();
+      const startTime = moment(time_from, 'hh:mm');
+      const endTime = moment(time_to, 'hh:mm');
+      const isOpen = time.isBetween(startTime, endTime);
+
+      if(time_from.slice(0,2) < 12){
+        time_from = time_from.slice(0,2)+" am"
+      }else{
+        time_from = time_from.slice(0,2)+" pm"
+      }
+      
+
       navigation.setOptions({
         headerTitle: data?.descriptor?.name,
       });
       await getOutletDetails();
-      setProvider(data);
+      setProvider({
+        ...data,
+        ...{
+          isOpen,
+          time_from:time_from,
+        },
+      });
     } catch (error) {
       handleApiError(error);
     } finally {
