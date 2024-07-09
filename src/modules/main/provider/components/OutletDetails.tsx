@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Image,
   Linking,
   Platform,
   StyleSheet,
@@ -9,9 +10,12 @@ import {
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useTranslation} from 'react-i18next';
+import {Grayscale} from 'react-native-color-matrix-image-filters';
 
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import {useAppTheme} from '../../../../utils/theme';
+import useMinutesToString from '../../../../hooks/useMinutesToString';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface OutletDetails {
   provider: any;
@@ -19,7 +23,11 @@ interface OutletDetails {
   apiRequested: boolean;
 }
 
-const NoImageAvailable = require('../../../../assets/noImage.png');
+const Closed = require('../../../../assets/closed.png');
+const Location = require('../../../../assets/location.png');
+const Timer = require('../../../../assets/timer.png');
+const Call = require('../../../../assets/call.png');
+const Direction = require('../../../../assets/direction.png');
 
 const OutletDetails: React.FC<OutletDetails> = ({
   provider,
@@ -27,6 +35,8 @@ const OutletDetails: React.FC<OutletDetails> = ({
   apiRequested,
 }) => {
   const {t} = useTranslation();
+  const {formatNumber} = useFormatNumber();
+  const {translateMinutesToHumanReadable} = useMinutesToString();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -46,53 +56,79 @@ const OutletDetails: React.FC<OutletDetails> = ({
 
   return (
     <View>
-      <FastImage
-        style={styles.brandImage}
-        source={
-          provider?.descriptor?.symbol
-            ? {uri: provider?.descriptor?.symbol}
-            : NoImageAvailable
-        }
-        resizeMode={FastImage.resizeMode.contain}
-      />
+      {!provider?.isOpen && (
+        <FastImage
+          style={styles.brandImage}
+          source={Closed}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+      )}
       <View style={styles.brandDetails}>
-        <Text variant={'headlineSmall'} style={styles.title}>
-          {provider?.descriptor?.name}
-        </Text>
-        {!!outlet?.address && (
-          <Text variant={'bodyLarge'} style={styles.address}>
-            {outlet?.address?.locality || 'NA'}
-          </Text>
-        )}
-        <Text variant={'bodyMedium'} style={styles.address}>
-          {outlet?.isOpen && (
-            <>
-              <Text variant={'bodyLarge'} style={styles.open}>
-                {t('Cart.Outlet Details.Open now')}
+        <View style={{flexDirection: 'row'}}>
+          <View style={{flex: 1}}>
+            <View style={styles.providerLocalityView}>
+              <Text variant={'headlineSmall'} style={styles.title}>
+                {provider?.descriptor?.name}
               </Text>
-              &nbsp;-&nbsp;
-            </>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  onPress={callProvider}
+                  style={styles.actionButton}>
+                  <Image source={Call} />
+                </TouchableOpacity>
+                <View style={styles.separator} />
+                <TouchableOpacity
+                  style={styles.actionButton}
+                  onPress={getDirection}>
+                  <Image source={Direction} />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.providerLocalityView}>
+              <Image source={Location} style={styles.imageIcon} />
+              <Text variant={'labelLarge'} style={styles.timing}>
+                {t('Store.km', {distance: formatNumber(outlet?.distance)})}
+              </Text>
+              <View style={styles.dotView} />
+              {!!outlet?.address && (
+                <Text variant={'labelLarge'} style={styles.address}>
+                  {outlet?.address?.locality || 'NA'}
+                </Text>
+              )}
+            </View>
+            <View style={styles.providerLocalityView}>
+              <Image source={Timer} style={styles.imageIcon} />
+              <Text variant={'labelLarge'} style={styles.address}>
+                {translateMinutesToHumanReadable(
+                  outlet?.minutes.type,
+                  outlet?.minutes.time,
+                )}
+              </Text>
+              {!provider?.isOpen && (
+                <>
+                  <View style={styles.dotView} />
+                  <Text variant={'labelLarge'} style={styles.address}>
+                    {t('Store.Opens at', {time: provider?.time_from})}
+                  </Text>
+                </>
+              )}
+            </View>
+          </View>
+          {!provider?.isOpen ? (
+            <Grayscale>
+              <FastImage
+                style={styles.headerImage}
+                source={{uri: outlet?.provider_descriptor.symbol}}
+                resizeMode={FastImage.resizeMode.cover}
+              />
+            </Grayscale>
+          ) : (
+            <FastImage
+              style={styles.headerImage}
+              source={{uri: outlet?.provider_descriptor.symbol}}
+              resizeMode={FastImage.resizeMode.cover}
+            />
           )}
-          {outlet?.timings}
-        </Text>
-
-        <Text variant={'bodyMedium'} style={styles.timing}>
-          {outlet?.distance}
-        </Text>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={getDirection}
-            style={[styles.actionButton, styles.getDirection]}>
-            <Text variant={'bodyMedium'} style={styles.getDirectionText}>
-              {t('Cart.Outlet Details.Get Direction')}
-            </Text>
-          </TouchableOpacity>
-          <View style={styles.separator} />
-          <TouchableOpacity style={styles.actionButton} onPress={callProvider}>
-            <Text variant={'bodyMedium'} style={styles.buttonText}>
-              {t('Cart.Outlet Details.Call Now')}
-            </Text>
-          </TouchableOpacity>
         </View>
         <View style={styles.borderBottom} />
       </View>
@@ -116,12 +152,11 @@ const makeStyles = (colors: any) =>
       marginTop: 24,
     },
     title: {
-      marginBottom: 12,
+      flex: 1,
       color: colors.neutral400,
     },
     address: {
       color: colors.neutral300,
-      marginBottom: 12,
     },
     open: {
       color: colors.success600,
@@ -129,23 +164,38 @@ const makeStyles = (colors: any) =>
     timing: {
       color: colors.neutral300,
     },
+    providerLocalityView: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 12,
+    },
+    imageIcon: {marginRight: 5},
+    dotView: {
+      height: 4,
+      width: 4,
+      borderRadius: 4,
+      backgroundColor: colors.neutral300,
+      marginHorizontal: 5,
+    },
+    headerImage: {height: 80, width: 80, borderRadius: 15},
     buttonContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
       alignItems: 'center',
-      marginTop: 28,
+      justifyContent: 'flex-end',
+      paddingRight: 35,
     },
     separator: {
-      width: 16,
+      width: 8,
     },
     actionButton: {
-      borderRadius: 8,
+      height: 28,
+      width: 28,
+      borderRadius: 28,
       borderWidth: 1,
-      flex: 1,
       alignItems: 'center',
-      paddingHorizontal: 24,
-      paddingVertical: 12,
+      justifyContent: 'center',
       borderColor: colors.primary,
+      backgroundColor: 'rgba(236, 243, 248, 1)',
     },
     getDirection: {
       borderColor: colors.error400,

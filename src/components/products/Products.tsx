@@ -26,6 +26,8 @@ interface Products {
   customMenu: any;
   subCategories: any[];
   search?: boolean;
+  outlet: any;
+  provider: any;
 }
 
 const CancelToken = axios.CancelToken;
@@ -35,6 +37,8 @@ const Products: React.FC<Products> = ({
   customMenu = null,
   subCategories = [],
   search = false,
+  outlet,
+  provider,
 }) => {
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
@@ -190,7 +194,11 @@ const Products: React.FC<Products> = ({
         <View style={styles.listContainer}>
           {filteredProducts.map(product => (
             <View key={product.id} style={styles.productContainer}>
-              <Product product={product} search={search} />
+              <Product
+                product={product}
+                search={search}
+                provider={provider}
+              />
             </View>
           ))}
         </View>

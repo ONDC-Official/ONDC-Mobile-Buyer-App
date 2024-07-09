@@ -15,7 +15,7 @@ import {
   Text,
 } from 'react-native-paper';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {
   useFocusEffect,
@@ -49,7 +49,7 @@ import ReferenceIcon from '../../../assets/reference.svg';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
-const Cart = () => {
+const SubCart = ({route: {params}}: any) => {
   const {formatNumber} = useFormatNumber();
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
@@ -57,6 +57,7 @@ const Cart = () => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {address} = useSelector(({address}) => address);
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const addressSheet = useRef<any>();
   const fulfillmentSheet = useRef<any>();
@@ -75,6 +76,15 @@ const Cart = () => {
   const [providerWiseItems, setProviderWiseItems] = useState<any[]>([]);
   const [confirmModalVisible, setConfirmModalVisible] =
     useState<boolean>(false);
+  const cartData = useSelector(({cart}) => cart);
+
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    if (cartData?.cartItems[params.index]?.items !== undefined) {
+      setCartItems(cartData?.cartItems[params.index]?.items);
+    }
+  }, [cartData]);
 
   const openFulfillmentSheet = () => {
     fulfillmentSheet.current.open();
@@ -865,4 +875,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default Cart;
+export default SubCart;

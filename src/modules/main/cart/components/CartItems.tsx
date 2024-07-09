@@ -34,6 +34,7 @@ import {useAppTheme} from '../../../../utils/theme';
 import DeleteIcon from '../../../../assets/delete.svg';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
+import ApplyCoupon from './ApplyCoupon';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -342,6 +343,7 @@ const CartItems: React.FC<CartItems> = ({
             </View>
           </View>
         ))}
+        <ApplyCoupon />
         {haveDistinctProviders && (
           <View style={styles.errorBox}>
             <Text variant={'bodyMedium'} style={styles.errorText}>

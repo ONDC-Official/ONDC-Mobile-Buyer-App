@@ -1,8 +1,18 @@
-import React, {useCallback} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
+import 'moment-duration-format';
+import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../utils/theme';
 import VegNonVegTag from '../products/VegNonVegTag';
 import {
@@ -10,11 +20,26 @@ import {
   FB_DOMAIN,
   GROCERY_DOMAIN,
 } from '../../utils/constants';
+import {calculateDistanceBetweenPoints} from '../../utils/utils';
+import useMinutesToString from '../../hooks/useMinutesToString';
+import useFormatNumber from '../../hooks/useFormatNumber';
+
+const Location = require('../../assets/location.png');
+const Timer = require('../../assets/timer.png');
 
 const Provider = ({provider}: {provider: any}) => {
+  const {t} = useTranslation();
+  const {formatNumber} = useFormatNumber();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
+  const [minutes, setMinutes] = useState({type: 'minutes', time: 0});
+  const [distance, setDistance] = useState<string>('');
+  const [domain, setDomain] = useState<string>('');
+  const [locality, setLocality] = useState<string>('');
+  const {address} = useSelector((state: any) => state?.address);
+  const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
+    useMinutesToString();
 
   const navigateToProviderDetails = () => {
     if (!!provider.items && provider.items.length > 0) {
@@ -60,6 +85,44 @@ const Provider = ({provider}: {provider: any}) => {
     );
   }, []);
 
+  useEffect(() => {
+    if (provider) {
+      let highMin = 0;
+      let latLong: string = '';
+      let itemsLocality = '';
+      let itemDomain = '';
+      provider?.items.forEach((item: any) => {
+        const duration = moment.duration(
+          item?.item_details['@ondc/org/time_to_ship'],
+        );
+        let durationInMinutes = duration.format('m').replace(/\,/g, '');
+
+        if (highMin < durationInMinutes) {
+          highMin = durationInMinutes;
+          latLong = item.location_details?.gps.split(/\s*,\s*/);
+          itemsLocality = item.location_details?.address?.locality;
+          itemDomain = item.context?.domain;
+        }
+      });
+
+      const newDistance = calculateDistanceBetweenPoints(
+        {
+          latitude: address.address.lat,
+          longitude: address.address.lng,
+        },
+        {
+          latitude: Number(latLong[0]),
+          longitude: Number(latLong[1]),
+        },
+      );
+      setDistance(newDistance);
+      let totalMinutes = Number(highMin) + (Number(newDistance) * 60) / 15;
+      setMinutes(convertMinutesToHumanReadable(totalMinutes));
+      setLocality(itemsLocality);
+      setDomain(itemDomain);
+    }
+  }, [provider]);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -73,9 +136,25 @@ const Provider = ({provider}: {provider: any}) => {
           <Text variant={'titleLarge'} style={styles.providerName}>
             {provider?.descriptor?.name}
           </Text>
-          <Text variant={'labelMedium'} style={styles.providerLocality}>
-            {provider?.descriptor?.short_desc}
-          </Text>
+          <View style={styles.providerLocalityView}>
+            <Text variant={'labelMedium'} style={styles.providerLocality}>
+              {locality}
+            </Text>
+            <View style={styles.dotView} />
+            <Image style={styles.imageIcon} source={Location} />
+            <Text variant={'labelMedium'} style={styles.providerLocality}>
+              {t('Store.km', {distance: formatNumber(distance)})}
+            </Text>
+            {domain === FB_DOMAIN && (
+              <View style={styles.providerLocalityView}>
+                <View style={styles.dotView} />
+                <Image style={styles.imageIcon} source={Timer} />
+                <Text variant={'labelMedium'} style={styles.providerLocality}>
+                  {translateMinutesToHumanReadable(minutes.type, minutes.time)}
+                </Text>
+              </View>
+            )}
+          </View>
         </View>
       </TouchableOpacity>
       <FlatList
@@ -114,6 +193,18 @@ const makeStyles = (colors: any) =>
     providerName: {
       marginBottom: 8,
       color: colors.neutral400,
+    },
+    providerLocalityView: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    imageIcon: {marginRight: 5},
+    dotView: {
+      height: 3,
+      width: 3,
+      borderRadius: 3,
+      backgroundColor: colors.neutral300,
+      marginHorizontal: 5,
     },
     providerLocality: {
       color: colors.neutral300,

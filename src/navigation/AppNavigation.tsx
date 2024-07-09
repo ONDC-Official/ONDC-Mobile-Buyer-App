@@ -10,12 +10,13 @@ import Splash from '../modules/authentication/splash/Splash';
 import AddDefaultAddress from '../modules/main/profile/AddDefaultAddress';
 import Dashboard from '../modules/main/dashboard/Dashboard';
 import AddressList from '../modules/main/dashboard/components/address/AddressList';
-import Cart from '../modules/main/cart/Cart';
+import SubCart from '../modules/main/cart/SubCart';
 import ProductDetails from '../modules/main/product/details/ProductDetails';
 import Profile from '../modules/main/profile/Profile';
 import OrderDetails from '../modules/main/order/details/OrderDetails';
 import UpdateAddress from '../modules/main/dashboard/components/address/UpdateAddress';
 import CategoryDetails from '../modules/main/category/CategoryDetails';
+import CouponList from '../modules/main/category/CouponList';
 import BrandDetails from '../modules/main/provider/BrandDetails';
 import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
 import Outlets from '../modules/main/provider/Outlets';
@@ -88,8 +89,8 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="Cart"
-          component={Cart}
+          name="SubCart"
+          component={SubCart}
           options={{
             title: '',
           }}
@@ -187,6 +188,13 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="CategoryDetails"
           component={CategoryDetails}
           options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="CouponList"
+          component={CouponList}
+          options={{
+            title: 'Apply Coupon',
+          }}
         />
         <Stack.Screen
           name="SubCategoryDetails"

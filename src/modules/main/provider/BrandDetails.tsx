@@ -14,14 +14,43 @@ import OtherBrandDetails from './components/OtherBrandDetails';
 import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
-import useFormatDate from '../../../hooks/useFormatDate';
 import {calculateDistanceBetweenPoints} from '../../../utils/utils';
+import useMinutesToString from '../../../hooks/useMinutesToString';
 
 const CancelToken = axios.CancelToken;
 
+const getStartAndEndTime = (item: any) => {
+  let startTime: string = '',
+    endTime: string = '';
+  item?.list?.forEach((element: any) => {
+    if (element.code === 'time_from') {
+      startTime = element?.value;
+    }
+    if (element.code === 'time_to') {
+      endTime = element?.value;
+    }
+  });
+
+  return {startTime, endTime};
+};
+
+const getMomentDateFromHourMinutes = (timeString: string) => {
+  // Extract hours and minutes from the string
+  const hours = parseInt(timeString.slice(0, 2), 10);
+  const minutes = parseInt(timeString.slice(2, 4), 10);
+
+  // Create a moment object with the current date
+  const currentDate = moment();
+
+  // Set the extracted hours and minutes
+  currentDate.set({hour: hours, minute: minutes});
+
+  return currentDate;
+};
+
 const BrandDetails = ({route: {params}}: {route: any}) => {
   const {address} = useSelector(({address}) => address);
-  const {formatDate} = useFormatDate();
+  const {convertMinutesToHumanReadable} = useMinutesToString();
   const isFocused = useIsFocused();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
@@ -44,19 +73,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         source.current.token,
       );
       if (data) {
-        data.timings = '';
-        data.isOpen = false;
-        if (data.time.range.start && data.time.range.end) {
-          data.timings = `${formatDate(
-            moment(data.time.range.start, 'hhmm'),
-            'h:mm a',
-          )} - ${formatDate(moment(data.time.range.end, 'hhmm'), 'h:mm a')}`;
-          const time = moment();
-          const startTime = moment(data.time.range.start, 'hh:mm');
-          const endTime = moment(data.time.range.end, 'hh:mm');
-          data.isOpen = time.isBetween(startTime, endTime);
-        }
-
         const latLong = data.gps.split(/\s*,\s*/);
         const distance = calculateDistanceBetweenPoints(
           {
@@ -68,10 +84,16 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
             longitude: latLong[1],
           },
         );
+        const duration = moment.duration(data.time_to_ship);
+        let durationInMinutes = duration.format('m').replace(/\,/g, '');
+        let totalMinutes =
+          Number(durationInMinutes) + (Number(distance) * 60) / 15;
+
         setOutlet({
           ...data,
           ...{
             distance,
+            minutes: convertMinutesToHumanReadable(totalMinutes),
           },
         });
       }
@@ -90,11 +112,84 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         `${API_BASE_URL}${PROVIDER}?id=${params.brandId}`,
         source.current.token,
       );
+
+      let time_from: string = '';
+      let time_to: string = '';
+
+      const timings = data?.tags?.filter((item: any) => item.code === 'timing');
+      if (timings.length === 1) {
+        timings[0].forEach((element: any) => {
+          if (element.code === 'time_from') {
+            time_from = element?.value;
+          }
+          if (element.code === 'time_to') {
+            time_to = element?.value;
+          }
+        });
+      } else {
+        const allTime = timings.find((time: any) => {
+          return !!time.list.find(
+            (item: any) => item.code === 'type' && item.value === 'ALL',
+          );
+        });
+        if (allTime) {
+          const time = getStartAndEndTime(allTime);
+          time_from = time.startTime;
+          time_to = time.endTime;
+        } else {
+          const orderTime = timings.find((time: any) => {
+            return !!time.list.find(
+              (item: any) => item.code === 'type' && item.value === 'Order',
+            );
+          });
+          if (orderTime) {
+            const time = getStartAndEndTime(orderTime);
+            time_from = time.startTime;
+            time_to = time.endTime;
+          } else {
+            const deliveryTime = timings.find((time: any) => {
+              return !!time.list.find(
+                (item: any) =>
+                  item.code === 'type' && item.value === 'Delivery',
+              );
+            });
+            if (deliveryTime) {
+              const time = getStartAndEndTime(deliveryTime);
+              time_from = time.startTime;
+              time_to = time.endTime;
+            } else {
+              const selfPickupTime = timings.find((time: any) => {
+                return !!time.list.find(
+                  (item: any) =>
+                    item.code === 'type' && item.value === 'Self-Pickup',
+                );
+              });
+              if (selfPickupTime) {
+                const time = getStartAndEndTime(selfPickupTime);
+                time_from = time.startTime;
+                time_to = time.endTime;
+              }
+            }
+          }
+        }
+      }
+
+      const time = moment();
+      const startTime = getMomentDateFromHourMinutes(time_from);
+      const endTime = getMomentDateFromHourMinutes(time_to);
+      const isOpen = time.isBetween(startTime, endTime);
+
       navigation.setOptions({
         headerTitle: data?.descriptor?.name,
       });
       await getOutletDetails();
-      setProvider(data);
+      setProvider({
+        ...data,
+        ...{
+          isOpen,
+          time_from: startTime.format('hh:mm a'),
+        },
+      });
     } catch (error) {
       handleApiError(error);
     } finally {

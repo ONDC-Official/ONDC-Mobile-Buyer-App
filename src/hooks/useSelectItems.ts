@@ -10,16 +10,9 @@ import {useTranslation} from 'react-i18next';
 
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import {SSE_TIMEOUT} from '../utils/constants';
-import {
-  API_BASE_URL,
-  CART,
-  EVENTS,
-  ON_SELECT,
-  SELECT,
-} from '../utils/apiActions';
+import {API_BASE_URL, EVENTS, ON_SELECT, SELECT} from '../utils/apiActions';
 import {setStoredData} from '../utils/storage';
 import useNetworkHandling from './useNetworkHandling';
-import {updateCartItems} from '../toolkit/reducer/cart';
 import {setTransactionId} from '../toolkit/reducer/auth';
 
 const CancelToken = axios.CancelToken;
@@ -84,24 +77,6 @@ export default (openFulfillmentSheet: () => void) => {
     checkDistinctProviders(items);
     checkAvailableQuantity(items);
     checkDifferentCategory(items);
-  };
-
-  const getCartItems = async () => {
-    try {
-      setLoading(true);
-      source.current = CancelToken.source();
-      const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${CART}/${uid}`,
-        source.current.token,
-      );
-      setCartItems(data);
-      dispatch(updateCartItems(data));
-      updatedCartItems.current = data;
-    } catch (error) {
-      console.log('Error fetching cart items:', error);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const getProviderIds = async (qoute: any[]) => {
@@ -319,7 +294,6 @@ export default (openFulfillmentSheet: () => void) => {
     loading,
     cartItems,
     checkoutLoading,
-    getCartItems,
     onCheckoutFromCart,
     haveDistinctProviders,
     isProductAvailableQuantityIsZero,
