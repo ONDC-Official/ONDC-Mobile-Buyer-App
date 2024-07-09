@@ -10,10 +10,12 @@ import {
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useTranslation} from 'react-i18next';
+import {Grayscale} from 'react-native-color-matrix-image-filters';
 
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import {useAppTheme} from '../../../../utils/theme';
-import {Grayscale} from 'react-native-color-matrix-image-filters';
+import useMinutesToString from '../../../../hooks/useMinutesToString';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface OutletDetails {
   provider: any;
@@ -33,6 +35,8 @@ const OutletDetails: React.FC<OutletDetails> = ({
   apiRequested,
 }) => {
   const {t} = useTranslation();
+  const {formatNumber} = useFormatNumber();
+  const {translateMinutesToHumanReadable} = useMinutesToString();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -83,7 +87,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
             <View style={styles.providerLocalityView}>
               <Image source={Location} style={styles.imageIcon} />
               <Text variant={'labelLarge'} style={styles.timing}>
-                {outlet?.distance} km
+                {t('Store.km', {distance: formatNumber(outlet?.distance)})}
               </Text>
               <View style={styles.dotView} />
               {!!outlet?.address && (
@@ -95,14 +99,17 @@ const OutletDetails: React.FC<OutletDetails> = ({
             <View style={styles.providerLocalityView}>
               <Image source={Timer} style={styles.imageIcon} />
               <Text variant={'labelLarge'} style={styles.address}>
-                {outlet?.minutes}
+                {translateMinutesToHumanReadable(
+                  outlet?.minutes.type,
+                  outlet?.minutes.time,
+                )}
               </Text>
               {!provider?.isOpen && (
                 <>
-                <View style={styles.dotView} />
-                <Text variant={'labelLarge'} style={styles.address}>
-                  Opens at {provider?.time_from}
-                </Text>
+                  <View style={styles.dotView} />
+                  <Text variant={'labelLarge'} style={styles.address}>
+                    {t('Store.Opens at', {time: provider?.time_from})}
+                  </Text>
                 </>
               )}
             </View>

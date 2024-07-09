@@ -142,7 +142,7 @@ const DashboardCart = ({navigation}: any) => {
         </View>
 
         {/* line */}
-        <View style={styles.line}></View>
+        <View style={styles.line} />
 
         {/* items */}
         <Text variant="labelMedium" style={styles.itemCart}>

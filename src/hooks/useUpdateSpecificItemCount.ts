@@ -54,7 +54,7 @@ export default () => {
         const finalData = cartItems.map(item =>
           item._id === uniqueId ? newObject : item,
         );
-        
+
         setCartItemsData(finalData);
       }
     } catch (e) {

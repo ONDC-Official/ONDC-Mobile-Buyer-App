@@ -1,20 +1,19 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  StyleSheet,
-  View,
   Image,
   ScrollView,
-  TouchableOpacity,
+  StyleSheet,
   TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../../utils/theme';
 import {Text} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
-import {API_BASE_URL,OFFERS} from '../../../utils/apiActions';
+import {API_BASE_URL, OFFERS} from '../../../utils/apiActions';
 
 const CouponImg = require('../../../assets/Coupon.png');
 const CheckBox = require('../../../assets/check.png');
@@ -31,8 +30,7 @@ const CouponList: React.FC<CouponList> = ({}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
-  const {getDataWithAuth} =
-    useNetworkHandling();
+  const {getDataWithAuth} = useNetworkHandling();
 
   const checkboxClick = () => {
     if (checkTick) {
@@ -42,19 +40,19 @@ const CouponList: React.FC<CouponList> = ({}) => {
     }
   };
 
-  const getCoupon = async() => {
+  const getCoupon = async () => {
     //https://buyer-app.ondc.org/clientApis/v2/offers?latitude=12.981243&longitude=77.595034&provider=preprod.xpressbaazaar.com_ONDC:RET12_79e060e7-a8f9-4c56-8e55-2b3321ccce87
     const {data} = await getDataWithAuth(
       `${API_BASE_URL}${OFFERS}?latitude=12.981243&longitude=77.595034&provider=preprod.xpressbaazaar.com_ONDC:RET12_79e060e7-a8f9-4c56-8e55-2b3321ccce87`,
       productSource.current.token,
     );
 
-    console.log('data : ',data);
-  }
+    console.log('data : ', data);
+  };
 
   useEffect(() => {
     getCoupon();
-  },[])
+  }, []);
 
   return (
     <View style={styles.container}>

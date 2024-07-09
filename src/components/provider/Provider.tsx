@@ -9,6 +9,10 @@ import {
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
+import moment from 'moment';
+import 'moment-duration-format';
+import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../utils/theme';
 import VegNonVegTag from '../products/VegNonVegTag';
 import {
@@ -16,29 +20,32 @@ import {
   FB_DOMAIN,
   GROCERY_DOMAIN,
 } from '../../utils/constants';
-import moment from 'moment';
-import 'moment-duration-format';
-import {useSelector} from 'react-redux';
 import {calculateDistanceBetweenPoints} from '../../utils/utils';
+import useMinutesToString from '../../hooks/useMinutesToString';
+import useFormatNumber from '../../hooks/useFormatNumber';
 
 const Location = require('../../assets/location.png');
 const Timer = require('../../assets/timer.png');
 
 const Provider = ({provider}: {provider: any}) => {
+  const {t} = useTranslation();
+  const {formatNumber} = useFormatNumber();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const [minutes, setMinutes] = useState(0);
-  const [distance, setDistance] = useState(0);
-  const [addressres, setAddressRes] = useState(0);
-  const {address} = useSelector(({address}) => address);
+  const [minutes, setMinutes] = useState({type: 'minutes', time: 0});
+  const [distance, setDistance] = useState<string>('');
+  const [domain, setDomain] = useState<string>('');
+  const [locality, setLocality] = useState<string>('');
+  const {address} = useSelector((state: any) => state?.address);
+  const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
+    useMinutesToString();
 
   const navigateToProviderDetails = () => {
     if (!!provider.items && provider.items.length > 0) {
       const latestItem = provider.items[0];
       const routeParams: any = {
         brandId: latestItem.provider_details.id,
-        minutes: minutes,
       };
 
       if (latestItem.location_details) {
@@ -79,47 +86,41 @@ const Provider = ({provider}: {provider: any}) => {
   }, []);
 
   useEffect(() => {
-    let highMin = 0;
-    let latLong;
-    let locality = '';
-    provider?.items.forEach(item => {
-      const isoDuration = item?.item_details?.['@ondc/org/time_to_ship'];
-      const duration = moment.duration(isoDuration);
-      let minutes = duration.format('m');
-      minutes = minutes.replace(/\,/g, '');
+    if (provider) {
+      let highMin = 0;
+      let latLong: string = '';
+      let itemsLocality = '';
+      let itemDomain = '';
+      provider?.items.forEach((item: any) => {
+        const duration = moment.duration(
+          item?.item_details['@ondc/org/time_to_ship'],
+        );
+        let durationInMinutes = duration.format('m').replace(/\,/g, '');
 
-      if (highMin < minutes) {
-        highMin = minutes;
-        latLong = item.location_details?.gps.split(/\s*,\s*/);
-        locality = item.location_details?.address?.locality;
-      }
-    });
+        if (highMin < durationInMinutes) {
+          highMin = durationInMinutes;
+          latLong = item.location_details?.gps.split(/\s*,\s*/);
+          itemsLocality = item.location_details?.address?.locality;
+          itemDomain = item.context?.domain;
+        }
+      });
 
-    const distance = calculateDistanceBetweenPoints(
-      {
-        latitude: address.address.lat,
-        longitude: address.address.lng,
-      },
-      {
-        latitude: latLong[0],
-        longitude: latLong[1],
-      },
-    );
-    setDistance(distance);
-
-    let totalMinutes = highMin + (distance / 15) * 60;
-    const days = Math.floor(totalMinutes / (60 * 24));
-    const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
-    const minutes = totalMinutes % 60;
-
-    let fixMinutes =
-      days > 0
-        ? days + ' days '
-        : hours > 0
-        ? hours + ' hours '
-        : minutes.toFixed(0) + ' minutes ';
-    setMinutes(fixMinutes);
-    setAddressRes(locality);
+      const newDistance = calculateDistanceBetweenPoints(
+        {
+          latitude: address.address.lat,
+          longitude: address.address.lng,
+        },
+        {
+          latitude: Number(latLong[0]),
+          longitude: Number(latLong[1]),
+        },
+      );
+      setDistance(newDistance);
+      let totalMinutes = Number(highMin) + (Number(newDistance) * 60) / 15;
+      setMinutes(convertMinutesToHumanReadable(totalMinutes));
+      setLocality(itemsLocality);
+      setDomain(itemDomain);
+    }
   }, [provider]);
 
   return (
@@ -137,18 +138,22 @@ const Provider = ({provider}: {provider: any}) => {
           </Text>
           <View style={styles.providerLocalityView}>
             <Text variant={'labelMedium'} style={styles.providerLocality}>
-              {addressres}
+              {locality}
             </Text>
             <View style={styles.dotView} />
             <Image style={styles.imageIcon} source={Location} />
             <Text variant={'labelMedium'} style={styles.providerLocality}>
-              {distance + ' Km'}
+              {t('Store.km', {distance: formatNumber(distance)})}
             </Text>
-            <View style={styles.dotView} />
-            <Image style={styles.imageIcon} source={Timer} />
-            <Text variant={'labelMedium'} style={styles.providerLocality}>
-              {minutes}
-            </Text>
+            {domain === FB_DOMAIN && (
+              <View style={styles.providerLocalityView}>
+                <View style={styles.dotView} />
+                <Image style={styles.imageIcon} source={Timer} />
+                <Text variant={'labelMedium'} style={styles.providerLocality}>
+                  {translateMinutesToHumanReadable(minutes.type, minutes.time)}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
       </TouchableOpacity>

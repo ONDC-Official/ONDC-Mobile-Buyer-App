@@ -44,7 +44,7 @@ export default () => {
           newObject.item.quantity.count -= 1;
         }
         await putDataWithAuth(url, newObject.item, source.current.token);
-        return newObject
+        return newObject;
       }
     } catch (e) {
       console.log(e);

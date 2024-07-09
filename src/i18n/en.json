@@ -601,7 +601,14 @@
     "Beverages": "Beverages"
   },
   "Store": {
-    "km": "{{distance}} km"
+    "km": "{{distance}} km",
+    "day": "{{time}} day",
+    "days": "{{time}} days",
+    "hour": "{{time}} hour",
+    "hours": "{{time}} hours",
+    "minute": "{{time}} minute",
+    "minutes": "{{time}} minutes",
+    "Opens at": "Opens at {{time}}"
   },
   "Network Banner": {
     "You are offline, please verify your internet connection": "You are offline, please verify your internet connection"

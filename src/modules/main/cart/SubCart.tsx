@@ -34,13 +34,10 @@ import {useAppTheme} from '../../../utils/theme';
 import useReadAudio from '../../../hooks/useReadAudio';
 import {VIEW_DELIVERY_OPTIONS_COMMAND} from '../../../utils/constants';
 import useFormatNumber from '../../../hooks/useFormatNumber';
-import {updateCartItems} from '../../../toolkit/reducer/cart';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
-const SubCart = ({
-  route: {params},
-}:any) => {
+const SubCart = ({route: {params}}: any) => {
   const {formatNumber} = useFormatNumber();
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
@@ -70,11 +67,10 @@ const SubCart = ({
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    if(cartData?.cartItems[params.index]?.items !== undefined){
-      setCartItems(cartData?.cartItems[params.index]?.items)
+    if (cartData?.cartItems[params.index]?.items !== undefined) {
+      setCartItems(cartData?.cartItems[params.index]?.items);
     }
-    
-  },[cartData])
+  }, [cartData]);
 
   const openFulfillmentSheet = () => {
     fulfillmentSheet.current.open();
@@ -527,7 +523,7 @@ const SubCart = ({
   }, []);
 
   const UpdateData = (item: any) => {
-    setCartItems(item)
+    setCartItems(item);
   };
 
   return (

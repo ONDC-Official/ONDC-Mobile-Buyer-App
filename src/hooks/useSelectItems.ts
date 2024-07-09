@@ -10,16 +10,9 @@ import {useTranslation} from 'react-i18next';
 
 import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import {SSE_TIMEOUT} from '../utils/constants';
-import {
-  API_BASE_URL,
-  CART,
-  EVENTS,
-  ON_SELECT,
-  SELECT,
-} from '../utils/apiActions';
+import {API_BASE_URL, EVENTS, ON_SELECT, SELECT} from '../utils/apiActions';
 import {setStoredData} from '../utils/storage';
 import useNetworkHandling from './useNetworkHandling';
-import {updateCartItems} from '../toolkit/reducer/cart';
 import {setTransactionId} from '../toolkit/reducer/auth';
 
 const CancelToken = axios.CancelToken;

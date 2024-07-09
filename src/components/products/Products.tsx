@@ -27,7 +27,7 @@ interface Products {
   subCategories: any[];
   search?: boolean;
   outlet: any;
-  provider:any;
+  provider: any;
 }
 
 const CancelToken = axios.CancelToken;
@@ -194,7 +194,11 @@ const Products: React.FC<Products> = ({
         <View style={styles.listContainer}>
           {filteredProducts.map(product => (
             <View key={product.id} style={styles.productContainer}>
-              <Product product={product} search={search} outlet={outlet} provider={provider}/>
+              <Product
+                product={product}
+                search={search}
+                provider={provider}
+              />
             </View>
           ))}
         </View>

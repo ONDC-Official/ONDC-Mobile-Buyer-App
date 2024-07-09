@@ -14,14 +14,43 @@ import OtherBrandDetails from './components/OtherBrandDetails';
 import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
-import useFormatDate from '../../../hooks/useFormatDate';
 import {calculateDistanceBetweenPoints} from '../../../utils/utils';
+import useMinutesToString from '../../../hooks/useMinutesToString';
 
 const CancelToken = axios.CancelToken;
 
+const getStartAndEndTime = (item: any) => {
+  let startTime: string = '',
+    endTime: string = '';
+  item?.list?.forEach((element: any) => {
+    if (element.code === 'time_from') {
+      startTime = element?.value;
+    }
+    if (element.code === 'time_to') {
+      endTime = element?.value;
+    }
+  });
+
+  return {startTime, endTime};
+};
+
+const getMomentDateFromHourMinutes = (timeString: string) => {
+  // Extract hours and minutes from the string
+  const hours = parseInt(timeString.slice(0, 2), 10);
+  const minutes = parseInt(timeString.slice(2, 4), 10);
+
+  // Create a moment object with the current date
+  const currentDate = moment();
+
+  // Set the extracted hours and minutes
+  currentDate.set({hour: hours, minute: minutes});
+
+  return currentDate;
+};
+
 const BrandDetails = ({route: {params}}: {route: any}) => {
   const {address} = useSelector(({address}) => address);
-  const {formatDate} = useFormatDate();
+  const {convertMinutesToHumanReadable} = useMinutesToString();
   const isFocused = useIsFocused();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
@@ -55,24 +84,16 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
             longitude: latLong[1],
           },
         );
-
-        let totalMinutes = (distance / 15) * 60;
-        const days = Math.floor(totalMinutes / (60 * 24));
-        const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
-        const minutes = totalMinutes % 60;
-
-        let getMinutes =
-          days > 0
-            ? days + ' days '
-            : hours > 0
-            ? hours + ' hours '
-            : minutes.toFixed(0) + ' minutes ';
+        const duration = moment.duration(data.time_to_ship);
+        let durationInMinutes = duration.format('m').replace(/\,/g, '');
+        let totalMinutes =
+          Number(durationInMinutes) + (Number(distance) * 60) / 15;
 
         setOutlet({
           ...data,
           ...{
             distance,
-            minutes: getMinutes,
+            minutes: convertMinutesToHumanReadable(totalMinutes),
           },
         });
       }
@@ -92,35 +113,71 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         source.current.token,
       );
 
-      let time_from;
-      let time_to;
+      let time_from: string = '';
+      let time_to: string = '';
 
-      data?.tags?.forEach((item: any) => {
-        if (item.code === 'timing') {
-          item?.list?.forEach((element: any) => {
-            if (element.code === 'time_from') {
-              time_from = element?.value;
-              console.log('element : ', element);
-            }
-            if (element.code === 'time_to') {
-              time_to = element?.value;
-              console.log('element : ', element);
-            }
+      const timings = data?.tags?.filter((item: any) => item.code === 'timing');
+      if (timings.length === 1) {
+        timings[0].forEach((element: any) => {
+          if (element.code === 'time_from') {
+            time_from = element?.value;
+          }
+          if (element.code === 'time_to') {
+            time_to = element?.value;
+          }
+        });
+      } else {
+        const allTime = timings.find((time: any) => {
+          return !!time.list.find(
+            (item: any) => item.code === 'type' && item.value === 'ALL',
+          );
+        });
+        if (allTime) {
+          const time = getStartAndEndTime(allTime);
+          time_from = time.startTime;
+          time_to = time.endTime;
+        } else {
+          const orderTime = timings.find((time: any) => {
+            return !!time.list.find(
+              (item: any) => item.code === 'type' && item.value === 'Order',
+            );
           });
+          if (orderTime) {
+            const time = getStartAndEndTime(orderTime);
+            time_from = time.startTime;
+            time_to = time.endTime;
+          } else {
+            const deliveryTime = timings.find((time: any) => {
+              return !!time.list.find(
+                (item: any) =>
+                  item.code === 'type' && item.value === 'Delivery',
+              );
+            });
+            if (deliveryTime) {
+              const time = getStartAndEndTime(deliveryTime);
+              time_from = time.startTime;
+              time_to = time.endTime;
+            } else {
+              const selfPickupTime = timings.find((time: any) => {
+                return !!time.list.find(
+                  (item: any) =>
+                    item.code === 'type' && item.value === 'Self-Pickup',
+                );
+              });
+              if (selfPickupTime) {
+                const time = getStartAndEndTime(selfPickupTime);
+                time_from = time.startTime;
+                time_to = time.endTime;
+              }
+            }
+          }
         }
-      });
+      }
 
       const time = moment();
-      const startTime = moment(time_from, 'hh:mm');
-      const endTime = moment(time_to, 'hh:mm');
+      const startTime = getMomentDateFromHourMinutes(time_from);
+      const endTime = getMomentDateFromHourMinutes(time_to);
       const isOpen = time.isBetween(startTime, endTime);
-
-      if(time_from.slice(0,2) < 12){
-        time_from = time_from.slice(0,2)+" am"
-      }else{
-        time_from = time_from.slice(0,2)+" pm"
-      }
-      
 
       navigation.setOptions({
         headerTitle: data?.descriptor?.name,
@@ -130,7 +187,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         ...data,
         ...{
           isOpen,
-          time_from:time_from,
+          time_from: startTime.format('hh:mm a'),
         },
       });
     } catch (error) {

@@ -30,8 +30,8 @@ import FBProductCustomization from '../../provider/components/FBProductCustomiza
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {
   compareIgnoringSpaces,
+  showInfoToast,
   showToastWithGravity,
-  showInfoToast
 } from '../../../../utils/utils';
 import {makeGlobalStyles} from '../../../../styles/styles';
 import Page from '../../../../components/page/Page';
@@ -221,18 +221,17 @@ const ProductDetails: React.FC<ProductDetails> = ({
         `${API_BASE_URL}${CART}/${uid}/all`,
         source.current.token,
       );
-      let ind:any = 0;
+      let ind: any = 0;
       if (pId) {
         let isItemAvailable = false;
         let findItem;
-        data.map((res:any,index:number) => {
+        data.map((res: any, index: number) => {
           const check = res.items.find((item: any) => item.item.id === pId);
-          if(check){
-            ind=index
-            findItem = check
+          if (check) {
+            ind = index;
+            findItem = check;
           }
-          
-        })
+        });
         if (findItem) {
           isItemAvailable = true;
           setItemAvailableInCart(findItem);
@@ -295,7 +294,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           locations: product.locations,
           ...product.provider_details,
         },
-        location_details:product.location_details,
+        location_details: product.location_details,
         product: {
           id: product.id,
           subtotal,
@@ -335,7 +334,11 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
         if (currentCount < maxCount || !isIncrement) {
           if (!customisations) {
-            const data = await updateCartItem(cartItems, isIncrement, cartItem[0]._id);
+            const data = await updateCartItem(
+              cartItems,
+              isIncrement,
+              cartItem[0]._id,
+            );
             setItemAvailableInCart(data);
             showInfoToast('Item quantity updated in your cart.');
             setAddToCartLoading(false);
