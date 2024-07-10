@@ -15,7 +15,7 @@ import {
   Text,
 } from 'react-native-paper';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {
   useFocusEffect,
@@ -57,7 +57,6 @@ const SubCart = ({route: {params}}: any) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {address} = useSelector(({address}) => address);
-  const dispatch = useDispatch();
   const isFocused = useIsFocused();
   const addressSheet = useRef<any>();
   const fulfillmentSheet = useRef<any>();
@@ -76,9 +75,8 @@ const SubCart = ({route: {params}}: any) => {
   const [providerWiseItems, setProviderWiseItems] = useState<any[]>([]);
   const [confirmModalVisible, setConfirmModalVisible] =
     useState<boolean>(false);
+  const [cartItems, setCartItems] = useState<any[]>([]);
   const cartData = useSelector(({cart}) => cart);
-
-  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     if (cartData?.cartItems[params.index]?.items !== undefined) {
@@ -98,14 +96,11 @@ const SubCart = ({route: {params}}: any) => {
 
   const {
     loading,
-    cartItems,
     checkoutLoading,
-    getCartItems,
     onCheckoutFromCart,
     haveDistinctProviders,
     isProductAvailableQuantityIsZero,
     isProductCategoryIsDifferent,
-    setCartItems,
     selectedItems,
     setSelectedItems,
     selectedItemsForInit,
@@ -531,15 +526,6 @@ const SubCart = ({route: {params}}: any) => {
     setProviderWiseItems(getProviderWiseItems());
     setCartTotal(getCartSubtotal());
   }, [cartItems]);
-
-  useEffect(() => {
-    if (isFocused) {
-      getCartItems().then(() => {
-        voiceDetectionStarted.current = true;
-        startVoice().then(() => {});
-      });
-    }
-  }, [isFocused]);
 
   useEffect(() => {
     navigation.setOptions({

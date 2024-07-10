@@ -343,7 +343,6 @@ const CartItems: React.FC<CartItems> = ({
             </View>
           </View>
         ))}
-        <ApplyCoupon />
         {haveDistinctProviders && (
           <View style={styles.errorBox}>
             <Text variant={'bodyMedium'} style={styles.errorText}>
