@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import SignUpWithEmail from './components/SignUpWithEmail';
@@ -11,10 +11,16 @@ import {useAppTheme} from '../../../utils/theme';
 /**
  * Component is used to render login form
  */
-const SignUp = () => {
+const SignUp = ({route}: any) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [formType, setFormType] = useState<string>('email');
+
+  useEffect(() => {
+    if (!route?.params?.tab) {
+      setFormType('phone');
+    }
+  }, [route?.params?.tab]);
 
   return (
     <>

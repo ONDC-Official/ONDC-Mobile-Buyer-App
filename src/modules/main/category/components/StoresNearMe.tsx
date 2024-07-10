@@ -85,8 +85,10 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   }, [locations]);
 
   useEffect(() => {
-    getAllLocations().then(() => {});
-
+    if(address){
+      getAllLocations().then(() => {});
+    }
+    
     return () => {
       if (source.current) {
         source.current.cancel();

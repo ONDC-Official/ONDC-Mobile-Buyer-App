@@ -75,7 +75,6 @@ const SubCart = ({route: {params}}: any) => {
   const [providerWiseItems, setProviderWiseItems] = useState<any[]>([]);
   const [confirmModalVisible, setConfirmModalVisible] =
     useState<boolean>(false);
-  const [cartItems, setCartItems] = useState<any[]>([]);
   const cartData = useSelector(({cart}) => cart);
 
   useEffect(() => {
@@ -102,6 +101,8 @@ const SubCart = ({route: {params}}: any) => {
     isProductAvailableQuantityIsZero,
     isProductCategoryIsDifferent,
     selectedItems,
+    cartItems,
+    setCartItems,
     setSelectedItems,
     selectedItemsForInit,
     updateSelectedItemsForInit,

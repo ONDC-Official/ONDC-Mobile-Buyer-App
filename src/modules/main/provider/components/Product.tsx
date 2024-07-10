@@ -18,11 +18,7 @@ interface Product {
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
 
-const Product: React.FC<Product> = ({
-  product,
-  search = false,
-  provider,
-}) => {
+const Product: React.FC<Product> = ({product, search = false, provider}) => {
   const {formatNumber} = useFormatNumber();
   const isFBDomain = product.context.domain === FB_DOMAIN;
   const theme = useAppTheme();
@@ -48,8 +44,10 @@ const Product: React.FC<Product> = ({
     <TouchableOpacity
       style={styles.container}
       onPress={navigateToProductDetails}
-      disabled={!provider?.isOpen ? true : false}>
-      {!provider?.isOpen ? (
+      disabled={
+        !provider?.isOpen && provider?.isOpen !== undefined ? true : false
+      }>
+      {!provider?.isOpen && provider?.isOpen !== undefined ? (
         <Grayscale>
           <FastImage
             style={styles.gridImage}

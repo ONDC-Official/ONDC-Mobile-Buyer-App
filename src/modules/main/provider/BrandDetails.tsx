@@ -118,7 +118,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
 
       const timings = data?.tags?.filter((item: any) => item.code === 'timing');
       if (timings.length === 1) {
-        timings[0].forEach((element: any) => {
+        timings[0]?.list.forEach((element: any) => {
           if (element.code === 'time_from') {
             time_from = element?.value;
           }

@@ -149,11 +149,11 @@ const Complaints: React.FC<any> = () => {
         keyExtractor={keyExtractor}
         onRefresh={onRefreshHandler}
         onEndReached={loadMoreList}
-        contentContainerStyle={
-          complaints.length > 0
-            ? {}
-            : [appStyles.container, styles.emptyContainer]
-        }
+        // contentContainerStyle={
+        //   complaints.length > 0
+        //     ? {}
+        //     : [appStyles.container, styles.emptyContainer]
+        // }
         ListFooterComponent={props => (
           <ListFooter moreRequested={moreListRequested} {...props} />
         )}

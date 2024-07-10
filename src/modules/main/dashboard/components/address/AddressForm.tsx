@@ -98,7 +98,7 @@ const AddressForm: React.FC<AddressForm> = ({
           getMapMeta().then(() => {});
         });
     }
-  }, []);
+  }, [address]);
 
   if (loading) {
     return (

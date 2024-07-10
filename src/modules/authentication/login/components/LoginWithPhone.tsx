@@ -166,7 +166,7 @@ const LoginWithPhone = () => {
         </Text>
         <TouchableOpacity
           disabled={googleLoginRequested || apiInProgress}
-          onPress={() => navigation.navigate('SignUp')}>
+          onPress={() => navigation.navigate('SignUp', {tab: false})}>
           <Text variant={'bodyLarge'} style={styles.signUpText}>
             Sign up
           </Text>

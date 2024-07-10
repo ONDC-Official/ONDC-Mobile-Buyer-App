@@ -166,7 +166,7 @@ const LoginWithEmail = () => {
             </Text>
             <TouchableOpacity
               disabled={googleLoginRequested || isSubmitting}
-              onPress={() => navigation.navigate('SignUp')}>
+              onPress={() => navigation.navigate('SignUp', {tab: true})}>
               <Text variant={'bodyLarge'} style={styles.signUpText}>
                 Sign up
               </Text>
