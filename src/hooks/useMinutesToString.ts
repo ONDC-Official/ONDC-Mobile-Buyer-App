@@ -7,13 +7,13 @@ export default () => {
     const duration = moment.duration(minutes, 'minutes');
 
     if (minutes >= 1440) {
-      const days = Math.floor(duration.asDays());
+      const days = Math.ceil(duration.asDays());
       return {type: 'days', time: days};
     } else if (minutes >= 60) {
-      const hours = Math.floor(duration.asHours());
+      const hours = Math.ceil(duration.asHours());
       return {type: 'hours', time: hours};
     } else {
-      return {type: 'minutes', time: minutes};
+      return {type: 'minutes', time: Math.ceil(minutes)};
     }
   };
 

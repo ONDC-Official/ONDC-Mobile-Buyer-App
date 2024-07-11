@@ -33,7 +33,14 @@ const Provider = ({provider}: {provider: any}) => {
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const [minutes, setMinutes] = useState({type: 'minutes', time: 0});
+  const [maxDeliveryTime, setMaxDeliveryTime] = useState({
+    type: 'minutes',
+    time: 0,
+  });
+  const [minDeliveryTime, setMinDeliveryTime] = useState({
+    type: 'minutes',
+    time: 0,
+  });
   const [distance, setDistance] = useState<string>('');
   const [domain, setDomain] = useState<string>('');
   const [locality, setLocality] = useState<string>('');
@@ -87,7 +94,8 @@ const Provider = ({provider}: {provider: any}) => {
 
   useEffect(() => {
     if (provider) {
-      let highMin = 0;
+      let maxMinutes = 0;
+      let minMinutes = 999999;
       let latLong: string = '';
       let itemsLocality = '';
       let itemDomain = '';
@@ -97,11 +105,14 @@ const Provider = ({provider}: {provider: any}) => {
         );
         let durationInMinutes = duration.format('m').replace(/\,/g, '');
 
-        if (highMin < durationInMinutes) {
-          highMin = durationInMinutes;
+        if (maxMinutes < durationInMinutes) {
+          maxMinutes = durationInMinutes;
           latLong = item.location_details?.gps.split(/\s*,\s*/);
           itemsLocality = item.location_details?.address?.locality;
           itemDomain = item.context?.domain;
+        }
+        if (minMinutes > durationInMinutes) {
+          minMinutes = durationInMinutes;
         }
       });
 
@@ -116,8 +127,13 @@ const Provider = ({provider}: {provider: any}) => {
         },
       );
       setDistance(newDistance);
-      let totalMinutes = Number(highMin) + (Number(newDistance) * 60) / 15;
-      setMinutes(convertMinutesToHumanReadable(totalMinutes));
+      let travelTime = (Number(newDistance) * 60) / 15;
+      setMaxDeliveryTime(
+        convertMinutesToHumanReadable(Number(maxMinutes) + travelTime),
+      );
+      setMinDeliveryTime(
+        convertMinutesToHumanReadable(Number(minMinutes) + travelTime),
+      );
       setLocality(itemsLocality);
       setDomain(itemDomain);
     }
@@ -150,7 +166,25 @@ const Provider = ({provider}: {provider: any}) => {
                 <View style={styles.dotView} />
                 <Image style={styles.imageIcon} source={Timer} />
                 <Text variant={'labelMedium'} style={styles.providerLocality}>
-                  {translateMinutesToHumanReadable(minutes.type, minutes.time)}
+                  {provider?.items.length === 1
+                    ? translateMinutesToHumanReadable(
+                        maxDeliveryTime.type,
+                        maxDeliveryTime.time,
+                      )
+                    : maxDeliveryTime.type === minDeliveryTime.type
+                    ? `${
+                        minDeliveryTime.time
+                      } - ${translateMinutesToHumanReadable(
+                        maxDeliveryTime.type,
+                        maxDeliveryTime.time,
+                      )}`
+                    : `${translateMinutesToHumanReadable(
+                        minDeliveryTime.type,
+                        minDeliveryTime.time,
+                      )} - ${translateMinutesToHumanReadable(
+                        maxDeliveryTime.type,
+                        maxDeliveryTime.time,
+                      )}`}
                 </Text>
               </View>
             )}
