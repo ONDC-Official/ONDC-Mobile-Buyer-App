@@ -46,6 +46,9 @@
   "Cart": {
     "Cart": "Cart",
     "My Cart": "My Cart",
+    "Items in cart": "Items in cart {{count}}",
+    "Total": "Total",
+    "View Cart": "View Cart",
     "Add More Items": "Add More Items",
     "Customise": "Customise",
     "Delivery Address": "Delivery Address",

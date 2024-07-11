@@ -46,6 +46,9 @@
   "Cart": {
     "Cart": "कार्ट",
     "My Cart": "मेरा कार्ट",
+    "Items in cart": "Items in cart {{count}}",
+    "Total": "Total",
+    "View Cart": "View Cart",
     "Add More Items": "अधिक आइटम जोड़ें",
     "Customise": "अनुकूलित करें",
     "Delivery Address": "डिलिवरी का पता",

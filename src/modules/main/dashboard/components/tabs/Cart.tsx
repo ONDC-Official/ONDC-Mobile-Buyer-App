@@ -35,8 +35,7 @@ const DashboardCart = ({navigation}: any) => {
         `${API_BASE_URL}${CART}/${uid}/${id}/clear`,
         source.current.token,
       );
-      var response = allCart.filter((item: any) => {
-        console.log(item.items.length);
+      const response = allCart.filter((item: any) => {
         if (item._id !== id) {
           return item;
         }
@@ -63,8 +62,7 @@ const DashboardCart = ({navigation}: any) => {
         `${API_BASE_URL}${CART}/${uid}/all`,
         source.current.token,
       );
-      var response = data.filter((item: any) => {
-        console.log(item.items.length);
+      const response = data.filter((item: any) => {
         if (item.items.length > 0) {
           return item;
         } else {

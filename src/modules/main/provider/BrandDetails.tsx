@@ -15,6 +15,7 @@ import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
 import {calculateDistanceBetweenPoints} from '../../../utils/utils';
+import useFormatDate from '../../../hooks/useFormatDate';
 
 const CancelToken = axios.CancelToken;
 
@@ -50,6 +51,7 @@ const getMomentDateFromHourMinutes = (timeString: string) => {
 const BrandDetails = ({route: {params}}: {route: any}) => {
   const {address} = useSelector(({address}) => address);
   const isFocused = useIsFocused();
+  const {formatDate} = useFormatDate();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
   const theme = useAppTheme();
@@ -182,7 +184,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         ...data,
         ...{
           isOpen,
-          time_from: startTime.format('hh:mm a'),
+          time_from: formatDate(startTime, 'hh:mm a'),
         },
       });
     } catch (error) {

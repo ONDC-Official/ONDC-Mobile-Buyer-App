@@ -18,18 +18,13 @@ export default () => {
     uniqueId: any,
   ) => {
     try {
-      console.log('cartItems --- ',cartItems)
-      console.log('increment --- ',increment)
-      console.log('uniqueId --- ',uniqueId)
       const itemIndex = cartItems.findIndex(
         (item: any) => item._id === uniqueId,
       );
-      console.log('itemIndex --- ',itemIndex)
       if (itemIndex !== -1) {
         const url = `${API_BASE_URL}${CART}/${uid}/${uniqueId}`;
         source.current = CancelToken.source();
-        var items = cartItems[itemIndex];
-        console.log('items ** ',items);
+        const items = cartItems[itemIndex];
         const newObject = {
           ...items,
           item: {...items.item, quantity: {...items.item.quantity}},

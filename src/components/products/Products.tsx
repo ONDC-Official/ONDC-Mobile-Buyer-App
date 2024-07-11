@@ -29,9 +29,7 @@ interface Products {
   search?: boolean;
   outlet: any;
   provider: any;
-  minTimeToShipMinutes: number;
   setMinTimeToShipMinutes: (value: number) => void;
-  maxTimeToShipMinutes: number;
   setMaxTimeToShipMinutes: (value: number) => void;
 }
 
@@ -43,9 +41,7 @@ const Products: React.FC<Products> = ({
   subCategories = [],
   search = false,
   provider,
-  minTimeToShipMinutes,
   setMinTimeToShipMinutes,
-  maxTimeToShipMinutes,
   setMaxTimeToShipMinutes,
 }) => {
   const voiceDetectionStarted = useRef<boolean>(false);
@@ -95,8 +91,8 @@ const Products: React.FC<Products> = ({
         url,
         productSearchSource.current.token,
       );
-      let maxMinutes = maxTimeToShipMinutes;
-      let minMinutes = minTimeToShipMinutes;
+      let maxMinutes = 0;
+      let minMinutes = 999999;
       data.response.data.forEach((item: any) => {
         const duration = moment.duration(
           item?.item_details['@ondc/org/time_to_ship'],

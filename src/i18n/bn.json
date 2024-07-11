@@ -46,6 +46,9 @@
   "Cart": {
     "Cart": "কার্ট",
     "My Cart": "মাই কার্ট",
+    "Items in cart": "Items in cart {{count}}",
+    "Total": "Total",
+    "View Cart": "View Cart",
     "Add More Items": "আরো আইটেম যোগ করুন",
     "Customise": "কাস্টমাইজ করুন",
     "Delivery Address": "সরবরাহের ঠিকানা",

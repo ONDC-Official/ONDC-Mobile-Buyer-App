@@ -6,15 +6,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import {useAppTheme} from '../../../utils/theme';
 import FastImage from 'react-native-fast-image';
-import {calculateDistanceBetweenPoints} from '../../../utils/utils';
 import moment from 'moment';
 import 'moment-duration-format';
 import {useSelector} from 'react-redux';
+
+import {useAppTheme} from '../../../utils/theme';
+import {calculateDistanceBetweenPoints} from '../../../utils/utils';
 import useMinutesToString from '../../../hooks/useMinutesToString';
-import {Text} from 'react-native-paper';
 import useFormatNumber from '../../../hooks/useFormatNumber';
 
 const Close = require('../../../assets/dashboard/close.png');
@@ -40,9 +41,9 @@ const StoreCart: React.FC<StoreCart> = ({
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
+  const [cartTotal, setCartTotal] = useState<number>(0);
   const [minutes, setMinutes] = useState({type: 'minutes', time: 0});
   const [distance, setDistance] = useState<string>('');
-  const [domain, setDomain] = useState<string>('');
   const [locality, setLocality] = useState<string>('');
 
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
@@ -50,21 +51,21 @@ const StoreCart: React.FC<StoreCart> = ({
   const {address} = useSelector((state: any) => state?.address);
 
   useEffect(() => {
-    console.log(JSON.stringify(item?.items[0]?.item?.provider?.descriptor?.symbol))
     if (item) {
       let highMin = 0;
       let latLong: string = '';
       let itemsLocality = '';
-      item?.items.forEach((item: any) => {
-        console.log('item : ', item?.item?.product['@ondc/org/time_to_ship']);
+      let total = 0;
+      item?.items.forEach((one: any) => {
         const duration = moment.duration(
-          item?.item?.product['@ondc/org/time_to_ship'],
+          one?.item?.product['@ondc/org/time_to_ship'],
         );
+        total += one?.item?.quantity?.count * one?.item?.product?.price?.value;
         let durationInMinutes = duration.format('m').replace(/\,/g, '');
         if (highMin < durationInMinutes) {
           highMin = durationInMinutes;
-          latLong = item.item.location_details?.gps.split(/\s*,\s*/);
-          itemsLocality = item.item.location_details?.address?.locality;
+          latLong = one.item.location_details?.gps.split(/\s*,\s*/);
+          itemsLocality = one.item.location_details?.address?.locality;
         }
       });
       const newDistance = calculateDistanceBetweenPoints(
@@ -78,6 +79,7 @@ const StoreCart: React.FC<StoreCart> = ({
         },
       );
       setDistance(newDistance);
+      setCartTotal(total);
       let totalMinutes = Number(highMin) + (Number(newDistance) * 60) / 15;
       setMinutes(convertMinutesToHumanReadable(totalMinutes));
       setLocality(itemsLocality);
@@ -89,7 +91,6 @@ const StoreCart: React.FC<StoreCart> = ({
       <View style={styles.mainItemView}>
         {/* header */}
         <View style={styles.itemHeader}>
-          <View />
           <FastImage
             source={{
               uri: item?.items[0]?.item?.provider?.descriptor?.symbol,
@@ -106,10 +107,12 @@ const StoreCart: React.FC<StoreCart> = ({
               </TouchableOpacity>
             </View>
             <View style={styles.providerLocalityView}>
-              <Text variant={'labelMedium'} style={styles.providerLocality}>
-                {locality.length < 30
-                  ? `${locality}`
-                  : `${locality.substring(0, 20)}...`}
+              <Text
+                variant={'labelMedium'}
+                style={styles.providerLocality}
+                numberOfLines={1}
+                ellipsizeMode={'tail'}>
+                {locality}
               </Text>
               <View style={styles.dotView} />
               <Image style={styles.imageIcon} source={Location} />
@@ -132,43 +135,42 @@ const StoreCart: React.FC<StoreCart> = ({
 
         {/* items */}
         <Text variant="labelMedium" style={styles.itemCart}>
-          Items in cart {item?.items.length}
+          {t('Cart.Items in cart', {count: item?.items.length})}
         </Text>
 
         <ScrollView
           contentContainerStyle={styles.itemMainView}
           horizontal
           showsHorizontalScrollIndicator={false}>
-          {item?.items.map((item: any) => {
-            return (
-              <View style={{}}>
-                <FastImage
-                  source={{
-                    uri: item?.item?.product?.descriptor?.images[0],
-                  }}
-                  style={styles.headerImage}
-                />
-                <Text variant="labelMedium" style={styles.description}>
-                  {item?.item?.product?.descriptor?.name.length < 4
-                    ? item?.item?.product?.descriptor?.name.length
-                    : `${item?.item?.product?.descriptor?.name.substring(
-                        0,
-                        4,
-                      )}...`}
-                </Text>
-              </View>
-            );
-          })}
+          {item?.items.map((one: any) => (
+            <View key={one.id} style={styles.cartItem}>
+              <FastImage
+                source={{
+                  uri: one?.item?.product?.descriptor?.images[0],
+                }}
+                style={styles.headerImage}
+              />
+              <Text
+                variant="labelMedium"
+                style={styles.description}
+                ellipsizeMode={'tail'}
+                numberOfLines={1}>
+                {one?.item?.product?.descriptor?.name}
+              </Text>
+            </View>
+          ))}
         </ScrollView>
 
         {/* bottomView */}
         <View style={styles.bottomView}>
-          <Text variant="bodyLarge">Total: ₹400.00</Text>
+          <Text variant="bodyLarge">
+            {t('Cart.Total')}: ₹{cartTotal}
+          </Text>
           <TouchableOpacity
             style={styles.viewCartButton}
             onPress={() => goToViewCart(index)}>
             <Text variant="labelLarge" style={styles.buttonText}>
-              View Cart
+              {t('Cart.View Cart')}
             </Text>
             <Image source={RightArrow} />
           </TouchableOpacity>
@@ -188,6 +190,9 @@ const makeStyles = (colors: any) =>
     },
     itemHeader: {
       flexDirection: 'row',
+    },
+    cartItem: {
+      width: 40,
     },
     headerImage: {
       height: 40,

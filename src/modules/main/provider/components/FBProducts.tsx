@@ -69,7 +69,6 @@ const FBProducts = ({
             item?.item_details['@ondc/org/time_to_ship'],
           );
           let durationInMinutes = duration.format('m').replace(/\,/g, '');
-
           if (maxMinutes < durationInMinutes) {
             maxMinutes = durationInMinutes;
           }

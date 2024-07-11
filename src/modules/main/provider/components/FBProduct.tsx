@@ -18,8 +18,8 @@ import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {
   getCustomizations,
   getPriceWithCustomisations,
+  showInfoToast,
   showToastWithGravity,
-  showInfoToast
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -162,9 +162,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   };
 
   const addToCart = async () => {
-    console.log('customizable : ',customizable)
     if (customizable) {
-      console.log('productDetails : ',productDetails)
       if (productDetails) {
         showCustomization();
       } else {
@@ -216,23 +214,16 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       };
 
       let ind: any = 0;
-      let items:any = null;
-      console.log('cartItems : ',JSON.stringify(cartItems))
-      // console.log('payload.id : ',payload.id)
+      let items: any = null;
       cartItems.map((res: any, index: number) => {
-        const check = res.items.find((item: any) => item.item.id === payload.id);
+        const check = res.items.find(
+          (item: any) => item.item.id === payload.id,
+        );
         if (check) {
           ind = index;
           items = check;
         }
       });
-      //cartItems.filter((ci: any) => ci.item.id === payload.id);
-      console.log('items : ',JSON.stringify(items))
-      // if (items.length > 0 && customisations && customisations.length > 0) {
-      //   items = cartItems.filter((ci: any) => {
-      //     return ci.item.customisations.length === customisations?.length;
-      //   });
-      // }
 
       source.current = CancelToken.source();
       if (!items) {
@@ -241,30 +232,25 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         setProductLoading(false);
         hideCustomization();
         setTimeout(() => {
-          showInfoToast(
-            t('Product Summary.Item added to cart successfully'),
-          );
+          showInfoToast(t('Product Summary.Item added to cart successfully'));
         }, 300);
       } else {
         const currentCount = Number(items.item.quantity.count);
         const maxCount = Number(items.item.product.quantity.maximum.count);
 
-        console.log('currentCount : ',currentCount)
-        console.log('maxCount : ',maxCount)
-
         if (currentCount < maxCount) {
           if (!customisations) {
             await updateCartItem(cartItems, true, items.cart);
-            
+
             setCustomizationState({});
             setProductLoading(false);
             hideCustomization();
 
             setTimeout(() => {
               showInfoToast(
-              t('Product Summary.Item quantity updated in your cart'),
-            );
-          }, 300);
+                t('Product Summary.Item quantity updated in your cart'),
+              );
+            }, 300);
           } else {
             const currentIds = customisations.map(item => item.id);
             let matchingCustomisation = null;
@@ -321,13 +307,13 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         `${API_BASE_URL}${ITEM_DETAILS}?id=${product.id}`,
         productSource.current.token,
       );
-      
+
       const details = data;
       setProductDetails(details);
       const url = `${API_BASE_URL}${CART}/${uid}`;
 
       const subtotal = details?.item_details?.price?.value;
-      
+
       const payload: any = {
         id: details.id,
         local_id: details.local_id,
@@ -358,9 +344,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       source.current = CancelToken.source();
       await postDataWithAuth(url, payload, source.current.token);
       setCustomizationState({});
-      showInfoToast(
-        t('Product Summary.Item added to cart successfully'),
-      );
+      showInfoToast(t('Product Summary.Item added to cart successfully'));
       await getCartItems();
       setProductLoading(false);
     } catch (error) {
@@ -378,7 +362,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         `${API_BASE_URL}${ITEM_DETAILS}?id=${product.id}`,
         productSource.current.token,
       );
-      console.log('data.response : ',data)
       setProductDetails(data);
       if (!preventCustomizeOpening) {
         showCustomization();

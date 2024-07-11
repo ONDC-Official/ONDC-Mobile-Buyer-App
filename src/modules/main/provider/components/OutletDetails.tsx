@@ -77,7 +77,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
         ),
       );
     }
-  }, [outlet]);
+  }, [outlet, minTimeToShipMinutes, maxTimeToShipMinutes]);
 
   if (apiRequested) {
     return <BrandSkeleton />;

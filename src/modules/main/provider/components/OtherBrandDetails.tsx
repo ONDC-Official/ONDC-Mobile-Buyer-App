@@ -55,9 +55,7 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
             customMenu={selectedMenu}
             outlet={outlet}
             subCategories={[]}
-            minTimeToShipMinutes={minTimeToShipMinutes}
             setMinTimeToShipMinutes={setMinTimeToShipMinutes}
-            maxTimeToShipMinutes={maxTimeToShipMinutes}
             setMaxTimeToShipMinutes={setMaxTimeToShipMinutes}
           />
         </View>

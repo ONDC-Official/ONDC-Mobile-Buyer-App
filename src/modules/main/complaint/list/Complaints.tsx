@@ -6,7 +6,6 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {appStyles} from '../../../../styles/styles';
 import {keyExtractor, skeletonList} from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, GET_ISSUES} from '../../../../utils/apiActions';

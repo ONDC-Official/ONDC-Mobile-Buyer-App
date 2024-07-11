@@ -34,7 +34,6 @@ import {useAppTheme} from '../../../../utils/theme';
 import DeleteIcon from '../../../../assets/delete.svg';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
-import ApplyCoupon from './ApplyCoupon';
 
 interface CartItems {
   allowScroll?: boolean;
@@ -191,7 +190,7 @@ const CartItems: React.FC<CartItems> = ({
                 source={{uri: provider?.provider?.descriptor?.symbol}}
                 style={styles.providerImage}
               />
-              <View>
+              <View style={styles.providerMeta}>
                 <Text variant={'titleLarge'} style={styles.providerName}>
                   {provider?.provider?.descriptor?.name}
                 </Text>
@@ -452,6 +451,9 @@ const makeStyles = (colors: any) =>
     providerHeader: {
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    providerMeta: {
+      flex: 1,
     },
     productsContainer: {
       paddingVertical: 16,

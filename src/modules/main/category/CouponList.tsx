@@ -46,8 +46,6 @@ const CouponList: React.FC<CouponList> = ({}) => {
       `${API_BASE_URL}${OFFERS}?latitude=12.981243&longitude=77.595034&provider=preprod.xpressbaazaar.com_ONDC:RET12_79e060e7-a8f9-4c56-8e55-2b3321ccce87`,
       productSource.current.token,
     );
-
-    console.log('data : ', data);
   };
 
   useEffect(() => {
