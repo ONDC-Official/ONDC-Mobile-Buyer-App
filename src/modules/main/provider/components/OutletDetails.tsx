@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   Linking,
@@ -21,6 +21,8 @@ interface OutletDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
+  minTimeToShipMinutes: number;
+  maxTimeToShipMinutes: number;
 }
 
 const Closed = require('../../../../assets/closed.png');
@@ -33,10 +35,21 @@ const OutletDetails: React.FC<OutletDetails> = ({
   provider,
   outlet,
   apiRequested,
+  minTimeToShipMinutes,
+  maxTimeToShipMinutes,
 }) => {
   const {t} = useTranslation();
   const {formatNumber} = useFormatNumber();
-  const {translateMinutesToHumanReadable} = useMinutesToString();
+  const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
+    useMinutesToString();
+  const [maxDeliveryTime, setMaxDeliveryTime] = useState({
+    type: 'minutes',
+    time: 0,
+  });
+  const [minDeliveryTime, setMinDeliveryTime] = useState({
+    type: 'minutes',
+    time: 0,
+  });
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -49,6 +62,22 @@ const OutletDetails: React.FC<OutletDetails> = ({
   };
 
   const callProvider = () => Linking.openURL('tel:+91 92729282982');
+
+  useEffect(() => {
+    if (outlet) {
+      let travelTime = (Number(outlet.distance) * 60) / 15;
+      setMaxDeliveryTime(
+        convertMinutesToHumanReadable(
+          Number(maxTimeToShipMinutes) + travelTime,
+        ),
+      );
+      setMinDeliveryTime(
+        convertMinutesToHumanReadable(
+          Number(minTimeToShipMinutes) + travelTime,
+        ),
+      );
+    }
+  }, [outlet]);
 
   if (apiRequested) {
     return <BrandSkeleton />;
@@ -64,8 +93,8 @@ const OutletDetails: React.FC<OutletDetails> = ({
         />
       )}
       <View style={styles.brandDetails}>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex: 1}}>
+        <View style={styles.row}>
+          <View style={styles.providerDetails}>
             <View style={styles.providerLocalityView}>
               <Text variant={'headlineSmall'} style={styles.title}>
                 {provider?.descriptor?.name}
@@ -99,10 +128,26 @@ const OutletDetails: React.FC<OutletDetails> = ({
             <View style={styles.providerLocalityView}>
               <Image source={Timer} style={styles.imageIcon} />
               <Text variant={'labelLarge'} style={styles.address}>
-                {translateMinutesToHumanReadable(
-                  outlet?.minutes.type,
-                  outlet?.minutes.time,
-                )}
+                {maxDeliveryTime.type === minDeliveryTime.type &&
+                maxDeliveryTime.time === minDeliveryTime.time
+                  ? translateMinutesToHumanReadable(
+                      maxDeliveryTime.type,
+                      maxDeliveryTime.time,
+                    )
+                  : maxDeliveryTime.type === minDeliveryTime.type
+                  ? `${
+                      minDeliveryTime.time
+                    } - ${translateMinutesToHumanReadable(
+                      maxDeliveryTime.type,
+                      maxDeliveryTime.time,
+                    )}`
+                  : `${translateMinutesToHumanReadable(
+                      minDeliveryTime.type,
+                      minDeliveryTime.time,
+                    )} - ${translateMinutesToHumanReadable(
+                      maxDeliveryTime.type,
+                      maxDeliveryTime.time,
+                    )}`}
               </Text>
               {!provider?.isOpen && (
                 <>
@@ -206,6 +251,8 @@ const makeStyles = (colors: any) =>
     getDirectionText: {
       color: colors.error400,
     },
+    row: {flexDirection: 'row'},
+    providerDetails: {flex: 1},
   });
 
 export default OutletDetails;

@@ -15,7 +15,6 @@ import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
 import {calculateDistanceBetweenPoints} from '../../../utils/utils';
-import useMinutesToString from '../../../hooks/useMinutesToString';
 
 const CancelToken = axios.CancelToken;
 
@@ -50,7 +49,6 @@ const getMomentDateFromHourMinutes = (timeString: string) => {
 
 const BrandDetails = ({route: {params}}: {route: any}) => {
   const {address} = useSelector(({address}) => address);
-  const {convertMinutesToHumanReadable} = useMinutesToString();
   const isFocused = useIsFocused();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
@@ -61,6 +59,9 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const [outletDetailsRequested, setOutletDetailsRequested] =
     useState<boolean>(true);
+  const [minTimeToShipMinutes, setMinTimeToShipMinutes] =
+    useState<number>(99999);
+  const [maxTimeToShipMinutes, setMaxTimeToShipMinutes] = useState<number>(0);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -84,16 +85,10 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
             longitude: latLong[1],
           },
         );
-        const duration = moment.duration(data.time_to_ship);
-        let durationInMinutes = duration.format('m').replace(/\,/g, '');
-        let totalMinutes =
-          Number(durationInMinutes) + (Number(distance) * 60) / 15;
-
         setOutlet({
           ...data,
           ...{
             distance,
-            minutes: convertMinutesToHumanReadable(totalMinutes),
           },
         });
       }
@@ -221,12 +216,20 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
             provider={provider}
             outlet={outlet}
             apiRequested={apiRequested || outletDetailsRequested}
+            minTimeToShipMinutes={minTimeToShipMinutes}
+            setMinTimeToShipMinutes={setMinTimeToShipMinutes}
+            maxTimeToShipMinutes={maxTimeToShipMinutes}
+            setMaxTimeToShipMinutes={setMaxTimeToShipMinutes}
           />
         ) : (
           <OtherBrandDetails
             provider={provider}
             outlet={outlet}
             apiRequested={apiRequested || outletDetailsRequested}
+            minTimeToShipMinutes={minTimeToShipMinutes}
+            setMinTimeToShipMinutes={setMinTimeToShipMinutes}
+            maxTimeToShipMinutes={maxTimeToShipMinutes}
+            setMaxTimeToShipMinutes={setMaxTimeToShipMinutes}
           />
         )}
       </View>

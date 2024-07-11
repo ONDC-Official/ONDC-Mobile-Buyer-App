@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ProgressBar} from 'react-native-paper';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import moment from 'moment';
 
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
@@ -28,6 +29,10 @@ interface Products {
   search?: boolean;
   outlet: any;
   provider: any;
+  minTimeToShipMinutes: number;
+  setMinTimeToShipMinutes: (value: number) => void;
+  maxTimeToShipMinutes: number;
+  setMaxTimeToShipMinutes: (value: number) => void;
 }
 
 const CancelToken = axios.CancelToken;
@@ -37,8 +42,11 @@ const Products: React.FC<Products> = ({
   customMenu = null,
   subCategories = [],
   search = false,
-  outlet,
   provider,
+  minTimeToShipMinutes,
+  setMinTimeToShipMinutes,
+  maxTimeToShipMinutes,
+  setMaxTimeToShipMinutes,
 }) => {
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
@@ -87,6 +95,24 @@ const Products: React.FC<Products> = ({
         url,
         productSearchSource.current.token,
       );
+      let maxMinutes = maxTimeToShipMinutes;
+      let minMinutes = minTimeToShipMinutes;
+      data.response.data.forEach((item: any) => {
+        const duration = moment.duration(
+          item?.item_details['@ondc/org/time_to_ship'],
+        );
+        let durationInMinutes = duration.format('m').replace(/\,/g, '');
+
+        if (maxMinutes < durationInMinutes) {
+          maxMinutes = durationInMinutes;
+        }
+        if (minMinutes > durationInMinutes) {
+          minMinutes = durationInMinutes;
+        }
+      });
+
+      setMaxTimeToShipMinutes(maxMinutes);
+      setMinTimeToShipMinutes(minMinutes);
       setTotalProducts(data.response.count);
       setProducts(data.response.data);
     } catch (error) {
@@ -194,11 +220,7 @@ const Products: React.FC<Products> = ({
         <View style={styles.listContainer}>
           {filteredProducts.map(product => (
             <View key={product.id} style={styles.productContainer}>
-              <Product
-                product={product}
-                search={search}
-                provider={provider}
-              />
+              <Product product={product} search={search} provider={provider} />
             </View>
           ))}
         </View>

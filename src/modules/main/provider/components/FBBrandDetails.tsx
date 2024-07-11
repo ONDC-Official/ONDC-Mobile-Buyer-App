@@ -8,12 +8,20 @@ interface FBBrandDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
+  minTimeToShipMinutes: number;
+  setMinTimeToShipMinutes: (value: number) => void;
+  maxTimeToShipMinutes: number;
+  setMaxTimeToShipMinutes: (value: number) => void;
 }
 
 const FBBrandDetails: React.FC<FBBrandDetails> = ({
   provider,
   outlet,
   apiRequested,
+  minTimeToShipMinutes,
+  setMinTimeToShipMinutes,
+  maxTimeToShipMinutes,
+  setMaxTimeToShipMinutes,
 }) => {
   const styles = makeStyles();
 
@@ -28,8 +36,15 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
           provider={provider}
           outlet={outlet}
           apiRequested={apiRequested}
+          minTimeToShipMinutes={minTimeToShipMinutes}
+          maxTimeToShipMinutes={maxTimeToShipMinutes}
         />
-        <FBProducts provider={provider?.id} domain={provider?.domain} />
+        <FBProducts
+          provider={provider?.id}
+          domain={provider?.domain}
+          setMinTimeToShipMinutes={setMinTimeToShipMinutes}
+          setMaxTimeToShipMinutes={setMaxTimeToShipMinutes}
+        />
       </View>
     </ScrollView>
   );

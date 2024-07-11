@@ -42,7 +42,6 @@ const Provider = ({provider}: {provider: any}) => {
     time: 0,
   });
   const [distance, setDistance] = useState<string>('');
-  const [domain, setDomain] = useState<string>('');
   const [locality, setLocality] = useState<string>('');
   const {address} = useSelector((state: any) => state?.address);
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
@@ -98,7 +97,6 @@ const Provider = ({provider}: {provider: any}) => {
       let minMinutes = 999999;
       let latLong: string = '';
       let itemsLocality = '';
-      let itemDomain = '';
       provider?.items.forEach((item: any) => {
         const duration = moment.duration(
           item?.item_details['@ondc/org/time_to_ship'],
@@ -109,7 +107,6 @@ const Provider = ({provider}: {provider: any}) => {
           maxMinutes = durationInMinutes;
           latLong = item.location_details?.gps.split(/\s*,\s*/);
           itemsLocality = item.location_details?.address?.locality;
-          itemDomain = item.context?.domain;
         }
         if (minMinutes > durationInMinutes) {
           minMinutes = durationInMinutes;
@@ -135,7 +132,6 @@ const Provider = ({provider}: {provider: any}) => {
         convertMinutesToHumanReadable(Number(minMinutes) + travelTime),
       );
       setLocality(itemsLocality);
-      setDomain(itemDomain);
     }
   }, [provider]);
 
@@ -161,33 +157,31 @@ const Provider = ({provider}: {provider: any}) => {
             <Text variant={'labelMedium'} style={styles.providerLocality}>
               {t('Store.km', {distance: formatNumber(distance)})}
             </Text>
-            {domain === FB_DOMAIN && (
-              <View style={styles.providerLocalityView}>
-                <View style={styles.dotView} />
-                <Image style={styles.imageIcon} source={Timer} />
-                <Text variant={'labelMedium'} style={styles.providerLocality}>
-                  {provider?.items.length === 1
-                    ? translateMinutesToHumanReadable(
-                        maxDeliveryTime.type,
-                        maxDeliveryTime.time,
-                      )
-                    : maxDeliveryTime.type === minDeliveryTime.type
-                    ? `${
-                        minDeliveryTime.time
-                      } - ${translateMinutesToHumanReadable(
-                        maxDeliveryTime.type,
-                        maxDeliveryTime.time,
-                      )}`
-                    : `${translateMinutesToHumanReadable(
-                        minDeliveryTime.type,
-                        minDeliveryTime.time,
-                      )} - ${translateMinutesToHumanReadable(
-                        maxDeliveryTime.type,
-                        maxDeliveryTime.time,
-                      )}`}
-                </Text>
-              </View>
-            )}
+            <View style={styles.providerLocalityView}>
+              <View style={styles.dotView} />
+              <Image style={styles.imageIcon} source={Timer} />
+              <Text variant={'labelMedium'} style={styles.providerLocality}>
+                {provider?.items.length === 1
+                  ? translateMinutesToHumanReadable(
+                      maxDeliveryTime.type,
+                      maxDeliveryTime.time,
+                    )
+                  : maxDeliveryTime.type === minDeliveryTime.type
+                  ? `${
+                      minDeliveryTime.time
+                    } - ${translateMinutesToHumanReadable(
+                      maxDeliveryTime.type,
+                      maxDeliveryTime.time,
+                    )}`
+                  : `${translateMinutesToHumanReadable(
+                      minDeliveryTime.type,
+                      minDeliveryTime.time,
+                    )} - ${translateMinutesToHumanReadable(
+                      maxDeliveryTime.type,
+                      maxDeliveryTime.time,
+                    )}`}
+              </Text>
+            </View>
           </View>
         </View>
       </TouchableOpacity>
