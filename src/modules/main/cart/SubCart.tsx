@@ -689,7 +689,7 @@ const SubCart = ({route: {params}}: any) => {
         <Payment
           userInput={userInput}
           productsQuote={productsQuote}
-          cartItems={selectedItemsForInit}
+          cartItems={cartItems}
           updatedCartItemsData={selectedItems}
           billingAddress={deliveryAddress}
           deliveryAddress={deliveryAddress}

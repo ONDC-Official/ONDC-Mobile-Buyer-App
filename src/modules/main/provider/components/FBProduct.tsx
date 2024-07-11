@@ -19,6 +19,7 @@ import {
   getCustomizations,
   getPriceWithCustomisations,
   showToastWithGravity,
+  showInfoToast
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
@@ -161,7 +162,9 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   };
 
   const addToCart = async () => {
+    console.log('customizable : ',customizable)
     if (customizable) {
+      console.log('productDetails : ',productDetails)
       if (productDetails) {
         showCustomization();
       } else {
@@ -202,6 +205,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           locations: productDetails.locations,
           ...productDetails.provider_details,
         },
+        location_details: productDetails.location_details,
         product: {
           id: productDetails.id,
           subtotal,
@@ -211,37 +215,56 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         hasCustomisations: true,
       };
 
-      let items: any[] = [];
-      items = cartItems.filter((ci: any) => ci.item.id === payload.id);
-
-      if (items.length > 0 && customisations && customisations.length > 0) {
-        items = cartItems.filter((ci: any) => {
-          return ci.item.customisations.length === customisations?.length;
-        });
-      }
+      let ind: any = 0;
+      let items:any = null;
+      console.log('cartItems : ',JSON.stringify(cartItems))
+      // console.log('payload.id : ',payload.id)
+      cartItems.map((res: any, index: number) => {
+        const check = res.items.find((item: any) => item.item.id === payload.id);
+        if (check) {
+          ind = index;
+          items = check;
+        }
+      });
+      //cartItems.filter((ci: any) => ci.item.id === payload.id);
+      console.log('items : ',JSON.stringify(items))
+      // if (items.length > 0 && customisations && customisations.length > 0) {
+      //   items = cartItems.filter((ci: any) => {
+      //     return ci.item.customisations.length === customisations?.length;
+      //   });
+      // }
 
       source.current = CancelToken.source();
-      if (items.length === 0) {
+      if (!items) {
         await postDataWithAuth(url, payload, source.current.token);
         setCustomizationState({});
         setProductLoading(false);
-        showToastWithGravity(
-          t('Product Summary.Item added to cart successfully'),
-        );
         hideCustomization();
+        setTimeout(() => {
+          showInfoToast(
+            t('Product Summary.Item added to cart successfully'),
+          );
+        }, 300);
       } else {
-        const currentCount = Number(items[0].item.quantity.count);
-        const maxCount = Number(items[0].item.product.quantity.maximum.count);
+        const currentCount = Number(items.item.quantity.count);
+        const maxCount = Number(items.item.product.quantity.maximum.count);
+
+        console.log('currentCount : ',currentCount)
+        console.log('maxCount : ',maxCount)
 
         if (currentCount < maxCount) {
           if (!customisations) {
-            await updateCartItem(cartItems, true, items[0]._id);
-            showToastWithGravity(
-              t('Product Summary.Item quantity updated in your cart'),
-            );
+            await updateCartItem(cartItems, true, items.cart);
+            
             setCustomizationState({});
             setProductLoading(false);
             hideCustomization();
+
+            setTimeout(() => {
+              showInfoToast(
+              t('Product Summary.Item quantity updated in your cart'),
+            );
+          }, 300);
           } else {
             const currentIds = customisations.map(item => item.id);
             let matchingCustomisation = null;
@@ -298,13 +321,13 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         `${API_BASE_URL}${ITEM_DETAILS}?id=${product.id}`,
         productSource.current.token,
       );
-      const details = data.response;
+      
+      const details = data;
       setProductDetails(details);
-
       const url = `${API_BASE_URL}${CART}/${uid}`;
 
       const subtotal = details?.item_details?.price?.value;
-
+      
       const payload: any = {
         id: details.id,
         local_id: details.local_id,
@@ -322,6 +345,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           locations: details.locations,
           ...details.provider_details,
         },
+        location_details: details.location_details,
         product: {
           id: details.id,
           subtotal,
@@ -334,7 +358,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       source.current = CancelToken.source();
       await postDataWithAuth(url, payload, source.current.token);
       setCustomizationState({});
-      showToastWithGravity(
+      showInfoToast(
         t('Product Summary.Item added to cart successfully'),
       );
       await getCartItems();
@@ -354,7 +378,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         `${API_BASE_URL}${ITEM_DETAILS}?id=${product.id}`,
         productSource.current.token,
       );
-      setProductDetails(data.response);
+      console.log('data.response : ',data)
+      setProductDetails(data);
       if (!preventCustomizeOpening) {
         showCustomization();
       }
@@ -400,22 +425,22 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     }
   };
 
-  useEffect(() => {
-    if (product && cartItems.length > 0) {
-      let items: any[] = cartItems.filter(
-        (ci: any) => ci.item.id === product.id,
-      );
-      let quantity = 0;
-      const productQuantity = items.reduce(
-        (accumulator, item) => accumulator + item.item.quantity.count,
-        quantity,
-      );
-      setCartItemDetails({items, productQuantity});
-    } else {
-      setCartItemDetails({items: [], productQuantity: 0});
-      quantitySheet.current.close();
-    }
-  }, [product, cartItems]);
+  // useEffect(() => {
+  //   if (product && cartItems.length > 0) {
+  //     let items: any[] = cartItems.filter(
+  //       (ci: any) => ci._id === product.id,
+  //     );
+  //     let quantity = 0;
+  //     const productQuantity = items.reduce(
+  //       (accumulator, item) => accumulator + item.item.quantity.count,
+  //       quantity,
+  //     );
+  //     setCartItemDetails({items, productQuantity});
+  //   } else {
+  //     setCartItemDetails({items: [], productQuantity: 0});
+  //     quantitySheet.current.close();
+  //   }
+  // }, [product, cartItems]);
 
   useEffect(() => {
     let rangePriceTag = null;
