@@ -1,11 +1,4 @@
-import {
-  FlatList,
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../../../../utils/theme';
@@ -14,13 +7,10 @@ import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, CART} from '../../../../../utils/apiActions';
 import {useEffect, useRef, useState} from 'react';
-import FastImage from 'react-native-fast-image';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateCartItems} from '../../../../../toolkit/reducer/cart';
 import {useIsFocused} from '@react-navigation/native';
-
-const Close = require('../../../../../assets/dashboard/close.png');
-const RightArrow = require('../../../../../assets/rightArrow.png');
+import StoreCart from '../../../cart/StoreCart';
 
 const CancelToken = axios.CancelToken;
 
@@ -41,7 +31,6 @@ const DashboardCart = ({navigation}: any) => {
     try {
       source.current = CancelToken.source();
 
-      console.log(`${API_BASE_URL}${CART}/${uid}`);
       await deleteDataWithAuth(
         `${API_BASE_URL}${CART}/${uid}/${id}/clear`,
         source.current.token,
@@ -74,7 +63,6 @@ const DashboardCart = ({navigation}: any) => {
         `${API_BASE_URL}${CART}/${uid}/all`,
         source.current.token,
       );
-
       var response = data.filter((item: any) => {
         console.log(item.items.length);
         if (item.items.length > 0) {
@@ -116,78 +104,12 @@ const DashboardCart = ({navigation}: any) => {
 
   const renderItems = ({item, index}: any) => {
     return (
-      <View style={styles.mainItemView}>
-        {/* header */}
-        <View style={styles.itemHeader}>
-          <View />
-          <FastImage
-            source={{
-              uri: item?.product?.descriptor?.symbol,
-            }}
-            style={styles.headerImage}
-          />
-          <View style={styles.headerText}>
-            <View style={styles.titleView}>
-              <Text variant="titleLarge" style={styles.title}>
-                Willow Bakery
-              </Text>
-              <TouchableOpacity onPress={() => deleteStore(item?._id)}>
-                <Image source={Close} />
-              </TouchableOpacity>
-            </View>
-            <Text variant="labelMedium" style={styles.description}>
-              Sec 28 Chd . 15 min . 7.5 Km
-            </Text>
-          </View>
-        </View>
-
-        {/* line */}
-        <View style={styles.line} />
-
-        {/* items */}
-        <Text variant="labelMedium" style={styles.itemCart}>
-          Items in cart {item?.items.length}
-        </Text>
-
-        <ScrollView
-          contentContainerStyle={styles.itemMainView}
-          horizontal
-          showsHorizontalScrollIndicator={false}>
-          {item?.items.map((item: any) => {
-            return (
-              <View style={{}}>
-                <FastImage
-                  source={{
-                    uri: item?.item?.product?.descriptor?.images[0],
-                  }}
-                  style={styles.headerImage}
-                />
-                <Text variant="labelMedium" style={styles.description}>
-                  {item?.item?.product?.descriptor?.name.length < 4
-                    ? item?.item?.product?.descriptor?.name.length
-                    : `${item?.item?.product?.descriptor?.name.substring(
-                        0,
-                        4,
-                      )}...`}
-                </Text>
-              </View>
-            );
-          })}
-        </ScrollView>
-
-        {/* bottomView */}
-        <View style={styles.bottomView}>
-          <Text variant="bodyLarge">Total: ₹400.00</Text>
-          <TouchableOpacity
-            style={styles.viewCartButton}
-            onPress={() => goToViewCart(index)}>
-            <Text variant="labelLarge" style={styles.buttonText}>
-              View Cart
-            </Text>
-            <Image source={RightArrow} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <StoreCart
+        item={item}
+        index={index}
+        deleteStore={deleteStore}
+        goToViewCart={goToViewCart}
+      />
     );
   };
 
@@ -231,67 +153,6 @@ const makeStyles = (colors: any) =>
       flexGrow: 1,
       padding: 16,
       gap: 16,
-    },
-    mainItemView: {
-      borderRadius: 16,
-      borderWidth: 1,
-      borderColor: colors.neutral100,
-      padding: 12,
-    },
-    itemHeader: {
-      flexDirection: 'row',
-    },
-    headerImage: {
-      height: 40,
-      width: 40,
-      borderRadius: 6,
-      borderWidth: 1,
-      borderColor: colors.neutral100,
-    },
-    headerText: {
-      flex: 1,
-      marginLeft: 16,
-      justifyContent: 'space-between',
-    },
-    line: {height: 1, backgroundColor: colors.neutral100, marginVertical: 12},
-    titleView: {
-      flexDirection: 'row',
-    },
-    title: {
-      flex: 1,
-      color: colors.neutral400,
-    },
-    description: {
-      color: colors.neutral300,
-      paddingTop: 8,
-    },
-    itemCart: {
-      color: colors.neutral400,
-    },
-    itemMainView: {
-      flexDirection: 'row',
-      paddingVertical: 8,
-      gap: 8,
-      overflow: 'hidden',
-    },
-    bottomView: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingTop: 8,
-    },
-    viewCartButton: {
-      flexDirection: 'row',
-      width: 97,
-      height: 32,
-      borderRadius: 21,
-      padding: 8,
-      backgroundColor: colors.primary,
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    buttonText: {
-      color: colors.white,
     },
   });
 

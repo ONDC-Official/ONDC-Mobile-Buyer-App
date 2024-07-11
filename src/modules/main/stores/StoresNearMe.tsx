@@ -18,7 +18,7 @@ interface StoresNearMe {
 
 const CancelToken = axios.CancelToken;
 
-const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
+const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   const navigation = useNavigation();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -60,7 +60,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       const url = `${API_BASE_URL}${LOCATIONS}?afterKey=${providerId}&limit=${20}&latitude=${
         address.address.lat
       }&longitude=${address.address.lng}&radius=100${
-        domain ? `&domain=${domain}` : ''
+        route?.params?.domain ? `&domain=${route?.params?.domain}` : ''
       }`;
       const {data} = await getDataWithAuth(url, source.current.token);
       totalLocations.current = data.count;
