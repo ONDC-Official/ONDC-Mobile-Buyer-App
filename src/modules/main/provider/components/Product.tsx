@@ -40,14 +40,13 @@ const Product: React.FC<Product> = ({product, search = false, provider}) => {
     }
   };
 
+  const disabled = !provider?.isOpen && provider?.isOpen !== undefined;
   return (
     <TouchableOpacity
       style={styles.container}
       onPress={navigateToProductDetails}
-      disabled={
-        !provider?.isOpen && provider?.isOpen !== undefined ? true : false
-      }>
-      {!provider?.isOpen && provider?.isOpen !== undefined ? (
+      disabled={disabled}>
+      {disabled ? (
         <Grayscale>
           <FastImage
             style={styles.gridImage}

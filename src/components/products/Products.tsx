@@ -27,7 +27,6 @@ interface Products {
   customMenu: any;
   subCategories: any[];
   search?: boolean;
-  outlet: any;
   provider: any;
   setMinTimeToShipMinutes: (value: number) => void;
   setMaxTimeToShipMinutes: (value: number) => void;
