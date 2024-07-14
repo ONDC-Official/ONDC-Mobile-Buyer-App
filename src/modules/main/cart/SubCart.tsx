@@ -9,8 +9,6 @@ import {
   ActivityIndicator,
   Button,
   Card,
-  Modal,
-  Portal,
   ProgressBar,
   Text,
 } from 'react-native-paper';
@@ -41,7 +39,6 @@ import {
   VIEW_DELIVERY_OPTIONS_COMMAND,
 } from '../../../utils/constants';
 import useFormatNumber from '../../../hooks/useFormatNumber';
-import ReferenceIcon from '../../../assets/reference.svg';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
@@ -68,8 +65,6 @@ const SubCart = ({route: {params}}: any) => {
   const [quoteItemProcessing, setQuoteItemProcessing] = useState<any>(null);
   const [cartTotal, setCartTotal] = useState<string>('0');
   const [providerWiseItems, setProviderWiseItems] = useState<any[]>([]);
-  const [confirmModalVisible, setConfirmModalVisible] =
-    useState<boolean>(false);
   const cartData = useSelector(({cart}) => cart);
 
   useEffect(() => {
@@ -148,10 +143,6 @@ const SubCart = ({route: {params}}: any) => {
 
   const detectAddressNavigation = () => {
     addressSheet.current.close();
-  };
-
-  const hideConfirmModal = () => {
-    setConfirmModalVisible(false);
   };
 
   const linkToManual = () => {
@@ -696,48 +687,14 @@ const SubCart = ({route: {params}}: any) => {
             setSelectedItems(data);
           }}
           closePaymentSheet={closePaymentSheet}
-          handleConfirmOrder={() => {
-            closePaymentSheet();
-            setConfirmModalVisible(true);
-          }}
+          handleConfirmOrder={() =>
+            handleConfirmOrder(selectedItemsForInit, selectedItems)
+          }
           confirmOrderLoading={confirmOrderLoading}
           setActivePaymentMethod={setActivePaymentMethod}
           activePaymentMethod={activePaymentMethod}
         />
       </RBSheet>
-      <Portal>
-        <Modal visible={confirmModalVisible} onDismiss={hideConfirmModal}>
-          <View style={styles.modal}>
-            <View style={styles.closeContainer}>
-              <TouchableOpacity onPress={hideConfirmModal}>
-                <Icon name={'clear'} size={20} color={'#000'} />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.modalContent}>
-              <View style={styles.modalContainer}>
-                <ReferenceIcon width={50} height={80} />
-                <Text variant={'headlineMedium'} style={styles.modalTitle}>
-                  {t('Cart.Reference.reference app')}
-                </Text>
-                <View style={styles.messageContainer}>
-                  <Text variant={'bodySmall'} style={styles.message}>
-                    {t('Cart.Reference.Reference App Message')}
-                  </Text>
-                  <Text
-                    variant={'bodySmall'}
-                    style={styles.link}
-                    onPress={linkToManual}>
-                    {t('Cart.Reference.Refer manual')}
-                  </Text>
-                </View>
-              </View>
-              <Button mode={'contained'} onPress={hideConfirmModal}>
-                {t('Cart.Reference.ok')}
-              </Button>
-            </View>
-          </View>
-        </Modal>
-      </Portal>
     </>
   );
 };

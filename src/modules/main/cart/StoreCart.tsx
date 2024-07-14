@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import FastImage from 'react-native-fast-image';
@@ -49,7 +43,7 @@ const StoreCart: React.FC<StoreCart> = ({
   useEffect(() => {
     if (item) {
       let highMin = 0;
-      let latLong: string = '';
+      let latLong: any[] = [];
       let itemsLocality = '';
       let total = 0;
       item?.items.forEach((one: any) => {
@@ -60,20 +54,25 @@ const StoreCart: React.FC<StoreCart> = ({
         let durationInMinutes = duration.format('m').replace(/\,/g, '');
         if (highMin < durationInMinutes) {
           highMin = durationInMinutes;
-          latLong = one.item.location_details?.gps.split(/\s*,\s*/);
+          latLong = one.item.location_details?.gps
+            ? one.item.location_details?.gps.split(/\s*,\s*/)
+            : [];
           itemsLocality = one.item.location_details?.address?.locality;
         }
       });
-      const newDistance = calculateDistanceBetweenPoints(
-        {
-          latitude: address.address.lat,
-          longitude: address.address.lng,
-        },
-        {
-          latitude: Number(latLong[0]),
-          longitude: Number(latLong[1]),
-        },
-      );
+      const newDistance =
+        latLong.length > 0
+          ? calculateDistanceBetweenPoints(
+              {
+                latitude: address.address.lat,
+                longitude: address.address.lng,
+              },
+              {
+                latitude: Number(latLong[0]),
+                longitude: Number(latLong[1]),
+              },
+            )
+          : '1.0';
       setDistance(newDistance);
       setCartTotal(total);
       let totalMinutes = Number(highMin) + (Number(newDistance) * 60) / 15;
