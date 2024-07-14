@@ -17,11 +17,7 @@ import {
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {
-  useFocusEffect,
-  useIsFocused,
-  useNavigation,
-} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
@@ -57,7 +53,6 @@ const SubCart = ({route: {params}}: any) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {address} = useSelector(({address}) => address);
-  const isFocused = useIsFocused();
   const addressSheet = useRef<any>();
   const fulfillmentSheet = useRef<any>();
   const fulfillmentSheetShown = useRef<boolean>(false);
@@ -485,7 +480,6 @@ const SubCart = ({route: {params}}: any) => {
         });
       }
     } catch (err) {
-      console.log('Calculating quote:', err);
       showQuoteError();
     }
   }, [selectedItems, selectedFulfillmentList]);

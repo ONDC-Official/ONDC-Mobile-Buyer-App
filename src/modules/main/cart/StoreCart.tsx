@@ -12,16 +12,12 @@ import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import 'moment-duration-format';
 import {useSelector} from 'react-redux';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {useAppTheme} from '../../../utils/theme';
 import {calculateDistanceBetweenPoints} from '../../../utils/utils';
 import useMinutesToString from '../../../hooks/useMinutesToString';
 import useFormatNumber from '../../../hooks/useFormatNumber';
-
-const Close = require('../../../assets/dashboard/close.png');
-const RightArrow = require('../../../assets/rightArrow.png');
-const Location = require('../../../assets/location.png');
-const Timer = require('../../../assets/timer.png');
 
 interface StoreCart {
   item: any;
@@ -102,8 +98,14 @@ const StoreCart: React.FC<StoreCart> = ({
               <Text variant="titleLarge" style={styles.title}>
                 {item?.location?.provider_descriptor?.name}
               </Text>
-              <TouchableOpacity onPress={() => deleteStore(item?._id)}>
-                <Image source={Close} />
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => deleteStore(item?._id)}>
+                <Icon
+                  name={'close'}
+                  size={18}
+                  color={theme.colors.neutral400}
+                />
               </TouchableOpacity>
             </View>
             <View style={styles.providerLocalityView}>
@@ -115,14 +117,12 @@ const StoreCart: React.FC<StoreCart> = ({
                 {locality}
               </Text>
               <View style={styles.dotView} />
-              <Image style={styles.imageIcon} source={Location} />
-              <Text variant={'labelMedium'} style={styles.providerLocality}>
+              <Text variant={'labelMedium'} style={styles.distance}>
                 {t('Store.km', {distance: formatNumber(distance)})}
               </Text>
               <View style={styles.providerLocalityView}>
                 <View style={styles.dotView} />
-                <Image style={styles.imageIcon} source={Timer} />
-                <Text variant={'labelMedium'} style={styles.providerLocality}>
+                <Text variant={'labelMedium'} style={styles.distance}>
                   {translateMinutesToHumanReadable(minutes.type, minutes.time)}
                 </Text>
               </View>
@@ -143,7 +143,7 @@ const StoreCart: React.FC<StoreCart> = ({
           horizontal
           showsHorizontalScrollIndicator={false}>
           {item?.items.map((one: any) => (
-            <View key={one.id} style={styles.cartItem}>
+            <View key={one._id} style={styles.cartItem}>
               <FastImage
                 source={{
                   uri: one?.item?.product?.descriptor?.images[0],
@@ -172,7 +172,11 @@ const StoreCart: React.FC<StoreCart> = ({
             <Text variant="labelLarge" style={styles.buttonText}>
               {t('Cart.View Cart')}
             </Text>
-            <Image source={RightArrow} />
+            <Icon
+              name={'keyboard-arrow-right'}
+              size={24}
+              color={theme.colors.white}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -251,6 +255,19 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     providerLocality: {
+      color: colors.neutral300,
+      flexShrink: 1,
+    },
+    closeButton: {
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: colors.neutral300,
+      width: 24,
+      height: 24,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    distance: {
       color: colors.neutral300,
     },
     imageIcon: {marginRight: 5},

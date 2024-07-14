@@ -17,6 +17,7 @@ export default () => {
   const source = useRef<any>(null);
 
   const updateSpecificCartItem = async (
+    locationId: any,
     itemId: any,
     increment: boolean,
     uniqueId: any,
@@ -24,43 +25,40 @@ export default () => {
     setCartItemsData: (items: any[]) => void,
   ) => {
     try {
-      const itemIndex = cartItems.findIndex(
+      const newCartItems = JSON.parse(JSON.stringify(cartItems));
+      let providerCart: any = newCartItems?.find(
+        (cart: any) => cart.location_id === locationId,
+      );
+
+      const itemIndex = providerCart.items.findIndex(
         (item: any) => item._id === uniqueId,
       );
       if (itemIndex !== -1) {
         const url = `${API_BASE_URL}${CART}/${uid}/${uniqueId}`;
         source.current = CancelToken.source();
-        var items = cartItems[itemIndex];
+        const newCartItem = providerCart.items[itemIndex];
 
-        const newObject = {
-          ...items,
-          item: {...items.item, quantity: {...items.item.quantity}},
-        };
         if (increment) {
           const productMaxQuantity =
-            newObject?.item?.product?.quantity?.maximum;
-          if (productMaxQuantity) {
-            newObject.item.quantity.count += 1;
+            newCartItem?.item?.product?.quantity?.maximum.count;
+          if (newCartItem.item.quantity.count < productMaxQuantity) {
+            newCartItem.item.quantity.count =
+              newCartItem.item.quantity.count + 1;
           } else {
             showToastWithGravity(
-              `Maximum allowed quantity is ${newObject.item.quantity.count}`,
+              t('Cart.Maximum allowed quantity is', {
+                count: newCartItem.item.quantity.count,
+              }),
             );
           }
         } else {
-          newObject.item.quantity.count -= 1;
+          newCartItem.item.quantity.count -= 1;
         }
-        await putDataWithAuth(url, newObject.item, source.current.token);
-
-        const finalData = cartItems.map(item =>
-          item._id === uniqueId ? newObject : item,
-        );
-
-        setCartItemsData(finalData);
+        await putDataWithAuth(url, newCartItem.item, source.current.token);
+        setCartItemsData(newCartItems);
       }
     } catch (e) {
       console.log(e);
-    } finally {
-      console.log('finally');
     }
   };
 

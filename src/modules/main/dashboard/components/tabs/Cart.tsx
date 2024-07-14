@@ -1,16 +1,19 @@
+import React, {useEffect, useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
+import {ActivityIndicator, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
-import {useAppTheme} from '../../../../../utils/theme';
 import axios from 'axios';
+
+import {useAppTheme} from '../../../../../utils/theme';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, CART} from '../../../../../utils/apiActions';
-import {useEffect, useRef, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {updateCartItems} from '../../../../../toolkit/reducer/cart';
-import {useIsFocused} from '@react-navigation/native';
 import StoreCart from '../../../cart/StoreCart';
+import EmptyCart from '../../../cart/components/EmptyCart';
+import {keyExtractor} from '../../../../../utils/utils';
 
 const CancelToken = axios.CancelToken;
 
@@ -25,6 +28,7 @@ const DashboardCart = ({navigation}: any) => {
   const {uid} = useSelector(({auth}) => auth);
   const source = useRef<any>(null);
 
+  const [apiInProgress, setApiInProgress] = useState<boolean>(true);
   const [allCart, setAllCart] = useState<any>([]);
 
   const deleteStore = async (id: string) => {
@@ -88,10 +92,10 @@ const DashboardCart = ({navigation}: any) => {
     if (isFocused) {
       getAllCartList()
         .then(() => {
-          // setApiInProgress(false);
+          setApiInProgress(false);
         })
         .catch(() => {
-          // setApiInProgress(false);
+          setApiInProgress(false);
         });
     }
   }, [isFocused]);
@@ -115,17 +119,23 @@ const DashboardCart = ({navigation}: any) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text variant={'titleLarge'} style={styles.pageTitle}>
-          All Cart
+          {t('Cart.All Cart')}
         </Text>
       </View>
-      <FlatList
-        data={allCart}
-        renderItem={renderItems}
-        contentContainerStyle={styles.subContainer}
-        ListEmptyComponent={() => (
-          <Text style={styles.emptyText}>Store Items not found</Text>
-        )}
-      />
+      {apiInProgress ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size={'large'} color={theme.colors.primary} />
+        </View>
+      ) : allCart.length > 0 ? (
+        <FlatList
+          keyExtractor={keyExtractor}
+          data={allCart}
+          renderItem={renderItems}
+          contentContainerStyle={styles.subContainer}
+        />
+      ) : (
+        <EmptyCart />
+      )}
     </View>
   );
 };
@@ -151,6 +161,11 @@ const makeStyles = (colors: any) =>
       flexGrow: 1,
       padding: 16,
       gap: 16,
+    },
+    loadingContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 

@@ -9,9 +9,8 @@ const Customizations = ({cartItem}: {cartItem: any}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
-  if (cartItem.item.customisations) {
-    const customisations = cartItem.item.customisations;
-
+  const {customisations} = cartItem.item;
+  if (customisations && customisations.length > 0) {
     return (
       <Text variant={'labelSmall'} style={styles.label}>
         {customisations.map((customization: any, index: number) => {

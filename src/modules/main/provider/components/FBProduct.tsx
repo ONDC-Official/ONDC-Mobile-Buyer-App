@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -18,7 +18,6 @@ import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {
   getCustomizations,
   getPriceWithCustomisations,
-  showInfoToast,
   showToastWithGravity,
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -28,7 +27,6 @@ import FBProductCustomization from './FBProductCustomization';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useCartItems from '../../../../hooks/useCartItems';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
-import {areCustomisationsSame} from '../../product/details/ProductDetails';
 import {makeGlobalStyles} from '../../../../styles/styles';
 import Customizations from '../../../../components/customization/Customizations';
 import ManageQuantity from '../../../../components/customization/ManageQuantity';
@@ -40,13 +38,13 @@ import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetCo
 import {useAppTheme} from '../../../../utils/theme';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
+import {areCustomisationsSame} from '../../product/details/ProductDetails';
 
 interface FBProduct {
   product: any;
 }
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
-
 const screenHeight: number = Dimensions.get('screen').height;
 
 const CancelToken = axios.CancelToken;
@@ -74,6 +72,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const productDetailsSheet = useRef<any>(null);
   const productSource = useRef<any>(null);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
+  const [itemCount, setItemCount] = useState<any>(0);
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
   const [productLoading, setProductLoading] = useState<boolean>(false);
@@ -85,9 +84,11 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const [itemQty, setItemQty] = useState<number>(1);
   const [priceRange, setPriceRange] = useState<any>(null);
 
-  const customizable = !!product?.item_details?.tags?.find(
-    (item: any) => item.code === 'custom_group',
-  );
+  const customizable = useMemo(() => {
+    return !!product?.item_details?.tags?.find(
+      (item: any) => item.code === 'custom_group',
+    );
+  }, [product]);
 
   const showCustomization = () => customizationSheet.current.open();
 
@@ -98,6 +99,21 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   const hideQuantitySheet = () => quantitySheet.current.close();
 
   const hideProductDetails = () => productDetailsSheet.current.close();
+
+  const addNewCustomization = () => {
+    setItemQty(1);
+    hideQuantitySheet();
+    addToCart().then(() => {});
+  };
+
+  const showProductDetails = async () => {
+    setItemQty(1);
+    hideQuantitySheet();
+    if (!productDetails) {
+      await getProductDetails(true);
+    }
+    productDetailsSheet.current.open();
+  };
 
   const removeQuantityClick = () => {
     if (cartItemDetails?.items.length === 1) {
@@ -130,7 +146,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     if (customizable) {
       showQuantitySheet();
     } else {
-      let items: any[] = cartItems.filter(
+      let items: any[] = cartItemDetails.items.filter(
         (ci: any) => ci.item.id === product.id,
       );
       if (items.length > 0) {
@@ -144,21 +160,6 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         }
       }
     }
-  };
-
-  const addNewCustomization = () => {
-    setItemQty(1);
-    hideQuantitySheet();
-    addToCart().then(() => {});
-  };
-
-  const showProductDetails = async () => {
-    setItemQty(1);
-    hideQuantitySheet();
-    if (!productDetails) {
-      await getProductDetails(true);
-    }
-    productDetailsSheet.current.open();
   };
 
   const addToCart = async () => {
@@ -213,60 +214,40 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         hasCustomisations: true,
       };
 
-      let ind: any = 0;
-      let items: any = null;
-      cartItems.map((res: any, index: number) => {
-        const check = res.items.find(
-          (item: any) => item.item.id === payload.id,
+      const newCartItems = JSON.parse(JSON.stringify(cartItems));
+      let providerCart: any = newCartItems?.find(
+        (cart: any) => cart.location_id === product.location_details.id,
+      );
+      if (providerCart) {
+        let items: any[] = [];
+        items = providerCart.items.filter(
+          (ci: any) => ci.item.id === payload.id,
         );
-        if (check) {
-          ind = index;
-          items = check;
+
+        if (items.length > 0 && customisations && customisations.length > 0) {
+          items = providerCart.items.filter(
+            (ci: any) =>
+              ci.item.customisations &&
+              ci.item.customisations.length === customisations?.length,
+          );
         }
-      });
 
-      source.current = CancelToken.source();
-      if (!items) {
-        await postDataWithAuth(url, payload, source.current.token);
-        setCustomizationState({});
-        setProductLoading(false);
-        hideCustomization();
-        setTimeout(() => {
-          showInfoToast(t('Product Summary.Item added to cart successfully'));
-        }, 300);
-      } else {
-        const currentCount = Number(items.item.quantity.count);
-        const maxCount = Number(items.item.product.quantity.maximum.count);
+        source.current = CancelToken.source();
+        if (items.length === 0) {
+          await postDataWithAuth(url, payload, source.current.token);
+          setCustomizationState({});
+          setProductLoading(false);
+          showToastWithGravity(
+            t('Product Summary.Item added to cart successfully'),
+          );
+          hideCustomization();
+        } else {
+          const currentCount = Number(items[0].item.quantity.count);
+          const maxCount = Number(items[0].item.product.quantity.maximum.count);
 
-        if (currentCount < maxCount) {
-          if (!customisations) {
-            await updateCartItem(cartItems, true, items.cart);
-
-            setCustomizationState({});
-            setProductLoading(false);
-            hideCustomization();
-
-            setTimeout(() => {
-              showInfoToast(
-                t('Product Summary.Item quantity updated in your cart'),
-              );
-            }, 300);
-          } else {
-            const currentIds = customisations.map(item => item.id);
-            let matchingCustomisation = null;
-
-            for (let i = 0; i < items.length; i++) {
-              let existingIds = items[i].item.customisations.map(
-                (item: any) => item.id,
-              );
-              const areSame = areCustomisationsSame(existingIds, currentIds);
-              if (areSame) {
-                matchingCustomisation = items[i];
-              }
-            }
-
-            if (matchingCustomisation) {
-              await updateCartItem(cartItems, true, matchingCustomisation._id);
+          if (currentCount < maxCount) {
+            if (!customisations) {
+              await updateCartItem(cartItems, true, items[0]._id);
               showToastWithGravity(
                 t('Product Summary.Item quantity updated in your cart'),
               );
@@ -274,22 +255,57 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               setProductLoading(false);
               hideCustomization();
             } else {
-              await postDataWithAuth(url, payload, source.current.token);
-              setCustomizationState({});
-              setProductLoading(false);
-              showToastWithGravity(
-                t('Product Summary.Item added to cart successfully'),
-              );
-              hideCustomization();
+              const currentIds = customisations.map(item => item.id);
+              let matchingCustomisation = null;
+
+              for (let i = 0; i < items.length; i++) {
+                let existingIds = items[i].item.customisations.map(
+                  (item: any) => item.id,
+                );
+                const areSame = areCustomisationsSame(existingIds, currentIds);
+                if (areSame) {
+                  matchingCustomisation = items[i];
+                }
+              }
+
+              if (matchingCustomisation) {
+                await updateCartItem(
+                  cartItems,
+                  true,
+                  matchingCustomisation._id,
+                );
+                showToastWithGravity(
+                  t('Product Summary.Item quantity updated in your cart'),
+                );
+                setCustomizationState({});
+                setProductLoading(false);
+                hideCustomization();
+              } else {
+                await postDataWithAuth(url, payload, source.current.token);
+                setCustomizationState({});
+                setProductLoading(false);
+                showToastWithGravity(
+                  t('Product Summary.Item added to cart successfully'),
+                );
+                hideCustomization();
+              }
             }
+          } else {
+            showToastWithGravity(
+              t(
+                'Product Summary.The maximum available quantity for item is already in your cart.',
+              ),
+            );
           }
-        } else {
-          showToastWithGravity(
-            t(
-              'Product Summary.The maximum available quantity for item is already in your cart.',
-            ),
-          );
         }
+      } else {
+        await postDataWithAuth(url, payload, source.current.token);
+        setCustomizationState({});
+        setProductLoading(false);
+        showToastWithGravity(
+          t('Product Summary.Item added to cart successfully'),
+        );
+        hideCustomization();
       }
       await getCartItems();
     } catch (error) {
@@ -307,44 +323,44 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         `${API_BASE_URL}${ITEM_DETAILS}?id=${product.id}`,
         productSource.current.token,
       );
+      setProductDetails(data);
 
-      const details = data;
-      setProductDetails(details);
-      const url = `${API_BASE_URL}${CART}/${uid}`;
-
-      const subtotal = details?.item_details?.price?.value;
+      const subtotal = data?.item_details?.price?.value;
 
       const payload: any = {
-        id: details.id,
-        local_id: details.local_id,
-        bpp_id: details.bpp_details.bpp_id,
-        bpp_uri: details.context.bpp_uri,
-        contextCity: details.context.city,
-        domain: details.context.domain,
-        tags: details.item_details.tags,
+        id: data.id,
+        local_id: data.local_id,
+        bpp_id: data.bpp_details.bpp_id,
+        bpp_uri: data.context.bpp_uri,
+        contextCity: data.context.city,
+        domain: data.context.domain,
+        tags: data.item_details.tags,
         customisationState: customizationState,
         quantity: {
           count: itemQty,
         },
         provider: {
-          id: details.bpp_details.bpp_id,
-          locations: details.locations,
-          ...details.provider_details,
+          id: data.bpp_details.bpp_id,
+          locations: data.locations,
+          ...data.provider_details,
         },
-        location_details: details.location_details,
+        location_details: data.location_details,
         product: {
-          id: details.id,
+          id: data.id,
           subtotal,
-          ...details.item_details,
+          ...data.item_details,
         },
         customisations: null,
         hasCustomisations: false,
       };
 
+      const url = `${API_BASE_URL}${CART}/${uid}`;
       source.current = CancelToken.source();
       await postDataWithAuth(url, payload, source.current.token);
       setCustomizationState({});
-      showInfoToast(t('Product Summary.Item added to cart successfully'));
+      showToastWithGravity(
+        t('Product Summary.Item added to cart successfully'),
+      );
       await getCartItems();
       setProductLoading(false);
     } catch (error) {
@@ -383,6 +399,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     uniqueId: any,
   ) => {
     await updateSpecificCartItem(
+      product.location_details.id,
       itemId,
       increment,
       uniqueId,
@@ -401,6 +418,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       );
       const list = cartItems.filter((item: any) => item._id !== itemId);
       dispatch(updateCartItems(list));
+      await getCartItems();
     } catch (error) {
       console.log(error);
     } finally {
@@ -408,22 +426,30 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (product && cartItems.length > 0) {
-  //     let items: any[] = cartItems.filter(
-  //       (ci: any) => ci._id === product.id,
-  //     );
-  //     let quantity = 0;
-  //     const productQuantity = items.reduce(
-  //       (accumulator, item) => accumulator + item.item.quantity.count,
-  //       quantity,
-  //     );
-  //     setCartItemDetails({items, productQuantity});
-  //   } else {
-  //     setCartItemDetails({items: [], productQuantity: 0});
-  //     quantitySheet.current.close();
-  //   }
-  // }, [product, cartItems]);
+  useEffect(() => {
+    if (product && cartItems.length > 0) {
+      let providerCart: any = cartItems?.find(
+        (cart: any) => cart.location_id === product.location_details.id,
+      );
+
+      if (providerCart) {
+        let items: any[] = providerCart?.items?.filter(
+          (one: any) => one.item.id === product.id,
+        );
+        let quantity = 0;
+        const productQuantity = items?.reduce(
+          (accumulator, item) => accumulator + item.item.quantity.count,
+          quantity,
+        );
+        setCartItemDetails({items, productQuantity});
+      } else {
+        setCartItemDetails({items: [], productQuantity: 0});
+      }
+    } else {
+      setCartItemDetails({items: [], productQuantity: 0});
+      quantitySheet.current.close();
+    }
+  }, [product, cartItems]);
 
   useEffect(() => {
     let rangePriceTag = null;
@@ -643,8 +669,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                 variant={'headlineSmall'}
                 style={styles.title}
                 ellipsizeMode={'tail'}>
-                Customization for{' '}
-                {cartItemDetails?.items[0]?.item?.product?.descriptor?.name}
+                {t('Cart.Customization for')}{' '}
+                {/*{cartItemDetails?.items[0]?.item?.product?.descriptor?.name}*/}
               </Text>
             </View>
             <View style={styles.customizationContainer}>
@@ -725,8 +751,8 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
             {inStock ? (
               <CustomizationFooterButtons
                 productLoading={productLoading}
-                itemQty={itemQty}
-                setItemQty={setItemQty}
+                itemQty={itemCount}
+                setItemQty={setItemCount}
                 itemOutOfStock={itemOutOfStock}
                 addDetailsToCart={addDetailsToCart}
                 product={product}
