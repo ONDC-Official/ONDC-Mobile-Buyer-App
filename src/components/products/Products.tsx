@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import axios from 'axios';
-import {StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ProgressBar} from 'react-native-paper';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -73,7 +73,6 @@ const Products: React.FC<Products> = ({
     attributes: any,
   ) => {
     try {
-      setProductsRequested(true);
       productSearchSource.current = CancelToken.source();
       let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}`;
       url += selectedProvider ? `&providerIds=${selectedProvider}` : '';
@@ -105,16 +104,32 @@ const Products: React.FC<Products> = ({
           minMinutes = durationInMinutes;
         }
       });
-
-      setMaxTimeToShipMinutes(maxMinutes);
-      setMinTimeToShipMinutes(minMinutes);
-      setTotalProducts(data.response.count);
-      setProducts(data.response.data);
+      if (data.response.data.length > 0) {
+        setPage(page + 1);
+        setMaxTimeToShipMinutes(maxMinutes);
+        setMinTimeToShipMinutes(minMinutes);
+        setTotalProducts(data.response.count);
+        setProducts([...products, ...data.response.data]);
+      }
     } catch (error) {
       handleApiError(error);
     } finally {
       setProductsRequested(false);
     }
+  };
+
+  const loadMoreList = () => {
+    searchProducts(
+      page,
+      providerId,
+      customMenu,
+      subCategories,
+      selectedAttributes,
+    ).then(() => {
+      voiceDetectionStarted.current = true;
+      startVoice().then(() => {});
+    });
+    // }
   };
 
   const filteredProducts = useMemo(() => {
@@ -132,17 +147,19 @@ const Products: React.FC<Products> = ({
   }, [products, searchQuery]);
 
   useEffect(() => {
-    searchProducts(
-      page,
-      providerId,
-      customMenu,
-      subCategories,
-      selectedAttributes,
-    ).then(() => {
-      voiceDetectionStarted.current = true;
-      startVoice().then(() => {});
-    });
-  }, [page, providerId, customMenu, subCategories, selectedAttributes]);
+    if (providerId) {
+      searchProducts(
+        page,
+        providerId,
+        customMenu,
+        subCategories,
+        selectedAttributes,
+      ).then(() => {
+        voiceDetectionStarted.current = true;
+        startVoice().then(() => {});
+      });
+    }
+  }, [providerId, selectedAttributes]);
 
   useEffect(() => {
     if (userInput.length > 0) {
@@ -212,13 +229,17 @@ const Products: React.FC<Products> = ({
           ))}
         </View>
       ) : (
-        <View style={styles.listContainer}>
-          {filteredProducts.map(product => (
-            <View key={product.id} style={styles.productContainer}>
-              <Product product={product} search={search} provider={provider} />
-            </View>
-          ))}
-        </View>
+        <FlatList
+          data={filteredProducts}
+          numColumns={2}
+          style={styles.listContainer}
+          renderItem={({item}) => {
+            return (
+              <Product product={item} search={search} provider={provider} />
+            );
+          }}
+          onEndReached={loadMoreList}
+        />
       )}
     </View>
   );
@@ -231,9 +252,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.white,
     },
     productContainer: {
-      width: '50%',
-      height: 254,
-      marginBottom: 12,
+      flex: 1,
     },
     searchContainer: {
       marginTop: 24,
@@ -247,9 +266,8 @@ const makeStyles = (colors: any) =>
       paddingVertical: 0,
     },
     listContainer: {
+      flex: 1,
       paddingHorizontal: 8,
-      flexDirection: 'row',
-      flexWrap: 'wrap',
       marginTop: 24,
     },
     emptyContainer: {

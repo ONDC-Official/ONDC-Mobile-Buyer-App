@@ -34,7 +34,7 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
 
   if (provider) {
     return (
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      // <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <OutletDetails
             provider={provider}
@@ -59,7 +59,7 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
             setMaxTimeToShipMinutes={setMaxTimeToShipMinutes}
           />
         </View>
-      </ScrollView>
+      // </ScrollView>
     );
   } else {
     return (
