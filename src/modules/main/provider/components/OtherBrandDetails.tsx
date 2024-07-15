@@ -12,20 +12,12 @@ interface OtherBrandDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
-  minTimeToShipMinutes: number;
-  setMinTimeToShipMinutes: (value: number) => void;
-  maxTimeToShipMinutes: number;
-  setMaxTimeToShipMinutes: (value: number) => void;
 }
 
 const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
   provider,
   outlet,
   apiRequested,
-  minTimeToShipMinutes,
-  setMinTimeToShipMinutes,
-  maxTimeToShipMinutes,
-  setMaxTimeToShipMinutes,
 }) => {
   const {t} = useTranslation();
   const {colors} = useAppTheme();
@@ -40,8 +32,6 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
             provider={provider}
             outlet={outlet}
             apiRequested={apiRequested}
-            minTimeToShipMinutes={minTimeToShipMinutes}
-            maxTimeToShipMinutes={maxTimeToShipMinutes}
           />
           <CustomMenu
             providerId={provider.id}
@@ -55,8 +45,6 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
             customMenu={selectedMenu}
             outlet={outlet}
             subCategories={[]}
-            setMinTimeToShipMinutes={setMinTimeToShipMinutes}
-            setMaxTimeToShipMinutes={setMaxTimeToShipMinutes}
           />
         </View>
       </ScrollView>

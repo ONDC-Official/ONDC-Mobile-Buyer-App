@@ -21,8 +21,6 @@ interface OutletDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
-  minTimeToShipMinutes: number;
-  maxTimeToShipMinutes: number;
 }
 
 const Closed = require('../../../../assets/closed.png');
@@ -35,8 +33,6 @@ const OutletDetails: React.FC<OutletDetails> = ({
   provider,
   outlet,
   apiRequested,
-  minTimeToShipMinutes,
-  maxTimeToShipMinutes,
 }) => {
   const {t} = useTranslation();
   const {formatNumber} = useFormatNumber();
@@ -66,6 +62,8 @@ const OutletDetails: React.FC<OutletDetails> = ({
   useEffect(() => {
     if (outlet) {
       let travelTime = (Number(outlet.distance) * 60) / 15;
+      const minTimeToShipMinutes = (outlet?.min_time_to_ship ?? 0) / 60;
+      const maxTimeToShipMinutes = (outlet?.max_time_to_ship ?? 0) / 60;
       setMaxDeliveryTime(
         convertMinutesToHumanReadable(
           Number(maxTimeToShipMinutes) + travelTime,
@@ -77,7 +75,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
         ),
       );
     }
-  }, [outlet, minTimeToShipMinutes, maxTimeToShipMinutes]);
+  }, [outlet]);
 
   if (apiRequested) {
     return <BrandSkeleton />;
@@ -120,7 +118,11 @@ const OutletDetails: React.FC<OutletDetails> = ({
               </Text>
               <View style={styles.dotView} />
               {!!outlet?.address && (
-                <Text variant={'labelLarge'} style={styles.address}>
+                <Text
+                  variant={'labelLarge'}
+                  style={styles.address}
+                  ellipsizeMode={'tail'}
+                  numberOfLines={1}>
                   {outlet?.address?.locality || 'NA'}
                 </Text>
               )}
@@ -202,6 +204,7 @@ const makeStyles = (colors: any) =>
     },
     address: {
       color: colors.neutral300,
+      flex: 1,
     },
     open: {
       color: colors.success600,

@@ -7,18 +7,21 @@ export default () => {
   ) => {
     const updatedStores = list.map((item: any) => {
       const latLong = item.gps.split(/\s*,\s*/);
-      const minTimeToShip = item?.min_time_to_ship ?? 0;
-      const maxTimeToShip = item?.max_time_to_ship ?? 0;
-      const averageTimeToShip = (minTimeToShip + maxTimeToShip) / 2 / 60;
+      const medianTimeToShip = item?.median_time_to_ship ?? 0;
+      const medianTimeToShipInMinutes = medianTimeToShip / 60;
       const distance =
         getDistance(location, {
           latitude: latLong[0],
           longitude: latLong[1],
         }) / 1000;
+      const distanceString = Number.isInteger(distance)
+        ? String(distance)
+        : distance.toFixed(1);
       return {
         ...item,
         ...{
-          timeToShip: averageTimeToShip + (distance * 60) / 15,
+          timeToShip: medianTimeToShipInMinutes + (distance * 60) / 15,
+          distance: distanceString,
         },
       };
     });

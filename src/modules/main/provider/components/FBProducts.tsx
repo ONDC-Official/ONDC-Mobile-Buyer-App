@@ -12,20 +12,9 @@ import ProductSkeleton from '../../../../components/skeleton/ProductSkeleton';
 import CustomMenuAccordion from './CustomMenuAccordion';
 import {useAppTheme} from '../../../../utils/theme';
 import ProductSearch from '../../../../components/products/ProductSearch';
-import moment from 'moment/moment';
 
 const CancelToken = axios.CancelToken;
-const FBProducts = ({
-  provider,
-  domain,
-  setMinTimeToShipMinutes,
-  setMaxTimeToShipMinutes,
-}: {
-  provider: string;
-  domain: string;
-  setMinTimeToShipMinutes: (value: number) => void;
-  setMaxTimeToShipMinutes: (value: number) => void;
-}) => {
+const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -60,29 +49,9 @@ const FBProducts = ({
         one.items = menuResponses[index].data.data;
         return one;
       });
-
-      let maxMinutes = 0;
-      let minMinutes = 999999;
-      list.map((one: any) => {
-        one.items.forEach((item: any) => {
-          const duration = moment.duration(
-            item?.item_details['@ondc/org/time_to_ship'],
-          );
-          let durationInMinutes = duration.format('m').replace(/\,/g, '');
-          if (maxMinutes < durationInMinutes) {
-            maxMinutes = durationInMinutes;
-          }
-          if (minMinutes > durationInMinutes) {
-            minMinutes = durationInMinutes;
-          }
-        });
-      });
-
       if (list.length > 0) {
         setExpandedAccordionId(list[0].id);
       }
-      setMaxTimeToShipMinutes(maxMinutes);
-      setMinTimeToShipMinutes(minMinutes);
       setMenu(list);
     } catch (error) {
       handleApiError(error);

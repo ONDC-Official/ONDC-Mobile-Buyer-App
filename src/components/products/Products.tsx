@@ -4,7 +4,6 @@ import {StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ProgressBar} from 'react-native-paper';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import moment from 'moment';
 
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
@@ -28,8 +27,6 @@ interface Products {
   subCategories: any[];
   search?: boolean;
   provider: any;
-  setMinTimeToShipMinutes: (value: number) => void;
-  setMaxTimeToShipMinutes: (value: number) => void;
 }
 
 const CancelToken = axios.CancelToken;
@@ -40,8 +37,6 @@ const Products: React.FC<Products> = ({
   subCategories = [],
   search = false,
   provider,
-  setMinTimeToShipMinutes,
-  setMaxTimeToShipMinutes,
 }) => {
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
@@ -90,24 +85,6 @@ const Products: React.FC<Products> = ({
         url,
         productSearchSource.current.token,
       );
-      let maxMinutes = 0;
-      let minMinutes = 999999;
-      data.response.data.forEach((item: any) => {
-        const duration = moment.duration(
-          item?.item_details['@ondc/org/time_to_ship'],
-        );
-        let durationInMinutes = duration.format('m').replace(/\,/g, '');
-
-        if (maxMinutes < durationInMinutes) {
-          maxMinutes = durationInMinutes;
-        }
-        if (minMinutes > durationInMinutes) {
-          minMinutes = durationInMinutes;
-        }
-      });
-
-      setMaxTimeToShipMinutes(maxMinutes);
-      setMinTimeToShipMinutes(minMinutes);
       setTotalProducts(data.response.count);
       setProducts(data.response.data);
     } catch (error) {
