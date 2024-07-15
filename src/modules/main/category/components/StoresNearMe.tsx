@@ -10,12 +10,12 @@ import {useTranslation} from 'react-i18next';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
-import {calculateDistance, skeletonList} from '../../../../utils/utils';
-import {useAppTheme} from '../../../../utils/theme';
+import {skeletonList} from '../../../../utils/utils';
 import Store from '../../stores/components/Store';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
 import {FB_DOMAIN} from '../../../../utils/constants';
 import {saveStoresList} from '../../../../toolkit/reducer/stores';
+import useCalculateTimeToShip from '../../../../hooks/useCalculateTimeToShip';
 
 interface StoresNearMe {
   domain?: string;
@@ -24,7 +24,6 @@ interface StoresNearMe {
 const CancelToken = axios.CancelToken;
 
 const BrandSkeleton = () => {
-  const theme = useAppTheme();
   const styles = makeStyles();
   return (
     <View style={styles.brand}>
@@ -40,12 +39,13 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const dispatch = useDispatch();
   const styles = makeStyles();
   const navigation = useNavigation<StackNavigationProp<any>>();
-  const {address} = useSelector(({address}) => address);
+  const {address} = useSelector((state: any) => state?.address);
   const source = useRef<any>(null);
   const [locations, setLocations] = useState<any[]>([]);
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const {calculateTimeToShip} = useCalculateTimeToShip();
 
   const getAllLocations = async () => {
     try {
@@ -57,9 +57,8 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
         domain ? `&domain=${domain}` : ''
       }`;
       const {data} = await getDataWithAuth(url, source.current.token);
-
       setLocations(
-        calculateDistance(data.data, {
+        calculateTimeToShip(data.data, {
           latitude: address.address.lat,
           longitude: address.address.lng,
         }),

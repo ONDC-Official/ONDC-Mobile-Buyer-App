@@ -1,12 +1,11 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
-import {useTranslation} from 'react-i18next';
 
 import {useAppTheme} from '../../../../utils/theme';
-import useFormatNumber from '../../../../hooks/useFormatNumber';
+import useMinutesToString from '../../../../hooks/useMinutesToString';
 
 interface StoreImage {
   source: any;
@@ -30,8 +29,8 @@ const StoreImage: React.FC<StoreImage> = ({source}) => {
 };
 
 const Store = ({store}: {store: any}) => {
-  const {t} = useTranslation();
-  const {formatNumber} = useFormatNumber();
+  const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
+    useMinutesToString();
   const navigation = useNavigation<any>();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
@@ -43,6 +42,8 @@ const Store = ({store}: {store: any}) => {
     routeParams.outletId = location.id;
     navigation.navigate('BrandDetails', routeParams);
   };
+
+  const timeToShip = convertMinutesToHumanReadable(store?.timeToShip);
 
   return (
     <TouchableOpacity
@@ -62,19 +63,13 @@ const Store = ({store}: {store: any}) => {
         ellipsizeMode={'tail'}>
         {store?.provider_descriptor?.name}
       </Text>
-      <View style={styles.addressContainer}>
-        <Text
-          style={styles.details}
-          variant={'labelSmall'}
-          numberOfLines={1}
-          ellipsizeMode={'tail'}>
-          {store?.address?.locality}
-        </Text>
-        <View style={styles.dot} />
-        <Text style={styles.distance} variant={'labelSmall'} numberOfLines={1}>
-          {t('Store.km', {distance: formatNumber(store?.distance)})}
-        </Text>
-      </View>
+      <Text
+        style={styles.details}
+        variant={'labelSmall'}
+        numberOfLines={1}
+        ellipsizeMode={'tail'}>
+        {translateMinutesToHumanReadable(timeToShip.type, timeToShip.time)}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -105,17 +100,6 @@ const makeStyles = (colors: any) =>
     },
     distance: {
       color: colors.neutral300,
-    },
-    addressContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    dot: {
-      width: 4,
-      height: 4,
-      borderRadius: 2,
-      backgroundColor: colors.neutral300,
-      marginHorizontal: 4,
     },
   });
 

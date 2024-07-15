@@ -377,24 +377,6 @@ export const compareIgnoringSpaces = (str1: string, str2: string) => {
   return cleanedStr1 === cleanedStr2;
 };
 
-export const calculateDistance = (
-  list: any,
-  location: {latitude: number; longitude: number},
-) => {
-  return list.map((item: any) => {
-    const latLong = item.gps.split(/\s*,\s*/);
-    const distance =
-      getDistance(location, {
-        latitude: latLong[0],
-        longitude: latLong[1],
-      }) / 1000;
-    const distanceString = Number.isInteger(distance)
-      ? String(distance)
-      : distance.toFixed(1);
-    return {...item, ...{distance: distanceString}};
-  });
-};
-
 export const calculateDistanceBetweenPoints = (
   firstPoint: {latitude: number; longitude: number},
   secondPoint: {latitude: number; longitude: number},
