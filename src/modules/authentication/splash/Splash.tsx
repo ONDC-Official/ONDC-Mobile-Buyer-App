@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Linking, NativeModules, StyleSheet, View} from 'react-native';
+import {Linking, NativeModules, Platform, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Text} from 'react-native-paper';
 import DeviceInfo, {getVersion} from 'react-native-device-info';
@@ -188,18 +188,22 @@ const Splash: React.FC<Splash> = ({navigation}) => {
                 () => {},
               );
             } else {
-              checkMagisk().then(isPresent => {
-                if (isPresent) {
-                  alertWithOneButton(
-                    'Alert',
-                    'This application can not be used on the rooted device',
-                    'Ok',
-                    () => {},
-                  );
-                } else {
-                  processLink();
-                }
-              });
+              if (Platform.OS === 'android') {
+                checkMagisk().then(isPresent => {
+                  if (isPresent) {
+                    alertWithOneButton(
+                      'Alert',
+                      'This application can not be used on the rooted device',
+                      'Ok',
+                      () => {},
+                    );
+                  } else {
+                    processLink();
+                  }
+                });
+              } else {
+                processLink();
+              }
             }
           });
         }
