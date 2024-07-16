@@ -129,7 +129,12 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           });
       } else {
         setProductLoading(true);
-        updateSpecificItem(cartItem?.item?.id, false, cartItem?._id)
+        updateSpecificItem(
+          cartItem?.item?.location_details.id,
+          cartItem?.item?.id,
+          false,
+          cartItem?._id,
+        )
           .then(() => {
             setProductLoading(false);
           })
@@ -152,7 +157,12 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
       if (items.length > 0) {
         try {
           setProductLoading(true);
-          await updateSpecificItem(items[0]?.item?.id, true, items[0]?._id);
+          await updateSpecificItem(
+            items[0]?.item?.location_details.id,
+            items[0]?.item?.id,
+            true,
+            items[0]?._id,
+          );
         } catch (e) {
           console.log(e);
         } finally {
@@ -394,12 +404,13 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   };
 
   const updateSpecificItem = async (
+    locationId: any,
     itemId: any,
     increment: boolean,
     uniqueId: any,
   ) => {
     await updateSpecificCartItem(
-      product.location_details.id,
+      locationId,
       itemId,
       increment,
       uniqueId,
@@ -477,6 +488,21 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
     Number(product?.item_details?.quantity?.available?.count) >= 1;
   const disabled = apiInProgress || !inStock;
 
+  const currency = useMemo(
+    () => CURRENCY_SYMBOLS[product?.item_details?.price?.currency],
+    [product, CURRENCY_SYMBOLS],
+  );
+
+  const productImageSource = useMemo(() => {
+    if (product?.item_details?.descriptor.symbol) {
+      return {uri: product?.item_details?.descriptor.symbol};
+    } else if (product?.item_details?.descriptor?.images?.length > 0) {
+      return {uri: product?.item_details?.descriptor.images[0]};
+    } else {
+      return NoImageAvailable;
+    }
+  }, [product?.item_details?.descriptor]);
+
   // @ts-ignore
   return (
     <>
@@ -494,26 +520,19 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           </Text>
           <Text variant={'headlineSmall'} style={styles.price}>
             {priceRange
-              ? `₹${formatNumber(priceRange?.minPrice)} - ₹${formatNumber(
-                  priceRange?.maxPrice,
-                )}`
-              : `${
-                  CURRENCY_SYMBOLS[product?.item_details?.price?.currency]
-                }${formatNumber(product?.item_details?.price?.value)}`}
+              ? `${currency}${formatNumber(
+                  priceRange?.minPrice,
+                )} - ${currency}${formatNumber(priceRange?.maxPrice)}`
+              : `${currency}${formatNumber(
+                  product?.item_details?.price?.value,
+                )}`}
           </Text>
         </TouchableOpacity>
         <View style={styles.actionContainer}>
           <TouchableOpacity
             style={styles.imageContainer}
             onPress={showProductDetails}>
-            <FastImage
-              style={styles.image}
-              source={
-                product?.item_details?.descriptor.symbol
-                  ? {uri: product?.item_details?.descriptor.symbol}
-                  : NoImageAvailable
-              }
-            />
+            <FastImage style={styles.image} source={productImageSource} />
             <View style={styles.productTag}>
               <VegNonVegTag tags={product?.item_details?.tags} />
             </View>

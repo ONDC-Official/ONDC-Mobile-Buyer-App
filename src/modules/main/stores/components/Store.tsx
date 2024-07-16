@@ -68,15 +68,15 @@ const Store = ({store}: {store: any}) => {
         {store?.provider_descriptor?.name}
       </Text>
       <View style={styles.addressContainer}>
-        <Text
-          style={styles.details}
-          variant={'labelSmall'}
-          numberOfLines={1}
-          ellipsizeMode={'tail'}>
+        <Text style={styles.details} variant={'labelSmall'}>
           {translateMinutesToHumanReadable(timeToShip.type, timeToShip.time)}
         </Text>
         <View style={styles.dot} />
-        <Text style={styles.distance} variant={'labelSmall'} numberOfLines={1}>
+        <Text
+          style={styles.distance}
+          variant={'labelSmall'}
+          numberOfLines={1}
+          ellipsizeMode={'tail'}>
           {t('Store.km', {distance: formatNumber(store?.distance)})}
         </Text>
       </View>
@@ -89,7 +89,7 @@ const makeStyles = (colors: any) =>
     brand: {
       marginBottom: 15,
       flex: 1 / 3,
-      marginHorizontal: 8,
+      marginHorizontal: 5,
     },
     brandImage: {
       borderRadius: 8,
@@ -106,10 +106,10 @@ const makeStyles = (colors: any) =>
     },
     details: {
       color: colors.neutral300,
-      flexShrink: 1,
     },
     distance: {
       color: colors.neutral300,
+      flexShrink: 1,
     },
     addressContainer: {
       flexDirection: 'row',

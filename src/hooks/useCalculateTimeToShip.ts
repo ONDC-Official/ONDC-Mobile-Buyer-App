@@ -16,6 +16,8 @@ export default () => {
         }) / 1000;
       const distanceString = Number.isInteger(distance)
         ? String(distance)
+        : distance > 9
+        ? distance.toFixed(0)
         : distance.toFixed(1);
       return {
         ...item,

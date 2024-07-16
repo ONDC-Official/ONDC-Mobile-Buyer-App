@@ -13,7 +13,7 @@ import {
   Text,
 } from 'react-native-paper';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {useSelector} from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
@@ -39,6 +39,7 @@ import {
   VIEW_DELIVERY_OPTIONS_COMMAND,
 } from '../../../utils/constants';
 import useFormatNumber from '../../../hooks/useFormatNumber';
+import { updateCartItems } from "../../../toolkit/reducer/cart";
 
 const screenHeight: number = Dimensions.get('screen').height;
 
@@ -47,6 +48,7 @@ const SubCart = ({route: {params}}: any) => {
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
   const {t} = useTranslation();
+  const dispatch = useDispatch();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {address} = useSelector(({address}) => address);
@@ -81,6 +83,11 @@ const SubCart = ({route: {params}}: any) => {
   const closePaymentSheet = () => {
     setActivePaymentMethod('');
     paymentSheet.current.close();
+  };
+
+  const updateDetailCartItems = (items: any[]) => {
+    dispatch(updateCartItems(items));
+    setCartItems(items[params.index].items);
   };
 
   const {
@@ -548,9 +555,10 @@ const SubCart = ({route: {params}}: any) => {
                   style={styles.pageContainer}
                   pointerEvents={checkoutLoading ? 'none' : 'auto'}>
                   <CartItems
+                    fullCartItems={cartData?.cartItems}
                     providerWiseItems={providerWiseItems}
                     cartItems={cartItems}
-                    setCartItems={setCartItems}
+                    setCartItems={updateDetailCartItems}
                     haveDistinctProviders={haveDistinctProviders}
                     isProductCategoryIsDifferent={isProductCategoryIsDifferent}
                   />

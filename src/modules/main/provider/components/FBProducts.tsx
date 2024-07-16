@@ -14,6 +14,9 @@ import {useAppTheme} from '../../../../utils/theme';
 import ProductSearch from '../../../../components/products/ProductSearch';
 
 const CancelToken = axios.CancelToken;
+const VegImage = require('../../../../assets/veg.png');
+const NonVegImage = require('../../../../assets/non_veg.png');
+
 const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -111,10 +114,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
               ? setSelectedFilter('')
               : setSelectedFilter('veg')
           }>
-          <FastImage
-            source={require('../../../../assets/veg.png')}
-            style={styles.filterIcon}
-          />
+          <FastImage source={VegImage} style={styles.filterIcon} />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>
             {t('Cart.Veg')}
           </Text>
@@ -138,7 +138,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
               : setSelectedFilter('nonveg')
           }>
           <FastImage
-            source={require('../../../../assets/non_veg.png')}
+            source={NonVegImage}
             style={styles.filterIcon}
           />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>
@@ -164,7 +164,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
               : setSelectedFilter('egg')
           }>
           <FastImage
-            source={require('../../../../assets/non_veg.png')}
+            source={NonVegImage}
             style={styles.filterIcon}
           />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>

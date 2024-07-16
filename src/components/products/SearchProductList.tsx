@@ -18,7 +18,6 @@ import {
   skeletonList,
 } from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
-import useBhashini from '../../hooks/useBhashini';
 import useReadAudio from '../../hooks/useReadAudio';
 
 interface SearchProductList {
@@ -45,11 +44,6 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
     stopAndDestroyVoiceListener,
     setAllowRestarts,
   } = useReadAudio(language);
-  const {
-    withoutConfigRequest,
-    computeRequestTransliteration,
-    transliterationRequest,
-  } = useBhashini();
 
   const totalProducts = useRef<number>(0);
   const pageNumber = useRef<number>(1);

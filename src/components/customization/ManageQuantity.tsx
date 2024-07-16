@@ -13,7 +13,12 @@ import useFormatNumber from '../../hooks/useFormatNumber';
 interface ManageQuantity {
   cartItem: any;
   updatingCartItem: any;
-  updateCartItem: (item: any, increment: boolean, uniqueId: any) => void;
+  updateCartItem: (
+    locationId: any,
+    item: any,
+    increment: boolean,
+    uniqueId: any,
+  ) => void;
   allowDelete?: boolean;
   deleteCartItem?: (itemId: any) => void;
 }
@@ -32,6 +37,7 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
   const maximumQuantity = Number(
     cartItem?.item?.product?.quantity?.maximum.count,
   );
+
   return (
     <View style={styles.quantityContainer}>
       {allowDelete && cartItem?.item?.quantity?.count === 1 ? (
@@ -45,7 +51,14 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
         <TouchableOpacity
           disabled={!!updatingCartItem || cartItem?.item?.quantity?.count === 0}
           style={styles.incrementButton}
-          onPress={() => updateCartItem(cartItem.item.id, false, cartItem._id)}>
+          onPress={() =>
+            updateCartItem(
+              cartItem.item.location_details.id,
+              cartItem.item.id,
+              false,
+              cartItem._id,
+            )
+          }>
           <Icon name={'minus'} color={theme.colors.primary} size={20} />
         </TouchableOpacity>
       )}
@@ -62,7 +75,14 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
           maximumQuantity === cartItem?.item?.quantity?.count
         }
         style={styles.incrementButton}
-        onPress={() => updateCartItem(cartItem.item.id, true, cartItem._id)}>
+        onPress={() =>
+          updateCartItem(
+            cartItem.item.location_details.id,
+            cartItem.item.id,
+            true,
+            cartItem._id,
+          )
+        }>
         <Icon name={'plus'} color={theme.colors.primary} size={20} />
       </TouchableOpacity>
     </View>

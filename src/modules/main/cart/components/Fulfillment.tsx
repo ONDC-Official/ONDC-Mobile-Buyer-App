@@ -35,6 +35,8 @@ interface Fulfillment {
   updateCartItems: (value: any) => void;
 }
 
+const NoImageAvailable = require('../../../../assets/noImage.png');
+
 const Fulfillment: React.FC<Fulfillment> = ({
   selectedFulfillmentList = [],
   setSelectedFulfillmentList,
@@ -262,16 +264,30 @@ const Fulfillment: React.FC<Fulfillment> = ({
                               },
                             );
                             fulfillmentTotal += itemTotal;
+                            let imageSource = NoImageAvailable;
+                            if (
+                              singleProduct?.item?.product?.descriptor?.symbol
+                            ) {
+                              imageSource = {
+                                uri: singleProduct?.item?.product?.descriptor
+                                  ?.symbol,
+                              };
+                            } else if (
+                              singleProduct?.item?.product?.descriptor?.images
+                                ?.length > 0
+                            ) {
+                              imageSource = {
+                                uri: singleProduct?.item?.product?.descriptor
+                                  ?.images[0],
+                              };
+                            }
 
                             return (
                               <View
                                 key={item.id}
                                 style={styles.productContainer}>
                                 <FastImage
-                                  source={{
-                                    uri: singleProduct?.item?.product
-                                      ?.descriptor?.symbol,
-                                  }}
+                                  source={imageSource}
                                   style={styles.productImage}
                                 />
                                 <Text

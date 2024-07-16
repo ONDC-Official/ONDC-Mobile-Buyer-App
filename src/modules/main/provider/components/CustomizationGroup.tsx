@@ -7,14 +7,12 @@ import {useAppTheme} from '../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 
+const VegImage = require('../../../../assets/veg.png');
+const NonVegImage = require('../../../../assets/veg.png');
 const VegNonVegTag = ({category = 'veg'}) => {
   return (
     <FastImage
-      source={
-        category === 'veg'
-          ? require('../../../../assets/veg.png')
-          : require('../../../../assets/non_veg.png')
-      }
+      source={category === 'veg' ? VegImage : NonVegImage}
       style={{width: 18, height: 18}}
     />
   );

@@ -27,7 +27,7 @@ const CustomMenuItem: React.FC<CustomMenuItem> = ({
       <FastImage
         style={[styles.image, selected ? styles.selected : styles.normal]}
         source={
-          item?.descriptor?.images
+          item?.descriptor?.images?.length > 0
             ? {uri: item?.descriptor?.images[0]}
             : NoImageAvailable
         }

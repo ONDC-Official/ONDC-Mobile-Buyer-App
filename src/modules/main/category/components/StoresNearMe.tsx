@@ -54,7 +54,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       const url = `${API_BASE_URL}${LOCATIONS}?latitude=${
         address.address.lat
       }&longitude=${address.address.lng}&radius=100${
-        domain ? `&domain=${domain}` : ''
+        domain ? `&domain=${domain}&limit=${domain === FB_DOMAIN ? 12 : 9}` : ''
       }`;
       const {data} = await getDataWithAuth(url, source.current.token);
       setLocations(
@@ -74,14 +74,6 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     dispatch(saveStoresList(locations));
     navigation.navigate('StoresNearMe', {domain});
   };
-
-  const list = useMemo(() => {
-    if (locations) {
-      return locations.slice(0, domain === FB_DOMAIN ? 12 : 9);
-    } else {
-      return [];
-    }
-  }, [locations]);
 
   useEffect(() => {
     if (address) {
@@ -115,7 +107,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
           <FlatList
             contentContainerStyle={styles.listContainer}
             numColumns={3}
-            data={list}
+            data={locations}
             keyExtractor={item => item.id}
             renderItem={({item}) => <Store store={item} />}
           />
