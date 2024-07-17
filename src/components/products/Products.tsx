@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import axios from 'axios';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
-import {ProgressBar} from 'react-native-paper';
+import {ProgressBar, Text} from 'react-native-paper';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 
@@ -21,6 +21,7 @@ import Product from '../../modules/main/provider/components/Product';
 import {useAppTheme} from '../../utils/theme';
 import ProductSearch from './ProductSearch';
 import useReadAudio from '../../hooks/useReadAudio';
+import {useTranslation} from 'react-i18next';
 
 interface Products {
   providerId: any;
@@ -49,6 +50,7 @@ const Products: React.FC<Products> = ({
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {language} = useSelector(({auth}) => auth);
+  const {t} = useTranslation();
   const {
     startVoice,
     userInteractionStarted,
@@ -56,7 +58,7 @@ const Products: React.FC<Products> = ({
     stopAndDestroyVoiceListener,
     setAllowRestarts,
   } = useReadAudio(language);
-  const [productsRequested, setProductsRequested] = useState<boolean>(true);
+  const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const [products, setProducts] = useState<any[]>([]);
@@ -72,6 +74,7 @@ const Products: React.FC<Products> = ({
     subCategoryIds: any,
     attributes: any,
   ) => {
+    setMoreListRequested(true);
     try {
       productSearchSource.current = CancelToken.source();
       let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}`;
@@ -114,22 +117,24 @@ const Products: React.FC<Products> = ({
     } catch (error) {
       handleApiError(error);
     } finally {
-      setProductsRequested(false);
+      setMoreListRequested(false);
     }
   };
 
   const loadMoreList = () => {
-    searchProducts(
-      page,
-      providerId,
-      customMenu,
-      subCategories,
-      selectedAttributes,
-    ).then(() => {
-      voiceDetectionStarted.current = true;
-      startVoice().then(() => {});
-    });
-    // }
+    console.log('loadMoreList : ', totalProducts, '===', products.length);
+    if (totalProducts !== products.length) {
+      searchProducts(
+        page,
+        providerId,
+        customMenu,
+        subCategories,
+        selectedAttributes,
+      ).then(() => {
+        voiceDetectionStarted.current = true;
+        startVoice().then(() => {});
+      });
+    }
   };
 
   const filteredProducts = useMemo(() => {
@@ -220,27 +225,27 @@ const Products: React.FC<Products> = ({
         />
       </View>
 
-      {productsRequested ? (
-        <View style={styles.listContainer}>
-          {skeletonList.map(product => (
-            <View key={product.id} style={styles.productContainer}>
-              <ProductSkeleton />
+      <FlatList
+        data={filteredProducts}
+        numColumns={2}
+        style={styles.listContainer}
+        renderItem={({item}) => {
+          return <Product product={item} search={search} provider={provider} />;
+        }}
+        ListEmptyComponent={() =>
+          !moreListRequested && (
+            <View style={styles.emptyContainer}>
+              <Text variant={'bodyMedium'}>
+                {t('Home.Search Product List.No products available')}
+              </Text>
             </View>
-          ))}
-        </View>
-      ) : (
-        <FlatList
-          data={filteredProducts}
-          numColumns={2}
-          style={styles.listContainer}
-          renderItem={({item}) => {
-            return (
-              <Product product={item} search={search} provider={provider} />
-            );
-          }}
-          onEndReached={loadMoreList}
-        />
-      )}
+          )
+        }
+        onEndReached={loadMoreList}
+        ListFooterComponent={props =>
+          moreListRequested ? <ProductSkeleton /> : <></>
+        }
+      />
     </View>
   );
 };
