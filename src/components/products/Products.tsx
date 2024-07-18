@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import axios from 'axios';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View, SectionList} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ProgressBar, Text} from 'react-native-paper';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -8,7 +8,11 @@ import moment from 'moment';
 
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
-import {API_BASE_URL, PRODUCT_SEARCH} from '../../utils/apiActions';
+import {
+  API_BASE_URL,
+  PRODUCT_SEARCH,
+  CUSTOM_MENU,
+} from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import Filters from './Filters';
 import {
@@ -22,27 +26,28 @@ import {useAppTheme} from '../../utils/theme';
 import ProductSearch from './ProductSearch';
 import useReadAudio from '../../hooks/useReadAudio';
 import {useTranslation} from 'react-i18next';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface Products {
   providerId: any;
-  customMenu: any;
   subCategories: any[];
   search?: boolean;
   provider: any;
   setMinTimeToShipMinutes: (value: number) => void;
   setMaxTimeToShipMinutes: (value: number) => void;
+  providerDomain: string;
 }
 
 const CancelToken = axios.CancelToken;
 
 const Products: React.FC<Products> = ({
   providerId = null,
-  customMenu = null,
   subCategories = [],
   search = false,
   provider,
   setMinTimeToShipMinutes,
   setMaxTimeToShipMinutes,
+  providerDomain,
 }) => {
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
@@ -64,22 +69,23 @@ const Products: React.FC<Products> = ({
   const [products, setProducts] = useState<any[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [selectedAttributes, setSelectedAttributes] = useState<any>({});
+  const [customData, setCustomData] = useState<any>(null);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
   const searchProducts = async (
     pageNumber: number,
     selectedProvider: any,
-    selectedMenu: any,
+    customMenu: any,
     subCategoryIds: any,
     attributes: any,
   ) => {
     setMoreListRequested(true);
     try {
       productSearchSource.current = CancelToken.source();
+
       let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}`;
       url += selectedProvider ? `&providerIds=${selectedProvider}` : '';
-      url += selectedMenu ? `&customMenu=${selectedMenu}` : '';
       url +=
         subCategoryIds.length > 0
           ? `&categoryIds=${subCategoryIds.join(',')}`
@@ -112,7 +118,27 @@ const Products: React.FC<Products> = ({
         setMaxTimeToShipMinutes(maxMinutes);
         setMinTimeToShipMinutes(minMinutes);
         setTotalProducts(data.response.count);
-        setProducts([...products, ...data.response.data]);
+
+        const listData = customMenu?.data?.data?.map(
+          (element: any, index: number) => {
+            let makeList: any = [];
+            data.response.data.forEach((item: any) => {
+              if (element.id === item.customisation_menus[0].id) {
+                makeList.push(item);
+              }
+            });
+            return products.length > 0
+              ? {
+                  title: element.descriptor.name,
+                  data: [
+                    {list: [...products[index].data[0].list, ...makeList]},
+                  ],
+                }
+              : {title: element.descriptor.name, data: [{list: makeList}]};
+          },
+        );
+
+        setProducts([...listData]);
       }
     } catch (error) {
       handleApiError(error);
@@ -122,12 +148,15 @@ const Products: React.FC<Products> = ({
   };
 
   const loadMoreList = () => {
-    console.log('loadMoreList : ', totalProducts, '===', products.length);
-    if (totalProducts !== products.length) {
+    let getCount: number = 0;
+    products.forEach(item => {
+      getCount = getCount + JSON.parse(item.data[0]?.list?.length);
+    });
+    if (totalProducts !== getCount) {
       searchProducts(
         page,
         providerId,
-        customMenu,
+        customData,
         subCategories,
         selectedAttributes,
       ).then(() => {
@@ -140,30 +169,51 @@ const Products: React.FC<Products> = ({
   const filteredProducts = useMemo(() => {
     const lowerQuery = searchQuery.toLowerCase();
     // Filter the products based on the search query
-    return products.filter(
-      product =>
-        product?.item_details?.descriptor?.name
-          ?.toLowerCase()
-          .includes(lowerQuery) ||
-        product?.provider_details?.descriptor?.name
-          ?.toLowerCase()
-          .includes(lowerQuery),
-    );
+
+    const listData = products.map((item: any) => {
+      return {
+        title: item.title,
+        data: [
+          {
+            list: item.data[0].list.filter(
+              (product: any) =>
+                product?.item_details?.descriptor?.name
+                  ?.toLowerCase()
+                  .includes(lowerQuery) ||
+                product?.provider_details?.descriptor?.name
+                  ?.toLowerCase()
+                  .includes(lowerQuery),
+            ),
+          },
+        ],
+      };
+    });
+
+    return listData;
   }, [products, searchQuery]);
 
   useEffect(() => {
-    if (providerId) {
-      searchProducts(
-        page,
-        providerId,
-        customMenu,
-        subCategories,
-        selectedAttributes,
-      ).then(() => {
-        voiceDetectionStarted.current = true;
-        startVoice().then(() => {});
-      });
-    }
+    (async () => {
+      if (providerId) {
+        productSearchSource.current = CancelToken.source();
+        const customdMenu = await getDataWithAuth(
+          `${API_BASE_URL}${CUSTOM_MENU}?provider=${providerId}&domain=${providerDomain}`,
+          productSearchSource.current.token,
+        );
+        setCustomData(customdMenu);
+
+        searchProducts(
+          page,
+          providerId,
+          customdMenu,
+          subCategories,
+          selectedAttributes,
+        ).then(() => {
+          voiceDetectionStarted.current = true;
+          startVoice().then(() => {});
+        });
+      }
+    })();
   }, [providerId, selectedAttributes]);
 
   useEffect(() => {
@@ -224,23 +274,51 @@ const Products: React.FC<Products> = ({
           setSearchQuery={setSearchQuery}
         />
       </View>
-
-      <FlatList
-        data={filteredProducts}
-        numColumns={2}
-        style={styles.listContainer}
+      <SectionList
+        sections={filteredProducts}
+        contentContainerStyle={styles.listContainer}
+        keyExtractor={(item, index) => item + index}
         renderItem={({item}) => {
-          return <Product product={item} search={search} provider={provider} />;
+          return item.list.length > 0 ? (
+            <FlatList
+              data={item.list}
+              numColumns={2}
+              style={styles.nestedListContainer}
+              renderItem={({item}) => {
+                return (
+                  <View key={item.id} style={styles.productContainer}>
+                    <Product
+                      product={item}
+                      search={search}
+                      provider={provider}
+                    />
+                  </View>
+                );
+              }}
+              keyExtractor={({item, index}) => index}
+            />
+          ) : (
+            <></>
+          );
         }}
-        ListEmptyComponent={() =>
-          !moreListRequested && (
-            <View style={styles.emptyContainer}>
-              <Text variant={'bodyMedium'}>
-                {t('Home.Search Product List.No products available')}
-              </Text>
-            </View>
-          )
-        }
+        renderSectionHeader={({section: {title}}) => (
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              paddingBottom: 20,
+              paddingHorizontal: 10,
+            }}>
+            <Text variant="headlineSmall" style={{flex: 1}}>
+              {title}
+            </Text>
+            <Icon
+              name={'keyboard-arrow-right'}
+              size={20}
+              color={theme.colors.neutral300}
+            />
+          </View>
+        )}
         onEndReached={loadMoreList}
         ListFooterComponent={props =>
           moreListRequested ? <ProductSkeleton /> : <></>
@@ -257,7 +335,9 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.white,
     },
     productContainer: {
-      flex: 1,
+      width: '50%',
+      height: 254,
+      marginBottom: 12,
     },
     searchContainer: {
       marginTop: 24,
@@ -271,9 +351,13 @@ const makeStyles = (colors: any) =>
       paddingVertical: 0,
     },
     listContainer: {
-      flex: 1,
+      flexGrow: 1,
       paddingHorizontal: 8,
       marginTop: 24,
+    },
+    nestedListContainer: {
+      flexGrow: 1,
+      paddingHorizontal: 8,
     },
     emptyContainer: {
       flex: 1,

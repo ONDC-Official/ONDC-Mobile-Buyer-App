@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 
-import CustomMenu from './CustomMenu';
 import Products from '../../../../components/products/Products';
 import {useAppTheme} from '../../../../utils/theme';
 import OutletDetails from './OutletDetails';
@@ -30,36 +29,27 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
   const {t} = useTranslation();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
-  const [selectedMenu, setSelectedMenu] = useState<any>(null);
 
   if (provider) {
     return (
-      // <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.container}>
-          <OutletDetails
-            provider={provider}
-            outlet={outlet}
-            apiRequested={apiRequested}
-            minTimeToShipMinutes={minTimeToShipMinutes}
-            maxTimeToShipMinutes={maxTimeToShipMinutes}
-          />
-          <CustomMenu
-            providerId={provider.id}
-            providerDomain={provider.domain}
-            selectedMenu={selectedMenu}
-            setSelectedMenu={setSelectedMenu}
-          />
-          <Products
-            providerId={provider.id}
-            provider={provider}
-            customMenu={selectedMenu}
-            outlet={outlet}
-            subCategories={[]}
-            setMinTimeToShipMinutes={setMinTimeToShipMinutes}
-            setMaxTimeToShipMinutes={setMaxTimeToShipMinutes}
-          />
-        </View>
-      // </ScrollView>
+      <View style={styles.container}>
+        <OutletDetails
+          provider={provider}
+          outlet={outlet}
+          apiRequested={apiRequested}
+          minTimeToShipMinutes={minTimeToShipMinutes}
+          maxTimeToShipMinutes={maxTimeToShipMinutes}
+        />
+        <Products
+          providerId={provider.id}
+          providerDomain={provider.domain}
+          provider={provider}
+          outlet={outlet}
+          subCategories={[]}
+          setMinTimeToShipMinutes={setMinTimeToShipMinutes}
+          setMaxTimeToShipMinutes={setMaxTimeToShipMinutes}
+        />
+      </View>
     );
   } else {
     return (
