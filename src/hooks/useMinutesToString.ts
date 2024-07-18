@@ -3,6 +3,14 @@ import {useTranslation} from 'react-i18next';
 
 export default () => {
   const {t} = useTranslation();
+  const convertHoursToHoursAndMinutes = (hours: any) => {
+    // Extract whole hours
+    const h = Math.floor(hours);
+    // Extract minutes by multiplying the decimal part by 60
+    const m = Math.floor((hours - h) * 60);
+    return {hours: h, minutes: m};
+  };
+
   const convertMinutesToHumanReadable = (minutes: number) => {
     const duration = moment.duration(minutes, 'minutes');
 
@@ -10,7 +18,7 @@ export default () => {
       const days = Math.ceil(duration.asDays());
       return {type: 'days', time: days};
     } else if (minutes >= 60) {
-      const hours = Math.ceil(duration.asHours());
+      const hours = duration.asHours();
       return {type: 'hours', time: hours};
     } else {
       return {type: 'minutes', time: Math.ceil(minutes)};
@@ -27,10 +35,33 @@ export default () => {
         }
 
       case 'hours':
-        if (time !== 1) {
-          return t('Store.hours', {time: time});
+        if (time > 1) {
+          const {hours, minutes} = convertHoursToHoursAndMinutes(time);
+          return `${
+            hours > 1
+              ? t('Store.hours', {time: hours})
+              : t('Store.hour', {time: hours})
+          } ${
+            minutes > 0
+              ? time !== 1
+                ? t('Store.minutes', {time: minutes})
+                : t('Store.minute', {time: minutes})
+              : ''
+          }`;
         } else {
-          return t('Store.hour', {time: time});
+          const {hours, minutes} = convertHoursToHoursAndMinutes(time);
+
+          return `${
+            hours > 1
+              ? t('Store.hours', {time: hours})
+              : t('Store.hour', {time: hours})
+          } ${
+            minutes > 0
+              ? time !== 1
+                ? t('Store.minutes', {time: minutes})
+                : t('Store.minute', {time: minutes})
+              : ''
+          }`;
         }
 
       default:

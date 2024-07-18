@@ -41,6 +41,18 @@ const Product: React.FC<Product> = ({product, search = false, provider}) => {
   };
 
   const disabled = !provider?.isOpen && provider?.isOpen !== undefined;
+
+  let imageSource = NoImageAvailable;
+  if (product?.item_details?.descriptor?.symbol) {
+    imageSource = {
+      uri: product?.item_details?.descriptor?.symbol,
+    };
+  } else if (product?.item_details?.descriptor?.images?.length > 0) {
+    imageSource = {
+      uri: product?.item_details?.descriptor?.images[0],
+    };
+  }
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -50,22 +62,14 @@ const Product: React.FC<Product> = ({product, search = false, provider}) => {
         <Grayscale>
           <FastImage
             style={styles.gridImage}
-            source={
-              product?.item_details?.descriptor?.symbol
-                ? {uri: product?.item_details?.descriptor?.symbol}
-                : NoImageAvailable
-            }
+            source={imageSource}
             resizeMode={FastImage.resizeMode.cover}
           />
         </Grayscale>
       ) : (
         <FastImage
           style={styles.gridImage}
-          source={
-            product?.item_details?.descriptor?.symbol
-              ? {uri: product?.item_details?.descriptor?.symbol}
-              : NoImageAvailable
-          }
+          source={imageSource}
           resizeMode={FastImage.resizeMode.cover}
         />
       )}

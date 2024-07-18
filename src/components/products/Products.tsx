@@ -4,7 +4,6 @@ import {FlatList, StyleSheet, View, SectionList} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ProgressBar, Text} from 'react-native-paper';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import moment from 'moment';
 
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
@@ -33,8 +32,6 @@ interface Products {
   subCategories: any[];
   search?: boolean;
   provider: any;
-  setMinTimeToShipMinutes: (value: number) => void;
-  setMaxTimeToShipMinutes: (value: number) => void;
   providerDomain: string;
 }
 
@@ -45,9 +42,7 @@ const Products: React.FC<Products> = ({
   subCategories = [],
   search = false,
   provider,
-  setMinTimeToShipMinutes,
-  setMaxTimeToShipMinutes,
-  providerDomain,
+                                        providerDomain,
 }) => {
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
@@ -83,7 +78,6 @@ const Products: React.FC<Products> = ({
     setMoreListRequested(true);
     try {
       productSearchSource.current = CancelToken.source();
-
       let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}`;
       url += selectedProvider ? `&providerIds=${selectedProvider}` : '';
       url +=

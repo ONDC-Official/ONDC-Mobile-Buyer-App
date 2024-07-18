@@ -12,6 +12,9 @@ interface VegNonVegTag {
   size?: string;
 }
 
+const VegImage = require('../../assets/veg.png');
+const NonVegImage = require('../../assets/non_veg.png');
+
 const VegNonVegTag: React.FC<VegNonVegTag> = ({
   tags,
   showLabel,
@@ -27,7 +30,7 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({
     return (
       <View style={styles.iconRow}>
         <FastImage
-          source={require('../../assets/veg.png')}
+          source={VegImage}
           style={size === 'regular' ? styles.icon : styles.smallIcon}
         />
         {showLabel && (
@@ -41,7 +44,7 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({
     return (
       <View style={styles.iconRow}>
         <FastImage
-          source={require('../../assets/non_veg.png')}
+          source={NonVegImage}
           style={size === 'regular' ? styles.icon : styles.smallIcon}
         />
         {showLabel && (
@@ -55,7 +58,7 @@ const VegNonVegTag: React.FC<VegNonVegTag> = ({
     return (
       <View style={styles.iconRow}>
         <FastImage
-          source={require('../../assets/non_veg.png')}
+          source={NonVegImage}
           style={size === 'regular' ? styles.icon : styles.smallIcon}
         />
         {showLabel && (

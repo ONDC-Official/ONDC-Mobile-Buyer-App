@@ -20,6 +20,8 @@ interface StoreCart {
   goToViewCart: (values: any) => void;
 }
 
+const NoImageAvailable = require('../../../assets/noImage.png');
+
 const StoreCart: React.FC<StoreCart> = ({
   item,
   index,
@@ -141,23 +143,27 @@ const StoreCart: React.FC<StoreCart> = ({
           contentContainerStyle={styles.itemMainView}
           horizontal
           showsHorizontalScrollIndicator={false}>
-          {item?.items.map((one: any) => (
-            <View key={one._id} style={styles.cartItem}>
-              <FastImage
-                source={{
-                  uri: one?.item?.product?.descriptor?.images[0],
-                }}
-                style={styles.headerImage}
-              />
-              <Text
-                variant="labelMedium"
-                style={styles.description}
-                ellipsizeMode={'tail'}
-                numberOfLines={1}>
-                {one?.item?.product?.descriptor?.name}
-              </Text>
-            </View>
-          ))}
+          {item?.items.map((one: any) => {
+            let imageSource = NoImageAvailable;
+            if (one?.item?.product?.descriptor?.symbol) {
+              imageSource = {uri: one?.item?.product?.descriptor?.symbol};
+            } else if (one?.item?.product?.descriptor?.images?.length > 0) {
+              imageSource = {uri: one?.item?.product?.descriptor?.images[0]};
+            }
+
+            return (
+              <View key={one._id} style={styles.cartItem}>
+                <FastImage source={imageSource} style={styles.headerImage} />
+                <Text
+                  variant="labelMedium"
+                  style={styles.description}
+                  ellipsizeMode={'tail'}
+                  numberOfLines={1}>
+                  {one?.item?.product?.descriptor?.name}
+                </Text>
+              </View>
+            );
+          })}
         </ScrollView>
 
         {/* bottomView */}
@@ -238,13 +244,12 @@ const makeStyles = (colors: any) =>
     },
     viewCartButton: {
       flexDirection: 'row',
-      width: 97,
       height: 32,
       borderRadius: 21,
-      padding: 8,
       backgroundColor: colors.primary,
-      justifyContent: 'space-between',
       alignItems: 'center',
+      justifyContent: 'center',
+      paddingLeft: 8,
     },
     buttonText: {
       color: colors.white,

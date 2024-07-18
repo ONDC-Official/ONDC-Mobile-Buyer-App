@@ -3,14 +3,14 @@ import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import {useEffect, useRef, useState} from 'react';
+import axios from 'axios';
 import Store from './components/Store';
 import {useAppTheme} from '../../../utils/theme';
 import Page from '../../../components/page/Page';
-import axios from 'axios';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
-import {calculateDistance} from '../../../utils/utils';
+import useCalculateTimeToShip from '../../../hooks/useCalculateTimeToShip';
 
 interface StoresNearMe {
   domain?: string;
@@ -23,7 +23,8 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {address} = useSelector(({address}) => address);
+  const {calculateTimeToShip} = useCalculateTimeToShip();
+  const {address} = useSelector((state: any) => state?.address);
   const source = useRef<any>(null);
   const totalLocations = useRef<number>(0);
   const {getDataWithAuth} = useNetworkHandling();
@@ -54,7 +55,6 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
 
   const getAllLocations = async () => {
     try {
-      // setApiRequested(true);
       source.current = CancelToken.source();
 
       const url = `${API_BASE_URL}${LOCATIONS}?afterKey=${providerId}&limit=${20}&latitude=${
@@ -66,15 +66,14 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
       totalLocations.current = data.count;
       setProviderId(data?.afterKey?.location_id);
 
-      const distanceData = calculateDistance(data.data, {
+      const distanceData = calculateTimeToShip(data.data, {
         latitude: address.address.lat,
         longitude: address.address.lng,
       });
-      setLocations([...locations, ...distanceData]);
+      const list = [...locations, ...distanceData];
+      setLocations(list.sort((a: any, b: any) => a.timeToShip - b.timeToShip));
     } catch (error) {
       handleApiError(error);
-    } finally {
-      // setApiRequested(false);
     }
   };
 

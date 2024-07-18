@@ -36,6 +36,7 @@ import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
 
 interface CartItems {
+  fullCartItems: any[];
   allowScroll?: boolean;
   providerWiseItems: any[];
   cartItems: any[];
@@ -46,8 +47,10 @@ interface CartItems {
 
 const CancelToken = axios.CancelToken;
 const screenHeight: number = Dimensions.get('screen').height;
+const NoImageAvailable = require('../../../../assets/noImage.png');
 
 const CartItems: React.FC<CartItems> = ({
+  fullCartItems,
   haveDistinctProviders,
   isProductCategoryIsDifferent,
   providerWiseItems,
@@ -91,15 +94,17 @@ const CartItems: React.FC<CartItems> = ({
   };
 
   const updateCartItem = async (
+    locationId: any,
     itemId: any,
     increment: boolean,
     uniqueId: any,
   ) => {
     await updateSpecificCartItem(
+      locationId,
       itemId,
       increment,
       uniqueId,
-      cartItems,
+      fullCartItems,
       setCartItems,
     );
   };
@@ -203,142 +208,155 @@ const CartItems: React.FC<CartItems> = ({
               </View>
             </View>
             <View style={styles.productsContainer}>
-              {provider?.items?.map((cartItem: any, itemIndex: number) => (
-                <View key={cartItem._id}>
-                  <View style={styles.product}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('ProductDetails', {
-                          productId: cartItem.item.id,
-                        })
-                      }>
-                      <FastImage
-                        source={{
-                          uri: cartItem?.item?.product?.descriptor?.symbol,
-                        }}
-                        style={styles.productImage}
-                      />
-                    </TouchableOpacity>
-                    <View style={styles.productMeta}>
-                      <Text variant={'bodyMedium'} style={styles.productName}>
-                        {cartItem?.item?.product?.descriptor?.name}
-                      </Text>
-                      <Customizations cartItem={cartItem} />
-                      {!cartItem.item.hasCustomisations &&
-                        cartItem.item.product?.quantity?.unitized &&
-                        Object.keys(
-                          cartItem.item.product?.quantity?.unitized,
-                        ).map(one => (
-                          <Text
-                            variant={'labelSmall'}
-                            key={
-                              cartItem.item.product?.quantity?.unitized[one]
-                                .value
-                            }>
-                            {
-                              cartItem.item.product?.quantity?.unitized[one]
-                                .value
-                            }{' '}
-                            {
-                              cartItem.item.product?.quantity?.unitized[one]
-                                .unit
-                            }
-                          </Text>
-                        ))}
-                      <View style={styles.quantityContainer}>
-                        <ManageQuantity
-                          allowDelete
-                          cartItem={cartItem}
-                          updatingCartItem={updatingCartItem}
-                          updateCartItem={updateCartItem}
-                          deleteCartItem={deleteCartItem}
+              {provider?.items?.map((cartItem: any, itemIndex: number) => {
+                let imageSource = NoImageAvailable;
+                if (cartItem?.item?.product?.descriptor?.symbol) {
+                  imageSource = {
+                    uri: cartItem?.item?.product?.descriptor?.symbol,
+                  };
+                } else if (
+                  cartItem?.item?.product?.descriptor?.images?.length > 0
+                ) {
+                  imageSource = {
+                    uri: cartItem?.item?.product?.descriptor?.images[0],
+                  };
+                }
+
+                return (
+                  <View key={cartItem._id}>
+                    <View style={styles.product}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('ProductDetails', {
+                            productId: cartItem.item.id,
+                          })
+                        }>
+                        <FastImage
+                          source={imageSource}
+                          style={styles.productImage}
                         />
+                      </TouchableOpacity>
+                      <View style={styles.productMeta}>
+                        <Text variant={'bodyMedium'} style={styles.productName}>
+                          {cartItem?.item?.product?.descriptor?.name}
+                        </Text>
+                        <Customizations cartItem={cartItem} />
+                        {!cartItem.item.hasCustomisations &&
+                          cartItem.item.product?.quantity?.unitized &&
+                          Object.keys(
+                            cartItem.item.product?.quantity?.unitized,
+                          ).map(one => (
+                            <Text
+                              variant={'labelSmall'}
+                              key={
+                                cartItem.item.product?.quantity?.unitized[one]
+                                  .value
+                              }>
+                              {
+                                cartItem.item.product?.quantity?.unitized[one]
+                                  .value
+                              }{' '}
+                              {
+                                cartItem.item.product?.quantity?.unitized[one]
+                                  .unit
+                              }
+                            </Text>
+                          ))}
+                        <View style={styles.quantityContainer}>
+                          <ManageQuantity
+                            allowDelete
+                            cartItem={cartItem}
+                            updatingCartItem={updatingCartItem}
+                            updateCartItem={updateCartItem}
+                            deleteCartItem={deleteCartItem}
+                          />
+                        </View>
+                        <Text variant="bodyLarge">
+                          ₹
+                          {cartItem.item.hasCustomisations
+                            ? formatNumber(
+                                getPriceWithCustomisations(cartItem) *
+                                  Number(cartItem?.item?.quantity?.count),
+                              )
+                            : formatNumber(cartItem?.item?.product?.subtotal)}
+                        </Text>
                       </View>
-                      <Text variant="bodyLarge">
-                        ₹
-                        {cartItem.item.hasCustomisations
-                          ? formatNumber(
-                              getPriceWithCustomisations(cartItem) *
-                                Number(cartItem?.item?.quantity?.count),
-                            )
-                          : formatNumber(cartItem?.item?.product?.subtotal)}
-                      </Text>
                     </View>
-                  </View>
-                  <View style={styles.productActionContainer}>
-                    {cartItem.item.domain === FB_DOMAIN &&
-                      cartItem.item.hasCustomisations && (
+                    <View style={styles.productActionContainer}>
+                      {cartItem.item.domain === FB_DOMAIN &&
+                        cartItem.item.hasCustomisations && (
+                          <TouchableOpacity
+                            disabled={!!requestedProduct}
+                            style={styles.customiseContainer}
+                            onPress={() => handleCustomiseClick(cartItem)}>
+                            {cartItem._id === requestedProduct ? (
+                              <ActivityIndicator
+                                color={theme.colors.primary}
+                                size={14}
+                              />
+                            ) : (
+                              <Icon
+                                name={'pencil'}
+                                color={theme.colors.primary}
+                                size={14}
+                              />
+                            )}
+                            <Text
+                              variant={'labelLarge'}
+                              style={styles.customiseText}>
+                              {t('Cart.Customise')}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      {cartItem.item.domain !== FB_DOMAIN && (
                         <TouchableOpacity
                           disabled={!!requestedProduct}
                           style={styles.customiseContainer}
-                          onPress={() => handleCustomiseClick(cartItem)}>
-                          {cartItem._id === requestedProduct ? (
-                            <ActivityIndicator
-                              color={theme.colors.primary}
-                              size={14}
-                            />
-                          ) : (
-                            <Icon
-                              name={'pencil'}
-                              color={theme.colors.primary}
-                              size={14}
-                            />
-                          )}
+                          onPress={() => handleEditClick(cartItem)}>
+                          <Icon
+                            name={'pencil'}
+                            color={theme.colors.primary}
+                            size={14}
+                          />
                           <Text
                             variant={'labelLarge'}
                             style={styles.customiseText}>
-                            {t('Cart.Customise')}
+                            {t('Cart.Edit')}
                           </Text>
                         </TouchableOpacity>
                       )}
-                    {cartItem.item.domain !== FB_DOMAIN && (
-                      <TouchableOpacity
-                        disabled={!!requestedProduct}
-                        style={styles.customiseContainer}
-                        onPress={() => handleEditClick(cartItem)}>
-                        <Icon
-                          name={'pencil'}
-                          color={theme.colors.primary}
-                          size={14}
-                        />
-                        <Text
-                          variant={'labelLarge'}
-                          style={styles.customiseText}>
-                          {t('Cart.Edit')}
+                      <View>
+                        {itemToDelete === cartItem._id ? (
+                          <ActivityIndicator
+                            size={20}
+                            color={theme.colors.primary}
+                          />
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => deleteCartItem(cartItem._id)}>
+                            <DeleteIcon width={20} height={20} />
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    </View>
+                    {cartItem.item.quantity.count >
+                      cartItem.item.product.quantity.available.count && (
+                      <View style={styles.infoBox}>
+                        <Text variant={'bodyMedium'} style={styles.infoText}>
+                          {t('Cart Items.Only Available Of Total', {
+                            quantity:
+                              cartItem.item.product.quantity.available.count,
+                            total: cartItem.item.quantity.count,
+                          })}
                         </Text>
-                      </TouchableOpacity>
+                      </View>
                     )}
-                    <View>
-                      {itemToDelete === cartItem._id ? (
-                        <ActivityIndicator
-                          size={20}
-                          color={theme.colors.primary}
-                        />
-                      ) : (
-                        <TouchableOpacity
-                          onPress={() => deleteCartItem(cartItem._id)}>
-                          <DeleteIcon width={20} height={20} />
-                        </TouchableOpacity>
-                      )}
-                    </View>
+                    {itemIndex !== provider?.items.length - 1 && (
+                      <View style={styles.providerBorderBottom} />
+                    )}
                   </View>
-                  {cartItem.item.quantity.count >
-                    cartItem.item.product.quantity.available.count && (
-                    <View style={styles.infoBox}>
-                      <Text variant={'bodyMedium'} style={styles.infoText}>
-                        {t('Cart Items.Only Available Of Total', {
-                          quantity:
-                            cartItem.item.product.quantity.available.count,
-                          total: cartItem.item.quantity.count,
-                        })}
-                      </Text>
-                    </View>
-                  )}
-                  {itemIndex !== provider?.items.length - 1 && (
-                    <View style={styles.providerBorderBottom} />
-                  )}
-                </View>
-              ))}
+                );
+              })}
             </View>
           </View>
         ))}

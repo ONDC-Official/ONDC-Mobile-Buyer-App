@@ -616,10 +616,10 @@
     "km": "{{distance}} km",
     "day": "{{time}} day",
     "days": "{{time}} days",
-    "hour": "{{time}} hour",
-    "hours": "{{time}} hours",
-    "minute": "{{time}} minute",
-    "minutes": "{{time}} minutes",
+    "hour": "{{time}} hr",
+    "hours": "{{time}} hrs",
+    "minute": "{{time}} min",
+    "minutes": "{{time}} mins",
     "Opens at": "Opens at {{time}}"
   },
   "Network Banner": {

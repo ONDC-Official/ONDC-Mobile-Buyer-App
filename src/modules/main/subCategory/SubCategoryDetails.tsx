@@ -45,8 +45,6 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
             subCategories={[currentSubCategory]}
             search
             provider={null}
-            setMaxTimeToShipMinutes={() => {}}
-            setMinTimeToShipMinutes={() => {}}
           />
         </ScrollView>
       </View>

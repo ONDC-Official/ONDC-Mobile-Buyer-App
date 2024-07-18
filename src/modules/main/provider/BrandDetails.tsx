@@ -61,9 +61,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const [outletDetailsRequested, setOutletDetailsRequested] =
     useState<boolean>(true);
-  const [minTimeToShipMinutes, setMinTimeToShipMinutes] =
-    useState<number>(99999);
-  const [maxTimeToShipMinutes, setMaxTimeToShipMinutes] = useState<number>(0);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -218,20 +215,12 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
             provider={provider}
             outlet={outlet}
             apiRequested={apiRequested || outletDetailsRequested}
-            minTimeToShipMinutes={minTimeToShipMinutes}
-            setMinTimeToShipMinutes={setMinTimeToShipMinutes}
-            maxTimeToShipMinutes={maxTimeToShipMinutes}
-            setMaxTimeToShipMinutes={setMaxTimeToShipMinutes}
           />
         ) : (
           <OtherBrandDetails
             provider={provider}
             outlet={outlet}
             apiRequested={apiRequested || outletDetailsRequested}
-            minTimeToShipMinutes={minTimeToShipMinutes}
-            setMinTimeToShipMinutes={setMinTimeToShipMinutes}
-            maxTimeToShipMinutes={maxTimeToShipMinutes}
-            setMaxTimeToShipMinutes={setMaxTimeToShipMinutes}
           />
         )}
       </View>

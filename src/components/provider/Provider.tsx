@@ -25,6 +25,7 @@ import useMinutesToString from '../../hooks/useMinutesToString';
 import useFormatNumber from '../../hooks/useFormatNumber';
 
 const Location = require('../../assets/location.png');
+const NoImageAvailable = require('../../assets/noImage.png');
 const Timer = require('../../assets/timer.png');
 
 const Provider = ({provider}: {provider: any}) => {
@@ -62,12 +63,16 @@ const Provider = ({provider}: {provider: any}) => {
   };
 
   const renderItem = useCallback(({item}: {item: any}) => {
+    let imageSource = NoImageAvailable;
+    if (item?.item_details?.descriptor.symbol) {
+      imageSource = {uri: item?.item_details?.descriptor.symbol};
+    } else if (item?.item_details?.descriptor?.images?.length > 0) {
+      imageSource = {uri: item?.item_details?.descriptor.images[0]};
+    }
+
     return (
       <View style={styles.product}>
-        <FastImage
-          source={{uri: item?.item_details?.descriptor?.symbol}}
-          style={styles.productImage}
-        />
+        <FastImage source={imageSource} style={styles.productImage} />
         <View style={styles.productNameContainer}>
           {(item?.context?.domain === GROCERY_DOMAIN ||
             item?.context.domain === FB_DOMAIN) && (
