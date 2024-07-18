@@ -119,24 +119,39 @@ const Products: React.FC<Products> = ({
         setMinTimeToShipMinutes(minMinutes);
         setTotalProducts(data.response.count);
 
-        const listData = customMenu?.data?.data?.map(
-          (element: any, index: number) => {
-            let makeList: any = [];
-            data.response.data.forEach((item: any) => {
-              if (element.id === item.customisation_menus[0].id) {
-                makeList.push(item);
-              }
-            });
-            return products.length > 0
-              ? {
-                  title: element.descriptor.name,
+        const listData =
+          customMenu?.data?.data?.length > 0
+            ? customMenu?.data?.data?.map((element: any, index: number) => {
+                let makeList: any = [];
+                data.response.data.forEach((item: any) => {
+                  if (element.id === item.customisation_menus[0].id) {
+                    makeList.push(item);
+                  }
+                });
+                return products.length > 0
+                  ? {
+                      title: element.descriptor.name,
+                      data: [
+                        {list: [...products[index].data[0].list, ...makeList]},
+                      ],
+                    }
+                  : {title: element.descriptor.name, data: [{list: makeList}]};
+              })
+            : products.length > 0
+            ? [
+                {
+                  title: null,
                   data: [
-                    {list: [...products[index].data[0].list, ...makeList]},
+                    {
+                      list: [
+                        ...products[0].data[0].list,
+                        ...data.response.data,
+                      ],
+                    },
                   ],
-                }
-              : {title: element.descriptor.name, data: [{list: makeList}]};
-          },
-        );
+                },
+              ]
+            : [{title: null, data: [{list: data.response.data}]}];
 
         setProducts([...listData]);
       }
@@ -302,7 +317,7 @@ const Products: React.FC<Products> = ({
           );
         }}
         renderSectionHeader={({section}) => {
-          return section.data[0]?.list?.length > 0 ? (
+          return section.data[0]?.list?.length > 0 && section?.title ? (
             <View
               style={{
                 flex: 1,
