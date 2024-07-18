@@ -4,6 +4,9 @@ import {FlatList, StyleSheet, View, SectionList} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ProgressBar, Text} from 'react-native-paper';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import moment from 'moment';
 
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
@@ -14,18 +17,12 @@ import {
 } from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import Filters from './Filters';
-import {
-  compareIgnoringSpaces,
-  showToastWithGravity,
-  skeletonList,
-} from '../../utils/utils';
+import {compareIgnoringSpaces, showToastWithGravity} from '../../utils/utils';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import Product from '../../modules/main/provider/components/Product';
 import {useAppTheme} from '../../utils/theme';
 import ProductSearch from './ProductSearch';
 import useReadAudio from '../../hooks/useReadAudio';
-import {useTranslation} from 'react-i18next';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 
 interface Products {
   providerId: any;
@@ -42,7 +39,7 @@ const Products: React.FC<Products> = ({
   subCategories = [],
   search = false,
   provider,
-                                        providerDomain,
+  providerDomain,
 }) => {
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
@@ -109,8 +106,6 @@ const Products: React.FC<Products> = ({
       });
       if (data.response.data.length > 0) {
         setPage(page + 1);
-        setMaxTimeToShipMinutes(maxMinutes);
-        setMinTimeToShipMinutes(minMinutes);
         setTotalProducts(data.response.count);
 
         const listData =
@@ -286,25 +281,19 @@ const Products: React.FC<Products> = ({
       <SectionList
         sections={filteredProducts}
         contentContainerStyle={styles.listContainer}
-        keyExtractor={(item, index) => item + index}
+        keyExtractor={(item, index) => `section${index}`}
         renderItem={({item}) => {
           return item.list.length > 0 ? (
             <FlatList
               data={item.list}
               numColumns={2}
               style={styles.nestedListContainer}
-              renderItem={({item}) => {
-                return (
-                  <View key={item.id} style={styles.productContainer}>
-                    <Product
-                      product={item}
-                      search={search}
-                      provider={provider}
-                    />
-                  </View>
-                );
-              }}
-              keyExtractor={({item, index}) => index}
+              renderItem={({item}) => (
+                <View key={item.id} style={styles.productContainer}>
+                  <Product product={item} search={search} provider={provider} />
+                </View>
+              )}
+              keyExtractor={item => item.id}
             />
           ) : (
             <></>
