@@ -291,6 +291,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
                 setProductLoading(false);
                 hideCustomization();
               } else {
+                source.current = CancelToken.source();
                 await postDataWithAuth(url, payload, source.current.token);
                 setCustomizationState({});
                 setProductLoading(false);
@@ -309,6 +310,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
           }
         }
       } else {
+        source.current = CancelToken.source();
         await postDataWithAuth(url, payload, source.current.token);
         setCustomizationState({});
         setProductLoading(false);
@@ -753,15 +755,13 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
               style={styles.productDetails}>
               <FBProductDetails product={productDetails} inStock={inStock}>
                 {inStock ? (
-                  <>
-                    <FBProductCustomization
-                      hideProductDetails
-                      product={productDetails}
-                      customizationState={customizationState}
-                      setCustomizationState={setCustomizationState}
-                      setItemOutOfStock={setItemOutOfStock}
-                    />
-                  </>
+                  <FBProductCustomization
+                    hideProductDetails
+                    product={productDetails}
+                    customizationState={customizationState}
+                    setCustomizationState={setCustomizationState}
+                    setItemOutOfStock={setItemOutOfStock}
+                  />
                 ) : (
                   <></>
                 )}
