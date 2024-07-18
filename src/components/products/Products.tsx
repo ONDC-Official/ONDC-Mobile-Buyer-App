@@ -301,24 +301,28 @@ const Products: React.FC<Products> = ({
             <></>
           );
         }}
-        renderSectionHeader={({section: {title}}) => (
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              paddingBottom: 20,
-              paddingHorizontal: 10,
-            }}>
-            <Text variant="headlineSmall" style={{flex: 1}}>
-              {title}
-            </Text>
-            <Icon
-              name={'keyboard-arrow-right'}
-              size={20}
-              color={theme.colors.neutral300}
-            />
-          </View>
-        )}
+        renderSectionHeader={({section}) => {
+          return section.data[0]?.list?.length > 0 ? (
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                paddingBottom: 20,
+                paddingHorizontal: 10,
+              }}>
+              <Text variant="headlineSmall" style={{flex: 1}}>
+                {section?.title}
+              </Text>
+              <Icon
+                name={'keyboard-arrow-right'}
+                size={20}
+                color={theme.colors.neutral300}
+              />
+            </View>
+          ) : (
+            <></>
+          );
+        }}
         onEndReached={loadMoreList}
         ListFooterComponent={props =>
           moreListRequested ? <ProductSkeleton /> : <></>
