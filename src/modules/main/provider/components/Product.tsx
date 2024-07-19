@@ -40,7 +40,10 @@ const Product: React.FC<Product> = ({product, search = false, provider}) => {
     }
   };
 
-  const disabled = !provider?.isOpen && provider?.isOpen !== undefined;
+  const inStock =
+    Number(product?.item_details?.quantity?.available?.count) >= 1;
+  const disabled =
+    !inStock || (!provider?.isOpen && provider?.isOpen !== undefined);
 
   let imageSource = NoImageAvailable;
   if (product?.item_details?.descriptor?.symbol) {

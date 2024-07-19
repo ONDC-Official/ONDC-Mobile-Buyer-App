@@ -29,7 +29,7 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
           outlet={outlet}
           apiRequested={apiRequested}
         />
-        <FBProducts provider={provider?.id} domain={provider?.domain} />
+        <FBProducts provider={provider} domain={provider?.domain} />
       </View>
     </ScrollView>
   );
