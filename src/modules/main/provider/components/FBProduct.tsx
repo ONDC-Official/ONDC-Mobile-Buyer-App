@@ -39,16 +39,18 @@ import {useAppTheme} from '../../../../utils/theme';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
 import {areCustomisationsSame} from '../../product/details/ProductDetails';
+import {Grayscale} from 'react-native-color-matrix-image-filters';
 
 interface FBProduct {
   product: any;
+  provider: any;
 }
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
 const screenHeight: number = Dimensions.get('screen').height;
 
 const CancelToken = axios.CancelToken;
-const FBProduct: React.FC<FBProduct> = ({product}) => {
+const FBProduct: React.FC<FBProduct> = ({product, provider}) => {
   const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -486,7 +488,10 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
 
   const inStock =
     Number(product?.item_details?.quantity?.available?.count) >= 1;
-  const disabled = apiInProgress || !inStock;
+  const disabled =
+    apiInProgress ||
+    !inStock ||
+    (!provider?.isOpen && provider?.isOpen !== undefined);
 
   const currency = useMemo(
     () => CURRENCY_SYMBOLS[product?.item_details?.price?.currency],
@@ -507,7 +512,7 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
   return (
     <>
       <View style={styles.product}>
-        <TouchableOpacity style={styles.meta} onPress={showProductDetails}>
+        <TouchableOpacity style={styles.meta} disabled={disabled} onPress={showProductDetails}>
           <Text
             variant={'titleLarge'}
             style={[styles.field, styles.name]}
@@ -531,8 +536,15 @@ const FBProduct: React.FC<FBProduct> = ({product}) => {
         <View style={styles.actionContainer}>
           <TouchableOpacity
             style={styles.imageContainer}
+            disabled={disabled}
             onPress={showProductDetails}>
-            <FastImage style={styles.image} source={productImageSource} />
+            {disabled ? (
+              <Grayscale>
+                <FastImage style={styles.image} source={productImageSource} />
+              </Grayscale>
+            ) : (
+              <FastImage style={styles.image} source={productImageSource} />
+            )}
             <View style={styles.productTag}>
               <VegNonVegTag tags={product?.item_details?.tags} />
             </View>

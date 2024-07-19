@@ -8,11 +8,13 @@ import {useAppTheme} from '../../../../utils/theme';
 interface CustomMenuAccordion {
   section: any;
   selectedFilter: string;
+  provider: any;
 }
 
 const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
   section,
   selectedFilter,
+  provider
 }) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -37,7 +39,7 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
         )
         .map((item: any, index: number) => (
           <View key={item.id}>
-            <FBProduct product={item} />
+            <FBProduct product={item} provider={provider}/>
             {itemLength === index + 1 ? (
               <View style={styles.lastItem} />
             ) : (

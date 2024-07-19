@@ -17,7 +17,7 @@ const CancelToken = axios.CancelToken;
 const VegImage = require('../../../../assets/veg.png');
 const NonVegImage = require('../../../../assets/non_veg.png');
 
-const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
+const FBProducts = ({provider, domain}: {provider: any; domain: string}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -37,7 +37,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
       setMenuRequested(true);
       customMenuSource.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${CUSTOM_MENU}?provider=${provider}&domain=${domain}`,
+        `${API_BASE_URL}${CUSTOM_MENU}?provider=${provider?.id}&domain=${domain}`,
         customMenuSource.current.token,
       );
       const menuResponses = await Promise.all(
@@ -194,6 +194,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
             key={section.id}
             section={section}
             selectedFilter={selectedFilter}
+            provider={provider}
           />
         ))}
       </List.AccordionGroup>

@@ -7,6 +7,7 @@ import axios from 'axios';
 import Store from './components/Store';
 import {useAppTheme} from '../../../utils/theme';
 import Page from '../../../components/page/Page';
+import ProductSkeleton from '../../../components/skeleton/ProductSkeleton';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
@@ -31,7 +32,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   const {handleApiError} = useNetworkErrorHandling();
   const [providerId, setProviderId] = useState<string>('');
   const [locations, setLocations] = useState<any[]>([]);
-  const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
+  const [moreListRequested, setMoreListRequested] = useState<boolean>(true);
 
   useEffect(() => {
     navigation.setOptions({
@@ -42,18 +43,18 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
 
   const loadMoreList = () => {
     if (totalLocations.current > locations?.length && !moreListRequested) {
-      setMoreListRequested(true);
       getAllLocations()
         .then(() => {
-          setMoreListRequested(false);
+          // setMoreListRequested(false);
         })
         .catch(() => {
-          setMoreListRequested(false);
+          // setMoreListRequested(false);
         });
     }
   };
 
   const getAllLocations = async () => {
+    setMoreListRequested(true);
     try {
       source.current = CancelToken.source();
 
@@ -74,6 +75,8 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
       setLocations(list.sort((a: any, b: any) => a.timeToShip - b.timeToShip));
     } catch (error) {
       handleApiError(error);
+    } finally {
+      setMoreListRequested(false);
     }
   };
 
@@ -88,6 +91,9 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
           renderItem={renderItem}
           numColumns={3}
           onEndReached={loadMoreList}
+          ListFooterComponent={props =>
+            moreListRequested ? <ProductSkeleton /> : <></>
+          }
           keyExtractor={(item: any) => item.id}
         />
       </View>
