@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useMemo} from 'react';
 import {
   Image,
   Linking,
@@ -38,14 +38,6 @@ const OutletDetails: React.FC<OutletDetails> = ({
   const {formatNumber} = useFormatNumber();
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
     useMinutesToString();
-  const [maxDeliveryTime, setMaxDeliveryTime] = useState({
-    type: 'minutes',
-    time: 0,
-  });
-  const [minDeliveryTime, setMinDeliveryTime] = useState({
-    type: 'minutes',
-    time: 0,
-  });
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -59,21 +51,15 @@ const OutletDetails: React.FC<OutletDetails> = ({
 
   const callProvider = () => Linking.openURL('tel:+91 92729282982');
 
-  useEffect(() => {
+  const timeToShip = useMemo(() => {
     if (outlet) {
       let travelTime = (Number(outlet.distance) * 60) / 15;
-      const minTimeToShipMinutes = (outlet?.min_time_to_ship ?? 0) / 60;
-      const maxTimeToShipMinutes = (outlet?.max_time_to_ship ?? 0) / 60;
-      setMaxDeliveryTime(
-        convertMinutesToHumanReadable(
-          Number(maxTimeToShipMinutes) + travelTime,
-        ),
+      const medianTimeToShipMinutes = (outlet?.median_time_to_ship ?? 0) / 60;
+      return convertMinutesToHumanReadable(
+        Number(medianTimeToShipMinutes) + travelTime,
       );
-      setMinDeliveryTime(
-        convertMinutesToHumanReadable(
-          Number(minTimeToShipMinutes) + travelTime,
-        ),
-      );
+    } else {
+      return {type: 'minutes', time: 0};
     }
   }, [outlet]);
 
@@ -130,26 +116,10 @@ const OutletDetails: React.FC<OutletDetails> = ({
             <View style={styles.providerLocalityView}>
               <Image source={Timer} style={styles.imageIcon} />
               <Text variant={'labelLarge'} style={styles.address}>
-                {maxDeliveryTime.type === minDeliveryTime.type &&
-                maxDeliveryTime.time === minDeliveryTime.time
-                  ? translateMinutesToHumanReadable(
-                      maxDeliveryTime.type,
-                      maxDeliveryTime.time,
-                    )
-                  : maxDeliveryTime.type === minDeliveryTime.type
-                  ? `${
-                      minDeliveryTime.time
-                    } - ${translateMinutesToHumanReadable(
-                      maxDeliveryTime.type,
-                      maxDeliveryTime.time,
-                    )}`
-                  : `${translateMinutesToHumanReadable(
-                      minDeliveryTime.type,
-                      minDeliveryTime.time,
-                    )} - ${translateMinutesToHumanReadable(
-                      maxDeliveryTime.type,
-                      maxDeliveryTime.time,
-                    )}`}
+                {translateMinutesToHumanReadable(
+                  timeToShip.type,
+                  timeToShip.time,
+                )}
               </Text>
               {!provider?.isOpen && (
                 <>

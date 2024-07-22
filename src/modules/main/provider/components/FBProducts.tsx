@@ -137,10 +137,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
               ? setSelectedFilter('')
               : setSelectedFilter('nonveg')
           }>
-          <FastImage
-            source={NonVegImage}
-            style={styles.filterIcon}
-          />
+          <FastImage source={NonVegImage} style={styles.filterIcon} />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>
             {t('Cart.Non Veg')}
           </Text>
@@ -163,10 +160,7 @@ const FBProducts = ({provider, domain}: {provider: string; domain: string}) => {
               ? setSelectedFilter('')
               : setSelectedFilter('egg')
           }>
-          <FastImage
-            source={NonVegImage}
-            style={styles.filterIcon}
-          />
+          <FastImage source={NonVegImage} style={styles.filterIcon} />
           <Text variant={'bodyMedium'} style={styles.filterLabel}>
             {t('Cart.Egg')}
           </Text>

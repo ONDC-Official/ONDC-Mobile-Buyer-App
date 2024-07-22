@@ -1,19 +1,17 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import axios from 'axios';
-import {FlatList, StyleSheet, View, SectionList} from 'react-native';
+import {FlatList, SectionList, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {ProgressBar, Text} from 'react-native-paper';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import moment from 'moment';
 
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import {
   API_BASE_URL,
-  PRODUCT_SEARCH,
   CUSTOM_MENU,
+  PRODUCT_SEARCH,
 } from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import Filters from './Filters';
@@ -47,7 +45,6 @@ const Products: React.FC<Products> = ({
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {language} = useSelector(({auth}) => auth);
-  const {t} = useTranslation();
   const {
     startVoice,
     userInteractionStarted,
@@ -89,21 +86,6 @@ const Products: React.FC<Products> = ({
         url,
         productSearchSource.current.token,
       );
-      let maxMinutes = 0;
-      let minMinutes = 999999;
-      data.response.data.forEach((item: any) => {
-        const duration = moment.duration(
-          item?.item_details['@ondc/org/time_to_ship'],
-        );
-        let durationInMinutes = duration.format('m').replace(/\,/g, '');
-
-        if (maxMinutes < durationInMinutes) {
-          maxMinutes = durationInMinutes;
-        }
-        if (minMinutes > durationInMinutes) {
-          minMinutes = durationInMinutes;
-        }
-      });
       if (data.response.data.length > 0) {
         setPage(page + 1);
         setTotalProducts(data.response.count);

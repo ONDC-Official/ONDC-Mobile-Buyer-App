@@ -1,6 +1,6 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
@@ -47,7 +47,9 @@ const Store = ({store}: {store: any}) => {
     navigation.navigate('BrandDetails', routeParams);
   };
 
-  const timeToShip = convertMinutesToHumanReadable(store?.timeToShip);
+  const timeToShip = useMemo(() => {
+    return convertMinutesToHumanReadable(store?.timeToShip);
+  }, [store]);
 
   return (
     <TouchableOpacity
