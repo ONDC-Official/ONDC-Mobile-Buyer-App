@@ -95,7 +95,7 @@ const Products: React.FC<Products> = ({
             ? customMenu?.data?.data?.map((element: any, index: number) => {
                 let makeList: any = [];
                 data.response.data.forEach((item: any) => {
-                  if (element.id === item.customisation_menus[0].id) {
+                  if (element?.id === item.customisation_menus[0]?.id) {
                     makeList.push(item);
                   }
                 });
@@ -156,7 +156,7 @@ const Products: React.FC<Products> = ({
     const lowerQuery = searchQuery.toLowerCase();
     // Filter the products based on the search query
 
-    const listData = products.map((item: any) => {
+    return products.map((item: any) => {
       return {
         title: item.title,
         data: [
@@ -174,8 +174,6 @@ const Products: React.FC<Products> = ({
         ],
       };
     });
-
-    return listData;
   }, [products, searchQuery]);
 
   useEffect(() => {

@@ -34,7 +34,6 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
           providerId={provider.id}
           providerDomain={provider.domain}
           provider={provider}
-          outlet={outlet}
           subCategories={[]}
         />
       </View>
