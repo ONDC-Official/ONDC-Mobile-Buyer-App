@@ -705,8 +705,7 @@ const SubCart = ({route: {params}}: any) => {
           }}
           closePaymentSheet={closePaymentSheet}
           handleConfirmOrder={() => {
-            closePaymentSheet();
-            setConfirmModalVisible(true);
+            handleConfirmOrder(selectedItemsForInit, selectedItems).then(() => {});
           }}
           confirmOrderLoading={confirmOrderLoading}
           setActivePaymentMethod={setActivePaymentMethod}
