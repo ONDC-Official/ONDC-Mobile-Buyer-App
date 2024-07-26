@@ -16,7 +16,7 @@ import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {API_BASE_URL, CART} from '../../../../utils/apiActions';
+import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
 import {
   getCustomizations,
   getPriceWithCustomisations,
@@ -34,6 +34,8 @@ import {useAppTheme} from '../../../../utils/theme';
 import DeleteIcon from '../../../../assets/delete.svg';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 
 interface CartItems {
   fullCartItems: any[];
@@ -41,6 +43,7 @@ interface CartItems {
   providerWiseItems: any[];
   cartItems: any[];
   setCartItems: (items: any[]) => void;
+  updateSpecificCartItems: (items: any[]) => void;
   haveDistinctProviders: boolean;
   isProductCategoryIsDifferent: boolean;
 }
@@ -56,13 +59,17 @@ const CartItems: React.FC<CartItems> = ({
   providerWiseItems,
   cartItems,
   setCartItems,
+  updateSpecificCartItems,
 }) => {
   const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {deleteDataWithAuth, getDataWithAuth, putDataWithAuth} =
-    useNetworkHandling();
+  const {
+    deleteDataWithAuth,
+    getDataWithAuth,
+    putDataWithAuth,
+  } = useNetworkHandling();
   const {customizationState, setCustomizationState, customizationPrices} =
     useCustomizationStateHelper();
   const {updatingCartItem, updateSpecificCartItem} =
@@ -79,17 +86,20 @@ const CartItems: React.FC<CartItems> = ({
   const [updatingProduct, setUpdatingProduct] = useState<boolean>(false);
   const [itemQty, setItemQty] = useState<number>(1);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
+  const {handleApiError} = useNetworkErrorHandling();
+  const updateCart = userUpdateCartItem();
 
   const getProductDetails = async (productId: any) => {
     try {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}/protocol/item-details?id=${productId}`,
+        `${API_BASE_URL}${ITEM_DETAILS}?id=${productId}`,
         source.current.token,
       );
       setProductPayload(data);
     } catch (error) {
-      console.log('Error fetching product details:', error);
+      handleApiError(error);
+    } finally {
     }
   };
 
@@ -118,7 +128,7 @@ const CartItems: React.FC<CartItems> = ({
         source.current.token,
       );
       const list = cartItems.filter((item: any) => item._id !== itemId);
-      setCartItems(list);
+      updateSpecificCartItems(list);
       dispatch(updateCartItems(list));
     } catch (error) {
     } finally {
@@ -154,25 +164,53 @@ const CartItems: React.FC<CartItems> = ({
     try {
       setUpdatingProduct(true);
       const url = `${API_BASE_URL}${CART}/${uid}/${currentCartItem._id}`;
+
+      let customisations = await getCustomizations(
+        productPayload,
+        customizationState,
+      );
+
+      const subtotal =
+        productPayload?.item_details?.price?.value + customizationPrices;
+
+      const payload: any = {
+        id: productPayload.id,
+        local_id: productPayload.local_id,
+        bpp_id: productPayload.bpp_details.bpp_id,
+        bpp_uri: productPayload.context.bpp_uri,
+        contextCity: productPayload.context.city,
+        domain: productPayload.context.domain,
+        tags: productPayload.item_details.tags,
+        customisationState: customizationState,
+        quantity: {
+          count: itemQty,
+        },
+        provider: {
+          id: productPayload.bpp_details.bpp_id,
+          locations: productPayload.locations,
+          ...productPayload.provider_details,
+        },
+        location_details: productPayload.location_details,
+        product: {
+          id: productPayload.id,
+          subtotal,
+          ...productPayload.item_details,
+        },
+        customisations,
+        hasCustomisations: true,
+      };
+
       const items = cartItems.concat([]);
       const itemIndex = items.findIndex(
         item => item._id === currentCartItem._id,
       );
       if (itemIndex !== -1) {
-        let updatedCartItem = items[itemIndex];
-        const updatedCustomizations = await getCustomizations(
-          productPayload,
-          customizationState,
-        );
-        updatedCartItem.id = updatedCartItem.item.id;
-        updatedCartItem.item.customisations = updatedCustomizations;
-        updatedCartItem = updatedCartItem.item;
-        updatedCartItem.customisationState = customizationState;
-        updatedCartItem.quantity.count = itemQty;
         source.current = CancelToken.source();
-        await putDataWithAuth(url, updatedCartItem, source.current.token);
+        await putDataWithAuth(url, payload, source.current.token);
         hideCustomization();
-        setCartItems(items);
+
+        items[itemIndex] = {...items[itemIndex], item: payload};
+        updateSpecificCartItems(items);
       }
       hideCustomization();
     } catch (e) {

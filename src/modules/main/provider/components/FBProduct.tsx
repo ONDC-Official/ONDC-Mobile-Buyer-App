@@ -514,7 +514,10 @@ const FBProduct: React.FC<FBProduct> = ({product, provider}) => {
   return (
     <>
       <View style={styles.product}>
-        <TouchableOpacity style={styles.meta} disabled={disabled} onPress={showProductDetails}>
+        <TouchableOpacity
+          style={styles.meta}
+          disabled={disabled}
+          onPress={showProductDetails}>
           <Text
             variant={'titleLarge'}
             style={[styles.field, styles.name]}

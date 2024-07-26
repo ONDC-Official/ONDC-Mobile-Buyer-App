@@ -94,9 +94,9 @@ const SubCart = ({route: {params}}: any) => {
     dispatch(updateCartItems(items));
     setCartItems(items[params.index].items);
   };
-  const deleteCartItems = (items: any[]) => {
+  const updateSpecificCartItems = (items: any[]) => {
     setCartItems(items);
-  }
+  };
 
   const {
     loading,
@@ -571,7 +571,7 @@ const SubCart = ({route: {params}}: any) => {
                     providerWiseItems={providerWiseItems}
                     cartItems={cartItems}
                     setCartItems={updateDetailCartItems}
-                    deleteCartItems={deleteCartItems}
+                    updateSpecificCartItems={updateSpecificCartItems}
                     haveDistinctProviders={haveDistinctProviders}
                     isProductCategoryIsDifferent={isProductCategoryIsDifferent}
                   />
@@ -709,7 +709,9 @@ const SubCart = ({route: {params}}: any) => {
           }}
           closePaymentSheet={closePaymentSheet}
           handleConfirmOrder={() => {
-            handleConfirmOrder(selectedItemsForInit, selectedItems).then(() => {});
+            handleConfirmOrder(selectedItemsForInit, selectedItems).then(
+              () => {},
+            );
           }}
           confirmOrderLoading={confirmOrderLoading}
           setActivePaymentMethod={setActivePaymentMethod}
