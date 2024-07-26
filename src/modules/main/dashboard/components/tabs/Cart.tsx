@@ -122,7 +122,7 @@ const DashboardCart = ({navigation}: any) => {
           {t('Cart.All Cart')}
         </Text>
       </View>
-      {apiInProgress ? (
+      {apiInProgress && allCart.length === 0 ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size={'large'} color={theme.colors.primary} />
         </View>
