@@ -1,5 +1,5 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {Keyboard, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {Text} from 'react-native-paper';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import {useSelector} from 'react-redux';
@@ -55,63 +55,82 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {cartItems} = useSelector(({cart}) => cart);
+  const [visible, setVisible] = useState<boolean>(true);
 
-  return (
-    <View style={[styles.container, styles.boxShadow]}>
-      {state.routes.map((route, index) => {
-        const {options} = descriptors[route.key];
-        const label = route.name;
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setVisible(false);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setVisible(true);
+    });
 
-        const isFocused = state.index === index;
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
-        const onPress = () => {
-          const event = navigation.emit({
-            type: 'tabPress',
-            target: route.key,
-            canPreventDefault: true,
-          });
+  if (visible) {
+    return (
+      <View style={[styles.container, styles.boxShadow]}>
+        {state.routes.map((route, index) => {
+          const {options} = descriptors[route.key];
+          const label = route.name;
 
-          if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name, route.params);
-          }
-        };
+          const isFocused = state.index === index;
 
-        const onLongPress = () => {
-          navigation.emit({
-            type: 'tabLongPress',
-            target: route.key,
-          });
-        };
+          const onPress = () => {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true,
+            });
 
-        const badge = cartItems?.length;
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name, route.params);
+            }
+          };
 
-        return (
-          <View key={route.name} style={styles.tab}>
-            <TouchableOpacity
-              style={[styles.button, isFocused ? styles.activeButton : {}]}
-              accessibilityRole="button"
-              accessibilityState={isFocused ? {selected: true} : {}}
-              accessibilityLabel={options.tabBarAccessibilityLabel}
-              testID={options.tabBarTestID}
-              onPress={onPress}
-              onLongPress={onLongPress}>
-              <TabIcon name={route.name} isFocused={isFocused} />
-              <Text
-                variant={'labelMedium'}
-                style={isFocused ? styles.activeButtonText : styles.tabText}>
-                {t(`${label}.${label}`)}
-              </Text>
-              {route.name === 'Cart' && badge ? (
-                <View style={styles.badge}>
-                  <Text style={styles.badgeLabel}>{badge}</Text>
-                </View>
-              ) : null}
-            </TouchableOpacity>
-          </View>
-        );
-      })}
-    </View>
-  );
+          const onLongPress = () => {
+            navigation.emit({
+              type: 'tabLongPress',
+              target: route.key,
+            });
+          };
+
+          const badge = cartItems?.length;
+
+          return (
+            <View key={route.name} style={styles.tab}>
+              <TouchableOpacity
+                style={[styles.button, isFocused ? styles.activeButton : {}]}
+                accessibilityRole="button"
+                accessibilityState={isFocused ? {selected: true} : {}}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+                testID={options.tabBarTestID}
+                onPress={onPress}
+                onLongPress={onLongPress}>
+                <TabIcon name={route.name} isFocused={isFocused} />
+                <Text
+                  variant={'labelMedium'}
+                  style={isFocused ? styles.activeButtonText : styles.tabText}>
+                  {t(`${label}.${label}`)}
+                </Text>
+                {route.name === 'Cart' && badge ? (
+                  <View style={styles.badge}>
+                    <Text style={styles.badgeLabel}>{badge}</Text>
+                  </View>
+                ) : null}
+              </TouchableOpacity>
+            </View>
+          );
+        })}
+      </View>
+    );
+  }
+
+  return <></>;
 };
 
 const makeStyles = (colors: any) =>
