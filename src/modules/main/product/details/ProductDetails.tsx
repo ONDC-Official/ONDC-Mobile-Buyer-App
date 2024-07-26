@@ -481,147 +481,135 @@ const ProductDetails: React.FC<ProductDetails> = ({
     addToCartLoading;
 
   return (
-    <View style={styles.container}>
-      <Page>
-        {userInteractionStarted && (
-          <ProgressBar indeterminate color={theme.colors.success600} />
-        )}
-        <ScrollView
-          style={styles.container}
-          showsVerticalScrollIndicator={false}>
-          <ProductImages
-            images={[product?.item_details?.descriptor?.symbol].concat(
-              product?.item_details?.descriptor?.images,
-            )}
-          />
-          <View style={styles.details}>
-            {(product?.context?.domain === FB_DOMAIN ||
-              product?.context?.domain === GROCERY_DOMAIN) && (
-              <View style={styles.stockRow}>
-                <VegNonVegTag tags={product?.item_details?.tags} showLabel />
-              </View>
-            )}
-            <Text variant="headlineSmall" style={styles.title}>
-              {product?.item_details?.descriptor?.name}
-            </Text>
-            {priceRange ? (
-              <View style={styles.priceContainer}>
-                <Text variant="headlineSmall" style={styles.price}>
-                  {`₹${formatNumber(priceRange?.minPrice)} - ₹${formatNumber(
-                    priceRange?.maxPrice,
-                  )}`}
-                </Text>
-              </View>
-            ) : (
-              <View style={styles.priceContainer}>
-                <Text variant="headlineSmall" style={styles.price}>
-                  ₹{formatNumber(product?.item_details?.price?.value)}
-                </Text>
-                {Number(product?.item_details?.price?.maximum_value) !==
-                  product?.item_details?.price?.value && (
-                  <Text variant="titleSmall" style={styles.maximumAmount}>
-                    ₹
-                    {formatNumber(
-                      Number(
-                        product?.item_details?.price?.maximum_value,
-                      ).toFixed(0),
-                    )}
-                  </Text>
-                )}
-              </View>
-            )}
-            <VariationsRenderer
-              product={product}
-              variationState={variationState}
-              setVariationState={setVariationState}
-              chartImage={product?.attributes?.size_chart || ''}
-              isFashion={product?.context?.domain === FASHION_DOMAIN}
-            />
-            {product?.context?.domain === FB_DOMAIN && (
-              <>
-                <FBProductCustomization
-                  product={product}
-                  customizationState={customizationState}
-                  setCustomizationState={setCustomizationState}
-                  isEditFlow={false}
-                  setItemOutOfStock={setItemOutOfStock}
-                />
-              </>
-            )}
-            <View style={styles.addToCartContainer}>
-              {product?.context.domain !== FB_DOMAIN &&
-              isItemAvailableInCart &&
-              itemAvailableInCart ? (
-                <View style={styles.buttonGroup}>
-                  <TouchableOpacity
-                    style={styles.incrementButton}
-                    onPress={() => {
-                      if (itemAvailableInCart.item.quantity.count === 1) {
-                        deleteCartItem(itemAvailableInCart._id).then(() => {});
-                      } else {
-                        addToCart(false, false).then(() => {});
-                      }
-                    }}>
-                    <Icon
-                      name={'minus'}
-                      color={theme.colors.primary}
-                      size={18}
-                    />
-                  </TouchableOpacity>
-                  <Text variant={'bodyLarge'} style={styles.quantity}>
-                    {addToCartLoading ? (
-                      <ActivityIndicator
-                        size={16}
-                        color={theme.colors.primary}
-                      />
-                    ) : (
-                      formatNumber(itemAvailableInCart.item.quantity.count)
-                    )}
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.incrementButton}
-                    onPress={() => addToCart(false, true)}>
-                    <Icon
-                      name={'plus'}
-                      color={theme.colors.primary}
-                      size={18}
-                    />
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  style={[
-                    styles.addToCartButton,
-                    disableActionButtons
-                      ? globalStyles.disabledContainedButton
-                      : globalStyles.outlineButton,
-                  ]}
-                  onPress={() => addToCart(false, true)}
-                  disabled={disableActionButtons}>
-                  {addToCartLoading ? (
-                    <ActivityIndicator
-                      size={'small'}
-                      color={theme.colors.primary}
-                    />
-                  ) : (
-                    <Text
-                      variant={'bodyLarge'}
-                      style={
-                        disableActionButtons
-                          ? globalStyles.disabledOutlineButtonText
-                          : styles.addToCartLabel
-                      }>
-                      {t('Cart.Add to cart')}
-                    </Text>
+    <Page>
+      {userInteractionStarted && (
+        <ProgressBar indeterminate color={theme.colors.success600} />
+      )}
+      <ScrollView
+        contentContainerStyle={styles.contentContainer}
+        style={styles.container}
+        showsVerticalScrollIndicator={false}>
+        <ProductImages
+          images={[product?.item_details?.descriptor?.symbol].concat(
+            product?.item_details?.descriptor?.images,
+          )}
+        />
+        <View style={styles.details}>
+          {(product?.context?.domain === FB_DOMAIN ||
+            product?.context?.domain === GROCERY_DOMAIN) && (
+            <View style={styles.stockRow}>
+              <VegNonVegTag tags={product?.item_details?.tags} showLabel />
+            </View>
+          )}
+          <Text variant="headlineSmall" style={styles.title}>
+            {product?.item_details?.descriptor?.name}
+          </Text>
+          {priceRange ? (
+            <View style={styles.priceContainer}>
+              <Text variant="headlineSmall" style={styles.price}>
+                {`₹${formatNumber(priceRange?.minPrice)} - ₹${formatNumber(
+                  priceRange?.maxPrice,
+                )}`}
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.priceContainer}>
+              <Text variant="headlineSmall" style={styles.price}>
+                ₹{formatNumber(product?.item_details?.price?.value)}
+              </Text>
+              {Number(product?.item_details?.price?.maximum_value) !==
+                product?.item_details?.price?.value && (
+                <Text variant="titleSmall" style={styles.maximumAmount}>
+                  ₹
+                  {formatNumber(
+                    Number(product?.item_details?.price?.maximum_value).toFixed(
+                      0,
+                    ),
                   )}
-                </TouchableOpacity>
+                </Text>
               )}
             </View>
-            <AboutProduct product={product} inStock />
+          )}
+          <VariationsRenderer
+            product={product}
+            variationState={variationState}
+            setVariationState={setVariationState}
+            chartImage={product?.attributes?.size_chart || ''}
+            isFashion={product?.context?.domain === FASHION_DOMAIN}
+          />
+          {product?.context?.domain === FB_DOMAIN && (
+            <>
+              <FBProductCustomization
+                product={product}
+                customizationState={customizationState}
+                setCustomizationState={setCustomizationState}
+                isEditFlow={false}
+                setItemOutOfStock={setItemOutOfStock}
+              />
+            </>
+          )}
+          <View style={styles.addToCartContainer}>
+            {product?.context.domain !== FB_DOMAIN &&
+            isItemAvailableInCart &&
+            itemAvailableInCart ? (
+              <View style={styles.buttonGroup}>
+                <TouchableOpacity
+                  style={styles.incrementButton}
+                  onPress={() => {
+                    if (itemAvailableInCart.item.quantity.count === 1) {
+                      deleteCartItem(itemAvailableInCart._id).then(() => {});
+                    } else {
+                      addToCart(false, false).then(() => {});
+                    }
+                  }}>
+                  <Icon name={'minus'} color={theme.colors.primary} size={18} />
+                </TouchableOpacity>
+                <Text variant={'bodyLarge'} style={styles.quantity}>
+                  {addToCartLoading ? (
+                    <ActivityIndicator size={16} color={theme.colors.primary} />
+                  ) : (
+                    formatNumber(itemAvailableInCart.item.quantity.count)
+                  )}
+                </Text>
+                <TouchableOpacity
+                  style={styles.incrementButton}
+                  onPress={() => addToCart(false, true)}>
+                  <Icon name={'plus'} color={theme.colors.primary} size={18} />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={[
+                  styles.addToCartButton,
+                  disableActionButtons
+                    ? globalStyles.disabledContainedButton
+                    : globalStyles.outlineButton,
+                ]}
+                onPress={() => addToCart(false, true)}
+                disabled={disableActionButtons}>
+                {addToCartLoading ? (
+                  <ActivityIndicator
+                    size={'small'}
+                    color={theme.colors.primary}
+                  />
+                ) : (
+                  <Text
+                    variant={'bodyLarge'}
+                    style={
+                      disableActionButtons
+                        ? globalStyles.disabledOutlineButtonText
+                        : styles.addToCartLabel
+                    }>
+                    {t('Cart.Add to cart')}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            )}
           </View>
-        </ScrollView>
-      </Page>
-    </View>
+          <AboutProduct product={product} inStock />
+        </View>
+      </ScrollView>
+    </Page>
   );
 };
 
@@ -630,6 +618,9 @@ const makeStyles = (colors: any) =>
     container: {
       flex: 1,
       backgroundColor: colors.white,
+    },
+    contentContainer: {
+      paddingBottom: 24,
     },
     header: {
       flexDirection: 'row',
