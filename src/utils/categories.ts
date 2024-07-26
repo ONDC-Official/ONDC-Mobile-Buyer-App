@@ -56,14 +56,6 @@ export const CATEGORIES: any = [
     domain: 'ONDC:RET13',
   },
   {
-    id: '8',
-    name: 'Agriculture',
-    shortName: 'Agriculture',
-    Icon: 'https://d2v00mt5yqy11h.cloudfront.net/categories/agriculture.png',
-    routeName: 'Agriculture',
-    domain: 'ONDC:AGR10',
-  },
-  {
     id: '9',
     name: 'Appliances',
     shortName: 'Appliances',
