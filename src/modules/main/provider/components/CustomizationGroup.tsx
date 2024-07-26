@@ -48,7 +48,7 @@ const CustomizationGroup = ({
     <View key={group?.id}>
       <View style={styles.filterContainer}>
         <View style={styles.groupHeader}>
-          <View>
+          <View style={styles.groupMeta}>
             <Text variant={'bodyLarge'} style={styles.groupName}>
               {group?.name}
             </Text>
@@ -217,6 +217,10 @@ const makeStyles = (colors: any) =>
       borderBottomWidth: 1,
       alignItems: 'center',
       paddingBottom: 8,
+    },
+    groupMeta: {
+      flex: 1,
+      paddingRight: 8,
     },
     mandatory: {
       paddingVertical: 6,
