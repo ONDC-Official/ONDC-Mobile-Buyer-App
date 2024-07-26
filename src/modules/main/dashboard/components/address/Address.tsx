@@ -81,12 +81,17 @@ const Address: React.FC<Address> = ({
             status={isCurrentAddress ? 'checked' : 'unchecked'}
           />
           {item?.descriptor?.name && (
-            <Text variant="bodyLarge" style={styles.name}>
+            <Text
+              variant="bodyLarge"
+              style={styles.name}
+              numberOfLines={1}
+              ellipsizeMode={'tail'}>
               {item?.descriptor?.name}
             </Text>
           )}
         </View>
         <TouchableOpacity
+          style={styles.editButton}
           onPress={() => navigation.navigate('UpdateAddress', {address: item})}>
           <Icon name={'pencil'} color={theme.colors.primary} size={16} />
         </TouchableOpacity>
@@ -103,7 +108,6 @@ export default Address;
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     card: {
-      backgroundColor: colors.white,
       marginBottom: 16,
       borderWidth: 1,
       borderColor: colors.neutral100,
@@ -118,12 +122,20 @@ const makeStyles = (colors: any) =>
     titleContainer: {
       flexDirection: 'row',
       alignItems: 'center',
+      flex: 1,
     },
     name: {
-      marginLeft: 8,
+      marginHorizontal: 8,
       color: colors.neutral400,
+      flex: 1,
     },
     description: {
       color: colors.neutral300,
+    },
+    editButton: {
+      width: 24,
+      height: 24,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
   });
