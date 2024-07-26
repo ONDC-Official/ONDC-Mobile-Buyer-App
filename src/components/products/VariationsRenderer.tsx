@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Dialog, Portal, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import FastImage from 'react-native-fast-image';
@@ -312,58 +312,64 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
             )}
           </View>
           <View style={styles.groupOptions}>
-            {groupData.options.map((option: any) => {
-              const isSelected = groupData.selected.includes(option);
-              if (groupName === 'color') {
-                return (
-                  <TouchableOpacity
-                    key={option}
-                    style={[
-                      styles.dotContainer,
-                      isSelected ? styles.selectedDotContainer : {},
-                    ]}
-                    onPress={() => {
-                      if (isUOM) {
-                        handleUOMClick(groupData, option);
-                      } else {
-                        handleVariationClick(groupData, option);
-                      }
-                    }}>
-                    <View
-                      style={[styles.colorDot, {backgroundColor: option}]}
-                    />
-                  </TouchableOpacity>
-                );
-              } else {
-                return (
-                  <TouchableOpacity
-                    key={option}
-                    style={[
-                      isSelected
-                        ? globalStyles.containedButton
-                        : styles.outlineButton,
-                      styles.customization,
-                    ]}
-                    onPress={() => {
-                      if (isUOM) {
-                        handleUOMClick(groupData, option);
-                      } else {
-                        handleVariationClick(groupData, option);
-                      }
-                    }}>
-                    <Text
-                      variant="bodyLarge"
-                      style={
+            <FlatList
+              data={groupData.options}
+              renderItem={({item}: {item: any}) => {
+                const isSelected = groupData.selected.includes(item);
+                if (groupName === 'color') {
+                  return (
+                    <TouchableOpacity
+                      key={item}
+                      style={[
+                        styles.dotContainer,
+                        isSelected ? styles.selectedDotContainer : {},
+                      ]}
+                      onPress={() => {
+                        if (isUOM) {
+                          handleUOMClick(groupData, item);
+                        } else {
+                          handleVariationClick(groupData, item);
+                        }
+                      }}>
+                      <View
+                        style={[styles.colorDot, {backgroundColor: item}]}
+                      />
+                    </TouchableOpacity>
+                  );
+                } else {
+                  return (
+                    <TouchableOpacity
+                      key={item}
+                      style={[
                         isSelected
-                          ? globalStyles.containedButtonText
-                          : styles.outlineButtonText
-                      }>
-                      {option}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }
-            })}
+                          ? globalStyles.containedButton
+                          : styles.outlineButton,
+                        styles.customization,
+                      ]}
+                      onPress={() => {
+                        if (isUOM) {
+                          handleUOMClick(groupData, item);
+                        } else {
+                          handleVariationClick(groupData, item);
+                        }
+                      }}>
+                      <Text
+                        variant="bodyLarge"
+                        style={
+                          isSelected
+                            ? globalStyles.containedButtonText
+                            : styles.outlineButtonText
+                        }>
+                        {item}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                }
+              }}
+              horizontal
+              keyExtractor={item => item}
+              showsHorizontalScrollIndicator={false}
+            />
           </View>
         </View>
         {openSizeChart && chartImage && (
@@ -412,8 +418,6 @@ const makeStyles = (colors: any) =>
       marginLeft: 16,
     },
     groupOptions: {
-      flexDirection: 'row',
-      alignItems: 'center',
       marginTop: 12,
     },
     customization: {
