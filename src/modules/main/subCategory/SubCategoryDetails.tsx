@@ -38,15 +38,12 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           category={params.category}
           setCurrentSubCategory={setCurrentSubCategory}
         />
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Products
-            providerId={null}
-            customMenu={null}
-            subCategories={[currentSubCategory]}
-            search
-            provider={null}
-          />
-        </ScrollView>
+        <Products
+          providerId={null}
+          subCategories={[currentSubCategory]}
+          search
+          provider={null}
+        />
       </View>
     </Page>
   );

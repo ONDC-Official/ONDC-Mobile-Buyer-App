@@ -27,7 +27,7 @@ interface Products {
   subCategories: any[];
   search?: boolean;
   provider: any;
-  providerDomain: string;
+  providerDomain?: string;
 }
 
 const CancelToken = axios.CancelToken;
@@ -181,7 +181,9 @@ const Products: React.FC<Products> = ({
       if (providerId) {
         productSearchSource.current = CancelToken.source();
         const customdMenu = await getDataWithAuth(
-          `${API_BASE_URL}${CUSTOM_MENU}?provider=${providerId}&domain=${providerDomain}`,
+          `${API_BASE_URL}${CUSTOM_MENU}?provider=${providerId}${
+            providerDomain ? `&domain=${providerDomain}` : ''
+          } `,
           productSearchSource.current.token,
         );
         setCustomData(customdMenu);
