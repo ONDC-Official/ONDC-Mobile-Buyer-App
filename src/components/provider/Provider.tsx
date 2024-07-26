@@ -13,6 +13,9 @@ import moment from 'moment';
 import 'moment-duration-format';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {useAppTheme} from '../../utils/theme';
 import VegNonVegTag from '../products/VegNonVegTag';
 import {
@@ -24,9 +27,7 @@ import {calculateDistanceBetweenPoints} from '../../utils/utils';
 import useMinutesToString from '../../hooks/useMinutesToString';
 import useFormatNumber from '../../hooks/useFormatNumber';
 
-const Location = require('../../assets/location.png');
 const NoImageAvailable = require('../../assets/noImage.png');
-const Timer = require('../../assets/timer.png');
 
 const Provider = ({provider}: {provider: any}) => {
   const {t} = useTranslation();
@@ -158,14 +159,22 @@ const Provider = ({provider}: {provider: any}) => {
               {locality}
             </Text>
             <View style={styles.dotView} />
-            <Image style={styles.imageIcon} source={Location} />
-            <Text variant={'labelMedium'} style={styles.providerLocality}>
+            <Icon
+              name={'location-pin'}
+              size={16}
+              color={theme.colors.neutral200}
+            />
+            <Text variant={'labelMedium'} style={styles.distance}>
               {t('Store.km', {distance: formatNumber(distance)})}
             </Text>
             <View style={styles.providerLocalityView}>
               <View style={styles.dotView} />
-              <Image style={styles.imageIcon} source={Timer} />
-              <Text variant={'labelMedium'} style={styles.providerLocality}>
+              <MaterialCommunityIcon
+                name={'clock'}
+                size={16}
+                color={theme.colors.neutral200}
+              />
+              <Text variant={'labelMedium'} style={styles.distance}>
                 {provider?.items.length === 1
                   ? translateMinutesToHumanReadable(
                       maxDeliveryTime.type,
@@ -231,7 +240,6 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
     },
-    imageIcon: {marginRight: 5},
     dotView: {
       height: 3,
       width: 3,
@@ -241,6 +249,10 @@ const makeStyles = (colors: any) =>
     },
     providerLocality: {
       color: colors.neutral300,
+    },
+    distance: {
+      color: colors.neutral300,
+      marginLeft: 3,
     },
     providerMeta: {
       flex: 1,
