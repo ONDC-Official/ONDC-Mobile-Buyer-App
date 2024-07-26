@@ -90,7 +90,7 @@ const AddressList: React.FC<AddressList> = ({
   return (
     <View style={styles.addressFormContainer}>
       <View style={styles.header}>
-        <Text variant={'titleMedium'}>
+        <Text variant={'headlineSmall'}>
           {t('Address List.Select a Delivery Address')}
         </Text>
       </View>
@@ -153,8 +153,10 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     addressFormContainer: {
       flex: 1,
+      backgroundColor: colors.neutral50,
     },
     shippingAddress: {
+      marginTop: 16,
       marginBottom: 12,
       paddingHorizontal: 16,
     },
@@ -175,6 +177,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       paddingBottom: 16,
       paddingHorizontal: 16,
+      backgroundColor: colors.white,
     },
     button: {
       marginTop: 20,
@@ -189,6 +192,7 @@ const makeStyles = (colors: any) =>
     },
     contentContainerStyle: {
       paddingBottom: 16,
+      paddingHorizontal: 16,
     },
   });
 export default AddressList;

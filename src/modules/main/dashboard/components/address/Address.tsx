@@ -112,7 +112,10 @@ const makeStyles = (colors: any) =>
       borderWidth: 1,
       borderColor: colors.neutral100,
       borderRadius: 8,
-      padding: 16,
+      paddingLeft: 8,
+      paddingRight: 16,
+      paddingVertical: 16,
+      backgroundColor: colors.white,
     },
     header: {
       flexDirection: 'row',
@@ -131,6 +134,7 @@ const makeStyles = (colors: any) =>
     },
     description: {
       color: colors.neutral300,
+      paddingLeft: 8,
     },
     editButton: {
       width: 24,
