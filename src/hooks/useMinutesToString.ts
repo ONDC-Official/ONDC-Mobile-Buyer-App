@@ -34,7 +34,7 @@ export default () => {
         return t('Store.hours', {time: `${lower}-${higher}`});
 
       default:
-        return t('Store.minutes', {time: `${lower}-${higher}`});
+        return t('Store.minutes', {time: lower});
     }
   };
 
