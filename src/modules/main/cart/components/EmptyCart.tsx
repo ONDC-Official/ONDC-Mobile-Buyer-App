@@ -41,6 +41,7 @@ const makeStyles = (colors: any) =>
     emptyDescription: {
       marginVertical: 8,
       color: colors.neutral400,
+      textAlign: 'center',
     },
   });
 
