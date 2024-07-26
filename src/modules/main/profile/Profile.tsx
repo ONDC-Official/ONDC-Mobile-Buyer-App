@@ -19,11 +19,12 @@ const Profile = () => {
   const {t} = useTranslation();
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
-  const {name, emailId} = useSelector(({auth}) => auth);
-  const [modalVisible, setModalVisible] = useState<boolean>(true);
+  const {name, emailId} = useSelector((state: any) => state.auth);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const verifyEmail = async () => {
     await auth().currentUser?.sendEmailVerification();
+    setModalVisible(true);
   };
 
   const closeModal = () => setModalVisible(false);
