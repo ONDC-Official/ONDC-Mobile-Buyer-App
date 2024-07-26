@@ -94,6 +94,9 @@ const SubCart = ({route: {params}}: any) => {
     dispatch(updateCartItems(items));
     setCartItems(items[params.index].items);
   };
+  const deleteCartItems = (items: any[]) => {
+    setCartItems(items);
+  }
 
   const {
     loading,
@@ -568,6 +571,7 @@ const SubCart = ({route: {params}}: any) => {
                     providerWiseItems={providerWiseItems}
                     cartItems={cartItems}
                     setCartItems={updateDetailCartItems}
+                    deleteCartItems={deleteCartItems}
                     haveDistinctProviders={haveDistinctProviders}
                     isProductCategoryIsDifferent={isProductCategoryIsDifferent}
                   />
