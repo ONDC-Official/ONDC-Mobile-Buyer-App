@@ -95,7 +95,7 @@ const SubCart = ({route: {params}}: any) => {
     setCartItems(items[params.index].items);
   };
 
-  const deleteCartItems = (items: any[]) => {
+  const updateSpecificCartItems = (items: any[]) => {
     setCartItems(items);
   };
 
@@ -153,7 +153,6 @@ const SubCart = ({route: {params}}: any) => {
 
   const navigateToHome = () => {
     stopAndDestroyVoiceListener().then(() => {
-      console.log('Inside then', providerWiseItems.length);
       if (providerWiseItems?.length > 0) {
         const routeParams: any = {
           brandId: providerWiseItems[0]?.items[0]?.item?.provider?.id,
@@ -583,7 +582,7 @@ const SubCart = ({route: {params}}: any) => {
                     providerWiseItems={providerWiseItems}
                     cartItems={cartItems}
                     setCartItems={updateDetailCartItems}
-                    deleteCartItems={deleteCartItems}
+                    updateSpecificCartItems={updateSpecificCartItems}
                     haveDistinctProviders={haveDistinctProviders}
                     isProductCategoryIsDifferent={isProductCategoryIsDifferent}
                   />
