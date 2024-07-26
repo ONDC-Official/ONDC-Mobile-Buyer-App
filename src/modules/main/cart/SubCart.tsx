@@ -772,6 +772,7 @@ const makeStyles = (colors: any) =>
     changeButton: {
       borderRadius: 40,
       height: 36,
+      borderColor: colors.primary,
     },
     changeButtonLabel: {
       margin: 0,
