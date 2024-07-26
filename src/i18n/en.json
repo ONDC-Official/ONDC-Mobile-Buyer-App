@@ -47,7 +47,7 @@
     "Cart": "Cart",
     "All Cart": "All Cart",
     "My Cart": "My Cart",
-    "Items in cart": "Items in cart {{count}}",
+    "Items in cart": "Items in cart ({{count}})",
     "Total": "Total",
     "View Cart": "View Cart",
     "Customization for": "Customization for",

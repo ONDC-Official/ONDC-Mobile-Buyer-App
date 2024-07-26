@@ -47,7 +47,7 @@
     "Cart": "কার্ট",
     "All Cart": "সমস্ত কার্ট",
     "My Cart": "মাই কার্ট",
-    "Items in cart": "কার্টে থাকা জিনিসগুলি {{count}}",
+    "Items in cart": "কার্টে থাকা জিনিসগুলি ({{count}})",
     "Total": "মোট",
     "View Cart": "কার্ট দেখুন",
     "Customization for": "এর জন্য কাস্টমাইজেশন",

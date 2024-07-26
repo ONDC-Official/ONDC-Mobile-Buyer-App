@@ -47,7 +47,7 @@
     "Cart": "कार्ट",
     "All Cart": "सभी कार्ट",
     "My Cart": "मेरा कार्ट",
-    "Items in cart": "कार्ट {{count}} में आइटम",
+    "Items in cart": "कार्ट में आइटम ({{count}})",
     "Total": "कुल",
     "View Cart": "कार्ट देखें",
     "Customization for": "के लिए अनुकूलन",
