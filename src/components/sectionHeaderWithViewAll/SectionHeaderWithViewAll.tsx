@@ -17,7 +17,11 @@ const SectionHeaderWithViewAll = ({
 
   return (
     <View style={styles.header}>
-      <Text variant={'titleLarge'} style={styles.title}>
+      <Text
+        variant={'titleLarge'}
+        style={styles.title}
+        ellipsizeMode={'tail'}
+        numberOfLines={1}>
         {title}
       </Text>
       <TouchableOpacity style={styles.viewAllContainer} onPress={viewAll}>
@@ -48,6 +52,8 @@ const makeStyles = (colors: any) =>
     },
     title: {
       color: colors.neutral400,
+      flex: 1,
+      paddingRight: 8,
     },
     viewAllLabel: {
       color: colors.neutral400,
