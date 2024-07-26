@@ -94,9 +94,10 @@ const SubCart = ({route: {params}}: any) => {
     dispatch(updateCartItems(items));
     setCartItems(items[params.index].items);
   };
+
   const deleteCartItems = (items: any[]) => {
     setCartItems(items);
-  }
+  };
 
   const {
     loading,
@@ -152,7 +153,15 @@ const SubCart = ({route: {params}}: any) => {
 
   const navigateToHome = () => {
     stopAndDestroyVoiceListener().then(() => {
-      navigation.navigate('Dashboard');
+      console.log('Inside then', providerWiseItems.length);
+      if (providerWiseItems?.length > 0) {
+        const routeParams: any = {
+          brandId: providerWiseItems[0]?.items[0]?.item?.provider?.id,
+        };
+        routeParams.outletId =
+          providerWiseItems[0]?.items[0]?.item?.location_details?.id;
+        navigation.navigate('BrandDetails', routeParams);
+      }
     });
   };
 
@@ -544,6 +553,9 @@ const SubCart = ({route: {params}}: any) => {
         </TouchableOpacity>
       ),
     });
+  }, [providerWiseItems]);
+
+  useEffect(() => {
     setDeliveryAddress(address);
   }, []);
 
@@ -709,7 +721,9 @@ const SubCart = ({route: {params}}: any) => {
           }}
           closePaymentSheet={closePaymentSheet}
           handleConfirmOrder={() => {
-            handleConfirmOrder(selectedItemsForInit, selectedItems).then(() => {});
+            handleConfirmOrder(selectedItemsForInit, selectedItems).then(
+              () => {},
+            );
           }}
           confirmOrderLoading={confirmOrderLoading}
           setActivePaymentMethod={setActivePaymentMethod}
@@ -792,6 +806,7 @@ const makeStyles = (colors: any) =>
     },
     address: {
       flexShrink: 1,
+      marginRight: 8,
     },
     addressTitle: {
       color: colors.neutral400,
