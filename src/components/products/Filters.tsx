@@ -3,6 +3,7 @@ import {Text} from 'react-native-paper';
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import {useTranslation} from 'react-i18next';
 import {
   API_BASE_URL,
   PRODUCT_ATTRIBUTE_VALUES,
@@ -13,7 +14,6 @@ import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import FilterList from './FilterList';
 import {useAppTheme} from '../../utils/theme';
 import FilterIcon from '../../assets/filter.svg';
-import {useTranslation} from 'react-i18next';
 
 interface Filters {
   providerId: any;

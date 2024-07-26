@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {useAppTheme} from '../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import { convertHexToName } from "../../utils/utils";
 
 interface FilterList {
   attributes: any[];

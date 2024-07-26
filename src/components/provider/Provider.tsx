@@ -155,7 +155,11 @@ const Provider = ({provider}: {provider: any}) => {
             {provider?.descriptor?.name}
           </Text>
           <View style={styles.providerLocalityView}>
-            <Text variant={'labelMedium'} style={styles.providerLocality}>
+            <Text
+              variant={'labelMedium'}
+              style={styles.providerLocality}
+              numberOfLines={1}
+              ellipsizeMode={'tail'}>
               {locality}
             </Text>
             <View style={styles.dotView} />
@@ -249,6 +253,7 @@ const makeStyles = (colors: any) =>
     },
     providerLocality: {
       color: colors.neutral300,
+      flex: 1,
     },
     distance: {
       color: colors.neutral300,

@@ -79,7 +79,7 @@ const Products: React.FC<Products> = ({
           ? `&categoryIds=${subCategoryIds.join(',')}`
           : '';
       Object.keys(attributes).map(key => {
-        url += `&${key}=${attributes[key].join(',')}`;
+        url += `&product_attr_${key}=${attributes[key].join(',')}`;
       });
 
       const {data} = await getDataWithAuth(
@@ -180,18 +180,18 @@ const Products: React.FC<Products> = ({
     (async () => {
       if (providerId) {
         productSearchSource.current = CancelToken.source();
-        const customdMenu = await getDataWithAuth(
+        const customMenu = await getDataWithAuth(
           `${API_BASE_URL}${CUSTOM_MENU}?provider=${providerId}${
             providerDomain ? `&domain=${providerDomain}` : ''
-          } `,
+          }`,
           productSearchSource.current.token,
         );
-        setCustomData(customdMenu);
+        setCustomData(customMenu);
 
         searchProducts(
           page,
           providerId,
-          customdMenu,
+          customMenu,
           subCategories,
           selectedAttributes,
         ).then(() => {

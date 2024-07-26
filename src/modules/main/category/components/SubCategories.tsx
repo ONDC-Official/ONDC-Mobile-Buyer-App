@@ -101,7 +101,7 @@ const makeStyles = (colors: any) =>
       flexGrow: 1,
       width: '25%',
       marginVertical: 12,
-      paddingHorizontal: 16,
+      paddingHorizontal: 8,
       alignItems: 'center',
     },
     alignCenter: {
