@@ -8,14 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* ONDCReferenceBuyerAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ONDCReferenceBuyerAppTests.m */; };
+		03F88B49496F04C103149C98 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D798066BB0F383720338E96C /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a */; };
 		0C80B921A6F3F58F76C31292 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1AAB4DA45384447DA2F120DA /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D96A77FB7F41417BA0585F34 /* Inter-Regular.ttf */; };
-		2503C8D6B18D189DD7504D2C /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E448314677DDCA31F18CDBD /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a */; };
-		39A9241738FF6603ED87683E /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 17C887050790C23744423773 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a */; };
-		5507376D274F50398354F122 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6C18B38DC78A715B5C59A19B /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a */; };
+		2DFE650089FDED0883F84BCB /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D77558754692151DD04F1A73 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a */; };
+		3C691C45B876634A6074FF00 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52C7FBF715D59C1D7E2CC65C /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a */; };
 		68F5EDC87EE046E1BF718EF4 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44630C48D1684C6088D3585B /* Inter-Medium.ttf */; };
 		71638D300D66D55473D5492F /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDC0E0A05629A59FD387D5F /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.a */; };
 		7396010D143594D089DA42A1 /* libPods-ONDCReferenceBuyerApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6267570888E19CDE175741CB /* libPods-ONDCReferenceBuyerApp.a */; };
@@ -24,7 +24,6 @@
 		8C914A8D2C443D1400D1CD1D /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		8C914A8E2C443D1400D1CD1D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		8C914A922C443D1400D1CD1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		8C914A932C443D1400D1CD1D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2A3322B5FA7D90066476C /* GoogleService-Info.plist */; };
 		8C914A942C443D1400D1CD1D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		8C914A952C443D1400D1CD1D /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 922FF88286E948DFB9D11C80 /* Inter-Bold.ttf */; };
 		8C914A962C443D1400D1CD1D /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44630C48D1684C6088D3585B /* Inter-Medium.ttf */; };
@@ -33,8 +32,6 @@
 		8C914AA62C443D3700D1CD1D /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		8C914AA72C443D3700D1CD1D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		8C914AAB2C443D3700D1CD1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		8C914AAC2C443D3700D1CD1D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2A3322B5FA7D90066476C /* GoogleService-Info.plist */; };
-		8C914AAD2C443D3700D1CD1D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		8C914AAE2C443D3700D1CD1D /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 922FF88286E948DFB9D11C80 /* Inter-Bold.ttf */; };
 		8C914AAF2C443D3700D1CD1D /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44630C48D1684C6088D3585B /* Inter-Medium.ttf */; };
 		8C914AB02C443D3700D1CD1D /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D96A77FB7F41417BA0585F34 /* Inter-Regular.ttf */; };
@@ -42,13 +39,15 @@
 		8C914ABF2C443D3F00D1CD1D /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		8C914AC02C443D3F00D1CD1D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		8C914AC42C443D3F00D1CD1D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		8C914AC52C443D3F00D1CD1D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2A3322B5FA7D90066476C /* GoogleService-Info.plist */; };
 		8C914AC62C443D3F00D1CD1D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		8C914AC72C443D3F00D1CD1D /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 922FF88286E948DFB9D11C80 /* Inter-Bold.ttf */; };
 		8C914AC82C443D3F00D1CD1D /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 44630C48D1684C6088D3585B /* Inter-Medium.ttf */; };
 		8C914AC92C443D3F00D1CD1D /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D96A77FB7F41417BA0585F34 /* Inter-Regular.ttf */; };
 		8C914ACA2C443D3F00D1CD1D /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E62E84F449B44D86B0FC3553 /* Inter-SemiBold.ttf */; };
-		8CF2A3332B5FA7DA0066476C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CF2A3322B5FA7D90066476C /* GoogleService-Info.plist */; };
+		8CC9A9A22C52950B002A63E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CC9A9982C52950B002A63E8 /* GoogleService-Info.plist */; };
+		8CC9A9A82C52950B002A63E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CC9A99A2C52950B002A63E8 /* GoogleService-Info.plist */; };
+		8CC9A9A92C52950B002A63E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CC9A99C2C52950B002A63E8 /* GoogleService-Info.plist */; };
+		8CC9A9AF2C52950B002A63E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8CC9A99E2C52950B002A63E8 /* GoogleService-Info.plist */; };
 		FD2B627F2C7E46B1844F95D2 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 922FF88286E948DFB9D11C80 /* Inter-Bold.ttf */; };
 /* End PBXBuildFile section */
 
@@ -72,17 +71,16 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ONDCReferenceBuyerApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ONDCReferenceBuyerApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ONDCReferenceBuyerApp/main.m; sourceTree = "<group>"; };
-		158100E63E3C066AA32F1C56 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.release.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.release.xcconfig"; sourceTree = "<group>"; };
-		17C887050790C23744423773 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2B961A11636C1862F45C973D /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig"; sourceTree = "<group>"; };
+		1878766E7FC69FC444B04F42 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.release.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.release.xcconfig"; sourceTree = "<group>"; };
+		321314CF76FB6EF8D54A42D0 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.debug.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.debug.xcconfig"; sourceTree = "<group>"; };
+		38172BB61A41132DED6AFB00 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.release.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.release.xcconfig"; sourceTree = "<group>"; };
 		3BA9F8A774D59952CCF969E1 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.release.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		3E448314677DDCA31F18CDBD /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		41563CEE745EA2254DBDD277 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.release.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.release.xcconfig"; sourceTree = "<group>"; };
 		44630C48D1684C6088D3585B /* Inter-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Medium.ttf"; path = "../assets/fonts/Inter-Medium.ttf"; sourceTree = "<group>"; };
+		52C7FBF715D59C1D7E2CC65C /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6267570888E19CDE175741CB /* libPods-ONDCReferenceBuyerApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ONDCReferenceBuyerApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6C18B38DC78A715B5C59A19B /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DDEF73F124F388511FA8AF7 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.debug.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.debug.xcconfig"; sourceTree = "<group>"; };
-		7E3C50665F17EACB2AF0BA52 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.release.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.release.xcconfig"; sourceTree = "<group>"; };
+		6EF55DC9AAB79F1CE44375B6 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig"; sourceTree = "<group>"; };
+		718506D6C1C09DDF36D32F48 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ONDCReferenceBuyerApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8C914AA02C443D1400D1CD1D /* ONDCReferenceBuyerAppDevelopment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ONDCReferenceBuyerAppDevelopment.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C914AA12C443D1400D1CD1D /* ONDCReferenceBuyerAppDevelopment-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ONDCReferenceBuyerAppDevelopment-Info.plist"; path = "/Users/punit/dev/ondc/ONDC-Mobile-Buyer-App/ios/ONDCReferenceBuyerAppDevelopment-Info.plist"; sourceTree = "<absolute>"; };
@@ -90,16 +88,20 @@
 		8C914ABA2C443D3700D1CD1D /* ONDCReferenceBuyerAppStaging-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ONDCReferenceBuyerAppStaging-Info.plist"; path = "/Users/punit/dev/ondc/ONDC-Mobile-Buyer-App/ios/ONDCReferenceBuyerAppStaging-Info.plist"; sourceTree = "<absolute>"; };
 		8C914AD22C443D3F00D1CD1D /* ONDCReferenceBuyerAppPreprod.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ONDCReferenceBuyerAppPreprod.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C914AD32C443D3F00D1CD1D /* ONDCReferenceBuyerAppPreprod-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ONDCReferenceBuyerAppPreprod-Info.plist"; path = "/Users/punit/dev/ondc/ONDC-Mobile-Buyer-App/ios/ONDCReferenceBuyerAppPreprod-Info.plist"; sourceTree = "<absolute>"; };
-		8CF2A3322B5FA7D90066476C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Firebase/Staging/GoogleService-Info.plist"; sourceTree = "<group>"; };
-		8E31117AF14474CA31735010 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.debug.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.debug.xcconfig"; sourceTree = "<group>"; };
+		8CC9A9982C52950B002A63E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8CC9A99A2C52950B002A63E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8CC9A99C2C52950B002A63E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8CC9A99E2C52950B002A63E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		922FF88286E948DFB9D11C80 /* Inter-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Bold.ttf"; path = "../assets/fonts/Inter-Bold.ttf"; sourceTree = "<group>"; };
 		CCDC0E0A05629A59FD387D5F /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD8296B8229636B61965B378 /* Pods-ONDCReferenceBuyerApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp.release.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp/Pods-ONDCReferenceBuyerApp.release.xcconfig"; sourceTree = "<group>"; };
+		D77558754692151DD04F1A73 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D798066BB0F383720338E96C /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D96A77FB7F41417BA0585F34 /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
+		DD4A1D37DB7CE9334223E173 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.release.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.release.xcconfig"; sourceTree = "<group>"; };
 		E0EFC5572CCBC77172308880 /* Pods-ONDCReferenceBuyerApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp.debug.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp/Pods-ONDCReferenceBuyerApp.debug.xcconfig"; sourceTree = "<group>"; };
 		E62E84F449B44D86B0FC3553 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F8FE8F1E589D9826FD3B4649 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5507376D274F50398354F122 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a in Frameworks */,
+				2DFE650089FDED0883F84BCB /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,7 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2503C8D6B18D189DD7504D2C /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a in Frameworks */,
+				3C691C45B876634A6074FF00 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,7 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				39A9241738FF6603ED87683E /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a in Frameworks */,
+				03F88B49496F04C103149C98 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,7 +169,7 @@
 		13B07FAE1A68108700A75B9A /* ONDCReferenceBuyerApp */ = {
 			isa = PBXGroup;
 			children = (
-				8CF2A3322B5FA7D90066476C /* GoogleService-Info.plist */,
+				8CC9A9A02C52950B002A63E8 /* Firebase */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -183,10 +185,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				6267570888E19CDE175741CB /* libPods-ONDCReferenceBuyerApp.a */,
-				6C18B38DC78A715B5C59A19B /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a */,
-				17C887050790C23744423773 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a */,
-				3E448314677DDCA31F18CDBD /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a */,
 				CCDC0E0A05629A59FD387D5F /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.a */,
+				D77558754692151DD04F1A73 /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.a */,
+				D798066BB0F383720338E96C /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.a */,
+				52C7FBF715D59C1D7E2CC65C /* libPods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -229,6 +231,50 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		8CC9A9992C52950B002A63E8 /* Development */ = {
+			isa = PBXGroup;
+			children = (
+				8CC9A9982C52950B002A63E8 /* GoogleService-Info.plist */,
+			);
+			path = Development;
+			sourceTree = "<group>";
+		};
+		8CC9A99B2C52950B002A63E8 /* Preprod */ = {
+			isa = PBXGroup;
+			children = (
+				8CC9A99A2C52950B002A63E8 /* GoogleService-Info.plist */,
+			);
+			path = Preprod;
+			sourceTree = "<group>";
+		};
+		8CC9A99D2C52950B002A63E8 /* Production */ = {
+			isa = PBXGroup;
+			children = (
+				8CC9A99C2C52950B002A63E8 /* GoogleService-Info.plist */,
+			);
+			path = Production;
+			sourceTree = "<group>";
+		};
+		8CC9A99F2C52950B002A63E8 /* Staging */ = {
+			isa = PBXGroup;
+			children = (
+				8CC9A99E2C52950B002A63E8 /* GoogleService-Info.plist */,
+			);
+			path = Staging;
+			sourceTree = "<group>";
+		};
+		8CC9A9A02C52950B002A63E8 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				8CC9A9992C52950B002A63E8 /* Development */,
+				8CC9A99B2C52950B002A63E8 /* Preprod */,
+				8CC9A99D2C52950B002A63E8 /* Production */,
+				8CC9A99F2C52950B002A63E8 /* Staging */,
+			);
+			name = Firebase;
+			path = ONDCReferenceBuyerApp/Firebase;
+			sourceTree = "<group>";
+		};
 		B0DD75C6C0B84D748B407B5B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -245,14 +291,14 @@
 			children = (
 				E0EFC5572CCBC77172308880 /* Pods-ONDCReferenceBuyerApp.debug.xcconfig */,
 				CD8296B8229636B61965B378 /* Pods-ONDCReferenceBuyerApp.release.xcconfig */,
-				F8FE8F1E589D9826FD3B4649 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig */,
-				41563CEE745EA2254DBDD277 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.release.xcconfig */,
-				2B961A11636C1862F45C973D /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig */,
-				7E3C50665F17EACB2AF0BA52 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.release.xcconfig */,
-				8E31117AF14474CA31735010 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.debug.xcconfig */,
-				158100E63E3C066AA32F1C56 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.release.xcconfig */,
 				6DDEF73F124F388511FA8AF7 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.debug.xcconfig */,
 				3BA9F8A774D59952CCF969E1 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppTests.release.xcconfig */,
+				718506D6C1C09DDF36D32F48 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig */,
+				DD4A1D37DB7CE9334223E173 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.release.xcconfig */,
+				6EF55DC9AAB79F1CE44375B6 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig */,
+				38172BB61A41132DED6AFB00 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.release.xcconfig */,
+				321314CF76FB6EF8D54A42D0 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.debug.xcconfig */,
+				1878766E7FC69FC444B04F42 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -308,14 +354,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C914A9D2C443D1400D1CD1D /* Build configuration list for PBXNativeTarget "ONDCReferenceBuyerAppDevelopment" */;
 			buildPhases = (
-				D9E35C15AE427A1DFA286125 /* [CP] Check Pods Manifest.lock */,
+				17746E830A1FA1A5D6866A16 /* [CP] Check Pods Manifest.lock */,
 				8C914A8B2C443D1400D1CD1D /* Start Packager */,
 				8C914A8C2C443D1400D1CD1D /* Sources */,
 				8C914A8F2C443D1400D1CD1D /* Frameworks */,
 				8C914A912C443D1400D1CD1D /* Resources */,
 				8C914A992C443D1400D1CD1D /* Bundle React Native code and images */,
-				D354BF1E808FBF9382CD197C /* [CP] Embed Pods Frameworks */,
-				3E991C078B3C5D2E476D089C /* [CP] Copy Pods Resources */,
+				2C6673B11F5085159FC11F8D /* [CP] Embed Pods Frameworks */,
+				00106D95FD79766BB5632823 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -330,14 +376,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C914AB62C443D3700D1CD1D /* Build configuration list for PBXNativeTarget "ONDCReferenceBuyerAppStaging" */;
 			buildPhases = (
-				6F02AF46071B9581C9200458 /* [CP] Check Pods Manifest.lock */,
+				A7913D84CAF2004DACBD8251 /* [CP] Check Pods Manifest.lock */,
 				8C914AA42C443D3700D1CD1D /* Start Packager */,
 				8C914AA52C443D3700D1CD1D /* Sources */,
 				8C914AA82C443D3700D1CD1D /* Frameworks */,
 				8C914AAA2C443D3700D1CD1D /* Resources */,
 				8C914AB22C443D3700D1CD1D /* Bundle React Native code and images */,
-				921828C84B70F0E58EC3D077 /* [CP] Embed Pods Frameworks */,
-				33647D514B85E06EEE2B5660 /* [CP] Copy Pods Resources */,
+				9F768DE1EDFFED06C08CCCE0 /* [CP] Embed Pods Frameworks */,
+				B424CF47206489305064AF98 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -352,14 +398,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C914ACF2C443D3F00D1CD1D /* Build configuration list for PBXNativeTarget "ONDCReferenceBuyerAppPreprod" */;
 			buildPhases = (
-				B72C572DE46457D6CD34B884 /* [CP] Check Pods Manifest.lock */,
+				A647B08A3E27916676B1444A /* [CP] Check Pods Manifest.lock */,
 				8C914ABD2C443D3F00D1CD1D /* Start Packager */,
 				8C914ABE2C443D3F00D1CD1D /* Sources */,
 				8C914AC12C443D3F00D1CD1D /* Frameworks */,
 				8C914AC32C443D3F00D1CD1D /* Resources */,
 				8C914ACB2C443D3F00D1CD1D /* Bundle React Native code and images */,
-				256861C815AAC52B7F6FE9BC /* [CP] Embed Pods Frameworks */,
-				6D6D0530066F1F5D184AF29B /* [CP] Copy Pods Resources */,
+				F61323E40A47EFF7557139ED /* [CP] Embed Pods Frameworks */,
+				5A3914538EC476C9FF30FA9B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -422,7 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				8CF2A3332B5FA7DA0066476C /* GoogleService-Info.plist in Resources */,
+				8CC9A9A92C52950B002A63E8 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				FD2B627F2C7E46B1844F95D2 /* Inter-Bold.ttf in Resources */,
 				68F5EDC87EE046E1BF718EF4 /* Inter-Medium.ttf in Resources */,
@@ -436,12 +482,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C914A922C443D1400D1CD1D /* LaunchScreen.storyboard in Resources */,
-				8C914A932C443D1400D1CD1D /* GoogleService-Info.plist in Resources */,
 				8C914A942C443D1400D1CD1D /* Images.xcassets in Resources */,
 				8C914A952C443D1400D1CD1D /* Inter-Bold.ttf in Resources */,
 				8C914A962C443D1400D1CD1D /* Inter-Medium.ttf in Resources */,
 				8C914A972C443D1400D1CD1D /* Inter-Regular.ttf in Resources */,
 				8C914A982C443D1400D1CD1D /* Inter-SemiBold.ttf in Resources */,
+				8CC9A9A22C52950B002A63E8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -450,8 +496,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C914AAB2C443D3700D1CD1D /* LaunchScreen.storyboard in Resources */,
-				8C914AAC2C443D3700D1CD1D /* GoogleService-Info.plist in Resources */,
-				8C914AAD2C443D3700D1CD1D /* Images.xcassets in Resources */,
+				8CC9A9AF2C52950B002A63E8 /* GoogleService-Info.plist in Resources */,
 				8C914AAE2C443D3700D1CD1D /* Inter-Bold.ttf in Resources */,
 				8C914AAF2C443D3700D1CD1D /* Inter-Medium.ttf in Resources */,
 				8C914AB02C443D3700D1CD1D /* Inter-Regular.ttf in Resources */,
@@ -464,7 +509,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C914AC42C443D3F00D1CD1D /* LaunchScreen.storyboard in Resources */,
-				8C914AC52C443D3F00D1CD1D /* GoogleService-Info.plist in Resources */,
+				8CC9A9A82C52950B002A63E8 /* GoogleService-Info.plist in Resources */,
 				8C914AC62C443D3F00D1CD1D /* Images.xcassets in Resources */,
 				8C914AC72C443D3F00D1CD1D /* Inter-Bold.ttf in Resources */,
 				8C914AC82C443D3F00D1CD1D /* Inter-Medium.ttf in Resources */,
@@ -476,6 +521,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		00106D95FD79766BB5632823 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -492,21 +554,26 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		256861C815AAC52B7F6FE9BC /* [CP] Embed Pods Frameworks */ = {
+		17746E830A1FA1A5D6866A16 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Embed Pods Frameworks";
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod-frameworks.sh\"\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		265CB54C0A640E6F5BEFDEB5 /* [CP] Copy Pods Resources */ = {
@@ -526,38 +593,21 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp/Pods-ONDCReferenceBuyerApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		33647D514B85E06EEE2B5660 /* [CP] Copy Pods Resources */ = {
+		2C6673B11F5085159FC11F8D /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3E991C078B3C5D2E476D089C /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		41DB1C734AAAC8FDA5D76C21 /* [CP] Check Pods Manifest.lock */ = {
@@ -582,7 +632,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6D6D0530066F1F5D184AF29B /* [CP] Copy Pods Resources */ = {
+		5A3914538EC476C9FF30FA9B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -597,28 +647,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6F02AF46071B9581C9200458 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8279F97E9D29731208C6D2EE /* [CP] Embed Pods Frameworks */ = {
@@ -756,7 +784,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		921828C84B70F0E58EC3D077 /* [CP] Embed Pods Frameworks */ = {
+		9F768DE1EDFFED06C08CCCE0 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -773,24 +801,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AD2C6B08A393F7D1EDE72734 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp/Pods-ONDCReferenceBuyerApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp/Pods-ONDCReferenceBuyerApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp/Pods-ONDCReferenceBuyerApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B72C572DE46457D6CD34B884 /* [CP] Check Pods Manifest.lock */ = {
+		A647B08A3E27916676B1444A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -810,6 +821,62 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A7913D84CAF2004DACBD8251 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AD2C6B08A393F7D1EDE72734 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp/Pods-ONDCReferenceBuyerApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp/Pods-ONDCReferenceBuyerApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp/Pods-ONDCReferenceBuyerApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B424CF47206489305064AF98 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BE2F032939EAE1DA5D8239E0 /* [CP] Copy Pods Resources */ = {
@@ -851,43 +918,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D354BF1E808FBF9382CD197C /* [CP] Embed Pods Frameworks */ = {
+		F61323E40A47EFF7557139ED /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D9E35C15AE427A1DFA286125 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
@@ -1224,7 +1269,7 @@
 		};
 		8C914A9E2C443D1400D1CD1D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F8FE8F1E589D9826FD3B4649 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig */;
+			baseConfigurationReference = 718506D6C1C09DDF36D32F48 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1244,7 +1289,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer;
+				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1254,7 +1299,7 @@
 		};
 		8C914A9F2C443D1400D1CD1D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 41563CEE745EA2254DBDD277 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.release.xcconfig */;
+			baseConfigurationReference = DD4A1D37DB7CE9334223E173 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1273,7 +1318,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer;
+				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1282,7 +1327,7 @@
 		};
 		8C914AB72C443D3700D1CD1D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8E31117AF14474CA31735010 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.debug.xcconfig */;
+			baseConfigurationReference = 321314CF76FB6EF8D54A42D0 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1302,7 +1347,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer;
+				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer.staging;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1312,7 +1357,7 @@
 		};
 		8C914AB82C443D3700D1CD1D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 158100E63E3C066AA32F1C56 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.release.xcconfig */;
+			baseConfigurationReference = 1878766E7FC69FC444B04F42 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppStaging.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1331,7 +1376,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer;
+				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer.staging;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1340,7 +1385,7 @@
 		};
 		8C914AD02C443D3F00D1CD1D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2B961A11636C1862F45C973D /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig */;
+			baseConfigurationReference = 6EF55DC9AAB79F1CE44375B6 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1360,7 +1405,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer;
+				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer.preprod;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1370,7 +1415,7 @@
 		};
 		8C914AD12C443D3F00D1CD1D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7E3C50665F17EACB2AF0BA52 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.release.xcconfig */;
+			baseConfigurationReference = 38172BB61A41132DED6AFB00 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -1389,7 +1434,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer;
+				PRODUCT_BUNDLE_IDENTIFIER = org.ondc.buyer.preprod;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

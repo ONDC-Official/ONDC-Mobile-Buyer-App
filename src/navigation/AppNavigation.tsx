@@ -62,7 +62,10 @@ const headerStyle = {
 const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
   return (
     <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerBackTitleVisible: false,
+        }}>
         <Stack.Screen
           name="Splash"
           component={Splash}
@@ -100,6 +103,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={AddDefaultAddress}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
         <Stack.Screen
@@ -107,6 +111,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={UpdateAddress}
           options={{
             title: 'Update Delivery Address',
+            headerStatusBarHeight: 0,
           }}
         />
 
@@ -115,6 +120,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={AddressList}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
 
@@ -123,6 +129,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={Profile}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
 
@@ -131,6 +138,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={ChooseLanguage}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
 
@@ -139,6 +147,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={Complaints}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
 
@@ -147,6 +156,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={ComplaintDetails}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
 
@@ -155,6 +165,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={Orders}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
 
@@ -180,6 +191,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="ProductDetails"
           component={ProductDetails}
           options={{
+            headerStatusBarHeight: 0,
             title: '',
           }}
         />
@@ -193,6 +205,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="CouponList"
           component={CouponList}
           options={{
+            headerStatusBarHeight: 0,
             title: 'Apply Coupon',
           }}
         />
@@ -201,6 +214,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={SubCategoryDetails}
           options={({navigation}) => ({
             title: '',
+            headerStatusBarHeight: 0,
             headerRight: () => (
               <TouchableOpacity
                 onPress={() => navigation.navigate('SearchProducts')}
@@ -233,6 +247,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           name="BrandDetails"
           component={BrandDetails}
           options={{
+            headerStatusBarHeight: 0,
             title: '',
           }}
         />
@@ -253,6 +268,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={StoresNearMe}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
         <Stack.Screen
@@ -260,6 +276,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={ShopByCategory}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
         <Stack.Screen
@@ -267,6 +284,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={FeaturedCategories}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
         <Stack.Screen
