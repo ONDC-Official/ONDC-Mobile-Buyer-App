@@ -9,7 +9,10 @@ import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {useAppTheme} from '../../../utils/theme';
-import {calculateDistanceBetweenPoints} from '../../../utils/utils';
+import {
+  calculateDistanceBetweenPoints,
+  getPriceWithCustomisations,
+} from '../../../utils/utils';
 import useMinutesToString from '../../../hooks/useMinutesToString';
 import useFormatNumber from '../../../hooks/useFormatNumber';
 
@@ -52,7 +55,13 @@ const StoreCart: React.FC<StoreCart> = ({
         const duration = moment.duration(
           one?.item?.product['@ondc/org/time_to_ship'],
         );
-        total += one?.item?.quantity?.count * one?.item?.product?.price?.value;
+
+        if (one.item.hasCustomisations) {
+          total += getPriceWithCustomisations(one) * one?.item?.quantity?.count;
+        } else {
+          total += one?.item?.product?.subtotal * one?.item?.quantity?.count;
+        }
+
         let durationInMinutes = duration.format('m').replace(/\,/g, '');
         if (highMin < durationInMinutes) {
           highMin = durationInMinutes;
