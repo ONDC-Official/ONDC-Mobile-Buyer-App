@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {useTranslation} from 'react-i18next';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
@@ -83,6 +83,12 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
   };
 
   const {descriptor, address} = params.address;
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: t('Address Form.Update Delivery Address'),
+    });
+  }, []);
 
   return (
     <AddressForm

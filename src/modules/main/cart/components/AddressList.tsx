@@ -116,6 +116,7 @@ const AddressList: React.FC<AddressList> = ({
                 isCurrentAddress={deliveryAddress?.id === item?.id}
                 params={{navigateToNext: true}}
                 onAddressSelect={updateDeliveryAddress}
+                detectAddressNavigation={detectAddressNavigation}
               />
             )}
             keyExtractor={item => item.id}
@@ -139,7 +140,7 @@ const AddressList: React.FC<AddressList> = ({
           <TouchableOpacity
             style={styles.button}
             onPress={navigateToAddAddress}>
-            <Text variant={'labelLarge'} style={styles.buttonLabel}>
+            <Text variant={'bodyLarge'} style={styles.buttonLabel}>
               {t('Address List.Add new address')}
             </Text>
           </TouchableOpacity>
@@ -180,12 +181,13 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.white,
     },
     button: {
-      marginTop: 20,
+      marginVertical: 20,
       backgroundColor: colors.primary,
-      borderRadius: 22,
-      padding: 12,
+      borderRadius: 8,
+      padding: 13,
       alignItems: 'center',
       marginHorizontal: 16,
+      height: 44,
     },
     buttonLabel: {
       color: colors.white,

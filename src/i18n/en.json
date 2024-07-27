@@ -153,6 +153,7 @@
   },
   "Address Form": {
     "Add Address": "Add Address",
+    "Update Delivery Address": "Update Delivery Address",
     "Name": "Name",
     "Email": "Email Address",
     "Mobile Number": "Phone Number",

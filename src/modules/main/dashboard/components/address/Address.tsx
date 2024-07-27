@@ -12,6 +12,7 @@ import {setAddress} from '../../../../../toolkit/reducer/address';
 import {clearCart} from '../../../../../toolkit/reducer/cart';
 
 interface Address {
+  detectAddressNavigation?: () => void | null;
   item: any;
   isCurrentAddress: boolean;
   params: any;
@@ -26,6 +27,7 @@ interface Address {
  * @returns {JSX.Element}
  */
 const Address: React.FC<Address> = ({
+  detectAddressNavigation = null,
   item,
   isCurrentAddress,
   params,
@@ -54,7 +56,7 @@ const Address: React.FC<Address> = ({
         () => {},
       );
     } else {
-      addAddressToStore();
+      await addAddressToStore();
     }
   };
 
@@ -68,6 +70,13 @@ const Address: React.FC<Address> = ({
       });
     } else {
       navigation.goBack();
+    }
+  };
+
+  const editAddress = () => {
+    navigation.navigate('UpdateAddress', {address: item});
+    if (detectAddressNavigation) {
+      detectAddressNavigation();
     }
   };
 
@@ -90,9 +99,7 @@ const Address: React.FC<Address> = ({
             </Text>
           )}
         </View>
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => navigation.navigate('UpdateAddress', {address: item})}>
+        <TouchableOpacity style={styles.editButton} onPress={editAddress}>
           <Icon name={'pencil'} color={theme.colors.primary} size={16} />
         </TouchableOpacity>
       </View>
