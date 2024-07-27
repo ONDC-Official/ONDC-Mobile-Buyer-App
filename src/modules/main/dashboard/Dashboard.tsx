@@ -14,7 +14,7 @@ import useCartItems from '../../../hooks/useCartItems';
 import useRefreshToken from '../../../hooks/useRefreshToken';
 import {useAppTheme} from '../../../utils/theme';
 import AvailableCities from '../../../assets/available_cities.svg';
-import { getStoredData, setStoredData } from "../../../utils/storage";
+import {getStoredData, setStoredData} from '../../../utils/storage';
 
 interface Dashboard {}
 
@@ -26,7 +26,7 @@ const Dashboard: React.FC<Dashboard> = () => {
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
   const {} = useRefreshToken();
-  const [modalVisible, setModalVisible] = useState<boolean>(true);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const closeModal = () => setModalVisible(false);
 
