@@ -1,15 +1,13 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {RadioButton, Text} from 'react-native-paper';
-import {alertWithTwoButtons} from '../../../../../utils/alerts';
 import {useAppTheme} from '../../../../../utils/theme';
 import {setStoredData} from '../../../../../utils/storage';
 import {setAddress} from '../../../../../toolkit/reducer/address';
-import {clearCart} from '../../../../../toolkit/reducer/cart';
 
 interface Address {
   detectAddressNavigation?: () => void | null;
@@ -38,23 +36,10 @@ const Address: React.FC<Address> = ({
   const dispatch = useDispatch();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const {street, landmark, city, state, areaCode} = item.address;
-  const {cartItems} = useSelector(({cart}) => cart);
 
   const setDefaultAddress = async () => {
     if (params?.navigateToNext) {
       onAddressSelect(item);
-    } else if (cartItems.length > 0 && !isCurrentAddress) {
-      alertWithTwoButtons(
-        'Address Updated',
-        'You want update the address, it will clear your existing cart. Please confirm if you want to go ahead with this?',
-        'Yes',
-        () => {
-          dispatch(clearCart());
-          addAddressToStore();
-        },
-        'No',
-        () => {},
-      );
     } else {
       await addAddressToStore();
     }
