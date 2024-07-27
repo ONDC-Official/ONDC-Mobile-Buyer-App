@@ -2,9 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Dialog, Portal, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import FastImage from 'react-native-fast-image';
 import {useTranslation} from 'react-i18next';
 
 import {makeGlobalStyles} from '../../styles/styles';
@@ -14,16 +13,16 @@ interface VariationsRenderer {
   product: any;
   variationState: any;
   setVariationState: (variations: any[]) => void;
-  chartImage?: string;
   isFashion: boolean;
+  openSizeChart?: () => void;
 }
 
 const VariationsRenderer: React.FC<VariationsRenderer> = ({
   product,
   variationState,
   setVariationState,
-  chartImage = '',
   isFashion = false,
+  openSizeChart,
 }) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -34,7 +33,6 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
   const [variations, setVariations] = useState<any[]>([]);
   const [initialVariationState, setInitialVariationState] = useState<any>({});
   const [isUOM, setIsUOM] = useState<boolean>(false);
-  const [openSizeChart, setOpenSizeChart] = useState<boolean>(false);
   const [noVariations, setNoVariations] = useState<boolean>(false);
 
   const getVariationGroups = () => {
@@ -294,102 +292,78 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
     const groupName = groupData.name;
 
     return (
-      <View key={groupId}>
-        <View style={styles.group} key={groupId}>
-          <View style={styles.groupHeader}>
-            <Text variant="bodyLarge" style={styles.groupTitle}>
-              {t('Variations.Available Options', {groupName})}
-            </Text>
-            {groupName === 'size' && isFashion && (
-              <TouchableOpacity
-                onPress={() => setOpenSizeChart(true)}
-                style={styles.sizeChart}>
-                <Text variant={'bodyMedium'} style={styles.sizeGuide}>
-                  {t('Variations.Size Guide')}
-                </Text>
-                <Icon name={'arrow-right'} color={theme.colors.primary} />
-              </TouchableOpacity>
-            )}
-          </View>
-          <View style={styles.groupOptions}>
-            <FlatList
-              data={groupData.options}
-              renderItem={({item}: {item: any}) => {
-                const isSelected = groupData.selected.includes(item);
-                if (groupName === 'colour') {
-                  return (
-                    <TouchableOpacity
-                      key={item}
-                      style={[
-                        styles.dotContainer,
-                        isSelected ? styles.selectedDotContainer : {},
-                      ]}
-                      onPress={() => {
-                        if (isUOM) {
-                          handleUOMClick(groupData, item);
-                        } else {
-                          handleVariationClick(groupData, item);
-                        }
-                      }}>
-                      <View
-                        style={[styles.colorDot, {backgroundColor: item}]}
-                      />
-                    </TouchableOpacity>
-                  );
-                } else {
-                  return (
-                    <TouchableOpacity
-                      key={item}
-                      style={[
-                        isSelected
-                          ? globalStyles.containedButton
-                          : styles.outlineButton,
-                        styles.customization,
-                      ]}
-                      onPress={() => {
-                        if (isUOM) {
-                          handleUOMClick(groupData, item);
-                        } else {
-                          handleVariationClick(groupData, item);
-                        }
-                      }}>
-                      <Text
-                        variant="bodyLarge"
-                        style={
-                          isSelected
-                            ? globalStyles.containedButtonText
-                            : styles.outlineButtonText
-                        }>
-                        {item}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                }
-              }}
-              horizontal
-              keyExtractor={item => item}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
+      <View style={styles.group} key={groupId}>
+        <View style={styles.groupHeader}>
+          <Text variant="bodyLarge" style={styles.groupTitle}>
+            {t('Variations.Available Options', {groupName})}
+          </Text>
+          {groupName === 'size' && isFashion && (
+            <TouchableOpacity onPress={openSizeChart} style={styles.sizeChart}>
+              <Text variant={'bodyMedium'} style={styles.sizeGuide}>
+                {t('Variations.Size Guide')}
+              </Text>
+              <Icon name={'arrow-right'} color={theme.colors.primary} />
+            </TouchableOpacity>
+          )}
         </View>
-        {openSizeChart && chartImage && (
-          <Portal>
-            <Dialog
-              visible={openSizeChart}
-              onDismiss={() => setOpenSizeChart(false)}>
-              <Dialog.Title>Size Chart</Dialog.Title>
-              <Dialog.Content>
-                <FastImage
-                  source={{uri: chartImage}}
-                  style={styles.chartImage}
-                />
-              </Dialog.Content>
-              <Dialog.Actions>
-                <Button onPress={() => setOpenSizeChart(false)}>Done</Button>
-              </Dialog.Actions>
-            </Dialog>
-          </Portal>
-        )}
+        <View style={styles.groupOptions}>
+          <FlatList
+            data={groupData.options}
+            renderItem={({item}: {item: any}) => {
+              const isSelected = groupData.selected.includes(item);
+              if (groupName === 'colour') {
+                return (
+                  <TouchableOpacity
+                    key={item}
+                    style={[
+                      styles.dotContainer,
+                      isSelected ? styles.selectedDotContainer : {},
+                    ]}
+                    onPress={() => {
+                      if (isUOM) {
+                        handleUOMClick(groupData, item);
+                      } else {
+                        handleVariationClick(groupData, item);
+                      }
+                    }}>
+                    <View style={[styles.colorDot, {backgroundColor: item}]} />
+                  </TouchableOpacity>
+                );
+              } else {
+                return (
+                  <TouchableOpacity
+                    key={item}
+                    style={[
+                      isSelected
+                        ? globalStyles.containedButton
+                        : styles.outlineButton,
+                      styles.customization,
+                    ]}
+                    onPress={() => {
+                      if (isUOM) {
+                        handleUOMClick(groupData, item);
+                      } else {
+                        handleVariationClick(groupData, item);
+                      }
+                    }}>
+                    <Text
+                      variant="bodyLarge"
+                      style={
+                        isSelected
+                          ? globalStyles.containedButtonText
+                          : styles.outlineButtonText
+                      }>
+                      {item}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              }
+            }}
+            horizontal
+            keyExtractor={item => item}
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
       </View>
     );
   });
@@ -452,10 +426,6 @@ const makeStyles = (colors: any) =>
       width: 24,
       height: 24,
       borderRadius: 12,
-    },
-    chartImage: {
-      width: '100%',
-      aspectRatio: 1,
     },
   });
 
