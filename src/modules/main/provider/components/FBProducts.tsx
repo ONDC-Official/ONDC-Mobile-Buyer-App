@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {List, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';

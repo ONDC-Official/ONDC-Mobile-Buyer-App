@@ -18,6 +18,7 @@ interface Category {
   routeName: string;
   domain: string;
 }
+
 const Categories = () => {
   const {t} = useTranslation();
   const theme = useAppTheme();

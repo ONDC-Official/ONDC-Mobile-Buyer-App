@@ -14,7 +14,7 @@ import useCartItems from '../../../hooks/useCartItems';
 import useRefreshToken from '../../../hooks/useRefreshToken';
 import {useAppTheme} from '../../../utils/theme';
 import AvailableCities from '../../../assets/available_cities.svg';
-import { getStoredData, setStoredData } from "../../../utils/storage";
+import {getStoredData, setStoredData} from '../../../utils/storage';
 
 interface Dashboard {}
 
@@ -60,7 +60,7 @@ const Dashboard: React.FC<Dashboard> = () => {
           contentContainerStyle={styles.modalContainer}>
           <View style={styles.closeContainer}>
             <TouchableOpacity onPress={closeModal}>
-              <MaterialIcons name={'clear'} size={24} />
+              <MaterialIcons name={'clear'} size={24} color={'#000'} />
             </TouchableOpacity>
           </View>
           <View style={styles.modalContent}>

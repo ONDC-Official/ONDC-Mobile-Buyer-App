@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {useAppTheme} from '../../utils/theme';
 import {useTranslation} from 'react-i18next';
-import { convertHexToName } from "../../utils/utils";
+import {convertHexToName} from '../../utils/utils';
 
 interface FilterList {
   attributes: any[];
@@ -134,17 +134,20 @@ const FilterList: React.FC<FilterList> = ({
                     onPress={() =>
                       isSelected ? removeValue(value) : addValue(value)
                     }>
-                    <View style={[
-                      styles.dotContainer,
-                      isSelected ? styles.selectedDotContainer : {},
-                    ]}>
+                    <View
+                      style={[
+                        styles.dotContainer,
+                        isSelected ? styles.selectedDotContainer : {},
+                      ]}>
                       <View
                         style={[styles.colorDot, {backgroundColor: value}]}
                       />
                     </View>
-                    <Text variant={'labelMedium'}>{convertHexToName(value)}</Text>
+                    <Text variant={'labelMedium'}>
+                      {convertHexToName(value)}
+                    </Text>
                   </TouchableOpacity>
-                )
+                );
               } else {
                 return (
                   <TouchableOpacity
