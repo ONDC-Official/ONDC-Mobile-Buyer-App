@@ -670,7 +670,9 @@ const FBProduct: React.FC<FBProduct> = ({product, provider}) => {
                 </Text>
               </View>
             </View>
-            <ScrollView style={styles.customizationContainer}>
+            <ScrollView
+              contentContainerStyle={styles.customizationContainer}
+              showsVerticalScrollIndicator={false}>
               <FBProductCustomization
                 product={productDetails}
                 customizationState={customizationState}
@@ -907,6 +909,7 @@ const makeStyles = (colors: any) =>
       borderTopLeftRadius: 15,
       borderTopRightRadius: 15,
       backgroundColor: colors.neutral50,
+      flex: 1,
     },
     header: {
       borderTopLeftRadius: 15,
