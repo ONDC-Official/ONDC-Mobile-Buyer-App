@@ -73,17 +73,18 @@ const Products: React.FC<Products> = ({
     try {
       productSearchSource.current = CancelToken.source();
       let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}`;
-      url += selectedProvider ? `&providerIds=${selectedProvider}` : '';
+      url += selectedProvider
+        ? `&providerIds=${encodeURIComponent(selectedProvider)}`
+        : '';
       url +=
         subCategoryIds.length > 0
-          ? `&categoryIds=${subCategoryIds.join(',')}`
+          ? `&categoryIds=${encodeURIComponent(subCategoryIds.join(','))}`
           : '';
       Object.keys(attributes).map(key => {
         url += `&product_attr_${key}=${encodeURIComponent(
           attributes[key].join(','),
         )}`;
       });
-
       const {data} = await getDataWithWithoutEncode(
         url,
         productSearchSource.current.token,
