@@ -707,8 +707,7 @@ const FBProduct: React.FC<FBProduct> = ({product, provider}) => {
                 variant={'headlineSmall'}
                 style={styles.title}
                 ellipsizeMode={'tail'}>
-                {t('Cart.Customization for')}{' '}
-                {/*{cartItemDetails?.items[0]?.item?.product?.descriptor?.name}*/}
+                {t('Cart.Customization for')}
               </Text>
             </View>
             <View style={styles.customizationContainer}>
@@ -728,10 +727,19 @@ const FBProduct: React.FC<FBProduct> = ({product, provider}) => {
                           ₹
                           {item.item.hasCustomisations
                             ? formatNumber(
-                                getPriceWithCustomisations(item) *
-                                  Number(item?.item?.quantity?.count),
+                                Number(
+                                  (
+                                    getPriceWithCustomisations(item) *
+                                    Number(item?.item?.quantity?.count)
+                                  ).toFixed(2),
+                                ),
                               )
-                            : formatNumber(item?.item?.product?.subtotal)}
+                            : formatNumber(
+                                Number(
+                                  item?.item?.product?.subtotal *
+                                    Number(item?.item?.quantity?.count),
+                                ).toFixed(2),
+                              )}
                         </Text>
                       </View>
                       <ManageQuantity
