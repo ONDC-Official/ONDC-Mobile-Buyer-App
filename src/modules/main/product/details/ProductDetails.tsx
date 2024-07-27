@@ -7,11 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ProgressBar, Text} from 'react-native-paper';
+import {Modal, Portal, ProgressBar, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useFocusEffect} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -91,6 +93,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   } = useReadAudio(language);
   const currentCartItem = useRef<any>(null);
 
+  const [showSizeChart, setShowSizeChart] = useState<boolean>(false);
   const [product, setProduct] = useState<any>(null);
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
@@ -411,6 +414,10 @@ const ProductDetails: React.FC<ProductDetails> = ({
     }
   };
 
+  const openSizeChart = () => setShowSizeChart(true);
+
+  const closeSizeChart = () => setShowSizeChart(false);
+
   useEffect(() => {
     getProductDetails().then(() => {});
 
@@ -532,10 +539,13 @@ const ProductDetails: React.FC<ProductDetails> = ({
           )}
           <VariationsRenderer
             product={product}
+            openSizeChart={openSizeChart}
             variationState={variationState}
             setVariationState={setVariationState}
-            chartImage={product?.attributes?.size_chart || ''}
-            isFashion={product?.context?.domain === FASHION_DOMAIN}
+            isFashion={
+              product?.context?.domain === FASHION_DOMAIN &&
+              !!product?.attributes?.size_chart
+            }
           />
           {product?.context?.domain === FB_DOMAIN && (
             <>
@@ -609,6 +619,27 @@ const ProductDetails: React.FC<ProductDetails> = ({
           <AboutProduct product={product} inStock />
         </View>
       </ScrollView>
+      {showSizeChart && (
+        <Portal>
+          <Modal
+            visible={showSizeChart}
+            onDismiss={closeSizeChart}
+            contentContainerStyle={styles.modalContainer}>
+            <View style={styles.modalHeader}>
+              <Text variant={'bodyLarge'}>{t('Variations.Size Guide')}</Text>
+              <TouchableOpacity onPress={closeSizeChart}>
+                <MaterialIcons name={'clear'} size={24} />
+              </TouchableOpacity>
+            </View>
+            <View>
+              <FastImage
+                source={{uri: product?.attributes?.size_chart}}
+                style={styles.chartImage}
+              />
+            </View>
+          </Modal>
+        </Portal>
+      )}
     </Page>
   );
 };
@@ -691,6 +722,26 @@ const makeStyles = (colors: any) =>
     quantity: {
       color: colors.primary,
       marginHorizontal: 20,
+    },
+    modalContainer: {
+      backgroundColor: colors.white,
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 40,
+      borderRadius: 20,
+      margin: 20,
+      alignItems: 'center',
+    },
+    modalHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
+      marginBottom: 20,
+    },
+    chartImage: {
+      width: '100%',
+      aspectRatio: 1,
     },
   });
 

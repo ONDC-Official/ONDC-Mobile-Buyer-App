@@ -308,10 +308,21 @@ const CartItems: React.FC<CartItems> = ({
                           ₹
                           {cartItem.item.hasCustomisations
                             ? formatNumber(
-                                getPriceWithCustomisations(cartItem) *
-                                  Number(cartItem?.item?.quantity?.count),
+                                Number(
+                                  (
+                                    getPriceWithCustomisations(cartItem) *
+                                    Number(cartItem?.item?.quantity?.count)
+                                  ).toFixed(2),
+                                ),
                               )
-                            : formatNumber(cartItem?.item?.product?.subtotal)}
+                            : formatNumber(
+                                Number(
+                                  (
+                                    cartItem?.item?.product?.subtotal *
+                                    Number(cartItem?.item?.quantity?.count)
+                                  ).toFixed(2),
+                                ),
+                              )}
                         </Text>
                       </View>
                     </View>

@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {useAppTheme} from '../../utils/theme';
 import {useTranslation} from 'react-i18next';
-import { convertHexToName } from "../../utils/utils";
+import {convertHexToName} from '../../utils/utils';
 
 interface FilterList {
   attributes: any[];
@@ -126,21 +126,45 @@ const FilterList: React.FC<FilterList> = ({
               const isSelected =
                 selectedValues[currentAttribute]?.includes(value);
 
-              return (
-                <TouchableOpacity
-                  key={value}
-                  style={styles.valueRow}
-                  onPress={() =>
-                    isSelected ? removeValue(value) : addValue(value)
-                  }>
-                  <Checkbox.Android
-                    status={isSelected ? 'checked' : 'unchecked'}
-                  />
-                  <Text variant={'labelMedium'} style={styles.valueLabel}>
-                    {value}
-                  </Text>
-                </TouchableOpacity>
-              );
+              if (currentAttribute === 'colour') {
+                return (
+                  <TouchableOpacity
+                    key={value}
+                    style={styles.valueRow}
+                    onPress={() =>
+                      isSelected ? removeValue(value) : addValue(value)
+                    }>
+                    <View
+                      style={[
+                        styles.dotContainer,
+                        isSelected ? styles.selectedDotContainer : {},
+                      ]}>
+                      <View
+                        style={[styles.colorDot, {backgroundColor: value}]}
+                      />
+                    </View>
+                    <Text variant={'labelMedium'}>
+                      {convertHexToName(value)}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              } else {
+                return (
+                  <TouchableOpacity
+                    key={value}
+                    style={styles.valueRow}
+                    onPress={() =>
+                      isSelected ? removeValue(value) : addValue(value)
+                    }>
+                    <Checkbox.Android
+                      status={isSelected ? 'checked' : 'unchecked'}
+                    />
+                    <Text variant={'labelMedium'} style={styles.valueLabel}>
+                      {value}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              }
             })
           )}
         </ScrollView>
@@ -290,6 +314,24 @@ export const makeStyles = (colors: any) =>
     valueLabel: {
       color: colors.neutral400,
       flex: 1,
+    },
+    dotContainer: {
+      borderWidth: 2,
+      borderColor: colors.neutral200,
+      width: 24,
+      height: 24,
+      borderRadius: 18,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginRight: 8,
+    },
+    selectedDotContainer: {
+      borderColor: colors.primary,
+    },
+    colorDot: {
+      width: 16,
+      height: 16,
+      borderRadius: 12,
     },
   });
 

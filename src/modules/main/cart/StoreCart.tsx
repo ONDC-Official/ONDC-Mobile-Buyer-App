@@ -178,7 +178,7 @@ const StoreCart: React.FC<StoreCart> = ({
         {/* bottomView */}
         <View style={styles.bottomView}>
           <Text variant="bodyLarge">
-            {t('Cart.Total')}: ₹{cartTotal}
+            {t('Cart.Total')}: ₹{formatNumber(Number(cartTotal.toFixed(2)))}
           </Text>
           <TouchableOpacity
             style={styles.viewCartButton}

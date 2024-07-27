@@ -170,6 +170,9 @@ const styles = StyleSheet.create({
   addButton: {
     borderRadius: 8,
     marginHorizontal: 16,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

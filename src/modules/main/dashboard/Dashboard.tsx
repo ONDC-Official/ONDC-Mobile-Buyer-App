@@ -60,7 +60,7 @@ const Dashboard: React.FC<Dashboard> = () => {
           contentContainerStyle={styles.modalContainer}>
           <View style={styles.closeContainer}>
             <TouchableOpacity onPress={closeModal}>
-              <MaterialIcons name={'clear'} size={24} />
+              <MaterialIcons name={'clear'} size={24} color={'#000'} />
             </TouchableOpacity>
           </View>
           <View style={styles.modalContent}>

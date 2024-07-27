@@ -59,7 +59,7 @@ const Products: React.FC<Products> = ({
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [selectedAttributes, setSelectedAttributes] = useState<any>({});
   const [customData, setCustomData] = useState<any>(null);
-  const {getDataWithAuth} = useNetworkHandling();
+  const {getDataWithAuth, getDataWithWithoutEncode} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
   const searchProducts = async (
@@ -73,58 +73,91 @@ const Products: React.FC<Products> = ({
     try {
       productSearchSource.current = CancelToken.source();
       let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}`;
-      url += selectedProvider ? `&providerIds=${selectedProvider}` : '';
+      url += selectedProvider
+        ? `&providerIds=${encodeURIComponent(selectedProvider)}`
+        : '';
       url +=
         subCategoryIds.length > 0
-          ? `&categoryIds=${subCategoryIds.join(',')}`
+          ? `&categoryIds=${encodeURIComponent(subCategoryIds.join(','))}`
           : '';
       Object.keys(attributes).map(key => {
-        url += `&product_attr_${key}=${attributes[key].join(',')}`;
+        url += `&product_attr_${key}=${encodeURIComponent(
+          attributes[key].join(','),
+        )}`;
       });
-
-      const {data} = await getDataWithAuth(
+      const {data} = await getDataWithWithoutEncode(
         url,
         productSearchSource.current.token,
       );
       if (data.response.data.length > 0) {
+        let listData = [];
+        if (page === 1) {
+          listData =
+            customMenu?.data?.data?.length > 0
+              ? customMenu?.data?.data?.map((element: any) => {
+                  let makeList: any = [];
+                  data.response.data.forEach((item: any) => {
+                    if (element?.id === item.customisation_menus[0]?.id) {
+                      makeList.push(item);
+                    }
+                  });
+                  return {
+                    title: element.descriptor.name,
+                    data: [{list: makeList}],
+                  };
+                })
+              : [{title: null, data: [{list: data.response.data}]}];
+        } else {
+          listData =
+            customMenu?.data?.data?.length > 0
+              ? customMenu?.data?.data?.map((element: any, index: number) => {
+                  let makeList: any = [];
+                  data.response.data.forEach((item: any) => {
+                    if (element?.id === item.customisation_menus[0]?.id) {
+                      makeList.push(item);
+                    }
+                  });
+                  return products.length > 0
+                    ? {
+                        title: element.descriptor.name,
+                        data: [
+                          {
+                            list: [
+                              ...products[index].data[0].list,
+                              ...makeList,
+                            ],
+                          },
+                        ],
+                      }
+                    : {
+                        title: element.descriptor.name,
+                        data: [{list: makeList}],
+                      };
+                })
+              : products.length > 0
+              ? [
+                  {
+                    title: null,
+                    data: [
+                      {
+                        list: [
+                          ...products[0].data[0].list,
+                          ...data.response.data,
+                        ],
+                      },
+                    ],
+                  },
+                ]
+              : [{title: null, data: [{list: data.response.data}]}];
+        }
         setPage(page + 1);
         setTotalProducts(data.response.count);
-
-        const listData =
-          customMenu?.data?.data?.length > 0
-            ? customMenu?.data?.data?.map((element: any, index: number) => {
-                let makeList: any = [];
-                data.response.data.forEach((item: any) => {
-                  if (element?.id === item.customisation_menus[0]?.id) {
-                    makeList.push(item);
-                  }
-                });
-                return products.length > 0
-                  ? {
-                      title: element.descriptor.name,
-                      data: [
-                        {list: [...products[index].data[0].list, ...makeList]},
-                      ],
-                    }
-                  : {title: element.descriptor.name, data: [{list: makeList}]};
-              })
-            : products.length > 0
-            ? [
-                {
-                  title: null,
-                  data: [
-                    {
-                      list: [
-                        ...products[0].data[0].list,
-                        ...data.response.data,
-                      ],
-                    },
-                  ],
-                },
-              ]
-            : [{title: null, data: [{list: data.response.data}]}];
-
         setProducts([...listData]);
+      } else {
+        if (page === 1) {
+          setTotalProducts(0);
+          setProducts([]);
+        }
       }
     } catch (error) {
       handleApiError(error);
@@ -152,11 +185,16 @@ const Products: React.FC<Products> = ({
     }
   };
 
+  const updateSelectedAttributes = (newAttributes: any) => {
+    setPage(1);
+    setSelectedAttributes(newAttributes);
+  };
+
   const filteredProducts = useMemo(() => {
     const lowerQuery = searchQuery.toLowerCase();
     // Filter the products based on the search query
 
-    return products.map((item: any) => {
+    const list = products.map((item: any) => {
       return {
         title: item.title,
         data: [
@@ -174,6 +212,7 @@ const Products: React.FC<Products> = ({
         ],
       };
     });
+    return list.filter(one => one.data[0].list.length > 0);
   }, [products, searchQuery]);
 
   useEffect(() => {
@@ -192,6 +231,17 @@ const Products: React.FC<Products> = ({
           page,
           providerId,
           customMenu,
+          subCategories,
+          selectedAttributes,
+        ).then(() => {
+          voiceDetectionStarted.current = true;
+          startVoice().then(() => {});
+        });
+      } else {
+        searchProducts(
+          page,
+          providerId,
+          null,
           subCategories,
           selectedAttributes,
         ).then(() => {
@@ -250,7 +300,7 @@ const Products: React.FC<Products> = ({
       )}
       <Filters
         selectedAttributes={selectedAttributes}
-        setSelectedAttributes={setSelectedAttributes}
+        setSelectedAttributes={updateSelectedAttributes}
         providerId={providerId}
         category={subCategories.length ? subCategories[0] : null}
       />
@@ -298,7 +348,7 @@ const Products: React.FC<Products> = ({
           );
         }}
         onEndReached={loadMoreList}
-        ListFooterComponent={props =>
+        ListFooterComponent={() =>
           moreListRequested ? <ProductSkeleton /> : <></>
         }
       />

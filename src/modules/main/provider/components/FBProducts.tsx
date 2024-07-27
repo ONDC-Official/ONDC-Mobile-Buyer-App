@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {List, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -12,6 +12,7 @@ import ProductSkeleton from '../../../../components/skeleton/ProductSkeleton';
 import CustomMenuAccordion from './CustomMenuAccordion';
 import {useAppTheme} from '../../../../utils/theme';
 import ProductSearch from '../../../../components/products/ProductSearch';
+import {getFilterCategory} from '../../../../utils/utils';
 
 const CancelToken = axios.CancelToken;
 const VegImage = require('../../../../assets/veg.png');
@@ -26,9 +27,6 @@ const FBProducts = ({provider, domain}: {provider: any; domain: string}) => {
   const [menu, setMenu] = useState<any[]>([]);
   const [menuRequested, setMenuRequested] = useState<boolean>(true);
   const [selectedFilter, setSelectedFilter] = useState<string>('');
-  const [expandedAccordionId, setExpandedAccordionId] = useState<
-    string | number
-  >('');
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
@@ -52,9 +50,6 @@ const FBProducts = ({provider, domain}: {provider: any; domain: string}) => {
         one.items = menuResponses[index].data.data;
         return one;
       });
-      if (list.length > 0) {
-        setExpandedAccordionId(list[0].id);
-      }
       setMenu(list);
     } catch (error) {
       handleApiError(error);
@@ -66,19 +61,24 @@ const FBProducts = ({provider, domain}: {provider: any; domain: string}) => {
   const filteredSections = useMemo(() => {
     const lowerSearch = searchQuery.toLowerCase();
     // Filter products based on search query
-    return menu.map(section => {
-      const filteredSectionItems = section.items.filter(
-        (item: any) =>
-          item.item_details?.descriptor?.name
-            .toLowerCase()
-            .includes(lowerSearch) ||
-          item?.item_details?.category_id.includes(lowerSearch),
-      );
+    const list = menu.map(section => {
+      let filteredSectionItems = section.items.filter((item: any) => {
+        const itemDetails = item?.item_details;
+        const itemName = itemDetails?.descriptor?.name?.toLowerCase();
+        const categoryId = itemDetails?.category_id;
+        const matchesSearch =
+          itemName?.includes(lowerSearch) || categoryId?.includes(lowerSearch);
+        const matchesFilter =
+          selectedFilter.length === 0 ||
+          getFilterCategory(itemDetails?.tags) === selectedFilter;
+        return matchesSearch && matchesFilter;
+      });
       return Object.assign({}, section, {
         items: filteredSectionItems,
       });
     });
-  }, [menu, searchQuery]);
+    return list.filter(section => section.items.length > 0);
+  }, [menu, searchQuery, selectedFilter]);
 
   useEffect(() => {
     getCustomMenu().then(() => {});
@@ -180,18 +180,14 @@ const FBProducts = ({provider, domain}: {provider: any; domain: string}) => {
           setSearchQuery={setSearchQuery}
         />
       </View>
-      <List.AccordionGroup
-        expandedId={expandedAccordionId}
-        onAccordionPress={expandedId => setExpandedAccordionId(expandedId)}>
-        {filteredSections.map(section => (
-          <CustomMenuAccordion
-            key={section.id}
-            section={section}
-            selectedFilter={selectedFilter}
-            provider={provider}
-          />
-        ))}
-      </List.AccordionGroup>
+      {filteredSections.map((section, index) => (
+        <CustomMenuAccordion
+          key={section.id}
+          section={section}
+          provider={provider}
+          defaultExpand={index === 0}
+        />
+      ))}
     </View>
   );
 };
