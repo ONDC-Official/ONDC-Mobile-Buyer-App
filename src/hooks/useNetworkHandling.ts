@@ -47,6 +47,16 @@ export default () => {
     }
   };
 
+  const getDataWithWithoutEncode = async (url: string, cancelToken: any) => {
+    try {
+      const config = getAuthConfig(cancelToken);
+      return await axios.get(url, config);
+    } catch (e) {
+      console.log(e, url);
+      throw e;
+    }
+  };
+
   const getDataWithAuth = async (url: string, cancelToken: any) => {
     try {
       const config = getAuthConfig(cancelToken);
@@ -70,6 +80,7 @@ export default () => {
   return {
     getDataWithAuth,
     postDataWithAuth,
+    getDataWithWithoutEncode,
     putDataWithAuth,
     deleteDataWithAuth,
   };
