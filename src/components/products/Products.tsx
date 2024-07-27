@@ -198,6 +198,17 @@ const Products: React.FC<Products> = ({
           voiceDetectionStarted.current = true;
           startVoice().then(() => {});
         });
+      } else {
+        searchProducts(
+          page,
+          providerId,
+          null,
+          subCategories,
+          selectedAttributes,
+        ).then(() => {
+          voiceDetectionStarted.current = true;
+          startVoice().then(() => {});
+        });
       }
     })();
   }, [providerId, selectedAttributes]);
