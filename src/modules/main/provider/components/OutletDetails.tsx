@@ -144,14 +144,14 @@ const OutletDetails: React.FC<OutletDetails> = ({
             <FastImage
               style={styles.headerImage}
               source={{uri: outlet?.provider_descriptor.symbol}}
-              resizeMode={FastImage.resizeMode.cover}
+              resizeMode={FastImage.resizeMode.contain}
             />
           </Grayscale>
         ) : (
           <FastImage
             style={styles.headerImage}
             source={{uri: outlet?.provider_descriptor.symbol}}
-            resizeMode={FastImage.resizeMode.cover}
+            resizeMode={FastImage.resizeMode.contain}
           />
         )}
       </View>
