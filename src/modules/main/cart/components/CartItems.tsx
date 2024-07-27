@@ -35,7 +35,6 @@ import DeleteIcon from '../../../../assets/delete.svg';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 
 interface CartItems {
   fullCartItems: any[];
@@ -65,11 +64,8 @@ const CartItems: React.FC<CartItems> = ({
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {
-    deleteDataWithAuth,
-    getDataWithAuth,
-    putDataWithAuth,
-  } = useNetworkHandling();
+  const {deleteDataWithAuth, getDataWithAuth, putDataWithAuth} =
+    useNetworkHandling();
   const {customizationState, setCustomizationState, customizationPrices} =
     useCustomizationStateHelper();
   const {updatingCartItem, updateSpecificCartItem} =
@@ -87,7 +83,6 @@ const CartItems: React.FC<CartItems> = ({
   const [itemQty, setItemQty] = useState<number>(1);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
   const {handleApiError} = useNetworkErrorHandling();
-  const updateCart = userUpdateCartItem();
 
   const getProductDetails = async (productId: any) => {
     try {
@@ -239,8 +234,8 @@ const CartItems: React.FC<CartItems> = ({
                 </Text>
                 {provider?.provider?.locations?.length > 0 && (
                   <Text variant={'labelSmall'} style={styles.providerAddress}>
-                    {provider?.provider?.locations[0]?.address?.street || '-'},{' '}
-                    {provider?.provider?.locations[0]?.address?.city || '-'}
+                    {provider.items[0]?.item?.location_details?.address
+                      ?.locality || 'NA'}
                   </Text>
                 )}
               </View>

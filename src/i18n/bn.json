@@ -614,7 +614,14 @@
     "Beverages": "পানীয়"
   },
   "Store": {
-    "km": "{{distance}} km"
+    "km": "{{distance}} km",
+    "day": "{{time}} day",
+    "days": "{{time}} days",
+    "hour": "{{time}} hr",
+    "hours": "{{time}} hrs",
+    "minute": "{{time}} min",
+    "minutes": "{{time}} mins",
+    "Opens at": "Opens at {{time}}"
   },
   "Network Banner": {
     "You are offline, please verify your internet connection": "আপনি অফলাইন, আপনার ইন্টারনেট সংযোগ যাচাই করুন"
@@ -794,7 +801,9 @@
     "Please upgrade your application to the latest version": "অনুগ্রহ করে আপনার অ্যাপ্লিকেশনটিকে সর্বশেষ সংস্করণে উন্নীত করুন।",
     "Internet connection not available. Please check internet connection": "ইন্টারনেট সংযোগ পাওয়া যায় না। অনুগ্রহ করে ইন্টারনেট সংযোগ পরীক্ষা করুন",
     "Something went wrong, please try again after some time": "কিছু ভুল হয়েছে, দয়া করে কিছু সময় পরে আবার চেষ্টা করুন",
-    "Some orders are not initialized": "কিছু অর্ডার আরম্ভ করা হয় না।"
+    "Some orders are not initialized": "কিছু অর্ডার আরম্ভ করা হয় না।",
+    "Available Cities": "উপলব্ধ শহরগুলি",
+    "The app is only for Delhi city": "অ্যাপটি শুধুমাত্র দিল্লি শহরের জন্য।"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ওএনডিসি কিউআর সে ভারত খুলেগা"

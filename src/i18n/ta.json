@@ -614,7 +614,14 @@
     "Beverages": "பானங்கள்"
   },
   "Store": {
-    "km": "{{distance}} km"
+    "km": "{{distance}} km",
+    "day": "{{time}} day",
+    "days": "{{time}} days",
+    "hour": "{{time}} hr",
+    "hours": "{{time}} hrs",
+    "minute": "{{time}} min",
+    "minutes": "{{time}} mins",
+    "Opens at": "Opens at {{time}}"
   },
   "Network Banner": {
     "You are offline, please verify your internet connection": "நீங்கள் ஆஃப்லைனில் உள்ளீர்கள், உங்கள் இணைய இணைப்பைச் சரிபார்க்கவும்"
@@ -794,7 +801,9 @@
     "Please upgrade your application to the latest version": "உங்கள் பயன்பாட்டை சமீபத்திய பதிப்பிற்கு மேம்படுத்தவும்",
     "Internet connection not available. Please check internet connection": "இணைய இணைப்பு இல்லை. இணைய இணைப்பை சரிபார்க்கவும்",
     "Something went wrong, please try again after some time": "ஏதோ தவறு நடந்தது, சிறிது நேரத்திற்குப் பிறகு மீண்டும் முயற்சிக்கவும்",
-    "Some orders are not initialized": "சில ஆர்டர்கள் துவக்கப்படவில்லை."
+    "Some orders are not initialized": "சில ஆர்டர்கள் துவக்கப்படவில்லை.",
+    "Available Cities": "கிடைக்கக்கூடிய நகரங்கள்",
+    "The app is only for Delhi city": "இந்த செயலி டெல்லி நகரத்திற்கு மட்டுமே பொருந்தும்"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ஒஎன்டிசி கியூஆர் சே பாரத் குலேகா"

@@ -614,7 +614,14 @@
     "Beverages": "पेय"
   },
   "Store": {
-    "km": "{{distance}} km"
+    "km": "{{distance}} km",
+    "day": "{{time}} day",
+    "days": "{{time}} days",
+    "hour": "{{time}} hr",
+    "hours": "{{time}} hrs",
+    "minute": "{{time}} min",
+    "minutes": "{{time}} mins",
+    "Opens at": "Opens at {{time}}"
   },
   "Network Banner": {
     "You are offline, please verify your internet connection": "आप ऑफ़लाइन हैं, कृपया अपना इंटरनेट कनेक्शन सत्यापित करें"
@@ -794,7 +801,9 @@
     "Please upgrade your application to the latest version": "कृपया अपने अनुप्रयोग को नवीनतम संस्करण में उन्नत करें",
     "Internet connection not available. Please check internet connection": "इंटरनेट कनेक्शन उपलब्ध नहीं है। कृपया इंटरनेट कनेक्शन की जाँच करें",
     "Something went wrong, please try again after some time": "कुछ गलत हुआ, कृपया कुछ समय बाद फिर से प्रयास करें",
-    "Some orders are not initialized": "कुछ ऑर्डर आरंभ नहीं किए जाते हैं।"
+    "Some orders are not initialized": "कुछ ऑर्डर आरंभ नहीं किए जाते हैं।",
+    "Available Cities": "उपलब्ध शहर",
+    "The app is only for Delhi city": "यह ऐप केवल दिल्ली शहर के लिए है।"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ओएनडीसी क्यूआर से भारत खुलेगा"

@@ -614,7 +614,14 @@
     "Beverages": "शीतपेये"
   },
   "Store": {
-    "km": "{{distance}} km"
+    "km": "{{distance}} km",
+    "day": "{{time}} day",
+    "days": "{{time}} days",
+    "hour": "{{time}} hr",
+    "hours": "{{time}} hrs",
+    "minute": "{{time}} min",
+    "minutes": "{{time}} mins",
+    "Opens at": "Opens at {{time}}"
   },
   "Network Banner": {
     "You are offline, please verify your internet connection": "तुम्ही ऑफलाइन आहात, कृपया तुमचे इंटरनेट कनेक्शन सत्यापित करा"
@@ -794,7 +801,9 @@
     "Please upgrade your application to the latest version": "कृपया तुमचा अनुप्रयोग नवीनतम आवृत्तीमध्ये सुधारित करा",
     "Internet connection not available. Please check internet connection": "इंटरनेट जोडणी उपलब्ध नाही. कृपया इंटरनेट जोडणी तपासा",
     "Something went wrong, please try again after some time": "काहीतरी चूक झाली आहे, कृपया काही काळानंतर पुन्हा प्रयत्न करा",
-    "Some orders are not initialized": "काही ऑर्डर सुरू केल्या जात नाहीत."
+    "Some orders are not initialized": "काही ऑर्डर सुरू केल्या जात नाहीत.",
+    "Available Cities": "उपलब्ध शहरे",
+    "The app is only for Delhi city": "हे एप केवळ दिल्ली शहरासाठी आहे."
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ओएनडीसी क्यूआर से भारत खुलेगा"

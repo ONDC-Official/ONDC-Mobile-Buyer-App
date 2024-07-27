@@ -801,7 +801,9 @@
     "Please upgrade your application to the latest version": "Please upgrade your application to the latest version",
     "Internet connection not available. Please check internet connection": "Internet connection not available. Please check internet connection",
     "Something went wrong, please try again after some time": "Something went wrong, please try again after some time",
-    "Some orders are not initialized": "Some orders are not initialized"
+    "Some orders are not initialized": "Some orders are not initialized",
+    "Available Cities": "Available Cities",
+    "The app is only for Delhi city": "The app is only for Delhi city"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ONDC QR se Bharat Khulega"
