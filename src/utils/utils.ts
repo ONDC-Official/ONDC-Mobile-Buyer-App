@@ -5,7 +5,7 @@ import {ToastPosition} from 'react-native-toast-message/lib/src/types';
 import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import getDistance from 'geolib/es/getDistance';
-import { COLOR_CODE_TO_NAME } from "./colorCodes";
+import {COLOR_CODE_TO_NAME} from './colorCodes';
 
 export const isIOS = Platform.OS === 'ios';
 const TOAST_VISIBILITY_TIME = 3000;
@@ -299,18 +299,27 @@ export const compareDateWithDuration = (duration: any, dateStr: string) => {
 export const getFilterCategory = (tags: any) => {
   let category = 'veg';
 
-  tags?.forEach((tag: any) => {
-    if (tag.code === 'veg_nonveg') {
-      const vegNonVegValue = tag.list[0].value;
-      if (vegNonVegValue === 'yes' || vegNonVegValue === 'Yes') {
-        category = 'veg';
-      } else if (vegNonVegValue === 'no') {
-        category = 'nonveg';
-      } else if (vegNonVegValue === 'egg') {
+  const selectedTag = tags.find((tag: any) => tag.code === 'veg_nonveg');
+  const veg = selectedTag.list.find(
+    (one: any) => one.code === 'veg' && one.value.toLowerCase() === 'yes',
+  );
+  if (veg) {
+    category = 'veg';
+  } else {
+    const nonVeg = selectedTag.list.find(
+      (one: any) => one.code === 'non_veg' && one.value.toLowerCase() === 'yes',
+    );
+    if (nonVeg) {
+      category = 'nonveg';
+    } else {
+      const egg = selectedTag.list.find(
+        (one: any) => one.code === 'egg' && one.value.toLowerCase() === 'yes',
+      );
+      if (egg) {
         category = 'egg';
       }
     }
-  });
+  }
 
   return category;
 };
@@ -388,5 +397,7 @@ export const calculateDistanceBetweenPoints = (
 
 export const convertHexToName = (hex: any) => {
   const hexLowerCase = hex.toLowerCase();
-  return  COLOR_CODE_TO_NAME?.hasOwnProperty(hexLowerCase) ? COLOR_CODE_TO_NAME[hexLowerCase] : hex;
+  return COLOR_CODE_TO_NAME?.hasOwnProperty(hexLowerCase)
+    ? COLOR_CODE_TO_NAME[hexLowerCase]
+    : hex;
 };

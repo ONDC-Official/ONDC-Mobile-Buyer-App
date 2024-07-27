@@ -2,9 +2,9 @@ import React from 'react';
 import FastImage from 'react-native-fast-image';
 import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 import {getFilterCategory} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 interface VegNonVegTag {
   tags: any[];
