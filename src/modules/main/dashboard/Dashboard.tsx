@@ -26,7 +26,7 @@ const Dashboard: React.FC<Dashboard> = () => {
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
   const {} = useRefreshToken();
-  const [modalVisible, setModalVisible] = useState<boolean>(true);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
 
   const closeModal = () => setModalVisible(false);
 

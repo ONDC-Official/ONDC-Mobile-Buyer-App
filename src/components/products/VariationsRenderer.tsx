@@ -294,7 +294,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
     const groupName = groupData.name;
 
     return (
-      <>
+      <View key={groupId}>
         <View style={styles.group} key={groupId}>
           <View style={styles.groupHeader}>
             <Text variant="bodyLarge" style={styles.groupTitle}>
@@ -316,7 +316,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
               data={groupData.options}
               renderItem={({item}: {item: any}) => {
                 const isSelected = groupData.selected.includes(item);
-                if (groupName === 'color') {
+                if (groupName === 'colour') {
                   return (
                     <TouchableOpacity
                       key={item}
@@ -390,7 +390,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
             </Dialog>
           </Portal>
         )}
-      </>
+      </View>
     );
   });
 };

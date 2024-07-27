@@ -5,6 +5,7 @@ import {ToastPosition} from 'react-native-toast-message/lib/src/types';
 import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import getDistance from 'geolib/es/getDistance';
+import { COLOR_CODE_TO_NAME } from "./colorCodes";
 
 export const isIOS = Platform.OS === 'ios';
 const TOAST_VISIBILITY_TIME = 3000;
@@ -383,4 +384,9 @@ export const calculateDistanceBetweenPoints = (
 ) => {
   const distance = getDistance(firstPoint, secondPoint) / 1000;
   return Number.isInteger(distance) ? String(distance) : distance.toFixed(1);
+};
+
+export const convertHexToName = (hex: any) => {
+  const hexLowerCase = hex.toLowerCase();
+  return  COLOR_CODE_TO_NAME?.hasOwnProperty(hexLowerCase) ? COLOR_CODE_TO_NAME[hexLowerCase] : hex;
 };
