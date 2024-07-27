@@ -287,19 +287,19 @@ export const getFilterCategory = (tags: any) => {
   let category = 'veg';
 
   const selectedTag = tags.find((tag: any) => tag.code === 'veg_nonveg');
-  const veg = selectedTag.list.find(
+  const veg = selectedTag?.list?.find(
     (one: any) => one.code === 'veg' && one.value.toLowerCase() === 'yes',
   );
   if (veg) {
     category = 'veg';
   } else {
-    const nonVeg = selectedTag.list.find(
+    const nonVeg = selectedTag?.list?.find(
       (one: any) => one.code === 'non_veg' && one.value.toLowerCase() === 'yes',
     );
     if (nonVeg) {
       category = 'nonveg';
     } else {
-      const egg = selectedTag.list.find(
+      const egg = selectedTag?.list?.find(
         (one: any) => one.code === 'egg' && one.value.toLowerCase() === 'yes',
       );
       if (egg) {

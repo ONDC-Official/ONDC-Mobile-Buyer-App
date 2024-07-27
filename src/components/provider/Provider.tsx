@@ -1,9 +1,8 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
-import moment from 'moment';
 import 'moment-duration-format';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
@@ -17,9 +16,9 @@ import {
   FB_DOMAIN,
   GROCERY_DOMAIN,
 } from '../../utils/constants';
-import {calculateDistanceBetweenPoints} from '../../utils/utils';
 import useMinutesToString from '../../hooks/useMinutesToString';
 import useFormatNumber from '../../hooks/useFormatNumber';
+import {calculateDistanceBetweenPoints} from '../../utils/utils';
 
 const NoImageAvailable = require('../../assets/noImage.png');
 
@@ -29,16 +28,6 @@ const Provider = ({provider}: {provider: any}) => {
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const [maxDeliveryTime, setMaxDeliveryTime] = useState({
-    type: 'minutes',
-    time: 0,
-  });
-  const [minDeliveryTime, setMinDeliveryTime] = useState({
-    type: 'minutes',
-    time: 0,
-  });
-  const [distance, setDistance] = useState<string>('');
-  const [locality, setLocality] = useState<string>('');
   const {address} = useSelector((state: any) => state?.address);
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
     useMinutesToString();
@@ -91,27 +80,10 @@ const Provider = ({provider}: {provider: any}) => {
     );
   }, []);
 
-  useEffect(() => {
-    if (provider) {
-      let maxMinutes = 0;
-      let minMinutes = 999999;
-      let latLong: string = '';
-      let itemsLocality = '';
-      provider?.items.forEach((item: any) => {
-        const duration = moment.duration(
-          item?.item_details['@ondc/org/time_to_ship'],
-        );
-        let durationInMinutes = duration.format('m').replace(/\,/g, '');
-
-        if (maxMinutes < durationInMinutes) {
-          maxMinutes = durationInMinutes;
-          latLong = item.location_details?.gps.split(/\s*,\s*/);
-          itemsLocality = item.location_details?.address?.locality;
-        }
-        if (minMinutes > durationInMinutes) {
-          minMinutes = durationInMinutes;
-        }
-      });
+  const {timeToShip, locality, distance} = useMemo(() => {
+    if (provider && provider?.items.length > 0) {
+      const locationDetails = provider?.items[0].location_details;
+      const latLong = locationDetails.gps.split(/\s*,\s*/);
 
       const newDistance = calculateDistanceBetweenPoints(
         {
@@ -123,15 +95,22 @@ const Provider = ({provider}: {provider: any}) => {
           longitude: Number(latLong[1]),
         },
       );
-      setDistance(newDistance);
       let travelTime = (Number(newDistance) * 60) / 15;
-      setMaxDeliveryTime(
-        convertMinutesToHumanReadable(Number(maxMinutes) + travelTime),
-      );
-      setMinDeliveryTime(
-        convertMinutesToHumanReadable(Number(minMinutes) + travelTime),
-      );
-      setLocality(itemsLocality);
+      const medianTimeToShipMinutes =
+        (locationDetails.median_time_to_ship ?? 0) / 60;
+      return {
+        timeToShip: convertMinutesToHumanReadable(
+          Number(medianTimeToShipMinutes) + travelTime,
+        ),
+        locality: locationDetails.address?.locality || 'NA',
+        distance: newDistance,
+      };
+    } else {
+      return {
+        timeToShip: {type: 'minutes', time: 0},
+        locality: '',
+        distance: 0,
+      };
     }
   }, [provider]);
 
@@ -173,25 +152,10 @@ const Provider = ({provider}: {provider: any}) => {
                 color={theme.colors.neutral200}
               />
               <Text variant={'labelMedium'} style={styles.distance}>
-                {provider?.items.length === 1
-                  ? translateMinutesToHumanReadable(
-                      maxDeliveryTime.type,
-                      maxDeliveryTime.time,
-                    )
-                  : maxDeliveryTime.type === minDeliveryTime.type
-                  ? `${
-                      minDeliveryTime.time
-                    } - ${translateMinutesToHumanReadable(
-                      maxDeliveryTime.type,
-                      maxDeliveryTime.time,
-                    )}`
-                  : `${translateMinutesToHumanReadable(
-                      minDeliveryTime.type,
-                      minDeliveryTime.time,
-                    )} - ${translateMinutesToHumanReadable(
-                      maxDeliveryTime.type,
-                      maxDeliveryTime.time,
-                    )}`}
+                {translateMinutesToHumanReadable(
+                  timeToShip.type,
+                  timeToShip.time,
+                )}
               </Text>
             </View>
           </View>
@@ -247,7 +211,7 @@ const makeStyles = (colors: any) =>
     },
     providerLocality: {
       color: colors.neutral300,
-      flex: 1,
+      flexShrink: 1,
     },
     distance: {
       color: colors.neutral300,
