@@ -22,7 +22,7 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
 
   const handleAccordionClick = () => setExpanded(!expanded);
 
-  let itemLength = useMemo(() => section?.items?.length, []);
+  let itemLength = useMemo(() => section?.items?.length, [section]);
 
   return (
     <List.Accordion
