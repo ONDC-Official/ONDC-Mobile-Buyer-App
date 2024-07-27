@@ -1,52 +1,50 @@
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 import {List, Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import FBProduct from './FBProduct';
-import {getFilterCategory} from '../../../../utils/utils';
 import {useAppTheme} from '../../../../utils/theme';
 
 interface CustomMenuAccordion {
   section: any;
-  selectedFilter: string;
   provider: any;
+  defaultExpand: boolean;
 }
 
 const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
   section,
-  selectedFilter,
-  provider
+  provider,
+  defaultExpand,
 }) => {
+  const [expanded, setExpanded] = useState<boolean>(defaultExpand);
+
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
-  let itemLength = section?.items?.length;
+  const handleAccordionClick = () => setExpanded(!expanded);
+
+  let itemLength = useMemo(() => section?.items?.length, []);
 
   return (
     <List.Accordion
+      expanded={expanded}
+      onPress={handleAccordionClick}
       id={section.id}
       style={styles.accordion}
       title={
         <Text variant={'headlineSmall'} style={styles.heading}>
-          {section?.descriptor?.name}{' '}
-          {section?.items ? `(${section?.items?.length})` : ''}
+          {section?.descriptor?.name} {itemLength > 0 ? `(${itemLength})` : ''}
         </Text>
       }>
-      {section?.items
-        ?.filter(
-          (item: any) =>
-            selectedFilter.length === 0 ||
-            getFilterCategory(item?.item_details?.tags) === selectedFilter,
-        )
-        .map((item: any, index: number) => (
-          <View key={item.id}>
-            <FBProduct product={item} provider={provider}/>
-            {itemLength === index + 1 ? (
-              <View style={styles.lastItem} />
-            ) : (
-              <View style={styles.itemSeparator} />
-            )}
-          </View>
-        ))}
+      {section?.items?.map((item: any, index: number) => (
+        <View key={item.id}>
+          <FBProduct product={item} provider={provider} />
+          {itemLength === index + 1 ? (
+            <View style={styles.lastItem} />
+          ) : (
+            <View style={styles.itemSeparator} />
+          )}
+        </View>
+      ))}
     </List.Accordion>
   );
 };
