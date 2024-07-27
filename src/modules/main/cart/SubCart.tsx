@@ -379,6 +379,7 @@ const SubCart = ({route: {params}}: any) => {
               //for customizations
               if (item.title_type === 'item' && item.isCustomization) {
                 let key = item.parent_item_id;
+                items[key] = items[key] || {};
                 items[key].customizations = items[key].customizations || {};
                 let existing_data = items[key].customizations[item.id] || {};
                 let customisation_details = {
