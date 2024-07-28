@@ -39,6 +39,7 @@ const Products: React.FC<Products> = ({
   provider,
   providerDomain,
 }) => {
+  const sectionListRef = useRef<any>(null);
   const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
   const productSearchSource = useRef<any>(null);
@@ -91,7 +92,7 @@ const Products: React.FC<Products> = ({
       );
       if (data.response.data.length > 0) {
         let listData = [];
-        if (page === 1) {
+        if (pageNumber === 1) {
           listData =
             customMenu?.data?.data?.length > 0
               ? customMenu?.data?.data?.map((element: any) => {
@@ -150,11 +151,11 @@ const Products: React.FC<Products> = ({
                 ]
               : [{title: null, data: [{list: data.response.data}]}];
         }
-        setPage(page + 1);
+        setPage(pageNumber + 1);
         setTotalProducts(data.response.count);
         setProducts([...listData]);
       } else {
-        if (page === 1) {
+        if (pageNumber === 1) {
           setTotalProducts(0);
           setProducts([]);
         }
@@ -217,6 +218,18 @@ const Products: React.FC<Products> = ({
 
   useEffect(() => {
     (async () => {
+      setProducts([]);
+      if (sectionListRef?.current) {
+        try {
+          sectionListRef?.current?.scrollToLocation({
+            sectionIndex: 0,
+            itemIndex: 0,
+            animated: true,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
       if (providerId) {
         productSearchSource.current = CancelToken.source();
         const customMenu = await getDataWithAuth(
@@ -228,7 +241,7 @@ const Products: React.FC<Products> = ({
         setCustomData(customMenu);
 
         searchProducts(
-          page,
+          1,
           providerId,
           customMenu,
           subCategories,
@@ -239,7 +252,7 @@ const Products: React.FC<Products> = ({
         });
       } else {
         searchProducts(
-          page,
+          1,
           providerId,
           null,
           subCategories,
@@ -250,7 +263,7 @@ const Products: React.FC<Products> = ({
         });
       }
     })();
-  }, [providerId, selectedAttributes]);
+  }, [providerId, selectedAttributes, subCategories]);
 
   useEffect(() => {
     if (userInput.length > 0) {
@@ -311,6 +324,7 @@ const Products: React.FC<Products> = ({
         />
       </View>
       <SectionList
+        ref={sectionListRef}
         sections={filteredProducts}
         contentContainerStyle={styles.listContainer}
         keyExtractor={(item, index) => `section${index}`}

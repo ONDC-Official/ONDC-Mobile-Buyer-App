@@ -103,7 +103,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
     );
 
     const itemList = cartItems[0]?.message?.quote?.items.filter((item: any) => {
-      if (item.hasOwnProperty('tags')) {
+      if (item.hasOwnProperty('tags') && item.tags.length > 0) {
         const typeTag = item?.tags?.find((tag: any) => tag.code === 'type');
         if (typeTag) {
           const itemCode = typeTag.list.find((tag: any) => tag.code === 'type');
@@ -176,7 +176,7 @@ const Fulfillment: React.FC<Fulfillment> = ({
                   const filteredProducts =
                     cartItems[0]?.message?.quote?.items?.filter((item: any) => {
                       let isItem = false;
-                      if (item?.tags) {
+                      if (item.hasOwnProperty('tags') && item.tags.length > 0) {
                         const findTag = item?.tags.find(
                           (tag: any) => tag.code === 'type',
                         );
