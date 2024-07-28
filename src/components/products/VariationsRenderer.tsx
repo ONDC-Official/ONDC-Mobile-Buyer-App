@@ -154,59 +154,63 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
   };
 
   const handleVariationClick = (groupData: any, option: any) => {
-    let updatedVariationState = {...variationState};
-    groupData.selected = [option];
-    updatedVariationState[groupData.id] = groupData;
-    const isLastGroup = groupData.id === Object.keys(variationState).length;
-    if (!isLastGroup) {
-      const lastGroupId = Object.keys(variationState).length;
-      updatedVariationState[lastGroupId].selected = [];
-    }
+    try {
+      let updatedVariationState = { ...variationState };
+      groupData.selected = [option];
+      updatedVariationState[groupData.id] = groupData;
+      const isLastGroup = groupData.id === Object.keys(variationState).length;
+      if (!isLastGroup) {
+        const lastGroupId = Object.keys(variationState).length;
+        updatedVariationState[lastGroupId].selected = [];
+      }
 
-    variationGroups.forEach((group, index) => {
-      const groupName = group.name;
-      const groupId = group.seq;
+      variationGroups.forEach((group, index) => {
+        const groupName = group.name;
+        const groupId = group.seq;
 
-      const selectionOption = updatedVariationState[index + 1].selected[0];
-      const newGroupData: any = {
-        id: groupId,
-        name: groupName,
-        selected: selectionOption ? [selectionOption] : [],
-        options: [],
-      };
+        const selectionOption = updatedVariationState[index + 1].selected[0];
+        const newGroupData: any = {
+          id: groupId,
+          name: groupName,
+          selected: selectionOption ? [selectionOption] : [],
+          options: [],
+        };
 
-      if (index + 1 === 1) {
-        variations.forEach(variation => {
-          newGroupData.productId = variation.productId;
-          if (!newGroupData.options.includes(variation[groupName])) {
-            newGroupData.options.push(variation[groupName]);
-          }
-        });
-      } else {
-        const prevGroupName = updatedVariationState[index].name;
-        const prevGroupSelection = updatedVariationState[index].selected[0];
-        variations.forEach(variation => {
-          if (variation[prevGroupName] === prevGroupSelection) {
+        if (index + 1 === 1) {
+          variations.forEach(variation => {
+            newGroupData.productId = variation.productId;
             if (!newGroupData.options.includes(variation[groupName])) {
               newGroupData.options.push(variation[groupName]);
             }
-          }
+          });
+        } else {
+          const prevGroupName = updatedVariationState[index].name;
+          const prevGroupSelection = updatedVariationState[index].selected[0];
+          variations.forEach(variation => {
+            if (variation[prevGroupName] === prevGroupSelection) {
+              if (!newGroupData.options.includes(variation[groupName])) {
+                newGroupData.options.push(variation[groupName]);
+              }
+            }
+          });
+        }
+
+        if (newGroupData.selected.length === 0) {
+          newGroupData.selected = [newGroupData.options[0]];
+        }
+        updatedVariationState[groupId] = newGroupData;
+      });
+
+      setVariationState(updatedVariationState);
+
+      const matchingVariation = findMatchingVariation(updatedVariationState);
+      if (matchingVariation) {
+        navigation.navigate('ProductDetails', {
+          productId: matchingVariation.id,
         });
       }
-
-      if (newGroupData.selected.length === 0) {
-        newGroupData.selected = [newGroupData.options[0]];
-      }
-      updatedVariationState[groupId] = newGroupData;
-    });
-
-    setVariationState(updatedVariationState);
-
-    const matchingVariation = findMatchingVariation(updatedVariationState);
-    if (matchingVariation) {
-      navigation.navigate('ProductDetails', {
-        productId: matchingVariation.id,
-      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
