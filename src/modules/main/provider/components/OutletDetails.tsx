@@ -76,7 +76,11 @@ const OutletDetails: React.FC<OutletDetails> = ({
       <View style={styles.brandDetails}>
         <View style={styles.providerDetails}>
           <View style={styles.providerLocalityView}>
-            <Text variant={'headlineSmall'} style={styles.title}>
+            <Text
+              variant={'headlineSmall'}
+              style={styles.title}
+              ellipsizeMode={'tail'}
+              numberOfLines={1}>
               {provider?.descriptor?.name}
             </Text>
             <View style={styles.buttonContainer}>
