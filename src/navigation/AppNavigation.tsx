@@ -96,6 +96,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
           component={SubCart}
           options={{
             title: '',
+            headerStatusBarHeight: 0,
           }}
         />
         <Stack.Screen

@@ -106,7 +106,8 @@ const makeStyles = (colors: any) =>
       borderRadius: 8,
       paddingLeft: 8,
       paddingRight: 16,
-      paddingVertical: 16,
+      paddingTop: 8,
+      paddingBottom: 16,
       backgroundColor: colors.white,
     },
     header: {
@@ -120,7 +121,6 @@ const makeStyles = (colors: any) =>
       flex: 1,
     },
     name: {
-      marginHorizontal: 8,
       color: colors.neutral400,
       flex: 1,
     },

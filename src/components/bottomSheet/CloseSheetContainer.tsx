@@ -3,6 +3,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
 import Toast, {ErrorToast} from 'react-native-toast-message';
 import {useAppTheme} from '../../utils/theme';
+import {isIOS} from '../../utils/constants';
 
 const CloseSheetContainer = ({
   closeSheet,
@@ -35,7 +36,8 @@ const makeStyles = (colors: any) =>
     container: {
       justifyContent: 'flex-end',
       height: Dimensions.get('screen').height,
-      paddingBottom: 70,
+      paddingBottom: isIOS ? 16 : 70,
+      paddingTop: isIOS ? 32 : 0,
     },
     closeSheet: {
       alignItems: 'center',

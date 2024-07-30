@@ -175,6 +175,9 @@ export const theme: any = {
       lineHeight: 14,
     },
   },
+  animation: {
+    scale: 0,
+  },
 };
 
 export type AppTheme = typeof theme;
