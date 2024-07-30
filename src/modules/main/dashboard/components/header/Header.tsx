@@ -13,9 +13,10 @@ import QRButton from './QRButton';
 
 type HeaderProps = {
   disableAddress?: boolean;
+  onPress?: () => void;
 };
 
-const Header: React.FC<HeaderProps> = ({disableAddress}) => {
+const Header: React.FC<HeaderProps> = ({disableAddress, onPress}) => {
   const isFocused = useIsFocused();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -56,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress}) => {
             style={styles.headerImage}
             resizeMode={'contain'}
           />
-          <AddressTag />
+          <AddressTag onPress={onPress}/>
         </View>
       )}
       <View style={styles.searchContainer}>
