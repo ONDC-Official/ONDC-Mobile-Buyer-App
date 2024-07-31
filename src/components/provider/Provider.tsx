@@ -225,6 +225,8 @@ const makeStyles = (colors: any) =>
       height: 116,
       marginBottom: 16,
       borderRadius: 14,
+      borderWidth: 1,
+      borderColor: colors.neutral100,
     },
     productNameContainer: {
       flexDirection: 'row',
@@ -235,6 +237,8 @@ const makeStyles = (colors: any) =>
     },
     productName: {
       color: colors.neutral400,
+      flexShrink: 1,
+      paddingRight: 8,
     },
     productAmount: {
       color: colors.neutral400,

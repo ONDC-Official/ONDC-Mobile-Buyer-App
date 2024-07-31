@@ -62,7 +62,8 @@ const App = () => {
   return (
     <StoreProvider store={store}>
       <PaperProvider theme={theme}>
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.topSafeArea} />
+        <SafeAreaView style={styles.bottomSafeArea}>
           <StatusBar backgroundColor={theme.colors.primary} />
           <AppNavigation navigationRef={navigationRef} />
           <NetworkBanner />
@@ -74,9 +75,13 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  topSafeArea: {
+    flex: 0,
+    backgroundColor: theme.colors.primary,
+  },
+  bottomSafeArea: {
     flex: 1,
-    backgroundColor: Platform.OS === 'android' ? '#fff' : theme.colors.primary,
+    backgroundColor: theme.colors.white,
   },
 });
 
