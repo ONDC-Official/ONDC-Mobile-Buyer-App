@@ -8,26 +8,46 @@ import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../../../utils/theme';
 import useMinutesToString from '../../../../hooks/useMinutesToString';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
+import StoreIcon from '../../../../assets/no_store_icon.svg';
 
 interface StoreImage {
   source: any;
 }
 
-const NoImageAvailable = require('../../../../assets/noImage.png');
+const NoImageAvailable = require('../../../../assets/no_store.png');
 
 const StoreImage: React.FC<StoreImage> = ({source}) => {
   const theme = useAppTheme();
   const [imageSource, setImageSource] = useState(source);
+  const [imageLoadFailed, setImageLoadFailed] = useState<boolean>(false);
+
   const styles = makeStyles(theme.colors);
 
-  return (
-    <FastImage
-      resizeMode={FastImage.resizeMode.contain}
-      source={imageSource}
-      style={styles.brandImage}
-      onError={() => setImageSource(NoImageAvailable)}
-    />
-  );
+  const onError = () => {
+    setImageLoadFailed(true);
+    setImageSource(NoImageAvailable);
+  };
+
+  if (source) {
+    return (
+      <FastImage
+        resizeMode={
+          imageLoadFailed
+            ? FastImage.resizeMode.cover
+            : FastImage.resizeMode.contain
+        }
+        source={imageSource}
+        style={styles.brandImage}
+        onError={onError}
+      />
+    );
+  } else {
+    return (
+      <View style={[styles.brandImage, styles.brandImageEmpty]}>
+        <StoreIcon width={48} height={48} />
+      </View>
+    );
+  }
 };
 
 const Store = ({store}: {store: any}) => {
@@ -48,13 +68,14 @@ const Store = ({store}: {store: any}) => {
   };
 
   const {timeToShip, imageSource} = useMemo(() => {
-    let source = NoImageAvailable;
+    let source = null;
 
     if (store?.provider_descriptor?.symbol) {
       source = {uri: store?.provider_descriptor?.symbol};
     } else if (store?.provider_descriptor?.images?.length > 0) {
       source = {uri: store?.provider_descriptor?.images[0]};
     }
+
     return {
       timeToShip: convertMinutesToHumanReadable(store?.timeToShip),
       imageSource: source,
@@ -108,6 +129,9 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: 8,
+    },
+    brandImageEmpty: {
+      backgroundColor: colors.neutral200,
     },
     name: {
       color: colors.neutral400,
