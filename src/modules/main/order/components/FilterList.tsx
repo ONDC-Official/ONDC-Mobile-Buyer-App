@@ -78,9 +78,9 @@ const FilterList: React.FC<FilterList> = ({
         <Text variant={'titleLarge'} style={styles.title}>
           {t('Orders.Filter List.Filters')}
         </Text>
-        <Button mode={'text'} compact onPress={clearAll}>
-          {t('Orders.Filter List.Clear all')}
-        </Button>
+        <TouchableOpacity onPress={clearAll}>
+          <Text variant={'bodyMedium'} style={styles.clearButton}>{t('Orders.Filter List.Clear all')}</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.filterContainer}>
         <ScrollView style={styles.attributes}>
