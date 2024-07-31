@@ -298,7 +298,7 @@ export const makeStyles = (colors: any) =>
     valueRow: {
       flexDirection: 'row',
       paddingHorizontal: 16,
-      paddingVertical: 10,
+      paddingVertical: 5,
       alignItems: 'center',
       flex: 1,
     },
