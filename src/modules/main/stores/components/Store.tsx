@@ -32,7 +32,7 @@ const StoreImage: React.FC<StoreImage> = ({source}) => {
 
 const Store = ({store}: {store: any}) => {
   const {t} = useTranslation();
-  const {formatNumber} = useFormatNumber();
+  const {formatNumber, formatDistance} = useFormatNumber();
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
     useMinutesToString();
   const navigation = useNavigation<any>();
@@ -47,21 +47,25 @@ const Store = ({store}: {store: any}) => {
     navigation.navigate('BrandDetails', routeParams);
   };
 
-  const timeToShip = useMemo(() => {
-    return convertMinutesToHumanReadable(store?.timeToShip);
+  const {timeToShip, imageSource} = useMemo(() => {
+    let source = NoImageAvailable;
+
+    if (store?.provider_descriptor?.symbol) {
+      source = {uri: store?.provider_descriptor?.symbol};
+    } else if (store?.provider_descriptor?.images?.length > 0) {
+      source = {uri: store?.provider_descriptor?.images[0]};
+    }
+    return {
+      timeToShip: convertMinutesToHumanReadable(store?.timeToShip),
+      imageSource: source,
+    };
   }, [store]);
 
   return (
     <TouchableOpacity
       style={styles.brand}
       onPress={() => navigateToDetails(store)}>
-      <StoreImage
-        source={
-          store?.provider_descriptor?.images?.length > 0
-            ? {uri: store?.provider_descriptor?.images[0]}
-            : NoImageAvailable
-        }
-      />
+      <StoreImage source={imageSource} />
       <Text
         variant={'bodyLarge'}
         style={styles.name}
@@ -70,16 +74,20 @@ const Store = ({store}: {store: any}) => {
         {store?.provider_descriptor?.name}
       </Text>
       <View style={styles.addressContainer}>
-        <Text style={styles.details} variant={'labelSmall'}>
-          {translateMinutesToHumanReadable(timeToShip.type, timeToShip.time)}
-        </Text>
+        {!!timeToShip && (
+          <Text style={styles.details} variant={'labelSmall'}>
+            {translateMinutesToHumanReadable(timeToShip.type, timeToShip.time)}
+          </Text>
+        )}
         <View style={styles.dot} />
         <Text
           style={styles.distance}
           variant={'labelSmall'}
           numberOfLines={1}
           ellipsizeMode={'tail'}>
-          {t('Store.km', {distance: formatNumber(store?.distance)})}
+          {t('Store.km', {
+            distance: formatNumber(formatDistance(store?.distance)),
+          })}
         </Text>
       </View>
     </TouchableOpacity>

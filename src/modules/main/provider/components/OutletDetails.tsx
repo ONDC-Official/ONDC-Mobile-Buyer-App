@@ -32,7 +32,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
   apiRequested,
 }) => {
   const {t} = useTranslation();
-  const {formatNumber} = useFormatNumber();
+  const {formatNumber, formatDistance} = useFormatNumber();
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
     useMinutesToString();
   const theme = useAppTheme();
@@ -108,7 +108,9 @@ const OutletDetails: React.FC<OutletDetails> = ({
               color={theme.colors.neutral200}
             />
             <Text variant={'labelLarge'} style={styles.timing}>
-              {t('Store.km', {distance: formatNumber(outlet?.distance)})}
+              {t('Store.km', {
+                distance: formatNumber(formatDistance(outlet?.distance)),
+              })}
             </Text>
             <View style={styles.dotView} />
             {!!outlet?.address && (

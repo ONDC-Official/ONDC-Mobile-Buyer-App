@@ -24,7 +24,7 @@ const NoImageAvailable = require('../../assets/noImage.png');
 
 const Provider = ({provider}: {provider: any}) => {
   const {t} = useTranslation();
-  const {formatNumber} = useFormatNumber();
+  const {formatNumber, formatDistance} = useFormatNumber();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -124,7 +124,11 @@ const Provider = ({provider}: {provider: any}) => {
           style={styles.image}
         />
         <View style={styles.providerMeta}>
-          <Text variant={'titleLarge'} style={styles.providerName}>
+          <Text
+            variant={'titleLarge'}
+            style={styles.providerName}
+            numberOfLines={1}
+            ellipsizeMode={'tail'}>
             {provider?.descriptor?.name}
           </Text>
           <View style={styles.providerLocalityView}>
@@ -142,7 +146,9 @@ const Provider = ({provider}: {provider: any}) => {
               color={theme.colors.neutral200}
             />
             <Text variant={'labelMedium'} style={styles.distance}>
-              {t('Store.km', {distance: formatNumber(distance)})}
+              {t('Store.km', {
+                distance: formatNumber(formatDistance(distance)),
+              })}
             </Text>
             <View style={styles.providerLocalityView}>
               <View style={styles.dotView} />
@@ -219,6 +225,7 @@ const makeStyles = (colors: any) =>
     },
     providerMeta: {
       flex: 1,
+      paddingRight: 12,
     },
     productImage: {
       width: 116,

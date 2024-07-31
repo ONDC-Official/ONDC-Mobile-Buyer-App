@@ -23,5 +23,14 @@ export default () => {
       .join('');
   };
 
-  return {formatNumber};
+  const formatDistance = (number: any) => {
+    const input = Number(number);
+    if (input >= 10) {
+      return Number(input.toFixed(0));
+    } else {
+      return Number(input.toFixed(1));
+    }
+  };
+
+  return {formatNumber, formatDistance};
 };
