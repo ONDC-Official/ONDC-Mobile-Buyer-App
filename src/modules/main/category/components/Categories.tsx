@@ -1,13 +1,13 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
 
 import {CATEGORIES} from '../../../../utils/categories';
 import {useAppTheme} from '../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
 
 interface Categories {
   currentCategory: string;
@@ -29,6 +29,37 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
     }
   };
 
+  const renderItem = useCallback(
+    ({item, index}: {item: any; index: number}) => {
+      const name = t(`Featured Categories.${item.name}`);
+      const numberOfLines = name.split(' ')[0].length > 10 ? 1 : 2;
+
+      return (
+        <TouchableOpacity
+          style={[styles.category, index === 0 ? styles.first : {}]}
+          onPress={() => navigateToCategory(item)}>
+          <View
+            style={[
+              styles.imageContainer,
+              item.shortName === currentCategory
+                ? styles.selected
+                : styles.normal,
+            ]}>
+            <FastImage source={{uri: item.Icon}} style={styles.image} />
+          </View>
+          <Text
+            variant={'labelMedium'}
+            style={styles.categoryText}
+            ellipsizeMode={'tail'}
+            numberOfLines={numberOfLines}>
+            {name}
+          </Text>
+        </TouchableOpacity>
+      );
+    },
+    [navigateToCategory, currentCategory, t],
+  );
+
   useEffect(() => {
     if (currentCategory) {
       const index = CATEGORIES.findIndex(
@@ -48,28 +79,7 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
         data={CATEGORIES}
         horizontal
         showsHorizontalScrollIndicator={false}
-        renderItem={({item, index}) => (
-          <TouchableOpacity
-            style={[styles.category, index === 0 ? styles.first : {}]}
-            onPress={() => navigateToCategory(item)}>
-            <View
-              style={[
-                styles.imageContainer,
-                item.shortName === currentCategory
-                  ? styles.selected
-                  : styles.normal,
-              ]}>
-              <FastImage source={{uri: item.Icon}} style={styles.image} />
-            </View>
-            <Text
-              variant={'labelMedium'}
-              style={styles.categoryText}
-              ellipsizeMode={'tail'}
-              numberOfLines={2}>
-              {t(`Featured Categories.${item.name}`)}
-            </Text>
-          </TouchableOpacity>
-        )}
+        renderItem={renderItem}
         keyExtractor={item => item.name}
         onScrollToIndexFailed={info => {
           const wait = new Promise(resolve => setTimeout(resolve, 500));

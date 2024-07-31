@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
@@ -36,6 +36,36 @@ const SubCategories: React.FC<SubCategories> = ({
     }
   };
 
+  const renderItem = useCallback(
+    ({item}: {item: any}) => {
+      const name = t(`Product SubCategories.${item?.key}`);
+      const numberOfLines = name.split(' ')[0].length > 10 ? 1 : 2;
+      return (
+        <TouchableOpacity
+          style={styles.subCategory}
+          onPress={() => updateSubCategory(item)}>
+          <View
+            style={[
+              styles.imageContainer,
+              item?.key === currentSubCategory
+                ? styles.selected
+                : styles.normal,
+            ]}>
+            <FastImage source={{uri: item.imageUrl}} style={styles.image} />
+          </View>
+          <Text
+            variant={'labelLarge'}
+            style={styles.categoryText}
+            ellipsizeMode={'tail'}
+            numberOfLines={numberOfLines}>
+            {name}
+          </Text>
+        </TouchableOpacity>
+      );
+    },
+    [currentSubCategory, updateSubCategory, styles],
+  );
+
   useEffect(() => {
     setSubCategories(PRODUCT_SUBCATEGORY[category]);
   }, [category]);
@@ -54,8 +84,13 @@ const SubCategories: React.FC<SubCategories> = ({
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.allOptionsButton} onPress={goBack}>
-        <AllOptionsIcon width={21} height={21} />
-        <Text variant={'labelLarge'} style={styles.allOptions}>
+        <View style={styles.allOptionsContainer}>
+          <AllOptionsIcon width={21} height={21} />
+        </View>
+        <Text
+          variant={'labelLarge'}
+          style={styles.allOptions}
+          numberOfLines={2}>
           {t('Cart.All Options')}
         </Text>
       </TouchableOpacity>
@@ -65,27 +100,7 @@ const SubCategories: React.FC<SubCategories> = ({
         showsHorizontalScrollIndicator={false}
         data={subCategories}
         horizontal
-        renderItem={({item}) => (
-          <TouchableOpacity
-            style={styles.subCategory}
-            onPress={() => updateSubCategory(item)}>
-            <View
-              style={[
-                styles.imageContainer,
-                item?.key === currentSubCategory
-                  ? styles.selected
-                  : styles.normal,
-              ]}>
-              <FastImage source={{uri: item.imageUrl}} style={styles.image} />
-            </View>
-            <Text
-              variant={'labelLarge'}
-              style={styles.categoryText}
-              ellipsizeMode={'tail'}>
-              {t(`Product SubCategories.${item?.key}`)}
-            </Text>
-          </TouchableOpacity>
-        )}
+        renderItem={renderItem}
         keyExtractor={item => item.key}
         onScrollToIndexFailed={info => {
           const wait = new Promise(resolve => setTimeout(resolve, 500));
@@ -108,7 +123,7 @@ const makeStyles = (colors: any) =>
       paddingTop: 16,
       backgroundColor: colors.white,
       flexDirection: 'row',
-      alignItems: 'flex-end',
+      alignItems: 'center',
     },
     categoryText: {
       textAlign: 'center',
@@ -118,7 +133,6 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       marginRight: 24,
       width: 56,
-      height: 76,
     },
     imageContainer: {
       height: 56,
@@ -142,6 +156,14 @@ const makeStyles = (colors: any) =>
       borderRadius: 28,
       borderWidth: 1,
       borderColor: colors.neutral100,
+    },
+    allOptionsContainer: {
+      width: 56,
+      height: 56,
+      borderRadius: 34,
+      backgroundColor: colors.primary50,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     allOptions: {
       color: colors.primary,

@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
@@ -42,6 +42,33 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
     }
   }, [currentCategory]);
 
+  const renderItem = useCallback(
+    ({item}: {item: any}) => {
+      if (item.value === 'Empty') {
+        return <View key={item.key} style={styles.brand} />;
+      }
+      const name = t(`Product SubCategories.${item.key}`);
+      const numberOfLines = name.split(' ')[0].length > 10 ? 1 : 2;
+
+      return (
+        <TouchableOpacity
+          key={item.key}
+          style={styles.brand}
+          onPress={() => navigateToSubCategory(item)}>
+          <FastImage source={{uri: item.imageUrl}} style={styles.brandImage} />
+          <Text
+            variant={'labelLarge'}
+            style={styles.name}
+            numberOfLines={numberOfLines}
+            ellipsizeMode={'tail'}>
+            {name}
+          </Text>
+        </TouchableOpacity>
+      );
+    },
+    [navigateToSubCategory, t],
+  );
+
   const navigateToAll = () => {
     navigation.navigate('ShopByCategory', {category: currentCategory});
   };
@@ -58,25 +85,7 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
           data={list}
           numColumns={4}
           keyExtractor={item => item.key}
-          renderItem={({item}) => {
-            if (item.value === 'Empty') {
-              return <View key={item.key} style={styles.brand} />;
-            }
-            return (
-              <TouchableOpacity
-                key={item.key}
-                style={styles.brand}
-                onPress={() => navigateToSubCategory(item)}>
-                <FastImage
-                  source={{uri: item.imageUrl}}
-                  style={styles.brandImage}
-                />
-                <Text variant={'labelLarge'} style={styles.name}>
-                  {t(`Product SubCategories.${item.key}`)}
-                </Text>
-              </TouchableOpacity>
-            );
-          }}
+          renderItem={renderItem}
         />
       </View>
     </View>
