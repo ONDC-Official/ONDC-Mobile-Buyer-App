@@ -1,4 +1,4 @@
-import {Dimensions, Platform} from 'react-native';
+import {Dimensions} from 'react-native';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
 import {ToastPosition} from 'react-native-toast-message/lib/src/types';
@@ -7,7 +7,6 @@ import CryptoJS from 'crypto-js';
 import getDistance from 'geolib/es/getDistance';
 import {COLOR_CODE_TO_NAME} from './colorCodes';
 
-export const isIOS = Platform.OS === 'ios';
 const TOAST_VISIBILITY_TIME = 3000;
 
 /**

@@ -71,8 +71,8 @@ const AddressForm: React.FC<AddressForm> = ({
         `${API_BASE_URL}${MAP_ACCESS_TOKEN}`,
         source.current.token,
       );
-      MapplsGL.setMapSDKKey(data.access_token);
-      MapplsGL.setRestAPIKey(data.access_token);
+      MapplsGL.setMapSDKKey(Config.MMI_API_KEY);
+      MapplsGL.setRestAPIKey(Config.MMI_API_KEY);
       MapplsGL.setAtlasClientId(data.client_id);
       MapplsGL.setAtlasClientSecret(Config.MMMI_CLIENT_SECRET);
     } catch (error) {

@@ -2,9 +2,10 @@ import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Checkbox, Text} from 'react-native-paper';
 import React, {useEffect, useState} from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
-import {useAppTheme} from '../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import {useAppTheme} from '../../utils/theme';
 import {convertHexToName} from '../../utils/utils';
+import {isIOS} from '../../utils/constants';
 
 interface FilterList {
   attributes: any[];
@@ -202,6 +203,7 @@ export const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
+      paddingBottom: isIOS ? 16 : 0,
     },
     sheetHeader: {
       flexDirection: 'row',
@@ -214,6 +216,9 @@ export const makeStyles = (colors: any) =>
     },
     title: {
       color: colors.neutral400,
+    },
+    clearButton: {
+      color: colors.primary,
     },
     filterContainer: {
       flexDirection: 'row',
@@ -298,7 +303,7 @@ export const makeStyles = (colors: any) =>
     valueRow: {
       flexDirection: 'row',
       paddingHorizontal: 16,
-      paddingVertical: 10,
+      paddingVertical: 5,
       alignItems: 'center',
       flex: 1,
     },

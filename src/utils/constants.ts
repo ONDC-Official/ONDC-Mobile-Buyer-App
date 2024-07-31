@@ -1,3 +1,5 @@
+import {Platform} from 'react-native';
+
 export const BRAND_PRODUCTS_LIMIT: number = 10;
 
 export const TAGS: any = {
@@ -150,3 +152,5 @@ export const numberWords: any = {
 
 export const MANUAL_LINK =
   'https://docs.google.com/document/d/1ICRM0BwlyBUPlH2WOT4WcochudtFGiGZKCUk_n4XtvQ/edit?usp=drivesdk';
+
+export const isIOS = Platform.OS === 'ios';

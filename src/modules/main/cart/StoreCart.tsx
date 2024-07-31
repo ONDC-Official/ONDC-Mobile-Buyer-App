@@ -32,7 +32,7 @@ const StoreCart: React.FC<StoreCart> = ({
   goToViewCart,
 }) => {
   const {t} = useTranslation();
-  const {formatNumber} = useFormatNumber();
+  const {formatNumber, formatDistance} = useFormatNumber();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -128,7 +128,9 @@ const StoreCart: React.FC<StoreCart> = ({
               </Text>
               <View style={styles.dotView} />
               <Text variant={'labelMedium'} style={styles.distance}>
-                {t('Store.km', {distance: formatNumber(distance)})}
+                {t('Store.km', {
+                  distance: formatNumber(formatDistance(distance)),
+                })}
               </Text>
               <View style={styles.providerLocalityView}>
                 <View style={styles.dotView} />

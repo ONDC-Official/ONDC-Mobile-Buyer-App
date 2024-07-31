@@ -26,9 +26,9 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
 
   useEffect(() => {
     navigation.setOptions({
-      title: t(`Product SubCategories.${params.subCategory}`),
+      title: t(`Product SubCategories.${currentSubCategory}`),
     });
-  }, [navigation]);
+  }, [navigation, currentSubCategory]);
 
   return (
     <Page>

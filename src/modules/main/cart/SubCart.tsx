@@ -544,16 +544,19 @@ const SubCart = ({route: {params}}: any) => {
   useEffect(() => {
     navigation.setOptions({
       title: t('Cart.My Cart'),
-      headerRight: () => (
-        <TouchableOpacity style={styles.addMoreItems} onPress={navigateToHome}>
-          <Icon name={'add'} size={24} color={theme.colors.primary} />
-          <Text variant={'labelMedium'} style={styles.addMoreItemsLabel}>
-            {t('Cart.Add More Items')}
-          </Text>
-        </TouchableOpacity>
-      ),
+      headerRight: () =>
+        cartData?.cartItems.length > 0 ? (
+          <TouchableOpacity
+            style={styles.addMoreItems}
+            onPress={navigateToHome}>
+            <Icon name={'add'} size={24} color={theme.colors.primary} />
+            <Text variant={'labelMedium'} style={styles.addMoreItemsLabel}>
+              {t('Cart.Add More Items')}
+            </Text>
+          </TouchableOpacity>
+        ) : null,
     });
-  }, [providerWiseItems]);
+  }, [providerWiseItems, cartData]);
 
   useEffect(() => {
     setDeliveryAddress(address);

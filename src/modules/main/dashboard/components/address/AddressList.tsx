@@ -159,11 +159,6 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
 };
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    width: 300,
-    marginVertical: 10,
-    alignSelf: 'center',
-  },
   contentContainerStyle: {
     padding: 16,
   },
