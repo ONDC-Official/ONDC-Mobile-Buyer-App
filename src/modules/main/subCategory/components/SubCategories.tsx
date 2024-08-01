@@ -39,7 +39,7 @@ const SubCategories: React.FC<SubCategories> = ({
   const renderItem = useCallback(
     ({item}: {item: any}) => {
       const name = t(`Product SubCategories.${item?.key}`);
-      const numberOfLines = name.split(' ')[0].length > 10 ? 1 : 2;
+      const numberOfLines = name.split(' ')[0].length > 8 ? 1 : 2;
       return (
         <TouchableOpacity
           style={styles.subCategory}
@@ -128,6 +128,7 @@ const makeStyles = (colors: any) =>
     categoryText: {
       textAlign: 'center',
       color: colors.neutral400,
+      width: 56,
     },
     subCategory: {
       alignItems: 'center',

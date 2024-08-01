@@ -32,7 +32,7 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
   const renderItem = useCallback(
     ({item, index}: {item: any; index: number}) => {
       const name = t(`Featured Categories.${item.name}`);
-      const numberOfLines = name.split(' ')[0].length > 10 ? 1 : 2;
+      const numberOfLines = name.split(' ')[0].length > 8 ? 1 : 2;
 
       return (
         <TouchableOpacity

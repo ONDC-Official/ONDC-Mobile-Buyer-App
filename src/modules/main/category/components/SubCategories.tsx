@@ -48,7 +48,7 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
         return <View key={item.key} style={styles.brand} />;
       }
       const name = t(`Product SubCategories.${item.key}`);
-      const numberOfLines = name.split(' ')[0].length > 10 ? 1 : 2;
+      const numberOfLines = name.split(' ')[0].length > 8 ? 1 : 2;
 
       return (
         <TouchableOpacity
