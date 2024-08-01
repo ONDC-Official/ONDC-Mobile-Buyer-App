@@ -244,7 +244,7 @@ const makeStyles = (colors: any) =>
     },
     productName: {
       color: colors.neutral400,
-      flexShrink: 1,
+      flex: 1,
       paddingRight: 8,
     },
     productAmount: {
