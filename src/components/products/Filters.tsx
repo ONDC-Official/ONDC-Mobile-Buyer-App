@@ -44,6 +44,7 @@ const Filters: React.FC<Filters> = ({
   const getAttributes = async () => {
     try {
       setAttributesRequested(true);
+      setAttributes([]);
       attributeSource.current = CancelToken.source();
       let url = `${API_BASE_URL}${PRODUCT_ATTRIBUTES}`;
       url += providerId ? `?provider=${providerId}` : '';
@@ -85,7 +86,7 @@ const Filters: React.FC<Filters> = ({
         attributeSource.current.cancel();
       }
     };
-  }, []);
+  }, [category, providerId]);
 
   if (attributes?.length > 0) {
     const attributesHeight = attributes.length * 40 + 200;
