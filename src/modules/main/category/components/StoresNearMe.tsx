@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {FlatList, StyleSheet, View} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
@@ -15,7 +15,6 @@ import Store from '../../stores/components/Store';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
 import {FB_DOMAIN} from '../../../../utils/constants';
 import {saveStoresList} from '../../../../toolkit/reducer/stores';
-import useCalculateTimeToShip from '../../../../hooks/useCalculateTimeToShip';
 
 interface StoresNearMe {
   domain?: string;
@@ -45,24 +44,20 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const {calculateTimeToShip} = useCalculateTimeToShip();
 
   const getAllLocations = async () => {
     try {
       setApiRequested(true);
+      const limit = domain === FB_DOMAIN ? 12 : 9;
       source.current = CancelToken.source();
       const url = `${API_BASE_URL}${LOCATIONS}?latitude=${
         address.address.lat
       }&longitude=${address.address.lng}&radius=100${
-        domain ? `&domain=${domain}&limit=${domain === FB_DOMAIN ? 12 : 9}` : ''
-      }`;
+        domain ? `&domain=${domain}` : ''
+      }&limitExtended=${limit}`;
+      console.log(url);
       const {data} = await getDataWithAuth(url, source.current.token);
-      setLocations(
-        calculateTimeToShip(data.data, {
-          latitude: address.address.lat,
-          longitude: address.address.lng,
-        }),
-      );
+      setLocations(data.data);
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -74,6 +69,13 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     dispatch(saveStoresList(locations));
     navigation.navigate('StoresNearMe', {domain});
   };
+
+  const renderSkeletonItem = useCallback(() => <BrandSkeleton />, []);
+
+  const renderItem = useCallback(
+    ({item}: {item: any}) => <Store store={item} />,
+    [],
+  );
 
   useEffect(() => {
     if (address) {
@@ -101,15 +103,15 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
             numColumns={3}
             data={skeletonList}
             keyExtractor={item => item.id}
-            renderItem={() => <BrandSkeleton />}
+            renderItem={renderSkeletonItem}
           />
         ) : (
           <FlatList
             contentContainerStyle={styles.listContainer}
             numColumns={3}
             data={locations}
-            keyExtractor={item => item.id}
-            renderItem={({item}) => <Store store={item} />}
+            keyExtractor={item => item.location}
+            renderItem={renderItem}
           />
         )}
       </View>

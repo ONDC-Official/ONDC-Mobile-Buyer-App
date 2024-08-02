@@ -1,6 +1,6 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
@@ -59,13 +59,12 @@ const Store = ({store}: {store: any}) => {
   const {colors} = useAppTheme();
   const styles = makeStyles(colors);
 
-  const navigateToDetails = (location: any) => {
-    const routeParams: any = {
-      brandId: location.provider,
-    };
-    routeParams.outletId = location.id;
-    navigation.navigate('BrandDetails', routeParams);
-  };
+  const navigateToDetails = useCallback(() => {
+    navigation.navigate('BrandDetails', {
+      brandId: store.provider,
+      outletId: store.location,
+    });
+  }, [store, navigation]);
 
   const {timeToShip, imageSource} = useMemo(() => {
     let source = null;
@@ -76,16 +75,17 @@ const Store = ({store}: {store: any}) => {
       source = {uri: store?.provider_descriptor?.images[0]};
     }
 
+    const time = store?.distance_time_to_ship
+      ? store?.distance_time_to_ship
+      : store?.median_time_to_ship / 60 + (store?.distance * 60) / 15;
     return {
-      timeToShip: convertMinutesToHumanReadable(store?.timeToShip),
+      timeToShip: convertMinutesToHumanReadable(time),
       imageSource: source,
     };
   }, [store]);
 
   return (
-    <TouchableOpacity
-      style={styles.brand}
-      onPress={() => navigateToDetails(store)}>
+    <TouchableOpacity style={styles.brand} onPress={navigateToDetails}>
       <StoreImage source={imageSource} />
       <Text
         variant={'bodyLarge'}

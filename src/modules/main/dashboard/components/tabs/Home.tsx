@@ -1,13 +1,14 @@
 import React, {useRef, useState} from 'react';
 import {Dimensions, ScrollView, StyleSheet, View} from 'react-native';
+import {useSelector} from 'react-redux';
+import RBSheet from 'react-native-raw-bottom-sheet';
+
 import Header from '../header/Header';
 import Categories from '../home/Categories';
 import {useAppTheme} from '../../../../../utils/theme';
 import StoresNearMe from '../../../category/components/StoresNearMe';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
 import AddressList from '../../../../main/cart/components/AddressList';
-import {useSelector} from 'react-redux';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
@@ -16,7 +17,7 @@ const Home = () => {
   const styles = makeStyles(theme.colors);
   const addressSheet = useRef<any>();
 
-  const {address} = useSelector(({address}) => address);
+  const {address} = useSelector((state: any) => state.address);
   const [deliveryAddress, setDeliveryAddress] = useState(address);
 
   const updateDeliveryAddress = (newAddress: any) => {
