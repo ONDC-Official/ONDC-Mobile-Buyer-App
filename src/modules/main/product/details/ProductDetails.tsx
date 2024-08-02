@@ -42,6 +42,7 @@ import {useAppTheme} from '../../../../utils/theme';
 import useReadAudio from '../../../../hooks/useReadAudio';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
+import SizeChart from './components/SizeChart';
 
 interface ProductDetails {
   route: any;
@@ -620,25 +621,10 @@ const ProductDetails: React.FC<ProductDetails> = ({
         </View>
       </ScrollView>
       {showSizeChart && (
-        <Portal>
-          <Modal
-            visible={showSizeChart}
-            onDismiss={closeSizeChart}
-            contentContainerStyle={styles.modalContainer}>
-            <View style={styles.modalHeader}>
-              <Text variant={'bodyLarge'}>{t('Variations.Size Guide')}</Text>
-              <TouchableOpacity onPress={closeSizeChart}>
-                <MaterialIcons name={'clear'} size={24} />
-              </TouchableOpacity>
-            </View>
-            <View>
-              <FastImage
-                source={{uri: product?.attributes?.size_chart}}
-                style={styles.chartImage}
-              />
-            </View>
-          </Modal>
-        </Portal>
+        <SizeChart
+          sizeChart={product?.attributes?.size_chart}
+          closeSizeChart={closeSizeChart}
+        />
       )}
     </Page>
   );
