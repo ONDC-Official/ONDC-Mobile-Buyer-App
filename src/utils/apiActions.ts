@@ -5,6 +5,7 @@ export const DELIVERY_ADDRESS: string = '/clientApis/v1/delivery_address';
 export const UPDATE_DELIVERY_ADDRESS: string =
   '/clientApis/v1/update_delivery_address/';
 export const LOCATIONS: string = '/clientApis/v2/locations';
+export const NEAR_LOCATIONS: string = '/clientApis/v2/nearlocations';
 export const MAP_ACCESS_TOKEN: string = '/clientApis/v2/map/accesstoken';
 export const PROVIDER: string = '/clientApis/v2/provider-details';
 export const STORE_DETAILS: string = '/clientApis/v2/location-details';
