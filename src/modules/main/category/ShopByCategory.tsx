@@ -5,11 +5,15 @@ import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
-import {PRODUCT_SUBCATEGORY} from '../../../utils/categories';
+import {useSelector} from 'react-redux';
 import {useAppTheme} from '../../../utils/theme';
 import Page from '../../../components/page/Page';
+import useSubCategoryName from '../../../hooks/useSubCategoryName';
+import NoStoreIcon from '../../../assets/no_store_icon.svg';
 
 const ShopByCategory = ({route: {params}}: {route: any}) => {
+  const {getSubcategoryName} = useSubCategoryName();
+  const {categories} = useSelector((state: any) => state.categories);
   const {t} = useTranslation();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useAppTheme();
@@ -17,8 +21,9 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
 
   const navigateToSubCategory = (subCategory: any) => {
     navigation.navigate('SubCategoryDetails', {
-      subCategory: subCategory.key,
+      subCategory: subCategory.code,
       category: params.category,
+      categoryDomain: params.categoryDomain,
     });
   };
 
@@ -30,9 +35,15 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
         <TouchableOpacity
           style={styles.brand}
           onPress={() => navigateToSubCategory(item)}>
-          <FastImage source={{uri: item?.imageUrl}} style={styles.brandImage} />
+          {item?.url ? (
+            <FastImage source={{uri: item?.url}} style={styles.brandImage} />
+          ) : (
+            <View style={[styles.brandImage, styles.emptyBrandImage]}>
+              <NoStoreIcon width={50} height={50} />
+            </View>
+          )}
           <Text variant={'labelLarge'} style={styles.name}>
-            {t(`Product SubCategories.${item.key}`)}
+            {getSubcategoryName(item.code, item.label)}
           </Text>
         </TouchableOpacity>
       );
@@ -40,8 +51,8 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
   }, []);
 
   const subCategories = useMemo(() => {
-    if (params.category) {
-      const list = PRODUCT_SUBCATEGORY[params.category];
+    if (params.categoryDomain) {
+      const list = categories[params.categoryDomain];
       const remainder = list.length % 3;
       const emptyItems = remainder === 0 ? 0 : 3 - remainder;
 
@@ -52,7 +63,7 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
       }
       return dataWithEmptyItems;
     }
-  }, [params.category]);
+  }, [params.category, params.categoryDomain]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -68,7 +79,7 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
         numColumns={3}
         data={subCategories}
         renderItem={renderItem}
-        keyExtractor={item => item.key}
+        keyExtractor={item => item.code}
       />
     </Page>
   );
@@ -77,7 +88,7 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      paddingHorizontal: 16,
+      paddingHorizontal: 8,
       paddingVertical: 20,
       backgroundColor: colors.white,
     },
@@ -86,6 +97,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 19,
+      padding: 8,
     },
     brandImage: {
       width: 92,
@@ -94,8 +106,13 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
       marginBottom: 12,
     },
+    emptyBrandImage: {
+      backgroundColor: colors.neutral50,
+      borderRadius: 46,
+    },
     name: {
       color: colors.neutral400,
+      textAlign: 'center',
     },
   });
 

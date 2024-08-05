@@ -57,7 +57,7 @@ const Header: React.FC<HeaderProps> = ({disableAddress, onPress}) => {
             style={styles.headerImage}
             resizeMode={'contain'}
           />
-          <AddressTag onPress={onPress}/>
+          <AddressTag onPress={onPress} />
         </View>
       )}
       <View style={styles.searchContainer}>

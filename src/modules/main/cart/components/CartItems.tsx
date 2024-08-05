@@ -352,7 +352,7 @@ const CartItems: React.FC<CartItems> = ({
                           </Text>
                         </TouchableOpacity>
                       ) : (
-                        <View></View>
+                        <View />
                       )}
                       {cartItem.item.domain !== FB_DOMAIN && (
                         <TouchableOpacity

@@ -62,13 +62,13 @@ const FeaturedCategories = () => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      flex:1,
+      flex: 1,
       paddingHorizontal: 16,
       paddingVertical: 20,
       backgroundColor: colors.white,
     },
     brand: {
-      width:'33.33%',
+      width: '33.33%',
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 19,

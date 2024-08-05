@@ -63,7 +63,6 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
       }&longitude=${address.address.lng}&radius=100${
         route?.params?.domain ? `&domain=${route?.params?.domain}` : ''
       }`;
-      console.log(url);
       const {data} = await getDataWithAuth(url, source.current.token);
       totalLocations.current = data.count;
       setProviderId(data?.afterKey?.location_id);

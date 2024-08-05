@@ -1,5 +1,5 @@
 import {ScrollView, TouchableOpacity, View} from 'react-native';
-import {Button, Checkbox, Text} from 'react-native-paper';
+import {Checkbox, Text} from 'react-native-paper';
 import React, {useEffect, useState} from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {useTranslation} from 'react-i18next';
@@ -79,7 +79,9 @@ const FilterList: React.FC<FilterList> = ({
           {t('Orders.Filter List.Filters')}
         </Text>
         <TouchableOpacity onPress={clearAll}>
-          <Text variant={'bodyMedium'} style={styles.clearButton}>{t('Orders.Filter List.Clear all')}</Text>
+          <Text variant={'bodyMedium'} style={styles.clearButton}>
+            {t('Orders.Filter List.Clear all')}
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.filterContainer}>

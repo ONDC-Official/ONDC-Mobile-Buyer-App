@@ -35,7 +35,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
       <View style={[appStyles.container, styles.container]}>
         <SubCategories
           currentSubCategory={currentSubCategory}
-          category={params.category}
+          categoryDomain={params.categoryDomain}
           setCurrentSubCategory={setCurrentSubCategory}
         />
         <Products

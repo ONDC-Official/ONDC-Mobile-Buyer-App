@@ -5,22 +5,25 @@ import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
+import {useSelector} from 'react-redux';
 
-import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
 import {useAppTheme} from '../../../../utils/theme';
 import AllOptionsIcon from '../../../../assets/all_options.svg';
+import useSubCategoryName from '../../../../hooks/useSubCategoryName';
 
 interface SubCategories {
   currentSubCategory: string;
-  category: string;
+  categoryDomain: string;
   setCurrentSubCategory: (newSubCategory: string) => void;
 }
 
 const SubCategories: React.FC<SubCategories> = ({
-  category,
   currentSubCategory,
+  categoryDomain,
   setCurrentSubCategory,
 }) => {
+  const {getSubcategoryName} = useSubCategoryName();
+  const {categories} = useSelector((state: any) => state.categories);
   const {t} = useTranslation();
   const flatListRef = useRef<any>(null);
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -31,14 +34,14 @@ const SubCategories: React.FC<SubCategories> = ({
   const goBack = () => navigation.goBack();
 
   const updateSubCategory = (subCategory: any) => {
-    if (subCategory.shortName !== currentSubCategory) {
-      setCurrentSubCategory(subCategory.key);
+    if (subCategory.code !== currentSubCategory) {
+      setCurrentSubCategory(subCategory.code);
     }
   };
 
   const renderItem = useCallback(
     ({item}: {item: any}) => {
-      const name = t(`Product SubCategories.${item?.key}`);
+      const name = getSubcategoryName(item.code, item.label);
       const numberOfLines = name.split(' ')[0].length > 8 ? 1 : 2;
       return (
         <TouchableOpacity
@@ -47,11 +50,11 @@ const SubCategories: React.FC<SubCategories> = ({
           <View
             style={[
               styles.imageContainer,
-              item?.key === currentSubCategory
+              item?.code === currentSubCategory
                 ? styles.selected
                 : styles.normal,
             ]}>
-            <FastImage source={{uri: item.imageUrl}} style={styles.image} />
+            <FastImage source={{uri: item.url}} style={styles.image} />
           </View>
           <Text
             variant={'labelLarge'}
@@ -67,13 +70,13 @@ const SubCategories: React.FC<SubCategories> = ({
   );
 
   useEffect(() => {
-    setSubCategories(PRODUCT_SUBCATEGORY[category]);
-  }, [category]);
+    setSubCategories(categories[categoryDomain]);
+  }, [categoryDomain]);
 
   useEffect(() => {
     if (subCategories.length > 0 && currentSubCategory) {
       const index = subCategories.findIndex(
-        one => one.key === currentSubCategory,
+        one => one.code === currentSubCategory,
       );
       setTimeout(() => {
         flatListRef.current.scrollToIndex({animated: true, index});
@@ -101,7 +104,7 @@ const SubCategories: React.FC<SubCategories> = ({
         data={subCategories}
         horizontal
         renderItem={renderItem}
-        keyExtractor={item => item.key}
+        keyExtractor={item => item.code}
         onScrollToIndexFailed={info => {
           const wait = new Promise(resolve => setTimeout(resolve, 500));
           wait.then(() => {

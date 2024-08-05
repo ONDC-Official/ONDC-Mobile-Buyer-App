@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Linking, NativeModules, Platform, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Text} from 'react-native-paper';
@@ -6,6 +6,7 @@ import DeviceInfo, {getVersion} from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
 import JailMonkey from 'jail-monkey';
 import {isDeviceRooted} from 'react-native-detect-frida';
+import axios from 'axios';
 
 import {appStyles} from '../../../styles/styles';
 import {getMultipleData, getStoredData} from '../../../utils/storage';
@@ -15,12 +16,17 @@ import {alertWithOneButton} from '../../../utils/alerts';
 import AppLogo from '../../../assets/app_logo.svg';
 import {setAddress} from '../../../toolkit/reducer/address';
 import {saveUser, setToken} from '../../../toolkit/reducer/auth';
+import {API_BASE_URL, CATEGORIES} from '../../../utils/apiActions';
+import useNetworkHandling from '../../../hooks/useNetworkHandling';
+import {updateCategories} from '../../../toolkit/reducer/categories';
 
 const {RootCheck} = NativeModules;
 
 interface Splash {
   navigation: any;
 }
+
+const CancelToken = axios.CancelToken;
 
 /**
  * Component to render splash screen
@@ -31,6 +37,8 @@ interface Splash {
 const Splash: React.FC<Splash> = ({navigation}) => {
   const dispatch = useDispatch();
   const styles = makeStyles();
+  const source = useRef<any>(null);
+  const {getDataWithAuth} = useNetworkHandling();
 
   const checkMagisk = async () => {
     return await RootCheck.isMagiskPresent();
@@ -149,7 +157,8 @@ const Splash: React.FC<Splash> = ({navigation}) => {
     }
   };
 
-  const processLink = () => {
+  const processLink = async () => {
+    await getCategoryDetails();
     Linking.getInitialURL().then(url => {
       if (url) {
         processUrl(url).then(() => {});
@@ -157,6 +166,17 @@ const Splash: React.FC<Splash> = ({navigation}) => {
         checkIfUserIsLoggedIn().then(() => {});
       }
     });
+  };
+
+  const getCategoryDetails = async () => {
+    const url = `${API_BASE_URL}${CATEGORIES}`;
+    source.current = CancelToken.source();
+    try {
+      const {data} = await getDataWithAuth(url, source.current.token);
+      dispatch(updateCategories(data));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

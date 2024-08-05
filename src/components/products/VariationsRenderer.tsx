@@ -155,7 +155,7 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
 
   const handleVariationClick = (groupData: any, option: any) => {
     try {
-      let updatedVariationState = { ...variationState };
+      let updatedVariationState = {...variationState};
       groupData.selected = [option];
       updatedVariationState[groupData.id] = groupData;
       const isLastGroup = groupData.id === Object.keys(variationState).length;

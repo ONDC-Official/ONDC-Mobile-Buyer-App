@@ -5,29 +5,37 @@ import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
-import {PRODUCT_SUBCATEGORY} from '../../../../utils/categories';
+import {useSelector} from 'react-redux';
 import {useAppTheme} from '../../../../utils/theme';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
+import useSubCategoryName from '../../../../hooks/useSubCategoryName';
 
 interface SubCategories {
   currentCategory: string;
+  categoryDomain: string;
 }
 
-const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
+const SubCategories: React.FC<SubCategories> = ({
+  currentCategory,
+  categoryDomain,
+}) => {
+  const {getSubcategoryName} = useSubCategoryName();
   const {t} = useTranslation();
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const {categories} = useSelector((state: any) => state.categories);
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   const navigateToSubCategory = (subCategory: any) => {
     navigation.navigate('SubCategoryDetails', {
-      subCategory: subCategory.key,
+      subCategory: subCategory.code,
       category: currentCategory,
+      categoryDomain,
     });
   };
 
   const list = useMemo(() => {
-    let data = PRODUCT_SUBCATEGORY[currentCategory];
+    let data = categories[categoryDomain];
     if (data.length > 0) {
       data = data.slice(0, 8);
       for (let index = data.length; index < 8; index++) {
@@ -40,22 +48,21 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
     } else {
       return [];
     }
-  }, [currentCategory]);
+  }, [categoryDomain]);
 
   const renderItem = useCallback(
     ({item}: {item: any}) => {
       if (item.value === 'Empty') {
         return <View key={item.key} style={styles.brand} />;
       }
-      const name = t(`Product SubCategories.${item.key}`);
+      let name = getSubcategoryName(item.code, item.label);
       const numberOfLines = name.split(' ')[0].length > 8 ? 1 : 2;
 
       return (
         <TouchableOpacity
-          key={item.key}
           style={styles.brand}
           onPress={() => navigateToSubCategory(item)}>
-          <FastImage source={{uri: item.imageUrl}} style={styles.brandImage} />
+          <FastImage source={{uri: item.url}} style={styles.brandImage} />
           <Text
             variant={'labelLarge'}
             style={styles.name}
@@ -70,7 +77,10 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
   );
 
   const navigateToAll = () => {
-    navigation.navigate('ShopByCategory', {category: currentCategory});
+    navigation.navigate('ShopByCategory', {
+      category: currentCategory,
+      categoryDomain,
+    });
   };
 
   return (
@@ -84,7 +94,7 @@ const SubCategories: React.FC<SubCategories> = ({currentCategory}) => {
         <FlatList
           data={list}
           numColumns={4}
-          keyExtractor={item => item.key}
+          keyExtractor={item => item.code}
           renderItem={renderItem}
         />
       </View>

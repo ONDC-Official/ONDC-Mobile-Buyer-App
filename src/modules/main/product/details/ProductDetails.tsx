@@ -7,13 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Modal, Portal, ProgressBar, Text} from 'react-native-paper';
+import {ProgressBar, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {useFocusEffect} from '@react-navigation/native';
-import FastImage from 'react-native-fast-image';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';

@@ -19,9 +19,7 @@ const AddressTag: React.FC<AddressTag> = ({onPress}) => {
 
   if (address) {
     return (
-      <TouchableOpacity
-        style={styles.addressContainer}
-        onPress={onPress}>
+      <TouchableOpacity style={styles.addressContainer} onPress={onPress}>
         <Icon name={'location-pin'} color={theme.colors.white} size={20} />
         <Text variant={'bodySmall'} style={styles.deliverTo}>
           {t('Home.Deliver to')}

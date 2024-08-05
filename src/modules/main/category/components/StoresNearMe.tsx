@@ -57,7 +57,6 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       }&longitude=${address.address.lng}&radius=100${
         domain ? `&domain=${domain}` : ''
       }&limit=${limit}`;
-      console.log(url);
       const {data} = await getDataWithAuth(url, source.current.token);
       setLocations(
         calculateTimeToShip(data.data, {

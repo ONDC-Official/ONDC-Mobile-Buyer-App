@@ -19,7 +19,10 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
         <ScrollView style={appStyles.container}>
           <Categories currentCategory={params.category} />
           {params.category !== 'F&B' && (
-            <SubCategories currentCategory={params.category} />
+            <SubCategories
+              currentCategory={params.category}
+              categoryDomain={params.domain}
+            />
           )}
           <StoresNearMe domain={params.domain} />
         </ScrollView>
