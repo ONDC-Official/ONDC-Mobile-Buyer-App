@@ -15,7 +15,7 @@ const AddressTag: React.FC<AddressTag> = ({onPress}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {address} = useSelector(({address}) => address);
+  const {address} = useSelector((state: any) => state.address);
 
   if (address) {
     return (

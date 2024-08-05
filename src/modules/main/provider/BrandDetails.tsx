@@ -49,7 +49,7 @@ const getMomentDateFromHourMinutes = (timeString: string) => {
 };
 
 const BrandDetails = ({route: {params}}: {route: any}) => {
-  const {address} = useSelector(({address}) => address);
+  const {address} = useSelector((state: any) => state.address);
   const isFocused = useIsFocused();
   const {formatDate} = useFormatDate();
   const navigation = useNavigation<StackNavigationProp<any>>();

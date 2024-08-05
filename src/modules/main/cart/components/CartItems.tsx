@@ -328,30 +328,32 @@ const CartItems: React.FC<CartItems> = ({
                     </View>
                     <View style={styles.productActionContainer}>
                       {cartItem.item.domain === FB_DOMAIN &&
-                        cartItem.item.hasCustomisations && (
-                          <TouchableOpacity
-                            disabled={!!requestedProduct}
-                            style={styles.customiseContainer}
-                            onPress={() => handleCustomiseClick(cartItem)}>
-                            {cartItem._id === requestedProduct ? (
-                              <ActivityIndicator
-                                color={theme.colors.primary}
-                                size={14}
-                              />
-                            ) : (
-                              <Icon
-                                name={'pencil'}
-                                color={theme.colors.primary}
-                                size={14}
-                              />
-                            )}
-                            <Text
-                              variant={'labelLarge'}
-                              style={styles.customiseText}>
-                              {t('Cart.Customise')}
-                            </Text>
-                          </TouchableOpacity>
-                        )}
+                      cartItem.item.hasCustomisations ? (
+                        <TouchableOpacity
+                          disabled={!!requestedProduct}
+                          style={styles.customiseContainer}
+                          onPress={() => handleCustomiseClick(cartItem)}>
+                          {cartItem._id === requestedProduct ? (
+                            <ActivityIndicator
+                              color={theme.colors.primary}
+                              size={14}
+                            />
+                          ) : (
+                            <Icon
+                              name={'pencil'}
+                              color={theme.colors.primary}
+                              size={14}
+                            />
+                          )}
+                          <Text
+                            variant={'labelLarge'}
+                            style={styles.customiseText}>
+                            {t('Cart.Customise')}
+                          </Text>
+                        </TouchableOpacity>
+                      ) : (
+                        <View></View>
+                      )}
                       {cartItem.item.domain !== FB_DOMAIN && (
                         <TouchableOpacity
                           disabled={!!requestedProduct}

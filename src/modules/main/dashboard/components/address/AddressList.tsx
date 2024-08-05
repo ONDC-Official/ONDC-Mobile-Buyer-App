@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {Button, Text} from 'react-native-paper';
 import axios from 'axios';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 
@@ -52,9 +52,8 @@ const CancelToken = axios.CancelToken;
 const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
   const [t] = useTranslation();
   const isFocused = useIsFocused();
-  const {address} = useSelector(({address}) => address);
+  const {address} = useSelector((state: any) => state.address);
   const source = useRef<any>(null);
-  const dispatch = useDispatch();
   const {} = useRefreshToken();
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();

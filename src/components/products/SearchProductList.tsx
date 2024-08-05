@@ -33,7 +33,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {address} = useSelector(({address}) => address);
+  const {address} = useSelector((state: any) => state.address);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const {language} = useSelector(({auth}) => auth);

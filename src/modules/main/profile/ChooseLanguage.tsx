@@ -14,7 +14,7 @@ import {updateLanguage} from '../../../toolkit/reducer/auth';
 const ChooseLanguage = () => {
   const dispatch = useDispatch();
   const theme = useAppTheme();
-  const {address} = useSelector(({address}) => address);
+  const {address} = useSelector((state: any) => state.address);
   const navigation = useNavigation<any>();
   const {t} = useTranslation();
   const styles = makeStyles(theme.colors);

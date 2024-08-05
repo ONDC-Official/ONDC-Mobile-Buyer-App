@@ -15,7 +15,15 @@ const CancelToken = axios.CancelToken;
 const VegImage = require('../../../../assets/veg.png');
 const NonVegImage = require('../../../../assets/non_veg.png');
 
-const FBProducts = ({provider, domain}: {provider: any; domain: string}) => {
+const FBProducts = ({
+  provider,
+  domain,
+  location,
+}: {
+  provider: any;
+  domain: string;
+  location: string;
+}) => {
   const {t} = useTranslation();
   const styles = makeStyles();
   const customMenuSource = useRef<any>(null);

@@ -11,6 +11,7 @@ import ProductSkeleton from '../../../components/skeleton/ProductSkeleton';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import {API_BASE_URL, LOCATIONS} from '../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
+import useCalculateTimeToShip from '../../../hooks/useCalculateTimeToShip';
 
 interface StoresNearMe {
   domain?: string;
@@ -23,6 +24,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
+  const {calculateTimeToShip} = useCalculateTimeToShip();
   const {address} = useSelector((state: any) => state?.address);
   const source = useRef<any>(null);
   const totalLocations = useRef<number>(0);
@@ -56,15 +58,20 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
     try {
       source.current = CancelToken.source();
 
-      const url = `${API_BASE_URL}${LOCATIONS}?afterKey=${providerId}&limitExtended=${200}&latitude=${
+      const url = `${API_BASE_URL}${LOCATIONS}?afterKey=${providerId}&limit=${200}&latitude=${
         address.address.lat
       }&longitude=${address.address.lng}&radius=100${
         route?.params?.domain ? `&domain=${route?.params?.domain}` : ''
       }`;
+      console.log(url);
       const {data} = await getDataWithAuth(url, source.current.token);
       totalLocations.current = data.count;
       setProviderId(data?.afterKey?.location_id);
-      setLocations(data.data);
+      const distanceData = calculateTimeToShip(data.data, {
+        latitude: address.address.lat,
+        longitude: address.address.lng,
+      });
+      setLocations([...locations, ...distanceData]);
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -82,10 +89,11 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
           data={locations}
           renderItem={renderItem}
           numColumns={3}
+          onEndReached={loadMoreList}
           ListFooterComponent={() =>
             moreListRequested ? <ProductSkeleton /> : <></>
           }
-          keyExtractor={(item: any) => item.location}
+          keyExtractor={(item: any) => item.id}
         />
       </View>
     </Page>

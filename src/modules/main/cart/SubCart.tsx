@@ -54,7 +54,7 @@ const SubCart = ({route: {params}}: any) => {
   const dispatch = useDispatch();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {address} = useSelector(({address}) => address);
+  const {address} = useSelector((state: any) => state.address);
   const addressSheet = useRef<any>();
   const fulfillmentSheet = useRef<any>();
   const fulfillmentSheetShown = useRef<boolean>(false);

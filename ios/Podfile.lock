@@ -554,6 +554,8 @@ PODS:
   - React-jsinspector (0.72.12)
   - React-logger (0.72.12):
     - glog
+  - react-native-blob-util (0.19.11):
+    - React-Core
   - react-native-camera (4.2.1):
     - React-Core
     - react-native-camera/RCT (= 4.2.1)
@@ -580,6 +582,8 @@ PODS:
     - React-Core
   - react-native-pager-view (6.3.3):
     - RCT-Folly (= 2021.07.22.00)
+    - React-Core
+  - react-native-pdf (6.7.5):
     - React-Core
   - react-native-razorpay (2.3.0):
     - razorpay-pod
@@ -806,6 +810,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
+  - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-color-matrix-image-filters (from `../node_modules/react-native-color-matrix-image-filters`)
   - react-native-config (from `../node_modules/react-native-config`)
@@ -814,6 +819,7 @@ DEPENDENCIES:
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
+  - react-native-pdf (from `../node_modules/react-native-pdf`)
   - react-native-razorpay (from `../node_modules/react-native-razorpay`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-voice (from `../node_modules/@react-native-voice/voice`)"
@@ -953,6 +959,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
+  react-native-blob-util:
+    :path: "../node_modules/react-native-blob-util"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
   react-native-color-matrix-image-filters:
@@ -969,6 +977,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
+  react-native-pdf:
+    :path: "../node_modules/react-native-pdf"
   react-native-razorpay:
     :path: "../node_modules/react-native-razorpay"
   react-native-safe-area-context:
@@ -1110,6 +1120,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 0fba62c8737394d939e79f07fa8222fd66fdfdf3
   React-jsinspector: 8e291ed0ab371314de269001d6b9b25db6aabf42
   React-logger: d4010de0b0564e63637ad08373bc73b5d919974b
+  react-native-blob-util: 39a20f2ef11556d958dc4beb0aa07d1ef2690745
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-color-matrix-image-filters: e2df0971b44f1aba49f4740463fdda857d467adf
   react-native-config: d7d8a0c65f7fa523197879f6b777997abbfc987e
@@ -1118,6 +1129,7 @@ SPEC CHECKSUMS:
   react-native-image-picker: 1889c342e6a4ba089ff11ae0c3bf5cc30a3134d0
   react-native-netinfo: 076df4f9b07f6670acf4ce9a75aac8d34c2e2ccc
   react-native-pager-view: ea67d9ca8e0e83118b46996ddec3c818ee032f26
+  react-native-pdf: 103940c90d62adfd259f63cca99c7c0c306b514c
   react-native-razorpay: 0272dd684bc9148828c54a72e05059e3e2e8b813
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
   react-native-voice: f5e8eec2278451d0017eb6a30a6ccc726aca34e0

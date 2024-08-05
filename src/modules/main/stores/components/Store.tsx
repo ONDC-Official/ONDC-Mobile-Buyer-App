@@ -62,7 +62,7 @@ const Store = ({store}: {store: any}) => {
   const navigateToDetails = useCallback(() => {
     navigation.navigate('BrandDetails', {
       brandId: store.provider,
-      outletId: store.location,
+      outletId: store.id,
     });
   }, [store, navigation]);
 
@@ -75,11 +75,8 @@ const Store = ({store}: {store: any}) => {
       source = {uri: store?.provider_descriptor?.images[0]};
     }
 
-    const time = store?.distance_time_to_ship
-      ? store?.distance_time_to_ship
-      : store?.median_time_to_ship / 60 + (store?.distance * 60) / 15;
     return {
-      timeToShip: convertMinutesToHumanReadable(time),
+      timeToShip: convertMinutesToHumanReadable(store?.timeToShip),
       imageSource: source,
     };
   }, [store]);

@@ -35,7 +35,7 @@ const OutletSkeleton = () => {
 const NoImageAvailable = require('../../../assets/noImage.png');
 
 const Outlets: React.FC<Outlets> = ({navigation, route: {params}}) => {
-  const {address} = useSelector(({address}) => address);
+  const {address} = useSelector((state: any) => state.address);
   const source = useRef<any>(null);
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);

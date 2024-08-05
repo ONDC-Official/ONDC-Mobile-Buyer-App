@@ -9,16 +9,13 @@ import {useTranslation} from 'react-i18next';
 
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {
-  API_BASE_URL,
-  LOCATIONS,
-  NEAR_LOCATIONS,
-} from '../../../../utils/apiActions';
+import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
 import {skeletonList} from '../../../../utils/utils';
 import Store from '../../stores/components/Store';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
 import {FB_DOMAIN} from '../../../../utils/constants';
 import {saveStoresList} from '../../../../toolkit/reducer/stores';
+import useCalculateTimeToShip from '../../../../hooks/useCalculateTimeToShip';
 
 interface StoresNearMe {
   domain?: string;
@@ -48,17 +45,26 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const {calculateTimeToShip} = useCalculateTimeToShip();
 
   const getAllLocations = async () => {
     try {
       setApiRequested(true);
       const limit = domain === FB_DOMAIN ? 12 : 9;
       source.current = CancelToken.source();
-      const url = domain
-        ? `${API_BASE_URL}${LOCATIONS}?latitude=${address.address.lat}&longitude=${address.address.lng}&radius=100&domain=${domain}&limitExtended=${limit}`
-        : `${API_BASE_URL}${NEAR_LOCATIONS}?latitude=${address.address.lat}&longitude=${address.address.lng}&radius=100&limitExtended=${limit}`;
+      const url = `${API_BASE_URL}${LOCATIONS}?latitude=${
+        address.address.lat
+      }&longitude=${address.address.lng}&radius=100${
+        domain ? `&domain=${domain}` : ''
+      }&limit=${limit}`;
+      console.log(url);
       const {data} = await getDataWithAuth(url, source.current.token);
-      setLocations(data.data);
+      setLocations(
+        calculateTimeToShip(data.data, {
+          latitude: address.address.lat,
+          longitude: address.address.lng,
+        }),
+      );
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -111,7 +117,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
             contentContainerStyle={styles.listContainer}
             numColumns={3}
             data={locations}
-            keyExtractor={item => item.location}
+            keyExtractor={item => item.id}
             renderItem={renderItem}
           />
         )}
