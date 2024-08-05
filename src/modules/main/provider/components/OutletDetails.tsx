@@ -185,6 +185,7 @@ const makeStyles = (colors: any) =>
     title: {
       flex: 1,
       color: colors.neutral400,
+      paddingRight: 12,
     },
     address: {
       color: colors.neutral300,
@@ -214,7 +215,6 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'flex-end',
-      paddingRight: 35,
     },
     separator: {
       width: 8,
@@ -232,7 +232,7 @@ const makeStyles = (colors: any) =>
     getDirection: {
       borderColor: colors.error400,
     },
-    providerDetails: {flex: 1},
+    providerDetails: {flex: 1, paddingRight: 24},
   });
 
 export default OutletDetails;
