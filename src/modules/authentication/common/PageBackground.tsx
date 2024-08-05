@@ -1,6 +1,8 @@
-import {StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import React from 'react';
 import {useAppTheme} from '../../../utils/theme';
+
+const screenHeight = Dimensions.get('window').height;
 
 const PageBackground = () => {
   const theme = useAppTheme();
@@ -21,11 +23,11 @@ const makeStyles = (colors: any) =>
     },
     primaryBackground: {
       backgroundColor: colors.primary,
-      flex: 1,
+      height: screenHeight / 2,
     },
     whiteBackground: {
       backgroundColor: colors.white,
-      flex: 1,
+      height: screenHeight / 2,
     },
   });
 

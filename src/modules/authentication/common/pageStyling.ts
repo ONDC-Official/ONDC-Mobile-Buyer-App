@@ -1,4 +1,5 @@
-import {Platform, StyleSheet} from 'react-native';
+import {Dimensions, Platform, StyleSheet} from 'react-native';
+const screenHeight = Dimensions.get('window').height;
 
 export const makeStyles = (colors: any) =>
   StyleSheet.create({
@@ -13,6 +14,8 @@ export const makeStyles = (colors: any) =>
     },
     container: {
       paddingHorizontal: 16,
+      flex: 1,
+      height: screenHeight - 50,
     },
     title: {
       paddingTop: 16,
