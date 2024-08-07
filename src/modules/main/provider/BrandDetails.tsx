@@ -14,7 +14,6 @@ import OtherBrandDetails from './components/OtherBrandDetails';
 import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
-import {calculateDistanceBetweenPoints} from '../../../utils/utils';
 import useFormatDate from '../../../hooks/useFormatDate';
 
 const CancelToken = axios.CancelToken;
@@ -192,7 +191,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   }
 
   return (
-    <Page>
+    <Page outletId={params.outletId}>
       <View style={styles.container}>
         {provider?.domain === FB_DOMAIN ? (
           <FBBrandDetails
