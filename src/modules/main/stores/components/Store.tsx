@@ -51,8 +51,6 @@ const StoreImage: React.FC<StoreImage> = ({source}) => {
 };
 
 const Store = ({store}: {store: any}) => {
-  const {t} = useTranslation();
-  const {formatNumber, formatDistance} = useFormatNumber();
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
     useMinutesToString();
   const navigation = useNavigation<any>();
@@ -93,20 +91,15 @@ const Store = ({store}: {store: any}) => {
       </Text>
       <View style={styles.addressContainer}>
         {!!timeToShip && (
-          <Text style={styles.details} variant={'labelSmall'}>
+          <Text
+            style={[
+              styles.details,
+              store?.type === 'pan' ? styles.pan : styles.local,
+            ]}
+            variant={'labelSmall'}>
             {translateMinutesToHumanReadable(timeToShip.type, timeToShip.time)}
           </Text>
         )}
-        {/*<View style={styles.dot} />*/}
-        {/*<Text*/}
-        {/*  style={styles.distance}*/}
-        {/*  variant={'labelSmall'}*/}
-        {/*  numberOfLines={1}*/}
-        {/*  ellipsizeMode={'tail'}>*/}
-        {/*  {t('Store.km', {*/}
-        {/*    distance: formatNumber(formatDistance(store?.distance)),*/}
-        {/*  })}*/}
-        {/*</Text>*/}
       </View>
     </TouchableOpacity>
   );
@@ -136,6 +129,13 @@ const makeStyles = (colors: any) =>
       flex: 1,
     },
     details: {
+      color: colors.neutral300,
+    },
+    pan: {
+      color: colors.primary,
+      fontStyle: 'italic',
+    },
+    local: {
       color: colors.neutral300,
     },
     distance: {
