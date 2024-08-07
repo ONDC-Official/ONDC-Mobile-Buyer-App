@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import Categories from './components/Categories';
 import Header from '../dashboard/components/header/Header';
@@ -6,16 +6,23 @@ import SubCategories from './components/SubCategories';
 import StoresNearMe from './components/StoresNearMe';
 import {appStyles} from '../../../styles/styles';
 import Page from '../../../components/page/Page';
+import AddressSheet from '../dashboard/components/address/AddressSheet';
 
 interface CategoryDetails {
   route: any;
 }
 
 const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
+  const addressSheet = useRef<any>();
+
+  const openAddressList = () => {
+    addressSheet.current.open();
+  };
+
   return (
     <Page>
       <View style={[appStyles.container, styles.container]}>
-        <Header />
+        <Header onPress={openAddressList} />
         <ScrollView style={appStyles.container}>
           <Categories currentCategory={params.category} />
           {params.category !== 'F&B' && (
@@ -27,6 +34,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
           <StoresNearMe domain={params.domain} />
         </ScrollView>
       </View>
+      <AddressSheet addressSheet={addressSheet} />
     </Page>
   );
 };

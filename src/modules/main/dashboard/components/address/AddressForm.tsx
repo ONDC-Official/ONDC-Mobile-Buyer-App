@@ -325,8 +325,8 @@ const AddressForm: React.FC<AddressForm> = ({
           values.areaCode = res?.pincode;
           values.state = res?.state;
           values.street = res?.street;
-          values.lat = res?.lat?.toFixed(6);
-          values.lng = res?.lng?.toFixed(6);
+          values.lat = Number(res?.lat)?.toFixed(6);
+          values.lng = Number(res?.lng)?.toFixed(6);
           if (address) {
             values.building = address.building;
             values.tag = address.tag;
