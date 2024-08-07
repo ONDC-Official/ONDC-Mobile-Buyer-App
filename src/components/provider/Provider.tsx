@@ -4,9 +4,6 @@ import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import 'moment-duration-format';
-import {useSelector} from 'react-redux';
-import {useTranslation} from 'react-i18next';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {useAppTheme} from '../../utils/theme';
@@ -17,18 +14,13 @@ import {
   GROCERY_DOMAIN,
 } from '../../utils/constants';
 import useMinutesToString from '../../hooks/useMinutesToString';
-import useFormatNumber from '../../hooks/useFormatNumber';
-import {calculateDistanceBetweenPoints} from '../../utils/utils';
 
 const NoImageAvailable = require('../../assets/noImage.png');
 
 const Provider = ({provider}: {provider: any}) => {
-  const {t} = useTranslation();
-  const {formatNumber, formatDistance} = useFormatNumber();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {address} = useSelector((state: any) => state?.address);
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
     useMinutesToString();
 
@@ -80,36 +72,19 @@ const Provider = ({provider}: {provider: any}) => {
     );
   }, []);
 
-  const {timeToShip, locality, distance} = useMemo(() => {
+  const {timeToShip, locality} = useMemo(() => {
     if (provider && provider?.items.length > 0) {
       const locationDetails = provider?.items[0].location_details;
-      const latLong = locationDetails.gps.split(/\s*,\s*/);
-
-      const newDistance = calculateDistanceBetweenPoints(
-        {
-          latitude: address.address.lat,
-          longitude: address.address.lng,
-        },
-        {
-          latitude: Number(latLong[0]),
-          longitude: Number(latLong[1]),
-        },
-      );
-      let travelTime = (Number(newDistance) * 60) / 15;
-      const medianTimeToShipMinutes =
-        (locationDetails.median_time_to_ship ?? 0) / 60;
       return {
         timeToShip: convertMinutesToHumanReadable(
-          Number(medianTimeToShipMinutes) + travelTime,
+          Number(provider?.minDaysWithTTS / 60),
         ),
         locality: locationDetails.address?.locality || 'NA',
-        distance: newDistance,
       };
     } else {
       return {
         timeToShip: {type: 'minutes', time: 0},
         locality: '',
-        distance: 0,
       };
     }
   }, [provider]);
@@ -138,17 +113,6 @@ const Provider = ({provider}: {provider: any}) => {
               numberOfLines={1}
               ellipsizeMode={'tail'}>
               {locality}
-            </Text>
-            <View style={styles.dotView} />
-            <Icon
-              name={'location-pin'}
-              size={16}
-              color={theme.colors.neutral200}
-            />
-            <Text variant={'labelMedium'} style={styles.distance}>
-              {t('Store.km', {
-                distance: formatNumber(formatDistance(distance)),
-              })}
             </Text>
             <View style={styles.providerLocalityView}>
               <View style={styles.dotView} />

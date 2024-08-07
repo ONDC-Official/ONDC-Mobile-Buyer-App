@@ -49,12 +49,8 @@ const OutletDetails: React.FC<OutletDetails> = ({
   const callProvider = () => Linking.openURL('tel:+91 92729282982');
 
   const timeToShip = useMemo(() => {
-    if (outlet) {
-      let travelTime = (Number(outlet.distance) * 60) / 15;
-      const medianTimeToShipMinutes = (outlet?.median_time_to_ship ?? 0) / 60;
-      return convertMinutesToHumanReadable(
-        Number(medianTimeToShipMinutes) + travelTime,
-      );
+    if (outlet && outlet?.minDaysWithTTS) {
+      return convertMinutesToHumanReadable(Number(outlet?.minDaysWithTTS / 60));
     } else {
       return {type: 'minutes', time: 0};
     }
@@ -102,17 +98,17 @@ const OutletDetails: React.FC<OutletDetails> = ({
             </View>
           </View>
           <View style={styles.providerLocalityView}>
-            <Icon
-              name={'location-pin'}
-              size={16}
-              color={theme.colors.neutral200}
-            />
-            <Text variant={'labelLarge'} style={styles.timing}>
-              {t('Store.km', {
-                distance: formatNumber(formatDistance(outlet?.distance)),
-              })}
-            </Text>
-            <View style={styles.dotView} />
+            {/*<Icon*/}
+            {/*  name={'location-pin'}*/}
+            {/*  size={16}*/}
+            {/*  color={theme.colors.neutral200}*/}
+            {/*/>*/}
+            {/*<Text variant={'labelLarge'} style={styles.timing}>*/}
+            {/*  {t('Store.km', {*/}
+            {/*    distance: formatNumber(formatDistance(outlet?.distance)),*/}
+            {/*  })}*/}
+            {/*</Text>*/}
+            {/*<View style={styles.dotView} />*/}
             {!!outlet?.address && (
               <Text
                 variant={'labelLarge'}

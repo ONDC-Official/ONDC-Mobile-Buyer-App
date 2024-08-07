@@ -54,7 +54,6 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   }, []);
 
   const loadMoreList = () => {
-    console.log(totalLocations.current, locations?.length);
     if (totalLocations.current > locations?.length && !moreListRequested) {
       getAllLocations(page)
         .then(() => {})

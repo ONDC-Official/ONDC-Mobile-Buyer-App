@@ -69,27 +69,11 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
       setOutletDetailsRequested(true);
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${STORE_DETAILS}?id=${params.outletId}`,
+        `${API_BASE_URL}${STORE_DETAILS}?id=${params.outletId}&pincode=${address.address.areaCode}`,
         source.current.token,
       );
       if (data) {
-        const latLong = data.gps.split(/\s*,\s*/);
-        const distance = calculateDistanceBetweenPoints(
-          {
-            latitude: address.address.lat,
-            longitude: address.address.lng,
-          },
-          {
-            latitude: latLong[0],
-            longitude: latLong[1],
-          },
-        );
-        setOutlet({
-          ...data,
-          ...{
-            distance,
-          },
-        });
+        setOutlet(data);
       }
     } catch (error) {
       handleApiError(error);
