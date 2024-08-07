@@ -11,9 +11,10 @@ import useFormatNumber from '../../hooks/useFormatNumber';
 
 interface Page {
   children: React.ReactNode;
+  outletId?: string;
 }
 
-const Page: React.FC<Page> = ({children}) => {
+const Page: React.FC<Page> = ({children, outletId = ''}) => {
   const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -21,7 +22,20 @@ const Page: React.FC<Page> = ({children}) => {
   const {cartItems} = useSelector(({cart}) => cart);
   const styles = makeStyles(theme.colors);
 
-  const navigateToCart = () => navigation.navigate('Cart');
+  const navigateToCart = () => {
+    if (outletId !== '') {
+      const index = cartItems.findIndex(
+        (one: any) => one.location_id === outletId,
+      );
+      if (index > -1) {
+        navigation.navigate('SubCart', {index: index});
+      } else {
+        navigation.navigate('Cart');
+      }
+    } else {
+      navigation.navigate('Cart');
+    }
+  };
 
   const itemCount = cartItems.length;
   return (

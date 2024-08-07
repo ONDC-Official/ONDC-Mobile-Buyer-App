@@ -5,7 +5,6 @@ import Header from '../dashboard/components/header/Header';
 import SubCategories from './components/SubCategories';
 import StoresNearMe from './components/StoresNearMe';
 import {appStyles} from '../../../styles/styles';
-import Page from '../../../components/page/Page';
 
 interface CategoryDetails {
   route: any;
@@ -13,21 +12,19 @@ interface CategoryDetails {
 
 const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   return (
-    <Page>
-      <View style={[appStyles.container, styles.container]}>
-        <Header />
-        <ScrollView style={appStyles.container}>
-          <Categories currentCategory={params.category} />
-          {params.category !== 'F&B' && (
-            <SubCategories
-              currentCategory={params.category}
-              categoryDomain={params.domain}
-            />
-          )}
-          <StoresNearMe domain={params.domain} />
-        </ScrollView>
-      </View>
-    </Page>
+    <View style={[appStyles.container, styles.container]}>
+      <Header />
+      <ScrollView style={appStyles.container}>
+        <Categories currentCategory={params.category} />
+        {params.category !== 'F&B' && (
+          <SubCategories
+            currentCategory={params.category}
+            categoryDomain={params.domain}
+          />
+        )}
+        <StoresNearMe domain={params.domain} />
+      </ScrollView>
+    </View>
   );
 };
 

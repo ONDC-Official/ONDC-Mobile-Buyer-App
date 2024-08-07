@@ -12,12 +12,14 @@ import AllOptionsIcon from '../../../../assets/all_options.svg';
 import useSubCategoryName from '../../../../hooks/useSubCategoryName';
 
 interface SubCategories {
+  currentCategory: string;
   currentSubCategory: string;
   categoryDomain: string;
   setCurrentSubCategory: (newSubCategory: string) => void;
 }
 
 const SubCategories: React.FC<SubCategories> = ({
+  currentCategory,
   currentSubCategory,
   categoryDomain,
   setCurrentSubCategory,
@@ -37,6 +39,13 @@ const SubCategories: React.FC<SubCategories> = ({
     if (subCategory.code !== currentSubCategory) {
       setCurrentSubCategory(subCategory.code);
     }
+  };
+
+  const navigateToAll = () => {
+    navigation.navigate('ShopByCategory', {
+      category: currentCategory,
+      categoryDomain,
+    });
   };
 
   const renderItem = useCallback(
@@ -86,7 +95,7 @@ const SubCategories: React.FC<SubCategories> = ({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.allOptionsButton} onPress={goBack}>
+      <TouchableOpacity style={styles.allOptionsButton} onPress={navigateToAll}>
         <View style={styles.allOptionsContainer}>
           <AllOptionsIcon width={21} height={21} />
         </View>

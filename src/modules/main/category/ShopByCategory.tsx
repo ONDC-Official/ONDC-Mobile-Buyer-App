@@ -7,7 +7,6 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 import {useAppTheme} from '../../../utils/theme';
-import Page from '../../../components/page/Page';
 import useSubCategoryName from '../../../hooks/useSubCategoryName';
 import NoStoreIcon from '../../../assets/no_store_icon.svg';
 
@@ -72,16 +71,14 @@ const ShopByCategory = ({route: {params}}: {route: any}) => {
   }, []);
 
   return (
-    <Page>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.container}
-        numColumns={3}
-        data={subCategories}
-        renderItem={renderItem}
-        keyExtractor={item => item.code}
-      />
-    </Page>
+    <FlatList
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.container}
+      numColumns={3}
+      data={subCategories}
+      renderItem={renderItem}
+      keyExtractor={item => item.code}
+    />
   );
 };
 

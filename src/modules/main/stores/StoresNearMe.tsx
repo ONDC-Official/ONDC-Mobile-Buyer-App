@@ -6,7 +6,6 @@ import {memo, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import Store from './components/Store';
 import {useAppTheme} from '../../../utils/theme';
-import Page from '../../../components/page/Page';
 import ProductSkeleton from '../../../components/skeleton/ProductSkeleton';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import {API_BASE_URL, SERVICEABLE_LOCATIONS} from '../../../utils/apiActions';
@@ -79,7 +78,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
       });
       setPage(pageNumber + 1);
       const list =
-        pageNumber === 1 ? distanceData : [...locations, ...distanceData];
+        pageNumber === 0 ? distanceData : [...locations, ...distanceData];
       setLocations(list);
       totalLocations.current = data.data.length > 0 ? data.count : list.length;
     } catch (error) {
@@ -90,23 +89,21 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   };
 
   return (
-    <Page>
-      <View style={styles.container}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={locations}
-          renderItem={renderItem}
-          numColumns={3}
-          initialNumToRender={21}
-          maxToRenderPerBatch={24}
-          onEndReached={loadMoreList}
-          ListFooterComponent={
-            <ListFooterComponent moreListRequested={moreListRequested} />
-          }
-          keyExtractor={(item: any) => item.id}
-        />
-      </View>
-    </Page>
+    <View style={styles.container}>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={locations}
+        renderItem={renderItem}
+        numColumns={3}
+        initialNumToRender={21}
+        maxToRenderPerBatch={24}
+        onEndReached={loadMoreList}
+        ListFooterComponent={
+          <ListFooterComponent moreListRequested={moreListRequested} />
+        }
+        keyExtractor={(item: any) => item.id}
+      />
+    </View>
   );
 };
 

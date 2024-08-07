@@ -4,7 +4,6 @@ import {useTranslation} from 'react-i18next';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
 import Products from '../../../components/products/Products';
-import Page from '../../../components/page/Page';
 
 interface SubCategoryDetails {
   route: any;
@@ -31,21 +30,20 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   }, [navigation, currentSubCategory]);
 
   return (
-    <Page>
-      <View style={[appStyles.container, styles.container]}>
-        <SubCategories
-          currentSubCategory={currentSubCategory}
-          categoryDomain={params.categoryDomain}
-          setCurrentSubCategory={setCurrentSubCategory}
-        />
-        <Products
-          providerId={null}
-          subCategories={[currentSubCategory]}
-          search
-          provider={null}
-        />
-      </View>
-    </Page>
+    <View style={[appStyles.container, styles.container]}>
+      <SubCategories
+        currentCategory={params.category}
+        currentSubCategory={currentSubCategory}
+        categoryDomain={params.categoryDomain}
+        setCurrentSubCategory={setCurrentSubCategory}
+      />
+      <Products
+        providerId={null}
+        subCategories={[currentSubCategory]}
+        search
+        provider={null}
+      />
+    </View>
   );
 };
 
