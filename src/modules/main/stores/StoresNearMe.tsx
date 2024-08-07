@@ -50,7 +50,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
     navigation.setOptions({
       title: t('Stores Near me.Stores Near me'),
     });
-    getAllLocations(1).then(() => {});
+    getAllLocations(0).then(() => {});
   }, []);
 
   const loadMoreList = () => {
@@ -65,7 +65,6 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
     setMoreListRequested(true);
     try {
       source.current = CancelToken.source();
-
       const url = `${API_BASE_URL}${SERVICEABLE_LOCATIONS}?page=${pageNumber}&limit=${21}&latitude=${
         address.address.lat
       }&longitude=${address.address.lng}&pincode=${

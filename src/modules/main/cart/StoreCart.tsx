@@ -126,18 +126,18 @@ const StoreCart: React.FC<StoreCart> = ({
                 ellipsizeMode={'tail'}>
                 {locality}
               </Text>
-              <View style={styles.dotView} />
-              <Text variant={'labelMedium'} style={styles.distance}>
-                {t('Store.km', {
-                  distance: formatNumber(formatDistance(distance)),
-                })}
-              </Text>
-              <View style={styles.providerLocalityView}>
-                <View style={styles.dotView} />
-                <Text variant={'labelMedium'} style={styles.distance}>
-                  {translateMinutesToHumanReadable(minutes.type, minutes.time)}
-                </Text>
-              </View>
+              {/*<View style={styles.dotView} />*/}
+              {/*<Text variant={'labelMedium'} style={styles.distance}>*/}
+              {/*  {t('Store.km', {*/}
+              {/*    distance: formatNumber(formatDistance(distance)),*/}
+              {/*  })}*/}
+              {/*</Text>*/}
+              {/*<View style={styles.providerLocalityView}>*/}
+              {/*  <View style={styles.dotView} />*/}
+              {/*  <Text variant={'labelMedium'} style={styles.distance}>*/}
+              {/*    {translateMinutesToHumanReadable(minutes.type, minutes.time)}*/}
+              {/*  </Text>*/}
+              {/*</View>*/}
             </View>
           </View>
         </View>
