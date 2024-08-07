@@ -97,16 +97,16 @@ const Store = ({store}: {store: any}) => {
             {translateMinutesToHumanReadable(timeToShip.type, timeToShip.time)}
           </Text>
         )}
-        <View style={styles.dot} />
-        <Text
-          style={styles.distance}
-          variant={'labelSmall'}
-          numberOfLines={1}
-          ellipsizeMode={'tail'}>
-          {t('Store.km', {
-            distance: formatNumber(formatDistance(store?.distance)),
-          })}
-        </Text>
+        {/*<View style={styles.dot} />*/}
+        {/*<Text*/}
+        {/*  style={styles.distance}*/}
+        {/*  variant={'labelSmall'}*/}
+        {/*  numberOfLines={1}*/}
+        {/*  ellipsizeMode={'tail'}>*/}
+        {/*  {t('Store.km', {*/}
+        {/*    distance: formatNumber(formatDistance(store?.distance)),*/}
+        {/*  })}*/}
+        {/*</Text>*/}
       </View>
     </TouchableOpacity>
   );

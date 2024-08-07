@@ -2,14 +2,14 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
-import {useEffect, useRef, useState} from 'react';
+import {memo, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import Store from './components/Store';
 import {useAppTheme} from '../../../utils/theme';
 import Page from '../../../components/page/Page';
 import ProductSkeleton from '../../../components/skeleton/ProductSkeleton';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
-import {API_BASE_URL, LOCATIONS} from '../../../utils/apiActions';
+import {API_BASE_URL, SERVICEABLE_LOCATIONS} from '../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import useCalculateTimeToShip from '../../../hooks/useCalculateTimeToShip';
 
@@ -18,6 +18,12 @@ interface StoresNearMe {
 }
 
 const CancelToken = axios.CancelToken;
+
+const MemoizedStore = memo(Store, (prevProps, nextProps) => {
+  return prevProps.store.id === nextProps.store.id; // Custom comparison to avoid unnecessary renders
+});
+
+const renderItem = ({item}) => <MemoizedStore store={item} />;
 
 const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   const navigation = useNavigation();
@@ -30,55 +36,54 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   const totalLocations = useRef<number>(0);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const [providerId, setProviderId] = useState<string>('');
   const [locations, setLocations] = useState<any[]>([]);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
 
   useEffect(() => {
     navigation.setOptions({
       title: t('Stores Near me.Stores Near me'),
     });
-    getAllLocations().then(() => {});
+    getAllLocations(1).then(() => {});
   }, []);
 
   const loadMoreList = () => {
+    console.log(totalLocations.current, locations?.length);
     if (totalLocations.current > locations?.length && !moreListRequested) {
-      getAllLocations()
-        .then(() => {
-          // setMoreListRequested(false);
-        })
-        .catch(() => {
-          // setMoreListRequested(false);
-        });
+      getAllLocations(page)
+        .then(() => {})
+        .catch(() => {});
     }
   };
 
-  const getAllLocations = async () => {
+  const getAllLocations = async (pageNumber: number) => {
     setMoreListRequested(true);
     try {
       source.current = CancelToken.source();
 
-      const url = `${API_BASE_URL}${LOCATIONS}?afterKey=${providerId}&limit=${200}&latitude=${
+      const url = `${API_BASE_URL}${SERVICEABLE_LOCATIONS}?page=${pageNumber}&limit=${21}&latitude=${
         address.address.lat
-      }&longitude=${address.address.lng}&radius=100${
+      }&longitude=${address.address.lng}&pincode=${
+        address.address.areaCode
+      }&radius=100${
         route?.params?.domain ? `&domain=${route?.params?.domain}` : ''
       }`;
       const {data} = await getDataWithAuth(url, source.current.token);
-      totalLocations.current = data.count;
-      setProviderId(data?.afterKey?.location_id);
       const distanceData = calculateTimeToShip(data.data, {
         latitude: address.address.lat,
         longitude: address.address.lng,
       });
-      setLocations([...locations, ...distanceData]);
+      setPage(pageNumber + 1);
+      const list =
+        pageNumber === 1 ? distanceData : [...locations, ...distanceData];
+      setLocations(list);
+      totalLocations.current = data.data.length > 0 ? data.count : list.length;
     } catch (error) {
       handleApiError(error);
     } finally {
       setMoreListRequested(false);
     }
   };
-
-  const renderItem = ({item}: {item: any}) => <Store store={item} />;
 
   return (
     <Page>
@@ -88,6 +93,8 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
           data={locations}
           renderItem={renderItem}
           numColumns={3}
+          initialNumToRender={21}
+          maxToRenderPerBatch={24}
           onEndReached={loadMoreList}
           ListFooterComponent={() =>
             moreListRequested ? <ProductSkeleton /> : <></>

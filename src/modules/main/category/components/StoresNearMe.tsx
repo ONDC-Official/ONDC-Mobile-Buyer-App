@@ -9,7 +9,10 @@ import {useTranslation} from 'react-i18next';
 
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {API_BASE_URL, LOCATIONS} from '../../../../utils/apiActions';
+import {
+  API_BASE_URL,
+  SERVICEABLE_LOCATIONS,
+} from '../../../../utils/apiActions';
 import {skeletonList} from '../../../../utils/utils';
 import Store from '../../stores/components/Store';
 import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
@@ -52,11 +55,11 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       setApiRequested(true);
       const limit = domain === FB_DOMAIN ? 12 : 9;
       source.current = CancelToken.source();
-      const url = `${API_BASE_URL}${LOCATIONS}?latitude=${
+      const url = `${API_BASE_URL}${SERVICEABLE_LOCATIONS}?latitude=${
         address.address.lat
-      }&longitude=${address.address.lng}&radius=100${
-        domain ? `&domain=${domain}` : ''
-      }&limit=${limit}`;
+      }&longitude=${address.address.lng}&pincode=${
+        address.address.areaCode
+      }&radius=100${domain ? `&domain=${domain}` : ''}&limit=${limit}`;
       const {data} = await getDataWithAuth(url, source.current.token);
       setLocations(
         calculateTimeToShip(data.data, {

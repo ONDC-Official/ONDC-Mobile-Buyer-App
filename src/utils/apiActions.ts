@@ -4,6 +4,9 @@ export const API_BASE_URL: string = Config.API_BASE_URL ?? ''; //'https://buyer-
 export const DELIVERY_ADDRESS: string = '/clientApis/v1/delivery_address';
 
 export const CATEGORIES: string = '/clientApis/v2/categories';
+
+export const SERVICEABLE_LOCATIONS: string =
+  '/clientApis/v2/servieablelocations';
 export const UPDATE_DELIVERY_ADDRESS: string =
   '/clientApis/v1/update_delivery_address/';
 export const LOCATIONS: string = '/clientApis/v2/locations';
