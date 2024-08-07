@@ -23,7 +23,13 @@ const MemoizedStore = memo(Store, (prevProps, nextProps) => {
   return prevProps.store.id === nextProps.store.id; // Custom comparison to avoid unnecessary renders
 });
 
-const renderItem = ({item}) => <MemoizedStore store={item} />;
+const ListFooterComponent = ({
+  moreListRequested,
+}: {
+  moreListRequested: boolean;
+}) => (moreListRequested ? <ProductSkeleton /> : <></>);
+
+const renderItem = ({item}: {item: any}) => <MemoizedStore store={item} />;
 
 const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   const navigation = useNavigation();
@@ -38,7 +44,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   const {handleApiError} = useNetworkErrorHandling();
   const [locations, setLocations] = useState<any[]>([]);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(true);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
 
   useEffect(() => {
     navigation.setOptions({
@@ -96,8 +102,8 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
           initialNumToRender={21}
           maxToRenderPerBatch={24}
           onEndReached={loadMoreList}
-          ListFooterComponent={() =>
-            moreListRequested ? <ProductSkeleton /> : <></>
+          ListFooterComponent={
+            <ListFooterComponent moreListRequested={moreListRequested} />
           }
           keyExtractor={(item: any) => item.id}
         />
