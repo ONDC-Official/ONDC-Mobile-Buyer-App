@@ -93,7 +93,21 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
       let time_from: string = '';
       let time_to: string = '';
 
-      const timings = data?.tags?.filter((item: any) => item.code === 'timing');
+      let timings = data?.tags?.filter((item: any) => {
+        const isTiming = item.code === 'timing';
+        if (isTiming) {
+          const locationIndex = item.list.findIndex(
+            (one: any) =>
+              one.code === 'location' && one.value === data.local_id,
+          );
+          if (locationIndex > -1) {
+            return true;
+          }
+        } else {
+          return false;
+        }
+      });
+
       if (timings.length === 1) {
         timings[0]?.list.forEach((element: any) => {
           if (element.code === 'time_from') {
