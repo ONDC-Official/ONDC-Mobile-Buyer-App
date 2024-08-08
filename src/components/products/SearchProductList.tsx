@@ -100,9 +100,10 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
     }
   };
 
-  const renderItem = useCallback(({item}: {item: any}) => {
-    return <Product product={item} search />;
-  }, []);
+  const renderItem = useCallback(
+    ({item}: {item: any}) => <Product product={item} search />,
+    [],
+  );
 
   useEffect(() => {
     if (userInput.length > 0) {
