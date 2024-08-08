@@ -387,3 +387,164 @@ export const convertHexToName = (hex: any) => {
     ? COLOR_CODE_TO_NAME[hexLowerCase]
     : hex;
 };
+
+const getStartAndEndTime = (item: any) => {
+  let startTime: string = '',
+    endTime: string = '';
+  item?.list?.forEach((element: any) => {
+    if (element.code === 'time_from') {
+      startTime = element?.value;
+    }
+    if (element.code === 'time_to') {
+      endTime = element?.value;
+    }
+  });
+
+  return {startTime, endTime};
+};
+
+export const getStoreTiming = (tags: any[], localId: string) => {
+  let time_from: string = '';
+  let time_to: string = '';
+
+  let timings = tags?.filter((item: any) => {
+    const isTiming = item.code === 'timing';
+    if (isTiming) {
+      const locationIndex = item.list.findIndex(
+        (one: any) => one.code === 'location' && one.value === localId,
+      );
+      if (locationIndex > -1) {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  });
+
+  if (timings.length === 1) {
+    const time = getStartAndEndTime(timings[0]);
+    time_from = time.startTime;
+    time_to = time.endTime;
+  } else {
+    const allTime = timings.find((time: any) => {
+      return !!time.list.find(
+        (item: any) => item.code === 'type' && item.value === 'ALL',
+      );
+    });
+    if (allTime) {
+      const time = getStartAndEndTime(allTime);
+      time_from = time.startTime;
+      time_to = time.endTime;
+    } else {
+      const orderTime = getTime(timings, 'Order');
+      if (!orderTime) {
+        const deliveryTime = getTime(timings, 'Delivery');
+        if (!deliveryTime) {
+          const selfPickup = getTime(timings, 'Self-Pickup');
+          if (selfPickup) {
+            const selfPickupDate = getStartAndEndTime(selfPickup);
+            time_from = selfPickupDate.startTime;
+            time_to = selfPickupDate.endTime;
+          }
+        } else {
+          const deliveryTimeDate = getStartAndEndTime(deliveryTime);
+          time_from = deliveryTimeDate.startTime;
+          time_to = deliveryTimeDate.endTime;
+        }
+      } else {
+        const orderTimeDate = getStartAndEndTime(orderTime);
+        time_from = orderTimeDate.startTime;
+        time_to = orderTimeDate.endTime;
+      }
+    }
+  }
+  return {time_from, time_to};
+};
+
+export const filterByType = (timings: any[], type: string) => {
+  return timings?.filter((time: any) => {
+    return !!time.list.find(
+      (item: any) => item.code === 'type' && item.value === type,
+    );
+  });
+};
+
+export const filterByDay = (orderTimes: any[], dayOfWeek: number) => {
+  return orderTimes.filter((time: any) => {
+    let minValue = 999,
+      maxValue = 0;
+    time.list.forEach((item: any) => {
+      if (item.code === 'day_from') {
+        minValue = Number(item.value);
+      }
+      if (item.code === 'day_to') {
+        maxValue = Number(item.value);
+      }
+    });
+    return minValue <= dayOfWeek && maxValue >= dayOfWeek;
+  });
+};
+
+export const findByTime = (orderTimes: any[]) => {
+  const currentTime = Number(moment().locale('en').format('HHmm'));
+  return orderTimes.find((time: any) => {
+    let minValue = 2359,
+      maxValue = 0;
+    time.list.forEach((item: any) => {
+      if (item.code === 'time_from') {
+        minValue = Number(item.value);
+      }
+      if (item.code === 'time_to') {
+        maxValue = Number(item.value);
+      }
+    });
+    return minValue <= currentTime && maxValue >= currentTime;
+  });
+};
+
+export const findNextSlotSameDay = (orderTimes: any[]) => {
+  const currentTime = Number(moment().locale('en').format('HHmm'));
+  return orderTimes.find((time: any) => {
+    let nextTime = false;
+    time.list.forEach((item: any) => {
+      if (item.code === 'time_from') {
+        nextTime = Number(item.value) > currentTime;
+      }
+    });
+    return nextTime;
+  });
+};
+
+export const sortNextDay = (orderTimes: any[]) => {
+  return orderTimes.sort((a, b) => {
+    const timeFromA = a.list.find(
+      (item: any) => item.code === 'time_from',
+    ).value;
+    const timeFromB = b.list.find(
+      (item: any) => item.code === 'time_from',
+    ).value;
+    return Number(timeFromA) - Number(timeFromB);
+  });
+};
+
+export const getTime = (timings: any[], type: string) => {
+  const dayOfWeek = moment().day();
+  let orderTimes = filterByType(timings, type);
+  let orderTimesForDay = filterByDay(orderTimes, dayOfWeek);
+  const orderTime = findByTime(orderTimesForDay);
+  if (orderTime) {
+    return orderTime;
+  } else if (orderTimes.length > 0) {
+    const nextSlotForDay = findNextSlotSameDay(orderTimesForDay);
+    if (nextSlotForDay) {
+     return nextSlotForDay;
+    } else {
+      orderTimesForDay = filterByDay(orderTimes, dayOfWeek + 1);
+      if (orderTimesForDay.length > 0) {
+        orderTimesForDay = sortNextDay(orderTimesForDay);
+        return orderTimesForDay[0];
+      }
+    }
+  }
+  return null;
+};

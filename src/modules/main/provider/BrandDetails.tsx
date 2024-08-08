@@ -15,23 +15,9 @@ import {FB_DOMAIN} from '../../../utils/constants';
 import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
 import useFormatDate from '../../../hooks/useFormatDate';
+import {getStoreTiming} from '../../../utils/utils';
 
 const CancelToken = axios.CancelToken;
-
-const getStartAndEndTime = (item: any) => {
-  let startTime: string = '',
-    endTime: string = '';
-  item?.list?.forEach((element: any) => {
-    if (element.code === 'time_from') {
-      startTime = element?.value;
-    }
-    if (element.code === 'time_to') {
-      endTime = element?.value;
-    }
-  });
-
-  return {startTime, endTime};
-};
 
 const getMomentDateFromHourMinutes = (timeString: string) => {
   // Extract hours and minutes from the string
@@ -90,80 +76,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         source.current.token,
       );
 
-      let time_from: string = '';
-      let time_to: string = '';
-
-      let timings = data?.tags?.filter((item: any) => {
-        const isTiming = item.code === 'timing';
-        if (isTiming) {
-          const locationIndex = item.list.findIndex(
-            (one: any) =>
-              one.code === 'location' && one.value === data.local_id,
-          );
-          if (locationIndex > -1) {
-            return true;
-          }
-        } else {
-          return false;
-        }
-      });
-
-      if (timings.length === 1) {
-        timings[0]?.list.forEach((element: any) => {
-          if (element.code === 'time_from') {
-            time_from = element?.value;
-          }
-          if (element.code === 'time_to') {
-            time_to = element?.value;
-          }
-        });
-      } else {
-        const allTime = timings.find((time: any) => {
-          return !!time.list.find(
-            (item: any) => item.code === 'type' && item.value === 'ALL',
-          );
-        });
-        if (allTime) {
-          const time = getStartAndEndTime(allTime);
-          time_from = time.startTime;
-          time_to = time.endTime;
-        } else {
-          const orderTime = timings.find((time: any) => {
-            return !!time.list.find(
-              (item: any) => item.code === 'type' && item.value === 'Order',
-            );
-          });
-          if (orderTime) {
-            const time = getStartAndEndTime(orderTime);
-            time_from = time.startTime;
-            time_to = time.endTime;
-          } else {
-            const deliveryTime = timings.find((time: any) => {
-              return !!time.list.find(
-                (item: any) =>
-                  item.code === 'type' && item.value === 'Delivery',
-              );
-            });
-            if (deliveryTime) {
-              const time = getStartAndEndTime(deliveryTime);
-              time_from = time.startTime;
-              time_to = time.endTime;
-            } else {
-              const selfPickupTime = timings.find((time: any) => {
-                return !!time.list.find(
-                  (item: any) =>
-                    item.code === 'type' && item.value === 'Self-Pickup',
-                );
-              });
-              if (selfPickupTime) {
-                const time = getStartAndEndTime(selfPickupTime);
-                time_from = time.startTime;
-                time_to = time.endTime;
-              }
-            }
-          }
-        }
-      }
+      const {time_from, time_to} = getStoreTiming(data.tags, data.local_id);
 
       const time = moment();
       const startTime = getMomentDateFromHourMinutes(time_from);
