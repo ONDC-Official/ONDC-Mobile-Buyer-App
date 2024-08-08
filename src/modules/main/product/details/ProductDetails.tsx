@@ -34,7 +34,6 @@ import {
   showToastWithGravity,
 } from '../../../../utils/utils';
 import {makeGlobalStyles} from '../../../../styles/styles';
-import Page from '../../../../components/page/Page';
 import AboutProduct from './components/AboutProduct';
 import {useAppTheme} from '../../../../utils/theme';
 import useReadAudio from '../../../../hooks/useReadAudio';
@@ -487,7 +486,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
     addToCartLoading;
 
   return (
-    <Page>
+    <>
       {userInteractionStarted && (
         <ProgressBar indeterminate color={theme.colors.success600} />
       )}
@@ -624,7 +623,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           closeSizeChart={closeSizeChart}
         />
       )}
-    </Page>
+    </>
   );
 };
 

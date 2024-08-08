@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useSelector} from 'react-redux';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
@@ -22,28 +22,23 @@ const Page: React.FC<Page> = ({children, outletId = ''}) => {
   const {cartItems} = useSelector(({cart}) => cart);
   const styles = makeStyles(theme.colors);
 
-  const navigateToCart = () => {
+  const index = useMemo(() => {
     if (outletId !== '') {
-      const index = cartItems.findIndex(
-        (one: any) => one.location_id === outletId,
-      );
-      if (index > -1) {
-        navigation.navigate('SubCart', {index: index});
-      } else {
-        navigation.navigate('Cart');
-      }
+      return cartItems.findIndex((one: any) => one.location_id === outletId);
     } else {
-      navigation.navigate('Cart');
+      return -1;
     }
-  };
+  }, [outletId]);
 
   const itemCount = cartItems.length;
   return (
     <View style={styles.pageContainer}>
       {children}
-      {itemCount > 0 && (
+      {index > -1 && (
         <View style={styles.container}>
-          <TouchableOpacity style={styles.button} onPress={navigateToCart}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('SubCart', {index: index})}>
             <Text variant={'bodyLarge'} style={styles.text}>
               {formatNumber(itemCount)}{' '}
               {itemCount > 1 ? t('Page.Items Added') : t('Page.Item Added')}
