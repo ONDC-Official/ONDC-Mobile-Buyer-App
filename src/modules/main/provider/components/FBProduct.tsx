@@ -85,6 +85,7 @@ const FBProduct: React.FC<FBProduct> = ({product, provider}) => {
   const [productDetails, setProductDetails] = useState<any>(null);
   const [itemQty, setItemQty] = useState<number>(1);
   const [priceRange, setPriceRange] = useState<any>(null);
+  const [defaultPrice, setDefaultPrice] = useState<any>(0);
 
   const customizable = useMemo(() => {
     return !!product?.item_details?.tags?.find(
@@ -468,24 +469,38 @@ const FBProduct: React.FC<FBProduct> = ({product, provider}) => {
 
   useEffect(() => {
     let rangePriceTag = null;
+    let price = 0;
     if (product?.item_details?.price?.tags) {
-      const findRangePriceTag = product?.item_details?.price?.tags.find(
-        (item: any) => item.code === 'range',
+      const defaultSelectionTag = product?.item_details?.price?.tags.find(
+        (item: any) => item.code === 'default_selection',
       );
-      if (findRangePriceTag) {
-        const findLowerPriceObj = findRangePriceTag.list.find(
-          (item: any) => item.code === 'lower',
+      if (defaultSelectionTag) {
+        const findDefaultTag = defaultSelectionTag.list.find(
+          (item: any) => item.code === 'value',
         );
-        const findUpperPriceObj = findRangePriceTag.list.find(
-          (item: any) => item.code === 'upper',
+        if (findDefaultTag) {
+          price = findDefaultTag.value;
+        }
+      } else {
+        const findRangePriceTag = product?.item_details?.price?.tags.find(
+          (item: any) => item.code === 'range',
         );
-        rangePriceTag = {
-          maxPrice: findUpperPriceObj.value,
-          minPrice: findLowerPriceObj.value,
-        };
+        if (findRangePriceTag) {
+          const findLowerPriceObj = findRangePriceTag.list.find(
+            (item: any) => item.code === 'lower',
+          );
+          const findUpperPriceObj = findRangePriceTag.list.find(
+            (item: any) => item.code === 'upper',
+          );
+          rangePriceTag = {
+            maxPrice: findUpperPriceObj.value,
+            minPrice: findLowerPriceObj.value,
+          };
+        }
       }
     }
     setPriceRange(rangePriceTag);
+    setDefaultPrice(price);
   }, [product]);
 
   const inStock =
@@ -529,7 +544,9 @@ const FBProduct: React.FC<FBProduct> = ({product, provider}) => {
             {product?.item_details?.category_id}
           </Text>
           <Text variant={'headlineSmall'} style={styles.price}>
-            {priceRange
+            {defaultPrice
+              ? defaultPrice
+              : priceRange
               ? `${currency}${formatNumber(
                   priceRange?.minPrice,
                 )} - ${currency}${formatNumber(priceRange?.maxPrice)}`
