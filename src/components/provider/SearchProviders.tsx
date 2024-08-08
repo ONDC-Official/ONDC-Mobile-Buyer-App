@@ -13,7 +13,6 @@ import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
-import useBhashini from '../../hooks/useBhashini';
 import useReadAudio from '../../hooks/useReadAudio';
 import Provider from './Provider';
 
@@ -36,15 +35,8 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
   const {
     startVoice,
     userInteractionStarted,
-    userInput,
-    stopAndDestroyVoiceListener,
     setAllowRestarts,
   } = useReadAudio(language);
-  const {
-    withoutConfigRequest,
-    computeRequestTransliteration,
-    transliterationRequest,
-  } = useBhashini();
 
   const totalProviders = useRef<number>(0);
   const [providers, setProviders] = useState<any[]>([]);
@@ -73,18 +65,9 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
       if (productSearchSource.current) {
         productSearchSource.current.cancel();
       }
-      let query = searchQuery;
       productSearchSource.current = CancelToken.source();
-      // if (language !== 'en') {
-      //   if (!transliterationRequest?.callbackUrl) {
-      //     await withoutConfigRequest();
-      //   }
-      //   const searchResponse = await computeRequestTransliteration(query);
-      //   query = searchResponse?.pipelineResponse[0]?.output[0]?.target;
-      // }
-
       const afterString = providerId ? `&afterKey=${providerId}` : '';
-      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}&name=${query}${afterString}`;
+      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}&name=${searchQuery}${afterString}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
