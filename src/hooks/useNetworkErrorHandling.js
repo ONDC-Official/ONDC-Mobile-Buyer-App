@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
+import {BackHandler} from 'react-native';
 import {alertWithOneButton} from '../utils/alerts';
 import {showToastWithGravity} from '../utils/utils';
 import {clearAll} from '../utils/storage';
@@ -55,7 +56,9 @@ export default () => {
             t('Global.Version mismatch'),
             t('Global.Please upgrade your application to the latest version'),
             'Ok',
-            () => {},
+            () => {
+              BackHandler.exitApp();
+            },
           );
         } else {
           if (setError !== null) {
