@@ -101,7 +101,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   };
 
   const renderItem = useCallback(
-    ({item}: {item: any}) => <Product product={item} search />,
+    ({item}: {item: any}) => <Product product={item} search isOpen />,
     [],
   );
 

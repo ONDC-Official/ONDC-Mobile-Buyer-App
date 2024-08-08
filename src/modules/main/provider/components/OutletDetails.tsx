@@ -16,7 +16,6 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import {useAppTheme} from '../../../../utils/theme';
 import useMinutesToString from '../../../../hooks/useMinutesToString';
-import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 interface OutletDetails {
   provider: any;
@@ -32,7 +31,6 @@ const OutletDetails: React.FC<OutletDetails> = ({
   apiRequested,
 }) => {
   const {t} = useTranslation();
-  const {formatNumber, formatDistance} = useFormatNumber();
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
     useMinutesToString();
   const theme = useAppTheme();
@@ -62,7 +60,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
 
   return (
     <View>
-      {!provider?.isOpen && (
+      {!outlet?.isOpen && (
         <FastImage
           style={styles.brandImage}
           source={Closed}
@@ -131,17 +129,17 @@ const OutletDetails: React.FC<OutletDetails> = ({
                 timeToShip.time,
               )}
             </Text>
-            {!provider?.isOpen && (
+            {!outlet?.isOpen && (
               <>
                 <View style={styles.dotView} />
                 <Text variant={'labelLarge'} style={styles.address}>
-                  {t('Store.Opens at', {time: provider?.time_from})}
+                  {t('Store.Opens at', {time: outlet?.time_from})}
                 </Text>
               </>
             )}
           </View>
         </View>
-        {!provider?.isOpen ? (
+        {!outlet?.isOpen ? (
           <Grayscale>
             <FastImage
               style={styles.headerImage}

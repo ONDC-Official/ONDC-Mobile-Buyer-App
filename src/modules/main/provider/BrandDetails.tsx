@@ -49,7 +49,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
-  const getOutletDetails = async () => {
+  const getOutletDetails = async (tags: any[]) => {
     try {
       setOutletDetailsRequested(true);
       source.current = CancelToken.source();
@@ -58,7 +58,20 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         source.current.token,
       );
       if (data) {
-        setOutlet(data);
+        const {time_from, time_to} = getStoreTiming(tags, data.local_id);
+
+        const time = moment();
+        const startTime = getMomentDateFromHourMinutes(time_from);
+        const endTime = getMomentDateFromHourMinutes(time_to);
+        const isOpen = time.isBetween(startTime, endTime);
+
+        setOutlet({
+          ...data,
+          ...{
+            isOpen,
+            time_from: formatDate(startTime, 'hh:mm a'),
+          },
+        });
       }
     } catch (error) {
       handleApiError(error);
@@ -75,25 +88,11 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         `${API_BASE_URL}${PROVIDER}?id=${params.brandId}`,
         source.current.token,
       );
-
-      const {time_from, time_to} = getStoreTiming(data.tags, data.local_id);
-
-      const time = moment();
-      const startTime = getMomentDateFromHourMinutes(time_from);
-      const endTime = getMomentDateFromHourMinutes(time_to);
-      const isOpen = time.isBetween(startTime, endTime);
-
       navigation.setOptions({
         headerTitle: data?.descriptor?.name,
       });
-      await getOutletDetails();
-      setProvider({
-        ...data,
-        ...{
-          isOpen,
-          time_from: formatDate(startTime, 'hh:mm a'),
-        },
-      });
+      await getOutletDetails(data.tags);
+      setProvider(data);
     } catch (error) {
       handleApiError(error);
     } finally {

@@ -24,6 +24,7 @@ interface Products {
   search?: boolean;
   provider: any;
   providerDomain?: string;
+  isOpen: boolean;
 }
 
 const CancelToken = axios.CancelToken;
@@ -34,6 +35,7 @@ const Products: React.FC<Products> = ({
   search = false,
   provider,
   providerDomain,
+  isOpen,
 }) => {
   const sectionListRef = useRef<any>(null);
   const productSearchSource = useRef<any>(null);
@@ -202,7 +204,7 @@ const Products: React.FC<Products> = ({
   const renderFlatListItem = useCallback(
     ({item}: {item: any}) => (
       <View key={item.id} style={styles.productContainer}>
-        <Product product={item} search={search} provider={provider} />
+        <Product product={item} search={search} isOpen={isOpen} />
       </View>
     ),
     [search, provider],

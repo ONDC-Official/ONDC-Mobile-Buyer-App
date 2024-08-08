@@ -35,6 +35,7 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
           providerDomain={provider.domain}
           provider={provider}
           subCategories={[]}
+          isOpen={outlet?.isOpen || false}
         />
       </View>
     );

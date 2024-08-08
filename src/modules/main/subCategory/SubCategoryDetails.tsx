@@ -42,6 +42,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
         subCategories={[currentSubCategory]}
         search
         provider={null}
+        isOpen
       />
     </View>
   );

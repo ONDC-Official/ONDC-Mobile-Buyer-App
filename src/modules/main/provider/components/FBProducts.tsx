@@ -26,10 +26,12 @@ const FBProducts = ({
   provider,
   domain,
   location,
+  isOpen,
 }: {
   provider: any;
   domain: string;
   location: string;
+  isOpen: boolean;
 }) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -183,6 +185,7 @@ const FBProducts = ({
             key={section.id}
             section={section}
             provider={provider}
+            isOpen={isOpen}
             defaultExpand={index === 0}
           />
         ))
@@ -190,7 +193,7 @@ const FBProducts = ({
         <FlatList
           data={filteredProducts}
           renderItem={({item}) => (
-            <FBProduct product={item} provider={provider} />
+            <FBProduct product={item} provider={provider} isOpen={isOpen} />
           )}
           contentContainerStyle={styles.listContainer}
           ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}

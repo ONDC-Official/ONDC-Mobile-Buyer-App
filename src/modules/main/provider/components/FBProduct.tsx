@@ -44,13 +44,14 @@ import {Grayscale} from 'react-native-color-matrix-image-filters';
 interface FBProduct {
   product: any;
   provider: any;
+  isOpen: boolean;
 }
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
 const screenHeight: number = Dimensions.get('screen').height;
 
 const CancelToken = axios.CancelToken;
-const FBProduct: React.FC<FBProduct> = ({product, provider}) => {
+const FBProduct: React.FC<FBProduct> = ({product, provider, isOpen}) => {
   const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -505,10 +506,7 @@ const FBProduct: React.FC<FBProduct> = ({product, provider}) => {
 
   const inStock =
     Number(product?.item_details?.quantity?.available?.count) >= 1;
-  const disabled =
-    apiInProgress ||
-    !inStock ||
-    (!provider?.isOpen && provider?.isOpen !== undefined);
+  const disabled = apiInProgress || !inStock || !isOpen;
 
   const currency = useMemo(
     () => CURRENCY_SYMBOLS[product?.item_details?.price?.currency],

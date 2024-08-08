@@ -33,6 +33,7 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
           provider={provider}
           domain={provider?.domain}
           location={outlet.id}
+          isOpen={outlet?.isOpen || false}
         />
       </View>
     </ScrollView>

@@ -8,12 +8,14 @@ interface CustomMenuAccordion {
   section: any;
   provider: any;
   defaultExpand: boolean;
+  isOpen: boolean;
 }
 
 const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
   section,
   provider,
   defaultExpand,
+  isOpen,
 }) => {
   const [expanded, setExpanded] = useState<boolean>(defaultExpand);
 
@@ -37,7 +39,7 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
       }>
       {section?.items?.map((item: any, index: number) => (
         <View key={item.id}>
-          <FBProduct product={item} provider={provider} />
+          <FBProduct product={item} provider={provider} isOpen={isOpen} />
           {itemLength === index + 1 ? (
             <View style={styles.lastItem} />
           ) : (

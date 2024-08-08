@@ -13,16 +13,12 @@ import {Grayscale} from 'react-native-color-matrix-image-filters';
 interface Product {
   product: any;
   search?: boolean;
-  provider?: any;
+  isOpen: boolean;
 }
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
 
-const Product: React.FC<Product> = ({
-  product,
-  search = false,
-  provider = null,
-}) => {
+const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
   const {formatNumber} = useFormatNumber();
   const isFBDomain = product.context.domain === FB_DOMAIN;
   const theme = useAppTheme();
@@ -46,8 +42,7 @@ const Product: React.FC<Product> = ({
 
   const inStock =
     Number(product?.item_details?.quantity?.available?.count) >= 1;
-  const disabled =
-    !inStock || (!provider?.isOpen && provider?.isOpen !== undefined);
+  const disabled = !inStock || !isOpen;
 
   let imageSource = NoImageAvailable;
   if (product?.item_details?.descriptor?.symbol) {
