@@ -93,7 +93,9 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
         numberOfLines={1}
         ellipsizeMode={'tail'}
         style={styles.provider}>
-        {product?.provider_details?.descriptor?.name}
+        {search
+          ? product?.provider_details?.descriptor?.name
+          : product?.item_details?.descriptor?.short_desc}
       </Text>
       <View style={styles.row}>
         <Text variant={'bodyLarge'} style={styles.amount}>

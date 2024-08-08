@@ -51,7 +51,7 @@ const NoImageAvailable = require('../../../../assets/noImage.png');
 const screenHeight: number = Dimensions.get('screen').height;
 
 const CancelToken = axios.CancelToken;
-const FBProduct: React.FC<FBProduct> = ({product, provider, isOpen}) => {
+const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
   const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -538,8 +538,12 @@ const FBProduct: React.FC<FBProduct> = ({product, provider, isOpen}) => {
             ellipsizeMode={'tail'}>
             {product?.item_details?.descriptor?.name}
           </Text>
-          <Text variant={'bodySmall'} style={[styles.field, styles.category]}>
-            {product?.item_details?.category_id}
+          <Text
+            variant={'bodySmall'}
+            style={[styles.field, styles.category]}
+            numberOfLines={1}
+            ellipsizeMode={'tail'}>
+            {product?.item_details?.descriptor?.short_desc}
           </Text>
           <Text variant={'headlineSmall'} style={styles.price}>
             {defaultPrice
@@ -887,6 +891,7 @@ const makeStyles = (colors: any) =>
     },
     category: {
       color: colors.neutral300,
+      paddingRight: 32,
     },
     actionButton: {
       width: 88,
