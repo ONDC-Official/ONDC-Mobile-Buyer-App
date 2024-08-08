@@ -1,6 +1,6 @@
-import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Checkbox, Text} from 'react-native-paper';
-import React, {useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../utils/theme';
@@ -20,13 +20,87 @@ const ValuesSkeleton = () => {
   const styles = makeStyles(theme.colors);
   return (
     <SkeletonPlaceholder>
-      <View style={styles.valueRow}>
+      <View style={styles.skeletonRow}>
         <View style={styles.checkboxSkeleton} />
         <View style={styles.textSkeleton} />
       </View>
     </SkeletonPlaceholder>
   );
 };
+
+const AttributeItem = memo(
+  ({item, selected, onPress}: {item: any; selected: boolean; onPress: any}) => {
+    const theme = useAppTheme();
+    const styles = makeStyles(theme.colors);
+
+    return (
+      <TouchableOpacity style={styles.attribute} onPress={onPress}>
+        <View style={selected ? styles.selected : styles.normal} />
+        <Text
+          variant={'bodyMedium'}
+          style={[
+            selected ? styles.selectedText : styles.normalText,
+            styles.attributeText,
+          ]}>
+          {item.code}
+        </Text>
+      </TouchableOpacity>
+    );
+  },
+);
+
+const AttributeValueItem = memo(
+  ({
+    value,
+    isSelected,
+    currentAttribute,
+    removeValue,
+    addValue,
+  }: {
+    value: any;
+    isSelected: boolean;
+    currentAttribute: any;
+    removeValue: any;
+    addValue: any;
+  }) => {
+    const theme = useAppTheme();
+    const styles = makeStyles(theme.colors);
+
+    const handlePress = useCallback(() => {
+      isSelected ? removeValue(value) : addValue(value);
+    }, [isSelected, removeValue, addValue, value]);
+
+    if (currentAttribute === 'colour') {
+      return (
+        <TouchableOpacity
+          key={value}
+          style={styles.valueRow}
+          onPress={handlePress}>
+          <View
+            style={[
+              styles.dotContainer,
+              isSelected ? styles.selectedDotContainer : {},
+            ]}>
+            <View style={[styles.colorDot, {backgroundColor: value}]} />
+          </View>
+          <Text variant={'labelMedium'}>{convertHexToName(value)}</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          key={value}
+          style={styles.valueRow}
+          onPress={handlePress}>
+          <Checkbox.Android status={isSelected ? 'checked' : 'unchecked'} />
+          <Text variant={'labelMedium'} style={styles.valueLabel}>
+            {value}
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+  },
+);
 
 const FilterList: React.FC<FilterList> = ({
   attributes,
@@ -49,31 +123,65 @@ const FilterList: React.FC<FilterList> = ({
     close();
   };
 
-  const removeValue = (value: string) => {
-    const values = Object.assign({}, selectedValues);
-    values[currentAttribute] = values[currentAttribute].filter(
-      (one: string) => one !== value,
-    );
-    setSelectedValues(values);
-  };
-
-  const addValue = (value: string) => {
-    const values = Object.assign({}, selectedValues);
-    if (values.hasOwnProperty(currentAttribute)) {
-      values[currentAttribute] = values[currentAttribute].concat([value]);
-    } else {
-      values[currentAttribute] = [value];
-    }
-    setSelectedValues(values);
-  };
-
   const clearAll = () => setSelectedValues({});
+
+  const renderAttributeItem = useCallback(
+    ({item}: {item: any}) => {
+      const selected = currentAttribute === item.code;
+      return (
+        <AttributeItem
+          item={item}
+          selected={selected}
+          onPress={() => setCurrentAttribute(item.code)}
+        />
+      );
+    },
+    [currentAttribute, setCurrentAttribute],
+  );
+
+  const renderAttributeValueItem = useCallback(
+    ({item}: {item: any}) => {
+      const isSelected = selectedValues[currentAttribute]?.includes(item);
+
+      const removeValue = (value: string) => {
+        const values = Object.assign({}, selectedValues);
+        values[currentAttribute] = values[currentAttribute].filter(
+          (one: string) => one !== value,
+        );
+        setSelectedValues(values);
+      };
+
+      const addValue = (value: string) => {
+        const values = Object.assign({}, selectedValues);
+        if (values.hasOwnProperty(currentAttribute)) {
+          values[currentAttribute] = values[currentAttribute].concat([value]);
+        } else {
+          values[currentAttribute] = [value];
+        }
+        setSelectedValues(values);
+      };
+
+      return (
+        <AttributeValueItem
+          value={item}
+          isSelected={isSelected}
+          currentAttribute={currentAttribute}
+          removeValue={removeValue}
+          addValue={addValue}
+        />
+      );
+    },
+    [selectedValues, currentAttribute],
+  );
+
+  const attributeValueKeyExtractor = useCallback(item => item, []);
 
   useEffect(() => {
     const attribute = attributes.find(one => one.code === currentAttribute);
     if (attribute && attribute.hasOwnProperty('values')) {
       setCurrentValues(attribute.values);
     } else {
+      setCurrentValues([]);
       getAttributeValues(currentAttribute);
     }
   }, [currentAttribute, attributes]);
@@ -93,82 +201,29 @@ const FilterList: React.FC<FilterList> = ({
         </Button>
       </View>
       <View style={styles.filterContainer}>
-        <ScrollView style={styles.attributes}>
-          {attributes.map(attribute => {
-            const selected = currentAttribute === attribute.code;
-            return (
-              <TouchableOpacity
-                key={attribute.code}
-                style={styles.attribute}
-                onPress={() => setCurrentAttribute(attribute.code)}>
-                <View style={selected ? styles.selected : styles.normal} />
-                <Text
-                  variant={'bodyMedium'}
-                  style={[
-                    selected ? styles.selectedText : styles.normalText,
-                    styles.attributeText,
-                  ]}>
-                  {attribute.code}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
-        <ScrollView style={styles.attributeValues}>
+        <View style={styles.attributes}>
+          <FlatList
+            data={attributes}
+            renderItem={renderAttributeItem}
+            keyExtractor={item => item.code}
+          />
+        </View>
+        <View style={styles.attributeValues}>
           {currentValues.length === 0 ? (
-            <>
+            <View>
               <ValuesSkeleton />
               <ValuesSkeleton />
               <ValuesSkeleton />
               <ValuesSkeleton />
-            </>
+            </View>
           ) : (
-            currentValues.map(value => {
-              const isSelected =
-                selectedValues[currentAttribute]?.includes(value);
-
-              if (currentAttribute === 'colour') {
-                return (
-                  <TouchableOpacity
-                    key={value}
-                    style={styles.valueRow}
-                    onPress={() =>
-                      isSelected ? removeValue(value) : addValue(value)
-                    }>
-                    <View
-                      style={[
-                        styles.dotContainer,
-                        isSelected ? styles.selectedDotContainer : {},
-                      ]}>
-                      <View
-                        style={[styles.colorDot, {backgroundColor: value}]}
-                      />
-                    </View>
-                    <Text variant={'labelMedium'}>
-                      {convertHexToName(value)}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              } else {
-                return (
-                  <TouchableOpacity
-                    key={value}
-                    style={styles.valueRow}
-                    onPress={() =>
-                      isSelected ? removeValue(value) : addValue(value)
-                    }>
-                    <Checkbox.Android
-                      status={isSelected ? 'checked' : 'unchecked'}
-                    />
-                    <Text variant={'labelMedium'} style={styles.valueLabel}>
-                      {value}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              }
-            })
+            <FlatList
+              data={currentValues}
+              renderItem={renderAttributeValueItem}
+              keyExtractor={attributeValueKeyExtractor}
+            />
           )}
-        </ScrollView>
+        </View>
       </View>
       <View style={styles.footer}>
         <View style={styles.buttonContainer}>
@@ -306,6 +361,14 @@ export const makeStyles = (colors: any) =>
       paddingVertical: 5,
       alignItems: 'center',
       flex: 1,
+    },
+    skeletonRow: {
+      flexDirection: 'row',
+      paddingHorizontal: 16,
+      paddingVertical: 5,
+      alignItems: 'center',
+      flex: 1,
+      marginVertical: 16,
     },
     checkboxSkeleton: {
       width: 16,

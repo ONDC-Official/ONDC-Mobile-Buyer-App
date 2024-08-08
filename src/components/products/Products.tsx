@@ -1,9 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import axios from 'axios';
 import {FlatList, SectionList, StyleSheet, View} from 'react-native';
-import {useSelector} from 'react-redux';
-import {ProgressBar, Text} from 'react-native-paper';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import useNetworkHandling from '../../hooks/useNetworkHandling';
@@ -15,12 +13,10 @@ import {
 } from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import Filters from './Filters';
-import {compareIgnoringSpaces, showToastWithGravity} from '../../utils/utils';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import Product from '../../modules/main/provider/components/Product';
 import {useAppTheme} from '../../utils/theme';
 import ProductSearch from './ProductSearch';
-import useReadAudio from '../../hooks/useReadAudio';
 
 interface Products {
   providerId: any;
@@ -40,19 +36,9 @@ const Products: React.FC<Products> = ({
   providerDomain,
 }) => {
   const sectionListRef = useRef<any>(null);
-  const voiceDetectionStarted = useRef<boolean>(false);
-  const navigation = useNavigation<any>();
   const productSearchSource = useRef<any>(null);
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {language} = useSelector(({auth}) => auth);
-  const {
-    startVoice,
-    userInteractionStarted,
-    userInput,
-    stopAndDestroyVoiceListener,
-    setAllowRestarts,
-  } = useReadAudio(language);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [page, setPage] = useState<number>(1);
@@ -179,10 +165,7 @@ const Products: React.FC<Products> = ({
         customData,
         subCategories,
         selectedAttributes,
-      ).then(() => {
-        voiceDetectionStarted.current = true;
-        startVoice().then(() => {});
-      });
+      ).then(() => {});
     }
   };
 
@@ -216,101 +199,92 @@ const Products: React.FC<Products> = ({
     return list.filter(one => one.data[0].list.length > 0);
   }, [products, searchQuery]);
 
-  useEffect(() => {
-    (async () => {
-      setProducts([]);
-      if (sectionListRef?.current) {
-        try {
-          sectionListRef?.current?.scrollToLocation({
-            sectionIndex: 0,
-            itemIndex: 0,
-            animated: true,
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      if (providerId) {
-        productSearchSource.current = CancelToken.source();
-        const customMenu = await getDataWithAuth(
-          `${API_BASE_URL}${CUSTOM_MENU}?provider=${providerId}${
-            providerDomain ? `&domain=${providerDomain}` : ''
-          }`,
-          productSearchSource.current.token,
-        );
-        setCustomData(customMenu);
+  const renderFlatListItem = useCallback(
+    ({item}: {item: any}) => (
+      <View key={item.id} style={styles.productContainer}>
+        <Product product={item} search={search} provider={provider} />
+      </View>
+    ),
+    [search, provider],
+  );
 
-        searchProducts(
-          1,
-          providerId,
-          customMenu,
-          subCategories,
-          selectedAttributes,
-        ).then(() => {
-          voiceDetectionStarted.current = true;
-          startVoice().then(() => {});
-        });
-      } else {
-        searchProducts(
-          1,
-          providerId,
-          null,
-          subCategories,
-          selectedAttributes,
-        ).then(() => {
-          voiceDetectionStarted.current = true;
-          startVoice().then(() => {});
-        });
-      }
-    })();
-  }, [providerId, selectedAttributes, subCategories]);
+  const renderItem = useCallback(
+    ({item}: {item: any}) => {
+      return item.list.length > 0 ? (
+        <FlatList
+          data={item.list}
+          numColumns={2}
+          style={styles.nestedListContainer}
+          renderItem={renderFlatListItem}
+          keyExtractor={item => item.id}
+        />
+      ) : null;
+    },
+    [renderFlatListItem],
+  );
+
+  const renderSectionHeader = useCallback(({section}) => {
+    return section.data[0]?.list?.length > 0 && section?.title ? (
+      <View style={styles.headerSection}>
+        <Text variant="headlineSmall" style={styles.headerText}>
+          {section?.title}
+        </Text>
+        <Icon
+          name={'keyboard-arrow-right'}
+          size={20}
+          color={theme.colors.neutral300}
+        />
+      </View>
+    ) : null;
+  }, []);
+
+  const ListFooterComponent = useMemo(() => {
+    return moreListRequested ? <ProductSkeleton /> : null;
+  }, [moreListRequested]);
 
   useEffect(() => {
-    if (userInput.length > 0) {
-      const input = userInput.toLowerCase();
-      if (/^(select|choose)\b/i.test(input)) {
-        const productName = input
-          .replace('select', '')
-          .replace('choose', '')
-          .trim();
-        let selectedProducts = [];
-        selectedProducts = products.filter(product =>
-          compareIgnoringSpaces(
-            product?.item_details?.descriptor?.name.toLowerCase(),
-            productName,
-          ),
-        );
-        if (selectedProducts.length > 1) {
-          showToastWithGravity(
-            'There are more than 1 product, please provide more details',
-          );
-        } else {
-          const product = selectedProducts[0];
-          stopAndDestroyVoiceListener().then(() => {
-            navigation.navigate('ProductDetails', {productId: product.id});
-          });
-        }
-      } else if (compareIgnoringSpaces('go to cart', input)) {
-        stopAndDestroyVoiceListener().then(() => {
-          navigation.navigate('Cart');
+    setProducts([]);
+    if (sectionListRef?.current) {
+      try {
+        sectionListRef?.current?.scrollToLocation({
+          sectionIndex: 0,
+          itemIndex: 0,
+          animated: true,
         });
+      } catch (error) {
+        console.log(error);
       }
     }
-  }, [userInput, products]);
-
-  useFocusEffect(
-    useCallback(() => {
-      if (voiceDetectionStarted.current) {
-        setAllowRestarts();
-      }
-    }, []),
-  );
+    if (providerId) {
+      productSearchSource.current = CancelToken.source();
+      getDataWithAuth(
+        `${API_BASE_URL}${CUSTOM_MENU}?provider=${providerId}${
+          providerDomain ? `&domain=${providerDomain}` : ''
+        }`,
+        productSearchSource.current.token,
+      ).then(menu => {
+        setCustomData(menu);
+        searchProducts(
+          1,
+          providerId,
+          menu,
+          subCategories,
+          selectedAttributes,
+        ).then(() => {});
+      });
+    } else {
+      searchProducts(
+        1,
+        providerId,
+        null,
+        subCategories,
+        selectedAttributes,
+      ).then(() => {});
+    }
+  }, [providerId, selectedAttributes, subCategories]);
 
   return (
     <View style={styles.container}>
-      {userInteractionStarted && (
-        <ProgressBar indeterminate color={theme.colors.success600} />
-      )}
       <Filters
         selectedAttributes={selectedAttributes}
         setSelectedAttributes={updateSelectedAttributes}
@@ -328,43 +302,10 @@ const Products: React.FC<Products> = ({
         sections={filteredProducts}
         contentContainerStyle={styles.listContainer}
         keyExtractor={(item, index) => `section${index}`}
-        renderItem={({item}) => {
-          return item.list.length > 0 ? (
-            <FlatList
-              data={item.list}
-              numColumns={2}
-              style={styles.nestedListContainer}
-              renderItem={({item}) => (
-                <View key={item.id} style={styles.productContainer}>
-                  <Product product={item} search={search} provider={provider} />
-                </View>
-              )}
-              keyExtractor={item => item.id}
-            />
-          ) : (
-            <></>
-          );
-        }}
-        renderSectionHeader={({section}) => {
-          return section.data[0]?.list?.length > 0 && section?.title ? (
-            <View style={styles.headerSection}>
-              <Text variant="headlineSmall" style={styles.headerText}>
-                {section?.title}
-              </Text>
-              <Icon
-                name={'keyboard-arrow-right'}
-                size={20}
-                color={theme.colors.neutral300}
-              />
-            </View>
-          ) : (
-            <></>
-          );
-        }}
+        renderItem={renderItem}
+        renderSectionHeader={renderSectionHeader}
         onEndReached={loadMoreList}
-        ListFooterComponent={() =>
-          moreListRequested ? <ProductSkeleton /> : <></>
-        }
+        ListFooterComponent={ListFooterComponent}
       />
     </View>
   );

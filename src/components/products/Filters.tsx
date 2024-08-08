@@ -1,6 +1,6 @@
 import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useTranslation} from 'react-i18next';
@@ -25,116 +25,137 @@ interface Filters {
 const screenHeight = Dimensions.get('screen').height;
 
 const CancelToken = axios.CancelToken;
-const Filters: React.FC<Filters> = ({
-  providerId = null,
-  category = null,
-  selectedAttributes,
-  setSelectedAttributes,
-}) => {
-  const {t} = useTranslation();
-  const attributeSource = useRef<any>(null);
-  const [attributes, setAttributes] = useState<any[]>([]);
-  const [attributesRequested, setAttributesRequested] = useState<boolean>(true);
-  const {getDataWithAuth} = useNetworkHandling();
-  const {handleApiError} = useNetworkErrorHandling();
-  const theme = useAppTheme();
-  const refFilterSheet = useRef<any>(null);
-  const styles = makeStyles(theme.colors);
+const Filters: React.FC<Filters> = React.memo(
+  ({
+    providerId = null,
+    category = null,
+    selectedAttributes,
+    setSelectedAttributes,
+  }) => {
+    const {t} = useTranslation();
+    const attributeSource = useRef<any>(null);
+    const [attributes, setAttributes] = useState<any[]>([]);
+    const [attributesRequested, setAttributesRequested] =
+      useState<boolean>(true);
+    const {getDataWithWithoutEncode} = useNetworkHandling();
+    const {handleApiError} = useNetworkErrorHandling();
+    const theme = useAppTheme();
+    const refFilterSheet = useRef<any>(null);
+    const styles = makeStyles(theme.colors);
 
-  const getAttributes = async () => {
-    try {
-      setAttributesRequested(true);
-      setAttributes([]);
-      attributeSource.current = CancelToken.source();
-      let url = `${API_BASE_URL}${PRODUCT_ATTRIBUTES}`;
-      url += providerId ? `?provider=${providerId}` : '';
-      url += category ? `?category=${category}` : '';
-      const {data} = await getDataWithAuth(url, attributeSource.current.token);
-      setAttributes(data.response.data);
-    } catch (error) {
-      handleApiError(error);
-    } finally {
-      setAttributesRequested(false);
-    }
-  };
-
-  const getAttributeValues = async (attribute: string) => {
-    try {
-      attributeSource.current = CancelToken.source();
-      let url = `${API_BASE_URL}${PRODUCT_ATTRIBUTE_VALUES}?attribute_code=${attribute}`;
-      url += providerId ? `&provider=${providerId}` : '';
-      url += category ? `&category=${category}` : '';
-      const {data} = await getDataWithAuth(url, attributeSource.current.token);
-      const list = Object.assign([], attributes);
-      const selectedAttribute: any = list.find(
-        (one: any) => one.code === attribute,
-      );
-      if (selectedAttribute) {
-        selectedAttribute.values = data.response.data;
-      }
-      setAttributes(list);
-    } catch (error) {
-      handleApiError(error);
-    }
-  };
-
-  useEffect(() => {
-    getAttributes().then(() => {});
-
-    return () => {
-      if (attributeSource.current) {
-        attributeSource.current.cancel();
+    const getAttributes = async () => {
+      try {
+        setAttributesRequested(true);
+        setAttributes([]);
+        attributeSource.current = CancelToken.source();
+        let url = `${API_BASE_URL}${PRODUCT_ATTRIBUTES}${
+          providerId ? `?provider=${encodeURIComponent(providerId)}` : ''
+        }${category ? `?category=${encodeURIComponent(category)}` : ''}`;
+        const {data} = await getDataWithWithoutEncode(
+          url,
+          attributeSource.current.token,
+        );
+        setAttributes(data.response.data);
+      } catch (error) {
+        handleApiError(error);
+      } finally {
+        setAttributesRequested(false);
       }
     };
-  }, [category, providerId]);
 
-  if (attributes?.length > 0) {
-    const attributesHeight = attributes.length * 40 + 200;
-    return (
-      <View style={styles.filterContainer}>
-        <TouchableOpacity
-          style={[
-            styles.filterButton,
-            attributesRequested
-              ? styles.disabledFilterButton
-              : styles.activeFilterButton,
-          ]}
-          onPress={() => refFilterSheet.current.open()}>
-          <Text
-            variant={'labelMedium'}
-            style={
-              attributesRequested
-                ? styles.disabledFilterLabel
-                : styles.filterLabel
-            }>
-            {t('Product SubCategories.Filter')}
-          </Text>
-          <FilterIcon width={18} height={18} />
-        </TouchableOpacity>
-        <RBSheet
-          ref={refFilterSheet}
-          height={
-            attributesHeight > screenHeight
-              ? screenHeight - 100
-              : attributesHeight
-          }
-          customStyles={{
-            container: styles.rbSheet,
-          }}>
-          <FilterList
-            selectedAttributes={selectedAttributes}
-            setSelectedAttributes={setSelectedAttributes}
-            attributes={attributes}
-            getAttributeValues={getAttributeValues}
-            close={() => refFilterSheet.current.close()}
-          />
-        </RBSheet>
-      </View>
+    const getAttributeValues = async (attribute: string) => {
+      try {
+        attributeSource.current = CancelToken.source();
+        let url = `${API_BASE_URL}${PRODUCT_ATTRIBUTE_VALUES}?attribute_code=${encodeURIComponent(
+          attribute,
+        )}${providerId ? `&provider=${encodeURIComponent(providerId)}` : ''}${
+          category ? `&category=${encodeURIComponent(category)}` : ''
+        }`;
+        const {data} = await getDataWithWithoutEncode(
+          url,
+          attributeSource.current.token,
+        );
+        const list = attributes.concat([]);
+        const selectedAttribute: any = list.find(
+          (one: any) => one.code === attribute,
+        );
+        if (selectedAttribute) {
+          selectedAttribute.values = data.response.data;
+        }
+        setAttributes(list);
+      } catch (error) {
+        handleApiError(error);
+      }
+    };
+
+    const openSheet = useCallback(
+      () => refFilterSheet.current.open(),
+      [refFilterSheet],
     );
-  } else {
-    return <View />;
-  }
-};
+
+    const closeSheet = useCallback(
+      () => refFilterSheet.current.close(),
+      [refFilterSheet],
+    );
+
+    useEffect(() => {
+      getAttributes().then(() => {});
+
+      return () => {
+        if (attributeSource.current) {
+          attributeSource.current.cancel();
+        }
+      };
+    }, [category, providerId]);
+
+    if (attributes?.length > 0) {
+      const attributesHeight = attributes.length * 40 + 200;
+      return (
+        <View style={styles.filterContainer}>
+          <TouchableOpacity
+            style={[
+              styles.filterButton,
+              attributesRequested
+                ? styles.disabledFilterButton
+                : styles.activeFilterButton,
+            ]}
+            onPress={openSheet}>
+            <Text
+              variant={'labelMedium'}
+              style={
+                attributesRequested
+                  ? styles.disabledFilterLabel
+                  : styles.filterLabel
+              }>
+              {t('Product SubCategories.Filter')}
+            </Text>
+            <FilterIcon width={18} height={18} />
+          </TouchableOpacity>
+          <RBSheet
+            ref={refFilterSheet}
+            height={
+              attributesHeight > screenHeight
+                ? screenHeight - 100
+                : attributesHeight
+            }
+            customStyles={{
+              container: styles.rbSheet,
+            }}>
+            <FilterList
+              selectedAttributes={selectedAttributes}
+              setSelectedAttributes={setSelectedAttributes}
+              attributes={attributes}
+              getAttributeValues={getAttributeValues}
+              close={closeSheet}
+            />
+          </RBSheet>
+        </View>
+      );
+    } else {
+      return <View />;
+    }
+  },
+);
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
