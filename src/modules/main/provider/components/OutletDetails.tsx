@@ -37,10 +37,11 @@ const OutletDetails: React.FC<OutletDetails> = ({
   const styles = makeStyles(theme.colors);
 
   const getDirection = async () => {
+    const gps = outlet?.gps.split(',');
     const url =
       Platform.OS === 'android'
-        ? `geo:0,0?q=${outlet?.gps[0]}+${outlet?.gps[1]}`
-        : `maps:0,0?q=${outlet?.gps[0]}+${outlet?.gps[1]}`;
+        ? `geo:0,0?q=${gps[0]}+${gps[1]}`
+        : `maps:0,0?q=${gps[0]}+${gps[1]}`;
     await Linking.openURL(url);
   };
 
