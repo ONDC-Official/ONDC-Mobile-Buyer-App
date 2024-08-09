@@ -97,17 +97,6 @@ const OutletDetails: React.FC<OutletDetails> = ({
             </View>
           </View>
           <View style={styles.providerLocalityView}>
-            {/*<Icon*/}
-            {/*  name={'location-pin'}*/}
-            {/*  size={16}*/}
-            {/*  color={theme.colors.neutral200}*/}
-            {/*/>*/}
-            {/*<Text variant={'labelLarge'} style={styles.timing}>*/}
-            {/*  {t('Store.km', {*/}
-            {/*    distance: formatNumber(formatDistance(outlet?.distance)),*/}
-            {/*  })}*/}
-            {/*</Text>*/}
-            {/*<View style={styles.dotView} />*/}
             {!!outlet?.address && (
               <Text
                 variant={'labelLarge'}
@@ -164,7 +153,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     brandImage: {
-      height: 268,
+      height: 220,
       backgroundColor: colors.black,
     },
     brandDetails: {
