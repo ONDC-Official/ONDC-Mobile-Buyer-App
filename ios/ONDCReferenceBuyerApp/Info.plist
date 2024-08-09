@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your photo library to allow you to upload photos for complaints</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -95,12 +99,10 @@
 		</dict>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>We need access to your photo library to allow you to upload photos for complaints</string>
+	<string>We need access to your photo library to allow you to upload photos for complaints</string>
 	<key>NSMicrophoneUsageDescription</key>
-    <string>We need access to listen to your commands for search request</string>
-	<key>NSCameraUsageDescription</key>
-    <string>We need access to your photo library to allow you to upload photos for complaints</string>
+	<string>We need access to listen to your commands for search request</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-    <string>We need access to listen to your commands for search request</string>
+	<string>We need access to listen to your commands for search request</string>
 </dict>
 </plist>
