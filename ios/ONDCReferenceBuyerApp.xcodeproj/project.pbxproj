@@ -82,6 +82,7 @@
 		6EF55DC9AAB79F1CE44375B6 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppPreprod.debug.xcconfig"; sourceTree = "<group>"; };
 		718506D6C1C09DDF36D32F48 /* Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig"; path = "Target Support Files/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment/Pods-ONDCReferenceBuyerApp-ONDCReferenceBuyerAppDevelopment.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ONDCReferenceBuyerApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8C5D6DB12C64857D004BD264 /* ONDCReferenceBuyerApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = ONDCReferenceBuyerApp.entitlements; path = ONDCReferenceBuyerApp/ONDCReferenceBuyerApp.entitlements; sourceTree = "<group>"; };
 		8C914AA02C443D1400D1CD1D /* ONDCReferenceBuyerAppDevelopment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ONDCReferenceBuyerAppDevelopment.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C914AA12C443D1400D1CD1D /* ONDCReferenceBuyerAppDevelopment-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ONDCReferenceBuyerAppDevelopment-Info.plist"; path = "/Users/punit/dev/ondc/ONDC-Mobile-Buyer-App/ios/ONDCReferenceBuyerAppDevelopment-Info.plist"; sourceTree = "<absolute>"; };
 		8C914AB92C443D3700D1CD1D /* ONDCReferenceBuyerAppStaging.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ONDCReferenceBuyerAppStaging.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -169,6 +170,7 @@
 		13B07FAE1A68108700A75B9A /* ONDCReferenceBuyerApp */ = {
 			isa = PBXGroup;
 			children = (
+				8C5D6DB12C64857D004BD264 /* ONDCReferenceBuyerApp.entitlements */,
 				8CC9A9A02C52950B002A63E8 /* Firebase */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -1069,6 +1071,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ONDCReferenceBuyerApp/ONDCReferenceBuyerApp.entitlements;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8N949QF9JX;
 				ENABLE_BITCODE = NO;
@@ -1079,7 +1082,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1099,6 +1102,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ONDCReferenceBuyerApp/ONDCReferenceBuyerApp.entitlements;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 8N949QF9JX;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1108,7 +1112,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

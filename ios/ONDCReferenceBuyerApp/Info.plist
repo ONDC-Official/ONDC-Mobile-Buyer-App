@@ -94,13 +94,15 @@
 			</array>
 		</dict>
 	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>We need access to your photo library to allow you to upload photos for complaints</string>
+	<string>We need access to your photo library to allow you to upload photos for complaints</string>
 	<key>NSMicrophoneUsageDescription</key>
-    <string>We need access to listen to your commands for search request</string>
+	<string>We need access to listen to your commands for search request</string>
 	<key>NSCameraUsageDescription</key>
-    <string>We need access to your photo library to allow you to upload photos for complaints</string>
+	<string>We need access to your photo library to allow you to upload photos for complaints</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-    <string>We need access to listen to your commands for search request</string>
+	<string>We need access to listen to your commands for search request</string>
 </dict>
 </plist>
