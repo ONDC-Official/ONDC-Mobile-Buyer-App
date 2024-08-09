@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {
   ActivityIndicator,
@@ -7,11 +7,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ProgressBar, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
-import {useFocusEffect} from '@react-navigation/native';
 
 import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -22,21 +21,15 @@ import {
   FASHION_DOMAIN,
   FB_DOMAIN,
   GROCERY_DOMAIN,
-  numberWords,
 } from '../../../../utils/constants';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import VariationsRenderer from '../../../../components/products/VariationsRenderer';
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
-import {
-  compareIgnoringSpaces,
-  showInfoToast,
-  showToastWithGravity,
-} from '../../../../utils/utils';
+import {showInfoToast, showToastWithGravity} from '../../../../utils/utils';
 import {makeGlobalStyles} from '../../../../styles/styles';
 import AboutProduct from './components/AboutProduct';
 import {useAppTheme} from '../../../../utils/theme';
-import useReadAudio from '../../../../hooks/useReadAudio';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
 import SizeChart from './components/SizeChart';
@@ -76,19 +69,12 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const voiceDetectionStarted = useRef<boolean>(false);
   const {t} = useTranslation();
   const firstTime = useRef<boolean>(true);
-  const {uid, language} = useSelector(({auth}) => auth);
+  const {uid} = useSelector(({auth}) => auth);
   const source = useRef<any>(null);
   const dispatch = useDispatch();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
-  const {
-    startVoice,
-    userInteractionStarted,
-    userInput,
-    stopAndDestroyVoiceListener,
-    setAllowRestarts,
-  } = useReadAudio(language);
   const currentCartItem = useRef<any>(null);
 
   const [showSizeChart, setShowSizeChart] = useState<boolean>(false);
@@ -144,7 +130,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
         title: data?.provider_details?.descriptor?.name,
       });
       voiceDetectionStarted.current = true;
-      startVoice().then(() => {});
       await getCartItems(data.id);
     } catch (error) {
       handleApiError(error);
@@ -390,23 +375,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
     }
   };
 
-  const addQuantitiesToCart = async (max: number) => {
-    for (let index = 0; index < max; index++) {
-      await addToCart(true);
-    }
-  };
-
-  const removeQuantitiesToCart = async (max: number) => {
-    for (let index = 0; index < max; index++) {
-      if (currentCartItem.current.item.quantity.count === 1) {
-        await deleteCartItem(currentCartItem.current._id);
-        break;
-      } else {
-        await addToCart(false);
-      }
-    }
-  };
-
   const openSizeChart = () => setShowSizeChart(true);
 
   const closeSizeChart = () => setShowSizeChart(false);
@@ -421,56 +389,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
     };
   }, [params]);
 
-  useEffect(() => {
-    if (userInput.length > 0) {
-      const input = userInput.toLowerCase();
-      if (/^(add)\b/i.test(input)) {
-        const quantityMessage = input.replace('add', '').trim();
-        const regex =
-          /(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+quantit(?:y|ies)\b/;
-
-        // Use match method to find matches
-        const match = quantityMessage.match(regex);
-        if (match) {
-          const value = match[1];
-          const max = parseInt(value, 10) || numberWords[value.toLowerCase()];
-          if (max > 0) {
-            addQuantitiesToCart(max).then(() => {});
-          }
-        }
-      } else if (/^(remove|substract)\b/i.test(input)) {
-        const quantityMessage = input
-          .replace('remove', '')
-          .replace('substract', '')
-          .trim();
-        const regex =
-          /(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+quantit(?:y|ies)\b/;
-
-        // Use match method to find matches
-        const match = quantityMessage.match(regex);
-        if (match) {
-          const value = match[1];
-          const max = parseInt(value, 10) || numberWords[value.toLowerCase()];
-          if (max > 0) {
-            removeQuantitiesToCart(max).then(() => {});
-          }
-        }
-      } else if (compareIgnoringSpaces('go to cart', input)) {
-        stopAndDestroyVoiceListener().then(() => {
-          navigation.navigate('Cart');
-        });
-      }
-    }
-  }, [userInput]);
-
-  useFocusEffect(
-    useCallback(() => {
-      if (voiceDetectionStarted.current) {
-        setAllowRestarts();
-      }
-    }, []),
-  );
-
   if (apiRequested) {
     return <ProductSkeleton />;
   }
@@ -482,13 +400,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
   return (
     <>
-      {userInteractionStarted && (
-        <ProgressBar indeterminate color={theme.colors.success600} />
-      )}
-      <ScrollView
-        contentContainerStyle={styles.contentContainer}
-        style={styles.container}
-        showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <ProductImages
           images={[product?.item_details?.descriptor?.symbol].concat(
             product?.item_details?.descriptor?.images,
@@ -541,15 +453,13 @@ const ProductDetails: React.FC<ProductDetails> = ({
             }
           />
           {product?.context?.domain === FB_DOMAIN && (
-            <>
-              <FBProductCustomization
-                product={product}
-                customizationState={customizationState}
-                setCustomizationState={setCustomizationState}
-                isEditFlow={false}
-                setItemOutOfStock={setItemOutOfStock}
-              />
-            </>
+            <FBProductCustomization
+              product={product}
+              customizationState={customizationState}
+              setCustomizationState={setCustomizationState}
+              isEditFlow={false}
+              setItemOutOfStock={setItemOutOfStock}
+            />
           )}
           <View style={styles.addToCartContainer}>
             {product?.context.domain !== FB_DOMAIN &&
@@ -576,7 +486,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 </Text>
                 <TouchableOpacity
                   style={styles.incrementButton}
-                  onPress={() => addToCart( true)}>
+                  onPress={() => addToCart(true)}>
                   <Icon name={'plus'} color={theme.colors.primary} size={18} />
                 </TouchableOpacity>
               </View>
@@ -588,7 +498,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                     ? globalStyles.disabledContainedButton
                     : globalStyles.outlineButton,
                 ]}
-                onPress={() => addToCart( true)}
+                onPress={() => addToCart(true)}
                 disabled={disableActionButtons}>
                 {addToCartLoading ? (
                   <ActivityIndicator
@@ -627,9 +537,6 @@ const makeStyles = (colors: any) =>
     container: {
       flex: 1,
       backgroundColor: colors.white,
-    },
-    contentContainer: {
-      paddingBottom: 24,
     },
     header: {
       flexDirection: 'row',
@@ -700,26 +607,6 @@ const makeStyles = (colors: any) =>
     quantity: {
       color: colors.primary,
       marginHorizontal: 20,
-    },
-    modalContainer: {
-      backgroundColor: colors.white,
-      paddingHorizontal: 16,
-      paddingTop: 16,
-      paddingBottom: 40,
-      borderRadius: 20,
-      margin: 20,
-      alignItems: 'center',
-    },
-    modalHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      width: '100%',
-      marginBottom: 20,
-    },
-    chartImage: {
-      width: '100%',
-      aspectRatio: 1,
     },
   });
 

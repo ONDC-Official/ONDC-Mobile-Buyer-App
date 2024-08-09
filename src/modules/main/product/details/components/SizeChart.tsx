@@ -56,82 +56,8 @@ const SizeChart = ({
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.white,
-    },
     contentContainer: {
       paddingBottom: 24,
-    },
-    header: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-    },
-    backButton: {
-      marginRight: 10,
-    },
-    stockRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginBottom: 10,
-    },
-    details: {
-      padding: 16,
-    },
-    title: {
-      color: colors.neutral400,
-      marginBottom: 12,
-    },
-    price: {
-      color: colors.neutral400,
-    },
-    priceContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    maximumAmount: {
-      color: colors.neutral300,
-      marginLeft: 12,
-      textDecorationLine: 'line-through',
-    },
-    buttonContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    addToCartContainer: {
-      marginTop: 28,
-    },
-    addToCartButton: {
-      flex: 1,
-      borderRadius: 8,
-      borderWidth: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: 44,
-      backgroundColor: colors.primary,
-    },
-    addToCartLabel: {
-      color: colors.white,
-    },
-    buttonGroup: {
-      backgroundColor: colors.primary50,
-      borderColor: colors.primary,
-      flexDirection: 'row',
-      alignItems: 'center',
-      flex: 1,
-      borderWidth: 1,
-      borderRadius: 8,
-      height: 44,
-      justifyContent: 'center',
-    },
-    incrementButton: {
-      paddingHorizontal: 12,
-    },
-    quantity: {
-      color: colors.primary,
-      marginHorizontal: 20,
     },
     modalContainer: {
       backgroundColor: colors.white,

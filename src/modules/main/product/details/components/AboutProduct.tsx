@@ -1,14 +1,8 @@
-import {Text} from 'react-native-paper';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import React, {useMemo, useState} from 'react';
+import {List, Text} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import React, {useMemo} from 'react';
 import moment from 'moment';
 import {useTranslation} from 'react-i18next';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from 'react-native-reanimated';
 import 'moment-duration-format';
 import {useAppTheme} from '../../../../../utils/theme';
 import useFormatNumber from '../../../../../hooks/useFormatNumber';
@@ -18,8 +12,6 @@ const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const [menuClose, setMenuClose] = useState<boolean>(true);
-  const height = useSharedValue(0);
 
   const attributes = useMemo(() => {
     if (product) {
@@ -71,39 +63,17 @@ const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
     return {};
   }, [product]);
 
-  const toggleAccordion = () => {
-    setMenuClose(!menuClose);
-    if (!menuClose) {
-      height.value = withSpring(0); // Open accordion
-    } else {
-      height.value = withSpring(Object.keys(attributes).length * 60); // Close accordion
-    }
-  };
-
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      height: height.value,
-    };
-  });
-
   return (
     <View>
-      <TouchableOpacity
-        style={styles.accordionHeader}
-        onPress={toggleAccordion}>
-        <Text
-          variant={'titleLarge'}
-          style={[styles.about, inStock ? {} : styles.disabledText]}>
-          {t('Cart.Product Details')}
-        </Text>
-        <Icon
-          name={menuClose ? 'keyboard-arrow-down' : 'keyboard-arrow-up'}
-          size={24}
-          color={theme.colors.neutral400}
-        />
-      </TouchableOpacity>
-      {!menuClose && (
-        <Animated.View style={[styles.details, animatedStyle]}>
+      <List.Accordion
+        title={
+          <Text
+            variant={'titleLarge'}
+            style={[styles.about, inStock ? {} : styles.disabledText]}>
+            {t('Cart.Product Details')}
+          </Text>
+        }>
+        <View style={styles.details}>
           {Object.keys(attributes).map(key => (
             <View style={styles.aboutRow} key={key}>
               <Text variant="bodyMedium" style={styles.aboutTitle}>
@@ -120,8 +90,8 @@ const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
               </Text>
             </View>
           ))}
-        </Animated.View>
-      )}
+        </View>
+      </List.Accordion>
     </View>
   );
 };
@@ -151,16 +121,6 @@ const makeStyles = (colors: any) =>
     aboutDetails: {
       flex: 1,
       color: colors.neutral400,
-    },
-    accordionHeader: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      width: '100%',
-      marginTop: 28,
-      paddingBottom: 12,
-      borderBottomWidth: 1,
-      borderBottomColor: colors.neutral100,
     },
     details: {
       paddingTop: 12,
