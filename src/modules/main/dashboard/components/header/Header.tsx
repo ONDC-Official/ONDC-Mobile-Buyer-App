@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Searchbar} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
@@ -42,6 +42,10 @@ const Header: React.FC<HeaderProps> = ({disableAddress, onPress}) => {
     }
   };
 
+  const navigateToHome = () => {
+    navigation.navigate('Dashboard');
+  };
+
   useEffect(() => {
     if (isFocused) {
       setSearchQuery('');
@@ -52,11 +56,13 @@ const Header: React.FC<HeaderProps> = ({disableAddress, onPress}) => {
     <View style={styles.container}>
       {!disableAddress && (
         <View style={styles.row}>
-          <FastImage
-            source={require('../../../../../assets/header_logo.png')}
-            style={styles.headerImage}
-            resizeMode={'contain'}
-          />
+          <TouchableOpacity onPress={navigateToHome}>
+            <FastImage
+              source={require('../../../../../assets/header_logo.png')}
+              style={styles.headerImage}
+              resizeMode={'contain'}
+            />
+          </TouchableOpacity>
           <AddressTag onPress={onPress} />
         </View>
       )}

@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
   addButton: {
     borderRadius: 8,
     marginHorizontal: 16,
+    marginBottom: 10,
     height: 44,
     alignItems: 'center',
     justifyContent: 'center',
