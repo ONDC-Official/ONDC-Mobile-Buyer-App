@@ -70,9 +70,9 @@ const Products: React.FC<Products> = ({
           ? `&categoryIds=${encodeURIComponent(subCategoryIds.join(','))}`
           : '';
       Object.keys(attributes).map(key => {
-        url += `&product_attr_${key}=${encodeURIComponent(
-          attributes[key].join(','),
-        )}`;
+        url += `&product_attr_${key}=${attributes[key]
+          .map((one: string) => encodeURIComponent(one))
+          .join(',')}`;
       });
       const {data} = await getDataWithWithoutEncode(
         url,
