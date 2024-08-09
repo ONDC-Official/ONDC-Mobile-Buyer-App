@@ -285,7 +285,7 @@ export const compareDateWithDuration = (duration: any, dateStr: string) => {
 export const getFilterCategory = (tags: any) => {
   let category = 'veg';
 
-  const selectedTag = tags.find((tag: any) => tag.code === 'veg_nonveg');
+  const selectedTag = tags?.find((tag: any) => tag.code === 'veg_nonveg');
   const veg = selectedTag?.list?.find(
     (one: any) => one.code === 'veg' && one.value.toLowerCase() === 'yes',
   );
