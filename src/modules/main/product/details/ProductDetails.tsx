@@ -244,7 +244,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
         setItemAvailableInCart(null);
         setIsItemAvailableInCart(false);
       }
-      dispatch(updateCartItems(data[ind].items));
+      dispatch(updateCartItems(data));
       return data[ind].items;
     } catch (error) {
       console.log('Error fetching cart items:', error);
@@ -261,7 +261,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
     await getCartItems();
   };
 
-  const addToCart = async (navigate = false, isIncrement = true) => {
+  const addToCart = async (isIncrement = true) => {
     try {
       setAddToCartLoading(true);
       source.current = CancelToken.source();
@@ -385,11 +385,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
           setAddToCartLoading(false);
         }
       }
-      if (navigate) {
-        stopAndDestroyVoiceListener().then(() => {
-          navigation.navigate('Cart');
-        });
-      }
     } catch (error) {
       console.log(error);
     }
@@ -397,7 +392,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
   const addQuantitiesToCart = async (max: number) => {
     for (let index = 0; index < max; index++) {
-      await addToCart(false, true);
+      await addToCart(true);
     }
   };
 
@@ -407,7 +402,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
         await deleteCartItem(currentCartItem.current._id);
         break;
       } else {
-        await addToCart(false, false);
+        await addToCart(false);
       }
     }
   };
@@ -567,7 +562,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                     if (itemAvailableInCart.item.quantity.count === 1) {
                       deleteCartItem(itemAvailableInCart._id).then(() => {});
                     } else {
-                      addToCart(false, false).then(() => {});
+                      addToCart(false).then(() => {});
                     }
                   }}>
                   <Icon name={'minus'} color={theme.colors.primary} size={18} />
@@ -581,7 +576,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 </Text>
                 <TouchableOpacity
                   style={styles.incrementButton}
-                  onPress={() => addToCart(false, true)}>
+                  onPress={() => addToCart( true)}>
                   <Icon name={'plus'} color={theme.colors.primary} size={18} />
                 </TouchableOpacity>
               </View>
@@ -593,7 +588,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                     ? globalStyles.disabledContainedButton
                     : globalStyles.outlineButton,
                 ]}
-                onPress={() => addToCart(false, true)}
+                onPress={() => addToCart( true)}
                 disabled={disableActionButtons}>
                 {addToCartLoading ? (
                   <ActivityIndicator
