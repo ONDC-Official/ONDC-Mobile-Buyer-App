@@ -88,8 +88,11 @@ const CustomizationFooterButtons = ({
             {update
               ? t('Product Summary.Update Item Total', {
                   total: `₹${formatNumber(
-                    (product?.item_details?.price.value + customizationPrices) *
-                      itemQty,
+                    Number(
+                      (product?.item_details?.price.value +
+                        customizationPrices) *
+                        itemQty,
+                    ).toFixed(2),
                   )}`,
                 })
               : t('Product Summary.Add Item Total', {
