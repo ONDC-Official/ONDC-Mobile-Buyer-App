@@ -37,6 +37,7 @@ export const theme: any = {
 
     black: '#000',
     white: '#fff',
+    disabled: '#686868',
 
     surfaceDisabled: '#E8E8E8',
     onSurfaceDisabled: '#B5B5B5',
