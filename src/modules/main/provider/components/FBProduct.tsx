@@ -513,6 +513,18 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
     [product, CURRENCY_SYMBOLS],
   );
 
+  const setItemQtyFun = (val: any) => {
+    if (val <= product?.item_details?.quantity?.maximum?.count) {
+      setItemQty(val);
+    } else {
+      showToastWithGravity(
+        t('Cart.Maximum allowed quantity is', {
+          count: product?.item_details?.quantity?.maximum?.count,
+        }),
+      );
+    }
+  };
+
   const productImageSource = useMemo(() => {
     if (product?.item_details?.descriptor.symbol) {
       return {uri: product?.item_details?.descriptor.symbol};
@@ -703,7 +715,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
             <CustomizationFooterButtons
               productLoading={productLoading}
               itemQty={itemQty}
-              setItemQty={setItemQty}
+              setItemQty={setItemQtyFun}
               itemOutOfStock={itemOutOfStock}
               addDetailsToCart={addDetailsToCart}
               product={product}

@@ -1,14 +1,49 @@
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import React, {useCallback, useState} from 'react';
-import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  Alert,
+  Dimensions,
+  Platform,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {getUrlParams} from '../../../utils/utils';
 import {useAppTheme} from '../../../utils/theme';
+import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {Text} from 'react-native-paper';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
   const theme = useAppTheme();
   const [torchOn, setTorchOn] = useState(false);
+  const [hasCameraPermission, setHasCameraPermission] = useState(false);
+
+  useEffect(() => {
+    requestCameraPermission();
+  }, []);
+
+  const requestCameraPermission = async () => {
+    try {
+      const result = await request(
+        Platform.OS === 'ios'
+          ? PERMISSIONS.IOS.CAMERA
+          : PERMISSIONS.ANDROID.CAMERA,
+      );
+      if (result === RESULTS.GRANTED) {
+        setHasCameraPermission(true);
+      } else {
+        Alert.alert(
+          'Permission Denied',
+          'Camera permission is required to scan QR codes.',
+          [{text: 'OK'}],
+        );
+      }
+    } catch (error) {
+      console.error('Failed to request camera permission:', error);
+    }
+  };
 
   const goBack = useCallback(() => {
     navigation.goBack();
@@ -33,6 +68,14 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
       }
     }
   };
+
+  if (!hasCameraPermission) {
+    return (
+      <View style={styles.permissionView}>
+        <Text>Requesting camera permission...</Text>
+      </View>
+    );
+  }
 
   return (
     <>
@@ -77,6 +120,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width,
     height: Dimensions.get('screen').height,
   },
+  permissionView: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   metaContainer: {
     position: 'absolute',
     top: 0,
