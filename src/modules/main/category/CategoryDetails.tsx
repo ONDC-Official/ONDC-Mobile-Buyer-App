@@ -21,7 +21,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   return (
     <>
       <View style={[appStyles.container, styles.container]}>
-        <Header onPress={openAddressList} />
+        <Header onPress={openAddressList} allowBack />
         <ScrollView style={appStyles.container}>
           <Categories currentCategory={params.category} />
           {params.category !== 'F&B' && (

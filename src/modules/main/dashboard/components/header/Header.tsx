@@ -5,18 +5,25 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
 import FastImage from 'react-native-fast-image';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
 import AudioRecorder from './AudioRecorder';
 import QRButton from './QRButton';
+import {isIOS} from '../../../../../utils/constants';
 
 type HeaderProps = {
   disableAddress?: boolean;
   onPress?: () => void;
+  allowBack?: boolean;
 };
 
-const Header: React.FC<HeaderProps> = ({disableAddress, onPress}) => {
+const Header: React.FC<HeaderProps> = ({
+  disableAddress,
+  onPress,
+  allowBack = false,
+}) => {
   const isFocused = useIsFocused();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -56,17 +63,20 @@ const Header: React.FC<HeaderProps> = ({disableAddress, onPress}) => {
     <View style={styles.container}>
       {!disableAddress && (
         <View style={styles.row}>
-          <TouchableOpacity onPress={navigateToHome}>
-            <FastImage
-              source={require('../../../../../assets/header_logo.png')}
-              style={styles.headerImage}
-              resizeMode={'contain'}
-            />
-          </TouchableOpacity>
+          <FastImage
+            source={require('../../../../../assets/header_logo.png')}
+            style={styles.headerImage}
+            resizeMode={'contain'}
+          />
           <AddressTag onPress={onPress} />
         </View>
       )}
       <View style={styles.searchContainer}>
+        {isIOS && allowBack && (
+          <TouchableOpacity onPress={navigateToHome} style={styles.backButton}>
+            <Icon name={'arrow-left'} size={24} color={'#fff'} />
+          </TouchableOpacity>
+        )}
         <View style={styles.searchButton}>
           <Searchbar
             editable
@@ -114,6 +124,13 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.primary,
       height: 60,
       gap: 15,
+    },
+    backButton: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 24,
+      height: 24,
+      marginRight: 10,
     },
     searchButton: {
       flex: 1,
