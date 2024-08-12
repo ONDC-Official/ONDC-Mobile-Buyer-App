@@ -27,8 +27,6 @@ interface SearchProductList {
 const CancelToken = axios.CancelToken;
 
 const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
-  const voiceDetectionStarted = useRef<boolean>(false);
-  const navigation = useNavigation<any>();
   const productSearchSource = useRef<any>(null);
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -36,14 +34,6 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   const {address} = useSelector((state: any) => state.address);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const {language} = useSelector(({auth}) => auth);
-  const {
-    startVoice,
-    userInteractionStarted,
-    userInput,
-    stopAndDestroyVoiceListener,
-    setAllowRestarts,
-  } = useReadAudio(language);
 
   const totalProducts = useRef<number>(0);
   const pageNumber = useRef<number>(1);
@@ -76,14 +66,6 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
       }
       let query = searchQuery;
       productSearchSource.current = CancelToken.source();
-      // if (language !== 'en') {
-      //   if (!transliterationRequest?.callbackUrl) {
-      //     await withoutConfigRequest();
-      //   }
-      //   const searchResponse = await computeRequestTransliteration(query);
-      //   query = searchResponse?.pipelineResponse[0]?.output[0]?.target;
-      // }
-
       let url = `${API_BASE_URL}${GLOBAL_SEARCH_ITEMS}?pageNumber=${pageNumber.current}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&name=${query}`;
       const {data} = await getDataWithAuth(
         url,
@@ -106,68 +88,10 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   );
 
   useEffect(() => {
-    if (userInput.length > 0) {
-      const input = userInput.toLowerCase();
-      if (/^(select|choose)\b/i.test(input)) {
-        const inputArray = input.split('from');
-        const productName = inputArray[0]
-          .replace('select', '')
-          .replace('choose', '')
-          .trim();
-        let filteredProducts = [];
-        if (inputArray.length > 1) {
-          filteredProducts = products.filter(product => {
-            return (
-              compareIgnoringSpaces(
-                product?.item_details?.descriptor?.name.toLowerCase(),
-                productName,
-              ) &&
-              compareIgnoringSpaces(
-                product?.provider_details?.descriptor?.name.toLowerCase(),
-                inputArray[1].trim(),
-              )
-            );
-          });
-        } else {
-          filteredProducts = products.filter(product =>
-            compareIgnoringSpaces(
-              product?.item_details?.descriptor?.name.toLowerCase(),
-              productName,
-            ),
-          );
-        }
-        if (filteredProducts.length > 1) {
-          showToastWithGravity(
-            'There are more than 1 product, please provide more details',
-          );
-        } else if (filteredProducts.length === 1) {
-          const product = filteredProducts[0];
-          const routeParams: any = {
-            brandId: product.provider_details.id,
-          };
-
-          if (product.location_details) {
-            routeParams.outletId = product.location_details.id;
-          }
-          stopAndDestroyVoiceListener().then(() => {
-            navigation.navigate('BrandDetails', routeParams);
-          });
-        }
-      } else if (compareIgnoringSpaces('go to cart', input)) {
-        stopAndDestroyVoiceListener().then(() => {
-          navigation.navigate('Cart');
-        });
-      }
-    }
-  }, [userInput, products]);
-
-  useEffect(() => {
     if (searchQuery?.length > 2) {
       pageNumber.current = 1;
       setProductsRequested(true);
       searchProducts().then(() => {
-        voiceDetectionStarted.current = true;
-        startVoice().then(() => {});
       });
     } else {
       totalProducts.current = 0;
@@ -175,22 +99,8 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
     }
   }, [searchQuery]);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (voiceDetectionStarted.current) {
-        setAllowRestarts();
-      }
-    }, []),
-  );
-
   return (
     <View style={styles.container}>
-      {userInteractionStarted && (
-        <ProgressBar indeterminate color={theme.colors.success600} />
-      )}
-      <View style={styles.filterContainer}>
-        <View />
-      </View>
       {productsRequested ? (
         <FlatList
           numColumns={2}
@@ -229,14 +139,6 @@ const makeStyles = (colors: any) =>
     container: {
       flex: 1,
       backgroundColor: colors.white,
-    },
-    filterContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingBottom: 16,
-      width: '100%',
     },
     listContainer: {
       paddingHorizontal: 8,
