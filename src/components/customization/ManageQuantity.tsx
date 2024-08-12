@@ -70,10 +70,10 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
         )}
       </Text>
       <TouchableOpacity
-        // disabled={
-        //   !!updatingCartItem ||
-        //   maximumQuantity === cartItem?.item?.quantity?.count
-        // }
+        disabled={
+          !!updatingCartItem ||
+          maximumQuantity === cartItem?.item?.quantity?.count
+        }
         style={styles.incrementButton}
         onPress={() =>
           updateCartItem(
