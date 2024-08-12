@@ -113,9 +113,6 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       paddingVertical: 9,
     },
-    headerTitle: {
-      color: colors.white,
-    },
     searchContainer: {
       width: '100%',
       paddingVertical: 8,
@@ -144,9 +141,6 @@ const makeStyles = (colors: any) =>
       flex: 1,
       height: 44,
       backgroundColor: colors.white,
-    },
-    micContainer: {
-      marginLeft: 10,
     },
     headerImage: {
       width: 75,

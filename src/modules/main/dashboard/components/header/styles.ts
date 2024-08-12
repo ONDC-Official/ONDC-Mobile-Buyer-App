@@ -2,9 +2,6 @@ import {StyleSheet} from 'react-native';
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    micContainer: {
-      marginLeft: 10,
-    },
     modalView: {
       alignSelf: 'center',
       height: 350,
@@ -31,10 +28,6 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
       alignSelf: 'center',
       marginTop: 75,
-    },
-    micWaves: {
-      backgroundColor: 'rgba(0, 142, 204, 0.4)',
-      borderRadius: 75,
     },
     labelText: {
       marginTop: 100,
