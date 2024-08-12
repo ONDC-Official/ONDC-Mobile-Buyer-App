@@ -48,13 +48,13 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       borderRadius: 60,
       backgroundColor: colors.neutral100,
-      padding: 10,
+      paddingHorizontal: 10,
       height: 40,
+      alignItems:'center'
     },
     inputContainer: {
-      marginLeft: 6,
       flex: 1,
-      // height: 20,
+      height: 20,
       fontSize: 14,
       textDecorationLine: 'none',
       fontWeight: '400',
