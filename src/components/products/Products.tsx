@@ -3,6 +3,7 @@ import axios from 'axios';
 import {FlatList, SectionList, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useTranslation} from 'react-i18next';
 
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
@@ -37,6 +38,7 @@ const Products: React.FC<Products> = ({
   providerDomain,
   isOpen,
 }) => {
+  const {t} = useTranslation();
   const sectionListRef = useRef<any>(null);
   const productSearchSource = useRef<any>(null);
   const theme = useAppTheme();
@@ -218,7 +220,7 @@ const Products: React.FC<Products> = ({
           numColumns={2}
           style={styles.nestedListContainer}
           renderItem={renderFlatListItem}
-          keyExtractor={item => item.id}
+          keyExtractor={(one: any) => one.id}
         />
       ) : null;
     },
@@ -308,6 +310,13 @@ const Products: React.FC<Products> = ({
         renderSectionHeader={renderSectionHeader}
         onEndReached={loadMoreList}
         ListFooterComponent={ListFooterComponent}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <Text variant={'bodyMedium'}>
+              {t('Home.Search Product List.No products available')}
+            </Text>
+          </View>
+        )}
       />
     </View>
   );

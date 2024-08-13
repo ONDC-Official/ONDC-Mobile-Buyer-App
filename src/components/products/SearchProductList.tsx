@@ -1,10 +1,9 @@
 import axios from 'axios';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {ProgressBar, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
@@ -12,13 +11,8 @@ import Product from '../../modules/main/provider/components/Product';
 import {API_BASE_URL, GLOBAL_SEARCH_ITEMS} from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
-import {
-  compareIgnoringSpaces,
-  showToastWithGravity,
-  skeletonList,
-} from '../../utils/utils';
+import {skeletonList} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
-import useReadAudio from '../../hooks/useReadAudio';
 
 interface SearchProductList {
   searchQuery: string;
