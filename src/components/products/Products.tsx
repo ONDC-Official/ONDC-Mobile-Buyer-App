@@ -310,13 +310,17 @@ const Products: React.FC<Products> = ({
         renderSectionHeader={renderSectionHeader}
         onEndReached={loadMoreList}
         ListFooterComponent={ListFooterComponent}
-        ListEmptyComponent={() => (
-          <View style={styles.emptyContainer}>
-            <Text variant={'bodyMedium'}>
-              {t('Home.Search Product List.No products available')}
-            </Text>
-          </View>
-        )}
+        ListEmptyComponent={() =>
+          moreListRequested ? (
+            <></>
+          ) : (
+            <View style={styles.emptyContainer}>
+              <Text variant={'bodyMedium'}>
+                {t('Home.Search Product List.No products available')}
+              </Text>
+            </View>
+          )
+        }
       />
     </View>
   );
