@@ -33,6 +33,7 @@ import {useAppTheme} from '../../../../utils/theme';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
 import SizeChart from './components/SizeChart';
+import Page from '../../../../components/page/Page';
 
 interface ProductDetails {
   route: any;
@@ -399,7 +400,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
     addToCartLoading;
 
   return (
-    <>
+    <Page outletId={product?.location_details?.id}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <ProductImages
           images={[product?.item_details?.descriptor?.symbol].concat(
@@ -528,7 +529,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           closeSizeChart={closeSizeChart}
         />
       )}
-    </>
+    </Page>
   );
 };
 

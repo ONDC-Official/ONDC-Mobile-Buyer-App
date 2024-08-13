@@ -1,15 +1,15 @@
 import {List, Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import React, {useMemo} from 'react';
-import moment from 'moment';
 import {useTranslation} from 'react-i18next';
 import 'moment-duration-format';
 import {useAppTheme} from '../../../../../utils/theme';
-import useFormatNumber from '../../../../../hooks/useFormatNumber';
+import useMinutesToString from '../../../../../hooks/useMinutesToString';
 
 const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
-  const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
+  const {convertDurationToHumanReadable, translateMinutesToHumanReadable} =
+    useMinutesToString();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
@@ -17,14 +17,13 @@ const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
     if (product) {
       let returnWindowValue: string = '0';
       if (product.item_details?.['@ondc/org/return_window']) {
-        // Create a duration object from the ISO 8601 string
-        const duration = moment.duration(
+        const time = convertDurationToHumanReadable(
           product.item_details?.['@ondc/org/return_window'],
         );
-
-        returnWindowValue = `${formatNumber(duration.format('m'))} ${t(
-          'Fulfillment.minutes',
-        )}`;
+        returnWindowValue = translateMinutesToHumanReadable(
+          time.type,
+          time.time,
+        );
       }
 
       let data: any = {

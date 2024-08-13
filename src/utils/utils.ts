@@ -537,7 +537,7 @@ export const getTime = (timings: any[], type: string) => {
   } else if (orderTimes.length > 0) {
     const nextSlotForDay = findNextSlotSameDay(orderTimesForDay);
     if (nextSlotForDay) {
-     return nextSlotForDay;
+      return nextSlotForDay;
     } else {
       orderTimesForDay = filterByDay(orderTimes, dayOfWeek + 1);
       if (orderTimesForDay.length > 0) {

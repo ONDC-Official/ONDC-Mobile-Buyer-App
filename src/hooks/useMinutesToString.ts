@@ -24,6 +24,21 @@ export default () => {
     }
   };
 
+  const convertDurationToHumanReadable = (value: string) => {
+    const duration = moment.duration(value);
+    const days = duration.asDays();
+    if (days >= 1) {
+      return {type: 'days', time: days};
+    } else {
+      const hours = duration.asHours();
+      if (hours >= 1) {
+        return {type: 'hours', time: hours};
+      } else {
+        return {type: 'minutes', time: duration.format('m')};
+      }
+    }
+  };
+
   const translateMinutesToHumanReadable = (type: string, time: number) => {
     const {lower, higher} = convertToRange(time);
     switch (type) {
@@ -38,5 +53,9 @@ export default () => {
     }
   };
 
-  return {convertMinutesToHumanReadable, translateMinutesToHumanReadable};
+  return {
+    convertDurationToHumanReadable,
+    convertMinutesToHumanReadable,
+    translateMinutesToHumanReadable,
+  };
 };
