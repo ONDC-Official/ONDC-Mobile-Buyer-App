@@ -89,7 +89,9 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
   const getInitialVariationState = (groupInfo: any) => {
     const parentId = product.item_details.parent_item_id;
 
-    const tags = product.categories.find(item => item.id === parentId)?.tags;
+    const tags = product.categories.find(
+      (item: any) => item.id === parentId,
+    )?.tags;
     const attr = tags?.find((tag: any) => tag.code === 'attr');
     const name = attr?.list.find((attribute: any) => attribute.code === 'name');
 
@@ -215,11 +217,20 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
   };
 
   const handleUOMClick = (groupData: any, option: any) => {
-    const toFind = option.split(' ')[0];
+    const unitDetails = option.split(' ');
     const relatedItem = product.related_items.find((item: any) => {
-      const value = item.item_details.quantity.unitized.measure.value;
-      if (Number(value) === Number(toFind)) {
-        return item;
+      const {value, unit} = item.item_details.quantity.unitized.measure;
+      if (unitDetails.length > 1) {
+        if (
+          Number(value) === Number(unitDetails[0]) &&
+          unitDetails[1] === unit
+        ) {
+          return item;
+        }
+      } else {
+        if (Number(value) === Number(unitDetails[0])) {
+          return item;
+        }
       }
     });
     navigation.navigate('ProductDetails', {productId: relatedItem.id});
@@ -294,7 +305,6 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
   return Object.keys(variationState).map(groupId => {
     const groupData = variationState[groupId];
     const groupName = groupData.name;
-
     return (
       <View style={styles.group} key={groupId}>
         <View style={styles.groupHeader}>
