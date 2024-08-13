@@ -3,11 +3,9 @@ import {Text} from 'react-native-paper';
 import React, {useCallback, useMemo, useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
-import {useTranslation} from 'react-i18next';
 
 import {useAppTheme} from '../../../../utils/theme';
 import useMinutesToString from '../../../../hooks/useMinutesToString';
-import useFormatNumber from '../../../../hooks/useFormatNumber';
 import StoreIcon from '../../../../assets/no_store_icon.svg';
 
 interface StoreImage {
