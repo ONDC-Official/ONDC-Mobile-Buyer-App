@@ -34,46 +34,50 @@ const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
         defaultQuery={params?.query ?? ''}
         backIconPress={() => navigation.goBack()}
       />
-      <View style={styles.switchRow}>
-        <View style={styles.switchContainer}>
-          <TouchableOpacity
-            onPress={() => setSearchType('Products')}
-            style={[
-              styles.button,
-              searchType === 'Products' ? styles.activeButton : {},
-            ]}>
-            <Text
-              variant={'bodyMedium'}
-              style={
-                searchType === 'Products'
-                  ? styles.activeButtonText
-                  : styles.buttonText
-              }>
-              {t('Search.Products')}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setSearchType('Stores')}
-            style={[
-              styles.button,
-              searchType === 'Stores' ? styles.activeButton : {},
-            ]}>
-            <Text
-              variant={'bodyMedium'}
-              style={
-                searchType === 'Stores'
-                  ? styles.activeButtonText
-                  : styles.buttonText
-              }>
-              {t('Search.Stores')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      {searchType === 'Products' ? (
-        <SearchProductList searchQuery={searchQuery} />
-      ) : (
-        <SearchProviders searchQuery={searchQuery} />
+      {searchQuery.length > 0 && (
+        <>
+          <View style={styles.switchRow}>
+            <View style={styles.switchContainer}>
+              <TouchableOpacity
+                onPress={() => setSearchType('Products')}
+                style={[
+                  styles.button,
+                  searchType === 'Products' ? styles.activeButton : {},
+                ]}>
+                <Text
+                  variant={'bodyMedium'}
+                  style={
+                    searchType === 'Products'
+                      ? styles.activeButtonText
+                      : styles.buttonText
+                  }>
+                  {t('Search.Products')}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setSearchType('Stores')}
+                style={[
+                  styles.button,
+                  searchType === 'Stores' ? styles.activeButton : {},
+                ]}>
+                <Text
+                  variant={'bodyMedium'}
+                  style={
+                    searchType === 'Stores'
+                      ? styles.activeButtonText
+                      : styles.buttonText
+                  }>
+                  {t('Search.Stores')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          {searchType === 'Products' ? (
+            <SearchProductList searchQuery={searchQuery} />
+          ) : (
+            <SearchProviders searchQuery={searchQuery} />
+          )}
+        </>
       )}
     </View>
   );
