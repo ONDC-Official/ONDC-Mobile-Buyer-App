@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   Linking,
   Platform,
@@ -16,6 +16,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import {useAppTheme} from '../../../../utils/theme';
 import useMinutesToString from '../../../../hooks/useMinutesToString';
+import StoreIcon from '../../../../assets/no_store_icon.svg';
 
 interface OutletDetails {
   provider: any;
@@ -24,6 +25,57 @@ interface OutletDetails {
 }
 
 const Closed = require('../../../../assets/closed.png');
+const NoImageAvailable = require('../../../../assets/no_store.png');
+
+const OutletImage = ({source, isOpen}: {source: any; isOpen: boolean}) => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
+  const [imageSource, setImageSource] = useState(source);
+  const [imageLoadFailed, setImageLoadFailed] = useState<boolean>(false);
+
+  const onError = () => {
+    setImageLoadFailed(true);
+    setImageSource(NoImageAvailable);
+  };
+
+  if (source) {
+    if (isOpen) {
+      return (
+        <FastImage
+          style={styles.headerImage}
+          source={imageSource}
+          resizeMode={
+            imageLoadFailed
+              ? FastImage.resizeMode.cover
+              : FastImage.resizeMode.contain
+          }
+          onError={onError}
+        />
+      );
+    } else {
+      return (
+        <Grayscale>
+          <FastImage
+            style={styles.headerImage}
+            source={imageSource}
+            resizeMode={
+              imageLoadFailed
+                ? FastImage.resizeMode.cover
+                : FastImage.resizeMode.contain
+            }
+            onError={onError}
+          />
+        </Grayscale>
+      );
+    }
+  } else {
+    return (
+      <View style={[styles.headerImage, styles.brandImageEmpty]}>
+        <StoreIcon width={48} height={48} />
+      </View>
+    );
+  }
+};
 
 const OutletDetails: React.FC<OutletDetails> = ({
   provider,
@@ -47,12 +99,23 @@ const OutletDetails: React.FC<OutletDetails> = ({
 
   const callProvider = () => Linking.openURL('tel:+91 92729282982');
 
-  const timeToShip = useMemo(() => {
-    if (outlet && outlet?.minDaysWithTTS) {
-      return convertMinutesToHumanReadable(Number(outlet?.minDaysWithTTS / 60));
-    } else {
-      return {type: 'minutes', time: 0};
+  const {timeToShip, imageSource} = useMemo(() => {
+    let source = null;
+    let time = {type: 'minutes', time: 0};
+
+    if (outlet) {
+      if (outlet?.provider_descriptor?.symbol) {
+        source = {uri: outlet?.provider_descriptor?.symbol};
+      } else if (outlet?.provider_descriptor?.images?.length > 0) {
+        source = {uri: outlet?.provider_descriptor?.images[0]};
+      }
+      if (outlet?.minDaysWithTTS) {
+        time = convertMinutesToHumanReadable(
+          Number(outlet?.minDaysWithTTS / 60),
+        );
+      }
     }
+    return {timeToShip: time, imageSource: source};
   }, [outlet]);
 
   if (apiRequested) {
@@ -129,21 +192,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
             )}
           </View>
         </View>
-        {!outlet?.isOpen ? (
-          <Grayscale>
-            <FastImage
-              style={styles.headerImage}
-              source={{uri: outlet?.provider_descriptor.symbol}}
-              resizeMode={FastImage.resizeMode.contain}
-            />
-          </Grayscale>
-        ) : (
-          <FastImage
-            style={styles.headerImage}
-            source={{uri: outlet?.provider_descriptor.symbol}}
-            resizeMode={FastImage.resizeMode.contain}
-          />
-        )}
+        <OutletImage source={imageSource} isOpen={outlet?.isOpen} />
       </View>
       <View style={styles.borderBottom} />
     </View>
@@ -217,6 +266,9 @@ const makeStyles = (colors: any) =>
       borderColor: colors.error400,
     },
     providerDetails: {flex: 1, paddingRight: 24},
+    brandImageEmpty: {
+      backgroundColor: colors.neutral200,
+    },
   });
 
 export default OutletDetails;
