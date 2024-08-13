@@ -33,7 +33,6 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
   const [variations, setVariations] = useState<any[]>([]);
   const [initialVariationState, setInitialVariationState] = useState<any>({});
   const [isUOM, setIsUOM] = useState<boolean>(false);
-  const [noVariations, setNoVariations] = useState<boolean>(false);
 
   const getVariationGroups = () => {
     const parentId = product.item_details.parent_item_id;
@@ -46,8 +45,8 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
 
       for (const tag of parentData.tags) {
         if (tag.code === 'attr') {
-          let nameTag = null;
-          let seqTag = null;
+          let nameTag: any = null;
+          let seqTag: any = null;
           tag.list.forEach((item: any) => {
             if (item.code === 'name') {
               nameTag = item;
@@ -81,8 +80,6 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
           }
         }
       }
-    } else {
-      setNoVariations(true);
     }
   };
 

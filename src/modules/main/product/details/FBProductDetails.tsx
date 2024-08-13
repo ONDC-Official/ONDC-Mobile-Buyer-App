@@ -63,7 +63,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
           product={product}
           variationState={variationState}
           setVariationState={setVariationState}
-          chartImage={product?.attributes?.size_chart || ''}
+          openSizeChart={() => {}}
           isFashion={product?.context?.domain === FASHION_DOMAIN}
         />
         <View style={styles.customizationContainer}>{children}</View>
