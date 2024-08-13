@@ -11,7 +11,6 @@ import {
   Card,
   Modal,
   Portal,
-  ProgressBar,
   Text,
 } from 'react-native-paper';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
@@ -115,13 +114,8 @@ const SubCart = ({route: {params}}: any) => {
   } = useSelectItems(openFulfillmentSheet);
 
   const {language} = useSelector(({auth}) => auth);
-  const {
-    startVoice,
-    userInteractionStarted,
-    userInput,
-    stopAndDestroyVoiceListener,
-    setAllowRestarts,
-  } = useReadAudio(language);
+  const {userInput, stopAndDestroyVoiceListener, setAllowRestarts} =
+    useReadAudio(language);
 
   const {
     confirmOrderLoading,
@@ -564,9 +558,6 @@ const SubCart = ({route: {params}}: any) => {
 
   return (
     <>
-      {userInteractionStarted && (
-        <ProgressBar indeterminate color={theme.colors.success600} />
-      )}
       <View style={styles.pageContainer}>
         {loading ? (
           <View style={styles.loadingContainer}>

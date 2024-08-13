@@ -14,16 +14,18 @@ import {API_BASE_URL, EVENTS, ON_SELECT, SELECT} from '../utils/apiActions';
 import {setStoredData} from '../utils/storage';
 import useNetworkHandling from './useNetworkHandling';
 import {setTransactionId} from '../toolkit/reducer/auth';
+import useNetworkErrorHandling from './useNetworkErrorHandling';
 
 const CancelToken = axios.CancelToken;
 
 export default (openFulfillmentSheet: () => void) => {
   const {t} = useTranslation();
+  const {handleApiError} = useNetworkErrorHandling();
   const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const dispatch = useDispatch();
   const source = useRef<any>(null);
   const address = useRef<any>(null);
-  const {token, uid, transaction_id} = useSelector(({auth}) => auth);
+  const {token, transaction_id} = useSelector(({auth}) => auth);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const responseRef = useRef<any[]>([]);
   const eventTimeOutRef = useRef<any[]>([]);
@@ -156,10 +158,11 @@ export default (openFulfillmentSheet: () => void) => {
             }),
           );
         }
-      } catch (err: any) {
-        console.log(err);
-        showToastWithGravity(err?.response?.data?.error?.message);
-        navigation.navigate('Dashboard');
+      } catch (error: any) {
+        handleApiError(error);
+        if (error.code !== 'ERR_CANCELED') {
+          navigation.navigate('Dashboard');
+        }
         setCheckoutLoading(false);
       }
     } else {
