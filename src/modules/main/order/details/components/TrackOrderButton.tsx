@@ -9,6 +9,8 @@ import {WebView} from 'react-native-webview';
 import Polyline from 'mappls-polyline';
 import {point} from '@turf/helpers';
 import MapplsGL from 'mappls-map-react-native';
+import {useTranslation} from 'react-i18next';
+import Config from 'react-native-config';
 
 // @ts-ignore
 import RNEventSource from 'react-native-event-source';
@@ -23,10 +25,8 @@ import {
   TRACK_ORDER,
 } from '../../../../../utils/apiActions';
 import {showToastWithGravity} from '../../../../../utils/utils';
-import Config from '../../../../../../config';
 import {theme, useAppTheme} from '../../../../../utils/theme';
 import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
-import {useTranslation} from 'react-i18next';
 import {updateRequestingTracker} from '../../../../../toolkit/reducer/order';
 
 interface TrackOrderButton {}
@@ -290,7 +290,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
       MapplsGL.setMapSDKKey(mapResponse.data.access_token);
       MapplsGL.setRestAPIKey(mapResponse.data.access_token);
       MapplsGL.setAtlasClientId(mapResponse.data.client_id);
-      MapplsGL.setAtlasClientSecret(Config.MMMI_CLIENT_SECRET);
+      MapplsGL.setAtlasClientSecret(Config.MMI_CLIENT_SECRET);
     });
   }, []);
 

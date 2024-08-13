@@ -8,6 +8,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Formik} from 'formik';
 import axios from 'axios';
 import {useTranslation} from 'react-i18next';
+import Config from 'react-native-config';
 
 import {addressTags, validationSchema} from '../../utils/addValidationSchema';
 import InputField from '../../../../../components/input/InputField';
@@ -16,7 +17,6 @@ import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, MAP_ACCESS_TOKEN} from '../../../../../utils/apiActions';
 
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
-import Config from '../../../../../../config';
 import {useAppTheme} from '../../../../../utils/theme';
 import DropdownField from '../../../../../components/input/DropdownField';
 import useLocationBackgroundFetch from '../../../../../hooks/useLocationBackgroundFetch';
@@ -71,10 +71,11 @@ const AddressForm: React.FC<AddressForm> = ({
         `${API_BASE_URL}${MAP_ACCESS_TOKEN}`,
         source.current.token,
       );
-      MapplsGL.setMapSDKKey(Config.MMI_API_KEY);
-      MapplsGL.setRestAPIKey(Config.MMI_API_KEY);
+      const MMI_API_KEY = Config.MMI_API_KEY;
+      MapplsGL.setMapSDKKey(MMI_API_KEY);
+      MapplsGL.setRestAPIKey(MMI_API_KEY);
       MapplsGL.setAtlasClientId(data.client_id);
-      MapplsGL.setAtlasClientSecret(Config.MMMI_CLIENT_SECRET);
+      MapplsGL.setAtlasClientSecret(Config.MMI_CLIENT_SECRET);
     } catch (error) {
       handleApiError(error);
     } finally {
