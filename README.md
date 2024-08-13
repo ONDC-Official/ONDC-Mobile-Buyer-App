@@ -18,7 +18,7 @@ This project aims to be a reference applications for the buyers registered on th
 
 ### Option 1: Using React-Native-Rename
 
-You can start by cloning this repository and using [react-native-rename](https://github.com/junedomingo/react-native-rename). In the current state of this project, it should give you no issues at all, just run the script, delete your node modules and reinstall them and you should be good to go.
+You can start by cloning this repository and using [react-native-rename](https://github.com/junedomingo/react-native-rename) your rename the app and package name. In the current state of this project, it should give you no issues at all, just run the script, delete your node modules and reinstall them and you should be good to go.
 
 Keep in mind that this library can cause trouble if you are renaming a project that uses `Pods` on the iOS side.
 
@@ -26,7 +26,6 @@ After that you should proceed as with any javascript project:
 
 - Go to your project's root folder and run `npm install --legacy-peer-deps`.
 - If you are using Xcode 12.5 or higher got to /ios and execute `pod install --repo-update`
-- Run `npm run ios` or `npm run android` to start your application!
 
 Note: Please read the Setup environments section that is below in this file for more information about the execution scripts.
 
@@ -49,6 +48,17 @@ This project uses environment variables to manage configuration settings. The en
 1. In the root directory of your project, create a env files named as `.env.development, .env.staging, .env.preprod, .env.production`.
 2. Copy the content from the provided `.env.example` file and paste it into your env files.
 3. Replace the placeholder values with your actual configuration settings.
+
+#### 1.2. Add firebase configs in for different platforms
+
+##### iOS Platform
+1. Create a folder named `Firebase` under `ios/[app_folder]`.
+2. Inside the Firebase folder, create four folders named `Staging`, `Development`, `Preprod`, and `Production`.
+3. In each of these folders, add the corresponding `GoogleService-Info.plist` files downloaded from Firebase.
+
+##### Android Platform
+1. Inside the `android/app` folder, create four folders named `staging`, `development`, `preprod`, and `production`.
+2. In each of these folders, add the corresponding `google-services.json` files downloaded from Firebase.
 
 ### Using scripts from console
 
