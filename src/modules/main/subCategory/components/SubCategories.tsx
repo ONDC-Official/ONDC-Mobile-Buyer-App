@@ -33,8 +33,6 @@ const SubCategories: React.FC<SubCategories> = ({
   const styles = makeStyles(theme.colors);
   const [subCategories, setSubCategories] = useState<any[]>([]);
 
-  const goBack = () => navigation.goBack();
-
   const updateSubCategory = (subCategory: any) => {
     if (subCategory.code !== currentSubCategory) {
       setCurrentSubCategory(subCategory.code);

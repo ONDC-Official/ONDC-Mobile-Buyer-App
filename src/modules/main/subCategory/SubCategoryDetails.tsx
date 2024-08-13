@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useTranslation} from 'react-i18next';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
 import Products from '../../../components/products/Products';
+import useSubCategoryName from '../../../hooks/useSubCategoryName';
 
 interface SubCategoryDetails {
   route: any;
@@ -14,7 +14,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   route: {params},
   navigation,
 }) => {
-  const {t} = useTranslation();
+  const {getSubcategoryName} = useSubCategoryName();
   const [currentSubCategory, setCurrentSubCategory] = useState(
     params.subCategory,
   );
@@ -24,8 +24,10 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   }, [params]);
 
   useEffect(() => {
+    const name = getSubcategoryName(currentSubCategory, currentSubCategory);
+
     navigation.setOptions({
-      title: t(`Product SubCategories.${currentSubCategory}`),
+      title: name,
     });
   }, [navigation, currentSubCategory]);
 
