@@ -1,10 +1,9 @@
 import axios from 'axios';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {ProgressBar, Text} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
 
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
@@ -13,7 +12,6 @@ import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
-import useReadAudio from '../../hooks/useReadAudio';
 import Provider from './Provider';
 
 interface SearchProductList {
@@ -23,7 +21,6 @@ interface SearchProductList {
 const CancelToken = axios.CancelToken;
 
 const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
-  const voiceDetectionStarted = useRef<boolean>(false);
   const productSearchSource = useRef<any>(null);
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -31,12 +28,6 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
   const {address} = useSelector((state: any) => state.address);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
-  const {language} = useSelector(({auth}) => auth);
-  const {
-    startVoice,
-    userInteractionStarted,
-    setAllowRestarts,
-  } = useReadAudio(language);
 
   const totalProviders = useRef<number>(0);
   const [providers, setProviders] = useState<any[]>([]);
@@ -88,30 +79,17 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
 
   useEffect(() => {
     if (searchQuery?.length > 2) {
+      setProviderId('');
       setProductsRequested(true);
-      searchProviders().then(() => {
-        voiceDetectionStarted.current = true;
-        startVoice().then(() => {});
-      });
+      searchProviders().then(() => {});
     } else {
       totalProviders.current = 0;
       setProviders([]);
     }
   }, [searchQuery]);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (voiceDetectionStarted.current) {
-        setAllowRestarts();
-      }
-    }, []),
-  );
-
   return (
     <View style={styles.container}>
-      {userInteractionStarted && (
-        <ProgressBar indeterminate color={theme.colors.success600} />
-      )}
       <View style={styles.filterContainer}>
         <View />
       </View>
