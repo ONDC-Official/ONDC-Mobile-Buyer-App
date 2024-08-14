@@ -104,5 +104,10 @@
 	<string>We need access to your photo library to allow you to upload photos for complaints</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>We need access to listen to your commands for search request</string>
+	<key>NSAppTransportSecurity</key>
+     <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+     </dict>
 </dict>
 </plist>
