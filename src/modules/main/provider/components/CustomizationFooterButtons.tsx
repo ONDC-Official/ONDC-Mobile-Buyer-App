@@ -120,7 +120,7 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
     },
     customizationButtons: {
-      marginBottom: 8,
+      marginBottom: 16,
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingHorizontal: 16,
