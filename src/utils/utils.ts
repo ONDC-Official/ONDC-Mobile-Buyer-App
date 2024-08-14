@@ -548,3 +548,8 @@ export const getTime = (timings: any[], type: string) => {
   }
   return null;
 };
+
+export const getFulfilmentContact = (fulfilmentList: any[], type: string) => {
+  const fulfilment = fulfilmentList.find(one => one.type === type);
+  return fulfilment?.contact?.phone ?? '';
+};

@@ -17,6 +17,7 @@ import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import {useAppTheme} from '../../../../utils/theme';
 import useMinutesToString from '../../../../hooks/useMinutesToString';
 import StoreIcon from '../../../../assets/no_store_icon.svg';
+import {getFulfilmentContact} from '../../../../utils/utils';
 
 interface OutletDetails {
   provider: any;
@@ -107,11 +108,10 @@ const OutletDetails: React.FC<OutletDetails> = ({
     await Linking.openURL(url);
   };
 
-  const callProvider = () => Linking.openURL('tel:+91 92729282982');
-
-  const {timeToShip, imageSource} = useMemo(() => {
+  const {timeToShip, imageSource, outletPhone} = useMemo(() => {
     let source = null;
     let time = {type: 'minutes', time: 0};
+    let phone = '';
 
     if (outlet) {
       if (outlet?.provider_descriptor?.symbol) {
@@ -124,8 +124,20 @@ const OutletDetails: React.FC<OutletDetails> = ({
           Number(outlet?.minDaysWithTTS / 60),
         );
       }
+      if (outlet?.fulfillment) {
+        phone = getFulfilmentContact(outlet?.fulfillment, 'Delivery');
+        if (!phone) {
+          phone = getFulfilmentContact(outlet?.fulfillment, 'Self-Pickup');
+          if (!phone) {
+            phone = getFulfilmentContact(
+              outlet?.fulfillment,
+              'Delivery and Self-Pickup',
+            );
+          }
+        }
+      }
     }
-    return {timeToShip: time, imageSource: source};
+    return {timeToShip: time, imageSource: source, outletPhone: phone};
   }, [outlet]);
 
   if (apiRequested) {
@@ -152,11 +164,13 @@ const OutletDetails: React.FC<OutletDetails> = ({
               {provider?.descriptor?.name}
             </Text>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                onPress={callProvider}
-                style={styles.actionButton}>
-                <Icon name={'phone'} color={theme.colors.primary} size={18} />
-              </TouchableOpacity>
+              {outletPhone && (
+                <TouchableOpacity
+                  onPress={() => Linking.openURL(`tel: ${outletPhone}`)}
+                  style={styles.actionButton}>
+                  <Icon name={'phone'} color={theme.colors.primary} size={18} />
+                </TouchableOpacity>
+              )}
               <View style={styles.separator} />
               <TouchableOpacity
                 style={styles.actionButton}
