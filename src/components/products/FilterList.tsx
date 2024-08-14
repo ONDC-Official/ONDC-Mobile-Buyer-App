@@ -196,9 +196,11 @@ const FilterList: React.FC<FilterList> = ({
         <Text variant={'titleLarge'} style={styles.title}>
           {t('Cart.Filter List.Filters')}
         </Text>
-        <Button mode={'text'} compact onPress={clearAll}>
-          {t('Cart.Filter List.Clear all')}
-        </Button>
+        <TouchableOpacity onPress={clearAll}>
+          <Text variant={'bodyMedium'} style={styles.clearButton}>
+            {t('Cart.Filter List.Clear all')}
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.filterContainer}>
         <View style={styles.attributes}>
