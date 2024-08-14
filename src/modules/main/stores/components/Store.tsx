@@ -89,12 +89,7 @@ const Store = ({store}: {store: any}) => {
       </Text>
       <View style={styles.addressContainer}>
         {!!timeToShip && (
-          <Text
-            style={[
-              styles.details,
-              store?.type === 'pan' ? styles.pan : styles.local,
-            ]}
-            variant={'labelSmall'}>
+          <Text style={styles.details} variant={'labelSmall'}>
             {translateMinutesToHumanReadable(timeToShip.type, timeToShip.time)}
           </Text>
         )}
@@ -127,13 +122,6 @@ const makeStyles = (colors: any) =>
       flex: 1,
     },
     details: {
-      color: colors.neutral300,
-    },
-    pan: {
-      color: colors.primary,
-      fontStyle: 'italic',
-    },
-    local: {
       color: colors.neutral300,
     },
     distance: {
