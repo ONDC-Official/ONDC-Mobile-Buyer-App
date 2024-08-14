@@ -89,11 +89,21 @@ const OutletDetails: React.FC<OutletDetails> = ({
   const styles = makeStyles(theme.colors);
 
   const getDirection = async () => {
-    const gps = outlet?.gps.split(',');
+    const {address} = outlet;
+    const addressString = [
+      address.name,
+      address.street,
+      address.locality,
+      address.city,
+      address.state && `${address.state} - ${address.area_code}`,
+      address.country,
+    ]
+      .filter(value => value) // Filters out null, undefined, or empty string values
+      .join(', ');
     const url =
       Platform.OS === 'android'
-        ? `geo:0,0?q=${gps[0]}+${gps[1]}`
-        : `maps:0,0?q=${gps[0]}+${gps[1]}`;
+        ? `geo:0,0?q=${addressString}`
+        : `maps:0,0?q=${addressString}`;
     await Linking.openURL(url);
   };
 
