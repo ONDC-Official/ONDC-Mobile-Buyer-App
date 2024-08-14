@@ -94,7 +94,11 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
     );
   }, [product]);
 
-  const showCustomization = () => customizationSheet.current.open();
+  const showCustomization = () => {
+    setTimeout(() => {
+      customizationSheet.current.open();
+    }, 200);
+  };
 
   const hideCustomization = () => customizationSheet.current.close();
 
@@ -729,48 +733,50 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
                 {t('Cart.Customization for')}
               </Text>
             </View>
-            <View style={styles.customizationContainer}>
-              <View style={styles.customizationList}>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                  {cartItemDetails?.items?.map((item: any) => (
-                    <View key={item?._id} style={styles.cartItem}>
-                      <View style={styles.productMeta}>
-                        <VegNonVegTag tags={item.item?.tags} />
-                        <Text
-                          variant={'bodyLarge'}
-                          style={styles.customizationName}>
-                          {item?.item?.product?.descriptor?.name}
-                        </Text>
-                        <Customizations cartItem={item} />
-                        <Text variant="bodyLarge" style={styles.cartQuantity}>
-                          ₹
-                          {item.item.hasCustomisations
-                            ? formatNumber(
-                                Number(
-                                  (
-                                    getPriceWithCustomisations(item) *
-                                    Number(item?.item?.quantity?.count)
+            <View style={styles.quantitySheetContainer}>
+              <View style={styles.customizationListContainer}>
+                <View style={styles.customizationList}>
+                  <ScrollView showsVerticalScrollIndicator={false}>
+                    {cartItemDetails?.items?.map((item: any) => (
+                      <View key={item?._id} style={styles.cartItem}>
+                        <View style={styles.productMeta}>
+                          <VegNonVegTag tags={item.item?.tags} />
+                          <Text
+                            variant={'bodyLarge'}
+                            style={styles.customizationName}>
+                            {item?.item?.product?.descriptor?.name}
+                          </Text>
+                          <Customizations cartItem={item} />
+                          <Text variant="bodyLarge" style={styles.cartQuantity}>
+                            ₹
+                            {item.item.hasCustomisations
+                              ? formatNumber(
+                                  Number(
+                                    (
+                                      getPriceWithCustomisations(item) *
+                                      Number(item?.item?.quantity?.count)
+                                    ).toFixed(2),
+                                  ),
+                                )
+                              : formatNumber(
+                                  Number(
+                                    item?.item?.product?.subtotal *
+                                      Number(item?.item?.quantity?.count),
                                   ).toFixed(2),
-                                ),
-                              )
-                            : formatNumber(
-                                Number(
-                                  item?.item?.product?.subtotal *
-                                    Number(item?.item?.quantity?.count),
-                                ).toFixed(2),
-                              )}
-                        </Text>
+                                )}
+                          </Text>
+                        </View>
+                        <ManageQuantity
+                          allowDelete
+                          cartItem={item}
+                          updatingCartItem={updatingCartItem ?? itemToDelete}
+                          deleteCartItem={deleteCartItem}
+                          updateCartItem={updateSpecificItem}
+                        />
                       </View>
-                      <ManageQuantity
-                        allowDelete
-                        cartItem={item}
-                        updatingCartItem={updatingCartItem ?? itemToDelete}
-                        deleteCartItem={deleteCartItem}
-                        updateCartItem={updateSpecificItem}
-                      />
-                    </View>
-                  ))}
-                </ScrollView>
+                    ))}
+                  </ScrollView>
+                </View>
                 <TouchableOpacity
                   style={styles.addNewCustomizationButton}
                   onPress={addNewCustomization}>
@@ -962,12 +968,21 @@ const makeStyles = (colors: any) =>
       padding: 16,
       backgroundColor: colors.neutral50,
     },
-    customizationList: {
+    quantitySheetContainer: {
+      padding: 16,
+      flex: 1,
+      backgroundColor: colors.neutral50,
+    },
+    customizationListContainer: {
       backgroundColor: colors.white,
       borderRadius: 12,
       padding: 12,
       borderWidth: 1,
       borderColor: colors.neutral100,
+      flex: 1,
+    },
+    customizationList: {
+      flex: 1,
     },
     quantity: {
       alignItems: 'center',
