@@ -836,5 +836,10 @@
   "Search": {
     "Products": "उत्पादने",
     "Stores": "दुकाने"
+  },
+  "Customisation": {
+    "Select any and upto": "कोणतेही {{minQuantity}} आणि {{maxQuantity}} पर्यंतचे पर्याय निवडा.",
+    "Select any": "कोणतेही {{minQuantity}} पर्याय निवडा",
+    "Select upto": "{{maxQuantity}} पर्यायांपर्यंत निवडा"
   }
 }

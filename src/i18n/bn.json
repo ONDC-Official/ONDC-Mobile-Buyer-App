@@ -836,5 +836,10 @@
   "Search": {
     "Products": "পণ্য",
     "Stores": "দোকানপাট।"
+  },
+  "Customisation": {
+    "Select any and upto": "যেকোনও {{minQuantity}} এবং {{maxQuantity}} পর্যন্ত বিকল্প নির্বাচন করুন",
+    "Select any": "যেকোনও {{minQuantity}} বিকল্প নির্বাচন করুন",
+    "Select upto": "{{maxQuantity}} পর্যন্ত বিকল্পগুলি নির্বাচন করুন"
   }
 }

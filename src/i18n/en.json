@@ -836,5 +836,10 @@
   "Search": {
     "Products": "Products",
     "Stores": "Stores"
+  },
+  "Customisation": {
+    "Select any and upto": "Select any {{minQuantity}} and upto {{maxQuantity}} options",
+    "Select any": "Select any {{minQuantity}} options",
+    "Select upto": "Select upto {{maxQuantity}} options"
   }
 }

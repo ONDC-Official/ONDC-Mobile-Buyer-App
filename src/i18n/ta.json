@@ -836,5 +836,10 @@
   "Search": {
     "Products": "தயாரிப்புகள்",
     "Stores": "கடைகள்."
+  },
+  "Customisation": {
+    "Select any and upto": "ஏதேனும் {{minQuantity}} மற்றும் {{maxQuantity}} விருப்பங்களைத் தேர்ந்தெடுக்கவும்",
+    "Select any": "ஏதேனும் {{minQuantity}} விருப்பங்களைத் தேர்ந்தெடுக்கவும்",
+    "Select upto": "{{maxQuantity}} விருப்பங்கள் வரை தேர்ந்தெடுக்கவும்"
   }
 }

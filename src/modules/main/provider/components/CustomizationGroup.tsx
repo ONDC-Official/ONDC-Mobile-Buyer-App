@@ -57,17 +57,22 @@ const CustomizationGroup = ({
             customizationGroup?.minQuantity !==
               customizationGroup?.maxQuantity ? (
               <Text variant={'labelSmall'} style={styles.selectionLabel}>
-                Select any {customizationGroup.minQuantity} and upto{' '}
-                {customizationGroup?.maxQuantity} options
+                {t('Customisation.Select any and upto', {
+                  minQuantity: customizationGroup.minQuantity,
+                  maxQuantity: customizationGroup?.maxQuantity,
+                })}
               </Text>
             ) : customizationGroup?.minQuantity !== 0 ? (
               <Text variant={'labelSmall'} style={styles.selectionLabel}>
-                {t('Cart.Select any')} {customizationGroup.minQuantity}{' '}
-                {t('Cart.options')}
+                {t('Customisation.Select any', {
+                  minQuantity: customizationGroup.minQuantity,
+                })}
               </Text>
             ) : customizationGroup?.maxQuantity !== 0 ? (
               <Text variant={'labelSmall'} style={styles.selectionLabel}>
-                Select upto {customizationGroup?.maxQuantity} options
+                {t('Customisation.Select upto', {
+                  maxQuantity: customizationGroup.maxQuantity,
+                })}
               </Text>
             ) : (
               <></>
@@ -105,7 +110,7 @@ const CustomizationGroup = ({
                     <View style={styles.optionActionContainer}>
                       <Text
                         variant={selected ? 'labelLarge' : 'labelMedium'}
-                        style={styles.option}>
+                        style={styles.amount}>
                         ₹{formatNumber(option.price)}
                       </Text>
                       <Checkbox.Android
@@ -160,6 +165,7 @@ const CustomizationGroup = ({
       {group?.childs &&
         group?.childs.map((child: any) => (
           <CustomizationGroup
+            key={child}
             group={customizationState[child]}
             customizationState={customizationState}
             customizationGroups={customizationGroups}
@@ -195,7 +201,11 @@ const makeStyles = (colors: any) =>
     },
     option: {
       color: colors.neutral400,
-      paddingLeft: 8,
+      paddingHorizontal: 8,
+      flex: 1,
+    },
+    amount: {
+      color: colors.neutral400,
     },
     outOfStock: {
       color: colors.error600,
