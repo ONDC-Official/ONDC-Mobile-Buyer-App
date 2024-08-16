@@ -1,8 +1,8 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {TextInput} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useAppTheme} from '../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import {useAppTheme} from '../../utils/theme';
 
 const ProductSearch = ({
   searchQuery,
@@ -19,6 +19,7 @@ const ProductSearch = ({
     <View style={styles.container}>
       <Icon name={'search'} size={20} color={theme.colors.neutral300} />
       <TextInput
+        dense
         mode={'outlined'}
         contentStyle={styles.input}
         style={styles.inputContainer}
@@ -49,18 +50,16 @@ const makeStyles = (colors: any) =>
       borderRadius: 60,
       backgroundColor: colors.neutral100,
       paddingHorizontal: 10,
-      height: 40,
-      alignItems:'center'
+      height: 52,
+      alignItems: 'center',
     },
     inputContainer: {
       flex: 1,
-      height: 20,
       fontSize: 14,
       textDecorationLine: 'none',
       fontWeight: '400',
     },
     input: {
-      height: 20,
       backgroundColor: colors.neutral100,
     },
   });
