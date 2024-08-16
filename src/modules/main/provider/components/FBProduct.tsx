@@ -75,7 +75,6 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
   const productDetailsSheet = useRef<any>(null);
   const productSource = useRef<any>(null);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
-  const [itemCount, setItemCount] = useState<any>(0);
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
   const [productLoading, setProductLoading] = useState<boolean>(false);
@@ -820,8 +819,8 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
             {inStock ? (
               <CustomizationFooterButtons
                 productLoading={productLoading}
-                itemQty={itemCount}
-                setItemQty={setItemCount}
+                itemQty={itemQty}
+                setItemQty={setItemQty}
                 itemOutOfStock={itemOutOfStock}
                 addDetailsToCart={addDetailsToCart}
                 product={product}
