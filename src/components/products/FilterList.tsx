@@ -270,6 +270,7 @@ export const makeStyles = (colors: any) =>
       paddingVertical: 12,
       borderBottomWidth: 1,
       borderBottomColor: colors.neutral100,
+      height: 40,
     },
     title: {
       color: colors.neutral400,
