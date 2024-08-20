@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Text} from 'react-native-paper';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
+import {hasNotch} from 'react-native-device-info';
 import {makeGlobalStyles} from '../../../../styles/styles';
 import {useAppTheme} from '../../../../utils/theme';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
@@ -120,7 +121,7 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
     },
     customizationButtons: {
-      marginBottom: 16,
+      marginBottom: hasNotch() ? 16 : 24,
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingHorizontal: 16,
