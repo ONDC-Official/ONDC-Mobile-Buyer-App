@@ -303,6 +303,7 @@ const Products: React.FC<Products> = ({
       </View>
       <SectionList
         ref={sectionListRef}
+        stickySectionHeadersEnabled={false}
         sections={filteredProducts}
         contentContainerStyle={styles.listContainer}
         keyExtractor={(item, index) => `section${index}`}
