@@ -77,7 +77,11 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   };
 
   const renderItem = useCallback(
-    ({item}: {item: any}) => <Product product={item} search isOpen />,
+    ({item}: {item: any}) => (
+      <View key={item.id} style={styles.productContainer}>
+        <Product product={item} search isOpen />
+      </View>
+    ),
     [],
   );
 
@@ -85,8 +89,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
     if (searchQuery?.length > 2) {
       pageNumber.current = 1;
       setProductsRequested(true);
-      searchProducts().then(() => {
-      });
+      searchProducts().then(() => {});
     } else {
       totalProducts.current = 0;
       setProducts([]);
@@ -141,5 +144,10 @@ const makeStyles = (colors: any) =>
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    productContainer: {
+      width: '50%',
+      height: 254,
+      marginBottom: 12,
     },
   });

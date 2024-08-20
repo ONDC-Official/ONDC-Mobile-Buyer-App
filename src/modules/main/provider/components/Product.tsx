@@ -111,7 +111,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       paddingHorizontal: 8,
-      width: '50%',
+      flex: 1,
       marginBottom: 20,
     },
     gridImage: {
