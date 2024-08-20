@@ -16,7 +16,6 @@ export const makeStyles = (colors: any) =>
     container: {
       paddingHorizontal: 16,
       flex: 1,
-      height: screenHeight - 50,
     },
     title: {
       paddingTop: 16,

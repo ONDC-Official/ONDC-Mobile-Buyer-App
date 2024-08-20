@@ -39,17 +39,17 @@ const SignUp = ({route}: any) => {
               {formType === 'email' ? <SignUpWithEmail /> : <SignUpWithPhone />}
             </View>
           </View>
-          <View style={styles.footerContainer}>
-            <Text variant={'labelSmall'} style={styles.textCenter}>
-              By Signing to mobile app. I accept all the
-            </Text>
-            <Text
-              variant={'labelLarge'}
-              style={[styles.textCenter, styles.terms]}>
-              Terms and Conditions
-            </Text>
-          </View>
         </ScrollView>
+        <View style={styles.footerContainer}>
+          <Text variant={'labelSmall'} style={styles.textCenter}>
+            By Signing to mobile app. I accept all the
+          </Text>
+          <Text
+            variant={'labelLarge'}
+            style={[styles.textCenter, styles.terms]}>
+            Terms and Conditions
+          </Text>
+        </View>
       </View>
     </>
   );
