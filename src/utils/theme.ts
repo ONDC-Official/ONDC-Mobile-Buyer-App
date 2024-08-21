@@ -55,7 +55,7 @@ export const theme: any = {
       }),
       fontWeight: '700',
       fontSize: 32,
-      lineHeight: 40,
+      lineHeight: 44,
     },
 
     // Title 2
@@ -67,7 +67,7 @@ export const theme: any = {
       }),
       fontWeight: '700',
       fontSize: 24,
-      lineHeight: 32,
+      lineHeight: 36,
     },
 
     // Title 3
@@ -79,10 +79,10 @@ export const theme: any = {
       }),
       fontWeight: '700',
       fontSize: 18,
-      lineHeight: 24,
+      lineHeight: 28,
     },
 
-    // Title 4
+    // Title 4 Semi bold
     titleLarge: {
       fontFamily: Platform.select({
         web: 'Inter-SemiBold, sans-serif',
@@ -91,8 +91,9 @@ export const theme: any = {
       }),
       fontWeight: '600',
       fontSize: 16,
-      lineHeight: 20,
+      lineHeight: 24,
     },
+    // Title 4 Medium
     titleMedium: {
       fontFamily: Platform.select({
         web: 'Inter-Medium, sans-serif',
@@ -101,8 +102,9 @@ export const theme: any = {
       }),
       fontWeight: '500',
       fontSize: 16,
-      lineHeight: 20,
+      lineHeight: 24,
     },
+    // Title 4 - Regular
     titleSmall: {
       fontFamily: Platform.select({
         web: 'Inter-Regular, sans-serif',
@@ -111,13 +113,13 @@ export const theme: any = {
       }),
       fontWeight: '400',
       fontSize: 16,
-      lineHeight: 20,
+      lineHeight: 24,
     },
 
-    // Body
+    // Body - Semi Bold
     bodyLarge: {
       fontSize: 14,
-      lineHeight: 18,
+      lineHeight: 22,
       fontWeight: '600',
       fontFamily: Platform.select({
         web: 'Inter-SemiBold, sans-serif',
@@ -125,9 +127,10 @@ export const theme: any = {
         default: 'Inter-SemiBold',
       }),
     },
+    // Body - Medium
     bodyMedium: {
       fontSize: 14,
-      lineHeight: 18,
+      lineHeight: 22,
       fontWeight: '500',
       fontFamily: Platform.select({
         web: 'Inter-Medium',
@@ -135,6 +138,7 @@ export const theme: any = {
         default: 'Inter-Medium',
       }),
     },
+    // Body - Regular
     bodySmall: {
       fontSize: 14,
       lineHeight: 18,
@@ -145,7 +149,7 @@ export const theme: any = {
       }),
     },
 
-    // Caption 1
+    // Caption 1 - Semi Bold
     labelLarge: {
       fontFamily: Platform.select({
         web: 'Inter-SemiBold, sans-serif',
@@ -154,8 +158,9 @@ export const theme: any = {
       }),
       fontWeight: '600',
       fontSize: 11,
-      lineHeight: 14,
+      lineHeight: 18,
     },
+    // Caption 1 - Medium
     labelMedium: {
       fontFamily: Platform.select({
         web: 'Inter-Medium, sans-serif',
@@ -164,8 +169,9 @@ export const theme: any = {
       }),
       fontWeight: '500',
       fontSize: 11,
-      lineHeight: 14,
+      lineHeight: 18,
     },
+    // Caption 1 - Regular
     labelSmall: {
       fontFamily: Platform.select({
         web: 'Inter-Regular, sans-serif',
@@ -173,7 +179,7 @@ export const theme: any = {
         default: 'Inter-Regular',
       }),
       fontSize: 11,
-      lineHeight: 14,
+      lineHeight: 18,
     },
   },
   animation: {
