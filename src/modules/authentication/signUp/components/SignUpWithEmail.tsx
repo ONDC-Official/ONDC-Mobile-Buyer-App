@@ -10,10 +10,12 @@ import auth from '@react-native-firebase/auth';
 import InputField from '../../../../components/input/InputField';
 import PasswordField from '../../../../components/input/PasswordField';
 import OrContainer from '../../common/OrContainer';
-import SocialMediaLogin from '../../common/GoogleLogin';
+import GoogleLogin from '../../common/GoogleLogin';
 import {showToastWithGravity} from '../../../../utils/utils';
 import useStoreUserAndNavigate from '../../../../hooks/useStoreUserAndNavigate';
 import {useAppTheme} from '../../../../utils/theme';
+import {isIOS} from '../../../../utils/constants';
+import AppleLogin from '../../common/AppleLogin';
 
 interface FormData {
   name: string;
@@ -50,6 +52,8 @@ const SignUpWithEmail = () => {
   const styles = makeStyles(theme.colors);
   const {isConnected, isInternetReachable} = useNetInfo();
   const [googleLoginRequested, setGoogleLoginRequested] =
+    useState<boolean>(false);
+  const [appleLoginRequested, setAppleLoginRequested] =
     useState<boolean>(false);
 
   /**
@@ -106,7 +110,9 @@ const SignUpWithEmail = () => {
           <View style={styles.inputContainer}>
             <InputField
               inputMode={'text'}
-              disabled={googleLoginRequested || isSubmitting}
+              disabled={
+                googleLoginRequested || appleLoginRequested || isSubmitting
+              }
               name="name"
               value={values.name}
               onBlur={handleBlur('name')}
@@ -121,7 +127,9 @@ const SignUpWithEmail = () => {
           <View style={styles.inputContainer}>
             <InputField
               inputMode={'email'}
-              disabled={googleLoginRequested || isSubmitting}
+              disabled={
+                googleLoginRequested || appleLoginRequested || isSubmitting
+              }
               name="email"
               value={values.email}
               onBlur={handleBlur('email')}
@@ -135,7 +143,9 @@ const SignUpWithEmail = () => {
           </View>
           <View style={styles.inputContainer}>
             <PasswordField
-              disabled={googleLoginRequested || isSubmitting}
+              disabled={
+                googleLoginRequested || appleLoginRequested || isSubmitting
+              }
               value={values.password}
               required
               onBlur={handleBlur('password')}
@@ -155,24 +165,39 @@ const SignUpWithEmail = () => {
               mode="contained"
               onPress={() => handleSubmit()}
               loading={isSubmitting}
-              disabled={googleLoginRequested || isSubmitting}>
+              disabled={
+                googleLoginRequested || appleLoginRequested || isSubmitting
+              }>
               Sign Up
             </Button>
           </View>
 
           <OrContainer />
-          <SocialMediaLogin
-            loginRequested={googleLoginRequested || isSubmitting}
+          <GoogleLogin
+            loginRequested={
+              googleLoginRequested || appleLoginRequested || isSubmitting
+            }
             googleLoginRequested={googleLoginRequested}
             setGoogleLoginRequested={setGoogleLoginRequested}
           />
+          {isIOS && (
+            <AppleLogin
+              setAppleLoginRequested={setAppleLoginRequested}
+              loginRequested={
+                googleLoginRequested || appleLoginRequested || isSubmitting
+              }
+              appleLoginRequested={appleLoginRequested}
+            />
+          )}
 
           <View style={styles.loginMessage}>
             <Text variant={'bodyMedium'} style={styles.dontHaveMessage}>
               Don't have an account?
             </Text>
             <TouchableOpacity
-              disabled={googleLoginRequested || isSubmitting}
+              disabled={
+                googleLoginRequested || appleLoginRequested || isSubmitting
+              }
               onPress={() => navigation.navigate('Login')}>
               <Text variant={'bodyLarge'} style={styles.signUpText}>
                 Sign In

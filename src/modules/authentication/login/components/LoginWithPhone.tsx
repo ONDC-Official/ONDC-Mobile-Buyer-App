@@ -6,10 +6,12 @@ import auth from '@react-native-firebase/auth';
 
 import InputField from '../../../../components/input/InputField';
 import OrContainer from '../../common/OrContainer';
-import SocialMediaLogin from '../../common/GoogleLogin';
+import GoogleLogin from '../../common/GoogleLogin';
 import {showToastWithGravity} from '../../../../utils/utils';
 import useStoreUserAndNavigate from '../../../../hooks/useStoreUserAndNavigate';
 import {useAppTheme} from '../../../../utils/theme';
+import {isIOS} from '../../../../utils/constants';
+import AppleLogin from '../../common/AppleLogin';
 
 const LoginWithPhone = () => {
   const navigation = useNavigation<any>();
@@ -17,6 +19,8 @@ const LoginWithPhone = () => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [googleLoginRequested, setGoogleLoginRequested] =
+    useState<boolean>(false);
+  const [appleLoginRequested, setAppleLoginRequested] =
     useState<boolean>(false);
   const [codeAvailable, setCodeAvailable] = useState<boolean>(false);
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
@@ -79,7 +83,9 @@ const LoginWithPhone = () => {
         <InputField
           left={<TextInput.Affix text="+91" />}
           inputMode={'numeric'}
-          disabled={googleLoginRequested || apiInProgress}
+          disabled={
+            googleLoginRequested || appleLoginRequested || apiInProgress
+          }
           name="email"
           value={mobileNumber}
           required
@@ -101,7 +107,9 @@ const LoginWithPhone = () => {
       {codeAvailable && (
         <View style={styles.inputContainer}>
           <InputField
-            disabled={googleLoginRequested || apiInProgress}
+            disabled={
+              googleLoginRequested || appleLoginRequested || apiInProgress
+            }
             value={code}
             required
             inputLabel="OTP"
@@ -124,7 +132,9 @@ const LoginWithPhone = () => {
               mode="contained"
               onPress={verifyOtp}
               loading={apiInProgress}
-              disabled={googleLoginRequested || apiInProgress}>
+              disabled={
+                googleLoginRequested || appleLoginRequested || apiInProgress
+              }>
               Verify
             </Button>
             <View style={styles.dontReceiveContainer}>
@@ -154,18 +164,31 @@ const LoginWithPhone = () => {
       </View>
 
       <OrContainer />
-      <SocialMediaLogin
-        loginRequested={googleLoginRequested || apiInProgress}
+      <GoogleLogin
+        loginRequested={
+          googleLoginRequested || appleLoginRequested || apiInProgress
+        }
         googleLoginRequested={googleLoginRequested}
         setGoogleLoginRequested={setGoogleLoginRequested}
       />
+      {isIOS && (
+        <AppleLogin
+          setAppleLoginRequested={setAppleLoginRequested}
+          loginRequested={
+            googleLoginRequested || appleLoginRequested || apiInProgress
+          }
+          appleLoginRequested={appleLoginRequested}
+        />
+      )}
 
       <View style={styles.loginMessage}>
         <Text variant={'bodyMedium'} style={styles.dontHaveMessage}>
           Don't have an account?
         </Text>
         <TouchableOpacity
-          disabled={googleLoginRequested || apiInProgress}
+          disabled={
+            googleLoginRequested || appleLoginRequested || apiInProgress
+          }
           onPress={() => navigation.navigate('SignUp', {tab: false})}>
           <Text variant={'bodyLarge'} style={styles.signUpText}>
             Sign up

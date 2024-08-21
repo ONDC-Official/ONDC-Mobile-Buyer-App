@@ -105,9 +105,11 @@
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>We need access to listen to your commands for search request</string>
 	<key>NSAppTransportSecurity</key>
-     <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-     </dict>
+  <dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+  </dict>
+  <key>LSMinimumSystemVersion</key>
+  <string>14.0.0</string>
 </dict>
 </plist>

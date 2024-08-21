@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
-import {Button, Text} from 'react-native-paper';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text} from 'react-native-paper';
 import axios from 'axios';
 import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
@@ -14,6 +14,7 @@ import {appStyles} from '../../../../../styles/styles';
 import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
+import {useAppTheme} from '../../../../../utils/theme';
 
 interface Address {
   _id: string;
@@ -50,6 +51,8 @@ interface AddressList {
 const CancelToken = axios.CancelToken;
 
 const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
   const [t] = useTranslation();
   const isFocused = useIsFocused();
   const {address} = useSelector((state: any) => state.address);
@@ -150,25 +153,32 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
           list.length > 0 ? styles.contentContainerStyle : appStyles.container
         }
       />
-      <Button style={styles.addButton} mode={'contained'} onPress={addAddress}>
-        {t('Address List.Add Address')}
-      </Button>
+      <TouchableOpacity style={styles.addButton} onPress={addAddress}>
+        <Text style={styles.addButtonText} variant={'bodyMedium'}>
+          {t('Address List.Add Address')}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  contentContainerStyle: {
-    padding: 16,
-  },
-  addButton: {
-    borderRadius: 8,
-    marginHorizontal: 16,
-    marginBottom: 10,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    contentContainerStyle: {
+      padding: 16,
+    },
+    addButton: {
+      borderRadius: 8,
+      marginHorizontal: 16,
+      marginBottom: 10,
+      height: 44,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: colors.primary,
+    },
+    addButtonText: {
+      color: colors.white,
+    },
+  });
 
 export default AddressList;
