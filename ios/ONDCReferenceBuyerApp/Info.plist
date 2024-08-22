@@ -111,5 +111,10 @@
   </dict>
   <key>LSMinimumSystemVersion</key>
   <string>14.0.0</string>
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+    <string>mailto</string>
+    <string>tel</string>
+  </array>
 </dict>
 </plist>
