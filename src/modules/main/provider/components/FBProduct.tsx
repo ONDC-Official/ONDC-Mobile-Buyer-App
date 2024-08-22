@@ -14,6 +14,7 @@ import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
+import {Grayscale} from 'react-native-color-matrix-image-filters';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {
   getCustomizations,
@@ -39,7 +40,6 @@ import {useAppTheme} from '../../../../utils/theme';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
 import {areCustomisationsSame} from '../../product/details/ProductDetails';
-import {Grayscale} from 'react-native-color-matrix-image-filters';
 
 interface FBProduct {
   product: any;
@@ -526,6 +526,34 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
     }
   }, [product?.item_details?.descriptor]);
 
+  const renderPrice = () => {
+    if (defaultPrice) {
+      return (
+        <Text variant={'bodyLarge'} style={styles.price}>
+          {currency}
+          {formatNumber(defaultPrice)}
+        </Text>
+      );
+    } else if (priceRange) {
+      const min = formatNumber(priceRange?.minPrice);
+      const max = formatNumber(priceRange?.maxPrice);
+      return (
+        <Text variant={'bodyLarge'} style={styles.price}>
+          {currency}{min}- {currency}{max}
+        </Text>
+      );
+    } else if (product?.item_details?.price?.value) {
+      return (
+        <Text variant={'bodyLarge'} style={styles.price}>
+          {currency}
+          {formatNumber(product?.item_details?.price?.value)}
+        </Text>
+      );
+    } else {
+      return <></>;
+    }
+  };
+
   // @ts-ignore
   return (
     <>
@@ -548,17 +576,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
             ellipsizeMode={'tail'}>
             {product?.item_details?.descriptor?.short_desc}
           </Text>
-          <Text variant={'bodyLarge'} style={styles.price}>
-            {defaultPrice
-              ? defaultPrice
-              : priceRange
-              ? `${currency}${formatNumber(
-                  priceRange?.minPrice,
-                )} - ${currency}${formatNumber(priceRange?.maxPrice)}`
-              : `${currency}${formatNumber(
-                  product?.item_details?.price?.value,
-                )}`}
-          </Text>
+          {renderPrice()}
         </TouchableOpacity>
         <View style={styles.actionContainer}>
           <TouchableOpacity
@@ -687,7 +705,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
                   {product?.item_details?.descriptor?.name}
                 </Text>
                 <Text variant={'labelLarge'} style={styles.prize}>
-                  {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
+                  {currency}
                   {formatNumber(product?.item_details?.price?.value)}
                 </Text>
               </View>
