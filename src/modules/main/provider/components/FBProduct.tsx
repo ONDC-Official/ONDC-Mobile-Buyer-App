@@ -535,20 +535,20 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
           disabled={disabled}
           onPress={showProductDetails}>
           <Text
-            variant={'titleLarge'}
-            style={[styles.field, styles.name]}
+            variant={'labelLarge'}
+            style={styles.name}
             numberOfLines={2}
             ellipsizeMode={'tail'}>
             {product?.item_details?.descriptor?.name}
           </Text>
           <Text
-            variant={'bodySmall'}
-            style={[styles.field, styles.category]}
+            variant={'labelSmall'}
+            style={styles.category}
             numberOfLines={1}
             ellipsizeMode={'tail'}>
             {product?.item_details?.descriptor?.short_desc}
           </Text>
-          <Text variant={'headlineSmall'} style={styles.price}>
+          <Text variant={'bodyLarge'} style={styles.price}>
             {defaultPrice
               ? defaultPrice
               : priceRange
@@ -896,7 +896,7 @@ const makeStyles = (colors: any) =>
     },
     category: {
       color: colors.neutral300,
-      paddingRight: 32,
+      marginBottom: 4,
     },
     actionButton: {
       width: 88,

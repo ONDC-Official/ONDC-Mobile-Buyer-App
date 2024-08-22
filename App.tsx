@@ -1,11 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {
-  Linking,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-} from 'react-native';
+import {Linking, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 import Toast, {ErrorToast} from 'react-native-toast-message';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Provider as StoreProvider} from 'react-redux';

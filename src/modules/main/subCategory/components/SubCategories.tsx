@@ -64,7 +64,7 @@ const SubCategories: React.FC<SubCategories> = ({
             <FastImage source={{uri: item.url}} style={styles.image} />
           </View>
           <Text
-            variant={'labelLarge'}
+            variant={'labelMedium'}
             style={styles.categoryText}
             ellipsizeMode={'tail'}
             numberOfLines={numberOfLines}>
@@ -148,7 +148,7 @@ const makeStyles = (colors: any) =>
     imageContainer: {
       height: 56,
       width: 56,
-      marginBottom: 6,
+      marginBottom: 2,
       backgroundColor: colors.neutral100,
       justifyContent: 'center',
       alignItems: 'center',

@@ -72,6 +72,8 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       paddingTop: 20,
+      paddingBottom: 16,
+      backgroundColor: colors.primary50,
     },
     categoryText: {
       color: colors.neutral400,

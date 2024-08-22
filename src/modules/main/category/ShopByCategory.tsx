@@ -101,7 +101,7 @@ const makeStyles = (colors: any) =>
       height: 92,
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: 12,
+      marginBottom: 8,
     },
     emptyBrandImage: {
       backgroundColor: colors.neutral50,

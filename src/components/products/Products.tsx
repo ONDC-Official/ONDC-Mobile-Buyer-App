@@ -205,9 +205,7 @@ const Products: React.FC<Products> = ({
 
   const renderFlatListItem = useCallback(
     ({item}: {item: any}) => (
-      <View key={item.id} style={styles.productContainer}>
-        <Product product={item} search={search} isOpen={isOpen} />
-      </View>
+      <Product product={item} search={search} isOpen={isOpen} />
     ),
     [search, provider],
   );
@@ -217,7 +215,6 @@ const Products: React.FC<Products> = ({
       return item.list.length > 0 ? (
         <FlatList
           data={item.list}
-          numColumns={2}
           style={styles.nestedListContainer}
           renderItem={renderFlatListItem}
           keyExtractor={(one: any) => one.id}

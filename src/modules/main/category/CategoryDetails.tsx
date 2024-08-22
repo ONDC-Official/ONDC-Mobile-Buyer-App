@@ -20,7 +20,12 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
 
   return (
     <>
-      <View style={[appStyles.container, styles.container]}>
+      <View
+        style={[
+          appStyles.container,
+          styles.container,
+          appStyles.backgroundWhite,
+        ]}>
         <Header onPress={openAddressList} allowBack />
         <ScrollView style={appStyles.container}>
           <Categories currentCategory={params.category} />

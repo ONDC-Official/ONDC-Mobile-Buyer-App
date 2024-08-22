@@ -98,7 +98,8 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      paddingTop: 16,
+      paddingVertical: 16,
+      backgroundColor: colors.primary50,
     },
     categoryText: {
       textAlign: 'center',
@@ -117,7 +118,7 @@ const makeStyles = (colors: any) =>
     imageContainer: {
       height: 56,
       width: 56,
-      marginBottom: 6,
+      marginBottom: 2,
       backgroundColor: colors.neutral100,
       padding: 6,
       justifyContent: 'center',

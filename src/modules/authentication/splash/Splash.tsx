@@ -187,46 +187,11 @@ const Splash: React.FC<Splash> = ({navigation}) => {
           'Please setup the device lock to access this application',
           'Ok',
           () => {
-            processLink();
+            processLink().then(() => {});
           },
         );
       } else {
-        if (JailMonkey.isJailBroken()) {
-          alertWithOneButton(
-            'Alert',
-            'This application can not be used on the rooted device',
-            'Ok',
-            () => {},
-          );
-        } else {
-          isDeviceRooted().then(result => {
-            if (result.isRooted) {
-              alertWithOneButton(
-                'Alert',
-                'This application can not be used on the rooted device',
-                'Ok',
-                () => {},
-              );
-            } else {
-              if (Platform.OS === 'android') {
-                checkMagisk().then(isPresent => {
-                  if (isPresent) {
-                    alertWithOneButton(
-                      'Alert',
-                      'This application can not be used on the rooted device',
-                      'Ok',
-                      () => {},
-                    );
-                  } else {
-                    processLink();
-                  }
-                });
-              } else {
-                processLink();
-              }
-            }
-          });
-        }
+        processLink().then(() => {});
       }
     });
   }, []);

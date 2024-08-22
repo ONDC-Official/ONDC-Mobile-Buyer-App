@@ -190,7 +190,10 @@ const OutletDetails: React.FC<OutletDetails> = ({
                 style={styles.address}
                 ellipsizeMode={'tail'}
                 numberOfLines={1}>
-                {outlet?.address?.locality || 'NA'}
+                {outlet?.address?.locality
+                  ? `${outlet?.address?.locality},`
+                  : ''}{' '}
+                {outlet?.address?.city}
               </Text>
             )}
           </View>
@@ -258,7 +261,7 @@ const makeStyles = (colors: any) =>
     providerLocalityView: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 12,
+      marginBottom: 6,
     },
     dotView: {
       height: 4,

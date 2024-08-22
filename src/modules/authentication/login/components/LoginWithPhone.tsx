@@ -49,8 +49,32 @@ const LoginWithPhone = () => {
       const idTokenResult = await user?.getIdTokenResult();
 
       await storeDetails(idTokenResult, user);
-    } catch (error) {
-      showToastWithGravity('Enter valid OTP');
+    } catch (error: any) {
+      switch (error.code) {
+        case 'auth/invalid-verification-code':
+          showToastWithGravity('Enter valid OTP');
+          break;
+        case 'auth/missing-verification-code':
+          showToastWithGravity('Please enter OTP');
+          break;
+        case 'auth/quota-exceeded':
+          showToastWithGravity('Limit exceed, please try after some time');
+          break;
+        case 'auth/session-expired':
+          showToastWithGravity(
+            'Entered OTP is expired, please request new OTP',
+          );
+          break;
+        case 'auth/invalid-verification-id':
+        case 'auth/too-many-requests':
+          showToastWithGravity(
+            'Something went wrong please try again after some time',
+          );
+          break;
+        case 'auth/user-disabled':
+          showToastWithGravity('Account is disabled, please contact admin');
+          break;
+      }
     } finally {
       setApiInProgress(false);
     }
@@ -139,9 +163,15 @@ const LoginWithPhone = () => {
             </Button>
             <View style={styles.dontReceiveContainer}>
               <Text variant={'bodyMedium'}>Didn’t receive OTP?</Text>
-              <Text variant={'bodyLarge'} style={styles.resend}>
-                Resend
-              </Text>
+              <TouchableOpacity
+                onPress={sendOtp}
+                disabled={
+                  googleLoginRequested || appleLoginRequested || apiInProgress
+                }>
+                <Text variant={'bodyLarge'} style={styles.resend}>
+                  Resend
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         ) : (
