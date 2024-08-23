@@ -102,6 +102,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.primary50,
     },
     categoryText: {
+      color: colors.neutral400,
       textAlign: 'center',
       letterSpacing: -0.5,
     },
