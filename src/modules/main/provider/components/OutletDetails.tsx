@@ -24,7 +24,7 @@ interface OutletDetails {
 const Closed = require('../../../../assets/closed.png');
 const NoImageAvailable = require('../../../../assets/no_store.png');
 const Mappls = require('../../../../assets/maps/mappls.png');
-const Google = require('../../../../assets/maps/google.png');
+const Google = require('../../../../assets/maps/google_maps.png');
 
 const getAddressString = (address: any) => {
   return [
