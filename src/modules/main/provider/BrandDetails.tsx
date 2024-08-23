@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {StyleSheet, View} from 'react-native';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
@@ -35,7 +35,6 @@ const getMomentDateFromHourMinutes = (timeString: string) => {
 
 const BrandDetails = ({route: {params}}: {route: any}) => {
   const {address} = useSelector((state: any) => state.address);
-  const isFocused = useIsFocused();
   const {formatDate} = useFormatDate();
   const navigation = useNavigation<StackNavigationProp<any>>();
   const source = useRef<any>(null);
@@ -101,16 +100,14 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   };
 
   useEffect(() => {
-    if (isFocused) {
-      getProviderDetails().then(() => {});
-    }
+    getProviderDetails().then(() => {});
 
     return () => {
       if (source.current) {
         source.current.cancel();
       }
     };
-  }, [isFocused]);
+  }, [params.brandId]);
 
   if (apiRequested) {
     return <BrandSkeleton />;

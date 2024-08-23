@@ -158,18 +158,20 @@ const Products: React.FC<Products> = ({
   };
 
   const loadMoreList = () => {
-    let getCount: number = 0;
-    products.forEach(item => {
-      getCount = getCount + JSON.parse(item.data[0]?.list?.length);
-    });
-    if (totalProducts !== getCount) {
-      searchProducts(
-        page,
-        providerId,
-        customData,
-        subCategories,
-        selectedAttributes,
-      ).then(() => {});
+    if (products?.length > 0) {
+      let getCount: number = 0;
+      products.forEach(item => {
+        getCount = getCount + JSON.parse(item.data[0]?.list?.length);
+      });
+      if (totalProducts !== getCount) {
+        searchProducts(
+          page,
+          providerId,
+          customData,
+          subCategories,
+          selectedAttributes,
+        ).then(() => {});
+      }
     }
   };
 
@@ -265,6 +267,7 @@ const Products: React.FC<Products> = ({
         productSearchSource.current.token,
       ).then(menu => {
         setCustomData(menu);
+        console.log('Use effect called');
         searchProducts(
           1,
           providerId,
@@ -274,6 +277,7 @@ const Products: React.FC<Products> = ({
         ).then(() => {});
       });
     } else {
+      console.log('Use effect called');
       searchProducts(
         1,
         providerId,

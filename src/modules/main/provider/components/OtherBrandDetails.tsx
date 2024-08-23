@@ -13,40 +13,38 @@ interface OtherBrandDetails {
   apiRequested: boolean;
 }
 
-const OtherBrandDetails: React.FC<OtherBrandDetails> = ({
-  provider,
-  outlet,
-  apiRequested,
-}) => {
-  const {t} = useTranslation();
-  const {colors} = useAppTheme();
-  const styles = makeStyles(colors);
+const OtherBrandDetails: React.FC<OtherBrandDetails> = React.memo(
+  ({provider, outlet, apiRequested}) => {
+    const {t} = useTranslation();
+    const {colors} = useAppTheme();
+    const styles = makeStyles(colors);
 
-  if (provider) {
-    return (
-      <View style={styles.container}>
-        <OutletDetails
-          provider={provider}
-          outlet={outlet}
-          apiRequested={apiRequested}
-        />
-        <Products
-          providerId={provider.id}
-          providerDomain={provider.domain}
-          provider={provider}
-          subCategories={[]}
-          isOpen={outlet?.isOpen || false}
-        />
-      </View>
-    );
-  } else {
-    return (
-      <View style={styles.providerNotFound}>
-        <Text variant={'bodyLarge'}>{t('Global.Details not available')}</Text>
-      </View>
-    );
-  }
-};
+    if (provider) {
+      return (
+        <View style={styles.container}>
+          <OutletDetails
+            provider={provider}
+            outlet={outlet}
+            apiRequested={apiRequested}
+          />
+          <Products
+            providerId={provider.id}
+            providerDomain={provider.domain}
+            provider={provider}
+            subCategories={[]}
+            isOpen={outlet?.isOpen || false}
+          />
+        </View>
+      );
+    } else {
+      return (
+        <View style={styles.providerNotFound}>
+          <Text variant={'bodyLarge'}>{t('Global.Details not available')}</Text>
+        </View>
+      );
+    }
+  },
+);
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
