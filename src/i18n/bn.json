@@ -803,7 +803,8 @@
     "Something went wrong, please try again after some time": "কিছু ভুল হয়েছে, দয়া করে কিছু সময় পরে আবার চেষ্টা করুন",
     "Some orders are not initialized": "কিছু অর্ডার আরম্ভ করা হয় না।",
     "Available Cities": "উপলব্ধ শহরগুলি",
-    "The app is only for Delhi city": "অ্যাপটি শুধুমাত্র দিল্লি শহরের জন্য।"
+    "The app is only for Delhi city": "অ্যাপটি শুধুমাত্র দিল্লি শহরের জন্য।",
+    "Open with": "দিয়ে খুলুন"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ওএনডিসি কিউআর সে ভারত খুলেগা"
