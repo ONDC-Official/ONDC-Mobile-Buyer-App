@@ -10,10 +10,11 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {Text} from 'react-native-paper';
+
 import {getUrlParams} from '../../../utils/utils';
 import {useAppTheme} from '../../../utils/theme';
-import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
-import {Text} from 'react-native-paper';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
   const theme = useAppTheme();
@@ -21,7 +22,7 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
 
   useEffect(() => {
-    requestCameraPermission();
+    requestCameraPermission().then(() => {});
   }, []);
 
   const requestCameraPermission = async () => {
