@@ -270,7 +270,7 @@ export const makeStyles = (colors: any) =>
       paddingVertical: 12,
       borderBottomWidth: 1,
       borderBottomColor: colors.neutral100,
-      height: 40,
+      height: 56,
     },
     title: {
       color: colors.neutral400,
@@ -333,8 +333,8 @@ export const makeStyles = (colors: any) =>
       flex: 1,
     },
     button: {
+      justifyContent: 'center',
       height: 36,
-      paddingVertical: 8,
       paddingHorizontal: 12,
     },
     closeLabel: {
