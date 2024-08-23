@@ -57,8 +57,32 @@ const SignUpWithPhone = () => {
       await auth()?.currentUser?.updateProfile({displayName: name});
       user = auth()?.currentUser;
       await storeDetails(idTokenResult, user);
-    } catch (error) {
-      showToastWithGravity('Enter valid OTP');
+    } catch (error: any) {
+      switch (error.code) {
+        case 'auth/invalid-verification-code':
+          showToastWithGravity('Enter valid OTP');
+          break;
+        case 'auth/missing-verification-code':
+          showToastWithGravity('Please enter OTP');
+          break;
+        case 'auth/quota-exceeded':
+          showToastWithGravity('Limit exceed, please try after some time');
+          break;
+        case 'auth/session-expired':
+          showToastWithGravity(
+            'Entered OTP is expired, please request new OTP',
+          );
+          break;
+        case 'auth/invalid-verification-id':
+        case 'auth/too-many-requests':
+          showToastWithGravity(
+            'Something went wrong please try again after some time',
+          );
+          break;
+        case 'auth/user-disabled':
+          showToastWithGravity('Account is disabled, please contact admin');
+          break;
+      }
     } finally {
       setApiInProgress(false);
     }
@@ -108,7 +132,10 @@ const SignUpWithPhone = () => {
           left={<TextInput.Affix text="+91" />}
           inputMode={'numeric'}
           disabled={
-            googleLoginRequested || appleLoginRequested || apiInProgress
+            codeAvailable ||
+            googleLoginRequested ||
+            appleLoginRequested ||
+            apiInProgress
           }
           name="email"
           value={mobileNumber}
@@ -121,6 +148,7 @@ const SignUpWithPhone = () => {
           right={
             codeAvailable ? (
               <TextInput.Icon
+                color={theme.colors.primary}
                 icon={'pencil'}
                 onPress={() => setCodeAvailable(false)}
               />

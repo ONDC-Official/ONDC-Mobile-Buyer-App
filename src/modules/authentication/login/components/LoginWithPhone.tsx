@@ -108,7 +108,10 @@ const LoginWithPhone = () => {
           left={<TextInput.Affix text="+91" />}
           inputMode={'numeric'}
           disabled={
-            googleLoginRequested || appleLoginRequested || apiInProgress
+            codeAvailable ||
+            googleLoginRequested ||
+            appleLoginRequested ||
+            apiInProgress
           }
           name="email"
           value={mobileNumber}
@@ -121,6 +124,7 @@ const LoginWithPhone = () => {
           right={
             codeAvailable ? (
               <TextInput.Icon
+                color={theme.colors.primary}
                 icon={'pencil'}
                 onPress={() => setCodeAvailable(false)}
               />
