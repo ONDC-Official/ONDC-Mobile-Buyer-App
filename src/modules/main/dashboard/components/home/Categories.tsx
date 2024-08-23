@@ -1,4 +1,4 @@
-import {useCallback} from 'react';
+import React, {useCallback} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
@@ -8,7 +8,6 @@ import {useTranslation} from 'react-i18next';
 
 import {CATEGORIES} from '../../../../../utils/categories';
 import {useAppTheme} from '../../../../../utils/theme';
-import SectionHeaderWithViewAll from '../../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
 
 interface Category {
   id: string;
@@ -25,10 +24,6 @@ const Categories = () => {
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const navigateToList = useCallback(() => {
-    navigation.navigate('FeaturedCategories');
-  }, []);
-
   const renderItem = useCallback(
     ({item}: {item: Category}) => (
       <TouchableOpacity
@@ -39,7 +34,9 @@ const Categories = () => {
             domain: item.domain,
           })
         }>
-        <FastImage source={{uri: item.Icon}} style={styles.imageContainer} />
+        <View style={styles.imageContainer}>
+          <FastImage source={{uri: item.Icon}} style={styles.image} />
+        </View>
         <Text
           variant={'labelMedium'}
           style={styles.categoryText}
@@ -54,14 +51,11 @@ const Categories = () => {
 
   return (
     <View style={styles.container}>
-      <SectionHeaderWithViewAll
-        title={t('Home.Featured Categories')}
-        viewAll={navigateToList}
-      />
       <FlatList
-        data={CATEGORIES.slice(0, 8)}
-        numColumns={4}
+        data={CATEGORIES}
+        horizontal
         renderItem={renderItem}
+        showsHorizontalScrollIndicator={false}
         keyExtractor={item => item.name}
       />
     </View>
@@ -71,8 +65,9 @@ const Categories = () => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      paddingTop: 20,
+      paddingTop: 16,
       paddingBottom: 16,
+      paddingLeft: 16,
       backgroundColor: colors.primary50,
     },
     categoryText: {
@@ -81,14 +76,23 @@ const makeStyles = (colors: any) =>
       marginTop: 4,
     },
     category: {
-      paddingHorizontal: 8,
-      marginTop: 12,
-      flex: 1,
       alignItems: 'center',
+      width: 59,
+      marginRight: 24,
     },
     imageContainer: {
-      height: 67,
-      width: 67,
+      height: 56,
+      width: 56,
+      marginBottom: 2,
+      padding: 6,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 28,
+      backgroundColor: 'white',
+    },
+    image: {
+      height: 44,
+      width: 44,
     },
   });
 

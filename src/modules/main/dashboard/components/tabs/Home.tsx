@@ -19,8 +19,8 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <Header onPress={openAddressList} />
+      <Categories />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <Categories />
         <StoresNearMe />
       </ScrollView>
       <AddressSheet addressSheet={addressSheet} />

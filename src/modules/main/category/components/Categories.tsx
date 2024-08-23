@@ -119,7 +119,7 @@ const makeStyles = (colors: any) =>
       height: 56,
       width: 56,
       marginBottom: 2,
-      backgroundColor: colors.neutral100,
+      backgroundColor: 'white',
       padding: 6,
       justifyContent: 'center',
       alignItems: 'center',
