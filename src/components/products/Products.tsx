@@ -267,7 +267,6 @@ const Products: React.FC<Products> = ({
         productSearchSource.current.token,
       ).then(menu => {
         setCustomData(menu);
-        console.log('Use effect called');
         searchProducts(
           1,
           providerId,
@@ -277,7 +276,6 @@ const Products: React.FC<Products> = ({
         ).then(() => {});
       });
     } else {
-      console.log('Use effect called');
       searchProducts(
         1,
         providerId,
