@@ -28,12 +28,12 @@ const Google = require('../../../../assets/maps/google_maps.png');
 
 const getAddressString = (address: any) => {
   return [
-    address.name,
-    address.street,
-    address.locality,
-    address.city,
-    address.state && `${address.state} - ${address.area_code}`,
-    address.country,
+    address?.name,
+    address?.street,
+    address?.locality,
+    address?.city,
+    address?.state && `${address?.state} - ${address?.area_code}`,
+    address?.country,
   ]
     .filter(value => value) // Filters out null, undefined, or empty string values
     .join(', ');
@@ -139,14 +139,14 @@ const OutletDetails: React.FC<OutletDetails> = ({
   }, [outlet]);
 
   const navigateToMappls = () => {
-    const destinationAddress = getAddressString(outlet.address);
+    const destinationAddress = getAddressString(outlet?.address);
     Linking.openURL(
       `https://www.mappls.com/direction?places=${address.address.lat},${address.address.lng};${outlet?.gps},${destinationAddress}`,
     );
   };
 
   const navigateToMaps = () => {
-    const destinationAddress = getAddressString(outlet.address);
+    const destinationAddress = getAddressString(outlet?.address);
     Linking.openURL(
       `https://www.google.com/maps/dir/?api=1&origin=${address.address.lat},${address.address.lng}&destination=${outlet?.gps}&destination_place_id=${destinationAddress}`,
     );

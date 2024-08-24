@@ -5,7 +5,12 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
-import {API_BASE_URL, PROVIDER, STORE_DETAILS} from '../../../utils/apiActions';
+import {
+  API_BASE_URL,
+  PROVIDER,
+  SERVICEABLE_LOCATIONS,
+  STORE_DETAILS,
+} from '../../../utils/apiActions';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import BrandSkeleton from '../../../components/skeleton/BrandSkeleton';
@@ -52,25 +57,37 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     try {
       setOutletDetailsRequested(true);
       source.current = CancelToken.source();
-      const {data} = await getDataWithAuth(
-        `${API_BASE_URL}${STORE_DETAILS}?id=${params.outletId}&pincode=${address.address.areaCode}`,
-        source.current.token,
-      );
-      if (data) {
-        const {time_from, time_to} = getStoreTiming(tags, data.local_id);
+      let locationId = params.outletId;
+      if (!params.outletId) {
+        const locationDetails = await getDataWithAuth(
+          `${API_BASE_URL}${SERVICEABLE_LOCATIONS}?providerId=${params.brandId}&latitude=${address.address.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}`,
+          source.current.token,
+        );
+        if (locationDetails.data.data.length > 0) {
+          locationId = locationDetails.data.data[0].id;
+        }
+      }
+      if (locationId) {
+        const {data} = await getDataWithAuth(
+          `${API_BASE_URL}${STORE_DETAILS}?id=${locationId}&pincode=${address.address.areaCode}`,
+          source.current.token,
+        );
+        if (data) {
+          const {time_from, time_to} = getStoreTiming(tags, data.local_id);
 
-        const time = moment();
-        const startTime = getMomentDateFromHourMinutes(time_from);
-        const endTime = getMomentDateFromHourMinutes(time_to);
-        const isOpen = time.isBetween(startTime, endTime);
+          const time = moment();
+          const startTime = getMomentDateFromHourMinutes(time_from);
+          const endTime = getMomentDateFromHourMinutes(time_to);
+          const isOpen = time.isBetween(startTime, endTime);
 
-        setOutlet({
-          ...data,
-          ...{
-            isOpen,
-            time_from: formatDate(startTime, 'hh:mm a'),
-          },
-        });
+          setOutlet({
+            ...data,
+            ...{
+              isOpen,
+              time_from: formatDate(startTime, 'hh:mm a'),
+            },
+          });
+        }
       }
     } catch (error) {
       handleApiError(error);
@@ -114,7 +131,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   }
 
   return (
-    <Page outletId={params.outletId}>
+    <Page outletId={outlet.id}>
       <View style={styles.container}>
         {provider?.domain === FB_DOMAIN ? (
           <FBBrandDetails

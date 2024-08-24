@@ -32,7 +32,7 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
         <FBProducts
           provider={provider}
           domain={provider?.domain}
-          location={outlet.id}
+          location={outlet?.id}
           isOpen={outlet?.isOpen || false}
         />
       </View>
