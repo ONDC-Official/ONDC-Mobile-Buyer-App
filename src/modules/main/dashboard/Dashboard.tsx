@@ -9,6 +9,7 @@ import Profile from './components/tabs/Profile';
 import DashboardCart from './components/tabs/Cart';
 import useCartItems from '../../../hooks/useCartItems';
 import useRefreshToken from '../../../hooks/useRefreshToken';
+import useCategoryDetails from '../../../hooks/useCategoryDetails';
 
 interface Dashboard {}
 
@@ -17,8 +18,10 @@ const Tab = createBottomTabNavigator();
 const Dashboard: React.FC<Dashboard> = () => {
   const {getCartItems} = useCartItems();
   const {} = useRefreshToken();
+  const {getCategoryDetails} = useCategoryDetails();
 
   useEffect(() => {
+    getCategoryDetails().then(() => {});
     getCartItems().then(() => {});
   }, []);
 
