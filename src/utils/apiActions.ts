@@ -1,7 +1,6 @@
 import Config from 'react-native-config';
 
-// export const API_BASE_URL: string = Config.API_BASE_URL ?? '';
-export const API_BASE_URL: string = 'https://buyer-app-preprod-v2.ondc.org';
+export const API_BASE_URL: string = Config.API_BASE_URL ?? '';
 export const DELIVERY_ADDRESS: string = '/clientApis/v1/delivery_address';
 
 export const CATEGORIES: string = '/clientApis/v2/categories';
