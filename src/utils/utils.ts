@@ -553,3 +553,13 @@ export const getFulfilmentContact = (fulfilmentList: any[], type: string) => {
   const fulfilment = fulfilmentList.find(one => one.type === type);
   return fulfilment?.contact?.phone ?? '';
 };
+
+export const isValidQRURL = (urlParams: any) => {
+  return (
+    urlParams.hasOwnProperty('context.action') &&
+    urlParams.hasOwnProperty('context.bpp_id') &&
+    urlParams.hasOwnProperty('context.domain') &&
+    urlParams.hasOwnProperty('message.intent.provider.id') &&
+    urlParams['context.action'] === 'search'
+  );
+};

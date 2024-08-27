@@ -744,7 +744,9 @@
   },
   "Provider Details": {
     "Order Cancelled": "Order Cancelled",
-    "Download Invoice": "Download Invoice"
+    "Download Invoice": "Download Invoice",
+    "Go Home": "Go Home",
+    "Incorrect specifications or malformed request": "Incorrect specifications or malformed request"
   },
   "Raise Issue": {
     "Raise an Issue": "Raise an Issue",

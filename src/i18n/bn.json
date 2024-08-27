@@ -744,7 +744,9 @@
   },
   "Provider Details": {
     "Order Cancelled": "অর্ডার বাতিল",
-    "Download Invoice": "চালান ডাউনলোড করুন"
+    "Download Invoice": "চালান ডাউনলোড করুন",
+    "Go Home": "গো হোম",
+    "Incorrect specifications or malformed request": "ইনকারেক্ট স্পেসিফিকেশনসহ ওর ম্যালফরমড রিকোয়েস্ট"
   },
   "Raise Issue": {
     "Raise an Issue": "একটি প্রসঙ্গ তুলে ধরুন",

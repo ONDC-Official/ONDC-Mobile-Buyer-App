@@ -4,11 +4,12 @@ import {useDispatch} from 'react-redux';
 import {Text} from 'react-native-paper';
 import DeviceInfo, {getVersion} from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
+import {useTranslation} from 'react-i18next';
 
 import {appStyles} from '../../../styles/styles';
 import {getMultipleData, getStoredData} from '../../../utils/storage';
 import i18n from '../../../i18n';
-import {getUrlParams} from '../../../utils/utils';
+import {getUrlParams, isValidQRURL} from '../../../utils/utils';
 import {alertWithOneButton} from '../../../utils/alerts';
 import AppLogo from '../../../assets/app_logo.svg';
 import {setAddress} from '../../../toolkit/reducer/address';
@@ -27,6 +28,7 @@ interface Splash {
 const Splash: React.FC<Splash> = ({navigation}) => {
   const dispatch = useDispatch();
   const styles = makeStyles();
+  const {t} = useTranslation();
 
   const navigateToLogin = () => {
     navigation.reset({
@@ -48,10 +50,17 @@ const Splash: React.FC<Splash> = ({navigation}) => {
         const address = JSON.parse(addressString);
         dispatch(setAddress(address));
         if (pageParams) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'BrandDetails', params: pageParams}],
-          });
+          if (pageParams.hasOwnProperty('message')) {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'InvalidBrandDetails', params: pageParams}],
+            });
+          } else {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'BrandDetails', params: pageParams}],
+            });
+          }
         } else {
           navigation.reset({
             index: 0,
@@ -120,10 +129,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
       const payload: any = await getDataFromStorage();
       if (payload) {
         const urlParams = getUrlParams(url);
-        if (
-          urlParams.hasOwnProperty('context.action') &&
-          urlParams['context.action'] === 'search'
-        ) {
+        if (isValidQRURL(urlParams)) {
           const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
           const pageParams: any = {brandId};
           if (
@@ -133,7 +139,11 @@ const Splash: React.FC<Splash> = ({navigation}) => {
           }
           await checkLanguage(payload.language, pageParams);
         } else {
-          await checkLanguage(payload.language, null);
+          await checkLanguage(payload.language, {
+            message: t(
+              'Provider Details.Incorrect specifications or malformed request',
+            ),
+          });
         }
       } else {
         navigateToLogin();

@@ -12,14 +12,16 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 
-import {getUrlParams} from '../../../utils/utils';
+import {getUrlParams, isValidQRURL} from '../../../utils/utils';
 import {useAppTheme} from '../../../utils/theme';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
   const theme = useAppTheme();
   const [torchOn, setTorchOn] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
+  const {t} = useTranslation();
 
   useEffect(() => {
     requestCameraPermission().then(() => {});
@@ -54,10 +56,7 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
     if (event.data.startsWith('beckn://ondc')) {
       const url = event.data;
       const urlParams = getUrlParams(url);
-      if (
-        urlParams.hasOwnProperty('context.action') &&
-        urlParams['context.action'] === 'search'
-      ) {
+      if (isValidQRURL(urlParams)) {
         const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
         const pageParams: any = {brandId};
         if (
@@ -66,7 +65,19 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
           pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
         }
         navigation.replace('BrandDetails', pageParams);
+      } else {
+        navigation.replace('InvalidBrandDetails', {
+          message: t(
+            'Provider Details.Incorrect specifications or malformed request',
+          ),
+        });
       }
+    } else {
+      navigation.replace('InvalidBrandDetails', {
+        message: t(
+          'Provider Details.Incorrect specifications or malformed request',
+        ),
+      });
     }
   };
 
