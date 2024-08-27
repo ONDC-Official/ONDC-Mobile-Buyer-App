@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Keyboard, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Text, TextInput} from 'react-native-paper';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -34,8 +34,9 @@ const SignUpWithPhone = () => {
   const [code, setCode] = useState('');
 
   const updateMobileNumber = (value: string) => {
-    setMobileNumber(value);
-    setMobileError(value.length !== 10 ? 'Enter valid mobile number' : '');
+    const digitsOnly = value.replace(/[^0-9]/g, '');
+    setMobileNumber(digitsOnly);
+    setMobileError(digitsOnly.length !== 10 ? 'Enter valid mobile number' : '');
   };
 
   const updateName = (value: string) => {
@@ -109,6 +110,11 @@ const SignUpWithPhone = () => {
     }
   };
 
+  const allowMobileEdit = () => {
+    Keyboard.dismiss();
+    setCodeAvailable(false);
+  };
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -137,8 +143,9 @@ const SignUpWithPhone = () => {
             appleLoginRequested ||
             apiInProgress
           }
-          name="email"
+          keyboardType={'numeric'}
           value={mobileNumber}
+          maxLength={10}
           required
           inputLabel="Phone No."
           placeholder="Enter phone no."
@@ -150,7 +157,7 @@ const SignUpWithPhone = () => {
               <TextInput.Icon
                 color={theme.colors.primary}
                 icon={'pencil'}
-                onPress={() => setCodeAvailable(false)}
+                onPress={allowMobileEdit}
               />
             ) : null
           }
