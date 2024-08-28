@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import moment from 'moment';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 import {
   API_BASE_URL,
   PROVIDER,
@@ -39,6 +40,7 @@ const getMomentDateFromHourMinutes = (timeString: string) => {
 };
 
 const BrandDetails = ({route: {params}}: {route: any}) => {
+  const {t} = useTranslation();
   const {address} = useSelector((state: any) => state.address);
   const {formatDate} = useFormatDate();
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -88,6 +90,12 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
             },
           });
         }
+      } else {
+        navigation.replace('InvalidBrandDetails', {
+          message: t(
+            'Provider Details.This store does not service your location',
+          ),
+        });
       }
     } catch (error) {
       handleApiError(error);
@@ -131,7 +139,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   }
 
   return (
-    <Page outletId={outlet.id}>
+    <Page outletId={outlet?.id}>
       <View style={styles.container}>
         {provider?.domain === FB_DOMAIN ? (
           <FBBrandDetails
