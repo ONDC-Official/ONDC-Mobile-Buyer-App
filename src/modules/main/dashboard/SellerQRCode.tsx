@@ -16,6 +16,7 @@ import {useTranslation} from 'react-i18next';
 
 import {getUrlParams, isValidQRURL} from '../../../utils/utils';
 import {useAppTheme} from '../../../utils/theme';
+import {SUPPORT_EMAIL} from '../../../utils/constants';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
   const theme = useAppTheme();
@@ -52,6 +53,15 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
     navigation.goBack();
   }, [navigation]);
 
+  const navigateToInvalidBrand = () => {
+    navigation.replace('InvalidBrandDetails', {
+      message: t(
+        'Provider Details.Incorrect specifications or malformed request',
+        {email: SUPPORT_EMAIL},
+      ),
+    });
+  };
+
   const onQRScan = (event: any) => {
     if (event.data.startsWith('beckn://ondc')) {
       const url = event.data;
@@ -66,18 +76,10 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
         }
         navigation.replace('BrandDetails', pageParams);
       } else {
-        navigation.replace('InvalidBrandDetails', {
-          message: t(
-            'Provider Details.Incorrect specifications or malformed request',
-          ),
-        });
+        navigateToInvalidBrand();
       }
     } else {
-      navigation.replace('InvalidBrandDetails', {
-        message: t(
-          'Provider Details.Incorrect specifications or malformed request',
-        ),
-      });
+      navigateToInvalidBrand();
     }
   };
 

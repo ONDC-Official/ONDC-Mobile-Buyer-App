@@ -14,6 +14,7 @@ import {alertWithOneButton} from '../../../utils/alerts';
 import AppLogo from '../../../assets/app_logo.svg';
 import {setAddress} from '../../../toolkit/reducer/address';
 import {saveUser, setToken} from '../../../toolkit/reducer/auth';
+import {SUPPORT_EMAIL} from '../../../utils/constants';
 
 interface Splash {
   navigation: any;
@@ -142,6 +143,7 @@ const Splash: React.FC<Splash> = ({navigation}) => {
           await checkLanguage(payload.language, {
             message: t(
               'Provider Details.Incorrect specifications or malformed request',
+              {email: SUPPORT_EMAIL},
             ),
           });
         }

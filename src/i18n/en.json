@@ -746,8 +746,8 @@
     "Order Cancelled": "Order Cancelled",
     "Download Invoice": "Download Invoice",
     "Go Home": "Go Home",
-    "Incorrect specifications or malformed request": "Incorrect specifications or malformed request",
-    "This store does not service your location": "This store does not service your location"
+    "Incorrect specifications or malformed request": "Issue in link -  contact seller or report at - {{email}}",
+    "This store does not service your location": "This seller is not currently available. Please check later"
   },
   "Raise Issue": {
     "Raise an Issue": "Raise an Issue",
