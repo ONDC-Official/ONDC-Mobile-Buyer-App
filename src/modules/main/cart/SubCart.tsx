@@ -600,7 +600,7 @@ const SubCart = ({route: {params}}: any) => {
                         {deliveryAddress?.descriptor?.phone})
                       </Text>
                     </View>
-                    <Button
+                    <TouchableOpacity
                       disabled={
                         isProductAvailableQuantityIsZero ||
                         isProductCategoryIsDifferent ||
@@ -608,11 +608,13 @@ const SubCart = ({route: {params}}: any) => {
                         checkoutLoading
                       }
                       style={styles.changeButton}
-                      labelStyle={styles.changeButtonLabel}
-                      mode={'outlined'}
                       onPress={() => addressSheet.current.open()}>
-                      {t('Cart.Change')}
-                    </Button>
+                      <Text
+                        variant={'labelMedium'}
+                        style={styles.changeButtonLabel}>
+                        {t('Cart.Change')}
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.summaryDivider} />
                   <View style={styles.summaryRow}>
@@ -765,11 +767,14 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     changeButton: {
       borderRadius: 40,
-      height: 36,
+      justifyContent: 'center',
       borderColor: colors.primary,
+      borderWidth: 1,
+      paddingHorizontal: 16,
+      paddingVertical: 11,
     },
     changeButtonLabel: {
-      margin: 0,
+      color: colors.primary,
     },
     pageContainer: {
       flex: 1,

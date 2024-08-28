@@ -77,11 +77,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   };
 
   const renderItem = useCallback(
-    ({item}: {item: any}) => (
-      <View key={item.id} style={styles.productContainer}>
-        <Product product={item} search isOpen />
-      </View>
-    ),
+    ({item}: {item: any}) => <Product product={item} search isOpen />,
     [],
   );
 
@@ -100,7 +96,6 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
     <View style={styles.container}>
       {productsRequested ? (
         <FlatList
-          numColumns={2}
           data={skeletonList}
           renderItem={() => <ProductSkeleton />}
           contentContainerStyle={styles.listContainer}
@@ -108,7 +103,6 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
         />
       ) : (
         <FlatList
-          numColumns={2}
           data={products}
           renderItem={renderItem}
           onEndReached={loadMoreList}

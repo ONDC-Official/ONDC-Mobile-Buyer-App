@@ -10,18 +10,26 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {getUrlParams} from '../../../utils/utils';
-import {useAppTheme} from '../../../utils/theme';
-import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
+
+import {
+  getUrlParams,
+  isDomainSupported,
+  isValidQRURL,
+} from '../../../utils/utils';
+import {useAppTheme} from '../../../utils/theme';
+import {SUPPORT_EMAIL} from '../../../utils/constants';
 
 const SellerQRCode = ({navigation}: {navigation: any}) => {
   const theme = useAppTheme();
   const [torchOn, setTorchOn] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
+  const {t} = useTranslation();
 
   useEffect(() => {
-    requestCameraPermission();
+    requestCameraPermission().then(() => {});
   }, []);
 
   const requestCameraPermission = async () => {
@@ -49,23 +57,40 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
     navigation.goBack();
   }, [navigation]);
 
+  const navigateToInvalidBrand = (domainSupported: boolean = false) => {
+    navigation.replace('InvalidBrandDetails', {
+      message: domainSupported
+        ? t(
+            'This store/seller type is not supported by Saarthi Application, explore other buyer apps.',
+          )
+        : t('Provider Details.Incorrect specifications or malformed request', {
+            email: SUPPORT_EMAIL,
+          }),
+    });
+  };
+
   const onQRScan = (event: any) => {
     if (event.data.startsWith('beckn://ondc')) {
       const url = event.data;
       const urlParams = getUrlParams(url);
-      if (
-        urlParams.hasOwnProperty('context.action') &&
-        urlParams['context.action'] === 'search'
-      ) {
-        const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
-        const pageParams: any = {brandId};
-        if (
-          urlParams.hasOwnProperty('message.intent.provider.locations.0.id')
-        ) {
-          pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
+      if (isValidQRURL(urlParams)) {
+        if (isDomainSupported(urlParams['context.domain'])) {
+          const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
+          const pageParams: any = {brandId};
+          if (
+            urlParams.hasOwnProperty('message.intent.provider.locations.0.id')
+          ) {
+            pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
+          }
+          navigation.replace('BrandDetails', pageParams);
+        } else {
+          navigateToInvalidBrand(true);
         }
-        navigation.replace('BrandDetails', pageParams);
+      } else {
+        navigateToInvalidBrand();
       }
+    } else {
+      navigateToInvalidBrand();
     }
   };
 

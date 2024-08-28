@@ -1,8 +1,9 @@
 import {Text} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useAppTheme} from '../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import LinearGradient from 'react-native-linear-gradient';
+import {useAppTheme} from '../../utils/theme';
 
 const SectionHeaderWithViewAll = ({
   title,
@@ -24,6 +25,14 @@ const SectionHeaderWithViewAll = ({
         numberOfLines={1}>
         {title}
       </Text>
+      <View style={styles.separatorContainer}>
+        <LinearGradient
+          colors={['#B5B5B5ff', '#B5B5B500']}
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          style={styles.gradient}
+        />
+      </View>
       <TouchableOpacity style={styles.viewAllContainer} onPress={viewAll}>
         <Text variant={'bodyMedium'} style={styles.viewAllLabel}>
           {t('Home.View All')}
@@ -44,16 +53,24 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       flexDirection: 'row',
     },
+    separatorContainer: {
+      height: 20,
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingHorizontal: 8,
+    },
+    gradient: {
+      height: 1,
+      width: '100%',
+    },
     header: {
       paddingHorizontal: 16,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
     },
     title: {
       color: colors.neutral400,
-      flex: 1,
-      paddingRight: 8,
     },
     viewAllLabel: {
       color: colors.neutral400,

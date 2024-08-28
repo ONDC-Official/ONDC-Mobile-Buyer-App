@@ -81,7 +81,7 @@ const Store = ({store}: {store: any}) => {
     <TouchableOpacity style={styles.brand} onPress={navigateToDetails}>
       <StoreImage source={imageSource} />
       <Text
-        variant={'bodyLarge'}
+        variant={'labelLarge'}
         style={styles.name}
         numberOfLines={1}
         ellipsizeMode={'tail'}>
@@ -111,14 +111,13 @@ const makeStyles = (colors: any) =>
       height: 64,
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: 8,
+      marginBottom: 4,
     },
     brandImageEmpty: {
       backgroundColor: colors.neutral200,
     },
     name: {
       color: colors.neutral400,
-      marginBottom: 4,
       flex: 1,
     },
     details: {

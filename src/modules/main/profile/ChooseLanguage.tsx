@@ -51,24 +51,24 @@ const ChooseLanguage = () => {
         handleChangeLanguage('en').then(() => {});
       },
     },
-    {
-      title: t('Choose Language.Marathi'),
-      onPress: () => {
-        handleChangeLanguage('mr').then(() => {});
-      },
-    },
-    {
-      title: t('Choose Language.Tamil'),
-      onPress: () => {
-        handleChangeLanguage('ta').then(() => {});
-      },
-    },
-    {
-      title: t('Choose Language.Bengali'),
-      onPress: () => {
-        handleChangeLanguage('bn').then(() => {});
-      },
-    },
+    // {
+    //   title: t('Choose Language.Marathi'),
+    //   onPress: () => {
+    //     handleChangeLanguage('mr').then(() => {});
+    //   },
+    // },
+    // {
+    //   title: t('Choose Language.Tamil'),
+    //   onPress: () => {
+    //     handleChangeLanguage('ta').then(() => {});
+    //   },
+    // },
+    // {
+    //   title: t('Choose Language.Bengali'),
+    //   onPress: () => {
+    //     handleChangeLanguage('bn').then(() => {});
+    //   },
+    // },
   ];
 
   useEffect(() => {

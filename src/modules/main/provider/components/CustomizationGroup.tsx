@@ -1,10 +1,11 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Checkbox, Text} from 'react-native-paper';
+import {Checkbox, Text, RadioButton} from 'react-native-paper';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useAppTheme} from '../../../../utils/theme';
 import {useTranslation} from 'react-i18next';
+
+import {useAppTheme} from '../../../../utils/theme';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 const VegImage = require('../../../../assets/veg.png');
@@ -44,6 +45,7 @@ const CustomizationGroup = ({
 
   const totalRecords = group?.options?.length;
   const options: any[] = showAll ? group?.options : group?.options?.slice(0, 4);
+
   return (
     <View key={group?.id}>
       <View style={styles.filterContainer}>
@@ -113,14 +115,26 @@ const CustomizationGroup = ({
                         style={styles.amount}>
                         ₹{formatNumber(option.price)}
                       </Text>
-                      <Checkbox.Android
-                        status={selected ? 'checked' : 'unchecked'}
-                        onPress={() => {
-                          if (option.inStock) {
-                            handleClick(group, option);
-                          }
-                        }}
-                      />
+                      {group?.type === 'Radio' ? (
+                        <RadioButton.Android
+                          status={selected ? 'checked' : 'unchecked'}
+                          onPress={() => {
+                            if (option.inStock) {
+                              handleClick(group, option);
+                            }
+                          }}
+                          value={formatNumber(option.price)}
+                        />
+                      ) : (
+                        <Checkbox.Android
+                          status={selected ? 'checked' : 'unchecked'}
+                          onPress={() => {
+                            if (option.inStock) {
+                              handleClick(group, option);
+                            }
+                          }}
+                        />
+                      )}
                     </View>
                   ) : (
                     <Text variant={'labelMedium'} style={styles.outOfStock}>

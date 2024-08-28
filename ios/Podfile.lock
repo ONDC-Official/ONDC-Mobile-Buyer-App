@@ -262,8 +262,8 @@ PODS:
   - MapplsAPICore (1.0.11)
   - MapplsAPIKit/Base (2.0.24)
   - MapplsGeoanalytics/Base (1.0.0)
-  - MapplsLMS/Base (1.0.3)
-  - MapplsMap/Base (5.13.12)
+  - MapplsLMS/Base (1.0.4)
+  - MapplsMap/Base (5.13.13)
   - MapplsUIWidgets (1.0.6):
     - MapplsUIWidgets/Complete (= 1.0.6)
   - MapplsUIWidgets/Base (1.0.6)
@@ -1108,8 +1108,8 @@ SPEC CHECKSUMS:
   MapplsAPICore: 16d5fc129fe32446338b15e02dece59a487633a6
   MapplsAPIKit: b2a5c30e8c59a48b39fbf184100f73ed6d2f54c6
   MapplsGeoanalytics: fa3434679c22d73a4ff47fac50a246c9b61b0192
-  MapplsLMS: 9ecee43f27407f182f382c8b7c54f64b57f152e9
-  MapplsMap: e10377be9e5e8781fc6d89b24028370abaa0c62d
+  MapplsLMS: b12fed1aa5bb6b9b55863ac515372fba1f11a493
+  MapplsMap: a86865cb97fa972f7eac276c77e047696a4fc2a1
   MapplsUIWidgets: 45af6bc3dedf4ccf110bb9969ce22a0800a3cf38
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c

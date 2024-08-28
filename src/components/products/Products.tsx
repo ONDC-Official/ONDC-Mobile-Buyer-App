@@ -158,18 +158,20 @@ const Products: React.FC<Products> = ({
   };
 
   const loadMoreList = () => {
-    let getCount: number = 0;
-    products.forEach(item => {
-      getCount = getCount + JSON.parse(item.data[0]?.list?.length);
-    });
-    if (totalProducts !== getCount) {
-      searchProducts(
-        page,
-        providerId,
-        customData,
-        subCategories,
-        selectedAttributes,
-      ).then(() => {});
+    if (products?.length > 0) {
+      let getCount: number = 0;
+      products.forEach(item => {
+        getCount = getCount + JSON.parse(item.data[0]?.list?.length);
+      });
+      if (totalProducts !== getCount) {
+        searchProducts(
+          page,
+          providerId,
+          customData,
+          subCategories,
+          selectedAttributes,
+        ).then(() => {});
+      }
     }
   };
 
@@ -205,9 +207,7 @@ const Products: React.FC<Products> = ({
 
   const renderFlatListItem = useCallback(
     ({item}: {item: any}) => (
-      <View key={item.id} style={styles.productContainer}>
-        <Product product={item} search={search} isOpen={isOpen} />
-      </View>
+      <Product product={item} search={search} isOpen={isOpen} />
     ),
     [search, provider],
   );
@@ -217,7 +217,6 @@ const Products: React.FC<Products> = ({
       return item.list.length > 0 ? (
         <FlatList
           data={item.list}
-          numColumns={2}
           style={styles.nestedListContainer}
           renderItem={renderFlatListItem}
           keyExtractor={(one: any) => one.id}

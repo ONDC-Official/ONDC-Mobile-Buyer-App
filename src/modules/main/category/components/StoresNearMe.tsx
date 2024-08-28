@@ -53,7 +53,10 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const getAllLocations = async () => {
     try {
       setApiRequested(true);
-      const limit = domain === FB_DOMAIN ? 12 : 9;
+      let limit = 12;
+      if (domain && domain !== FB_DOMAIN) {
+        limit = 9;
+      }
       source.current = CancelToken.source();
       const url = `${API_BASE_URL}${SERVICEABLE_LOCATIONS}?latitude=${
         address.address.lat

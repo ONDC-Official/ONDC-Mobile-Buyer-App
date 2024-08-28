@@ -1,4 +1,4 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Keyboard, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Text, TextInput} from 'react-native-paper';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -32,8 +32,9 @@ const LoginWithPhone = () => {
   const [code, setCode] = useState('');
 
   const updateMobileNumber = (value: string) => {
-    setMobileNumber(value);
-    setMobileError(value.length !== 10 ? 'Enter valid mobile number' : '');
+    const digitsOnly = value.replace(/[^0-9]/g, '');
+    setMobileNumber(digitsOnly);
+    setMobileError(digitsOnly.length !== 10 ? 'Enter valid mobile number' : '');
   };
 
   const updateCode = (value: string) => {
@@ -49,8 +50,32 @@ const LoginWithPhone = () => {
       const idTokenResult = await user?.getIdTokenResult();
 
       await storeDetails(idTokenResult, user);
-    } catch (error) {
-      showToastWithGravity('Enter valid OTP');
+    } catch (error: any) {
+      switch (error.code) {
+        case 'auth/invalid-verification-code':
+          showToastWithGravity('Enter valid OTP');
+          break;
+        case 'auth/missing-verification-code':
+          showToastWithGravity('Please enter OTP');
+          break;
+        case 'auth/quota-exceeded':
+          showToastWithGravity('Limit exceed, please try after some time');
+          break;
+        case 'auth/session-expired':
+          showToastWithGravity(
+            'Entered OTP is expired, please request new OTP',
+          );
+          break;
+        case 'auth/invalid-verification-id':
+        case 'auth/too-many-requests':
+          showToastWithGravity(
+            'Something went wrong please try again after some time',
+          );
+          break;
+        case 'auth/user-disabled':
+          showToastWithGravity('Account is disabled, please contact admin');
+          break;
+      }
     } finally {
       setApiInProgress(false);
     }
@@ -77,6 +102,11 @@ const LoginWithPhone = () => {
     }
   };
 
+  const allowMobileEdit = () => {
+    Keyboard.dismiss();
+    setCodeAvailable(false);
+  };
+
   return (
     <>
       <View style={styles.inputContainer}>
@@ -84,10 +114,14 @@ const LoginWithPhone = () => {
           left={<TextInput.Affix text="+91" />}
           inputMode={'numeric'}
           disabled={
-            googleLoginRequested || appleLoginRequested || apiInProgress
+            codeAvailable ||
+            googleLoginRequested ||
+            appleLoginRequested ||
+            apiInProgress
           }
-          name="email"
+          keyboardType={'numeric'}
           value={mobileNumber}
+          maxLength={10}
           required
           inputLabel="Phone No."
           placeholder="Enter phone no."
@@ -97,8 +131,9 @@ const LoginWithPhone = () => {
           right={
             codeAvailable ? (
               <TextInput.Icon
+                color={theme.colors.primary}
                 icon={'pencil'}
-                onPress={() => setCodeAvailable(false)}
+                onPress={allowMobileEdit}
               />
             ) : null
           }
@@ -139,9 +174,15 @@ const LoginWithPhone = () => {
             </Button>
             <View style={styles.dontReceiveContainer}>
               <Text variant={'bodyMedium'}>Didn’t receive OTP?</Text>
-              <Text variant={'bodyLarge'} style={styles.resend}>
-                Resend
-              </Text>
+              <TouchableOpacity
+                onPress={sendOtp}
+                disabled={
+                  googleLoginRequested || appleLoginRequested || apiInProgress
+                }>
+                <Text variant={'bodyLarge'} style={styles.resend}>
+                  Resend
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         ) : (

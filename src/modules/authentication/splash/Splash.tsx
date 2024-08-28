@@ -1,32 +1,28 @@
-import React, {useEffect, useRef} from 'react';
-import {Linking, NativeModules, Platform, StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {Linking, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Text} from 'react-native-paper';
 import DeviceInfo, {getVersion} from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
-import JailMonkey from 'jail-monkey';
-import {isDeviceRooted} from 'react-native-detect-frida';
-import axios from 'axios';
+import {useTranslation} from 'react-i18next';
 
 import {appStyles} from '../../../styles/styles';
 import {getMultipleData, getStoredData} from '../../../utils/storage';
 import i18n from '../../../i18n';
-import {getUrlParams} from '../../../utils/utils';
+import {
+  getUrlParams,
+  isDomainSupported,
+  isValidQRURL,
+} from '../../../utils/utils';
 import {alertWithOneButton} from '../../../utils/alerts';
 import AppLogo from '../../../assets/app_logo.svg';
 import {setAddress} from '../../../toolkit/reducer/address';
 import {saveUser, setToken} from '../../../toolkit/reducer/auth';
-import {API_BASE_URL, CATEGORIES} from '../../../utils/apiActions';
-import useNetworkHandling from '../../../hooks/useNetworkHandling';
-import {updateCategories} from '../../../toolkit/reducer/categories';
-
-const {RootCheck} = NativeModules;
+import {SUPPORT_EMAIL} from '../../../utils/constants';
 
 interface Splash {
   navigation: any;
 }
-
-const CancelToken = axios.CancelToken;
 
 /**
  * Component to render splash screen
@@ -37,11 +33,13 @@ const CancelToken = axios.CancelToken;
 const Splash: React.FC<Splash> = ({navigation}) => {
   const dispatch = useDispatch();
   const styles = makeStyles();
-  const source = useRef<any>(null);
-  const {getDataWithAuth} = useNetworkHandling();
+  const {t} = useTranslation();
 
-  const checkMagisk = async () => {
-    return await RootCheck.isMagiskPresent();
+  const navigateToLogin = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Login'}],
+    });
   };
 
   const checkLanguage = async (language: any, pageParams: any) => {
@@ -57,10 +55,17 @@ const Splash: React.FC<Splash> = ({navigation}) => {
         const address = JSON.parse(addressString);
         dispatch(setAddress(address));
         if (pageParams) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'BrandDetails', params: pageParams}],
-          });
+          if (pageParams.hasOwnProperty('message')) {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'InvalidBrandDetails', params: pageParams}],
+            });
+          } else {
+            navigation.reset({
+              index: 0,
+              routes: [{name: 'BrandDetails', params: pageParams}],
+            });
+          }
         } else {
           navigation.reset({
             index: 0,
@@ -117,48 +122,52 @@ const Splash: React.FC<Splash> = ({navigation}) => {
       if (payload) {
         await checkLanguage(payload.language, null);
       } else {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Login'}],
-        });
+        navigateToLogin();
       }
     } catch (error) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Login'}],
-      });
+      navigateToLogin();
     }
   };
 
   const processUrl = async (url: string) => {
     try {
       const payload: any = await getDataFromStorage();
-      const urlParams = getUrlParams(url);
-      if (
-        urlParams.hasOwnProperty('context.action') &&
-        urlParams['context.action'] === 'search'
-      ) {
-        const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
-        const pageParams: any = {brandId};
-        if (
-          urlParams.hasOwnProperty('message.intent.provider.locations.0.id')
-        ) {
-          pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
+      if (payload) {
+        const urlParams = getUrlParams(url);
+        if (isValidQRURL(urlParams)) {
+          if (isDomainSupported(urlParams['context.domain'])) {
+            const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
+            const pageParams: any = {brandId};
+            if (
+              urlParams.hasOwnProperty('message.intent.provider.locations.0.id')
+            ) {
+              pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
+            }
+            await checkLanguage(payload.language, pageParams);
+          } else {
+            await checkLanguage(payload.language, {
+              message: t(
+                'Provider Details.This store/seller type is not supported by Saarthi Application, explore other buyer apps.',
+              ),
+            });
+          }
+        } else {
+          await checkLanguage(payload.language, {
+            message: t(
+              'Provider Details.Incorrect specifications or malformed request',
+              {email: SUPPORT_EMAIL},
+            ),
+          });
         }
-        await checkLanguage(payload.language, pageParams);
       } else {
-        await checkLanguage(payload.language, null);
+        navigateToLogin();
       }
     } catch (error) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Login'}],
-      });
+      navigateToLogin();
     }
   };
 
   const processLink = async () => {
-    await getCategoryDetails();
     Linking.getInitialURL().then(url => {
       if (url) {
         processUrl(url).then(() => {});
@@ -166,17 +175,6 @@ const Splash: React.FC<Splash> = ({navigation}) => {
         checkIfUserIsLoggedIn().then(() => {});
       }
     });
-  };
-
-  const getCategoryDetails = async () => {
-    const url = `${API_BASE_URL}${CATEGORIES}`;
-    source.current = CancelToken.source();
-    try {
-      const {data} = await getDataWithAuth(url, source.current.token);
-      dispatch(updateCategories(data));
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   useEffect(() => {
@@ -187,46 +185,11 @@ const Splash: React.FC<Splash> = ({navigation}) => {
           'Please setup the device lock to access this application',
           'Ok',
           () => {
-            processLink();
+            processLink().then(() => {});
           },
         );
       } else {
-        if (JailMonkey.isJailBroken()) {
-          alertWithOneButton(
-            'Alert',
-            'This application can not be used on the rooted device',
-            'Ok',
-            () => {},
-          );
-        } else {
-          isDeviceRooted().then(result => {
-            if (result.isRooted) {
-              alertWithOneButton(
-                'Alert',
-                'This application can not be used on the rooted device',
-                'Ok',
-                () => {},
-              );
-            } else {
-              if (Platform.OS === 'android') {
-                checkMagisk().then(isPresent => {
-                  if (isPresent) {
-                    alertWithOneButton(
-                      'Alert',
-                      'This application can not be used on the rooted device',
-                      'Ok',
-                      () => {},
-                    );
-                  } else {
-                    processLink();
-                  }
-                });
-              } else {
-                processLink();
-              }
-            }
-          });
-        }
+        processLink().then(() => {});
       }
     });
   }, []);

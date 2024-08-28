@@ -60,6 +60,28 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
       style={styles.container}
       onPress={navigateToProductDetails}
       disabled={disabled}>
+      <View style={styles.meta}>
+        <Text
+          variant={'labelLarge'}
+          numberOfLines={1}
+          ellipsizeMode={'tail'}
+          style={styles.name}>
+          {product?.item_details?.descriptor?.name}
+        </Text>
+        <Text
+          variant={'labelSmall'}
+          numberOfLines={1}
+          ellipsizeMode={'tail'}
+          style={styles.provider}>
+          {search
+            ? product?.provider_details?.descriptor?.name
+            : product?.item_details?.descriptor?.short_desc}
+        </Text>
+        <Text variant={'bodyLarge'} style={styles.amount}>
+          {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
+          {formatNumber(product?.item_details?.price?.value)}
+        </Text>
+      </View>
       {disabled ? (
         <Grayscale>
           <FastImage
@@ -81,28 +103,6 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
           <VegNonVegTag tags={product.item_details.tags} />
         </View>
       )}
-      <Text
-        variant={'labelMedium'}
-        numberOfLines={1}
-        ellipsizeMode={'tail'}
-        style={styles.name}>
-        {product?.item_details?.descriptor?.name}
-      </Text>
-      <Text
-        variant={'labelSmall'}
-        numberOfLines={1}
-        ellipsizeMode={'tail'}
-        style={styles.provider}>
-        {search
-          ? product?.provider_details?.descriptor?.name
-          : product?.item_details?.descriptor?.short_desc}
-      </Text>
-      <View style={styles.row}>
-        <Text variant={'bodyLarge'} style={styles.amount}>
-          {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
-          {formatNumber(product?.item_details?.price?.value)}
-        </Text>
-      </View>
     </TouchableOpacity>
   );
 };
@@ -110,23 +110,25 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      paddingHorizontal: 8,
+      flexDirection: 'row',
+      marginBottom: 15,
+    },
+    meta: {
       flex: 1,
-      marginBottom: 20,
+      paddingRight: 20,
     },
     gridImage: {
-      width: '100%',
-      height: 180,
-      borderRadius: 12,
-      marginBottom: 12,
+      width: 126,
+      height: 126,
+      borderRadius: 15,
     },
     name: {
       color: colors.neutral400,
-      marginBottom: 8,
+      marginBottom: 2,
     },
     provider: {
       color: colors.neutral300,
-      marginBottom: 8,
+      marginBottom: 2,
     },
     amount: {
       color: colors.neutral400,

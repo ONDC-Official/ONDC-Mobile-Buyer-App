@@ -18,6 +18,7 @@ import UpdateAddress from '../modules/main/dashboard/components/address/UpdateAd
 import CategoryDetails from '../modules/main/category/CategoryDetails';
 import CouponList from '../modules/main/category/CouponList';
 import BrandDetails from '../modules/main/provider/BrandDetails';
+import InvalidBrandDetails from '../modules/main/provider/InvalidBrandDetails';
 import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
 import Outlets from '../modules/main/provider/Outlets';
 import Orders from '../modules/main/order/list/Orders';
@@ -247,6 +248,14 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="BrandDetails"
           component={BrandDetails}
+          options={{
+            headerStatusBarHeight: 0,
+            title: '',
+          }}
+        />
+        <Stack.Screen
+          name="InvalidBrandDetails"
+          component={InvalidBrandDetails}
           options={{
             headerStatusBarHeight: 0,
             title: '',

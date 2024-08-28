@@ -744,7 +744,11 @@
   },
   "Provider Details": {
     "Order Cancelled": "অর্ডার বাতিল",
-    "Download Invoice": "চালান ডাউনলোড করুন"
+    "Download Invoice": "চালান ডাউনলোড করুন",
+    "Go Home": "গো হোম",
+    "Incorrect specifications or malformed request": "ইনকারেক্ট স্পেসিফিকেশনসহ ওর ম্যালফরমড রিকোয়েস্ট",
+    "This store does not service your location": "This store does not service your location",
+    "This store/seller type is not supported by Saarthi Application, explore other buyer apps.": "This store/seller type is not supported by Saarthi Application, explore other buyer apps."
   },
   "Raise Issue": {
     "Raise an Issue": "একটি প্রসঙ্গ তুলে ধরুন",
@@ -803,7 +807,8 @@
     "Something went wrong, please try again after some time": "কিছু ভুল হয়েছে, দয়া করে কিছু সময় পরে আবার চেষ্টা করুন",
     "Some orders are not initialized": "কিছু অর্ডার আরম্ভ করা হয় না।",
     "Available Cities": "উপলব্ধ শহরগুলি",
-    "The app is only for Delhi city": "অ্যাপটি শুধুমাত্র দিল্লি শহরের জন্য।"
+    "The app is only for Delhi city": "অ্যাপটি শুধুমাত্র দিল্লি শহরের জন্য।",
+    "Open with": "দিয়ে খুলুন"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ওএনডিসি কিউআর সে ভারত খুলেগা"
