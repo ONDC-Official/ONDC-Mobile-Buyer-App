@@ -747,7 +747,8 @@
     "Download Invoice": "Download Invoice",
     "Go Home": "Go Home",
     "Incorrect specifications or malformed request": "Issue in link -  contact seller or report at - {{email}}",
-    "This store does not service your location": "This seller is not currently available. Please check later"
+    "This store does not service your location": "This seller is not currently available. Please check later",
+    "This store/seller type is not supported by Saarthi Application, explore other buyer apps.": "This store/seller type is not supported by Saarthi Application, explore other buyer apps."
   },
   "Raise Issue": {
     "Raise an Issue": "Raise an Issue",

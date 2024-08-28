@@ -6,12 +6,13 @@ import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
 import getDistance from 'geolib/es/getDistance';
 import {COLOR_CODE_TO_NAME} from './colorCodes';
+import {CATEGORIES} from './categories';
 
 const TOAST_VISIBILITY_TIME = 3000;
 
 /**
  * Function is used to show toast on the screen
- * @param message: message to show on tha toast
+ * @param message
  **/
 export const showToastWithGravity = (message: string) => {
   Toast.show({
@@ -562,4 +563,8 @@ export const isValidQRURL = (urlParams: any) => {
     urlParams.hasOwnProperty('message.intent.provider.id') &&
     urlParams['context.action'] === 'search'
   );
+};
+
+export const isDomainSupported = (domain: string) => {
+  return CATEGORIES.findIndex((one: any) => one.domain === domain) > -1;
 };

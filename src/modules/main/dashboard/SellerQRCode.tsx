@@ -14,7 +14,11 @@ import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 
-import {getUrlParams, isValidQRURL} from '../../../utils/utils';
+import {
+  getUrlParams,
+  isDomainSupported,
+  isValidQRURL,
+} from '../../../utils/utils';
 import {useAppTheme} from '../../../utils/theme';
 import {SUPPORT_EMAIL} from '../../../utils/constants';
 
@@ -53,12 +57,15 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
     navigation.goBack();
   }, [navigation]);
 
-  const navigateToInvalidBrand = () => {
+  const navigateToInvalidBrand = (domainSupported: boolean = false) => {
     navigation.replace('InvalidBrandDetails', {
-      message: t(
-        'Provider Details.Incorrect specifications or malformed request',
-        {email: SUPPORT_EMAIL},
-      ),
+      message: domainSupported
+        ? t(
+            'This store/seller type is not supported by Saarthi Application, explore other buyer apps.',
+          )
+        : t('Provider Details.Incorrect specifications or malformed request', {
+            email: SUPPORT_EMAIL,
+          }),
     });
   };
 
@@ -67,14 +74,18 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
       const url = event.data;
       const urlParams = getUrlParams(url);
       if (isValidQRURL(urlParams)) {
-        const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
-        const pageParams: any = {brandId};
-        if (
-          urlParams.hasOwnProperty('message.intent.provider.locations.0.id')
-        ) {
-          pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
+        if (isDomainSupported(urlParams['context.domain'])) {
+          const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
+          const pageParams: any = {brandId};
+          if (
+            urlParams.hasOwnProperty('message.intent.provider.locations.0.id')
+          ) {
+            pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
+          }
+          navigation.replace('BrandDetails', pageParams);
+        } else {
+          navigateToInvalidBrand(true);
         }
-        navigation.replace('BrandDetails', pageParams);
       } else {
         navigateToInvalidBrand();
       }

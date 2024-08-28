@@ -9,7 +9,11 @@ import {useTranslation} from 'react-i18next';
 import {appStyles} from '../../../styles/styles';
 import {getMultipleData, getStoredData} from '../../../utils/storage';
 import i18n from '../../../i18n';
-import {getUrlParams, isValidQRURL} from '../../../utils/utils';
+import {
+  getUrlParams,
+  isDomainSupported,
+  isValidQRURL,
+} from '../../../utils/utils';
 import {alertWithOneButton} from '../../../utils/alerts';
 import AppLogo from '../../../assets/app_logo.svg';
 import {setAddress} from '../../../toolkit/reducer/address';
@@ -131,14 +135,22 @@ const Splash: React.FC<Splash> = ({navigation}) => {
       if (payload) {
         const urlParams = getUrlParams(url);
         if (isValidQRURL(urlParams)) {
-          const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
-          const pageParams: any = {brandId};
-          if (
-            urlParams.hasOwnProperty('message.intent.provider.locations.0.id')
-          ) {
-            pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
+          if (isDomainSupported(urlParams['context.domain'])) {
+            const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
+            const pageParams: any = {brandId};
+            if (
+              urlParams.hasOwnProperty('message.intent.provider.locations.0.id')
+            ) {
+              pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
+            }
+            await checkLanguage(payload.language, pageParams);
+          } else {
+            await checkLanguage(payload.language, {
+              message: t(
+                'Provider Details.This store/seller type is not supported by Saarthi Application, explore other buyer apps.',
+              ),
+            });
           }
-          await checkLanguage(payload.language, pageParams);
         } else {
           await checkLanguage(payload.language, {
             message: t(

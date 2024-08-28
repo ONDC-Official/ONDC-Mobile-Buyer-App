@@ -747,7 +747,8 @@
     "Download Invoice": "चलन डाऊनलोड करा",
     "Go Home": "गो होम",
     "Incorrect specifications or malformed request": "इनकरेक्ट स्पेसिफिकेशन्स ओर मालफॉर्म्ड रिक्वेस्ट",
-    "This store does not service your location": "This store does not service your location"
+    "This store does not service your location": "This store does not service your location",
+    "This store/seller type is not supported by Saarthi Application, explore other buyer apps.": "This store/seller type is not supported by Saarthi Application, explore other buyer apps."
   },
   "Raise Issue": {
     "Raise an Issue": "मुद्दा मांडा",

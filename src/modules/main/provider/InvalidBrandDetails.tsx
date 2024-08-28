@@ -1,13 +1,11 @@
 import React, {useCallback} from 'react';
-import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Text} from 'react-native-paper';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useAppTheme} from '../../../utils/theme';
 import InvalidBarcode from '../../../assets/invalid_barcode.svg';
-
-const screenWidth = Dimensions.get('screen').width;
 
 const InvalidBrandDetails = ({route: {params}}: {route: any}) => {
   const theme = useAppTheme();
@@ -41,6 +39,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: colors.white,
+      paddingHorizontal: 20,
     },
     message: {
       color: colors.neutral400,
@@ -49,7 +48,7 @@ const makeStyles = (colors: any) =>
     },
     button: {
       marginTop: 28,
-      width: screenWidth - 40,
+      width: '100%',
       marginHorizontal: 20,
       borderRadius: 8,
       backgroundColor: colors.primary,

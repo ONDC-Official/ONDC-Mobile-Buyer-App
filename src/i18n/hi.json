@@ -747,7 +747,8 @@
     "Download Invoice": "चालान डाउनलोड करें",
     "Go Home": "गो होम",
     "Incorrect specifications or malformed request": "लिंक में समस्या - विक्रेता से संपर्क करें या रिपोर्ट करें - {{email}}",
-    "This store does not service your location": "यह विक्रेता वर्तमान में उपलब्ध नहीं है. कृपया बाद में जांचें"
+    "This store does not service your location": "यह विक्रेता वर्तमान में उपलब्ध नहीं है. कृपया बाद में जांचें",
+    "This store/seller type is not supported by Saarthi Application, explore other buyer apps.": "यह स्टोर/विक्रेता प्रकार सारथी एप्लिकेशन द्वारा समर्थित नहीं है, अन्य खरीदार ऐप्स देखें।"
   },
   "Raise Issue": {
     "Raise an Issue": "एक मुद्दा उठाओ",
