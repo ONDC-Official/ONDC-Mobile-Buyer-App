@@ -265,7 +265,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
       selected: [],
       childs: [],
       isMandatory,
-      type: 'Checkbox',
+      type: currentGroup.maxQuantity > 1 ? 'Checkbox' : 'Radio',
     };
     updatedCustomizationState1[groupId].options = [];
 
