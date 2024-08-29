@@ -137,7 +137,9 @@ const SubCart = ({route: {params}}: any) => {
     fulfillmentSheetShown.current = false;
     updateSelectedItemsForInit();
     fulfillmentSheet.current.close();
-    paymentSheet.current.open();
+    setTimeout(() => {
+      paymentSheet.current.open();
+    }, 200);
   };
 
   const updateDeliveryAddress = (newAddress: any) => {
