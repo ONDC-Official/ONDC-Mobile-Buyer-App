@@ -1,6 +1,8 @@
 #import "AppDelegate.h"
 #import <Firebase.h>
 #import <React/RCTBundleURLProvider.h>
+#import <React/RCTLinkingManager.h>
+
 
 @implementation AppDelegate
 
@@ -13,6 +15,13 @@
   [FIRApp configure];
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+- (BOOL)application:(UIApplication *)application
+   openURL:(NSURL *)url
+   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
