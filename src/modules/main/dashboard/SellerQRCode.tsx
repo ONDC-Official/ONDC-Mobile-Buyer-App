@@ -1,6 +1,6 @@
 import {RNCamera} from 'react-native-camera';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Alert,
   Dimensions,
@@ -12,11 +12,14 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {request, PERMISSIONS, RESULTS} from 'react-native-permissions';
 import {Text} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 
 import {useAppTheme} from '../../../utils/theme';
 
 const SellerQRCode = ({navigation, route}: {navigation: any; route: any}) => {
   const {handleDeepLink} = route.params;
+  const {token} = useSelector(({auth}) => auth);
+  const {address} = useSelector((state: any) => state.address);
   const theme = useAppTheme();
   const [torchOn, setTorchOn] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
@@ -51,7 +54,7 @@ const SellerQRCode = ({navigation, route}: {navigation: any; route: any}) => {
   }, [navigation]);
 
   const onQRScan = (event: any) => {
-    handleDeepLink(event.data);
+    handleDeepLink(event.data, token, address);
   };
 
   if (!hasCameraPermission) {

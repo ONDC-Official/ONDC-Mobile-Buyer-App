@@ -808,7 +808,9 @@
     "Some orders are not initialized": "काही ऑर्डर सुरू केल्या जात नाहीत.",
     "Available Cities": "उपलब्ध शहरे",
     "The app is only for Delhi city": "हे एप केवळ दिल्ली शहरासाठी आहे.",
-    "Open with": "सह उघडा"
+    "Open with": "सह उघडा",
+    "Please log in to your account and set your preferences": "कृपया तुमच्या खात्यात लॉग इन करा आणि तुमची प्राधान्ये सेट करा",
+    "Please set your preferences": "कृपया तुमची प्राधान्ये सेट करा"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ओएनडीसी क्यूआर से भारत खुलेगा"

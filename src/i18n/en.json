@@ -808,7 +808,9 @@
     "Some orders are not initialized": "Some orders are not initialized",
     "Available Cities": "Available Cities",
     "The app is only for Delhi city": "The app is only for Delhi city",
-    "Open with": "Open with"
+    "Open with": "Open with",
+    "Please log in to your account and set your preferences": "Please log in to your account and set your preferences",
+    "Please set your preferences": "Please set your preferences"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ONDC QR se Bharat Khulega"

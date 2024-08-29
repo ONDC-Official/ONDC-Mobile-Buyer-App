@@ -71,7 +71,7 @@ const AppNavigation = () => {
   const source = useRef<any>(null);
   const {address} = useSelector((state: any) => state.address);
   const {t} = useTranslation();
-  const {getDataWithAuth} = useNetworkHandling();
+  const {getDataWithToken} = useNetworkHandling();
   const [linkModalVisible, setLinkModalVisible] = useState<boolean>(false);
   const [linkMessage, setLinkMessage] = useState<string>('');
 
@@ -85,7 +85,7 @@ const AppNavigation = () => {
   };
 
   const handleDeepLink = useCallback(
-    (url: string) => {
+    (url: string, userToken: string, userAddress: any) => {
       if (url.startsWith('beckn://ondc')) {
         const urlParams = getUrlParams(url);
         if (isValidQRURL(urlParams)) {
@@ -99,9 +99,10 @@ const AppNavigation = () => {
               navigationRef.current.navigate('BrandDetails', pageParams);
             } else {
               source.current = axios.CancelToken.source();
-              const {lat, lng, areaCode} = address.address;
-              getDataWithAuth(
+              const {lat, lng, areaCode} = userAddress?.address;
+              getDataWithToken(
                 `${API_BASE_URL}${SERVICEABLE_LOCATIONS}?providerId=${brandId}&latitude=${lat}&longitude=${lng}&pincode=${areaCode}`,
+                userToken,
                 source.current.token,
               ).then(locationDetails => {
                 if (locationDetails.data.data.length > 0) {
@@ -141,13 +142,23 @@ const AppNavigation = () => {
         );
       }
     },
-    [navigationRef, getDataWithAuth, address, t],
+    [navigationRef, getDataWithToken, t],
   );
 
   useEffect(() => {
-    const getUrlDetails = ({url}: {url: any}) => {
-      if (url && token) {
-        handleDeepLink(url);
+    const getUrlDetails = ({url}: {url: string}) => {
+      if (url) {
+        if (token) {
+          if (address) {
+            handleDeepLink(url, token, address);
+          } else {
+            showLinkMessage(t('Global.Please set your preferences'));
+          }
+        } else {
+          showLinkMessage(
+            t('Global.Please log in to your account and set your preferences'),
+          );
+        }
       }
     };
 
@@ -156,7 +167,7 @@ const AppNavigation = () => {
     return () => {
       Linking.removeAllListeners('url');
     };
-  }, [handleDeepLink, token]);
+  }, [handleDeepLink, token, address, t]);
 
   return (
     <>
@@ -169,6 +180,7 @@ const AppNavigation = () => {
             name="Splash"
             component={Splash}
             options={{headerShown: false}}
+            initialParams={{handleDeepLink}}
           />
           <Stack.Screen
             name="SignUp"
