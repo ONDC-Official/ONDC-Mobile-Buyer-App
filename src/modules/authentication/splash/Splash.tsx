@@ -30,7 +30,6 @@ const Splash: React.FC<Splash> = ({navigation, route}) => {
   const styles = makeStyles();
 
   const navigateToLogin = () => {
-    console.log('Navigate to login splash');
     navigation.reset({
       index: 0,
       routes: [{name: 'Login'}],

@@ -13,14 +13,13 @@ import {
   Portal,
   Text,
 } from 'react-native-paper';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
-  compareIgnoringSpaces,
   getPriceWithCustomisations,
   isItemCustomization,
   showToastWithGravity,
@@ -34,11 +33,7 @@ import Payment from './components/Payment';
 import useConfirmItems from '../../../hooks/useConfirmItems';
 import CloseSheetContainer from '../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../utils/theme';
-import useReadAudio from '../../../hooks/useReadAudio';
-import {
-  MANUAL_LINK,
-  VIEW_DELIVERY_OPTIONS_COMMAND,
-} from '../../../utils/constants';
+import {MANUAL_LINK} from '../../../utils/constants';
 import useFormatNumber from '../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../toolkit/reducer/cart';
 import ReferenceIcon from '../../../assets/reference.svg';
@@ -47,7 +42,6 @@ const screenHeight: number = Dimensions.get('screen').height;
 
 const SubCart = ({route: {params}}: any) => {
   const {formatNumber} = useFormatNumber();
-  const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
   const {t} = useTranslation();
   const dispatch = useDispatch();
@@ -113,10 +107,6 @@ const SubCart = ({route: {params}}: any) => {
     updateSelectedItemsForInit,
   } = useSelectItems(openFulfillmentSheet);
 
-  const {language} = useSelector(({auth}) => auth);
-  const {userInput, stopAndDestroyVoiceListener, setAllowRestarts} =
-    useReadAudio(language);
-
   const {
     confirmOrderLoading,
     handleConfirmOrder,
@@ -124,7 +114,7 @@ const SubCart = ({route: {params}}: any) => {
     setDeliveryAddress,
     activePaymentMethod,
     setActivePaymentMethod,
-  } = useConfirmItems(closePaymentSheet, stopAndDestroyVoiceListener);
+  } = useConfirmItems(closePaymentSheet);
 
   const showQuoteError = () => {
     let msg: string = quoteItemProcessing
@@ -148,16 +138,14 @@ const SubCart = ({route: {params}}: any) => {
   };
 
   const navigateToHome = () => {
-    stopAndDestroyVoiceListener().then(() => {
-      if (providerWiseItems?.length > 0) {
-        const routeParams: any = {
-          brandId: providerWiseItems[0]?.items[0]?.item?.provider?.id,
-        };
-        routeParams.outletId =
-          providerWiseItems[0]?.items[0]?.item?.location_details?.id;
-        navigation.navigate('BrandDetails', routeParams);
-      }
-    });
+    if (providerWiseItems?.length > 0) {
+      const routeParams: any = {
+        brandId: providerWiseItems[0]?.items[0]?.item?.provider?.id,
+      };
+      routeParams.outletId =
+        providerWiseItems[0]?.items[0]?.item?.location_details?.id;
+      navigation.navigate('BrandDetails', routeParams);
+    }
   };
 
   const detectAddressNavigation = () => {
@@ -172,31 +160,9 @@ const SubCart = ({route: {params}}: any) => {
     Linking.openURL(MANUAL_LINK).then(() => {});
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      if (voiceDetectionStarted.current) {
-        setAllowRestarts();
-      }
-    }, []),
-  );
-
   useEffect(() => {
     setDeliveryAddress(address);
   }, [address]);
-
-  useEffect(() => {
-    if (userInput.length > 0) {
-      const input = userInput.toLowerCase();
-      if (VIEW_DELIVERY_OPTIONS_COMMAND.includes(input)) {
-        onCheckoutFromCart(deliveryAddress).then(() => {});
-      } else if (
-        fulfillmentSheetShown.current &&
-        compareIgnoringSpaces('proceed to pay', input)
-      ) {
-        showPaymentOption();
-      }
-    }
-  }, [userInput, deliveryAddress]);
 
   useEffect(() => {
     try {
@@ -703,7 +669,6 @@ const SubCart = ({route: {params}}: any) => {
           container: styles.rbSheet,
         }}>
         <Payment
-          userInput={userInput}
           productsQuote={productsQuote}
           cartItems={cartItems}
           updatedCartItemsData={selectedItems}
