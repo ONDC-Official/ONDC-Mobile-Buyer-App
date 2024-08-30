@@ -11,6 +11,8 @@ import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
 import AudioRecorder from './AudioRecorder';
 import QRButton from './QRButton';
+import WishList from './WishList';
+import CartIcon from './CartIcon';
 import {isIOS} from '../../../../../utils/constants';
 
 type HeaderProps = {
@@ -63,12 +65,11 @@ const Header: React.FC<HeaderProps> = ({
     <View style={styles.container}>
       {!disableAddress && (
         <View style={styles.row}>
-          <FastImage
-            source={require('../../../../../assets/header_logo.png')}
-            style={styles.headerImage}
-            resizeMode={'contain'}
-          />
           <AddressTag onPress={onPress} />
+          <View style={{flexDirection: 'row', gap: 22}}>
+            <WishList />
+            <CartIcon />
+          </View>
         </View>
       )}
       <View style={styles.searchContainer}>
@@ -121,6 +122,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.primary,
       height: 60,
       gap: 15,
+      marginBottom:8
     },
     backButton: {
       alignItems: 'center',
@@ -143,8 +145,8 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.white,
     },
     headerImage: {
-      width: 75,
-      height: 25,
+      width: 32,
+      height: 32,
       objectFit: 'contain',
     },
   });

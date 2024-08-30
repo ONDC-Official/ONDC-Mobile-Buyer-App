@@ -1,5 +1,11 @@
 import React, {memo, useEffect, useRef, useState} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Searchbar, Text} from 'react-native-paper';
 import axios from 'axios';
 import {useTranslation} from 'react-i18next';
@@ -16,6 +22,7 @@ import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
 import {useAppTheme} from '../../../../utils/theme';
 import FiltersIcon from '../../../../assets/filter.svg';
 import FilterList from '../components/FilterList';
+import FastImage from 'react-native-fast-image';
 
 const CancelToken = axios.CancelToken;
 
@@ -144,17 +151,36 @@ const Orders: React.FC<any> = () => {
     );
   }
 
+  const goBack = () => {
+    navigation.goBack();
+  };
+
   return (
     <>
       <View style={styles.pageContainer}>
+        <StatusBar
+          backgroundColor={theme.colors.white}
+          barStyle={'dark-content'}
+        />
+        <View style={styles.header}>
+          <TouchableOpacity onPress={goBack}>
+            <FastImage
+              source={require('../../../../assets/arrow_back.png')}
+              style={styles.backArrow}
+            />
+          </TouchableOpacity>
+          <Text variant={'titleLarge'} style={styles.pageTitle}>
+            {t('Profile.Order History')}
+          </Text>
+        </View>
         <View style={styles.searchHeader}>
           <Searchbar
             editable
-            iconColor={theme.colors.neutral400}
+            iconColor={theme.colors.primary}
             rippleColor={theme.colors.neutral400}
             inputStyle={styles.searchInput}
             style={styles.search}
-            placeholderTextColor={theme.colors.neutral400}
+            placeholderTextColor={theme.colors.neutral300}
             placeholder={t('Orders.Search')}
             // onChangeText={onChangeSearch}
             // onBlur={onSearchComplete}
@@ -163,10 +189,10 @@ const Orders: React.FC<any> = () => {
           <TouchableOpacity
             style={styles.filterButton}
             onPress={() => refFilterSheet.current.open()}>
-            <Text variant={'labelLarge'} style={styles.filterButtonText}>
+            <FiltersIcon width={14} height={14} />
+            <Text variant={'bodyMedium'} style={styles.filterButtonText}>
               {t('Orders.Filter')}
             </Text>
-            <FiltersIcon width={18} height={19} />
           </TouchableOpacity>
         </View>
         <FlatList
@@ -209,6 +235,18 @@ const makeStyles = (colors: any) =>
       flex: 1,
       backgroundColor: colors.white,
     },
+    header: {
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+      marginBottom: 8,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 20,
+      backgroundColor: colors.white,
+    },
+    pageTitle: {
+      color: colors.neutral400,
+    },
     searchHeader: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -216,6 +254,10 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 16,
       width: '100%',
       marginBottom: 16,
+    },
+    backArrow: {
+      height: 16,
+      width: 16,
     },
     filterButton: {
       flexDirection: 'row',
@@ -240,7 +282,7 @@ const makeStyles = (colors: any) =>
     },
     search: {
       flex: 1,
-      height: 40,
+      height: 44,
       backgroundColor: colors.white,
       borderWidth: 1,
       borderColor: colors.neutral100,

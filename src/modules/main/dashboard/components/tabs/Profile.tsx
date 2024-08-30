@@ -1,5 +1,11 @@
 import {Text} from 'react-native-paper';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -40,10 +46,6 @@ const Profile = () => {
       action: navigateToProfile,
     },
     {
-      title: t('Profile.Order History'),
-      action: navigateToOrders,
-    },
-    {
       title: t('Profile.Complaints'),
       action: navigateToComplaints,
     },
@@ -59,6 +61,10 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        backgroundColor={theme.colors.white}
+        barStyle={'dark-content'}
+      />
       <View style={styles.header}>
         <Text variant={'titleLarge'} style={styles.pageTitle}>
           {t('Profile.Profile')}

@@ -20,7 +20,6 @@ import CouponList from '../modules/main/category/CouponList';
 import BrandDetails from '../modules/main/provider/BrandDetails';
 import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
 import Outlets from '../modules/main/provider/Outlets';
-import Orders from '../modules/main/order/list/Orders';
 import ChooseLanguage from '../modules/main/profile/ChooseLanguage';
 import CancelOrder from '../modules/main/order/details/CancelOrder';
 import SearchProducts from '../modules/main/dashboard/SearchProducts';
@@ -36,6 +35,8 @@ import ShopByCategory from '../modules/main/category/ShopByCategory';
 import {theme} from '../utils/theme';
 import FeaturedCategories from '../modules/main/category/FeaturedCategories';
 import SellerQRCode from '../modules/main/dashboard/SellerQRCode';
+import List from '../modules/main/dashboard/components/tabs/List';
+import DashboardCart from '../modules/main/dashboard/components/tabs/Cart';
 
 const Stack = createStackNavigator();
 
@@ -155,15 +156,6 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="ComplaintDetails"
           component={ComplaintDetails}
-          options={{
-            title: '',
-            headerStatusBarHeight: 0,
-          }}
-        />
-
-        <Stack.Screen
-          name="Orders"
-          component={Orders}
           options={{
             title: '',
             headerStatusBarHeight: 0,
@@ -291,6 +283,16 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="SellerQRCode"
           component={SellerQRCode}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="List"
+          component={List}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="DashboardCart"
+          component={DashboardCart}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

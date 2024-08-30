@@ -6,6 +6,7 @@ import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
 import {useAppTheme} from '../../../../../utils/theme';
+import FastImage from 'react-native-fast-image';
 
 interface AddressTag {
   onPress?: () => void;
@@ -20,9 +21,13 @@ const AddressTag: React.FC<AddressTag> = ({onPress}) => {
   if (address) {
     return (
       <TouchableOpacity style={styles.addressContainer} onPress={onPress}>
-        <Icon name={'location-pin'} color={theme.colors.white} size={20} />
+        <FastImage
+          source={require('../../../../../assets/ONDClogo.png')}
+          style={styles.headerImage}
+          resizeMode={'contain'}
+        />
         <Text variant={'bodySmall'} style={styles.deliverTo}>
-          {t('Home.Deliver to')}
+          {t('Home.Deliver to')}{' '}
         </Text>
         <Text variant={'bodyLarge'} style={styles.address}>
           {address?.address?.areaCode
@@ -44,12 +49,17 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     deliverTo: {
-      marginHorizontal: 4,
+      marginLeft: 20,
       color: colors.neutral50,
     },
     address: {
       marginEnd: 8,
       color: colors.neutral50,
+    },
+    headerImage: {
+      width: 32,
+      height: 32,
+      objectFit: 'contain',
     },
   });
 

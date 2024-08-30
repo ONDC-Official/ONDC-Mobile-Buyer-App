@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 
 import Header from '../header/Header';
 import Categories from '../home/Categories';
@@ -18,6 +18,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor={theme.colors.primary}/>
       <Header onPress={openAddressList} />
       <Categories />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

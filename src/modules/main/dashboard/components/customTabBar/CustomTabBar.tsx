@@ -7,7 +7,7 @@ import {useTranslation} from 'react-i18next';
 
 import HomeIcon from '../../../../../assets/dashboard/home.svg';
 import CartIcon from '../../../../../assets/dashboard/cart.svg';
-import ListIcon from '../../../../../assets/dashboard/list.svg';
+import ListIcon from '../../../../../assets/dashboard/list_alt.svg';
 import ProfileIcon from '../../../../../assets/dashboard/profile.svg';
 import HomeActiveIcon from '../../../../../assets/dashboard/home_a.svg';
 import CartActiveIcon from '../../../../../assets/dashboard/cart_a.svg';
@@ -25,8 +25,8 @@ const TabIcon: React.FC<TabIcon> = ({name, isFocused}) => {
     switch (name) {
       case 'Home':
         return <HomeActiveIcon width={20} height={20} color={'#686868'} />;
-      case 'List':
-        return <ListActiveIcon width={20} height={20} color={'#686868'} />;
+      case 'Orders':
+        return <ListActiveIcon width={18} height={18} color={'#686868'} />;
       case 'Cart':
         return <CartActiveIcon width={20} height={20} color={'#686868'} />;
       default:
@@ -36,8 +36,8 @@ const TabIcon: React.FC<TabIcon> = ({name, isFocused}) => {
     switch (name) {
       case 'Home':
         return <HomeIcon width={20} height={20} color={'#fff'} />;
-      case 'List':
-        return <ListIcon width={20} height={20} color={'#fff'} />;
+      case 'Orders':
+        return <ListIcon width={18} height={18} color={'#fff'} />;
       case 'Cart':
         return <CartIcon width={20} height={20} color={'#fff'} />;
       default:
@@ -150,6 +150,7 @@ const makeStyles = (colors: any) =>
       borderTopLeftRadius: 12,
       borderTopRightRadius: 12,
       backgroundColor: colors.white,
+      gap: 6,
     },
     tab: {
       flex: 1,
@@ -157,11 +158,14 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
     },
     button: {
+      width: '100%',
+      height: 36,
       paddingVertical: 6,
       paddingHorizontal: 12,
       borderRadius: 10,
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'center',
     },
     activeButton: {
       backgroundColor: colors.primary,
