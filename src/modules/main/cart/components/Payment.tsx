@@ -181,7 +181,7 @@ const Payment: React.FC<Payment> = ({
           if (updatedCartItems.current) {
             let findItemFromQuote =
               updatedCartItems.current[0].message.quote.items.find(
-                (data: any) => data.id === itemData.local_id,
+                (one: any) => one.id === itemData.local_id,
               );
             if (findItemFromQuote) {
               itemData.parent_item_id = findItemFromQuote.parent_item_id;

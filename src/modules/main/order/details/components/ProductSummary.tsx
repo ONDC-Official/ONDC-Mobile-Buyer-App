@@ -88,8 +88,9 @@ const ProductSummary = ({
             (tag: any) =>
               tag?.code === 'type' &&
               tag?.list?.some(
-                (item: any) =>
-                  item?.code === 'type' && item?.value === 'customization',
+                (childItem: any) =>
+                  childItem?.code === 'type' &&
+                  childItem?.value === 'customization',
               ),
           ),
         );
@@ -105,7 +106,7 @@ const ProductSummary = ({
 
         let returnedCount = 0;
         const returnFulfilments = orderDetails.fulfillments.filter(
-          (fulfilment: any) => fulfilment.type === 'Return',
+          (one: any) => one.type === 'Return',
         );
         returnFulfilments.forEach((fulfillment: any) => {
           const returnTag = fulfillment.tags.find(
