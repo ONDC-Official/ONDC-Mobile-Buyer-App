@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {createCustomizationAndGroupMapping} from '../../../../utils/utils';
 import CustomizationGroup from './CustomizationGroup';
 
@@ -157,7 +157,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
       );
       const state: any = {firstGroup};
 
-      const processGroup = (id: any) => {
+      const processCustomizationGroup = (id: any) => {
         const group: any = customizationGroups.find(item => item.id === id);
         if (!group) {
           return;
@@ -195,13 +195,13 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
 
         if (childGroups) {
           for (const childGroup of childGroups) {
-            processGroup(childGroup);
+            processCustomizationGroup(childGroup);
           }
         }
       };
 
       if (firstGroup) {
-        processGroup(firstGroup.id);
+        processCustomizationGroup(firstGroup.id);
         setCustomizationState(state);
       }
     };
@@ -349,12 +349,14 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
     setCustomizationState(updatedState);
   };
 
-  const minSeq = findMinMaxSeq(customizationGroups).minSeq;
-  const firstGroup = customizationGroups.find(group => group.seq === minSeq);
+  const initialGroup = useMemo(() => {
+    const lowestSequence = findMinMaxSeq(customizationGroups).minSeq;
+    return customizationGroups.find(group => group.seq === lowestSequence);
+  }, [customizationGroups]);
 
   return (
     <CustomizationGroup
-      group={customizationState[firstGroup?.id]}
+      group={customizationState[initialGroup?.id]}
       customizationState={customizationState}
       customizationGroups={customizationGroups}
       handleClick={handleClick}
