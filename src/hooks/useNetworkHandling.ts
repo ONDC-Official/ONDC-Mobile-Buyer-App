@@ -19,7 +19,7 @@ export default () => {
     return config;
   };
 
-  const getAuthConfigForToken = (cancelToken = null, accessToken: string) => {
+  const getAuthConfigForToken = (accessToken: string, cancelToken = null) => {
     const config: any = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -77,7 +77,7 @@ export default () => {
     cancelToken: any,
   ) => {
     try {
-      const config = getAuthConfigForToken(cancelToken, accessToken);
+      const config = getAuthConfigForToken(accessToken, cancelToken);
       return await axios.get(encodeURI(url), config);
     } catch (e) {
       console.log(e, url);

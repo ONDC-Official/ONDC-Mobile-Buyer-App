@@ -1,6 +1,5 @@
 import Voice from '@react-native-voice/voice';
-import {useEffect, useRef, useState} from 'react';
-import {START_AUDIO_LISTENER_COMMAND} from '../utils/constants';
+import {useRef, useState} from 'react';
 
 export default (language: string) => {
   const userLatestInteraction = useRef<boolean>(false);
@@ -9,43 +8,7 @@ export default (language: string) => {
   const [userInput, setUserInput] = useState<string>('');
   const allowRestart = useRef<boolean>(true);
 
-  const onSpeechResults = async (event: any) => {
-    if (!userLatestInteraction.current) {
-      const isPresent = START_AUDIO_LISTENER_COMMAND.includes(
-        event.value[0].toLowerCase(),
-      );
-      setUserInteractionStarted(isPresent);
-      userLatestInteraction.current = isPresent;
-    } else {
-      setUserInput(event.value[0]);
-    }
-    await restartVoice();
-  };
-
-  const restartVoice = async () => {
-    // try {
-    //   if (allowRestart.current) {
-    //     await Voice.stop();
-    //     await startVoice();
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  };
-
-  const startVoice = async () => {
-    // try {
-    //   await Voice.destroy();
-    //   const locale = getLocale(language);
-    //   await Voice.start(locale); // Start listening for Hindi speech
-    // } catch (error) {
-    //   console.error(error);
-    // }
-  };
-
-  const onSpeechError = async () => {
-    await restartVoice();
-  };
+  const startVoice = async () => {};
 
   const stopAndDestroyVoiceListener = async () => {
     try {
@@ -62,15 +25,6 @@ export default (language: string) => {
   const setAllowRestarts = () => {
     allowRestart.current = true;
   };
-
-  useEffect(() => {
-    // Voice.onSpeechResults = onSpeechResults;
-    // Voice.onSpeechError = onSpeechError;
-    //
-    // return () => {
-    //   Voice.destroy().then(Voice.removeAllListeners);
-    // };
-  }, []);
 
   return {
     startVoice,
