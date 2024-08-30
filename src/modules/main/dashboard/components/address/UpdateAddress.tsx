@@ -27,8 +27,8 @@ const CancelToken = axios.CancelToken;
 const UpdateAddress: React.FC<UpdateAddress> = ({
   navigation,
   route: {params},
-}) => {
-  const refreshToken = useRefreshToken();
+}): JSX.Element => {
+  const {getUserToken} = useRefreshToken();
   const {t} = useTranslation();
   const source = useRef<any>(null);
   const {postDataWithAuth} = useNetworkHandling();
@@ -87,6 +87,7 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
     navigation.setOptions({
       title: t('Address Form.Update Delivery Address'),
     });
+    getUserToken().then(() => {});
   }, []);
 
   return (

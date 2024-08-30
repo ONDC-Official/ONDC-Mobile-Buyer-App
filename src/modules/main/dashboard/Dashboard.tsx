@@ -16,12 +16,13 @@ const Tab = createBottomTabNavigator();
 
 const Dashboard: React.FC<Dashboard> = () => {
   const {getCartItems} = useCartItems();
-  const refreshToken = useRefreshToken();
+  const {getUserToken} = useRefreshToken();
   const {getCategoryDetails} = useCategoryDetails();
 
   useEffect(() => {
     getCategoryDetails().then(() => {});
     getCartItems().then(() => {});
+    getUserToken().then(() => {});
   }, []);
 
   return (

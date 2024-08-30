@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 import Header from '../header/Header';
 import Categories from '../home/Categories';
@@ -20,9 +20,7 @@ const Home = () => {
     <View style={styles.container}>
       <Header onPress={openAddressList} />
       <Categories />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <StoresNearMe />
-      </ScrollView>
+      <StoresNearMe />
       <AddressSheet addressSheet={addressSheet} />
     </View>
   );

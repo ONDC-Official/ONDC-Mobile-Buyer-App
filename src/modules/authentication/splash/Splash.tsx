@@ -109,7 +109,6 @@ const Splash: React.FC<Splash> = ({navigation, route}) => {
         navigateToLogin();
       }
     } catch (error) {
-      console.log('Error', error);
       navigateToLogin();
     }
   };
