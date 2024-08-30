@@ -17,7 +17,7 @@ import {keyExtractor} from '../../../../../utils/utils';
 
 const CancelToken = axios.CancelToken;
 
-const DashboardCart = ({navigation}: any) => {
+const Cart = ({navigation}: any) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -167,4 +167,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default DashboardCart;
+export default Cart;
