@@ -30,7 +30,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
   route: {params},
 }) => {
   const dispatch = useDispatch();
-  const {} = useRefreshToken();
+  const refreshToken = useRefreshToken();
   const {t} = useTranslation();
   const source = useRef<any>(null);
   const {name, emailId} = useSelector(({auth}) => auth);

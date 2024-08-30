@@ -55,7 +55,7 @@ const layerStyles: any = {
   },
 };
 
-const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
+const TrackOrderButton: React.FC<TrackOrderButton> = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const appTheme = useAppTheme();

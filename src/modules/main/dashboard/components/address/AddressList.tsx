@@ -57,7 +57,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
   const isFocused = useIsFocused();
   const {address} = useSelector((state: any) => state.address);
   const source = useRef<any>(null);
-  const {} = useRefreshToken();
+  const refreshToken = useRefreshToken();
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState<boolean>(true);

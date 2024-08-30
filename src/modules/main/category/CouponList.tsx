@@ -7,11 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {useTranslation} from 'react-i18next';
-import {useAppTheme} from '../../../utils/theme';
 import {Text} from 'react-native-paper';
+import {useAppTheme} from '../../../utils/theme';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import {API_BASE_URL, OFFERS} from '../../../utils/apiActions';
 
@@ -20,10 +17,7 @@ const CheckBox = require('../../../assets/check.png');
 
 interface CouponList {}
 
-const CouponList: React.FC<CouponList> = ({}) => {
-  const {t} = useTranslation();
-  const navigation = useNavigation<StackNavigationProp<any>>();
-
+const CouponList: React.FC<CouponList> = () => {
   const [checkTick, setCheckTick] = useState(false);
   const productSource = useRef<any>(null);
 
@@ -41,15 +35,14 @@ const CouponList: React.FC<CouponList> = ({}) => {
   };
 
   const getCoupon = async () => {
-    //https://buyer-app.ondc.org/clientApis/v2/offers?latitude=12.981243&longitude=77.595034&provider=preprod.xpressbaazaar.com_ONDC:RET12_79e060e7-a8f9-4c56-8e55-2b3321ccce87
-    const {data} = await getDataWithAuth(
+    await getDataWithAuth(
       `${API_BASE_URL}${OFFERS}?latitude=12.981243&longitude=77.595034&provider=preprod.xpressbaazaar.com_ONDC:RET12_79e060e7-a8f9-4c56-8e55-2b3321ccce87`,
       productSource.current.token,
     );
   };
 
   useEffect(() => {
-    getCoupon();
+    getCoupon().then(() => {});
   }, []);
 
   return (

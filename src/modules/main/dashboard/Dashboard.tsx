@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 
 const Dashboard: React.FC<Dashboard> = () => {
   const {getCartItems} = useCartItems();
-  const {} = useRefreshToken();
+  const refreshToken = useRefreshToken();
   const {getCategoryDetails} = useCategoryDetails();
 
   useEffect(() => {
