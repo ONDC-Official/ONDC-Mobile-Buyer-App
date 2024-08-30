@@ -136,6 +136,13 @@ const TrackOrderButton: React.FC<TrackOrderButton> = () => {
     };
   };
 
+  const trackingNotAvailable = () => {
+    dispatch(updateRequestingTracker(false));
+    showToastWithGravity(
+      t('Orders.Tracking information is not provided by the provider'),
+    );
+  };
+
   // on track order
   const getTrackOrderDetails = async (messageId: any) => {
     try {
@@ -151,10 +158,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = () => {
       ];
       const {message} = data[0];
       if (message.tracking.status === 'active' && message.tracking.url === '') {
-        dispatch(updateRequestingTracker(false));
-        showToastWithGravity(
-          t('Orders.Tracking information is not provided by the provider'),
-        );
+        trackingNotAvailable();
         return;
       } else if (
         message.tracking.status === 'active' &&
@@ -194,10 +198,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = () => {
         setTrackingUrl('');
         trackingSheet.current.open();
       } else {
-        dispatch(updateRequestingTracker(false));
-        showToastWithGravity(
-          t('Orders.Tracking information is not provided by the provider'),
-        );
+        trackingNotAvailable();
         return;
       }
     } catch (err: any) {
