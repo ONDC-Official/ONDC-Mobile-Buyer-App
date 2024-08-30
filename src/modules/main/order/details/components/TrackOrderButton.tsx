@@ -136,13 +136,6 @@ const TrackOrderButton: React.FC<TrackOrderButton> = () => {
     };
   };
 
-  const trackingNotAvailable = () => {
-    dispatch(updateRequestingTracker(false));
-    showToastWithGravity(
-      t('Orders.Tracking information is not provided by the provider'),
-    );
-  };
-
   // on track order
   const getTrackOrderDetails = async (messageId: any) => {
     try {
@@ -157,10 +150,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = () => {
         data[0],
       ];
       const {message} = data[0];
-      if (message.tracking.status === 'active' && message.tracking.url === '') {
-        trackingNotAvailable();
-        return;
-      } else if (
+      if (
         message.tracking.status === 'active' &&
         (message?.tracking?.url !== '' || message?.tracking?.url !== undefined)
       ) {
@@ -198,7 +188,10 @@ const TrackOrderButton: React.FC<TrackOrderButton> = () => {
         setTrackingUrl('');
         trackingSheet.current.open();
       } else {
-        trackingNotAvailable();
+        dispatch(updateRequestingTracker(false));
+        showToastWithGravity(
+          t('Orders.Tracking information is not provided by the provider'),
+        );
         return;
       }
     } catch (err: any) {
@@ -291,7 +284,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = () => {
       MapplsGL.setMapSDKKey(mapResponse.data.access_token);
       MapplsGL.setRestAPIKey(mapResponse.data.access_token);
       MapplsGL.setAtlasClientId(mapResponse.data.client_id);
-      MapplsGL.setAtlasClientSecret(Config.MMI_CLIENT_SECRET);
+      MapplsGL.setAtlasClientSecret(Config.MMI_CLIENT_SECRET ?? '');
     });
   }, []);
 
