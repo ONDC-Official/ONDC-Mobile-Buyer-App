@@ -9,13 +9,13 @@ import AboutProduct from './components/AboutProduct';
 import {useAppTheme} from '../../../../utils/theme';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 
-interface ProductDetails {
+interface FBProductDetails {
   product: any;
   children: any;
   inStock: boolean;
 }
 
-const ProductDetails: React.FC<ProductDetails> = ({
+const FBProductDetails: React.FC<FBProductDetails> = ({
   product,
   children,
   inStock = true,
@@ -149,4 +149,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default ProductDetails;
+export default FBProductDetails;
