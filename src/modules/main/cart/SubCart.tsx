@@ -93,7 +93,6 @@ const SubCart = ({route: {params}}: any) => {
   };
 
   const {
-    loading,
     checkoutLoading,
     onCheckoutFromCart,
     haveDistinctProviders,
@@ -103,13 +102,11 @@ const SubCart = ({route: {params}}: any) => {
     cartItems,
     setCartItems,
     setSelectedItems,
-    selectedItemsForInit,
     updateSelectedItemsForInit,
   } = useSelectItems(openFulfillmentSheet);
 
   const {
     confirmOrderLoading,
-    handleConfirmOrder,
     deliveryAddress,
     setDeliveryAddress,
     activePaymentMethod,
@@ -263,8 +260,6 @@ const SubCart = ({route: {params}}: any) => {
 
               if (error && error.code === '30009') {
                 cartList.splice(cartIndex, 1);
-              }
-              if (error && error.code === '40002') {
               }
               uuid = uuid + 1;
               return {
@@ -527,103 +522,97 @@ const SubCart = ({route: {params}}: any) => {
   return (
     <>
       <View style={styles.pageContainer}>
-        {loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size={'large'} color={theme.colors.primary} />
-          </View>
-        ) : (
-          <>
-            {cartItems.length === 0 ? (
-              <EmptyCart />
-            ) : (
-              <>
-                <View
-                  style={styles.pageContainer}
-                  pointerEvents={checkoutLoading ? 'none' : 'auto'}>
-                  <CartItems
-                    fullCartItems={cartData?.cartItems}
-                    providerWiseItems={providerWiseItems}
-                    cartItems={cartItems}
-                    setCartItems={updateDetailCartItems}
-                    updateSpecificCartItems={updateSpecificCartItems}
-                    haveDistinctProviders={haveDistinctProviders}
-                    isProductCategoryIsDifferent={isProductCategoryIsDifferent}
-                  />
+        <>
+          {cartItems.length === 0 ? (
+            <EmptyCart />
+          ) : (
+            <>
+              <View
+                style={styles.pageContainer}
+                pointerEvents={checkoutLoading ? 'none' : 'auto'}>
+                <CartItems
+                  fullCartItems={cartData?.cartItems}
+                  providerWiseItems={providerWiseItems}
+                  cartItems={cartItems}
+                  setCartItems={updateDetailCartItems}
+                  updateSpecificCartItems={updateSpecificCartItems}
+                  haveDistinctProviders={haveDistinctProviders}
+                  isProductCategoryIsDifferent={isProductCategoryIsDifferent}
+                />
+              </View>
+              <Card style={styles.summaryCard}>
+                <View style={styles.summaryRow}>
+                  <View style={styles.address}>
+                    <Text variant={'bodyLarge'} style={styles.addressTitle}>
+                      {t('Cart.Delivery Address')}
+                    </Text>
+                    <Text variant={'labelMedium'} style={styles.addressLabel}>
+                      {deliveryAddress?.address?.street},{' '}
+                      {deliveryAddress?.address?.landmark
+                        ? `${deliveryAddress?.address?.landmark},`
+                        : ''}{' '}
+                      {deliveryAddress?.address?.city},{' '}
+                      {deliveryAddress?.address?.state},{' '}
+                      {deliveryAddress?.address?.areaCode}{' '}
+                      {deliveryAddress?.descriptor?.name} (
+                      {deliveryAddress?.descriptor?.phone})
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    disabled={
+                      isProductAvailableQuantityIsZero ||
+                      isProductCategoryIsDifferent ||
+                      haveDistinctProviders ||
+                      checkoutLoading
+                    }
+                    style={styles.changeButton}
+                    onPress={() => addressSheet.current.open()}>
+                    <Text
+                      variant={'labelMedium'}
+                      style={styles.changeButtonLabel}>
+                      {t('Cart.Change')}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-                <Card style={styles.summaryCard}>
-                  <View style={styles.summaryRow}>
-                    <View style={styles.address}>
-                      <Text variant={'bodyLarge'} style={styles.addressTitle}>
-                        {t('Cart.Delivery Address')}
-                      </Text>
-                      <Text variant={'labelMedium'} style={styles.addressLabel}>
-                        {deliveryAddress?.address?.street},{' '}
-                        {deliveryAddress?.address?.landmark
-                          ? `${deliveryAddress?.address?.landmark},`
-                          : ''}{' '}
-                        {deliveryAddress?.address?.city},{' '}
-                        {deliveryAddress?.address?.state},{' '}
-                        {deliveryAddress?.address?.areaCode}{' '}
-                        {deliveryAddress?.descriptor?.name} (
-                        {deliveryAddress?.descriptor?.phone})
-                      </Text>
-                    </View>
-                    <TouchableOpacity
+                <View style={styles.summaryDivider} />
+                <View style={styles.summaryRow}>
+                  <View>
+                    <Text variant="titleLarge" style={styles.total}>
+                      ₹{formatNumber(cartTotal)}
+                    </Text>
+                    <Text variant="bodyMedium" style={styles.itemCount}>
+                      {formatNumber(cartItems.length)} {t('Cart.items')}
+                    </Text>
+                  </View>
+                  <View>
+                    <Button
                       disabled={
                         isProductAvailableQuantityIsZero ||
                         isProductCategoryIsDifferent ||
                         haveDistinctProviders ||
                         checkoutLoading
                       }
-                      style={styles.changeButton}
-                      onPress={() => addressSheet.current.open()}>
-                      <Text
-                        variant={'labelMedium'}
-                        style={styles.changeButtonLabel}>
-                        {t('Cart.Change')}
-                      </Text>
-                    </TouchableOpacity>
+                      icon={() =>
+                        checkoutLoading ? (
+                          <ActivityIndicator
+                            size={14}
+                            color={theme.colors.primary}
+                          />
+                        ) : (
+                          <></>
+                        )
+                      }
+                      style={styles.deliveryButton}
+                      mode={'contained'}
+                      onPress={() => onCheckoutFromCart(deliveryAddress)}>
+                      {t('Cart.View Delivery Options')}
+                    </Button>
                   </View>
-                  <View style={styles.summaryDivider} />
-                  <View style={styles.summaryRow}>
-                    <View>
-                      <Text variant="titleLarge" style={styles.total}>
-                        ₹{formatNumber(cartTotal)}
-                      </Text>
-                      <Text variant="bodyMedium" style={styles.itemCount}>
-                        {formatNumber(cartItems.length)} {t('Cart.items')}
-                      </Text>
-                    </View>
-                    <View>
-                      <Button
-                        disabled={
-                          isProductAvailableQuantityIsZero ||
-                          isProductCategoryIsDifferent ||
-                          haveDistinctProviders ||
-                          checkoutLoading
-                        }
-                        icon={() =>
-                          checkoutLoading ? (
-                            <ActivityIndicator
-                              size={14}
-                              color={theme.colors.primary}
-                            />
-                          ) : (
-                            <></>
-                          )
-                        }
-                        style={styles.deliveryButton}
-                        mode={'contained'}
-                        onPress={() => onCheckoutFromCart(deliveryAddress)}>
-                        {t('Cart.View Delivery Options')}
-                      </Button>
-                    </View>
-                  </View>
-                </Card>
-              </>
-            )}
-          </>
-        )}
+                </View>
+              </Card>
+            </>
+          )}
+        </>
       </View>
       <RBSheet
         closeOnPressMask={false}
