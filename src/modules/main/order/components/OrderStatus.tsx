@@ -12,15 +12,6 @@ const OrderStatus: React.FC<OrderStatus> = ({status}) => {
   const styles = makeStyles(theme.colors);
 
   switch (status) {
-    case 'Created':
-      return (
-        <View style={[styles.container, styles.created]}>
-          <Text variant={'labelLarge'} style={styles.createdLabel}>
-            {status}
-          </Text>
-        </View>
-      );
-
     case 'Shipped':
     case 'Updated':
       return (

@@ -49,8 +49,7 @@ const DashboardCart = ({navigation}: any) => {
       dispatch(updateCartItems(response));
     } catch (error: any) {
       if (error.response) {
-        if (error.response.status === 404) {
-        } else {
+        if (error.response.status !== 404) {
           handleApiError(error);
         }
       } else {

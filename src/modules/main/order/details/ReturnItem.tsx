@@ -80,10 +80,9 @@ const ReturnItem = ({
       maxHeight: 300,
     };
     const response = await launchImageLibrary(options);
-    if (response.didCancel) {
-    } else if (response.errorMessage) {
+    if (response.errorMessage) {
       console.log('ImagePicker Error: ', response.errorMessage);
-    } else {
+    } else if (!response.didCancel) {
       setPhotos(response.assets);
     }
   };

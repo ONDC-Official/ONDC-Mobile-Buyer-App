@@ -25,6 +25,18 @@ const ValuesSkeleton = () => {
   );
 };
 
+const attributes = [
+  {
+    code: 'orderType',
+    name: 'Order Type',
+    values: [
+      {name: 'Created,Accepted,In-progress', value: 'Ongoing'},
+      {name: 'Completed', value: 'Completed'},
+      {name: 'Cancelled', value: 'Cancelled'},
+    ],
+  },
+];
+
 const FilterList: React.FC<FilterList> = ({
   selectedFilter,
   setSelectedFilter,
@@ -33,17 +45,6 @@ const FilterList: React.FC<FilterList> = ({
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const [attributes, setAttributes] = useState([
-    {
-      code: 'orderType',
-      name: 'Order Type',
-      values: [
-        {name: 'Created,Accepted,In-progress', value: 'Ongoing'},
-        {name: 'Completed', value: 'Completed'},
-        {name: 'Cancelled', value: 'Cancelled'},
-      ],
-    },
-  ]);
   const [currentAttribute, setCurrentAttribute] = useState<string>('orderType');
   const [currentValues, setCurrentValues] = useState<any[]>([]);
   const [selectedValue, setSelectedValue] = useState<any>({});
