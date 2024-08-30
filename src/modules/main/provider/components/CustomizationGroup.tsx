@@ -1,5 +1,5 @@
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Checkbox, Text, RadioButton} from 'react-native-paper';
+import {Checkbox, RadioButton, Text} from 'react-native-paper';
 import React, {useState} from 'react';
 import FastImage from 'react-native-fast-image';
 import Icon from 'react-native-vector-icons/FontAwesome5';

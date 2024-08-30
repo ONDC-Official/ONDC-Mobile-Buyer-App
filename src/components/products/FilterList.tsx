@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Button, Checkbox, Text} from 'react-native-paper';
+import {Checkbox, Text} from 'react-native-paper';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {useTranslation} from 'react-i18next';
