@@ -397,7 +397,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   }
 
   const disableActionButtons: boolean =
-    !(Number(product?.item_details?.quantity?.available?.count) >= 1) ||
+    (Number(product?.item_details?.quantity?.available?.count) < 1) ||
     itemOutOfStock ||
     addToCartLoading;
 
