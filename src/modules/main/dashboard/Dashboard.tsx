@@ -33,7 +33,6 @@ const Dashboard: React.FC<Dashboard> = () => {
       initialRouteName="Home"
       tabBar={props => <CustomTabBar {...props} />}>
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="List" component={List} />
       <Tab.Screen name="Cart" component={DashboardCart} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
