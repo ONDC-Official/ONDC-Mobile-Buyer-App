@@ -32,6 +32,10 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
     onSearch(searchQuery);
   };
 
+  const onClearIconPress = () => {
+    onSearch('');
+  };
+
   const onAudioSearchComplete = (query: string) => {
     if (query.length > 0) {
       onSearch(query);
@@ -49,13 +53,14 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
       <Searchbar
         editable
         iconColor={theme.colors.primary}
-        rippleColor={theme.colors.primary}
+        rippleColor={theme.colors.primary50}
         inputStyle={styles.searchInput}
         style={styles.search}
         placeholderTextColor={theme.colors.primary}
         placeholder={t('Home.Search')}
         onChangeText={onChangeSearch}
         onBlur={onSearchComplete}
+        onClearIconPress={onClearIconPress}
         value={searchQuery}
       />
       <AudioRecorder
