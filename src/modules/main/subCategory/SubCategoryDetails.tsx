@@ -71,7 +71,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
     ]).start(() => {
       saveMenuStatus = false;
     });
-  }, [navigation, params.category]);
+  }, [navigation, params.category,currentSubCategory]);
 
   const openCloseMenu = async () => {
     if (saveMenuStatus) {
