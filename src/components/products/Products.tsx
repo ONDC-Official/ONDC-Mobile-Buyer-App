@@ -215,6 +215,7 @@ const Products: React.FC<Products> = ({
       return item.list.length > 0 ? (
         <FlatList
           data={item.list}
+          numColumns={2}
           style={styles.nestedListContainer}
           renderItem={renderFlatListItem}
           keyExtractor={(one: any) => one.id}
@@ -292,12 +293,12 @@ const Products: React.FC<Products> = ({
         providerId={providerId}
         category={subCategories.length ? subCategories[0] : null}
       />
-      <View style={styles.searchContainer}>
+      {/* <View style={styles.searchContainer}>
         <ProductSearch
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
         />
-      </View>
+      </View> */}
       <SectionList
         ref={sectionListRef}
         stickySectionHeadersEnabled={false}

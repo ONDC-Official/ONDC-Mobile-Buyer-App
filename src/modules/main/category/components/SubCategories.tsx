@@ -7,7 +7,6 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 import {useAppTheme} from '../../../../utils/theme';
-import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithViewAll/SectionHeaderWithViewAll';
 import useSubCategoryName from '../../../../hooks/useSubCategoryName';
 
 interface SubCategories {
@@ -35,6 +34,7 @@ const SubCategories: React.FC<SubCategories> = ({
   };
 
   const list = useMemo(() => {
+    if(categories){
     let data = categories[categoryDomain];
     if (data.length > 0) {
       data = data.slice(0, 8);
@@ -48,6 +48,7 @@ const SubCategories: React.FC<SubCategories> = ({
     } else {
       return [];
     }
+  }
   }, [categoryDomain]);
 
   const renderItem = useCallback(
@@ -56,7 +57,6 @@ const SubCategories: React.FC<SubCategories> = ({
         return <View key={item.key} style={styles.brand} />;
       }
       let name = getSubcategoryName(item.code, item.label);
-      const numberOfLines = name.split(' ')[0].length > 8 ? 1 : 2;
 
       return (
         <TouchableOpacity
@@ -66,7 +66,6 @@ const SubCategories: React.FC<SubCategories> = ({
           <Text
             variant={'labelLarge'}
             style={styles.name}
-            numberOfLines={numberOfLines}
             ellipsizeMode={'tail'}>
             {name}
           </Text>
@@ -76,24 +75,22 @@ const SubCategories: React.FC<SubCategories> = ({
     [navigateToSubCategory, t],
   );
 
-  const navigateToAll = () => {
-    navigation.navigate('ShopByCategory', {
-      category: currentCategory,
-      categoryDomain,
-    });
+  const headerComponent = () => {
+    return (
+      <Text variant="titleLarge" style={{paddingHorizontal: 8}}>
+        {currentCategory}
+      </Text>
+    );
   };
 
   return (
     <View style={styles.sectionContainer}>
-      <SectionHeaderWithViewAll
-        title={t('SubCategories.Shop By Category')}
-        viewAll={navigateToAll}
-      />
-
       <View style={styles.container}>
         <FlatList
           data={list}
-          numColumns={4}
+          numColumns={3}
+          contentContainerStyle={{paddingHorizontal: 8}}
+          ListHeaderComponent={headerComponent}
           keyExtractor={item => item.code}
           renderItem={renderItem}
         />
@@ -104,9 +101,7 @@ const SubCategories: React.FC<SubCategories> = ({
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    sectionContainer: {
-      marginTop: 28,
-    },
+    sectionContainer: {},
     container: {
       paddingHorizontal: 16,
       marginBottom: -12,
@@ -119,9 +114,9 @@ const makeStyles = (colors: any) =>
     brand: {
       flexGrow: 1,
       width: '25%',
-      marginVertical: 12,
-      paddingHorizontal: 8,
+      marginVertical: 8,
       alignItems: 'center',
+      marginHorizontal: 8,
     },
     alignCenter: {
       alignItems: 'center',
@@ -137,13 +132,14 @@ const makeStyles = (colors: any) =>
     },
     brandImage: {
       borderRadius: 10,
-      width: 60,
-      height: 60,
+      width: 83,
+      height: 83,
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: 8,
     },
     name: {
+      flex: 1,
       color: colors.neutral400,
       textAlign: 'center',
     },

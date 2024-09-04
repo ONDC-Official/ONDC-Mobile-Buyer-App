@@ -93,7 +93,7 @@ const SubCategories: React.FC<SubCategories> = ({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.allOptionsButton} onPress={navigateToAll}>
+      {/* <TouchableOpacity style={styles.allOptionsButton} onPress={navigateToAll}>
         <View style={styles.allOptionsContainer}>
           <AllOptionsIcon width={21} height={21} />
         </View>
@@ -103,13 +103,13 @@ const SubCategories: React.FC<SubCategories> = ({
           numberOfLines={2}>
           {t('Cart.All Options')}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <FlatList
         initialNumToRender={50}
         ref={flatListRef}
         showsHorizontalScrollIndicator={false}
         data={subCategories}
-        horizontal
+        // horizontal
         renderItem={renderItem}
         keyExtractor={item => item.code}
         onScrollToIndexFailed={info => {

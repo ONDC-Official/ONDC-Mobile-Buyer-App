@@ -32,11 +32,13 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
   const renderItem = useCallback(
     ({item, index}: {item: any; index: number}) => {
       const name = t(`Featured Categories.${item.name}`);
-      const numberOfLines = name.split(' ')[0].length > 8 ? 1 : 2;
 
       return (
         <TouchableOpacity
-          style={[styles.category, index === 0 ? styles.first : {}]}
+          style={[
+            styles.category,
+            item.shortName === currentCategory ? styles.activeCat : {},
+          ]}
           onPress={() => navigateToCategory(item)}>
           <View
             style={[
@@ -47,11 +49,7 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
             ]}>
             <FastImage source={{uri: item.Icon}} style={styles.image} />
           </View>
-          <Text
-            variant={'labelMedium'}
-            style={styles.categoryText}
-            ellipsizeMode={'tail'}
-            numberOfLines={numberOfLines}>
+          <Text variant={'labelMedium'} style={styles.categoryText}>
             {name}
           </Text>
         </TouchableOpacity>
@@ -77,7 +75,6 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
         initialNumToRender={50}
         ref={flatListRef}
         data={CATEGORIES}
-        horizontal
         showsHorizontalScrollIndicator={false}
         renderItem={renderItem}
         keyExtractor={item => item.name}
@@ -99,27 +96,31 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       paddingVertical: 16,
-      backgroundColor: colors.primary50,
+      marginTop: -20,
     },
     categoryText: {
       textAlign: 'center',
-      letterSpacing: -0.5,
+      lineHeight: 14,
+      paddingHorizontal: 10,
+    },
+    activeCat: {
+      borderLeftWidth: 4,
+      borderLeftColor: colors.primary,
+      marginRight: 4,
     },
     category: {
       alignItems: 'center',
-      marginRight: 24,
-      width: 59,
-      padding: 0,
+      paddingVertical: 8,
     },
     first: {
       paddingLeft: 16,
       width: 75,
     },
     imageContainer: {
-      height: 56,
-      width: 56,
+      height: 52,
+      width: 52,
       marginBottom: 2,
-      backgroundColor: 'white',
+      backgroundColor: colors.neutral100,
       padding: 6,
       justifyContent: 'center',
       alignItems: 'center',
@@ -127,8 +128,8 @@ const makeStyles = (colors: any) =>
       borderRadius: 28,
     },
     image: {
-      height: 44,
-      width: 44,
+      height: 36,
+      width: 36,
     },
     selected: {
       borderColor: colors.primary,
