@@ -36,7 +36,7 @@ const SubCategories: React.FC<SubCategories> = ({
   const list = useMemo(() => {
     if(categories){
     let data = categories[categoryDomain];
-    if (data.length > 0) {
+    if (data?.length > 0) {
       data = data.slice(0, 8);
       for (let index = data.length; index < 8; index++) {
         data.push({

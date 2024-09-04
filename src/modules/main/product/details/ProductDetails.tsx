@@ -311,8 +311,8 @@ const ProductDetails: React.FC<ProductDetails> = ({
 
       if (cartItem.length === 0) {
         await postDataWithAuth(url, payload, source.current.token);
-        setAddToCartLoading(false);
         await getCartItems(product.id);
+        setAddToCartLoading(false);
       } else {
         const currentCount = Number(cartItem[0].item.quantity.count);
         const maxCount = Number(
@@ -328,6 +328,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
             );
             setItemAvailableInCart(data);
             showInfoToast('Item quantity updated in your cart.');
+            await getCartItems(product.id);
             setAddToCartLoading(false);
           } else {
             const currentIds = customisations.map(item => item.id);
@@ -349,6 +350,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
                 isIncrement,
                 matchingCustomisation._id,
               );
+              await getCartItems(product.id);
               showToastWithGravity(
                 t('Product Summary.Item quantity updated in your cart'),
               );
@@ -395,7 +397,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   }
 
   const disableActionButtons: boolean =
-    !(Number(product?.item_details?.quantity?.available?.count) >= 1) ||
+    Number(product?.item_details?.quantity?.available?.count) < 1 ||
     itemOutOfStock ||
     addToCartLoading;
 

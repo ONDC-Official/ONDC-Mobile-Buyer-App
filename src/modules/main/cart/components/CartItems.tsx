@@ -94,7 +94,6 @@ const CartItems: React.FC<CartItems> = ({
       setProductPayload(data);
     } catch (error) {
       handleApiError(error);
-    } finally {
     }
   };
 

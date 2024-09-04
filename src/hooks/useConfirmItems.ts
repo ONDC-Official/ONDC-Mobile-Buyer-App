@@ -25,10 +25,7 @@ import {setTransactionId} from '../toolkit/reducer/auth';
 import {clearCart} from '../toolkit/reducer/cart';
 
 const CancelToken = axios.CancelToken;
-export default (
-  closePaymentSheet: () => void,
-  stopAndDestroyVoiceListener: () => void,
-) => {
+export default (closePaymentSheet: () => void) => {
   const {t} = useTranslation();
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
@@ -289,7 +286,6 @@ export default (
         await removeData('parent_and_transaction_id_map');
         dispatch(setTransactionId(transactionId));
         closePaymentSheet();
-        stopAndDestroyVoiceListener();
         dispatch(clearCart());
         navigation.navigate('OrderDetails', {
           orderId: responseRef.current[0].message?.order?.id,

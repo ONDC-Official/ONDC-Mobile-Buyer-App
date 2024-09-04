@@ -61,6 +61,28 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
       style={styles.container}
       onPress={navigateToProductDetails}
       disabled={disabled}>
+      <View style={styles.meta}>
+        <Text
+          variant={'labelLarge'}
+          numberOfLines={2}
+          ellipsizeMode={'tail'}
+          style={styles.name}>
+          {product?.item_details?.descriptor?.name}
+        </Text>
+        <Text
+          variant={'labelSmall'}
+          numberOfLines={4}
+          ellipsizeMode={'tail'}
+          style={styles.provider}>
+          {search
+            ? product?.provider_details?.descriptor?.name
+            : product?.item_details?.descriptor?.short_desc}
+        </Text>
+        <Text variant={'bodyLarge'} style={styles.amount}>
+          {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
+          {formatNumber(product?.item_details?.price?.value.toFixed(2))}
+        </Text>
+      </View>
       {disabled ? (
         <Grayscale>
           <FastImage
@@ -82,33 +104,6 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
           <VegNonVegTag tags={product.item_details.tags} />
         </View>
       )}
-
-      <View style={styles.meta}>
-        <Text
-          variant={'labelLarge'}
-          numberOfLines={2}
-          ellipsizeMode={'tail'}
-          style={styles.name}>
-          {product?.item_details?.descriptor?.name}
-        </Text>
-        <Text
-          variant={'labelSmall'}
-          numberOfLines={4}
-          ellipsizeMode={'tail'}
-          style={styles.provider}>
-          {search
-            ? product?.provider_details?.descriptor?.name
-            : product?.item_details?.descriptor?.short_desc}
-        </Text>
-        <Text variant={'labelMedium'} style={styles.amountstrike}>
-          {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
-          {formatNumber(product?.item_details?.price?.value.toFixed(2))}
-        </Text>
-        <Text variant={'bodyLarge'} style={styles.amount}>
-          {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
-          {formatNumber(product?.item_details?.price?.value.toFixed(2))}
-        </Text>
-      </View>
     </TouchableOpacity>
   );
 };
@@ -116,17 +111,16 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      flex: 1,
+      flexDirection: 'row',
       marginBottom: 15,
-      marginHorizontal: 8,
     },
     meta: {
       flex: 1,
-      marginTop: 12,
+      paddingRight: 20,
     },
     gridImage: {
-      width: '100%',
-      height: 150,
+      width: 126,
+      height: 126,
       borderRadius: 15,
     },
     name: {
@@ -135,16 +129,10 @@ const makeStyles = (colors: any) =>
     },
     provider: {
       color: colors.neutral300,
-      marginTop: 4,
+      marginBottom: 2,
     },
     amount: {
       color: colors.neutral400,
-      marginTop: 2,
-    },
-    amountstrike: {
-      color: colors.neutral300,
-      textDecorationLine: 'line-through',
-      marginTop: 8,
     },
     row: {
       flexDirection: 'row',
@@ -161,4 +149,3 @@ const makeStyles = (colors: any) =>
   });
 
 export default Product;
-

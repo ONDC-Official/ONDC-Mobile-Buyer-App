@@ -99,6 +99,7 @@ const makeStyles = (colors: any) =>
       marginTop: -20,
     },
     categoryText: {
+      color: colors.neutral400,
       textAlign: 'center',
       lineHeight: 14,
       paddingHorizontal: 10,

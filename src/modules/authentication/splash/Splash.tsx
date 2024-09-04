@@ -1,32 +1,22 @@
-import React, {useEffect, useRef} from 'react';
-import {Linking, NativeModules, Platform, StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {Linking, StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Text} from 'react-native-paper';
 import DeviceInfo, {getVersion} from 'react-native-device-info';
 import auth from '@react-native-firebase/auth';
-import JailMonkey from 'jail-monkey';
-import {isDeviceRooted} from 'react-native-detect-frida';
-import axios from 'axios';
 
 import {appStyles} from '../../../styles/styles';
 import {getMultipleData, getStoredData} from '../../../utils/storage';
 import i18n from '../../../i18n';
-import {getUrlParams} from '../../../utils/utils';
 import {alertWithOneButton} from '../../../utils/alerts';
 import AppLogo from '../../../assets/app_logo.svg';
 import {setAddress} from '../../../toolkit/reducer/address';
 import {saveUser, setToken} from '../../../toolkit/reducer/auth';
-import {API_BASE_URL, CATEGORIES} from '../../../utils/apiActions';
-import useNetworkHandling from '../../../hooks/useNetworkHandling';
-import {updateCategories} from '../../../toolkit/reducer/categories';
-
-const {RootCheck} = NativeModules;
 
 interface Splash {
   navigation: any;
+  route: any;
 }
-
-const CancelToken = axios.CancelToken;
 
 /**
  * Component to render splash screen
@@ -34,17 +24,19 @@ const CancelToken = axios.CancelToken;
  * @constructor
  * @returns {JSX.Element}
  */
-const Splash: React.FC<Splash> = ({navigation}) => {
+const Splash: React.FC<Splash> = ({navigation, route}) => {
+  const {handleDeepLink} = route.params;
   const dispatch = useDispatch();
   const styles = makeStyles();
-  const source = useRef<any>(null);
-  const {getDataWithAuth} = useNetworkHandling();
 
-  const checkMagisk = async () => {
-    return await RootCheck.isMagiskPresent();
+  const navigateToLogin = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Login'}],
+    });
   };
 
-  const checkLanguage = async (language: any, pageParams: any) => {
+  const checkLanguage = async (language: any, token: string) => {
     if (!language) {
       navigation.reset({
         index: 0,
@@ -56,16 +48,13 @@ const Splash: React.FC<Splash> = ({navigation}) => {
       if (addressString) {
         const address = JSON.parse(addressString);
         dispatch(setAddress(address));
-        if (pageParams) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'BrandDetails', params: pageParams}],
-          });
-        } else {
-          navigation.reset({
-            index: 0,
-            routes: [{name: 'Dashboard'}],
-          });
+        const url = await Linking.getInitialURL();
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Dashboard'}],
+        });
+        if (url) {
+          handleDeepLink(url, token, address);
         }
       } else {
         navigation.reset({
@@ -111,71 +100,16 @@ const Splash: React.FC<Splash> = ({navigation}) => {
    * Function is used to check if the token is available
    * @returns {Promise<void>}
    */
-  const checkIfUserIsLoggedIn = async () => {
+  const checkIfUserIsLoggedIn = async (): Promise<void> => {
     try {
       const payload: any = await getDataFromStorage();
       if (payload) {
-        await checkLanguage(payload.language, null);
+        await checkLanguage(payload.language, payload.token);
       } else {
-        navigation.reset({
-          index: 0,
-          routes: [{name: 'Login'}],
-        });
+        navigateToLogin();
       }
     } catch (error) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Login'}],
-      });
-    }
-  };
-
-  const processUrl = async (url: string) => {
-    try {
-      const payload: any = await getDataFromStorage();
-      const urlParams = getUrlParams(url);
-      if (
-        urlParams.hasOwnProperty('context.action') &&
-        urlParams['context.action'] === 'search'
-      ) {
-        const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
-        const pageParams: any = {brandId};
-        if (
-          urlParams.hasOwnProperty('message.intent.provider.locations.0.id')
-        ) {
-          pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
-        }
-        await checkLanguage(payload.language, pageParams);
-      } else {
-        await checkLanguage(payload.language, null);
-      }
-    } catch (error) {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Login'}],
-      });
-    }
-  };
-
-  const processLink = async () => {
-    await getCategoryDetails();
-    Linking.getInitialURL().then(url => {
-      if (url) {
-        processUrl(url).then(() => {});
-      } else {
-        checkIfUserIsLoggedIn().then(() => {});
-      }
-    });
-  };
-
-  const getCategoryDetails = async () => {
-    const url = `${API_BASE_URL}${CATEGORIES}`;
-    source.current = CancelToken.source();
-    try {
-      const {data} = await getDataWithAuth(url, source.current.token);
-      dispatch(updateCategories(data));
-    } catch (error) {
-      console.log(error);
+      navigateToLogin();
     }
   };
 
@@ -187,11 +121,11 @@ const Splash: React.FC<Splash> = ({navigation}) => {
           'Please setup the device lock to access this application',
           'Ok',
           () => {
-            processLink().then(() => {});
+            checkIfUserIsLoggedIn().then(() => {});
           },
         );
       } else {
-        processLink().then(() => {});
+        checkIfUserIsLoggedIn().then(() => {});
       }
     });
   }, []);

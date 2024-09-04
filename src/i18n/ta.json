@@ -745,7 +745,11 @@
   },
   "Provider Details": {
     "Order Cancelled": "ஆர்டர் ரத்து செய்யப்பட்டது",
-    "Download Invoice": "விலைப்பட்டியலைப் பதிவிறக்கவும்"
+    "Download Invoice": "விலைப்பட்டியலைப் பதிவிறக்கவும்",
+    "Go Home": "கோ ஹோம்",
+    "Incorrect specifications or malformed request": "இன்கரெக்ட் ஸ்பெசிபிகேஷன்ஸ் ஆர் மால்ஃபார்ம்ட் ரிக்வெஸ்ட்",
+    "This store does not service your location": "This store does not service your location",
+    "This store/seller type is not supported by Saarthi Application, explore other buyer apps.": "This store/seller type is not supported by Saarthi Application, explore other buyer apps."
   },
   "Raise Issue": {
     "Raise an Issue": "ஒரு பிரச்சினையை எழுப்புங்கள்",
@@ -805,7 +809,9 @@
     "Some orders are not initialized": "சில ஆர்டர்கள் துவக்கப்படவில்லை.",
     "Available Cities": "கிடைக்கக்கூடிய நகரங்கள்",
     "The app is only for Delhi city": "இந்த செயலி டெல்லி நகரத்திற்கு மட்டுமே பொருந்தும்",
-    "Open with": "உடன் திறக்கவும்"
+    "Open with": "உடன் திறக்கவும்",
+    "Please log in to your account and set your preferences": "உங்கள் கணக்கில் உள்நுழைந்து உங்கள் விருப்பங்களை அமைக்கவும்",
+    "Please set your preferences": "உங்கள் விருப்பங்களை அமைக்கவும்"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ஒஎன்டிசி கியூஆர் சே பாரத் குலேகா"

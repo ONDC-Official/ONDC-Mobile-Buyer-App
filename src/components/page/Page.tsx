@@ -5,8 +5,8 @@ import {Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useAppTheme} from '../../utils/theme';
 import {useTranslation} from 'react-i18next';
+import {useAppTheme} from '../../utils/theme';
 import useFormatNumber from '../../hooks/useFormatNumber';
 
 interface Page {
@@ -24,11 +24,11 @@ const Page: React.FC<Page> = ({children, outletId = ''}) => {
 
   const {index, count} = useMemo(() => {
     if (outletId !== '') {
-      const index = cartItems.findIndex(
+      const cartIndex = cartItems.findIndex(
         (one: any) => one.location_id === outletId,
       );
-      if (index > -1) {
-        return {index, count: cartItems[index].items.length};
+      if (cartIndex > -1) {
+        return {index: cartIndex, count: cartItems[cartIndex].items.length};
       } else {
         return {index: -1, count: 0};
       }

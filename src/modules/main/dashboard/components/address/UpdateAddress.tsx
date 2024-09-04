@@ -20,7 +20,6 @@ const CancelToken = axios.CancelToken;
 /**
  * Component to render form in add new address screen
  * @param navigation: required: to navigate to the respective screen
- * @param theme:application theme
  * @param params
  * @constructor
  * @returns {JSX.Element}
@@ -28,8 +27,8 @@ const CancelToken = axios.CancelToken;
 const UpdateAddress: React.FC<UpdateAddress> = ({
   navigation,
   route: {params},
-}) => {
-  const {} = useRefreshToken();
+}): JSX.Element => {
+  const {getUserToken} = useRefreshToken();
   const {t} = useTranslation();
   const source = useRef<any>(null);
   const {postDataWithAuth} = useNetworkHandling();
@@ -88,6 +87,7 @@ const UpdateAddress: React.FC<UpdateAddress> = ({
     navigation.setOptions({
       title: t('Address Form.Update Delivery Address'),
     });
+    getUserToken().then(() => {});
   }, []);
 
   return (

@@ -20,7 +20,9 @@ const Login = () => {
     <>
       <PageBackground />
       <View style={styles.pageContainer}>
-        <ScrollView style={styles.flexContainer}>
+        <ScrollView
+          style={styles.flexContainer}
+          keyboardShouldPersistTaps={'always'}>
           <View style={styles.container}>
             <Text variant={'headlineMedium'} style={styles.title}>
               Sign In

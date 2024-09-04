@@ -2,6 +2,8 @@ import {Platform} from 'react-native';
 
 export const BRAND_PRODUCTS_LIMIT: number = 10;
 
+export const SUPPORT_EMAIL: string = 'developer@ondc.org';
+
 export const TAGS: any = {
   non_veg: 'Non-Veg',
   veg: 'Veg',

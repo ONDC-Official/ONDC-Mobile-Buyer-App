@@ -9,7 +9,6 @@ import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../../../../utils/constants';
 import {
-  compareIgnoringSpaces,
   constructQuoteObject,
   removeNullValues,
   showToastWithGravity,
@@ -29,7 +28,6 @@ import CashOnDeliveryIcon from '../../../../assets/payment/cod.svg';
 import PrepaidIcon from '../../../../assets/payment/prepaid.svg';
 
 interface Payment {
-  userInput: string;
   productsQuote: any;
   cartItems: any[];
   responseReceivedIds: string[];
@@ -49,7 +47,6 @@ interface Payment {
 const CancelToken = axios.CancelToken;
 
 const Payment: React.FC<Payment> = ({
-  userInput,
   activePaymentMethod,
   setActivePaymentMethod,
   closePaymentSheet,
@@ -178,11 +175,13 @@ const Payment: React.FC<Payment> = ({
       const payload = items.map((item: any) => {
         let itemsData = Object.assign([], JSON.parse(JSON.stringify(item)));
         itemsData = itemsData?.map((itemData: any) => {
-          delete itemData?.product?.fulfillment_id;
+          if (itemData?.product?.fulfillment_id) {
+            delete itemData.product.fulfillment_id;
+          }
           if (updatedCartItems.current) {
             let findItemFromQuote =
               updatedCartItems.current[0].message.quote.items.find(
-                (data: any) => data.id === itemData.local_id,
+                (one: any) => one.id === itemData.local_id,
               );
             if (findItemFromQuote) {
               itemData.parent_item_id = findItemFromQuote.parent_item_id;
@@ -290,50 +289,6 @@ const Payment: React.FC<Payment> = ({
     setActivePaymentMethod(newMethod);
     handleInitializeOrder();
   };
-
-  useEffect(() => {
-    if (
-      !(
-        activePaymentMethod === '' ||
-        productsQuote.isError ||
-        confirmOrderLoading ||
-        initializeOrderLoading ||
-        initFailed
-      )
-    ) {
-      if (userInput) {
-        const input = userInput.toLowerCase();
-        if (compareIgnoringSpaces('proceed to pay', input)) {
-          handleConfirmOrder();
-        }
-      }
-    } else if (userInput) {
-      const input = userInput.toLowerCase();
-      if (!initializeOrderLoading) {
-        if (/^(select|choose)\b/i.test(input)) {
-          const paymentOption = input
-            .replace('select', '')
-            .replace('choose', '')
-            .trim();
-          if (
-            compareIgnoringSpaces(paymentOption, 'prepaid') ||
-            compareIgnoringSpaces(paymentOption, 'prepared')
-          ) {
-            updatePaymentMethod(ORDER_PAYMENT_METHODS.PREPAID);
-          } else if (compareIgnoringSpaces(paymentOption, 'cash on delivery')) {
-            updatePaymentMethod(ORDER_PAYMENT_METHODS.COD);
-          }
-        }
-      }
-    }
-  }, [
-    userInput,
-    activePaymentMethod,
-    productsQuote,
-    confirmOrderLoading,
-    initializeOrderLoading,
-    initFailed,
-  ]);
 
   useEffect(() => {
     if (updatedCartItemsData) {

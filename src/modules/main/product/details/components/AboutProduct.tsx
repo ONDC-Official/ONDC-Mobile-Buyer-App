@@ -26,6 +26,9 @@ const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
         );
       }
 
+      const returnable =
+        product.item_details?.['@ondc/org/returnable']?.toString() === 'true';
+
       let data: any = {
         'Available on COD':
           product.item_details?.['@ondc/org/available_on_cod']?.toString() ===
@@ -36,11 +39,7 @@ const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
           product.item_details?.['@ondc/org/cancellable']?.toString() === 'true'
             ? 'Yes'
             : 'No',
-        'Return window value': returnWindowValue,
-        Returnable:
-          product.item_details?.['@ondc/org/returnable']?.toString() === 'true'
-            ? 'Yes'
-            : 'No',
+        Returnable: returnable ? 'Yes' : 'No',
         'Customer care':
           product.item_details?.['@ondc/org/contact_details_consumer_care'],
         'Manufacturer name':
@@ -53,6 +52,10 @@ const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
           ]?.manufacturer_or_packer_address,
         Description: product.item_details?.descriptor?.long_desc ?? '',
       };
+
+      if (returnable) {
+        data['Returnable in'] = returnWindowValue;
+      }
 
       data = Object.assign({}, data, product?.attributes);
 

@@ -1,3 +1,5 @@
+import React, {useRef} from 'react';
+import {StyleSheet, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 import {ScrollView, StatusBar, StyleSheet, View} from 'react-native';
 
@@ -27,13 +29,7 @@ const Home = () => {
       <StatusBar backgroundColor={theme.colors.primary} />
       <Header onPress={openAddressList} />
       <Categories />
-      <ScrollView
-        style={styles.container}
-        showsVerticalScrollIndicator={false}
-        nestedScrollEnabled
-        scrollEnabled={scroll}>
-        <StoresNearMe />
-      </ScrollView>
+      <StoresNearMe />
       <AddressSheet addressSheet={addressSheet} />
       <Draggable
         renderSize={50}

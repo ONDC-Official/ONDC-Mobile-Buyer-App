@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StyleSheet} from 'react-native';
 
 import CustomTabBar from './components/customTabBar/CustomTabBar';
 import Home from './components/tabs/Home';
@@ -39,31 +38,4 @@ const Dashboard: React.FC<Dashboard> = () => {
   );
 };
 
-const makeStyles = (colors: any) =>
-  StyleSheet.create({
-    modalContainer: {
-      backgroundColor: colors.white,
-      paddingHorizontal: 16,
-      paddingTop: 16,
-      paddingBottom: 40,
-      borderRadius: 20,
-      margin: 20,
-      alignItems: 'center',
-    },
-    modalTitle: {
-      marginTop: 20,
-      marginBottom: 6,
-    },
-    closeContainer: {
-      flexDirection: 'row',
-      alignItems: 'flex-end',
-      justifyContent: 'flex-end',
-      width: '100%',
-      marginBottom: 20,
-    },
-    modalContent: {
-      alignItems: 'center',
-      textAlign: 'center',
-    },
-  });
 export default Dashboard;

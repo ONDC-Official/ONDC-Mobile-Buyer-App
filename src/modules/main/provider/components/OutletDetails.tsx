@@ -28,12 +28,12 @@ const Google = require('../../../../assets/maps/google_maps.png');
 
 const getAddressString = (address: any) => {
   return [
-    address.name,
-    address.street,
-    address.locality,
-    address.city,
-    address.state && `${address.state} - ${address.area_code}`,
-    address.country,
+    address?.name,
+    address?.street,
+    address?.locality,
+    address?.city,
+    address?.state && `${address?.state} - ${address?.area_code}`,
+    address?.country,
   ]
     .filter(value => value) // Filters out null, undefined, or empty string values
     .join(', ');
@@ -139,14 +139,14 @@ const OutletDetails: React.FC<OutletDetails> = ({
   }, [outlet]);
 
   const navigateToMappls = () => {
-    const destinationAddress = getAddressString(outlet.address);
+    const destinationAddress = getAddressString(outlet?.address);
     Linking.openURL(
       `https://www.mappls.com/direction?places=${address.address.lat},${address.address.lng};${outlet?.gps},${destinationAddress}`,
     );
   };
 
   const navigateToMaps = () => {
-    const destinationAddress = getAddressString(outlet.address);
+    const destinationAddress = getAddressString(outlet?.address);
     Linking.openURL(
       `https://www.google.com/maps/dir/?api=1&origin=${address.address.lat},${address.address.lng}&destination=${outlet?.gps}&destination_place_id=${destinationAddress}`,
     );
@@ -250,26 +250,28 @@ const OutletDetails: React.FC<OutletDetails> = ({
           {t('Global.Open with')}
         </Text>
         <Divider />
-        <TouchableOpacity style={styles.mapRow} onPress={navigateToMappls}>
-          <FastImage
-            style={styles.mapImage}
-            source={Mappls}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-          <Text variant={'bodyMedium'} style={styles.mapName}>
-            Mappls MapmyIndia
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.mapRow} onPress={navigateToMaps}>
-          <FastImage
-            style={styles.mapImage}
-            source={Google}
-            resizeMode={FastImage.resizeMode.cover}
-          />
-          <Text variant={'bodyMedium'} style={styles.mapName}>
-            Maps
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.mapsContainer}>
+          <TouchableOpacity style={styles.mapRow} onPress={navigateToMappls}>
+            <FastImage
+              style={styles.mapImage}
+              source={Mappls}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+            <Text variant={'bodyMedium'} style={styles.mapName}>
+              Mappls
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.mapRow} onPress={navigateToMaps}>
+            <FastImage
+              style={styles.mapImage}
+              source={Google}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+            <Text variant={'bodyMedium'} style={styles.mapName}>
+              Maps
+            </Text>
+          </TouchableOpacity>
+        </View>
       </RBSheet>
     </>
   );
@@ -354,15 +356,20 @@ const makeStyles = (colors: any) =>
       color: colors.neutral400,
       paddingVertical: 16,
     },
+    mapsContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
     mapRow: {
       flexDirection: 'row',
       alignItems: 'center',
       marginVertical: 8,
+      flex: 1,
     },
     mapImage: {
       width: 36,
       height: 36,
-      marginRight: 12,
+      marginRight: 4,
       borderRadius: 8,
     },
     mapName: {

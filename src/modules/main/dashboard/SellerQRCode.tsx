@@ -10,18 +10,22 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {getUrlParams} from '../../../utils/utils';
-import {useAppTheme} from '../../../utils/theme';
-import {check, request, PERMISSIONS, RESULTS} from 'react-native-permissions';
+import {PERMISSIONS, request, RESULTS} from 'react-native-permissions';
 import {Text} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 
-const SellerQRCode = ({navigation}: {navigation: any}) => {
+import {useAppTheme} from '../../../utils/theme';
+
+const SellerQRCode = ({navigation, route}: {navigation: any; route: any}) => {
+  const {handleDeepLink} = route.params;
+  const {token} = useSelector(({auth}) => auth);
+  const {address} = useSelector((state: any) => state.address);
   const theme = useAppTheme();
   const [torchOn, setTorchOn] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
 
   useEffect(() => {
-    requestCameraPermission();
+    requestCameraPermission().then(() => {});
   }, []);
 
   const requestCameraPermission = async () => {
@@ -50,23 +54,7 @@ const SellerQRCode = ({navigation}: {navigation: any}) => {
   }, [navigation]);
 
   const onQRScan = (event: any) => {
-    if (event.data.startsWith('beckn://ondc')) {
-      const url = event.data;
-      const urlParams = getUrlParams(url);
-      if (
-        urlParams.hasOwnProperty('context.action') &&
-        urlParams['context.action'] === 'search'
-      ) {
-        const brandId = `${urlParams['context.bpp_id']}_${urlParams['context.domain']}_${urlParams['message.intent.provider.id']}`;
-        const pageParams: any = {brandId};
-        if (
-          urlParams.hasOwnProperty('message.intent.provider.locations.0.id')
-        ) {
-          pageParams.outletId = `${brandId}_${urlParams['message.intent.provider.locations.0.id']}`;
-        }
-        navigation.replace('BrandDetails', pageParams);
-      }
-    }
+    handleDeepLink(event.data, token, address);
   };
 
   if (!hasCameraPermission) {

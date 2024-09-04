@@ -24,8 +24,11 @@ const Categories = () => {
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const renderItem = useCallback(
-    ({item}: {item: Category}) => (
+  const renderItem = useCallback(({item}: {item: Category}) => {
+    const name = t(`Featured Categories.${item.name}`);
+    const numberOfLines = name.split(' ')[0].length > 8 ? 1 : 2;
+
+    return (
       <TouchableOpacity
         style={styles.category}
         onPress={() =>
@@ -40,14 +43,13 @@ const Categories = () => {
         <Text
           variant={'labelMedium'}
           style={styles.categoryText}
-          numberOfLines={2}
+          numberOfLines={numberOfLines}
           ellipsizeMode={'tail'}>
-          {t(`Featured Categories.${item.name}`)}
+          {name}
         </Text>
       </TouchableOpacity>
-    ),
-    [],
-  );
+    );
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -65,20 +67,20 @@ const Categories = () => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      paddingTop: 16,
-      paddingBottom: 16,
+      paddingVertical: 16,
       paddingLeft: 16,
       backgroundColor: colors.primary50,
     },
     categoryText: {
       color: colors.neutral400,
       textAlign: 'center',
-      marginTop: 4,
+      letterSpacing: -0.5,
     },
     category: {
       alignItems: 'center',
-      width: 59,
       marginRight: 24,
+      width: 59,
+      padding: 0,
     },
     imageContainer: {
       height: 56,

@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Modal, Portal, Text, useTheme} from 'react-native-paper';
-import {TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';
 import Voice from '@react-native-voice/voice';
 import {useSelector} from 'react-redux';
-import makeStyles from './styles';
 import {getLocale} from '../../../../../utils/utils';
 import MicWave from './MicWave';
 
@@ -87,5 +86,40 @@ const SearchModal: React.FC<MicrProps> = ({
     </Portal>
   );
 };
+
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    modalView: {
+      alignSelf: 'center',
+      height: 350,
+      width: 300,
+      margin: 20,
+      backgroundColor: 'white',
+      borderRadius: 20,
+      padding: 16,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    micWavesContainer: {
+      width: 60,
+      height: 60,
+      borderRadius: 75,
+      backgroundColor: colors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
+      alignSelf: 'center',
+      marginTop: 75,
+    },
+    labelText: {
+      marginTop: 100,
+      textAlign: 'center',
+    },
+  });
 
 export default SearchModal;
