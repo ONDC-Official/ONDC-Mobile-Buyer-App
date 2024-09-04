@@ -205,21 +205,7 @@ const AppNavigation: React.FC<AppNavigation> = ({navigationRef}) => {
         <Stack.Screen
           name="SubCategoryDetails"
           component={SubCategoryDetails}
-          options={({navigation}) => ({
-            title: '',
-            headerStatusBarHeight: 0,
-            headerRight: () => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('SearchProducts')}
-                style={styles.searchButton}>
-                <Icon
-                  name={'search'}
-                  size={24}
-                  color={theme.colors.neutral400}
-                />
-              </TouchableOpacity>
-            ),
-          })}
+          options={{headerShown: false}}
         />
         <Stack.Screen
           name="CancelOrder"

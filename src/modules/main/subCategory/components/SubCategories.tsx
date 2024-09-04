@@ -8,7 +8,6 @@ import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 
 import {useAppTheme} from '../../../../utils/theme';
-import AllOptionsIcon from '../../../../assets/all_options.svg';
 import useSubCategoryName from '../../../../hooks/useSubCategoryName';
 
 interface SubCategories {
@@ -93,23 +92,11 @@ const SubCategories: React.FC<SubCategories> = ({
 
   return (
     <View style={styles.container}>
-      {/* <TouchableOpacity style={styles.allOptionsButton} onPress={navigateToAll}>
-        <View style={styles.allOptionsContainer}>
-          <AllOptionsIcon width={21} height={21} />
-        </View>
-        <Text
-          variant={'labelLarge'}
-          style={styles.allOptions}
-          numberOfLines={2}>
-          {t('Cart.All Options')}
-        </Text>
-      </TouchableOpacity> */}
       <FlatList
         initialNumToRender={50}
         ref={flatListRef}
         showsHorizontalScrollIndicator={false}
         data={subCategories}
-        // horizontal
         renderItem={renderItem}
         keyExtractor={item => item.code}
         onScrollToIndexFailed={info => {
@@ -144,6 +131,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       marginRight: 24,
       width: 56,
+      marginBottom:10
     },
     imageContainer: {
       height: 56,

@@ -349,12 +349,11 @@ const makeStyles = (colors: any) =>
     },
     listContainer: {
       flexGrow: 1,
-      paddingHorizontal: 8,
       marginTop: 24,
     },
     nestedListContainer: {
       flexGrow: 1,
-      paddingHorizontal: 8,
+      paddingHorizontal: 12,
     },
     emptyContainer: {
       flex: 1,

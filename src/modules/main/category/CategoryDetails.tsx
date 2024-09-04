@@ -36,9 +36,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   const animated1 = new Animated.Value(0);
   const duration = 500;
 
-  const animationExpand = useRef(
-    new Animated.Value(screenWidth),
-  ).current;
+  const animationExpand = useRef(new Animated.Value(screenWidth)).current;
 
   const inputRange = [0, screenWidth];
   const outputRange = [0, 1];
@@ -56,8 +54,8 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
       toValue: -screenWidth * 0.22,
       duration: duration,
       useNativeDriver: true,
-    })
-  },[])
+    });
+  }, []);
 
   const openCloseMenu = async () => {
     console.log('openMenu : ', saveMenuStatus);
@@ -126,8 +124,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
             />
           </TouchableOpacity>
           <Text variant={'titleLarge'} style={styles.pageTitle}>
-            {/* {t('Profile.Order History')} */}
-            Categories
+            {t('Featured Categories.Categories')}
           </Text>
         </View>
         <View style={{flex: 1, flexDirection: 'row'}}>
@@ -140,7 +137,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
           </Animated.View>
           <Animated.View
             style={{
-              width: screenWidth*0.96,
+              width: screenWidth * 0.96,
               transform: [
                 {scaleX: animatedWidthCollapse},
                 {translateX: animated1},

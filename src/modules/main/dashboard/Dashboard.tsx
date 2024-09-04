@@ -8,6 +8,7 @@ import Orders from './../../main/order/list/Orders';
 import Profile from './components/tabs/Profile';
 import useCartItems from '../../../hooks/useCartItems';
 import useRefreshToken from '../../../hooks/useRefreshToken';
+import useCategoryDetails from '../../../hooks/useCategoryDetails';
 
 interface Dashboard {}
 
@@ -15,10 +16,13 @@ const Tab = createBottomTabNavigator();
 
 const Dashboard: React.FC<Dashboard> = () => {
   const {getCartItems} = useCartItems();
-  const {} = useRefreshToken();
+  const {getUserToken} = useRefreshToken();
+  const {getCategoryDetails} = useCategoryDetails();
 
   useEffect(() => {
+    getCategoryDetails().then(() => {});
     getCartItems().then(() => {});
+    getUserToken().then(() => {});
   }, []);
 
   return (

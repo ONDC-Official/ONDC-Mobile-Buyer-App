@@ -1,11 +1,22 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Animated, Dimensions, Easing, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  Animated,
+  Dimensions,
+  Easing,
+  Image,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
 import Products from '../../../components/products/Products';
-import useSubCategoryName from '../../../hooks/useSubCategoryName';
 import FastImage from 'react-native-fast-image';
 import {useAppTheme} from '../../../utils/theme';
+import {Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
+import SearchProviders from '../../../components/provider/SearchProviders';
 
 interface SubCategoryDetails {
   route: any;
@@ -19,20 +30,19 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   route: {params},
   navigation,
 }) => {
-  const {getSubcategoryName} = useSubCategoryName();
   const [currentSubCategory, setCurrentSubCategory] = useState(
     params.subCategory,
   );
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
+  const [searchType, setSearchType] = useState<string>('Products');
 
   const animated = new Animated.Value(0);
   const animated1 = new Animated.Value(0);
   const duration = 500;
 
-  const animationExpand = useRef(
-    new Animated.Value(screenWidth),
-  ).current;
+  const animationExpand = useRef(new Animated.Value(screenWidth)).current;
 
   const inputRange = [0, screenWidth];
   const outputRange = [0, 1];
@@ -45,16 +55,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
     navigation.goBack();
   };
 
-  useEffect(() => {
-    Animated.timing(animated1, {
-      toValue: -screenWidth * 0.22,
-      duration: duration,
-      useNativeDriver: true,
-    })
-  },[])
-
   const openCloseMenu = async () => {
-    console.log('openMenu : ', saveMenuStatus);
     if (saveMenuStatus) {
       Animated.parallel([
         Animated.timing(animated, {
@@ -104,13 +105,6 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
     setCurrentSubCategory(params.subCategory);
   }, [params]);
 
-  useEffect(() => {
-    const name = getSubcategoryName(currentSubCategory, currentSubCategory);
-
-    navigation.setOptions({
-      title: name,
-    });
-  }, [navigation, currentSubCategory]);
 
   return (
     <>
@@ -120,7 +114,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           styles.container,
           appStyles.backgroundWhite,
         ]}>
-        {/* <StatusBar
+        <StatusBar
           backgroundColor={theme.colors.white}
           barStyle={'dark-content'}
         />
@@ -132,9 +126,17 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
             />
           </TouchableOpacity>
           <Text variant={'titleLarge'} style={styles.pageTitle}>
-            Categories
+            {currentSubCategory}
           </Text>
-        </View> */}
+          <View style={styles.iconsView}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('SearchProducts')}>
+              <Image source={require('../../../assets/search_1.png')} />
+            </TouchableOpacity>
+            <Image source={require('../../../assets/favorite_1.png')} />
+            <Image source={require('../../../assets/cart_1.png')} />
+          </View>
+        </View>
         <View style={{flex: 1, flexDirection: 'row'}}>
           <Animated.View
             style={[
@@ -156,13 +158,53 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
                 {translateX: animated1},
               ],
             }}>
-            <Products
-              providerId={null}
-              subCategories={[currentSubCategory]}
-              search
-              provider={null}
-              isOpen
-            />
+            <View style={styles.switchRow}>
+              <View style={styles.switchContainer}>
+                <TouchableOpacity
+                  onPress={() => setSearchType('Products')}
+                  style={[
+                    styles.button,
+                    searchType === 'Products' ? styles.activeButton : {},
+                  ]}>
+                  <Text
+                    variant={'bodyMedium'}
+                    style={
+                      searchType === 'Products'
+                        ? styles.activeButtonText
+                        : styles.buttonText
+                    }>
+                    {t('Search.Products')}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setSearchType('Stores')}
+                  style={[
+                    styles.button,
+                    searchType === 'Stores' ? styles.activeButton : {},
+                  ]}>
+                  <Text
+                    variant={'bodyMedium'}
+                    style={
+                      searchType === 'Stores'
+                        ? styles.activeButtonText
+                        : styles.buttonText
+                    }>
+                    {t('Search.Stores')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            {searchType === 'Products' ? (
+              <Products
+                providerId={null}
+                subCategories={[currentSubCategory]}
+                search
+                provider={null}
+                isOpen
+              />
+            ) : (
+              <SearchProviders searchQuery={''} />
+            )}
           </Animated.View>
         </View>
         <TouchableOpacity
@@ -175,40 +217,76 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
         </TouchableOpacity>
       </View>
     </>
-    // <View style={[appStyles.container, styles.container]}>
-    //   <SubCategories
-    //     currentCategory={params.category}
-    //     currentSubCategory={currentSubCategory}
-    //     categoryDomain={params.categoryDomain}
-    //     setCurrentSubCategory={setCurrentSubCategory}
-    //   />
-    //   <Products
-    //     providerId={null}
-    //     subCategories={[currentSubCategory]}
-    //     search
-    //     provider={null}
-    //     isOpen
-    //   />
-    // </View>
   );
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-  container: {
-    paddingBottom: 16,
-  },
-  categoryView: {
-    borderRightWidth: 1,
-    borderRightColor: colors.neutral100,
-  },
-  flotingButton: {
-    position: 'absolute',
-    height: 32,
-    width: 24,
-    tintColor: 'red',
-    bottom: 50,
-  },
-});
+    container: {
+      paddingBottom: 16,
+    },
+    categoryView: {
+      borderRightWidth: 1,
+      borderRightColor: colors.neutral100,
+    },
+    flotingButton: {
+      position: 'absolute',
+      height: 32,
+      width: 24,
+      tintColor: 'red',
+      bottom: 50,
+    },
+    header: {
+      paddingVertical: 14,
+      paddingHorizontal: 16,
+      marginBottom: 8,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 20,
+      backgroundColor: colors.white,
+    },
+    pageTitle: {
+      color: colors.neutral400,
+    },
+    backArrow: {
+      height: 16,
+      width: 16,
+    },
+    iconsView: {
+      flex: 1,
+      flexDirection: 'row',
+      gap: 12,
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+    },
+    switchRow: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 20,
+    },
+    switchContainer: {
+      borderRadius: 24,
+      backgroundColor: colors.primary50,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    button: {
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      width: 100,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    activeButton: {
+      backgroundColor: colors.primary,
+      borderRadius: 24,
+    },
+    activeButtonText: {
+      color: colors.white,
+    },
+    buttonText: {
+      color: colors.neutral400,
+    },
+  });
 
 export default SubCategoryDetails;

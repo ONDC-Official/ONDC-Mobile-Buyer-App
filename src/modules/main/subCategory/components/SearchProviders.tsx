@@ -5,14 +5,14 @@ import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 
-import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
-import useNetworkHandling from '../../hooks/useNetworkHandling';
-import {API_BASE_URL, GLOBAL_SEARCH_STORES} from '../../utils/apiActions';
-import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
-import ProductSkeleton from '../skeleton/ProductSkeleton';
-import {skeletonList} from '../../utils/utils';
-import {useAppTheme} from '../../utils/theme';
-import Provider from './Provider';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import useNetworkHandling from '../../../../hooks/useNetworkHandling';
+import {API_BASE_URL, GLOBAL_SEARCH_STORES} from '../../../../utils/apiActions';
+import {BRAND_PRODUCTS_LIMIT} from '../../../../utils/constants';
+import ProductSkeleton from '../../../../components/skeleton/ProductSkeleton';
+import {skeletonList} from '../../../../utils/utils';
+import {useAppTheme} from '../../../../utils/theme';
+import Provider from '../../../../components/provider/Provider';
 
 interface SearchProductList {
   searchQuery: string;
@@ -58,11 +58,7 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
       }
       productSearchSource.current = CancelToken.source();
       const afterString = providerId ? `&afterKey=${providerId}` : '';
-      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${
-        address?.address?.lat
-      }&longitude=${address.address.lng}&pincode=${
-        address.address.areaCode
-      }&name=${'all'}${afterString}`;
+      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}&name=${searchQuery}${afterString}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
@@ -82,9 +78,14 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
   }, []);
 
   useEffect(() => {
-    setProviderId('');
-    setProductsRequested(true);
-    searchProviders().then(() => {});
+    if (searchQuery?.length > 2) {
+      setProviderId('');
+      setProductsRequested(true);
+      searchProviders().then(() => {});
+    } else {
+      totalProviders.current = 0;
+      setProviders([]);
+    }
   }, [searchQuery]);
 
   return (
