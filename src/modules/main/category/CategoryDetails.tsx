@@ -53,19 +53,19 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
     Animated.parallel([
       Animated.timing(animated1, {
         toValue: -screenWidth * 0.11,
-        duration: duration,
+        duration: 0,
         useNativeDriver: true,
       }),
       Animated.timing(animationExpand, {
         toValue: screenWidth * 0.78,
-        duration: duration,
+        duration: 0,
         easing: Easing.linear,
         useNativeDriver: true,
       }),
     ]).start(() => {
       saveMenuStatus = false;
     });
-  }, []);
+  }, [navigation,params.category]);
 
   const openCloseMenu = async () => {
     console.log('openMenu : ', saveMenuStatus);
