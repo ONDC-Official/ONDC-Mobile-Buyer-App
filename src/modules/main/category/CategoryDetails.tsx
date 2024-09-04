@@ -50,10 +50,20 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   };
 
   useEffect(() => {
-    Animated.timing(animated1, {
-      toValue: -screenWidth * 0.22,
-      duration: duration,
-      useNativeDriver: true,
+    Animated.parallel([
+      Animated.timing(animated1, {
+        toValue: -screenWidth * 0.11,
+        duration: duration,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animationExpand, {
+        toValue: screenWidth * 0.78,
+        duration: duration,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      saveMenuStatus = false;
     });
   }, []);
 

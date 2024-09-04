@@ -55,6 +55,24 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
     navigation.goBack();
   };
 
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(animated1, {
+        toValue: -screenWidth * 0.11,
+        duration: duration,
+        useNativeDriver: true,
+      }),
+      Animated.timing(animationExpand, {
+        toValue: screenWidth * 0.78,
+        duration: duration,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      saveMenuStatus = false;
+    });
+  }, []);
+
   const openCloseMenu = async () => {
     if (saveMenuStatus) {
       Animated.parallel([
@@ -105,7 +123,6 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
     setCurrentSubCategory(params.subCategory);
   }, [params]);
 
-
   return (
     <>
       <View
@@ -152,7 +169,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           </Animated.View>
           <Animated.View
             style={{
-              width: screenWidth * 0.96,
+              width: screenWidth * 0.98,
               transform: [
                 {scaleX: animatedWidthCollapse},
                 {translateX: animated1},
