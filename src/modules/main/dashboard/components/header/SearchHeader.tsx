@@ -45,23 +45,20 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
 
   return (
     <View style={styles.searchContainer}>
-      <TouchableOpacity
-        onPress={backIconPress}
-        style={styles.backIconContainer}>
-        <Icon name={'arrow-back'} size={24} color={'#fff'} />
-      </TouchableOpacity>
       <Searchbar
         editable
         iconColor={theme.colors.primary}
         rippleColor={theme.colors.primary50}
         inputStyle={styles.searchInput}
         style={styles.search}
-        placeholderTextColor={theme.colors.primary}
+        placeholderTextColor={theme.colors.neutral300}
         placeholder={t('Home.Search')}
         onChangeText={onChangeSearch}
         onBlur={onSearchComplete}
         onClearIconPress={onClearIconPress}
         value={searchQuery}
+        icon={() => <Icon name="arrow-back" size={20} color={theme.colors.primary} />} 
+        onIconPress={backIconPress}
       />
       <AudioRecorder
         setSearchQuery={setSearchQuery}
@@ -85,7 +82,7 @@ const makeStyles = (colors: any) =>
       paddingVertical: 12,
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: colors.primary,
+      backgroundColor: colors.white,
       paddingHorizontal: 16,
       gap: 15,
     },
@@ -100,6 +97,8 @@ const makeStyles = (colors: any) =>
       flex: 1,
       height: 44,
       backgroundColor: colors.white,
+      borderWidth:1,
+      borderColor:'#196AAB'
     },
     backIconContainer: {
       marginRight: 4,

@@ -89,7 +89,6 @@ const SubCategories: React.FC<SubCategories> = ({
         <FlatList
           data={list}
           numColumns={3}
-          contentContainerStyle={{paddingHorizontal: 8}}
           ListHeaderComponent={headerComponent}
           keyExtractor={item => item.code}
           renderItem={renderItem}
@@ -103,7 +102,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     sectionContainer: {},
     container: {
-      paddingHorizontal: 16,
+      paddingHorizontal: 24,
       marginBottom: -12,
       marginHorizontal: -16,
     },
@@ -132,7 +131,7 @@ const makeStyles = (colors: any) =>
     },
     brandImage: {
       borderRadius: 10,
-      width: 83,
+      width: '100%',
       height: 83,
       alignItems: 'center',
       justifyContent: 'center',
@@ -142,6 +141,7 @@ const makeStyles = (colors: any) =>
       flex: 1,
       color: colors.neutral400,
       textAlign: 'center',
+      marginHorizontal: 8,
     },
   });
 export default SubCategories;

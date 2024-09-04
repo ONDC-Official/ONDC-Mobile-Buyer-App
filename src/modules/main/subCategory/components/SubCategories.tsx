@@ -2,8 +2,6 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 
@@ -27,7 +25,6 @@ const SubCategories: React.FC<SubCategories> = ({
   const {categories} = useSelector((state: any) => state.categories);
   const {t} = useTranslation();
   const flatListRef = useRef<any>(null);
-  const navigation = useNavigation<StackNavigationProp<any>>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [subCategories, setSubCategories] = useState<any[]>([]);
@@ -36,13 +33,6 @@ const SubCategories: React.FC<SubCategories> = ({
     if (subCategory.code !== currentSubCategory) {
       setCurrentSubCategory(subCategory.code);
     }
-  };
-
-  const navigateToAll = () => {
-    navigation.navigate('ShopByCategory', {
-      category: currentCategory,
-      categoryDomain,
-    });
   };
 
   const renderItem = useCallback(
@@ -117,7 +107,6 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       paddingLeft: 16,
-      paddingTop: 16,
       backgroundColor: colors.white,
       flexDirection: 'row',
       alignItems: 'center',

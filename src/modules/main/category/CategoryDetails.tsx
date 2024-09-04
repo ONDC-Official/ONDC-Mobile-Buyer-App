@@ -52,7 +52,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   useEffect(() => {
     Animated.parallel([
       Animated.timing(animated1, {
-        toValue: -screenWidth * 0.11,
+        toValue: -screenWidth * 0.14,
         duration: 0,
         useNativeDriver: true,
       }),
@@ -62,13 +62,10 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
         easing: Easing.linear,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      saveMenuStatus = false;
-    });
-  }, [navigation,params.category]);
+    ]).start(() => {});
+  }, [navigation, params.category]);
 
   const openCloseMenu = async () => {
-    console.log('openMenu : ', saveMenuStatus);
     if (saveMenuStatus) {
       Animated.parallel([
         Animated.timing(animated, {
@@ -98,7 +95,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
           useNativeDriver: true,
         }),
         Animated.timing(animated1, {
-          toValue: -screenWidth * 0.11,
+          toValue: -screenWidth * 0.14,
           duration: duration,
           useNativeDriver: true,
         }),
@@ -147,7 +144,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
           </Animated.View>
           <Animated.View
             style={{
-              width: screenWidth * 0.96,
+              width: screenWidth,
               transform: [
                 {scaleX: animatedWidthCollapse},
                 {translateX: animated1},

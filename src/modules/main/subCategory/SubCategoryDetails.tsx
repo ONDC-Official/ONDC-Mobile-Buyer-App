@@ -58,7 +58,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   useEffect(() => {
     Animated.parallel([
       Animated.timing(animated1, {
-        toValue: -screenWidth * 0.11,
+        toValue: -screenWidth * 0.14,
         duration: 0,
         useNativeDriver: true,
       }),
@@ -68,10 +68,8 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
         easing: Easing.linear,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      saveMenuStatus = false;
-    });
-  }, [navigation, params.category,currentSubCategory]);
+    ]).start(() => {});
+  }, [navigation, currentSubCategory]);
 
   const openCloseMenu = async () => {
     if (saveMenuStatus) {
@@ -103,7 +101,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           useNativeDriver: true,
         }),
         Animated.timing(animated1, {
-          toValue: -screenWidth * 0.11,
+          toValue: -screenWidth * 0.14,
           duration: duration,
           useNativeDriver: true,
         }),
@@ -169,7 +167,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           </Animated.View>
           <Animated.View
             style={{
-              width: screenWidth * 0.98,
+              width: screenWidth,
               transform: [
                 {scaleX: animatedWidthCollapse},
                 {translateX: animated1},
@@ -279,7 +277,6 @@ const makeStyles = (colors: any) =>
     switchRow: {
       justifyContent: 'center',
       alignItems: 'center',
-      marginVertical: 20,
     },
     switchContainer: {
       borderRadius: 24,
