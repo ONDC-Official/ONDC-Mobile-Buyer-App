@@ -1,12 +1,12 @@
 import React from 'react';
 import {ActivityIndicator, StyleSheet, TouchableOpacity} from 'react-native';
 import {Text} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
+import FastImage from 'react-native-fast-image';
 
 import {useAppTheme} from '../../../../../utils/theme';
-import FastImage from 'react-native-fast-image';
 
 interface AddressTag {
   onPress?: () => void;
@@ -34,7 +34,7 @@ const AddressTag: React.FC<AddressTag> = ({onPress}) => {
             ? address?.address?.areaCode
             : address?.address?.city}
         </Text>
-        <Icon name={'arrow-down'} color={theme.colors.neutral50} />
+        <Icon name={'keyboard-arrow-down'} color={theme.colors.neutral50} />
       </TouchableOpacity>
     );
   } else {
@@ -54,7 +54,7 @@ const makeStyles = (colors: any) =>
     },
     address: {
       marginEnd: 8,
-      color: colors.neutral50,
+      color: colors.white,
     },
     headerImage: {
       width: 32,

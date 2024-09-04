@@ -1,31 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import {Searchbar} from 'react-native-paper';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
-import FastImage from 'react-native-fast-image';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import AddressTag from '../address/AddressTag';
 import {useAppTheme} from '../../../../../utils/theme';
 import AudioRecorder from './AudioRecorder';
 import QRButton from './QRButton';
-import WishList from './WishList';
-import CartIcon from './CartIcon';
-import {isIOS} from '../../../../../utils/constants';
+import WishListAction from './WishListAction';
+import CartAction from './CartAction';
 
 type HeaderProps = {
-  disableAddress?: boolean;
   onPress?: () => void;
-  allowBack?: boolean;
 };
 
-const Header: React.FC<HeaderProps> = ({
-  disableAddress,
-  onPress,
-  allowBack = false,
-}) => {
+const Header: React.FC<HeaderProps> = ({onPress}) => {
   const isFocused = useIsFocused();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -51,10 +42,6 @@ const Header: React.FC<HeaderProps> = ({
     }
   };
 
-  const navigateToHome = () => {
-    navigation.navigate('Dashboard');
-  };
-
   useEffect(() => {
     if (isFocused) {
       setSearchQuery('');
@@ -63,21 +50,14 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <View style={styles.container}>
-      {!disableAddress && (
-        <View style={styles.row}>
-          <AddressTag onPress={onPress} />
-          <View style={{flexDirection: 'row', gap: 22}}>
-            <WishList />
-            <CartIcon />
-          </View>
+      <View style={styles.row}>
+        <AddressTag onPress={onPress} />
+        <View style={styles.actionButtonContainer}>
+          <WishListAction />
+          <CartAction />
         </View>
-      )}
+      </View>
       <View style={styles.searchContainer}>
-        {isIOS && allowBack && (
-          <TouchableOpacity onPress={navigateToHome} style={styles.backButton}>
-            <Icon name={'arrow-left'} size={24} color={'#fff'} />
-          </TouchableOpacity>
-        )}
         <View style={styles.searchButton}>
           <Searchbar
             editable
@@ -122,7 +102,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.primary,
       height: 60,
       gap: 15,
-      marginBottom:8
+      marginBottom: 8,
     },
     backButton: {
       alignItems: 'center',
@@ -148,6 +128,11 @@ const makeStyles = (colors: any) =>
       width: 32,
       height: 32,
       objectFit: 'contain',
+    },
+    actionButtonContainer: {
+      flexDirection: 'row',
+      gap: 20,
+      alignItems: 'center',
     },
   });
 export default Header;

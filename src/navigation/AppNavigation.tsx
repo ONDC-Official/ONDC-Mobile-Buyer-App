@@ -45,8 +45,7 @@ import {SUPPORT_EMAIL} from '../utils/constants';
 import InvalidBarcode from '../assets/invalid_barcode.svg';
 import useNetworkHandling from '../hooks/useNetworkHandling';
 import {API_BASE_URL, SERVICEABLE_LOCATIONS} from '../utils/apiActions';
-import List from '../modules/main/dashboard/components/tabs/List';
-import DashboardCart from '../modules/main/dashboard/components/tabs/Cart';
+import Orders from "../modules/main/order/list/Orders";
 
 const Stack = createStackNavigator();
 

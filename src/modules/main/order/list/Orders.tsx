@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useRef, useState} from 'react';
+import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {
   FlatList,
   StatusBar,
@@ -6,13 +6,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
-import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Searchbar, Text} from 'react-native-paper';
 import axios from 'axios';
 import {useTranslation} from 'react-i18next';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import FastImage from 'react-native-fast-image';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {keyExtractor, skeletonList} from '../../../../utils/utils';
@@ -24,7 +23,6 @@ import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
 import {useAppTheme} from '../../../../utils/theme';
 import FiltersIcon from '../../../../assets/filter.svg';
 import FilterList from '../components/FilterList';
-import FastImage from 'react-native-fast-image';
 
 const CancelToken = axios.CancelToken;
 
