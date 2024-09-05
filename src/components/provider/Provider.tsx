@@ -14,10 +14,12 @@ import {
   GROCERY_DOMAIN,
 } from '../../utils/constants';
 import useMinutesToString from '../../hooks/useMinutesToString';
+import useFormatNumber from '../../hooks/useFormatNumber';
 
 const NoImageAvailable = require('../../assets/noImage.png');
 
 const Provider = ({provider}: {provider: any}) => {
+  const {formatNumber} = useFormatNumber();
   const navigation = useNavigation<any>();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -66,7 +68,7 @@ const Provider = ({provider}: {provider: any}) => {
         </View>
         <Text variant={'bodyLarge'} style={styles.productAmount}>
           {CURRENCY_SYMBOLS[item?.item_details?.price?.currency]}
-          {item?.item_details?.price?.value}
+          {formatNumber(item?.item_details?.price?.value.toFixed(2))}
         </Text>
       </View>
     );
