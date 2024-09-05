@@ -1,19 +1,20 @@
 import {Keyboard, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Button, Text, TextInput} from 'react-native-paper';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 import InputField from '../../../../components/input/InputField';
 import OrContainer from '../../common/OrContainer';
 import GoogleLogin from '../../common/GoogleLogin';
-import {showToastWithGravity} from '../../../../utils/utils';
 import useStoreUserAndNavigate from '../../../../hooks/useStoreUserAndNavigate';
 import {useAppTheme} from '../../../../utils/theme';
 import {isIOS} from '../../../../utils/constants';
 import AppleLogin from '../../common/AppleLogin';
+import useHandlePhoneVerification from '../../../../hooks/useHandlePhoneVerification';
 
 const LoginWithPhone = () => {
+  const {handleVerificationError, sendOtp} = useHandlePhoneVerification();
   const navigation = useNavigation<any>();
   const {storeDetails} = useStoreUserAndNavigate();
   const theme = useAppTheme();
@@ -46,66 +47,40 @@ const LoginWithPhone = () => {
     try {
       setApiInProgress(true);
       await confirmation.confirm(code);
-      const user = auth()?.currentUser;
-      const idTokenResult = await user?.getIdTokenResult();
-
-      await storeDetails(idTokenResult, user);
     } catch (error: any) {
-      switch (error.code) {
-        case 'auth/invalid-verification-code':
-          showToastWithGravity('Enter valid OTP');
-          break;
-        case 'auth/missing-verification-code':
-          showToastWithGravity('Please enter OTP');
-          break;
-        case 'auth/quota-exceeded':
-          showToastWithGravity('Limit exceed, please try after some time');
-          break;
-        case 'auth/session-expired':
-          showToastWithGravity(
-            'Entered OTP is expired, please request new OTP',
-          );
-          break;
-        case 'auth/invalid-verification-id':
-        case 'auth/too-many-requests':
-          showToastWithGravity(
-            'Something went wrong please try again after some time',
-          );
-          break;
-        case 'auth/user-disabled':
-          showToastWithGravity('Account is disabled, please contact admin');
-          break;
-      }
+      handleVerificationError(error.code);
     } finally {
       setApiInProgress(false);
     }
   };
 
-  const sendOtp = async () => {
-    try {
-      setApiInProgress(true);
-      const confirm = await auth().signInWithPhoneNumber(`+91${mobileNumber}`);
-      setConfirmation(confirm);
-      setCodeAvailable(true);
-    } catch (error: any) {
-      if (error?.code === 'auth/invalid-phone-number') {
-        showToastWithGravity('Please enter valid phone number');
-      } else if (error?.code === 'auth/too-many-requests') {
-        showToastWithGravity(
-          'We have blocked all requests from this device due to unusual activity. Try again later',
-        );
-      } else {
-        showToastWithGravity(error.message);
-      }
-    } finally {
-      setApiInProgress(false);
-    }
+  const requestOtp = async () => {
+    setCode('');
+    await sendOtp(
+      mobileNumber,
+      setApiInProgress,
+      setConfirmation,
+      setCodeAvailable,
+    );
   };
 
   const allowMobileEdit = () => {
     Keyboard.dismiss();
     setCodeAvailable(false);
   };
+
+  // Handle login
+  const onAuthStateChanged = async (user: FirebaseAuthTypes.User | null) => {
+    if (user) {
+      const idTokenResult = await user?.getIdTokenResult();
+      await storeDetails(idTokenResult, user);
+    }
+  };
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
 
   return (
     <>
@@ -175,7 +150,7 @@ const LoginWithPhone = () => {
             <View style={styles.dontReceiveContainer}>
               <Text variant={'bodyMedium'}>Didn’t receive OTP?</Text>
               <TouchableOpacity
-                onPress={sendOtp}
+                onPress={requestOtp}
                 disabled={
                   googleLoginRequested || appleLoginRequested || apiInProgress
                 }>
@@ -191,7 +166,7 @@ const LoginWithPhone = () => {
             style={styles.containedButton}
             contentStyle={styles.button}
             mode="contained"
-            onPress={sendOtp}
+            onPress={requestOtp}
             loading={apiInProgress}
             disabled={
               googleLoginRequested ||
