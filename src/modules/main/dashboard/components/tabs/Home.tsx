@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {StatusBar, StyleSheet, View} from 'react-native';
+import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 import Draggable from 'react-native-draggable';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -10,6 +10,8 @@ import StoresNearMe from '../../../category/components/StoresNearMe';
 import AddressSheet from '../address/AddressSheet';
 
 import {CATEGORIES} from '../../../../../utils/categories';
+
+const screenWidth = Dimensions.get('window').width;
 
 const Home = () => {
   const theme = useAppTheme();
@@ -30,8 +32,8 @@ const Home = () => {
       <AddressSheet addressSheet={addressSheet} />
       <Draggable
         renderSize={50}
-        x={150}
-        y={300}
+        x={screenWidth-46}
+        y={400}
         imageSource={require('../../../../../assets/Categories.png')}
         isCircle
         onShortPressRelease={() =>

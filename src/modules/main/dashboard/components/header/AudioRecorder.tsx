@@ -24,7 +24,7 @@ const AudioRecorder = ({
   return (
     <>
       <TouchableOpacity onPress={openVoiceModal}>
-        <Icon name={'mic'} color={theme.colors.primary} size={24} />
+        <Icon name={'mic'} color={'#fff'} size={24} />
       </TouchableOpacity>
       {showVoiceModal && (
         <SearchModal
