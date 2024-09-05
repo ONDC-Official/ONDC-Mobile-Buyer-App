@@ -12,6 +12,7 @@ import {useAppTheme} from '../../../../utils/theme';
 import {isIOS} from '../../../../utils/constants';
 import AppleLogin from '../../common/AppleLogin';
 import useHandlePhoneVerification from '../../../../hooks/useHandlePhoneVerification';
+import MobileField from '../../../../components/input/MobileField';
 
 const LoginWithPhone = () => {
   const {handleVerificationError, sendOtp} = useHandlePhoneVerification();
@@ -85,8 +86,7 @@ const LoginWithPhone = () => {
   return (
     <>
       <View style={styles.inputContainer}>
-        <InputField
-          left={<TextInput.Affix text="+91" />}
+        <MobileField
           inputMode={'numeric'}
           disabled={
             codeAvailable ||
