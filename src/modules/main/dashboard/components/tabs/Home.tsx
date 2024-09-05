@@ -1,11 +1,12 @@
 import React, {useRef} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 
 import Header from '../header/Header';
 import Categories from '../home/Categories';
 import {useAppTheme} from '../../../../../utils/theme';
 import StoresNearMe from '../../../category/components/StoresNearMe';
 import AddressSheet from '../address/AddressSheet';
+import {appStyles} from '../../../../../styles/styles';
 
 const Home = () => {
   const theme = useAppTheme();
@@ -19,8 +20,10 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <Header onPress={openAddressList} />
-      <Categories />
-      <StoresNearMe />
+      <ScrollView style={appStyles.container}>
+        <Categories />
+        <StoresNearMe />
+      </ScrollView>
       <AddressSheet addressSheet={addressSheet} />
     </View>
   );
