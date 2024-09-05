@@ -69,7 +69,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
         useNativeDriver: true,
       }),
     ]).start(() => {});
-  }, [navigation, currentSubCategory]);
+  }, [navigation, currentSubCategory, searchType]);
 
   const openCloseMenu = async () => {
     if (saveMenuStatus) {

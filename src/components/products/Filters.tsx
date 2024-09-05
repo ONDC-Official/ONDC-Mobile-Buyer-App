@@ -120,8 +120,9 @@ const Filters: React.FC<Filters> = React.memo(
                 : styles.activeFilterButton,
             ]}
             onPress={openSheet}>
+            <FilterIcon width={13} height={13} />
             <Text
-              variant={'labelMedium'}
+              variant={'labelLarge'}
               style={
                 attributesRequested
                   ? styles.disabledFilterLabel
@@ -129,7 +130,6 @@ const Filters: React.FC<Filters> = React.memo(
               }>
               {t('Product SubCategories.Filter')}
             </Text>
-            <FilterIcon width={18} height={18} />
           </TouchableOpacity>
           <RBSheet
             ref={refFilterSheet}
@@ -160,16 +160,17 @@ const Filters: React.FC<Filters> = React.memo(
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     filterLabel: {
-      marginRight: 8,
       color: colors.primary,
     },
     filterButton: {
       borderRadius: 8,
       borderWidth: 1,
-      paddingHorizontal: 8,
-      paddingVertical: 7,
+      width: 68,
+      height: 32,
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent:'center',
+      gap:4
     },
     disabledFilterButton: {
       borderColor: colors.neutral100,
@@ -179,7 +180,6 @@ const makeStyles = (colors: any) =>
     },
     disabledFilterLabel: {
       color: colors.neutral100,
-      marginRight: 8,
     },
     rbSheet: {borderTopLeftRadius: 15, borderTopRightRadius: 15},
     filterContainer: {

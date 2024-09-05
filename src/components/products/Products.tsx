@@ -295,12 +295,6 @@ const Products: React.FC<Products> = ({
         providerId={providerId}
         category={subCategories.length ? subCategories[0] : null}
       />
-      {/* <View style={styles.searchContainer}>
-        <ProductSearch
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
-      </View> */}
       <SectionList
         ref={sectionListRef}
         stickySectionHeadersEnabled={false}
@@ -311,6 +305,7 @@ const Products: React.FC<Products> = ({
         renderSectionHeader={renderSectionHeader}
         onEndReached={loadMoreList}
         ListFooterComponent={ListFooterComponent}
+        ListFooterComponentStyle={styles.container}
         ListEmptyComponent={() =>
           moreListRequested ? (
             <></>

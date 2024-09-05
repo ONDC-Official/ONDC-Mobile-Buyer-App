@@ -10,6 +10,7 @@ import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
+import Wishlist from '../../../../assets/dashboard/Wishlist.svg';
 
 interface Product {
   product: any;
@@ -61,28 +62,6 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
       style={styles.container}
       onPress={navigateToProductDetails}
       disabled={disabled}>
-      <View style={styles.meta}>
-        <Text
-          variant={'labelLarge'}
-          numberOfLines={2}
-          ellipsizeMode={'tail'}
-          style={styles.name}>
-          {product?.item_details?.descriptor?.name}
-        </Text>
-        <Text
-          variant={'labelSmall'}
-          numberOfLines={4}
-          ellipsizeMode={'tail'}
-          style={styles.provider}>
-          {search
-            ? product?.provider_details?.descriptor?.name
-            : product?.item_details?.descriptor?.short_desc}
-        </Text>
-        <Text variant={'bodyLarge'} style={styles.amount}>
-          {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
-          {formatNumber(product?.item_details?.price?.value.toFixed(2))}
-        </Text>
-      </View>
       {disabled ? (
         <Grayscale>
           <FastImage
@@ -104,6 +83,43 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
           <VegNonVegTag tags={product.item_details.tags} />
         </View>
       )}
+
+      <View style={styles.meta}>
+        <Text
+          variant={'labelLarge'}
+          numberOfLines={2}
+          ellipsizeMode={'tail'}
+          style={styles.name}>
+          {product?.item_details?.descriptor?.name}
+        </Text>
+        <Text
+          variant={'labelSmall'}
+          numberOfLines={4}
+          ellipsizeMode={'tail'}
+          style={styles.provider}>
+          {search
+            ? product?.provider_details?.descriptor?.name
+            : product?.item_details?.descriptor?.short_desc}
+        </Text>
+        <View style={styles.priceView}>
+          <View style={styles.priceText}>
+            <Text variant={'labelMedium'} style={styles.amountStrike}>
+              {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
+              {formatNumber(product?.item_details?.price?.value.toFixed(2))}
+            </Text>
+            <Text variant={'bodyLarge'} style={styles.amount}>
+              {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
+              {formatNumber(product?.item_details?.price?.value.toFixed(2))}
+            </Text>
+          </View>
+          <TouchableOpacity style={styles.quantityView}>
+            <Text variant={'bodyLarge'} style={styles.quantityText}>Add</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      <TouchableOpacity style={styles.wishlist}>
+        <Wishlist width={28} height={28} />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 };
@@ -111,17 +127,23 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      flexDirection: 'row',
+      flex: 1,
       marginBottom: 15,
+      marginHorizontal: 8,
     },
     meta: {
       flex: 1,
-      paddingRight: 20,
+      marginTop: 12,
     },
     gridImage: {
-      width: 126,
-      height: 126,
+      width: '100%',
+      height: 173,
       borderRadius: 15,
+    },
+    wishlist: {
+      position: 'absolute',
+      top: 4,
+      left: 4,
     },
     name: {
       color: colors.neutral400,
@@ -129,10 +151,14 @@ const makeStyles = (colors: any) =>
     },
     provider: {
       color: colors.neutral300,
-      marginBottom: 2,
+      marginTop: 4,
     },
     amount: {
       color: colors.neutral400,
+    },
+    amountStrike: {
+      color: colors.neutral200,
+      textDecorationLine: 'line-through',
     },
     row: {
       flexDirection: 'row',
@@ -146,6 +172,25 @@ const makeStyles = (colors: any) =>
       paddingTop: 12,
       paddingRight: 12,
     },
+    priceView: {
+      flexDirection: 'row',
+    },
+    priceText:{
+      flex:1
+    },
+    quantityView:{
+      height:28,
+      width:72,
+      borderWidth:1,
+      borderRadius:8,
+      borderColor:colors.primary,
+      alignSelf:'flex-end',
+      alignItems:'center',
+      justifyContent:'center'
+    },
+    quantityText:{
+      color:colors.primary
+    }
   });
 
 export default Product;
