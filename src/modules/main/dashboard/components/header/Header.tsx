@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({onPress}) => {
             rippleColor={theme.colors.primary}
             inputStyle={styles.searchInput}
             style={styles.search}
-            placeholderTextColor={theme.colors.primary}
+            placeholderTextColor={theme.colors.neutral300}
             placeholder={t('Home.Search')}
             onChangeText={onChangeSearch}
             onSubmitEditing={onSubmitEditing}
@@ -92,7 +92,7 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingVertical: 9,
+      height: 40,
     },
     searchContainer: {
       width: '100%',
@@ -101,8 +101,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       backgroundColor: colors.primary,
       height: 60,
-      gap: 15,
-      marginBottom: 8,
+      gap: 20,
     },
     backButton: {
       alignItems: 'center',
@@ -113,9 +112,10 @@ const makeStyles = (colors: any) =>
     },
     searchButton: {
       flex: 1,
+      marginRight:4
     },
     searchInput: {
-      paddingVertical: 12,
+      paddingVertical: 10,
       paddingHorizontal: 16,
       minHeight: 44,
     },
@@ -131,6 +131,7 @@ const makeStyles = (colors: any) =>
     },
     actionButtonContainer: {
       flexDirection: 'row',
+      height:40,
       gap: 20,
       alignItems: 'center',
     },

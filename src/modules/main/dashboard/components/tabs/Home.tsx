@@ -12,6 +12,7 @@ import AddressSheet from '../address/AddressSheet';
 import {CATEGORIES} from '../../../../../utils/categories';
 
 const screenWidth = Dimensions.get('window').width;
+const screenHeight = Dimensions.get('window').height;
 
 const Home = () => {
   const theme = useAppTheme();
@@ -32,8 +33,8 @@ const Home = () => {
       <AddressSheet addressSheet={addressSheet} />
       <Draggable
         renderSize={50}
-        x={screenWidth-46}
-        y={400}
+        x={screenWidth-50}
+        y={screenHeight*0.70}
         imageSource={require('../../../../../assets/Categories.png')}
         isCircle
         onShortPressRelease={() =>

@@ -4,7 +4,7 @@ import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
-import FastImage from 'react-native-fast-image';
+import Logo from '../../../../../assets/dashboard/ONDClogo.svg';
 
 import {useAppTheme} from '../../../../../utils/theme';
 
@@ -21,20 +21,19 @@ const AddressTag: React.FC<AddressTag> = ({onPress}) => {
   if (address) {
     return (
       <TouchableOpacity style={styles.addressContainer} onPress={onPress}>
-        <FastImage
-          source={require('../../../../../assets/ONDClogo.png')}
-          style={styles.headerImage}
-          resizeMode={'contain'}
-        />
-        <Text variant={'bodySmall'} style={styles.deliverTo}>
-          {t('Home.Deliver to')}{' '}
-        </Text>
-        <Text variant={'bodyLarge'} style={styles.address}>
+        <Logo height={32} width={32} />
+        <Text variant={'bodyLarge'} style={styles.deliverTo}>
+          {address?.address?.tag ? address?.address?.tag : t('Home.Deliver to')}
+          {' - '}
           {address?.address?.areaCode
             ? address?.address?.areaCode
             : address?.address?.city}
         </Text>
-        <Icon name={'keyboard-arrow-down'} color={theme.colors.neutral50} />
+        <Icon
+          name={'keyboard-arrow-down'}
+          color={theme.colors.neutral50}
+          size={24}
+        />
       </TouchableOpacity>
     );
   } else {
@@ -50,16 +49,8 @@ const makeStyles = (colors: any) =>
     },
     deliverTo: {
       marginLeft: 20,
+      marginRight: 6,
       color: colors.neutral50,
-    },
-    address: {
-      marginEnd: 8,
-      color: colors.white,
-    },
-    headerImage: {
-      width: 32,
-      height: 32,
-      objectFit: 'contain',
     },
   });
 
