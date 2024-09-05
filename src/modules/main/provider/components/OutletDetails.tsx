@@ -179,7 +179,9 @@ const OutletDetails: React.FC<OutletDetails> = ({
               <View style={styles.buttonContainer}>
                 {outletPhone && (
                   <TouchableOpacity
-                    onPress={() => Linking.openURL(`tel: ${outletPhone}`)}
+                    onPress={() =>
+                      Linking.openURL(`tel:${outletPhone.replaceAll(' ', '')}`)
+                    }
                     style={styles.actionButton}>
                     <Icon
                       name={'phone'}
