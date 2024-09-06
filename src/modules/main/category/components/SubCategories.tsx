@@ -34,21 +34,14 @@ const SubCategories: React.FC<SubCategories> = ({
   };
 
   const list = useMemo(() => {
-    if(categories){
-    let data = categories[categoryDomain];
-    if (data?.length > 0) {
-      data = data.slice(0, 8);
-      for (let index = data.length; index < 8; index++) {
-        data.push({
-          value: 'Empty',
-          key: 'Empty',
-        });
+    if (categories) {
+      let data = categories[categoryDomain];
+      if (data?.length > 0) {
+        return data;
+      } else {
+        return [];
       }
-      return data;
-    } else {
-      return [];
     }
-  }
   }, [categoryDomain]);
 
   const renderItem = useCallback(
@@ -77,7 +70,7 @@ const SubCategories: React.FC<SubCategories> = ({
 
   const headerComponent = () => {
     return (
-      <Text variant="titleLarge" style={{paddingHorizontal: 8}}>
+      <Text variant="titleLarge" style={styles.headerText}>
         {currentCategory}
       </Text>
     );
@@ -143,5 +136,6 @@ const makeStyles = (colors: any) =>
       textAlign: 'center',
       marginHorizontal: 8,
     },
+    headerText: {paddingHorizontal: 8},
   });
 export default SubCategories;

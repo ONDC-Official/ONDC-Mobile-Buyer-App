@@ -17,6 +17,7 @@ import {useAppTheme} from '../../../utils/theme';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import SearchProviders from '../../../components/provider/SearchProviders';
+import Header from '../../../components/header/Header';
 
 interface SubCategoryDetails {
   route: any;
@@ -50,10 +51,6 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
     inputRange,
     outputRange,
   });
-
-  const goBack = () => {
-    navigation.goBack();
-  };
 
   useEffect(() => {
     Animated.parallel([
@@ -129,30 +126,13 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           styles.container,
           appStyles.backgroundWhite,
         ]}>
-        <StatusBar
-          backgroundColor={theme.colors.white}
-          barStyle={'dark-content'}
+        <Header
+          label={currentSubCategory}
+          search={true}
+          wishlist={true}
+          cart={true}
         />
-        <View style={styles.header}>
-          <TouchableOpacity onPress={goBack}>
-            <FastImage
-              source={require('../../../assets/arrow_back.png')}
-              style={styles.backArrow}
-            />
-          </TouchableOpacity>
-          <Text variant={'titleLarge'} style={styles.pageTitle}>
-            {currentSubCategory}
-          </Text>
-          <View style={styles.iconsView}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('SearchProducts')}>
-              <Image source={require('../../../assets/search_1.png')} />
-            </TouchableOpacity>
-            <Image source={require('../../../assets/favorite_1.png')} />
-            <Image source={require('../../../assets/cart_1.png')} />
-          </View>
-        </View>
-        <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={styles.subContainer}>
           <Animated.View
             style={[
               styles.categoryView,
@@ -240,6 +220,7 @@ const makeStyles = (colors: any) =>
     container: {
       paddingBottom: 16,
     },
+    subContainer: {flex: 1, flexDirection: 'row'},
     categoryView: {
       borderRightWidth: 1,
       borderRightColor: colors.neutral100,
@@ -250,29 +231,6 @@ const makeStyles = (colors: any) =>
       width: 24,
       tintColor: 'red',
       bottom: 50,
-    },
-    header: {
-      paddingVertical: 14,
-      paddingHorizontal: 16,
-      marginBottom: 8,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 20,
-      backgroundColor: colors.white,
-    },
-    pageTitle: {
-      color: colors.neutral400,
-    },
-    backArrow: {
-      height: 16,
-      width: 16,
-    },
-    iconsView: {
-      flex: 1,
-      flexDirection: 'row',
-      gap: 12,
-      alignItems: 'center',
-      justifyContent: 'flex-end',
     },
     switchRow: {
       justifyContent: 'center',

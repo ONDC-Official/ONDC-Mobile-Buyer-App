@@ -13,7 +13,7 @@ import SubCategories from './components/SubCategories';
 import {appStyles} from '../../../styles/styles';
 import {useAppTheme} from '../../../utils/theme';
 import FastImage from 'react-native-fast-image';
-import {Text} from 'react-native-paper';
+import Header from '../../../components/header/Header';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 
@@ -44,10 +44,6 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
     inputRange,
     outputRange,
   });
-
-  const goBack = () => {
-    navigation.goBack();
-  };
 
   useEffect(() => {
     Animated.parallel([
@@ -119,22 +115,8 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
           styles.container,
           appStyles.backgroundWhite,
         ]}>
-        <StatusBar
-          backgroundColor={theme.colors.white}
-          barStyle={'dark-content'}
-        />
-        <View style={styles.header}>
-          <TouchableOpacity onPress={goBack}>
-            <FastImage
-              source={require('../../../assets/arrow_back.png')}
-              style={styles.backArrow}
-            />
-          </TouchableOpacity>
-          <Text variant={'titleLarge'} style={styles.pageTitle}>
-            {t('Featured Categories.Categories')}
-          </Text>
-        </View>
-        <View style={{flex: 1, flexDirection: 'row'}}>
+        <Header label={t('Featured Categories.Categories')} />
+        <View style={styles.subContainer}>
           <Animated.View
             style={[
               styles.categoryView,
@@ -150,12 +132,10 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
                 {translateX: animated1},
               ],
             }}>
-            {params.category !== 'F&B' && (
-              <SubCategories
-                currentCategory={params.category}
-                categoryDomain={params.domain}
-              />
-            )}
+            <SubCategories
+              currentCategory={params.category}
+              categoryDomain={params.domain}
+            />
           </Animated.View>
         </View>
         <TouchableOpacity
@@ -176,6 +156,7 @@ const makeStyles = (colors: any) =>
     container: {
       paddingBottom: 16,
     },
+    subContainer: {flex: 1, flexDirection: 'row'},
     header: {
       paddingVertical: 14,
       paddingHorizontal: 16,

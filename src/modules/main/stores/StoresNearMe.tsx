@@ -11,6 +11,7 @@ import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import {API_BASE_URL, SERVICEABLE_LOCATIONS} from '../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import useCalculateTimeToShip from '../../../hooks/useCalculateTimeToShip';
+import Header from '../../../components/header/Header';
 
 interface StoresNearMe {
   domain?: string;
@@ -46,9 +47,6 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
   const [page, setPage] = useState<number>(0);
 
   useEffect(() => {
-    navigation.setOptions({
-      title: t('Stores Near me.Stores Near me'),
-    });
     getAllLocations(0).then(() => {});
   }, []);
 
@@ -90,11 +88,13 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
 
   return (
     <View style={styles.container}>
+      <Header label={t('Stores Near me.Stores Near me')} />
       <FlatList
         showsVerticalScrollIndicator={false}
         data={locations}
         renderItem={renderItem}
         numColumns={3}
+        contentContainerStyle={styles.subContainer}
         initialNumToRender={21}
         maxToRenderPerBatch={24}
         onEndReached={loadMoreList}
@@ -110,11 +110,10 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
-      paddingVertical: 20,
-      paddingHorizontal: 8,
       backgroundColor: colors.white,
       flex: 1,
     },
+    subContainer: {paddingHorizontal: 11},
   });
 
 export default StoresNearMe;

@@ -112,7 +112,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: 4,
-      backgroundColor:colors.black
+      backgroundColor: colors.black,
     },
     brandImageEmpty: {
       backgroundColor: colors.neutral200,
@@ -122,6 +122,7 @@ const makeStyles = (colors: any) =>
       flex: 1,
     },
     details: {
+      fontWeight: '400',
       color: colors.neutral300,
     },
     distance: {

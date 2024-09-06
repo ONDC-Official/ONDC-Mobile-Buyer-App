@@ -45,7 +45,9 @@ import {SUPPORT_EMAIL} from '../utils/constants';
 import InvalidBarcode from '../assets/invalid_barcode.svg';
 import useNetworkHandling from '../hooks/useNetworkHandling';
 import {API_BASE_URL, SERVICEABLE_LOCATIONS} from '../utils/apiActions';
-import Orders from "../modules/main/order/list/Orders";
+import Orders from '../modules/main/order/list/Orders';
+import List from '../modules/main/dashboard/components/tabs/List';
+import DashboardCart from '../modules/main/dashboard/components/tabs/Cart';
 
 const Stack = createStackNavigator();
 
@@ -288,6 +290,18 @@ const AppNavigation = () => {
           />
 
           <Stack.Screen
+            name="List"
+            component={List}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="DashboardCart"
+            component={DashboardCart}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
             name="OrderProductDetails"
             component={OrderProductDetails}
             options={{headerShown: false}}
@@ -372,10 +386,7 @@ const AppNavigation = () => {
           <Stack.Screen
             name="StoresNearMe"
             component={StoresNearMe}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="ShopByCategory"

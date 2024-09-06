@@ -17,6 +17,11 @@ const store = configureStore({
     stores,
     order,
   },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+      ignoredPaths: ['navigation.params.handleDeepLink'],
+    }),
 });
 
 export default store;

@@ -35,23 +35,28 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
 
       return (
         <TouchableOpacity
-          style={[
-            styles.category,
-            item.shortName === currentCategory ? styles.activeCat : {},
-          ]}
+          style={styles.category}
           onPress={() => navigateToCategory(item)}>
-          <View
-            style={[
-              styles.imageContainer,
-              item.shortName === currentCategory
-                ? styles.selected
-                : styles.normal,
-            ]}>
-            <FastImage source={{uri: item.Icon}} style={styles.image} />
+          {item.shortName === currentCategory ? (
+            <View style={styles.activeCat} />
+          ) : (
+            <></>
+          )}
+
+          <View style={styles.categoriesView}>
+            <View
+              style={[
+                styles.imageContainer,
+                item.shortName === currentCategory
+                  ? styles.selected
+                  : styles.normal,
+              ]}>
+              <FastImage source={{uri: item.Icon}} style={styles.image} />
+            </View>
+            <Text variant={'labelMedium'} style={styles.categoryText}>
+              {name}
+            </Text>
           </View>
-          <Text variant={'labelMedium'} style={styles.categoryText}>
-            {name}
-          </Text>
         </TouchableOpacity>
       );
     },
@@ -105,14 +110,15 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 10,
     },
     activeCat: {
-      borderLeftWidth: 4,
-      borderLeftColor: colors.primary,
-      marginRight: 4,
+      height: '100%',
+      width: 4,
+      backgroundColor: colors.primary,
+      borderRadius:10,
     },
     category: {
-      alignItems: 'center',
-      paddingVertical: 8,
+      flexDirection: 'row',
     },
+    categoriesView: {flex: 1, alignItems: 'center', paddingVertical: 8},
     first: {
       paddingLeft: 16,
       width: 75,

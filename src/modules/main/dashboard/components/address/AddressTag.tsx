@@ -22,7 +22,7 @@ const AddressTag: React.FC<AddressTag> = ({onPress}) => {
     return (
       <TouchableOpacity style={styles.addressContainer} onPress={onPress}>
         <Logo height={32} width={32} />
-        <Text variant={'bodyLarge'} style={styles.deliverTo}>
+        <Text variant={'bodyMedium'} style={styles.deliverTo}>
           {address?.address?.tag ? address?.address?.tag : t('Home.Deliver to')}
           {' - '}
           {address?.address?.areaCode
