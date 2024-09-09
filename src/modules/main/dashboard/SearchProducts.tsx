@@ -8,6 +8,7 @@ import SearchProductList from '../../../components/products/SearchProductList';
 import SearchHeader from './components/header/SearchHeader';
 import {useAppTheme} from '../../../utils/theme';
 import SearchProviders from '../../../components/provider/SearchProviders';
+import SafeAreaPage from '../../../components/header/SafeAreaPage';
 
 interface SearchProductsProps {
   route: any;
@@ -28,58 +29,60 @@ const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <SearchHeader
-        onSearch={onSearch}
-        defaultQuery={params?.query ?? ''}
-        backIconPress={() => navigation.goBack()}
-      />
-      {searchQuery.length > 0 && (
-        <>
-          <View style={styles.switchRow}>
-            <View style={styles.switchContainer}>
-              <TouchableOpacity
-                onPress={() => setSearchType('Products')}
-                style={[
-                  styles.button,
-                  searchType === 'Products' ? styles.activeButton : {},
-                ]}>
-                <Text
-                  variant={'bodyMedium'}
-                  style={
-                    searchType === 'Products'
-                      ? styles.activeButtonText
-                      : styles.buttonText
-                  }>
-                  {t('Search.Products')}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setSearchType('Stores')}
-                style={[
-                  styles.button,
-                  searchType === 'Stores' ? styles.activeButton : {},
-                ]}>
-                <Text
-                  variant={'bodyMedium'}
-                  style={
-                    searchType === 'Stores'
-                      ? styles.activeButtonText
-                      : styles.buttonText
-                  }>
-                  {t('Search.Stores')}
-                </Text>
-              </TouchableOpacity>
+    <SafeAreaPage>
+      <View style={styles.container}>
+        <SearchHeader
+          onSearch={onSearch}
+          defaultQuery={params?.query ?? ''}
+          backIconPress={() => navigation.goBack()}
+        />
+        {searchQuery.length > 0 && (
+          <>
+            <View style={styles.switchRow}>
+              <View style={styles.switchContainer}>
+                <TouchableOpacity
+                  onPress={() => setSearchType('Products')}
+                  style={[
+                    styles.button,
+                    searchType === 'Products' ? styles.activeButton : {},
+                  ]}>
+                  <Text
+                    variant={'bodyMedium'}
+                    style={
+                      searchType === 'Products'
+                        ? styles.activeButtonText
+                        : styles.buttonText
+                    }>
+                    {t('Search.Products')}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setSearchType('Stores')}
+                  style={[
+                    styles.button,
+                    searchType === 'Stores' ? styles.activeButton : {},
+                  ]}>
+                  <Text
+                    variant={'bodyMedium'}
+                    style={
+                      searchType === 'Stores'
+                        ? styles.activeButtonText
+                        : styles.buttonText
+                    }>
+                    {t('Search.Stores')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-          {searchType === 'Products' ? (
-            <SearchProductList searchQuery={searchQuery} />
-          ) : (
-            <SearchProviders searchQuery={searchQuery} />
-          )}
-        </>
-      )}
-    </View>
+            {searchType === 'Products' ? (
+              <SearchProductList searchQuery={searchQuery} />
+            ) : (
+              <SearchProviders searchQuery={searchQuery} />
+            )}
+          </>
+        )}
+      </View>
+    </SafeAreaPage>
   );
 };
 

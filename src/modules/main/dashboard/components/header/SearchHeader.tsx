@@ -57,26 +57,23 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         onBlur={onSearchComplete}
         onClearIconPress={onClearIconPress}
         value={searchQuery}
-        icon={() => <Icon name="arrow-back" size={20} color={theme.colors.primary} />} 
+        icon={() => (
+          <Icon name="arrow-back" size={20} color={theme.colors.primary} />
+        )}
         onIconPress={backIconPress}
       />
       <AudioRecorder
+        color={theme.colors.primary}
         setSearchQuery={setSearchQuery}
         onSearchComplete={onAudioSearchComplete}
       />
-      <QRButton />
+      <QRButton color={theme.colors.primary} />
     </View>
   );
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    row: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingVertical: 10,
-    },
     searchContainer: {
       width: '100%',
       paddingVertical: 12,
@@ -97,8 +94,8 @@ const makeStyles = (colors: any) =>
       flex: 1,
       height: 44,
       backgroundColor: colors.white,
-      borderWidth:1,
-      borderColor:'#196AAB'
+      borderWidth: 1,
+      borderColor: '#196AAB',
     },
     backIconContainer: {
       marginRight: 4,

@@ -4,10 +4,7 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-import {useAppTheme} from '../../../../../utils/theme';
-
-const QRButton = () => {
-  const theme = useAppTheme();
+const QRButton = ({color}: {color: string}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const showQRScanner = () => {
@@ -16,7 +13,7 @@ const QRButton = () => {
 
   return (
     <TouchableOpacity onPress={showQRScanner}>
-      <Icon name={'qr-code-scanner'} color={'#fff'} size={24} />
+      <Icon name={'qr-code-scanner'} color={color} size={24} />
     </TouchableOpacity>
   );
 };

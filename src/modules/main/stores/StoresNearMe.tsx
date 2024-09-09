@@ -1,6 +1,5 @@
 import {FlatList, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import {memo, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
@@ -32,7 +31,6 @@ const ListFooterComponent = ({
 const renderItem = ({item}: {item: any}) => <MemoizedStore store={item} />;
 
 const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
-  const navigation = useNavigation();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);

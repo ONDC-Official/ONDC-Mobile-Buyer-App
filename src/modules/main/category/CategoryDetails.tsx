@@ -16,6 +16,7 @@ import FastImage from 'react-native-fast-image';
 import Header from '../../../components/header/Header';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
+import SafeAreaPage from '../../../components/header/SafeAreaPage';
 
 interface CategoryDetails {
   route: any;
@@ -108,7 +109,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   };
 
   return (
-    <>
+    <SafeAreaPage>
       <View
         style={[
           appStyles.container,
@@ -147,7 +148,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
           />
         </TouchableOpacity>
       </View>
-    </>
+    </SafeAreaPage>
   );
 };
 

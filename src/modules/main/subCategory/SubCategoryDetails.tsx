@@ -18,6 +18,7 @@ import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import SearchProviders from '../../../components/provider/SearchProviders';
 import Header from '../../../components/header/Header';
+import SafeAreaPage from '../../../components/header/SafeAreaPage';
 
 interface SubCategoryDetails {
   route: any;
@@ -119,7 +120,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   }, [params]);
 
   return (
-    <>
+    <SafeAreaPage>
       <View
         style={[
           appStyles.container,
@@ -211,7 +212,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           />
         </TouchableOpacity>
       </View>
-    </>
+    </SafeAreaPage>
   );
 };
 

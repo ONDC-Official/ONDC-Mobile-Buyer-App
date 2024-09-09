@@ -73,10 +73,11 @@ const Header: React.FC<HeaderProps> = ({onPress}) => {
           />
         </View>
         <AudioRecorder
+          color={theme.colors.white}
           setSearchQuery={setSearchQuery}
           onSearchComplete={onAudioSearchComplete}
         />
-        <QRButton />
+        <QRButton color={theme.colors.white}/>
       </View>
     </View>
   );
