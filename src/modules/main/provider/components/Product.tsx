@@ -127,7 +127,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
       let subtotal = product?.item_details?.price?.value;
 
       // const customisations = getCustomizations() ?? null;
-      const customisations:any = null;
+      const customisations: any = null;
 
       if (customisations) {
         calculateSubtotal(
@@ -204,7 +204,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
             await getCartItems(product.id);
             setAddToCartLoading(false);
           } else {
-            const currentIds = customisations.map((item:any) => item.id);
+            const currentIds = customisations.map((item: any) => item.id);
             let matchingCustomisation = null;
 
             for (let i = 0; i < cartItem.length; i++) {

@@ -1,7 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { createCustomizationAndGroupMapping } from '../../../../utils/utils';
+import React, {useEffect, useMemo, useState} from 'react';
+import {createCustomizationAndGroupMapping} from '../../../../utils/utils';
 import CustomizationGroup from './CustomizationGroup';
-import { formatCustomizationGroups, formatCustomizations } from '../../../../utils/utils'
+import {
+  formatCustomizationGroups,
+  formatCustomizations,
+} from '../../../../utils/utils';
 
 interface FBProductCustomization {
   product: any;
@@ -14,7 +17,7 @@ interface FBProductCustomization {
 
 const findMinMaxSeq = (customizationGroups: any) => {
   if (!customizationGroups || customizationGroups.length === 0) {
-    return { minSeq: undefined, maxSeq: undefined };
+    return {minSeq: undefined, maxSeq: undefined};
   }
 
   let minSeq = Infinity;
@@ -30,7 +33,7 @@ const findMinMaxSeq = (customizationGroups: any) => {
     }
   });
 
-  return { minSeq, maxSeq };
+  return {minSeq, maxSeq};
 };
 
 const FBProductCustomization: React.FC<FBProductCustomization> = ({
@@ -49,7 +52,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
 
   useEffect(() => {
     if (product) {
-      const { customisation_groups, customisation_items } = product;
+      const {customisation_groups, customisation_items} = product;
       const customGroup = product?.item_details?.tags?.find(
         (item: any) => item.code === 'custom_group',
       );
@@ -73,7 +76,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
       const firstGroup = customizationGroups.find(
         (group: any) => group.seq === minSeq,
       );
-      const state: any = { firstGroup };
+      const state: any = {firstGroup};
 
       const processCustomizationGroup = (id: any) => {
         const group: any = customizationGroups.find(item => item.id === id);
@@ -257,7 +260,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
   };
 
   const handleClick = (group: any, selectedOption: any) => {
-    let updatedCustomizationState = { ...customizationState };
+    let updatedCustomizationState = {...customizationState};
     let updatedState = processGroup(
       group.id,
       updatedCustomizationState,

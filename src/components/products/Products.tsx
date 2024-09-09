@@ -17,7 +17,6 @@ import Filters from './Filters';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import Product from '../../modules/main/provider/components/Product';
 import {useAppTheme} from '../../utils/theme';
-import ProductSearch from './ProductSearch';
 
 interface Products {
   providerId: any;
@@ -44,7 +43,7 @@ const Products: React.FC<Products> = ({
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(true);
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery] = useState<string>('');
   const [page, setPage] = useState<number>(1);
   const [products, setProducts] = useState<any[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);

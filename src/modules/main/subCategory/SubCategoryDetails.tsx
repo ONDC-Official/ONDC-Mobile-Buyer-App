@@ -3,8 +3,6 @@ import {
   Animated,
   Dimensions,
   Easing,
-  Image,
-  StatusBar,
   StyleSheet,
   TouchableOpacity,
   View,

@@ -1,6 +1,6 @@
 import React from 'react';
 import {Searchbar} from 'react-native-paper';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';
 
