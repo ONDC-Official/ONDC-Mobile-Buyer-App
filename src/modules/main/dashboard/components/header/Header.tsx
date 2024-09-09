@@ -112,7 +112,7 @@ const makeStyles = (colors: any) =>
     },
     searchButton: {
       flex: 1,
-      marginRight:4
+      marginRight: 4,
     },
     searchInput: {
       paddingVertical: 10,
@@ -131,7 +131,7 @@ const makeStyles = (colors: any) =>
     },
     actionButtonContainer: {
       flexDirection: 'row',
-      height:40,
+      height: 40,
       gap: 20,
       alignItems: 'center',
     },

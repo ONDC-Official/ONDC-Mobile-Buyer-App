@@ -1,12 +1,10 @@
-import {Dimensions} from 'react-native';
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
-import {ToastPosition} from 'react-native-toast-message/lib/src/types';
+import { ToastPosition } from 'react-native-toast-message/lib/src/types';
 import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
-import getDistance from 'geolib/es/getDistance';
-import {COLOR_CODE_TO_NAME} from './colorCodes';
-import {CATEGORIES} from './categories';
+import { COLOR_CODE_TO_NAME } from './colorCodes';
+import { CATEGORIES } from './categories';
 
 const TOAST_VISIBILITY_TIME = 3000;
 
@@ -74,8 +72,6 @@ export const skeletonList: any[] = [
  */
 export const keyExtractor = (item: any) => item._id;
 
-export const half = Dimensions.get('window').height / 2;
-
 /**
  * Check if the value is of type object
  * @param obj
@@ -83,25 +79,6 @@ export const half = Dimensions.get('window').height / 2;
  */
 const isObject = (obj: any) => {
   return obj != null && obj.constructor.name === 'Object';
-};
-
-/**
- * Function is used to remove the keys which has blank/null values
- * @param initialObject: Form object which needs to be cleans
- */
-export const cleanFormData = (initialObject: any) => {
-  const object = Object.assign({}, initialObject);
-  Object.keys(object).forEach(key => {
-    if (object[key] == null || object[key] === '' || object[key].length === 0) {
-      delete object[key];
-    } else {
-      if (isObject(object[key])) {
-        object[key] = cleanFormData(object[key]);
-      }
-    }
-  });
-
-  return object;
 };
 
 export const createCustomizationAndGroupMapping = (customizations: any[]) => {
@@ -163,16 +140,8 @@ export const getPriceWithCustomisations = (cartItem: any) => {
   return basePrice + price;
 };
 
-export const getInitials = (name: string) => {
-  return name
-    .split(' ')
-    .map(n => n[0])
-    .join('')
-    .toUpperCase();
-};
-
 export const removeNullValues = (object: any) => {
-  Object.entries(object).forEach(([k, v]) => {
+  Object.entries(object).forEach(([k, v]: any) => {
     if (v && typeof v === 'object') {
       removeNullValues(v);
     }
@@ -219,7 +188,7 @@ export const getCustomizations = async (
   product: any,
   customizationState: any,
 ) => {
-  const {customisation_items} = product;
+  const { customisation_items } = product;
   const customizations: any[] = [];
 
   const firstGroupId = customizationState.firstGroup?.id;
@@ -268,7 +237,7 @@ export const isItemCustomization = (tags: any[]) => {
   return isCustomization;
 };
 
-export const parseDuration = (duration: number) => {
+const parseDuration = (duration: number) => {
   return moment.duration(duration).asMilliseconds();
 };
 
@@ -365,23 +334,6 @@ export const getLocale = (code: string) => {
   }
 };
 
-export const compareIgnoringSpaces = (str1: string, str2: string) => {
-  // Remove all spaces from the strings
-  const cleanedStr1 = str1.replace(/\s+/g, '');
-  const cleanedStr2 = str2.replace(/\s+/g, '');
-
-  // Compare the cleaned strings
-  return cleanedStr1 === cleanedStr2;
-};
-
-export const calculateDistanceBetweenPoints = (
-  firstPoint: {latitude: number; longitude: number},
-  secondPoint: {latitude: number; longitude: number},
-) => {
-  const distance = getDistance(firstPoint, secondPoint) / 1000;
-  return Number.isInteger(distance) ? String(distance) : distance.toFixed(1);
-};
-
 export const convertHexToName = (hex: any) => {
   const hexLowerCase = hex.toLowerCase();
   return COLOR_CODE_TO_NAME?.hasOwnProperty(hexLowerCase)
@@ -401,7 +353,7 @@ const getStartAndEndTime = (item: any) => {
     }
   });
 
-  return {startTime, endTime};
+  return { startTime, endTime };
 };
 
 export const getStoreTiming = (tags: any[], localId: string) => {
@@ -459,10 +411,10 @@ export const getStoreTiming = (tags: any[], localId: string) => {
       }
     }
   }
-  return {time_from, time_to};
+  return { time_from, time_to };
 };
 
-export const filterByType = (timings: any[], type: string) => {
+const filterByType = (timings: any[], type: string) => {
   return timings?.filter((time: any) => {
     return !!time.list.find(
       (item: any) => item.code === 'type' && item.value === type,
@@ -470,7 +422,7 @@ export const filterByType = (timings: any[], type: string) => {
   });
 };
 
-export const filterByDay = (orderTimes: any[], dayOfWeek: number) => {
+const filterByDay = (orderTimes: any[], dayOfWeek: number) => {
   return orderTimes.filter((time: any) => {
     let minValue = 999,
       maxValue = 0;
@@ -486,7 +438,7 @@ export const filterByDay = (orderTimes: any[], dayOfWeek: number) => {
   });
 };
 
-export const findByTime = (orderTimes: any[]) => {
+const findByTime = (orderTimes: any[]) => {
   const currentTime = Number(moment().locale('en').format('HHmm'));
   return orderTimes.find((time: any) => {
     let minValue = 2359,
@@ -503,7 +455,7 @@ export const findByTime = (orderTimes: any[]) => {
   });
 };
 
-export const findNextSlotSameDay = (orderTimes: any[]) => {
+const findNextSlotSameDay = (orderTimes: any[]) => {
   const currentTime = Number(moment().locale('en').format('HHmm'));
   return orderTimes.find((time: any) => {
     let nextTime = false;
@@ -516,7 +468,7 @@ export const findNextSlotSameDay = (orderTimes: any[]) => {
   });
 };
 
-export const sortNextDay = (orderTimes: any[]) => {
+const sortNextDay = (orderTimes: any[]) => {
   return orderTimes.sort((a, b) => {
     const timeFromA = a.list.find(
       (item: any) => item.code === 'time_from',
@@ -528,7 +480,7 @@ export const sortNextDay = (orderTimes: any[]) => {
   });
 };
 
-export const getTime = (timings: any[], type: string) => {
+const getTime = (timings: any[], type: string) => {
   const dayOfWeek = moment().day();
   let orderTimes = filterByType(timings, type);
   let orderTimesForDay = filterByDay(orderTimes, dayOfWeek);
@@ -567,4 +519,107 @@ export const isValidQRURL = (urlParams: any) => {
 
 export const isDomainSupported = (domain: string) => {
   return CATEGORIES.findIndex((one: any) => one.domain === domain) > -1;
+};
+
+export const areCustomisationsSame = (
+  existingIds: any[],
+  currentIds: any[],
+) => {
+  if (existingIds.length !== currentIds.length) {
+    return false;
+  }
+
+  existingIds.sort();
+  currentIds.sort();
+
+  for (let i = 0; i < existingIds.length; i++) {
+    if (existingIds[i] !== currentIds[i]) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+export const formatCustomizationGroups = (groups: any) => {
+  return groups?.map((group: any) => {
+    let minConfig, maxConfig, inputTypeConfig, seqConfig;
+
+    group?.tags?.forEach((tag: any) => {
+      if (tag.code === 'config') {
+        tag.list.forEach((one: any) => {
+          if (one.code === 'min') {
+            minConfig = one.value;
+          }
+          if (one.code === 'max') {
+            maxConfig = one.value;
+          }
+          if (one.code === 'input') {
+            inputTypeConfig = one.value;
+          }
+          if (one.code === 'seq') {
+            seqConfig = one.value;
+          }
+        });
+      }
+    });
+
+    const customization: any = {
+      id: group.local_id,
+      name: group.descriptor.name,
+      inputType: inputTypeConfig,
+      minQuantity: Number(minConfig),
+      maxQuantity: Number(maxConfig),
+      seq: Number(seqConfig),
+    };
+
+    if (inputTypeConfig === 'input') {
+      customization.special_instructions = '';
+    }
+
+    return customization;
+  });
+};
+
+export const formatCustomizations = (items: any) => {
+  return items?.map((customization: any) => {
+    let parent = null;
+    let isDefault = false;
+    let childs: any[] = [];
+    let child = null;
+    let vegNonVegTag: any = null;
+
+    customization?.item_details?.tags?.forEach((tag: any) => {
+      if (tag.code === 'parent') {
+        tag.list.forEach((one: any) => {
+          if (one.code === 'default') {
+            isDefault = one.value.toLowerCase() === 'yes';
+          } else if (one.code === 'id') {
+            parent = one.value;
+          }
+        });
+      } else if (tag.code === 'child') {
+        tag.list.forEach((item: any) => {
+          childs.push(item.value);
+          if (item.code === 'id') {
+            child = item.value;
+          }
+        });
+      } else if (tag.code === 'veg_nonveg') {
+        vegNonVegTag = tag;
+      }
+    });
+
+    return {
+      id: customization.item_details.id,
+      name: customization.item_details.descriptor.name,
+      price: customization.item_details.price.value,
+      inStock: customization.item_details.quantity.available.count > 0,
+      parent,
+      child,
+      childs: childs?.length > 0 ? childs : null,
+      isDefault: isDefault,
+      vegNonVeg: vegNonVegTag ? vegNonVegTag.list[0].code : '',
+    };
+  });
 };

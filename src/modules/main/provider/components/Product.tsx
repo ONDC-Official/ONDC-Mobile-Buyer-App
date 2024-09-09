@@ -24,6 +24,7 @@ import {useSelector} from 'react-redux';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {showInfoToast, showToastWithGravity} from '../../../../utils/utils';
 import {useTranslation} from 'react-i18next';
+import {areCustomisationsSame} from '../../../../utils/utils';
 
 interface Product {
   product: any;
@@ -32,26 +33,6 @@ interface Product {
 }
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
-
-export const areCustomisationsSame = (
-  existingIds: any[],
-  currentIds: any[],
-) => {
-  if (existingIds.length !== currentIds.length) {
-    return false;
-  }
-
-  existingIds.sort();
-  currentIds.sort();
-
-  for (let i = 0; i < existingIds.length; i++) {
-    if (existingIds[i] !== currentIds[i]) {
-      return false;
-    }
-  }
-
-  return true;
-};
 
 const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
   const CancelToken = axios.CancelToken;
@@ -146,7 +127,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
       let subtotal = product?.item_details?.price?.value;
 
       // const customisations = getCustomizations() ?? null;
-      const customisations = null;
+      const customisations:any = null;
 
       if (customisations) {
         calculateSubtotal(
@@ -223,7 +204,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
             await getCartItems(product.id);
             setAddToCartLoading(false);
           } else {
-            const currentIds = customisations.map(item => item.id);
+            const currentIds = customisations.map((item:any) => item.id);
             let matchingCustomisation = null;
 
             for (let i = 0; i < cartItem.length; i++) {

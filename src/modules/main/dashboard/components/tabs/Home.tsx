@@ -33,8 +33,8 @@ const Home = () => {
       <AddressSheet addressSheet={addressSheet} />
       <Draggable
         renderSize={50}
-        x={screenWidth-50}
-        y={screenHeight*0.70}
+        x={screenWidth - 50}
+        y={screenHeight * 0.7}
         imageSource={require('../../../../../assets/Categories.png')}
         isCircle
         onShortPressRelease={() =>

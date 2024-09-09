@@ -113,7 +113,7 @@ const makeStyles = (colors: any) =>
       height: '100%',
       width: 4,
       backgroundColor: colors.primary,
-      borderRadius:10,
+      borderRadius: 10,
     },
     category: {
       flexDirection: 'row',

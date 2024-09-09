@@ -120,7 +120,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       marginRight: 24,
       width: 56,
-      marginBottom:10
+      marginBottom: 10,
     },
     imageContainer: {
       height: 56,

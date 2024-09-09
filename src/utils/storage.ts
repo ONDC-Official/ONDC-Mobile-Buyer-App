@@ -22,16 +22,6 @@ export const clearAll = async () => {
   await AsyncStorage.clear();
 };
 
-export const clearMultiple = async (keys: string[]) => {
-  try {
-    await AsyncStorage.multiRemove(keys);
-    return true;
-  } catch (e) {
-    console.log(e);
-    throw e;
-  }
-};
-
 export const saveMultipleData = async (data: any) => {
   try {
     const updatedData = data.map((one: any[]) => {

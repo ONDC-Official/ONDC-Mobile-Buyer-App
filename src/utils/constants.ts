@@ -1,13 +1,8 @@
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 
 export const BRAND_PRODUCTS_LIMIT: number = 10;
 
 export const SUPPORT_EMAIL: string = 'developer@ondc.org';
-
-export const TAGS: any = {
-  non_veg: 'Non-Veg',
-  veg: 'Veg',
-};
 
 export const CURRENCY_SYMBOLS: any = {
   INR: '₹',
@@ -127,30 +122,6 @@ export const CANCELLATION_REASONS_SELLER = [
     isApplicableForCancellation: false,
   },
 ];
-
-export const START_AUDIO_LISTENER_COMMAND: string[] = [
-  'hello sarthi',
-  'hello sarathi',
-  'hello saarathi',
-];
-
-export const VIEW_DELIVERY_OPTIONS_COMMAND: string[] = [
-  'view delivery options',
-  'view delivery option',
-];
-
-export const numberWords: any = {
-  one: 1,
-  two: 2,
-  three: 3,
-  four: 4,
-  five: 5,
-  six: 6,
-  seven: 7,
-  eight: 8,
-  nine: 9,
-  ten: 10,
-};
 
 export const MANUAL_LINK =
   'https://docs.google.com/document/d/1ICRM0BwlyBUPlH2WOT4WcochudtFGiGZKCUk_n4XtvQ/edit?usp=drivesdk';

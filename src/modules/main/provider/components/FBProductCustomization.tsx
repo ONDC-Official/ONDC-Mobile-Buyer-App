@@ -1,6 +1,7 @@
-import React, {useEffect, useMemo, useState} from 'react';
-import {createCustomizationAndGroupMapping} from '../../../../utils/utils';
+import React, { useEffect, useMemo, useState } from 'react';
+import { createCustomizationAndGroupMapping } from '../../../../utils/utils';
 import CustomizationGroup from './CustomizationGroup';
+import { formatCustomizationGroups, formatCustomizations } from '../../../../utils/utils'
 
 interface FBProductCustomization {
   product: any;
@@ -11,92 +12,9 @@ interface FBProductCustomization {
   hideProductDetails?: boolean;
 }
 
-export const formatCustomizationGroups = (groups: any) => {
-  return groups?.map((group: any) => {
-    let minConfig, maxConfig, inputTypeConfig, seqConfig;
-
-    group?.tags?.forEach((tag: any) => {
-      if (tag.code === 'config') {
-        tag.list.forEach((one: any) => {
-          if (one.code === 'min') {
-            minConfig = one.value;
-          }
-          if (one.code === 'max') {
-            maxConfig = one.value;
-          }
-          if (one.code === 'input') {
-            inputTypeConfig = one.value;
-          }
-          if (one.code === 'seq') {
-            seqConfig = one.value;
-          }
-        });
-      }
-    });
-
-    const customization: any = {
-      id: group.local_id,
-      name: group.descriptor.name,
-      inputType: inputTypeConfig,
-      minQuantity: Number(minConfig),
-      maxQuantity: Number(maxConfig),
-      seq: Number(seqConfig),
-    };
-
-    if (inputTypeConfig === 'input') {
-      customization.special_instructions = '';
-    }
-
-    return customization;
-  });
-};
-
-export const formatCustomizations = (items: any) => {
-  return items?.map((customization: any) => {
-    let parent = null;
-    let isDefault = false;
-    let childs: any[] = [];
-    let child = null;
-    let vegNonVegTag: any = null;
-
-    customization?.item_details?.tags?.forEach((tag: any) => {
-      if (tag.code === 'parent') {
-        tag.list.forEach((one: any) => {
-          if (one.code === 'default') {
-            isDefault = one.value.toLowerCase() === 'yes';
-          } else if (one.code === 'id') {
-            parent = one.value;
-          }
-        });
-      } else if (tag.code === 'child') {
-        tag.list.forEach((item: any) => {
-          childs.push(item.value);
-          if (item.code === 'id') {
-            child = item.value;
-          }
-        });
-      } else if (tag.code === 'veg_nonveg') {
-        vegNonVegTag = tag;
-      }
-    });
-
-    return {
-      id: customization.item_details.id,
-      name: customization.item_details.descriptor.name,
-      price: customization.item_details.price.value,
-      inStock: customization.item_details.quantity.available.count > 0,
-      parent,
-      child,
-      childs: childs?.length > 0 ? childs : null,
-      isDefault: isDefault,
-      vegNonVeg: vegNonVegTag ? vegNonVegTag.list[0].code : '',
-    };
-  });
-};
-
 const findMinMaxSeq = (customizationGroups: any) => {
   if (!customizationGroups || customizationGroups.length === 0) {
-    return {minSeq: undefined, maxSeq: undefined};
+    return { minSeq: undefined, maxSeq: undefined };
   }
 
   let minSeq = Infinity;
@@ -112,7 +30,7 @@ const findMinMaxSeq = (customizationGroups: any) => {
     }
   });
 
-  return {minSeq, maxSeq};
+  return { minSeq, maxSeq };
 };
 
 const FBProductCustomization: React.FC<FBProductCustomization> = ({
@@ -131,7 +49,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
 
   useEffect(() => {
     if (product) {
-      const {customisation_groups, customisation_items} = product;
+      const { customisation_groups, customisation_items } = product;
       const customGroup = product?.item_details?.tags?.find(
         (item: any) => item.code === 'custom_group',
       );
@@ -155,7 +73,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
       const firstGroup = customizationGroups.find(
         (group: any) => group.seq === minSeq,
       );
-      const state: any = {firstGroup};
+      const state: any = { firstGroup };
 
       const processCustomizationGroup = (id: any) => {
         const group: any = customizationGroups.find(item => item.id === id);
@@ -339,7 +257,7 @@ const FBProductCustomization: React.FC<FBProductCustomization> = ({
   };
 
   const handleClick = (group: any, selectedOption: any) => {
-    let updatedCustomizationState = {...customizationState};
+    let updatedCustomizationState = { ...customizationState };
     let updatedState = processGroup(
       group.id,
       updatedCustomizationState,

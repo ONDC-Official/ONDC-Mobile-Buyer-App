@@ -34,33 +34,13 @@ import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
 import SizeChart from './components/SizeChart';
 import Page from '../../../../components/page/Page';
-
+import {areCustomisationsSame} from '../../../../utils/utils';
 interface ProductDetails {
   route: any;
   navigation: any;
 }
 
 const CancelToken = axios.CancelToken;
-
-export const areCustomisationsSame = (
-  existingIds: any[],
-  currentIds: any[],
-) => {
-  if (existingIds.length !== currentIds.length) {
-    return false;
-  }
-
-  existingIds.sort();
-  currentIds.sort();
-
-  for (let i = 0; i < existingIds.length; i++) {
-    if (existingIds[i] !== currentIds[i]) {
-      return false;
-    }
-  }
-
-  return true;
-};
 
 const ProductDetails: React.FC<ProductDetails> = ({
   navigation,

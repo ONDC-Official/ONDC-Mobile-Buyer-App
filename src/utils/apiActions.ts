@@ -9,7 +9,6 @@ export const SERVICEABLE_LOCATIONS: string =
   '/clientApis/v2/servieablelocations';
 export const UPDATE_DELIVERY_ADDRESS: string =
   '/clientApis/v1/update_delivery_address/';
-export const LOCATIONS: string = '/clientApis/v2/locations';
 export const MAP_ACCESS_TOKEN: string = '/clientApis/v2/map/accesstoken';
 export const PROVIDER: string = '/clientApis/v2/provider-details';
 export const STORE_DETAILS: string = '/clientApis/v2/location-details';
@@ -60,10 +59,3 @@ export const CREATE_PAYMENT: string = '/clientApis/v2/razorpay/';
 export const GLOBAL_SEARCH_STORES: string =
   '/clientApis/v2/search/global/providers';
 export const GLOBAL_SEARCH_ITEMS: string = '/clientApis/v2/search/global/items';
-
-// Bhashini API
-export const ULCA_BASE_URL: string = Config.ULCA_BASE_URL ?? '';
-export const ULCA_API_KEY: string = Config.ULCA_API_KEY ?? '';
-export const ULCA_USER_ID: string = Config.ULCA_USER_ID ?? '';
-export const PIPELINE_ID: string = Config.PIPELINE_ID ?? '';
-export const MODEL_PIPELINE_ENDPOINT = '/ulca/apis/v0/model/getModelsPipeline';

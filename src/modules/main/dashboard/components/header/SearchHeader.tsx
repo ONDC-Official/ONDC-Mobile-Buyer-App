@@ -57,7 +57,9 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         onBlur={onSearchComplete}
         onClearIconPress={onClearIconPress}
         value={searchQuery}
-        icon={() => <Icon name="arrow-back" size={20} color={theme.colors.primary} />} 
+        icon={() => (
+          <Icon name="arrow-back" size={20} color={theme.colors.primary} />
+        )}
         onIconPress={backIconPress}
       />
       <AudioRecorder
@@ -97,8 +99,8 @@ const makeStyles = (colors: any) =>
       flex: 1,
       height: 44,
       backgroundColor: colors.white,
-      borderWidth:1,
-      borderColor:'#196AAB'
+      borderWidth: 1,
+      borderColor: '#196AAB',
     },
     backIconContainer: {
       marginRight: 4,

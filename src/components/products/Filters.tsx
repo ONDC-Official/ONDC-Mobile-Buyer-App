@@ -169,8 +169,8 @@ const makeStyles = (colors: any) =>
       height: 32,
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent:'center',
-      gap:4
+      justifyContent: 'center',
+      gap: 4,
     },
     disabledFilterButton: {
       borderColor: colors.neutral100,

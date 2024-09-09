@@ -187,6 +187,6 @@ export const theme: any = {
   },
 };
 
-export type AppTheme = typeof theme;
+type AppTheme = typeof theme;
 
 export const useAppTheme = () => useTheme<AppTheme>();

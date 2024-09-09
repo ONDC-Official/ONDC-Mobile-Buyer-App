@@ -39,7 +39,7 @@ import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetCo
 import {useAppTheme} from '../../../../utils/theme';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
-import {areCustomisationsSame} from '../../product/details/ProductDetails';
+import {areCustomisationsSame} from '../../../../utils/utils';
 
 interface FBProduct {
   product: any;
@@ -539,7 +539,9 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
       const max = formatNumber(priceRange?.maxPrice.toFixed(2));
       return (
         <Text variant={'bodyLarge'} style={styles.price}>
-          {currency}{min}- {currency}{max}
+          {currency}
+          {min}- {currency}
+          {max}
         </Text>
       );
     } else if (product?.item_details?.price?.value) {

@@ -8,7 +8,7 @@ import Profile from './components/tabs/Profile';
 import useCartItems from '../../../hooks/useCartItems';
 import useRefreshToken from '../../../hooks/useRefreshToken';
 import useCategoryDetails from '../../../hooks/useCategoryDetails';
-import {Text} from "react-native-paper";
+import {Text} from 'react-native-paper';
 
 interface Dashboard {}
 

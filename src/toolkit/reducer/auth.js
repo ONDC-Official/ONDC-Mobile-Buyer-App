@@ -32,9 +32,6 @@ const authSlice = createSlice({
     updateLanguage(state, action) {
       state.language = action.payload;
     },
-    hideLoader(state) {
-      state.isLoading = false;
-    },
     logoutUser(state) {
       Object.assign(state, initialState);
     },
@@ -49,7 +46,6 @@ export const {
   setToken,
   setTransactionId,
   updateLanguage,
-  hideLoader,
   logoutUser,
   saveUser,
 } = authSlice.actions;
