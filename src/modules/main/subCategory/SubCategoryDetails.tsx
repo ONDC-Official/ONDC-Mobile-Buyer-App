@@ -4,11 +4,10 @@ import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
 import Products from '../../../components/products/Products';
 import {useAppTheme} from '../../../utils/theme';
-import {Text} from 'react-native-paper';
-import {useTranslation} from 'react-i18next';
 import SearchProviders from '../../../components/provider/SearchProviders';
 import Header from '../../../components/header/Header';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import CategoryTab from '../../../components/products/CategoryTab';
 
 interface SubCategoryDetails {
   route: any;
@@ -21,7 +20,6 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   const [currentSubCategory, setCurrentSubCategory] = useState(
     params.subCategory,
   );
-  const {t} = useTranslation();
   const theme = useAppTheme();
   const [searchType, setSearchType] = useState<string>('Products');
   const widthAnim = useRef(new Animated.Value(80)).current;
@@ -66,55 +64,21 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
             />
           </Animated.View>
           <View style={styles.pageContainer}>
-            <View style={styles.pageContainer}>
-              <View style={styles.switchRow}>
-                <View style={styles.switchContainer}>
-                  <TouchableOpacity
-                    onPress={() => setSearchType('Stores')}
-                    style={[
-                      styles.button,
-                      searchType === 'Stores' ? styles.activeButton : {},
-                    ]}>
-                    <Text
-                      variant={'bodyMedium'}
-                      style={
-                        searchType === 'Stores'
-                          ? styles.activeButtonText
-                          : styles.buttonText
-                      }>
-                      {t('Search.Stores')}
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => setSearchType('Products')}
-                    style={[
-                      styles.button,
-                      searchType === 'Products' ? styles.activeButton : {},
-                    ]}>
-                    <Text
-                      variant={'bodyMedium'}
-                      style={
-                        searchType === 'Products'
-                          ? styles.activeButtonText
-                          : styles.buttonText
-                      }>
-                      {t('Search.Products')}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              {searchType === 'Products' ? (
-                <Products
-                  providerId={null}
-                  subCategories={[currentSubCategory]}
-                  search
-                  provider={null}
-                  isOpen
-                />
-              ) : (
-                <SearchProviders searchQuery={''} />
-              )}
-            </View>
+            <CategoryTab
+              searchType={searchType}
+              setSearchType={setSearchType}
+            />
+            {searchType === 'Products' ? (
+              <Products
+                providerId={null}
+                subCategories={[currentSubCategory]}
+                search
+                provider={null}
+                isOpen
+              />
+            ) : (
+              <SearchProviders searchQuery={''} />
+            )}
             <TouchableOpacity
               style={styles.collapsibleButton}
               onPress={toggleWidth}>

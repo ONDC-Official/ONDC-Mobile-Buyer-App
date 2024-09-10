@@ -130,6 +130,7 @@ const makeStyles = (colors: any) =>
     container: {
       flex: 1,
       backgroundColor: colors.white,
+      paddingTop:20,
     },
     listContainer: {
       paddingHorizontal: 8,

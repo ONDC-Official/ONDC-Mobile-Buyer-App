@@ -8,6 +8,7 @@ import SearchProductList from '../../../components/products/SearchProductList';
 import SearchHeader from './components/header/SearchHeader';
 import {useAppTheme} from '../../../utils/theme';
 import SearchProviders from '../../../components/provider/SearchProviders';
+import CategoryTab from '../../../components/products/CategoryTab';
 
 interface SearchProductsProps {
   route: any;
@@ -36,42 +37,7 @@ const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
       />
       {searchQuery.length > 0 && (
         <>
-          <View style={styles.switchRow}>
-            <View style={styles.switchContainer}>
-              <TouchableOpacity
-                onPress={() => setSearchType('Products')}
-                style={[
-                  styles.button,
-                  searchType === 'Products' ? styles.activeButton : {},
-                ]}>
-                <Text
-                  variant={'bodyMedium'}
-                  style={
-                    searchType === 'Products'
-                      ? styles.activeButtonText
-                      : styles.buttonText
-                  }>
-                  {t('Search.Products')}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => setSearchType('Stores')}
-                style={[
-                  styles.button,
-                  searchType === 'Stores' ? styles.activeButton : {},
-                ]}>
-                <Text
-                  variant={'bodyMedium'}
-                  style={
-                    searchType === 'Stores'
-                      ? styles.activeButtonText
-                      : styles.buttonText
-                  }>
-                  {t('Search.Stores')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
+          <CategoryTab searchType={searchType} setSearchType={setSearchType} />
           {searchType === 'Products' ? (
             <SearchProductList searchQuery={searchQuery} />
           ) : (
