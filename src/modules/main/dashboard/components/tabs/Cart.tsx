@@ -14,6 +14,7 @@ import {updateCartItems} from '../../../../../toolkit/reducer/cart';
 import StoreCart from '../../../cart/StoreCart';
 import EmptyCart from '../../../cart/components/EmptyCart';
 import {keyExtractor} from '../../../../../utils/utils';
+import SafeAreaPage from '../../../../../components/header/SafeAreaPage';
 
 const CancelToken = axios.CancelToken;
 
@@ -114,6 +115,7 @@ const Cart = ({navigation}: any) => {
   };
 
   return (
+    <SafeAreaPage>
     <View style={styles.container}>
       <View style={styles.header}>
         <Text variant={'titleLarge'} style={styles.pageTitle}>
@@ -135,6 +137,7 @@ const Cart = ({navigation}: any) => {
         <EmptyCart />
       )}
     </View>
+    </SafeAreaPage>
   );
 };
 

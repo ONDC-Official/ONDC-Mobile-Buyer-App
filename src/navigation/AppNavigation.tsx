@@ -215,72 +215,48 @@ const AppNavigation = () => {
           <Stack.Screen
             name="AddDefaultAddress"
             component={AddDefaultAddress}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="UpdateAddress"
             component={UpdateAddress}
-            options={{
-              title: 'Update Delivery Address',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="AddressList"
             component={AddressList}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="MyProfile"
             component={Profile}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="ChooseLanguage"
             component={ChooseLanguage}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="Complaints"
             component={Complaints}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="ComplaintDetails"
             component={ComplaintDetails}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
             name="Orders"
             component={Orders}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
@@ -316,10 +292,7 @@ const AppNavigation = () => {
           <Stack.Screen
             name="ProductDetails"
             component={ProductDetails}
-            options={{
-              headerStatusBarHeight: 0,
-              title: '',
-            }}
+            options={{headerShown: false}}
           />
 
           <Stack.Screen
@@ -330,10 +303,7 @@ const AppNavigation = () => {
           <Stack.Screen
             name="CouponList"
             component={CouponList}
-            options={{
-              headerStatusBarHeight: 0,
-              title: 'Apply Coupon',
-            }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="SubCategoryDetails"
@@ -358,25 +328,17 @@ const AppNavigation = () => {
           <Stack.Screen
             name="BrandDetails"
             component={BrandDetails}
-            options={{
-              headerStatusBarHeight: 0,
-              title: '',
-            }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="InvalidBrandDetails"
             component={InvalidBrandDetails}
-            options={{
-              headerStatusBarHeight: 0,
-              title: '',
-            }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="Outlets"
             component={Outlets}
-            options={{
-              headerStyle,
-            }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="SearchProducts"
@@ -391,18 +353,12 @@ const AppNavigation = () => {
           <Stack.Screen
             name="ShopByCategory"
             component={ShopByCategory}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="FeaturedCategories"
             component={FeaturedCategories}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="SellerQRCode"

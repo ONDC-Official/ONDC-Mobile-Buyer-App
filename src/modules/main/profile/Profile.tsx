@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {Button, Chip, Modal, Portal, Text} from 'react-native-paper';
@@ -8,6 +8,8 @@ import auth from '@react-native-firebase/auth';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {useAppTheme} from '../../../utils/theme';
+import SafeAreaPage from '../../../components/header/SafeAreaPage';
+import Header from '../../../components/header/Header';
 
 /**
  * Component to render profile screen which shows user profile
@@ -29,14 +31,9 @@ const Profile = () => {
 
   const closeModal = () => setModalVisible(false);
 
-  useEffect(() => {
-    navigation.setOptions({
-      title: t('Profile.My Profile'),
-    });
-  }, []);
-
   return (
-    <>
+    <SafeAreaPage>
+      <Header label={t('Profile.My Profile')} />
       <View style={styles.container}>
         <View>
           <Text variant={'bodySmall'} style={styles.label}>
@@ -92,7 +89,7 @@ const Profile = () => {
           <Text variant={'bodySmall'}>{t('Profile.Email send')}</Text>
         </Modal>
       </Portal>
-    </>
+    </SafeAreaPage>
   );
 };
 

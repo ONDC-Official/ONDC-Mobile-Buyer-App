@@ -8,6 +8,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../utils/theme';
 import useFormatNumber from '../../hooks/useFormatNumber';
+import SafeAreaPage from '../header/SafeAreaPage';
+import Header from '../header/Header';
 
 interface Page {
   children: React.ReactNode;
@@ -38,6 +40,8 @@ const Page: React.FC<Page> = ({children, outletId = ''}) => {
   }, [outletId, cartItems]);
 
   return (
+    <SafeAreaPage>
+      <Header/>
     <View style={styles.pageContainer}>
       {children}
       {index > -1 && (
@@ -59,6 +63,7 @@ const Page: React.FC<Page> = ({children, outletId = ''}) => {
         </View>
       )}
     </View>
+    </SafeAreaPage>
   );
 };
 
