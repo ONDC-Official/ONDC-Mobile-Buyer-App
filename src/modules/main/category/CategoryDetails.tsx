@@ -1,188 +1,79 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {
-  Animated,
-  Dimensions,
-  Easing,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, {useRef, useState, useMemo, useCallback} from 'react';
+import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Categories from './components/Categories';
 import SubCategories from './components/SubCategories';
 import {appStyles} from '../../../styles/styles';
 import {useAppTheme} from '../../../utils/theme';
-import FastImage from 'react-native-fast-image';
 import Header from '../../../components/header/Header';
-import {useTranslation} from 'react-i18next';
-import {useNavigation} from '@react-navigation/native';
 
 interface CategoryDetails {
   route: any;
 }
 
-let saveMenuStatus = true;
-
-const screenWidth = Dimensions.get('window').width;
-
 const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   const theme = useAppTheme();
   const {t} = useTranslation();
-  const navigation = useNavigation();
-  const styles = makeStyles(theme.colors);
-  const [openMenu, setOpenMenu] = useState(false);
+  const widthAnim = useRef(new Animated.Value(80)).current;
+  const [expanded, setExpanded] = useState(false);
 
-  const animated = new Animated.Value(0);
-  const animated1 = new Animated.Value(0);
-  const duration = 500;
+  const styles = useMemo(() => makeStyles(theme.colors), [theme.colors]);
 
-  const animationExpand = useRef(new Animated.Value(screenWidth)).current;
-
-  const inputRange = [0, screenWidth];
-  const outputRange = [0, 1];
-  const animatedWidthCollapse = animationExpand.interpolate({
-    inputRange,
-    outputRange,
-  });
-
-  useEffect(() => {
-    Animated.parallel([
-      Animated.timing(animated1, {
-        toValue: -screenWidth * 0.14,
-        duration: 0,
-        useNativeDriver: true,
-      }),
-      Animated.timing(animationExpand, {
-        toValue: screenWidth * 0.78,
-        duration: 0,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {});
-  }, [navigation, params.category]);
-
-  const openCloseMenu = async () => {
-    if (saveMenuStatus) {
-      Animated.parallel([
-        Animated.timing(animated, {
-          toValue: -screenWidth * 0.22,
-          duration: duration,
-          useNativeDriver: true,
-        }),
-        Animated.timing(animated1, {
-          toValue: -screenWidth * 0.22,
-          duration: duration,
-          useNativeDriver: true,
-        }),
-        Animated.timing(animationExpand, {
-          toValue: screenWidth,
-          duration: duration,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        saveMenuStatus = false;
-      });
-    } else {
-      Animated.parallel([
-        Animated.timing(animated, {
-          toValue: 0,
-          duration: duration,
-          useNativeDriver: true,
-        }),
-        Animated.timing(animated1, {
-          toValue: -screenWidth * 0.14,
-          duration: duration,
-          useNativeDriver: true,
-        }),
-        Animated.timing(animationExpand, {
-          toValue: screenWidth * 0.78,
-          duration: duration,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        saveMenuStatus = true;
-      });
-    }
-  };
+  const toggleWidth = useCallback(() => {
+    Animated.timing(widthAnim, {
+      toValue: expanded ? 0 : 80,
+      duration: 500,
+      useNativeDriver: false, // Cannot use native driver for width animation
+    }).start();
+    setExpanded(prev => !prev);
+  }, [expanded, widthAnim]);
 
   return (
-    <>
-      <View
-        style={[
-          appStyles.container,
-          styles.container,
-          appStyles.backgroundWhite,
-        ]}>
+      <View style={[appStyles.container, styles.container, appStyles.backgroundWhite]}>
         <Header label={t('Featured Categories.Categories')} />
         <View style={styles.subContainer}>
-          <Animated.View
-            style={[
-              styles.categoryView,
-              {width: screenWidth * 0.22, transform: [{translateX: animated}]},
-            ]}>
+          <Animated.View style={[styles.categoryView, {width: widthAnim}]}>
             <Categories currentCategory={params.category} />
           </Animated.View>
-          <Animated.View
-            style={{
-              width: screenWidth,
-              transform: [
-                {scaleX: animatedWidthCollapse},
-                {translateX: animated1},
-              ],
-            }}>
-            <SubCategories
-              currentCategory={params.category}
-              categoryDomain={params.domain}
-            />
-          </Animated.View>
+          <View style={styles.pageContainer}>
+            <SubCategories currentCategory={params.category} categoryDomain={params.domain} />
+            <TouchableOpacity style={styles.collapsibleButton} onPress={toggleWidth}>
+              <Icon name={'keyboard-arrow-left'} size={20} color={theme.colors.white} />
+            </TouchableOpacity>
+          </View>
         </View>
-        <TouchableOpacity
-          onPress={() => openCloseMenu()}
-          style={{transform: [{translateX: animated}]}}>
-          <FastImage
-            source={require('../../../assets/Frame.png')}
-            style={[styles.flotingButton, {marginLeft: screenWidth * 0.22}]}
-          />
-        </TouchableOpacity>
       </View>
-    </>
   );
 };
 
 const makeStyles = (colors: any) =>
-  StyleSheet.create({
-    container: {
-      paddingBottom: 16,
-    },
-    subContainer: {flex: 1, flexDirection: 'row'},
-    header: {
-      paddingVertical: 14,
-      paddingHorizontal: 16,
-      marginBottom: 8,
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 20,
-      backgroundColor: colors.white,
-    },
-    pageTitle: {
-      color: colors.neutral400,
-    },
-    backArrow: {
-      height: 16,
-      width: 16,
-    },
-    categoryView: {
-      borderRightWidth: 1,
-      borderRightColor: colors.neutral100,
-    },
-    flotingButton: {
-      position: 'absolute',
-      height: 32,
-      width: 24,
-      tintColor: 'red',
-      bottom: 50,
-    },
-  });
+    StyleSheet.create({
+      container: {
+        paddingBottom: 16,
+      },
+      pageContainer: {
+        flex: 1,
+      },
+      subContainer: {
+        flex: 1,
+        flexDirection: 'row',
+      },
+      categoryView: {
+        borderRightWidth: 1,
+        borderRightColor: colors.neutral100,
+      },
+      collapsibleButton: {
+        position: 'absolute',
+        height: 32,
+        width: 24,
+        backgroundColor: colors.neutral400,
+        bottom: 50,
+        borderTopRightRadius: 27,
+        borderBottomRightRadius: 27,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+    });
 
 export default CategoryDetails;
