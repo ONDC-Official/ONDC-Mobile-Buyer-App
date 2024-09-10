@@ -16,7 +16,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   const theme = useAppTheme();
   const {t} = useTranslation();
   const widthAnim = useRef(new Animated.Value(80)).current;
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   const styles = useMemo(() => makeStyles(theme.colors), [theme.colors]);
 

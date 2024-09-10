@@ -15,7 +15,7 @@ import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
-import Wishlist from '../../../../assets/dashboard/Wishlist.svg';
+import Wishlist from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -352,7 +352,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
       <View style={styles.meta}>
         <Text
           variant={'labelLarge'}
-          numberOfLines={2}
+          numberOfLines={1}
           ellipsizeMode={'tail'}
           style={styles.name}>
           {product?.item_details?.descriptor?.name}
@@ -417,7 +417,11 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
         </View>
       </View>
       <TouchableOpacity style={styles.wishlist}>
-        <Wishlist width={28} height={28} />
+        <Wishlist
+          name="cards-heart-outline"
+          size={20}
+          color={theme.colors.error600}
+        />
       </TouchableOpacity>
     </TouchableOpacity>
   );
@@ -443,6 +447,12 @@ const makeStyles = (colors: any) =>
       position: 'absolute',
       top: 4,
       left: 4,
+      height: 28,
+      width: 28,
+      borderRadius: 28,
+      backgroundColor: colors.white,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     name: {
       color: colors.neutral400,

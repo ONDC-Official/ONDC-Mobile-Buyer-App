@@ -13,10 +13,20 @@ import FastImage from 'react-native-fast-image';
 const Header = ({label, search, wishlist, cart}: any) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   const goBack = () => {
     navigation.goBack();
+  };
+
+  const openSearch = () => {
+    navigation.navigate('SearchProducts');
+  };
+  const openWishlist = () => {
+    navigation.navigate('List');
+  };
+  const openCart = () => {
+    navigation.navigate('DashboardCart');
   };
 
   return (
@@ -37,19 +47,26 @@ const Header = ({label, search, wishlist, cart}: any) => {
         </Text>
         <View style={styles.iconsView}>
           {search ? (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('SearchProducts')}>
+            <TouchableOpacity onPress={openSearch}>
               <Image source={require('../../assets/search_1.png')} />
             </TouchableOpacity>
           ) : (
             <></>
           )}
           {wishlist ? (
-            <Image source={require('../../assets/favorite_1.png')} />
+            <TouchableOpacity onPress={openWishlist}>
+              <Image source={require('../../assets/favorite_1.png')} />
+            </TouchableOpacity>
           ) : (
             <></>
           )}
-          {cart ? <Image source={require('../../assets/cart_1.png')} /> : <></>}
+          {cart ? (
+            <TouchableOpacity onPress={openCart}>
+              <Image source={require('../../assets/cart_1.png')} />
+            </TouchableOpacity>
+          ) : (
+            <></>
+          )}
         </View>
       </View>
     </View>

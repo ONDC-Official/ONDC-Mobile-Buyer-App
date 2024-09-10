@@ -53,7 +53,13 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
               ]}>
               <FastImage source={{uri: item.Icon}} style={styles.image} />
             </View>
-            <Text variant={'labelMedium'} style={styles.categoryText}>
+            <Text
+              variant={
+                item.shortName === currentCategory
+                  ? 'labelLarge'
+                  : 'labelMedium'
+              }
+              style={styles.categoryText}>
               {name}
             </Text>
           </View>
@@ -83,6 +89,7 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
         showsHorizontalScrollIndicator={false}
         renderItem={renderItem}
         keyExtractor={item => item.name}
+        showsVerticalScrollIndicator={false}
         onScrollToIndexFailed={info => {
           const wait = new Promise(resolve => setTimeout(resolve, 500));
           wait.then(() => {
@@ -99,10 +106,7 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    container: {
-      paddingVertical: 16,
-      marginTop: -20,
-    },
+    container: {},
     categoryText: {
       color: colors.neutral400,
       textAlign: 'center',
@@ -112,13 +116,19 @@ const makeStyles = (colors: any) =>
     activeCat: {
       height: '100%',
       width: 4,
+      marginRight: -4,
       backgroundColor: colors.primary,
       borderRadius: 10,
     },
     category: {
       flexDirection: 'row',
     },
-    categoriesView: {flex: 1, alignItems: 'center', paddingVertical: 8},
+    categoriesView: {
+      flex: 1,
+      alignItems: 'center',
+      paddingVertical: 8,
+      marginLeft: 4,
+    },
     first: {
       paddingLeft: 16,
       width: 75,
@@ -126,7 +136,7 @@ const makeStyles = (colors: any) =>
     imageContainer: {
       height: 52,
       width: 52,
-      marginBottom: 2,
+      marginBottom: 4,
       backgroundColor: colors.neutral100,
       padding: 6,
       justifyContent: 'center',

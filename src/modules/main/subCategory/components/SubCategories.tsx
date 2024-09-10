@@ -38,27 +38,34 @@ const SubCategories: React.FC<SubCategories> = ({
   const renderItem = useCallback(
     ({item}: {item: any}) => {
       const name = getSubcategoryName(item.code, item.label);
-      const numberOfLines = name.split(' ')[0].length > 8 ? 1 : 2;
       return (
         <TouchableOpacity
-          style={styles.subCategory}
+          style={styles.category}
           onPress={() => updateSubCategory(item)}>
-          <View
-            style={[
-              styles.imageContainer,
-              item?.code === currentSubCategory
-                ? styles.selected
-                : styles.normal,
-            ]}>
-            <FastImage source={{uri: item.url}} style={styles.image} />
+          {item?.code === currentSubCategory ? (
+            <View style={styles.activeCat} />
+          ) : (
+            <></>
+          )}
+
+          <View style={styles.categoriesView}>
+            <View
+              style={[
+                styles.imageContainer,
+                item?.code === currentSubCategory
+                  ? styles.selected
+                  : styles.normal,
+              ]}>
+              <FastImage source={{uri: item.url}} style={styles.image} />
+            </View>
+            <Text
+              variant={
+                item?.code === currentSubCategory ? 'labelLarge' : 'labelMedium'
+              }
+              style={styles.categoryText}>
+              {name}
+            </Text>
           </View>
-          <Text
-            variant={'labelMedium'}
-            style={styles.categoryText}
-            ellipsizeMode={'tail'}
-            numberOfLines={numberOfLines}>
-            {name}
-          </Text>
         </TouchableOpacity>
       );
     },
@@ -89,6 +96,7 @@ const SubCategories: React.FC<SubCategories> = ({
         data={subCategories}
         renderItem={renderItem}
         keyExtractor={item => item.code}
+        showsVerticalScrollIndicator={false}
         onScrollToIndexFailed={info => {
           const wait = new Promise(resolve => setTimeout(resolve, 500));
           wait.then(() => {
@@ -105,64 +113,53 @@ const SubCategories: React.FC<SubCategories> = ({
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    container: {
-      paddingLeft: 16,
-      backgroundColor: colors.white,
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
+    container: {},
     categoryText: {
-      textAlign: 'center',
       color: colors.neutral400,
-      width: 56,
+      textAlign: 'center',
+      lineHeight: 14,
+      paddingHorizontal: 4,
     },
-    subCategory: {
+    activeCat: {
+      height: '100%',
+      width: 4,
+      marginRight: -4,
+      backgroundColor: colors.primary,
+      borderRadius: 10,
+    },
+    category: {
+      flexDirection: 'row',
+    },
+    categoriesView: {
+      flex: 1,
       alignItems: 'center',
-      marginRight: 24,
-      width: 56,
-      marginBottom: 10,
+      paddingVertical: 8,
+      marginLeft: 4,
+    },
+    first: {
+      paddingLeft: 16,
+      width: 75,
     },
     imageContainer: {
-      height: 56,
-      width: 56,
-      marginBottom: 2,
+      height: 52,
+      width: 52,
+      marginBottom: 4,
       backgroundColor: colors.neutral100,
+      padding: 6,
       justifyContent: 'center',
       alignItems: 'center',
+      borderWidth: 1,
+      borderRadius: 28,
     },
     image: {
-      height: 54,
-      width: 54,
-      borderRadius: 29,
+      height: 36,
+      width: 36,
     },
     selected: {
-      borderRadius: 28,
-      borderWidth: 1,
       borderColor: colors.primary,
     },
     normal: {
-      borderRadius: 28,
-      borderWidth: 1,
       borderColor: colors.neutral100,
-    },
-    allOptionsContainer: {
-      width: 56,
-      height: 56,
-      borderRadius: 34,
-      backgroundColor: colors.primary50,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    allOptions: {
-      color: colors.primary,
-      marginTop: 6,
-      textAlign: 'center',
-    },
-    allOptionsButton: {
-      width: 56,
-      marginRight: 24,
-      alignItems: 'center',
-      justifyContent: 'center',
     },
   });
 

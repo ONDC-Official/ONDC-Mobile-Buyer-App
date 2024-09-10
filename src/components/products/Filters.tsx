@@ -187,7 +187,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 16,
-      marginTop: 24,
+      marginTop: 20,
     },
   });
 
