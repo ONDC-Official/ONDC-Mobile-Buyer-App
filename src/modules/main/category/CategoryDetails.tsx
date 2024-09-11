@@ -7,6 +7,7 @@ import SubCategories from './components/SubCategories';
 import {appStyles} from '../../../styles/styles';
 import {useAppTheme} from '../../../utils/theme';
 import Header from '../../../components/header/Header';
+import ListingPage from '../../../components/categoryTab/ListingPage';
 
 interface CategoryDetails {
   route: any;
@@ -30,50 +31,68 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   }, [expanded, widthAnim]);
 
   return (
-      <View style={[appStyles.container, styles.container, appStyles.backgroundWhite]}>
-        <Header label={t('Featured Categories.Categories')} />
-        <View style={styles.subContainer}>
-          <Animated.View style={[styles.categoryView, {width: widthAnim}]}>
-            <Categories currentCategory={params.category} />
-          </Animated.View>
-          <View style={styles.pageContainer}>
-            <SubCategories currentCategory={params.category} categoryDomain={params.domain} />
-            <TouchableOpacity style={styles.collapsibleButton} onPress={toggleWidth}>
-              <Icon name={'keyboard-arrow-left'} size={20} color={theme.colors.white} />
-            </TouchableOpacity>
-          </View>
+    <View
+      style={[
+        appStyles.container,
+        styles.container,
+        appStyles.backgroundWhite,
+      ]}>
+      <Header label={t('Featured Categories.Categories')} />
+      <View style={styles.subContainer}>
+        <Animated.View style={[styles.categoryView, {width: widthAnim}]}>
+          <Categories currentCategory={params.category} />
+        </Animated.View>
+        <View style={styles.pageContainer}>
+          {params.category !== 'F&B' ? (
+            <SubCategories
+              currentCategory={params.category}
+              categoryDomain={params.domain}
+            />
+          ) : (
+            <ListingPage searchQuery={''} subCategories={params.category} />
+          )}
+          <TouchableOpacity
+            style={styles.collapsibleButton}
+            onPress={toggleWidth}>
+            <Icon
+              name={'keyboard-arrow-left'}
+              size={20}
+              color={theme.colors.white}
+            />
+          </TouchableOpacity>
         </View>
       </View>
+    </View>
   );
 };
 
 const makeStyles = (colors: any) =>
-    StyleSheet.create({
-      container: {
-        paddingBottom: 16,
-      },
-      pageContainer: {
-        flex: 1,
-      },
-      subContainer: {
-        flex: 1,
-        flexDirection: 'row',
-      },
-      categoryView: {
-        borderRightWidth: 1,
-        borderRightColor: colors.neutral100,
-      },
-      collapsibleButton: {
-        position: 'absolute',
-        height: 32,
-        width: 24,
-        backgroundColor: colors.neutral400,
-        bottom: 50,
-        borderTopRightRadius: 27,
-        borderBottomRightRadius: 27,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-    });
+  StyleSheet.create({
+    container: {
+      paddingBottom: 16,
+    },
+    pageContainer: {
+      flex: 1,
+    },
+    subContainer: {
+      flex: 1,
+      flexDirection: 'row',
+    },
+    categoryView: {
+      borderRightWidth: 1,
+      borderRightColor: colors.neutral100,
+    },
+    collapsibleButton: {
+      position: 'absolute',
+      height: 32,
+      width: 24,
+      backgroundColor: colors.neutral400,
+      bottom: 50,
+      borderTopRightRadius: 27,
+      borderBottomRightRadius: 27,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  });
 
 export default CategoryDetails;

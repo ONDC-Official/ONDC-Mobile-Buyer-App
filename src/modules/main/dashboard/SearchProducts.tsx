@@ -1,28 +1,22 @@
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {Text} from 'react-native-paper';
-import {useTranslation} from 'react-i18next';
-import SearchProductList from '../../../components/products/SearchProductList';
+import {StyleSheet, View} from 'react-native';
 import SearchHeader from './components/header/SearchHeader';
 import {useAppTheme} from '../../../utils/theme';
-import SearchProviders from '../../../components/provider/SearchProviders';
-import CategoryTab from '../../../components/products/CategoryTab';
+import ListingPage from '../../../components/categoryTab/ListingPage';
 
 interface SearchProductsProps {
   route: any;
 }
 
 const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
-  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [searchQuery, setSearchQuery] = useState<string | ''>(
     params?.query ?? '',
   );
-  const [searchType, setSearchType] = useState<string>('Products');
 
   const onSearch = (query: string) => {
     setSearchQuery(query);
@@ -36,14 +30,7 @@ const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
         backIconPress={() => navigation.goBack()}
       />
       {searchQuery.length > 0 && (
-        <>
-          <CategoryTab searchType={searchType} setSearchType={setSearchType} />
-          {searchType === 'Products' ? (
-            <SearchProductList searchQuery={searchQuery} />
-          ) : (
-            <SearchProviders searchQuery={searchQuery} />
-          )}
-        </>
+        <ListingPage searchQuery={searchQuery} subCategories={''} />
       )}
     </View>
   );

@@ -1,14 +1,10 @@
 import {Text} from 'react-native-paper';
-import {
-  Image,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useAppTheme} from '../../utils/theme';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Header = ({label, search, wishlist, cart}: any) => {
   const theme = useAppTheme();
@@ -48,21 +44,33 @@ const Header = ({label, search, wishlist, cart}: any) => {
         <View style={styles.iconsView}>
           {search ? (
             <TouchableOpacity onPress={openSearch}>
-              <Image source={require('../../assets/search_1.png')} />
+              <MaterialIcons
+                name={'search'}
+                size={24}
+                color={theme.colors.neutral400}
+              />
             </TouchableOpacity>
           ) : (
             <></>
           )}
           {wishlist ? (
             <TouchableOpacity onPress={openWishlist}>
-              <Image source={require('../../assets/favorite_1.png')} />
+              <MaterialCommunityIcons
+                name={'heart-outline'}
+                size={24}
+                color={theme.colors.neutral400}
+              />
             </TouchableOpacity>
           ) : (
             <></>
           )}
           {cart ? (
             <TouchableOpacity onPress={openCart}>
-              <Image source={require('../../assets/cart_1.png')} />
+              <MaterialCommunityIcons
+                name={'cart-outline'}
+                size={24}
+                color={theme.colors.neutral400}
+              />
             </TouchableOpacity>
           ) : (
             <></>

@@ -4,16 +4,13 @@ import {useAppTheme} from '../../utils/theme';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 
-interface SearchProductList {
+interface CategoryTab {
   searchType: string;
   setSearchType: (values: any) => void;
 }
 
-const CategoryTab: React.FC<SearchProductList> = ({
-  searchType,
-  setSearchType,
-}) => {
-    const {t} = useTranslation();
+const CategoryTab: React.FC<CategoryTab> = ({searchType, setSearchType}) => {
+  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 

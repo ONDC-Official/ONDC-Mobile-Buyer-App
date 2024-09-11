@@ -21,6 +21,7 @@ import {useAppTheme} from '../../utils/theme';
 interface Products {
   providerId: any;
   subCategories: any[];
+  SearchText: string;
   search?: boolean;
   provider: any;
   providerDomain?: string;
@@ -32,6 +33,7 @@ const CancelToken = axios.CancelToken;
 const Products: React.FC<Products> = ({
   providerId = null,
   subCategories = [],
+  SearchText,
   search = false,
   provider,
   providerDomain,
@@ -70,11 +72,13 @@ const Products: React.FC<Products> = ({
         subCategoryIds.length > 0
           ? `&categoryIds=${encodeURIComponent(subCategoryIds.join(','))}`
           : '';
+
       Object.keys(attributes).forEach(key => {
         url += `&product_attr_${key}=${attributes[key]
           .map((one: string) => encodeURIComponent(one))
           .join(',')}`;
       });
+      url += subCategoryIds.length > 0 ? `&name=${SearchText}` : '';
       const {data} = await getDataWithWithoutEncode(
         url,
         productSearchSource.current.token,

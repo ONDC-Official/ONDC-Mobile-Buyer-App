@@ -359,7 +359,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
         </Text>
         <Text
           variant={'labelSmall'}
-          numberOfLines={4}
+          numberOfLines={1}
           ellipsizeMode={'tail'}
           style={styles.provider}>
           {search

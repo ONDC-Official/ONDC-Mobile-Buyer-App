@@ -14,13 +14,17 @@ import {skeletonList} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
 import Provider from './Provider';
 
-interface SearchProductList {
+interface SearchProviders {
   searchQuery: string;
+  currentSubCategory: string;
 }
 
 const CancelToken = axios.CancelToken;
 
-const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
+const SearchProviders: React.FC<SearchProviders> = ({
+  searchQuery,
+  currentSubCategory,
+}) => {
   const productSearchSource = useRef<any>(null);
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -31,7 +35,7 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
 
   const totalProviders = useRef<number>(0);
   const [providers, setProviders] = useState<any[]>([]);
-  const [productsRequested, setProductsRequested] = useState<boolean>(false);
+  const [productsRequested, setProductsRequested] = useState<boolean>(true);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
   const [providerId, setProviderId] = useState<string>('');
 
@@ -41,7 +45,7 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
   const loadMoreList = () => {
     if (totalProviders.current > providers?.length && !moreListRequested) {
       setMoreListRequested(true);
-      searchProviders()
+      searchProviders(false)
         .then(() => {
           setMoreListRequested(false);
         })
@@ -51,25 +55,30 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
     }
   };
 
-  const searchProviders = async () => {
+  const searchProviders = async (pagination: boolean) => {
     try {
       if (productSearchSource.current) {
         productSearchSource.current.cancel();
       }
       productSearchSource.current = CancelToken.source();
-      const afterString = providerId ? `&afterKey=${providerId}` : '';
-      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${
-        address?.address?.lat
-      }&longitude=${address.address.lng}&pincode=${
-        address.address.areaCode
-      }&name=${'all'}${afterString}`;
+      const afterString =
+        providerId && !pagination ? `&afterKey=${providerId}` : '';
+      const name = searchQuery.length > 0 ? `&name=${searchQuery}` : '';
+      const subcategory = currentSubCategory
+        ? `&subcategory=${currentSubCategory}`
+        : '';
+      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}${subcategory}${name}${afterString}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
       );
       totalProviders.current = data.response.count;
       setProviderId(data?.response?.afterKey?.provider_id);
-      setProviders([...providers, ...data?.response?.data]);
+      if (pagination) {
+        setProviders([...data?.response?.data]);
+      } else {
+        setProviders([...providers, ...data?.response?.data]);
+      }
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -84,7 +93,16 @@ const SearchProviders: React.FC<SearchProductList> = ({searchQuery}) => {
   useEffect(() => {
     setProviderId('');
     setProductsRequested(true);
-    searchProviders().then(() => {});
+    if (currentSubCategory) {
+      searchProviders(true).then(() => {});
+    }
+  }, [currentSubCategory]);
+  useEffect(() => {
+    setProviderId('');
+    setProductsRequested(true);
+    if (searchQuery.length > 0) {
+      searchProviders(true).then(() => {});
+    }
   }, [searchQuery]);
 
   return (

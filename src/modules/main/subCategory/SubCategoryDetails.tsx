@@ -2,12 +2,10 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
-import Products from '../../../components/products/Products';
 import {useAppTheme} from '../../../utils/theme';
-import SearchProviders from '../../../components/provider/SearchProviders';
 import Header from '../../../components/header/Header';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import CategoryTab from '../../../components/products/CategoryTab';
+import ListingPage from '../../../components/categoryTab/ListingPage';
 
 interface SubCategoryDetails {
   route: any;
@@ -21,7 +19,6 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
     params.subCategory,
   );
   const theme = useAppTheme();
-  const [searchType, setSearchType] = useState<string>('Products');
   const widthAnim = useRef(new Animated.Value(80)).current;
   const [expanded, setExpanded] = useState<boolean>(false);
 
@@ -64,21 +61,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
             />
           </Animated.View>
           <View style={styles.pageContainer}>
-            <CategoryTab
-              searchType={searchType}
-              setSearchType={setSearchType}
-            />
-            {searchType === 'Products' ? (
-              <Products
-                providerId={null}
-                subCategories={[currentSubCategory]}
-                search
-                provider={null}
-                isOpen
-              />
-            ) : (
-              <SearchProviders searchQuery={''} />
-            )}
+            <ListingPage searchQuery={''} subCategories={currentSubCategory} />
             <TouchableOpacity
               style={styles.collapsibleButton}
               onPress={toggleWidth}>
