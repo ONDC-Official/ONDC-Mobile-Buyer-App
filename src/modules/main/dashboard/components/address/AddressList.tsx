@@ -15,6 +15,7 @@ import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
 import {useAppTheme} from '../../../../../utils/theme';
+import SafeAreaPage from '../../../../../components/header/SafeAreaPage';
 
 interface Address {
   _id: string;
@@ -137,6 +138,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
   const list = apiInProgress ? skeletonList : addresses;
 
   return (
+    <SafeAreaPage>
     <View style={appStyles.container}>
       <FlatList
         style={appStyles.container}
@@ -160,6 +162,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
         </Text>
       </TouchableOpacity>
     </View>
+    </SafeAreaPage>
   );
 };
 

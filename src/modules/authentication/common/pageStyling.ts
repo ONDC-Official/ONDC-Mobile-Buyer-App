@@ -9,7 +9,7 @@ export const makeStyles = (colors: any) =>
     },
     pageContainer: {
       position: 'absolute',
-      top: 0,
+      top: 78,
       bottom: 0,
       width: '100%',
     },

@@ -7,6 +7,7 @@ import FormSwitch from '../common/FormSwitch';
 import PageBackground from '../common/PageBackground';
 import {makeStyles} from '../common/pageStyling';
 import {useAppTheme} from '../../../utils/theme';
+import SafeAreaPage from '../common/SafeAreaPage';
 
 /**
  * Component is used to render login form
@@ -17,7 +18,7 @@ const Login = () => {
   const [formType, setFormType] = useState<string>('email');
 
   return (
-    <>
+    <SafeAreaPage>
       <PageBackground />
       <View style={styles.pageContainer}>
         <ScrollView
@@ -47,7 +48,7 @@ const Login = () => {
           </Text>
         </View>
       </View>
-    </>
+      </SafeAreaPage>
   );
 };
 
