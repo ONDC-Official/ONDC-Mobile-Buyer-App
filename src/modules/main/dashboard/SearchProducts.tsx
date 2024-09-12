@@ -5,6 +5,7 @@ import {StyleSheet, View} from 'react-native';
 import SearchHeader from './components/header/SearchHeader';
 import {useAppTheme} from '../../../utils/theme';
 import ListingPage from '../../../components/categoryTab/ListingPage';
+import SafeAreaPage from '../../../components/header/SafeAreaPage';
 
 interface SearchProductsProps {
   route: any;
@@ -23,6 +24,7 @@ const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
   };
 
   return (
+    <SafeAreaPage>
     <View style={styles.container}>
       <SearchHeader
         onSearch={onSearch}
@@ -33,6 +35,7 @@ const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
         <ListingPage searchQuery={searchQuery} subCategories={''} />
       )}
     </View>
+    </SafeAreaPage>
   );
 };
 

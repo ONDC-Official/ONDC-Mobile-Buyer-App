@@ -13,6 +13,7 @@ import ComplaintSkeleton from '../components/ComplaintSkeleton';
 import ListFooter from '../../order/components/ListFooter';
 import Complaint from '../components/Complaint';
 import {useAppTheme} from '../../../../utils/theme';
+import SafeAreaPage from '../../../../components/header/SafeAreaPage';
 
 const CancelToken = axios.CancelToken;
 
@@ -139,6 +140,7 @@ const Complaints: React.FC<any> = () => {
   }
 
   return (
+    <SafeAreaPage>
     <View style={styles.pageContainer}>
       <FlatList
         data={complaints}
@@ -158,6 +160,7 @@ const Complaints: React.FC<any> = () => {
         )}
       />
     </View>
+    </SafeAreaPage>
   );
 };
 
