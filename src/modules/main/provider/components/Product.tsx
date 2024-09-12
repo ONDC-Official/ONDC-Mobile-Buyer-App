@@ -22,9 +22,12 @@ import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, CART} from '../../../../utils/apiActions';
 import {useSelector} from 'react-redux';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
-import {showInfoToast, showToastWithGravity} from '../../../../utils/utils';
+import {
+  areCustomisationsSame,
+  showInfoToast,
+  showToastWithGravity,
+} from '../../../../utils/utils';
 import {useTranslation} from 'react-i18next';
-import {areCustomisationsSame} from '../../../../utils/utils';
 
 interface Product {
   product: any;
@@ -82,10 +85,6 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
     };
   }
 
-  useEffect(() => {
-    getCartItems(product.id);
-  }, [product]);
-
   const getCartItems = async (pId = null) => {
     try {
       source.current = CancelToken.source();
@@ -95,7 +94,6 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
       );
       let ind: any = 0;
       if (pId) {
-        let isItemAvailable = false;
         let findItem;
         data.map((res: any, index: number) => {
           const check = res.items.find((item: any) => item.item.id === pId);
@@ -105,13 +103,11 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
           }
         });
         if (findItem) {
-          isItemAvailable = true;
           setItemAvailableInCart(findItem);
         }
       } else {
         setItemAvailableInCart(null);
       }
-      // dispatch(updateCartItems(data));
       return data[ind].items;
     } catch (error) {
       console.log('Error fetching cart items:', error);
@@ -259,21 +255,6 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
     await getCartItems();
   };
 
-  const getCustomization = (groupId: any, selectedCustomizationIds: any[]) => {
-    let group = customizationState[groupId];
-    if (!group) {
-      return selectedCustomizationIds;
-    }
-
-    group.selected.forEach((selectedGroup: any) =>
-      selectedCustomizationIds.push(selectedGroup.id),
-    );
-    group?.childs?.forEach((child: any) => {
-      getCustomization(child, selectedCustomizationIds);
-    });
-    return selectedCustomizationIds;
-  };
-
   const calculateSubtotal = (groupId: any, newState: any) => {
     let group = newState[groupId];
     if (!group) {
@@ -289,6 +270,10 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
       calculateSubtotal(child, newState);
     });
   };
+
+  useEffect(() => {
+    getCartItems(product.id);
+  }, [product]);
 
   return (
     <TouchableOpacity
@@ -338,7 +323,9 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
           <View style={styles.priceText}>
             <Text variant={'labelMedium'} style={styles.amountStrike}>
               {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
-              {formatNumber(product?.item_details?.price?.value.toFixed(2))}
+              {formatNumber(
+                product?.item_details?.price?.maximum_value.toFixed(2),
+              )}
             </Text>
             <Text variant={'bodyLarge'} style={styles.amount}>
               {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
@@ -400,7 +387,6 @@ const makeStyles = (colors: any) =>
     container: {
       flex: 1,
       marginBottom: 15,
-      marginHorizontal: 8,
     },
     meta: {
       flex: 1,

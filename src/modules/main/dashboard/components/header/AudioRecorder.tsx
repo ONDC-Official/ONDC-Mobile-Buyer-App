@@ -1,7 +1,6 @@
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
-import {useAppTheme} from '../../../../../utils/theme';
 import SearchModal from './SearchModal';
 
 const AudioRecorder = ({

@@ -6,11 +6,9 @@ import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
 import HomeIcon from '../../../../../assets/dashboard/home.svg';
-import CartIcon from '../../../../../assets/dashboard/cart.svg';
 import ListIcon from '../../../../../assets/dashboard/list_alt.svg';
 import ProfileIcon from '../../../../../assets/dashboard/profile.svg';
 import HomeActiveIcon from '../../../../../assets/dashboard/home_a.svg';
-import CartActiveIcon from '../../../../../assets/dashboard/cart_a.svg';
 import ListActiveIcon from '../../../../../assets/dashboard/list_a.svg';
 import ProfileActiveIcon from '../../../../../assets/dashboard/profile_a.svg';
 import {useAppTheme} from '../../../../../utils/theme';
@@ -27,8 +25,6 @@ const TabIcon: React.FC<TabIcon> = ({name, isFocused}) => {
         return <HomeActiveIcon width={20} height={20} color={'#686868'} />;
       case 'Orders':
         return <ListActiveIcon width={18} height={18} color={'#686868'} />;
-      case 'Cart':
-        return <CartActiveIcon width={20} height={20} color={'#686868'} />;
       default:
         return <ProfileActiveIcon width={20} height={20} color={'#686868'} />;
     }
@@ -38,8 +34,6 @@ const TabIcon: React.FC<TabIcon> = ({name, isFocused}) => {
         return <HomeIcon width={20} height={20} color={'#fff'} />;
       case 'Orders':
         return <ListIcon width={18} height={18} color={'#fff'} />;
-      case 'Cart':
-        return <CartIcon width={20} height={20} color={'#fff'} />;
       default:
         return <ProfileIcon width={20} height={20} color={'#fff'} />;
     }

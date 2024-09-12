@@ -1,4 +1,4 @@
-import React, {useRef, useState, useMemo, useCallback} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -33,38 +33,38 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
 
   return (
     <SafeAreaPage>
-    <View
-      style={[
-        appStyles.container,
-        styles.container,
-        appStyles.backgroundWhite,
-      ]}>
-      <Header label={t('Featured Categories.Categories')} />
-      <View style={styles.subContainer}>
-        <Animated.View style={[styles.categoryView, {width: widthAnim}]}>
-          <Categories currentCategory={params.category} />
-        </Animated.View>
-        <View style={styles.pageContainer}>
-          {params.category !== 'F&B' ? (
-            <SubCategories
-              currentCategory={params.category}
-              categoryDomain={params.domain}
-            />
-          ) : (
-            <ListingPage searchQuery={''} subCategories={params.category} />
-          )}
-          <TouchableOpacity
-            style={styles.collapsibleButton}
-            onPress={toggleWidth}>
-            <Icon
-              name={'keyboard-arrow-left'}
-              size={20}
-              color={theme.colors.white}
-            />
-          </TouchableOpacity>
+      <View
+        style={[
+          appStyles.container,
+          styles.container,
+          appStyles.backgroundWhite,
+        ]}>
+        <Header label={t('Featured Categories.Categories')} />
+        <View style={styles.subContainer}>
+          <Animated.View style={[styles.categoryView, {width: widthAnim}]}>
+            <Categories currentCategory={params.category} />
+          </Animated.View>
+          <View style={styles.pageContainer}>
+            {params.category !== 'F&B' ? (
+              <SubCategories
+                currentCategory={params.category}
+                categoryDomain={params.domain}
+              />
+            ) : (
+              <ListingPage searchQuery={''} subCategories={params.category} />
+            )}
+            <TouchableOpacity
+              style={styles.collapsibleButton}
+              onPress={toggleWidth}>
+              <Icon
+                name={'keyboard-arrow-left'}
+                size={20}
+                color={theme.colors.white}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
     </SafeAreaPage>
   );
 };

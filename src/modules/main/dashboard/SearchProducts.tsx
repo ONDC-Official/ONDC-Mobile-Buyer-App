@@ -25,16 +25,16 @@ const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
 
   return (
     <SafeAreaPage>
-    <View style={styles.container}>
-      <SearchHeader
-        onSearch={onSearch}
-        defaultQuery={params?.query ?? ''}
-        backIconPress={() => navigation.goBack()}
-      />
-      {searchQuery.length > 0 && (
-        <ListingPage searchQuery={searchQuery} subCategories={''} />
-      )}
-    </View>
+      <View style={styles.container}>
+        <SearchHeader
+          onSearch={onSearch}
+          defaultQuery={params?.query ?? ''}
+          backIconPress={() => navigation.goBack()}
+        />
+        {searchQuery.length > 0 && (
+          <ListingPage searchQuery={searchQuery} subCategories={''} />
+        )}
+      </View>
     </SafeAreaPage>
   );
 };

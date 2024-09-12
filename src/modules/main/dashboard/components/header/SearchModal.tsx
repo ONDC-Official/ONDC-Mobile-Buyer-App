@@ -75,7 +75,11 @@ const SearchModal: React.FC<MicrProps> = ({
           </TouchableOpacity>
           <View style={styles.micWavesContainer}>
             <MicWave />
-            <MaterialCommunityIcons name="microphone-outline" size={40} color="#fff" />
+            <MaterialCommunityIcons
+              name="microphone-outline"
+              size={40}
+              color="#fff"
+            />
           </View>
           <Text variant={'bodyLarge'} style={styles.labelText}>
             {recognizedText?.length > 0

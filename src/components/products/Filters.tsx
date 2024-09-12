@@ -152,7 +152,7 @@ const Filters: React.FC<Filters> = React.memo(
         </View>
       );
     } else {
-      return <View />;
+      return <View style={styles.filterContainer} />;
     }
   },
 );
@@ -187,7 +187,7 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 16,
-      marginTop: 20,
+      marginBottom: 20,
     },
   });
 

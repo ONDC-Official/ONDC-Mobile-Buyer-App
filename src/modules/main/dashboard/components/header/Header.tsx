@@ -77,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({onPress}) => {
           setSearchQuery={setSearchQuery}
           onSearchComplete={onAudioSearchComplete}
         />
-        <QRButton color={theme.colors.white}/>
+        <QRButton color={theme.colors.white} />
       </View>
     </View>
   );
@@ -104,13 +104,6 @@ const makeStyles = (colors: any) =>
       height: 60,
       gap: 20,
     },
-    backButton: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 24,
-      height: 24,
-      marginRight: 10,
-    },
     searchButton: {
       flex: 1,
       marginRight: 4,
@@ -124,11 +117,6 @@ const makeStyles = (colors: any) =>
       flex: 1,
       height: 44,
       backgroundColor: colors.white,
-    },
-    headerImage: {
-      width: 32,
-      height: 32,
-      objectFit: 'contain',
     },
     actionButtonContainer: {
       flexDirection: 'row',

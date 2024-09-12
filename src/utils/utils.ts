@@ -1,10 +1,10 @@
 import Toast from 'react-native-toast-message';
 import moment from 'moment';
-import { ToastPosition } from 'react-native-toast-message/lib/src/types';
+import {ToastPosition} from 'react-native-toast-message/lib/src/types';
 import Config from 'react-native-config';
 import CryptoJS from 'crypto-js';
-import { COLOR_CODE_TO_NAME } from './colorCodes';
-import { CATEGORIES } from './categories';
+import {COLOR_CODE_TO_NAME} from './colorCodes';
+import {CATEGORIES} from './categories';
 
 const TOAST_VISIBILITY_TIME = 3000;
 
@@ -188,7 +188,7 @@ export const getCustomizations = async (
   product: any,
   customizationState: any,
 ) => {
-  const { customisation_items } = product;
+  const {customisation_items} = product;
   const customizations: any[] = [];
 
   const firstGroupId = customizationState.firstGroup?.id;
@@ -353,7 +353,7 @@ const getStartAndEndTime = (item: any) => {
     }
   });
 
-  return { startTime, endTime };
+  return {startTime, endTime};
 };
 
 export const getStoreTiming = (tags: any[], localId: string) => {
@@ -411,7 +411,7 @@ export const getStoreTiming = (tags: any[], localId: string) => {
       }
     }
   }
-  return { time_from, time_to };
+  return {time_from, time_to};
 };
 
 const filterByType = (timings: any[], type: string) => {

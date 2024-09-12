@@ -139,29 +139,29 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
 
   return (
     <SafeAreaPage>
-    <View style={appStyles.container}>
-      <FlatList
-        style={appStyles.container}
-        data={list}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        ListEmptyComponent={() => (
-          <View style={[appStyles.container, appStyles.centerContainer]}>
-            <Text variant={'bodyMedium'}>
-              {t('Address List.No address available')}
-            </Text>
-          </View>
-        )}
-        contentContainerStyle={
-          list.length > 0 ? styles.contentContainerStyle : appStyles.container
-        }
-      />
-      <TouchableOpacity style={styles.addButton} onPress={addAddress}>
-        <Text style={styles.addButtonText} variant={'bodyMedium'}>
-          {t('Address List.Add Address')}
-        </Text>
-      </TouchableOpacity>
-    </View>
+      <View style={appStyles.container}>
+        <FlatList
+          style={appStyles.container}
+          data={list}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          ListEmptyComponent={() => (
+            <View style={[appStyles.container, appStyles.centerContainer]}>
+              <Text variant={'bodyMedium'}>
+                {t('Address List.No address available')}
+              </Text>
+            </View>
+          )}
+          contentContainerStyle={
+            list.length > 0 ? styles.contentContainerStyle : appStyles.container
+          }
+        />
+        <TouchableOpacity style={styles.addButton} onPress={addAddress}>
+          <Text style={styles.addButtonText} variant={'bodyMedium'}>
+            {t('Address List.Add Address')}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaPage>
   );
 };

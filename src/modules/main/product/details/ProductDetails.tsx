@@ -26,7 +26,11 @@ import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import VariationsRenderer from '../../../../components/products/VariationsRenderer';
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
-import {showInfoToast, showToastWithGravity} from '../../../../utils/utils';
+import {
+  areCustomisationsSame,
+  showInfoToast,
+  showToastWithGravity,
+} from '../../../../utils/utils';
 import {makeGlobalStyles} from '../../../../styles/styles';
 import AboutProduct from './components/AboutProduct';
 import {useAppTheme} from '../../../../utils/theme';
@@ -34,7 +38,7 @@ import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
 import SizeChart from './components/SizeChart';
 import Page from '../../../../components/page/Page';
-import {areCustomisationsSame} from '../../../../utils/utils';
+
 interface ProductDetails {
   route: any;
   navigation: any;

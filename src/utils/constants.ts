@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 
 export const BRAND_PRODUCTS_LIMIT: number = 10;
 

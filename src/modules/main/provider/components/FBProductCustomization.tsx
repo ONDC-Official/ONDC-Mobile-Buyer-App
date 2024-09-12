@@ -1,10 +1,10 @@
 import React, {useEffect, useMemo, useState} from 'react';
-import {createCustomizationAndGroupMapping} from '../../../../utils/utils';
-import CustomizationGroup from './CustomizationGroup';
 import {
+  createCustomizationAndGroupMapping,
   formatCustomizationGroups,
   formatCustomizations,
 } from '../../../../utils/utils';
+import CustomizationGroup from './CustomizationGroup';
 
 interface FBProductCustomization {
   product: any;

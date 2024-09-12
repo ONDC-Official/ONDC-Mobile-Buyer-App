@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useCallback, useMemo, useRef} from 'react';
 import {Dimensions, StatusBar, StyleSheet, View} from 'react-native';
 import Draggable from 'react-native-draggable';
 import {useNavigation} from '@react-navigation/native';
@@ -11,18 +11,24 @@ import AddressSheet from '../address/AddressSheet';
 
 import {CATEGORIES} from '../../../../../utils/categories';
 
-const screenWidth = Dimensions.get('window').width;
-const screenHeight = Dimensions.get('window').height;
+const screenDimensions = Dimensions.get('window');
 
 const Home = () => {
   const theme = useAppTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = useMemo(() => makeStyles(theme.colors), [theme.colors]);
   const addressSheet = useRef<any>();
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const openAddressList = () => {
-    addressSheet.current.open();
-  };
+  const openAddressList = useCallback(() => {
+    addressSheet.current?.open();
+  }, []);
+
+  const navigateToCategoryDetails = useCallback(() => {
+    navigation.navigate('CategoryDetails', {
+      category: CATEGORIES[0].shortName,
+      domain: CATEGORIES[0].domain,
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -33,16 +39,11 @@ const Home = () => {
       <AddressSheet addressSheet={addressSheet} />
       <Draggable
         renderSize={50}
-        x={screenWidth - 50}
-        y={screenHeight * 0.7}
-        imageSource={require('../../../../../assets/Categories.png')}
+        x={screenDimensions.width - 40}
+        y={screenDimensions.height * 0.7}
+        imageSource={require('../../../../../assets/dashboard/categories.png')}
         isCircle
-        onShortPressRelease={() =>
-          navigation.navigate('CategoryDetails', {
-            category: CATEGORIES[0].shortName,
-            domain: CATEGORIES[0].domain,
-          })
-        }
+        onShortPressRelease={navigateToCategoryDetails}
       />
     </View>
   );

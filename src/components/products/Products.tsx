@@ -224,6 +224,7 @@ const Products: React.FC<Products> = ({
           style={styles.nestedListContainer}
           renderItem={renderFlatListItem}
           keyExtractor={(one: any) => one.id}
+          columnWrapperStyle={styles.columnWrapper}
         />
       ) : null;
     },
@@ -331,29 +332,12 @@ const makeStyles = (colors: any) =>
       flex: 1,
       backgroundColor: colors.white,
     },
-    productContainer: {
-      width: '50%',
-      height: 254,
-      marginBottom: 12,
-    },
-    searchContainer: {
-      marginTop: 24,
-      paddingHorizontal: 16,
-    },
-    searchBar: {
-      borderRadius: 60,
-      height: 40,
-    },
-    searchInput: {
-      paddingVertical: 0,
-    },
     listContainer: {
       flexGrow: 1,
-      marginTop: 24,
     },
     nestedListContainer: {
       flexGrow: 1,
-      paddingHorizontal: 12,
+      paddingHorizontal: 16,
     },
     emptyContainer: {
       flex: 1,
@@ -367,6 +351,10 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 10,
     },
     headerText: {flex: 1},
+    columnWrapper: {
+      justifyContent: 'space-between',
+      gap: 16,
+    },
   });
 
 export default Products;

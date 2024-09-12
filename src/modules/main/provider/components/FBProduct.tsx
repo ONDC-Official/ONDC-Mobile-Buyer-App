@@ -17,6 +17,7 @@ import {useTranslation} from 'react-i18next';
 import {Grayscale} from 'react-native-color-matrix-image-filters';
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {
+  areCustomisationsSame,
   getCustomizations,
   getPriceWithCustomisations,
   showToastWithGravity,
@@ -39,7 +40,6 @@ import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetCo
 import {useAppTheme} from '../../../../utils/theme';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
-import {areCustomisationsSame} from '../../../../utils/utils';
 
 interface FBProduct {
   product: any;

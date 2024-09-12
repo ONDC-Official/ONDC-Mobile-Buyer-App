@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useAppTheme} from '../../utils/theme';
-import CategoryTab from './CategoryTab';
+import ListingTab from './ListingTab';
 import Products from '../products/Products';
 import SearchProviders from '../provider/SearchProviders';
 
@@ -11,13 +10,15 @@ interface ListingPage {
 }
 
 const ListingPage: React.FC<ListingPage> = ({searchQuery, subCategories}) => {
-  const theme = useAppTheme();
-  const styles = makeStyles(theme.colors);
+  const styles = makeStyles();
   const [searchType, setSearchType] = useState<string>('Stores');
 
   return (
     <View style={styles.pageContainer}>
-      <CategoryTab searchType={searchType} setSearchType={setSearchType} />
+      <ListingTab
+        isStore={searchType === 'Stores'}
+        setSearchType={setSearchType}
+      />
       {searchType === 'Products' ? (
         <Products
           providerId={null}
@@ -25,7 +26,7 @@ const ListingPage: React.FC<ListingPage> = ({searchQuery, subCategories}) => {
           SearchText={searchQuery}
           search
           provider={null}
-          isOpen
+          isOpen={true}
         />
       ) : (
         <SearchProviders
@@ -37,7 +38,7 @@ const ListingPage: React.FC<ListingPage> = ({searchQuery, subCategories}) => {
   );
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     pageContainer: {
       flex: 1,

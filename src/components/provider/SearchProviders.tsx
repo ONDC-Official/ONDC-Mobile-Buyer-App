@@ -7,11 +7,7 @@ import {useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
-import {
-  API_BASE_URL,
-  GLOBAL_SEARCH_STORES,
-  GLOBAL_SEARCH_ITEMS,
-} from '../../utils/apiActions';
+import {API_BASE_URL, GLOBAL_SEARCH_STORES} from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT, FB_DOMAIN} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
@@ -24,6 +20,20 @@ interface SearchProviders {
 }
 
 const CancelToken = axios.CancelToken;
+
+const ListEmptyComponent = () => {
+  const {t} = useTranslation();
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
+
+  return (
+    <View style={styles.emptyContainer}>
+      <Text variant={'bodyMedium'}>
+        {t('Home.Search Provider List.No providers available')}
+      </Text>
+    </View>
+  );
+};
 
 const SearchProviders: React.FC<SearchProviders> = ({
   searchQuery,
@@ -103,6 +113,8 @@ const SearchProviders: React.FC<SearchProviders> = ({
     return <Provider provider={item} />;
   }, []);
 
+  const keyExtractor = useCallback((item: any) => item.id, []);
+
   useEffect(() => {
     setProviderId('');
     setProductsRequested(true);
@@ -110,6 +122,7 @@ const SearchProviders: React.FC<SearchProviders> = ({
       searchProviders(true).then(() => {});
     }
   }, [currentSubCategory]);
+
   useEffect(() => {
     setProviderId('');
     setProductsRequested(true);
@@ -120,34 +133,25 @@ const SearchProviders: React.FC<SearchProviders> = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.filterContainer}>
-        <View />
-      </View>
       {productsRequested ? (
         <FlatList
           data={skeletonList}
           renderItem={() => <ProductSkeleton />}
           contentContainerStyle={styles.listContainer}
-          keyExtractor={item => item.id}
+          keyExtractor={keyExtractor}
         />
       ) : (
         <FlatList
           data={providers}
           renderItem={renderItem}
           onEndReached={loadMoreList}
-          ListEmptyComponent={() => (
-            <View style={styles.emptyContainer}>
-              <Text variant={'bodyMedium'}>
-                {t('Home.Search Provider List.No providers available')}
-              </Text>
-            </View>
-          )}
+          ListEmptyComponent={ListEmptyComponent}
           contentContainerStyle={
             providers.length === 0
               ? styles.emptyContainer
               : styles.listContainer
           }
-          keyExtractor={item => item.id}
+          keyExtractor={keyExtractor}
         />
       )}
     </View>
@@ -162,16 +166,8 @@ const makeStyles = (colors: any) =>
       flex: 1,
       backgroundColor: colors.white,
     },
-    filterContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: 16,
-      paddingBottom: 16,
-      width: '100%',
-    },
     listContainer: {
-      paddingHorizontal: 8,
+      paddingHorizontal: 16,
     },
     emptyContainer: {
       flex: 1,

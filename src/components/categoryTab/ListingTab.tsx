@@ -1,15 +1,15 @@
 import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {useAppTheme} from '../../utils/theme';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
+import {useAppTheme} from '../../utils/theme';
 
-interface CategoryTab {
-  searchType: string;
+interface ListingTab {
+  isStore: boolean;
   setSearchType: (values: any) => void;
 }
 
-const CategoryTab: React.FC<CategoryTab> = ({searchType, setSearchType}) => {
+const CategoryTab: React.FC<ListingTab> = ({isStore, setSearchType}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -19,33 +19,19 @@ const CategoryTab: React.FC<CategoryTab> = ({searchType, setSearchType}) => {
       <View style={styles.switchContainer}>
         <TouchableOpacity
           onPress={() => setSearchType('Stores')}
-          style={[
-            styles.button,
-            searchType === 'Stores' ? styles.activeButton : {},
-          ]}>
+          style={[styles.button, isStore ? styles.activeButton : {}]}>
           <Text
             variant={'bodyMedium'}
-            style={
-              searchType === 'Stores'
-                ? styles.activeButtonText
-                : styles.buttonText
-            }>
+            style={isStore ? styles.activeButtonText : styles.buttonText}>
             {t('Search.Stores')}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setSearchType('Products')}
-          style={[
-            styles.button,
-            searchType === 'Products' ? styles.activeButton : {},
-          ]}>
+          style={[styles.button, !isStore ? styles.activeButton : {}]}>
           <Text
             variant={'bodyMedium'}
-            style={
-              searchType === 'Products'
-                ? styles.activeButtonText
-                : styles.buttonText
-            }>
+            style={!isStore ? styles.activeButtonText : styles.buttonText}>
             {t('Search.Products')}
           </Text>
         </TouchableOpacity>
@@ -59,15 +45,15 @@ const makeStyles = (colors: any) =>
     switchRow: {
       justifyContent: 'center',
       alignItems: 'center',
+      marginVertical: 20,
     },
     switchContainer: {
       height: 28,
       width: 168,
-      borderRadius: 39,
+      borderRadius: 24,
       backgroundColor: colors.primary50,
       flexDirection: 'row',
       alignItems: 'center',
-      marginTop:20,
     },
     button: {
       width: 84,
@@ -77,7 +63,7 @@ const makeStyles = (colors: any) =>
     },
     activeButton: {
       backgroundColor: colors.primary,
-      borderRadius: 39,
+      borderRadius: 24,
     },
     activeButtonText: {
       color: colors.white,

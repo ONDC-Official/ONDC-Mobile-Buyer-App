@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import {FlatList, StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Text} from 'react-native-paper';
+import {ActivityIndicator} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import axios from 'axios';
 
@@ -159,7 +159,7 @@ const makeStyles = (colors: any) =>
       flexGrow: 1,
       paddingHorizontal: 16,
       gap: 15,
-      paddingVertical:15
+      paddingVertical: 15,
     },
     loadingContainer: {
       flex: 1,

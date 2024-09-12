@@ -30,35 +30,31 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
   };
 
   const renderItem = useCallback(
-    ({item, index}: {item: any; index: number}) => {
+    ({item}: {item: any}) => {
       const name = t(`Featured Categories.${item.name}`);
+      const isSelected = item.shortName === currentCategory;
 
       return (
         <TouchableOpacity
           style={styles.category}
           onPress={() => navigateToCategory(item)}>
-          {item.shortName === currentCategory ? (
-            <View style={styles.activeCat} />
-          ) : (
-            <></>
-          )}
+          <View
+            style={[
+              styles.categoryBorder,
+              isSelected ? styles.activeCategory : {},
+            ]}
+          />
 
           <View style={styles.categoriesView}>
             <View
               style={[
                 styles.imageContainer,
-                item.shortName === currentCategory
-                  ? styles.selected
-                  : styles.normal,
+                isSelected ? styles.selected : styles.normal,
               ]}>
               <FastImage source={{uri: item.Icon}} style={styles.image} />
             </View>
             <Text
-              variant={
-                item.shortName === currentCategory
-                  ? 'labelLarge'
-                  : 'labelMedium'
-              }
+              variant={isSelected ? 'labelLarge' : 'labelMedium'}
               style={styles.categoryText}>
               {name}
             </Text>
@@ -112,12 +108,14 @@ const makeStyles = (colors: any) =>
       textAlign: 'center',
       lineHeight: 14,
     },
-    activeCat: {
+    categoryBorder: {
       height: '100%',
       width: 4,
-      marginRight: -4,
-      backgroundColor: colors.primary,
       borderRadius: 10,
+      backgroundColor: colors.white,
+    },
+    activeCategory: {
+      backgroundColor: colors.primary,
     },
     category: {
       flexDirection: 'row',
@@ -127,10 +125,6 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       paddingVertical: 8,
       marginLeft: 4,
-    },
-    first: {
-      paddingLeft: 16,
-      width: 75,
     },
     imageContainer: {
       height: 52,

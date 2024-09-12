@@ -14,6 +14,11 @@ type SearchHeaderProps = {
   backIconPress?: () => void;
 };
 
+const BackIcon = () => {
+  const theme = useAppTheme();
+  return <Icon name="arrow-back" size={24} color={theme.colors.primary} />;
+};
+
 const SearchHeader: React.FC<SearchHeaderProps> = ({
   onSearch,
   defaultQuery,
@@ -47,7 +52,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
     <View style={styles.searchContainer}>
       <Searchbar
         editable
-        iconColor={theme.colors.primary}
+        iconColor={theme.colors.neutral200}
         rippleColor={theme.colors.primary50}
         inputStyle={styles.searchInput}
         style={styles.search}
@@ -57,9 +62,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         onBlur={onSearchComplete}
         onClearIconPress={onClearIconPress}
         value={searchQuery}
-        icon={() => (
-          <Icon name="arrow-back" size={20} color={theme.colors.primary} />
-        )}
+        icon={BackIcon}
         onIconPress={backIconPress}
       />
       <AudioRecorder
@@ -81,7 +84,7 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       backgroundColor: colors.white,
       paddingHorizontal: 16,
-      gap: 15,
+      gap: 20,
     },
     searchInput: {
       paddingVertical: 12,
@@ -95,7 +98,7 @@ const makeStyles = (colors: any) =>
       height: 44,
       backgroundColor: colors.white,
       borderWidth: 1,
-      borderColor: '#196AAB',
+      borderColor: 'rgba(25, 106, 171, 0.19)',
     },
     backIconContainer: {
       marginRight: 4,

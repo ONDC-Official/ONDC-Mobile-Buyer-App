@@ -48,7 +48,7 @@ const Login = () => {
           </Text>
         </View>
       </View>
-      </SafeAreaPage>
+    </SafeAreaPage>
   );
 };
 

@@ -141,25 +141,20 @@ const Complaints: React.FC<any> = () => {
 
   return (
     <SafeAreaPage>
-    <View style={styles.pageContainer}>
-      <FlatList
-        data={complaints}
-        renderItem={renderItem}
-        ListEmptyComponent={() => <Text>{t('Profile.No data found')}</Text>}
-        refreshing={refreshInProgress}
-        keyExtractor={keyExtractor}
-        onRefresh={onRefreshHandler}
-        onEndReached={loadMoreList}
-        // contentContainerStyle={
-        //   complaints.length > 0
-        //     ? {}
-        //     : [appStyles.container, styles.emptyContainer]
-        // }
-        ListFooterComponent={props => (
-          <ListFooter moreRequested={moreListRequested} {...props} />
-        )}
-      />
-    </View>
+      <View style={styles.pageContainer}>
+        <FlatList
+          data={complaints}
+          renderItem={renderItem}
+          ListEmptyComponent={() => <Text>{t('Profile.No data found')}</Text>}
+          refreshing={refreshInProgress}
+          keyExtractor={keyExtractor}
+          onRefresh={onRefreshHandler}
+          onEndReached={loadMoreList}
+          ListFooterComponent={props => (
+            <ListFooter moreRequested={moreListRequested} {...props} />
+          )}
+        />
+      </View>
     </SafeAreaPage>
   );
 };

@@ -46,12 +46,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           styles.container,
           appStyles.backgroundWhite,
         ]}>
-        <Header
-          label={currentSubCategory}
-          search={true}
-          wishlist={true}
-          cart={true}
-        />
+        <Header label={currentSubCategory} search wishlist cart />
         <View style={styles.subContainer}>
           <Animated.View style={[styles.categoryView, {width: widthAnim}]}>
             <SubCategories
