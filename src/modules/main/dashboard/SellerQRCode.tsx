@@ -15,6 +15,7 @@ import {Text} from 'react-native-paper';
 import {useSelector} from 'react-redux';
 
 import {useAppTheme} from '../../../utils/theme';
+import SafeAreaPage from '../../authentication/common/SafeAreaPage';
 
 const SellerQRCode = ({navigation, route}: {navigation: any; route: any}) => {
   const {handleDeepLink} = route.params;
@@ -66,7 +67,7 @@ const SellerQRCode = ({navigation, route}: {navigation: any; route: any}) => {
   }
 
   return (
-    <>
+    <SafeAreaPage>
       <QRCodeScanner
         reactivate={false}
         onRead={onQRScan}
@@ -99,7 +100,7 @@ const SellerQRCode = ({navigation, route}: {navigation: any; route: any}) => {
         </View>
         <View style={styles.footer} />
       </View>
-    </>
+    </SafeAreaPage>
   );
 };
 
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
   permissionView: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   metaContainer: {
     position: 'absolute',
-    top: 0,
+    top: 58,
     left: 0,
     right: 0,
     bottom: 0,
