@@ -378,7 +378,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
                 addToCart(true);
               }}>
               <Text variant={'bodyLarge'} style={styles.quantityText}>
-                Add
+                {t('Cart.FBProduct.Add')}
               </Text>
             </TouchableOpacity>
           )}
