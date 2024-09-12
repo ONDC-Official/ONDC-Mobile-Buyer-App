@@ -7,7 +7,11 @@ import {useSelector} from 'react-redux';
 
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../hooks/useNetworkHandling';
-import {API_BASE_URL, GLOBAL_SEARCH_STORES} from '../../utils/apiActions';
+import {
+  API_BASE_URL,
+  GLOBAL_SEARCH_STORES,
+  GLOBAL_SEARCH_ITEMS,
+} from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
@@ -65,19 +69,45 @@ const SearchProviders: React.FC<SearchProviders> = ({
         providerId && !pagination ? `&afterKey=${providerId}` : '';
       const name = searchQuery.length > 0 ? `&name=${searchQuery}` : '';
       const subcategory = currentSubCategory
-        ? `&subcategory=${currentSubCategory}`
+        ? currentSubCategory !== 'F&B'
+          ? `&subcategory=${currentSubCategory}`
+          : `&category=${currentSubCategory}&`
         : '';
-      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}${subcategory}${name}${afterString}`;
+      const pageNumber = currentSubCategory == 'F&B' ? `pageNumber=${1}` : '';
+
+      let url = `${API_BASE_URL}${
+        currentSubCategory !== 'F&B'
+          ? GLOBAL_SEARCH_STORES
+          : GLOBAL_SEARCH_ITEMS
+      }?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${
+        address?.address?.lat
+      }&longitude=${address.address.lng}&pincode=${
+        address.address.areaCode
+      }${subcategory}${name}${pageNumber}${afterString}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
       );
-      totalProviders.current = data.response.count;
-      setProviderId(data?.response?.afterKey?.provider_id);
-      if (pagination) {
-        setProviders([...data?.response?.data]);
+      console.log('url : ', url);
+      console.log('data : ', data);
+
+      if (currentSubCategory !== 'F&B') {
+        totalProviders.current = data.response.count;
+        setProviderId(data?.response?.afterKey?.provider_id);
+        if (pagination) {
+          setProviders([...data?.response?.data]);
+        } else {
+          setProviders([...providers, ...data?.response?.data]);
+        }
       } else {
-        setProviders([...providers, ...data?.response?.data]);
+        if (data?.data?.length > 0) {
+          //here is need response to set data for F&B currently set approx data
+          if (pagination) {
+            setProviders([...data?.data]);
+          } else {
+            setProviders([...providers, ...data?.data]);
+          }
+        }
       }
     } catch (error) {
       handleApiError(error);

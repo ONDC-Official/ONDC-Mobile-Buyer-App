@@ -230,7 +230,7 @@ const Products: React.FC<Products> = ({
     [renderFlatListItem],
   );
 
-  const renderSectionHeader = useCallback(({section}) => {
+  const renderSectionHeader = useCallback(({section}: any) => {
     return section.data[0]?.list?.length > 0 && section?.title ? (
       <View style={styles.headerSection}>
         <Text variant="headlineSmall" style={styles.headerText}>

@@ -111,7 +111,6 @@ const makeStyles = (colors: any) =>
       color: colors.neutral400,
       textAlign: 'center',
       lineHeight: 14,
-      paddingHorizontal: 10,
     },
     activeCat: {
       height: '100%',
