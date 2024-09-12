@@ -41,7 +41,7 @@ const Page: React.FC<Page> = ({children, outletId = ''}) => {
 
   return (
     <SafeAreaPage>
-      <Header wishlist={true} cart={true}/>
+      <Header wishlist={true} cart={true} />
       <View style={styles.pageContainer}>
         {children}
         {index > -1 && (

@@ -2,15 +2,11 @@ import {Keyboard, StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Text} from 'react-native-paper';
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
-import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
+import AntIcon from 'react-native-vector-icons/AntDesign';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-import HomeIcon from '../../../../../assets/dashboard/home.svg';
-import ListIcon from '../../../../../assets/dashboard/list_alt.svg';
-import ProfileIcon from '../../../../../assets/dashboard/profile.svg';
-import HomeActiveIcon from '../../../../../assets/dashboard/home_a.svg';
-import ListActiveIcon from '../../../../../assets/dashboard/list_a.svg';
-import ProfileActiveIcon from '../../../../../assets/dashboard/profile_a.svg';
 import {useAppTheme} from '../../../../../utils/theme';
 
 interface TabIcon {
@@ -19,23 +15,47 @@ interface TabIcon {
 }
 
 const TabIcon: React.FC<TabIcon> = ({name, isFocused}) => {
+  const theme = useAppTheme();
+
   if (isFocused) {
     switch (name) {
       case 'Home':
-        return <HomeActiveIcon width={20} height={20} color={'#686868'} />;
+        return (
+          <FeatherIcon name={'home'} size={24} color={theme.colors.white} />
+        );
       case 'Orders':
-        return <ListActiveIcon width={18} height={18} color={'#686868'} />;
+        return (
+          <MaterialIcon
+            name={'list-alt'}
+            size={24}
+            color={theme.colors.white}
+          />
+        );
       default:
-        return <ProfileActiveIcon width={20} height={20} color={'#686868'} />;
+        return <AntIcon name={'user'} size={24} color={theme.colors.white} />;
     }
   } else {
     switch (name) {
       case 'Home':
-        return <HomeIcon width={20} height={20} color={'#fff'} />;
+        return (
+          <FeatherIcon
+            name={'home'}
+            size={24}
+            color={theme.colors.neutral300}
+          />
+        );
       case 'Orders':
-        return <ListIcon width={18} height={18} color={'#fff'} />;
+        return (
+          <MaterialIcon
+            name={'list-alt'}
+            size={24}
+            color={theme.colors.neutral300}
+          />
+        );
       default:
-        return <ProfileIcon width={20} height={20} color={'#fff'} />;
+        return (
+          <AntIcon name={'user'} size={24} color={theme.colors.neutral300} />
+        );
     }
   }
 };
@@ -48,7 +68,6 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {cartItems} = useSelector(({cart}) => cart);
   const [visible, setVisible] = useState<boolean>(true);
 
   useEffect(() => {
@@ -93,7 +112,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
             });
           };
 
-          const badge = cartItems?.length;
+          const tabLabel = t(`${label}.${label}`);
 
           return (
             <View key={route.name} style={styles.tab}>
@@ -106,16 +125,15 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({
                 onPress={onPress}
                 onLongPress={onLongPress}>
                 <TabIcon name={route.name} isFocused={isFocused} />
-                <Text
-                  variant={'labelMedium'}
-                  style={isFocused ? styles.activeButtonText : styles.tabText}>
-                  {t(`${label}.${label}`)}
-                </Text>
-                {route.name === 'Cart' && badge ? (
-                  <View style={styles.badge}>
-                    <Text style={styles.badgeLabel}>{badge}</Text>
-                  </View>
-                ) : null}
+                {isFocused ? (
+                  <Text variant={'labelLarge'} style={styles.activeButtonText}>
+                    {tabLabel}
+                  </Text>
+                ) : (
+                  <Text variant={'labelSmall'} style={styles.tabText}>
+                    {tabLabel}
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
           );
@@ -160,6 +178,7 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
+      gap: 6,
     },
     activeButton: {
       backgroundColor: colors.primary,
@@ -167,22 +186,10 @@ const makeStyles = (colors: any) =>
     activeButtonText: {
       fontWeight: '600',
       color: '#fff',
-      marginLeft: 6,
     },
     tabText: {
       color: colors.neutral300,
-      marginLeft: 6,
     },
-    badge: {
-      position: 'absolute',
-      top: -6,
-      right: -6,
-      backgroundColor: colors.primary200,
-      borderRadius: 12,
-      paddingHorizontal: 6,
-      paddingVertical: 2,
-    },
-    badgeLabel: {color: colors.white, fontSize: 10},
   });
 
 export default CustomTabBar;
