@@ -134,7 +134,6 @@ const makeStyles = (colors: any) =>
       flex: 1,
       color: colors.neutral400,
       textAlign: 'center',
-      marginHorizontal: 8,
     },
     headerText: {paddingHorizontal: 8},
   });
