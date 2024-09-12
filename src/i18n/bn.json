@@ -57,7 +57,7 @@
     "Delivery Address": "সরবরাহের ঠিকানা",
     "Change": "পরিবর্তন",
     "View Delivery Options": "ডেলিভারি অপশন দেখুন",
-    "items": "আইটেম",
+    "items": "জিনিসপত্র",
     "Add to cart": "এড তো কার্ট",
     "Product Details": "পণ্যের বিবরণ",
     "Select any": "যেকোনো একটি নির্বাচন করুন",
@@ -106,12 +106,12 @@
     "You are ordering from different category. Please check your order again": "আপনি বিভিন্ন বিভাগ থেকে অর্ডার করছেন। আপনার অর্ডার চেক করুন"
   },
   "Profile": {
-    "Profile": "প্রোফাইল",
+    "Profile": "লগআউট",
     "My Profile": "আমার প্রোফাইল",
     "Order History": "অর্ডার ইতিহাস",
     "Complaints": "অভিযোগ",
     "Choose Language": "ভাষা নির্বাচন করুন",
-    "Logout": "প্রস্থান",
+    "Logout": "লগআউট",
     "No data found": "কোন তথ্য পাওয়া যায়নি",
     "Are you sure you want to logout?": "আপনি লগ আউট করতে চান",
     "Cancel": "বাতিল করুন",
@@ -221,7 +221,7 @@
   },
   "Product SubCategories": {
     "Search": "অনুসন্ধান করুন",
-    "Filter": "ছাঁকনি",
+    "Filter": "ফিল্টার করুন",
     "Shop by Category": "বিভাগ অনুযায়ী দোকান খুঁজুন",
     "Shop By Category": "বিভাগ অনুযায়ী দোকান খুঁজুন",
     "Fruits and Vegetables": "ফল ও সবজি",
@@ -778,7 +778,7 @@
   "Orders": {
     "No data found": "কোন তথ্য পাওয়া যায়নি",
     "Search": "অনুসন্ধান করুন",
-    "Filter": "ছাঁকনি",
+    "Filter": "ফিল্টার করুন",
     "Filter List": {
       "Filters": "ফিল্টার",
       "Clear all": "সব পরিষ্কার করে দাও",

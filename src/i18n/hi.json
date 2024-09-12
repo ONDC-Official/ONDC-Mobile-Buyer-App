@@ -57,8 +57,8 @@
     "Delivery Address": "डिलिवरी का पता",
     "Change": "परिवर्तन",
     "View Delivery Options": "डिलिवरी विकल्प देखें",
-    "items": "सामान",
-    "Add to cart": "कार्ट में जोड़ें",
+    "items": "वस्तुएँ",
+    "Add to cart": "एड तो कार्ट",
     "Product Details": "उत्पाद विवरण",
     "Select any": "कोई भी चुनें",
     "options": "विकल्प",
@@ -82,7 +82,7 @@
       "Customizable": "कस्टमाइजेबल"
     },
     "Filter List": {
-      "Filters": "फिल्टर",
+      "Filters": "फ़िल्टर",
       "Clear all": "सभी साफ करें",
       "Close": "बंद करना",
       "Apply": "आवेदन करना"
@@ -106,12 +106,12 @@
     "You are ordering from different category. Please check your order again": "आप अलग-अलग श्रेणी से ऑर्डर कर रहे हैं. कृपया अपना ऑर्डर दोबारा जांचें."
   },
   "Profile": {
-    "Profile": "प्रोफ़ाइल",
+    "Profile": "प्रोफाइल",
     "My Profile": "मेरी प्रोफाइल",
     "Order History": "आदेश इतिहास",
     "Complaints": "शिकायतों",
     "Choose Language": "भाषा चुनें",
-    "Logout": "लॉग आउट",
+    "Logout": "लॉगआउट करें",
     "No data found": "डाटा प्राप्त नहीं हुआ",
     "Are you sure you want to logout?": "क्या आप लॉग आउट करना चाहते हैं",
     "Cancel": "रद्द करना",
@@ -170,7 +170,7 @@
   "Categories": {
     "Fashion": "पहनावा",
     "Grocery": "किराना",
-    "Electronics": "इलेक्ट्रानिक्स",
+    "Electronics": "इलेक्ट्रॉनिक्स",
     "Food & Beverage": "खाद्य और पेय",
     "Home & Decor": "गृह सजावट",
     "Health & Wellness": "स्वास्थ्य और कल्याण",
@@ -211,7 +211,7 @@
     "Featured Categories": "फीचर्ड कैटेगरीज",
     "Fashion": "पहनावा",
     "Grocery": "किराना",
-    "Electronics": "इलेक्ट्रानिक्स",
+    "Electronics": "इलेक्ट्रॉनिक्स",
     "Food & Beverage": "खाद्य और पेय",
     "Home & Decor": "गृह सजावट",
     "Health & Wellness": "स्वास्थ्य और कल्याण",
@@ -221,7 +221,7 @@
   },
   "Product SubCategories": {
     "Search": "खोज",
-    "Filter": "फ़िल्टर",
+    "Filter": "फ़िल्टर करें",
     "Shop by Category": "श्रेणी के अनुसार स्टोर ढूंढें",
     "Shop By Category": "श्रेणी के अनुसार स्टोर ढूंढें",
     "Fruits and Vegetables": "फल और सब्जियाँ",
@@ -778,9 +778,9 @@
   "Orders": {
     "No data found": "डाटा प्राप्त नहीं हुआ",
     "Search": "खोज",
-    "Filter": "फ़िल्टर",
+    "Filter": "फ़िल्टर करें",
     "Filter List": {
-      "Filters": "फिल्टर",
+      "Filters": "फ़िल्टर",
       "Clear all": "सभी साफ करें",
       "Close": "बंद करना",
       "Apply": "आवेदन करना",

@@ -57,7 +57,7 @@
     "Delivery Address": "वितरण पत्ता",
     "Change": "बदला",
     "View Delivery Options": "वितरण पर्याय पहा",
-    "items": "आयटम",
+    "items": "वस्तू",
     "Add to cart": "ॲड तो कार्ट",
     "Product Details": "उत्पादन तपशील",
     "Select any": "कोणतेही निवडा",
@@ -82,7 +82,7 @@
       "Customizable": "कस्टमायझेबल"
     },
     "Filter List": {
-      "Filters": "फिल्टर",
+      "Filters": "फिल्टर्स",
       "Clear all": "सर्व साफ करा",
       "Close": "बंद",
       "Apply": "अर्ज करा"
@@ -106,12 +106,12 @@
     "You are ordering from different category. Please check your order again": "तुम्ही वेगवेगळ्या श्रेणीतून ऑर्डर करत आहात. कृपया तुमची ऑर्डर पुन्हा तपासा."
   },
   "Profile": {
-    "Profile": "प्रोफाइल",
+    "Profile": "प्रोफाईल",
     "My Profile": "माझे प्रोफाइल",
     "Order History": "ऑर्डर इतिहास",
     "Complaints": "तक्रारी",
     "Choose Language": "भाषा निवडा",
-    "Logout": "बाहेर पडणे",
+    "Logout": "लॉगआऊट करा",
     "No data found": "माहिती आढळली नाही",
     "Are you sure you want to logout?": "तुमची खात्री आहे की तुम्ही लॉगआउट करू इच्छिता",
     "Cancel": "रद्द करा",
@@ -780,7 +780,7 @@
     "Search": "शोधा",
     "Filter": "फिल्टर करा",
     "Filter List": {
-      "Filters": "फिल्टर",
+      "Filters": "फिल्टर्स",
       "Clear all": "सर्व साफ करा",
       "Close": "बंद",
       "Apply": "अर्ज करा",
