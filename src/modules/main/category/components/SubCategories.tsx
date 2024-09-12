@@ -55,7 +55,7 @@ const SubCategories: React.FC<SubCategories> = ({
         <TouchableOpacity
           style={styles.brand}
           onPress={() => navigateToSubCategory(item)}>
-          <FastImage source={{uri: item.url}} style={styles.brandImage} />
+          <FastImage source={{uri: item.url}} style={styles.brandImage} resizeMode='contain'/>
           <Text
             variant={'labelLarge'}
             style={styles.name}
