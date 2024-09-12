@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,6 +10,8 @@ import i18n from 'i18next';
 import {useAppTheme} from '../../../utils/theme';
 import {setStoredData} from '../../../utils/storage';
 import {updateLanguage} from '../../../toolkit/reducer/auth';
+import SafeAreaPage from '../../../components/header/SafeAreaPage';
+import Header from '../../../components/header/Header';
 
 const ChooseLanguage = () => {
   const dispatch = useDispatch();
@@ -71,36 +73,33 @@ const ChooseLanguage = () => {
     // },
   ];
 
-  useEffect(() => {
-    navigation.setOptions({
-      title: t('Choose Language.Choose Language'),
-    });
-  }, []);
-
   return (
-    <View style={styles.container}>
-      <Text variant={'bodyMedium'} style={styles.inputLabel}>
-        {t('Choose Language.Select a language')}
-      </Text>
-      <FlatList
-        contentContainerStyle={styles.listContainer}
-        keyExtractor={item => item.title}
-        ItemSeparatorComponent={() => <View style={styles.divider} />}
-        data={menu}
-        renderItem={({item: {title, onPress}}) => (
-          <TouchableOpacity style={styles.menuOption} onPress={onPress}>
-            <Text variant={'titleMedium'} style={styles.menuName}>
-              {title}
-            </Text>
-            <Icon
-              name={'keyboard-arrow-right'}
-              size={24}
-              color={theme.colors.neutral400}
-            />
-          </TouchableOpacity>
-        )}
-      />
-    </View>
+    <SafeAreaPage>
+      <Header label={t('Choose Language.Choose Language')} />
+      <View style={styles.container}>
+        <Text variant={'bodyMedium'} style={styles.inputLabel}>
+          {t('Choose Language.Select a language')}
+        </Text>
+        <FlatList
+          contentContainerStyle={styles.listContainer}
+          keyExtractor={item => item.title}
+          ItemSeparatorComponent={() => <View style={styles.divider} />}
+          data={menu}
+          renderItem={({item: {title, onPress}}) => (
+            <TouchableOpacity style={styles.menuOption} onPress={onPress}>
+              <Text variant={'titleMedium'} style={styles.menuName}>
+                {title}
+              </Text>
+              <Icon
+                name={'keyboard-arrow-right'}
+                size={24}
+                color={theme.colors.neutral400}
+              />
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    </SafeAreaPage>
   );
 };
 

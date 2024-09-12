@@ -63,22 +63,17 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         onIconPress={backIconPress}
       />
       <AudioRecorder
+        color={theme.colors.primary}
         setSearchQuery={setSearchQuery}
         onSearchComplete={onAudioSearchComplete}
       />
-      <QRButton />
+      <QRButton color={theme.colors.primary} />
     </View>
   );
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    row: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingVertical: 10,
-    },
     searchContainer: {
       width: '100%',
       paddingVertical: 12,

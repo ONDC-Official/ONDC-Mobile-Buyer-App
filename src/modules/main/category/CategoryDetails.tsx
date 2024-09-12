@@ -31,19 +31,30 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   }, [expanded, widthAnim]);
 
   return (
-    <View
-      style={[
-        appStyles.container,
-        styles.container,
-        appStyles.backgroundWhite,
-      ]}>
-      <Header label={t('Featured Categories.Categories')} />
-      <View style={styles.subContainer}>
-        <Animated.View style={[styles.categoryView, {width: widthAnim}]}>
-          <Categories currentCategory={params.category} />
-        </Animated.View>
-        <View style={styles.pageContainer}>
-          {params.category !== 'F&B' ? (
+    <>
+      <View
+        style={[
+          appStyles.container,
+          styles.container,
+          appStyles.backgroundWhite,
+        ]}>
+        <Header label={t('Featured Categories.Categories')} />
+        <View style={styles.subContainer}>
+          <Animated.View
+            style={[
+              styles.categoryView,
+              {width: screenWidth * 0.22, transform: [{translateX: animated}]},
+            ]}>
+            <Categories currentCategory={params.category} />
+          </Animated.View>
+          <Animated.View
+            style={{
+              width: screenWidth,
+              transform: [
+                {scaleX: animatedWidthCollapse},
+                {translateX: animated1},
+              ],
+            }}>
             <SubCategories
               currentCategory={params.category}
               categoryDomain={params.domain}
@@ -62,7 +73,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </>
   );
 };
 

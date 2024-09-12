@@ -27,10 +27,6 @@ const Header = ({label, search, wishlist, cart}: any) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={theme.colors.white}
-        barStyle={'dark-content'}
-      />
       <View style={styles.header}>
         <TouchableOpacity onPress={goBack}>
           <FastImage

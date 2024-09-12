@@ -6,6 +6,7 @@ import {useAppTheme} from '../../../utils/theme';
 import Header from '../../../components/header/Header';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ListingPage from '../../../components/categoryTab/ListingPage';
+import SafeAreaPage from '../../../components/header/SafeAreaPage';
 
 interface SubCategoryDetails {
   route: any;
@@ -38,7 +39,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   }, [params]);
 
   return (
-    <>
+    <SafeAreaPage>
       <View
         style={[
           appStyles.container,
@@ -74,7 +75,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           </View>
         </View>
       </View>
-    </>
+    </SafeAreaPage>
   );
 };
 
