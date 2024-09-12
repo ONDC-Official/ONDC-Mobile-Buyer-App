@@ -8,6 +8,7 @@ import {appStyles} from '../../../styles/styles';
 import {useAppTheme} from '../../../utils/theme';
 import Header from '../../../components/header/Header';
 import ListingPage from '../../../components/categoryTab/ListingPage';
+import SafeAreaPage from '../../../components/header/SafeAreaPage';
 
 interface CategoryDetails {
   route: any;
@@ -31,6 +32,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
   }, [expanded, widthAnim]);
 
   return (
+    <SafeAreaPage>
     <View
       style={[
         appStyles.container,
@@ -63,6 +65,7 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
         </View>
       </View>
     </View>
+    </SafeAreaPage>
   );
 };
 
