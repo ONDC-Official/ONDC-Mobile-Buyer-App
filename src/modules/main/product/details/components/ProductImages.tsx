@@ -27,7 +27,8 @@ const ProductImages: React.FC<ProductImages> = ({
           setSelectedMediaPosition(position)
         }
         style={[styles.pager, fbProduct ? styles.fbImage : styles.otherImage]}
-        initialPage={0}>
+        initialPage={0}
+        useNext={false}>
         {images?.map((uri, index) => (
           <FastImage
             key={`${index}image`}
@@ -37,7 +38,7 @@ const ProductImages: React.FC<ProductImages> = ({
               fbProduct ? styles.fbImage : styles.otherImage,
               roundedCorner ? styles.roundedCorner : {},
             ]}
-            resizeMode={'contain'}
+            resizeMode={'cover'}
           />
         ))}
       </PagerView>
@@ -62,7 +63,7 @@ const makeStyles = (colors: any) =>
       objectFit: 'contain',
       alignSelf: 'center',
     },
-    pagerContainer: {backgroundColor: 'white', paddingBottom: 8},
+    pagerContainer: {backgroundColor: colors.white, paddingBottom: 8},
     pager: {
       zIndex: 999,
     },

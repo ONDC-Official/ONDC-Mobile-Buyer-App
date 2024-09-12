@@ -41,28 +41,28 @@ const Page: React.FC<Page> = ({children, outletId = ''}) => {
 
   return (
     <SafeAreaPage>
-      <Header/>
-    <View style={styles.pageContainer}>
-      {children}
-      {index > -1 && (
-        <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('SubCart', {index: index})}>
-            <Text variant={'bodyLarge'} style={styles.text}>
-              {formatNumber(count)}{' '}
-              {count > 1 ? t('Page.Items Added') : t('Page.Item Added')}
-              {t('Page., Go To Cart')}
-            </Text>
-            <Icon
-              name={'keyboard-arrow-right'}
-              size={18}
-              color={theme.colors.white}
-            />
-          </TouchableOpacity>
-        </View>
-      )}
-    </View>
+      <Header wishlist={true} cart={true}/>
+      <View style={styles.pageContainer}>
+        {children}
+        {index > -1 && (
+          <View style={styles.container}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('SubCart', {index: index})}>
+              <Text variant={'bodyLarge'} style={styles.text}>
+                {formatNumber(count)}{' '}
+                {count > 1 ? t('Page.Items Added') : t('Page.Item Added')}
+                {t('Page., Go To Cart')}
+              </Text>
+              <Icon
+                name={'keyboard-arrow-right'}
+                size={18}
+                color={theme.colors.white}
+              />
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
     </SafeAreaPage>
   );
 };
