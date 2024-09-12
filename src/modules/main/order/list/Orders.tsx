@@ -11,7 +11,7 @@ import axios from 'axios';
 import {useTranslation} from 'react-i18next';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import FastImage from 'react-native-fast-image';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../styles/styles';
 import {keyExtractor, skeletonList} from '../../../../utils/utils';
@@ -176,9 +176,10 @@ const Orders: React.FC<any> = () => {
         />
         <View style={styles.header}>
           <TouchableOpacity onPress={goBack}>
-            <FastImage
-              source={require('../../../../assets/arrow_back.png')}
-              style={styles.backArrow}
+            <MaterialIcons
+              name={'arrow-back'}
+              size={24}
+              color={theme.colors.neutral400}
             />
           </TouchableOpacity>
           <Text variant={'titleLarge'} style={styles.pageTitle}>

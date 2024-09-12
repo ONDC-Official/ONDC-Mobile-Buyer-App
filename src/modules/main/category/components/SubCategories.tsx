@@ -93,7 +93,7 @@ const SubCategories: React.FC<SubCategories> = ({
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    sectionContainer: {},
+    sectionContainer: {marginTop: 20},
     container: {
       paddingHorizontal: 24,
       marginBottom: -12,

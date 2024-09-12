@@ -1,4 +1,4 @@
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import {useAppTheme} from '../../../../../utils/theme';
@@ -25,7 +25,7 @@ const AudioRecorder = ({
   return (
     <>
       <TouchableOpacity onPress={openVoiceModal}>
-        <Icon name={'mic'} color={color} size={24} />
+        <Icon name={'microphone-outline'} color={color} size={24} />
       </TouchableOpacity>
       {showVoiceModal && (
         <SearchModal

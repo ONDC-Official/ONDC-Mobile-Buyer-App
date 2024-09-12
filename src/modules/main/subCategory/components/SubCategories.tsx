@@ -113,7 +113,7 @@ const SubCategories: React.FC<SubCategories> = ({
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
-    container: {},
+    container: {marginTop: 20},
     categoryText: {
       color: colors.neutral400,
       textAlign: 'center',

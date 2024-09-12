@@ -11,7 +11,7 @@ import {
 import axios from 'axios';
 import FastImage from 'react-native-fast-image';
 import {Text} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -216,29 +216,31 @@ const CartItems: React.FC<CartItems> = ({
 
   return (
     <>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        style={styles.container}
-        contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         {providerWiseItems?.map((provider: any) => (
-          <View key={provider.provider.id} style={styles.provider}>
-            <View style={styles.providerHeader}>
-              <FastImage
-                source={{uri: provider?.provider?.descriptor?.symbol}}
-                style={styles.providerImage}
-              />
-              <View style={styles.providerMeta}>
-                <Text variant={'titleLarge'} style={styles.providerName}>
-                  {provider?.provider?.descriptor?.name}
-                </Text>
-                {provider?.provider?.locations?.length > 0 && (
-                  <Text variant={'labelSmall'} style={styles.providerAddress}>
-                    {provider.items[0]?.item?.location_details?.address
-                      ?.locality || 'NA'}
+          <>
+            <View key={provider.provider.id} style={styles.provider}>
+              <View style={styles.providerHeader}>
+                <FastImage
+                  source={{uri: provider?.provider?.descriptor?.symbol}}
+                  style={styles.providerImage}
+                />
+                <View style={styles.providerMeta}>
+                  <Text variant={'titleLarge'} style={styles.providerName}>
+                    {provider?.provider?.descriptor?.name}
                   </Text>
-                )}
+                  {provider?.provider?.locations?.length > 0 && (
+                    <Text
+                      variant={'labelMedium'}
+                      style={styles.providerAddress}>
+                      {provider.items[0]?.item?.location_details?.address
+                        ?.locality || 'NA'}
+                    </Text>
+                  )}
+                </View>
               </View>
             </View>
+
             <View style={styles.productsContainer}>
               {provider?.items?.map((cartItem: any, itemIndex: number) => {
                 let imageSource = NoImageAvailable;
@@ -268,40 +270,51 @@ const CartItems: React.FC<CartItems> = ({
                           style={styles.productImage}
                         />
                       </TouchableOpacity>
-                      <View style={styles.productMeta}>
-                        <Text variant={'bodyMedium'} style={styles.productName}>
-                          {cartItem?.item?.product?.descriptor?.name}
-                        </Text>
-                        <Customizations cartItem={cartItem} />
-                        {!cartItem.item.hasCustomisations &&
-                          cartItem.item.product?.quantity?.unitized &&
-                          Object.keys(
-                            cartItem.item.product?.quantity?.unitized,
-                          ).map(one => (
+
+                      <View style={styles.cartFlex}>
+                        <View style={styles.productMeta}>
+                          <View style={styles.cartFlex}>
                             <Text
-                              variant={'labelSmall'}
-                              key={
-                                cartItem.item.product?.quantity?.unitized[one]
-                                  .value
-                              }>
-                              {
-                                cartItem.item.product?.quantity?.unitized[one]
-                                  .value
-                              }{' '}
-                              {
-                                cartItem.item.product?.quantity?.unitized[one]
-                                  .unit
-                              }
+                              variant={'labelLarge'}
+                              style={styles.productName}>
+                              {cartItem?.item?.product?.descriptor?.name}
                             </Text>
-                          ))}
-                        <View style={styles.quantityContainer}>
-                          <ManageQuantity
-                            allowDelete
-                            cartItem={cartItem}
-                            updatingCartItem={updatingCartItem}
-                            updateCartItem={updateCartItem}
-                            deleteCartItem={deleteCartItem}
-                          />
+                            <Customizations cartItem={cartItem} />
+                            {!cartItem.item.hasCustomisations &&
+                              cartItem.item.product?.quantity?.unitized &&
+                              Object.keys(
+                                cartItem.item.product?.quantity?.unitized,
+                              ).map(one => (
+                                <Text
+                                  style={styles.providerAddress}
+                                  variant={'labelMedium'}
+                                  key={
+                                    cartItem.item.product?.quantity?.unitized[
+                                      one
+                                    ].value
+                                  }>
+                                  {
+                                    cartItem.item.product?.quantity?.unitized[
+                                      one
+                                    ].value
+                                  }{' '}
+                                  {
+                                    cartItem.item.product?.quantity?.unitized[
+                                      one
+                                    ].unit
+                                  }
+                                </Text>
+                              ))}
+                          </View>
+                          <View style={styles.quantityContainer}>
+                            <ManageQuantity
+                              allowDelete
+                              cartItem={cartItem}
+                              updatingCartItem={updatingCartItem}
+                              updateCartItem={updateCartItem}
+                              deleteCartItem={deleteCartItem}
+                            />
+                          </View>
                         </View>
                         <Text variant="bodyLarge">
                           ₹
@@ -325,6 +338,7 @@ const CartItems: React.FC<CartItems> = ({
                         </Text>
                       </View>
                     </View>
+
                     <View style={styles.productActionContainer}>
                       {cartItem.item.domain === FB_DOMAIN ? (
                         cartItem.item.hasCustomisations ? (
@@ -339,13 +353,13 @@ const CartItems: React.FC<CartItems> = ({
                               />
                             ) : (
                               <Icon
-                                name={'pencil'}
+                                name={'pencil-outline'}
                                 color={theme.colors.primary}
-                                size={14}
+                                size={24}
                               />
                             )}
                             <Text
-                              variant={'labelLarge'}
+                              variant={'bodyLarge'}
                               style={styles.customiseText}>
                               {t('Cart.Customise')}
                             </Text>
@@ -359,12 +373,12 @@ const CartItems: React.FC<CartItems> = ({
                           style={styles.customiseContainer}
                           onPress={() => handleEditClick(cartItem)}>
                           <Icon
-                            name={'pencil'}
+                            name={'pencil-outline'}
                             color={theme.colors.primary}
-                            size={14}
+                            size={24}
                           />
                           <Text
-                            variant={'labelLarge'}
+                            variant={'bodyLarge'}
                             style={styles.customiseText}>
                             {t('Cart.Edit')}
                           </Text>
@@ -379,7 +393,7 @@ const CartItems: React.FC<CartItems> = ({
                         ) : (
                           <TouchableOpacity
                             onPress={() => deleteCartItem(cartItem._id)}>
-                            <DeleteIcon width={20} height={20} />
+                            <DeleteIcon width={24} height={24} />
                           </TouchableOpacity>
                         )}
                       </View>
@@ -403,7 +417,7 @@ const CartItems: React.FC<CartItems> = ({
                 );
               })}
             </View>
-          </View>
+          </>
         ))}
         {haveDistinctProviders && (
           <View style={styles.errorBox}>
@@ -496,9 +510,6 @@ const makeStyles = (colors: any) =>
       flex: 1,
       paddingBottom: 24,
     },
-    scrollViewContent: {
-      paddingBottom: 24,
-    },
     providerBorderBottom: {
       borderBottomColor: colors.neutral100,
       borderBottomWidth: 1,
@@ -508,33 +519,36 @@ const makeStyles = (colors: any) =>
     provider: {
       backgroundColor: colors.white,
       paddingHorizontal: 16,
-      paddingVertical: 12,
-      marginBottom: 12,
     },
+    cartFlex: {flex: 1},
     providerHeader: {
+      height: 72,
       flexDirection: 'row',
       alignItems: 'center',
+      gap: 12,
     },
     providerMeta: {
       flex: 1,
+      height: 42,
+      justifyContent: 'space-between',
     },
     productsContainer: {
-      paddingVertical: 16,
+      padding: 16,
     },
     providerImage: {
-      width: 30,
-      height: 30,
-      marginRight: 10,
+      width: 48,
+      height: 48,
+      borderRadius: 8,
     },
     providerName: {
       color: colors.neutral400,
     },
     providerAddress: {
-      marginBottom: 10,
       color: colors.neutral300,
     },
     product: {
       flexDirection: 'row',
+      gap: 12,
     },
     productActionContainer: {
       marginTop: 12,
@@ -544,12 +558,11 @@ const makeStyles = (colors: any) =>
     },
     productImage: {
       width: 80,
-      height: 100,
-      borderRadius: 12,
+      height: 80,
+      borderRadius: 8,
     },
     productMeta: {
-      flex: 1,
-      marginLeft: 12,
+      flexDirection: 'row',
     },
     productName: {
       color: colors.neutral400,

@@ -76,7 +76,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     searchContainer: {
       width: '100%',
-      paddingVertical: 12,
+      paddingTop: 12,
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: colors.white,

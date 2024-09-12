@@ -16,7 +16,7 @@ import {useAppTheme} from '../../../../utils/theme';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import Wishlist from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, CART} from '../../../../utils/apiActions';
@@ -126,7 +126,6 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
       const url = `${API_BASE_URL}${CART}/${uid}`;
       let subtotal = product?.item_details?.price?.value;
 
-      // const customisations = getCustomizations() ?? null;
       const customisations: any = null;
 
       if (customisations) {
@@ -260,37 +259,6 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
     await getCartItems();
   };
 
-  const getCustomizations = () => {
-    const {customisation_items} = product;
-
-    if (!customisation_items.length) {
-      return null;
-    }
-    const customizations = [];
-
-    const firstGroupId = customizationState.firstGroup?.id;
-
-    if (!firstGroupId) {
-      return;
-    }
-    let selectedCustomizationIds = getCustomization(firstGroupId, []);
-
-    for (const cId of selectedCustomizationIds) {
-      let c = customisation_items.find((item: any) => item.local_id === cId);
-      if (c) {
-        c = {
-          ...c,
-          quantity: {
-            count: 1,
-          },
-        };
-        customizations.push(c);
-      }
-    }
-
-    return customizations;
-  };
-
   const getCustomization = (groupId: any, selectedCustomizationIds: any[]) => {
     let group = customizationState[groupId];
     if (!group) {
@@ -387,7 +355,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
                     addToCart(false).then(() => {});
                   }
                 }}>
-                <Icon name={'minus'} color={theme.colors.primary} size={11} />
+                <Icon name={'minus'} color={theme.colors.primary} size={20} />
               </TouchableOpacity>
               <Text variant={'bodyLarge'} style={styles.quantity}>
                 {addToCartLoading ? (
@@ -400,7 +368,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
                 onPress={() => {
                   addToCart(true);
                 }}>
-                <Icon name={'plus'} color={theme.colors.primary} size={11} />
+                <Icon name={'plus'} color={theme.colors.primary} size={20} />
               </TouchableOpacity>
             </View>
           ) : (

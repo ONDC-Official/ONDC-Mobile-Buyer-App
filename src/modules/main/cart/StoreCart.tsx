@@ -6,6 +6,7 @@ import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import 'moment-duration-format';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {useAppTheme} from '../../../utils/theme';
 import {getPriceWithCustomisations} from '../../../utils/utils';
@@ -33,14 +34,17 @@ const StoreCart: React.FC<StoreCart> = ({
 
   const [cartTotal, setCartTotal] = useState<number>(0);
   const [locality, setLocality] = useState<string>('');
+  const [itemsCart, setItemsCart] = useState<string>('');
 
   useEffect(() => {
     if (item) {
       let highMin = 0;
       let itemsLocality = '';
       let total = 0;
-      item?.items.forEach((one: any) => {
-        const duration = moment.duration(
+      let description: any = '';
+
+      item?.items.forEach((one: any, ind: number) => {
+        const duration: any = moment.duration(
           one?.item?.product['@ondc/org/time_to_ship'],
         );
 
@@ -55,7 +59,17 @@ const StoreCart: React.FC<StoreCart> = ({
           highMin = durationInMinutes;
           itemsLocality = one.item.location_details?.address?.locality;
         }
+        description = description + one?.item?.product?.descriptor?.name;
+
+        if (item?.items.length - 2 !== ind || item?.items.length === 1) {
+          if (item?.items.length - 1 !== ind) {
+            description = description + ', ';
+          }
+        } else {
+          description = description + ' and ';
+        }
       });
+      setItemsCart(description);
       setCartTotal(total);
       setLocality(itemsLocality);
     }
@@ -80,9 +94,9 @@ const StoreCart: React.FC<StoreCart> = ({
               <TouchableOpacity
                 style={styles.closeButton}
                 onPress={() => deleteStore(item?._id)}>
-                <Icon
-                  name={'close'}
-                  size={18}
+                <MaterialCommunityIcons
+                  name={'close-circle-outline'}
+                  size={24}
                   color={theme.colors.neutral400}
                 />
               </TouchableOpacity>
@@ -103,37 +117,39 @@ const StoreCart: React.FC<StoreCart> = ({
         <View style={styles.line} />
 
         {/* items */}
-        <Text variant="labelMedium" style={styles.itemCart}>
-          {t('Cart.Items in cart', {count: item?.items.length})}
-        </Text>
+        <View>
+          <Text variant="labelLarge" style={styles.itemCart}>
+            {t('Cart.Items in cart', {count: item?.items.length})}
+          </Text>
 
-        <ScrollView
-          contentContainerStyle={styles.itemMainView}
-          horizontal
-          showsHorizontalScrollIndicator={false}>
-          {item?.items.map((one: any) => {
-            let imageSource = NoImageAvailable;
-            if (one?.item?.product?.descriptor?.symbol) {
-              imageSource = {uri: one?.item?.product?.descriptor?.symbol};
-            } else if (one?.item?.product?.descriptor?.images?.length > 0) {
-              imageSource = {uri: one?.item?.product?.descriptor?.images[0]};
-            }
+          <ScrollView
+            contentContainerStyle={styles.itemMainView}
+            horizontal
+            showsHorizontalScrollIndicator={false}>
+            {item?.items.map((one: any, index: number) => {
+              let imageSource = NoImageAvailable;
+              if (one?.item?.product?.descriptor?.symbol) {
+                imageSource = {uri: one?.item?.product?.descriptor?.symbol};
+              } else if (one?.item?.product?.descriptor?.images?.length > 0) {
+                imageSource = {uri: one?.item?.product?.descriptor?.images[0]};
+              }
 
-            return (
-              <View key={one._id} style={styles.cartItem}>
-                <FastImage source={imageSource} style={styles.headerImage} />
-                <Text
-                  variant="labelMedium"
-                  style={styles.description}
-                  ellipsizeMode={'tail'}
-                  numberOfLines={1}>
-                  {one?.item?.product?.descriptor?.name}
-                </Text>
-              </View>
-            );
-          })}
-        </ScrollView>
-
+              return (
+                <View key={one._id} style={styles.cartItem}>
+                  <FastImage source={imageSource} style={styles.itemImage} />
+                </View>
+              );
+            })}
+          </ScrollView>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <Text
+              variant="labelMedium"
+              style={styles.description}
+              numberOfLines={1}>
+              {itemsCart}
+            </Text>
+          </ScrollView>
+        </View>
         {/* bottomView */}
         <View style={styles.bottomView}>
           <Text variant="bodyLarge">
@@ -147,7 +163,7 @@ const StoreCart: React.FC<StoreCart> = ({
             </Text>
             <Icon
               name={'keyboard-arrow-right'}
-              size={24}
+              size={16}
               color={theme.colors.white}
             />
           </TouchableOpacity>
@@ -164,26 +180,31 @@ const makeStyles = (colors: any) =>
       borderWidth: 1,
       borderColor: colors.neutral100,
       padding: 12,
+      gap: 16,
     },
     itemHeader: {
       flexDirection: 'row',
+      gap: 12,
     },
     cartItem: {
       width: 40,
     },
     headerImage: {
+      height: 48,
+      width: 48,
+      borderRadius: 8,
+    },
+    itemImage: {
       height: 40,
       width: 40,
-      borderRadius: 6,
-      borderWidth: 1,
-      borderColor: colors.neutral100,
+      borderRadius: 12,
     },
     headerText: {
       flex: 1,
-      marginLeft: 16,
+      height: 42,
       justifyContent: 'space-between',
     },
-    line: {height: 1, backgroundColor: colors.neutral100, marginVertical: 12},
+    line: {height: 1, backgroundColor: colors.neutral100},
     titleView: {
       flexDirection: 'row',
     },
@@ -192,8 +213,7 @@ const makeStyles = (colors: any) =>
       color: colors.neutral400,
     },
     description: {
-      color: colors.neutral300,
-      paddingTop: 8,
+      color: colors.neutral400,
     },
     itemCart: {
       color: colors.neutral400,
@@ -202,13 +222,11 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       paddingVertical: 8,
       gap: 8,
-      overflow: 'hidden',
     },
     bottomView: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      paddingTop: 8,
     },
     viewCartButton: {
       flexDirection: 'row',
@@ -217,7 +235,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.primary,
       alignItems: 'center',
       justifyContent: 'center',
-      paddingLeft: 8,
+      paddingHorizontal: 12,
     },
     buttonText: {
       color: colors.white,
@@ -231,11 +249,6 @@ const makeStyles = (colors: any) =>
       flexShrink: 1,
     },
     closeButton: {
-      borderRadius: 12,
-      borderWidth: 1,
-      borderColor: colors.neutral300,
-      width: 24,
-      height: 24,
       alignItems: 'center',
       justifyContent: 'center',
     },

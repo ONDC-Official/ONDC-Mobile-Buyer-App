@@ -67,6 +67,7 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.primary50,
       flexDirection: 'row',
       alignItems: 'center',
+      marginTop:20,
     },
     button: {
       width: 84,

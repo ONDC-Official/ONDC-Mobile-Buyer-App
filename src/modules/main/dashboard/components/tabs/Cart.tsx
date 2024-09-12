@@ -15,6 +15,7 @@ import StoreCart from '../../../cart/StoreCart';
 import EmptyCart from '../../../cart/components/EmptyCart';
 import {keyExtractor} from '../../../../../utils/utils';
 import SafeAreaPage from '../../../../../components/header/SafeAreaPage';
+import Header from '../../../../../components/header/Header';
 
 const CancelToken = axios.CancelToken;
 
@@ -116,27 +117,23 @@ const Cart = ({navigation}: any) => {
 
   return (
     <SafeAreaPage>
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text variant={'titleLarge'} style={styles.pageTitle}>
-          {t('Cart.All Cart')}
-        </Text>
+      <View style={styles.container}>
+        <Header label={t('Cart.All Cart')} />
+        {apiInProgress && allCart.length === 0 ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size={'large'} color={theme.colors.primary} />
+          </View>
+        ) : allCart.length > 0 ? (
+          <FlatList
+            keyExtractor={keyExtractor}
+            data={allCart}
+            renderItem={renderItems}
+            contentContainerStyle={styles.subContainer}
+          />
+        ) : (
+          <EmptyCart />
+        )}
       </View>
-      {apiInProgress && allCart.length === 0 ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size={'large'} color={theme.colors.primary} />
-        </View>
-      ) : allCart.length > 0 ? (
-        <FlatList
-          keyExtractor={keyExtractor}
-          data={allCart}
-          renderItem={renderItems}
-          contentContainerStyle={styles.subContainer}
-        />
-      ) : (
-        <EmptyCart />
-      )}
-    </View>
     </SafeAreaPage>
   );
 };
@@ -160,8 +157,9 @@ const makeStyles = (colors: any) =>
     },
     subContainer: {
       flexGrow: 1,
-      padding: 16,
-      gap: 16,
+      paddingHorizontal: 16,
+      gap: 15,
+      paddingVertical:15
     },
     loadingContainer: {
       flex: 1,

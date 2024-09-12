@@ -37,6 +37,8 @@ import {MANUAL_LINK} from '../../../utils/constants';
 import useFormatNumber from '../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../toolkit/reducer/cart';
 import ReferenceIcon from '../../../assets/reference.svg';
+import SafeAreaPage from '../../../components/header/SafeAreaPage';
+import Header from './components/Header';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
@@ -499,29 +501,17 @@ const SubCart = ({route: {params}}: any) => {
   }, [cartItems]);
 
   useEffect(() => {
-    navigation.setOptions({
-      title: t('Cart.My Cart'),
-      headerRight: () =>
-        cartData?.cartItems.length > 0 ? (
-          <TouchableOpacity
-            style={styles.addMoreItems}
-            onPress={navigateToHome}>
-            <Icon name={'add'} size={24} color={theme.colors.primary} />
-            <Text variant={'labelMedium'} style={styles.addMoreItemsLabel}>
-              {t('Cart.Add More Items')}
-            </Text>
-          </TouchableOpacity>
-        ) : null,
-    });
-  }, [providerWiseItems, cartData]);
-
-  useEffect(() => {
     setDeliveryAddress(address);
   }, []);
 
   return (
-    <>
+    <SafeAreaPage>
       <View style={styles.pageContainer}>
+        <Header
+          label={t('Cart.My Cart')}
+          cart={cartData?.cartItems.length > 0 ? true : false}
+          navigateToHome={navigateToHome}
+        />
         <>
           {cartItems.length === 0 ? (
             <EmptyCart />
@@ -714,7 +704,7 @@ const SubCart = ({route: {params}}: any) => {
           </View>
         </Modal>
       </Portal>
-    </>
+    </SafeAreaPage>
   );
 };
 
@@ -733,7 +723,6 @@ const makeStyles = (colors: any) =>
     },
     pageContainer: {
       flex: 1,
-      backgroundColor: colors.neutral50,
     },
     loadingContainer: {
       flex: 1,
@@ -791,15 +780,6 @@ const makeStyles = (colors: any) =>
     },
     deliveryButton: {
       borderRadius: 8,
-    },
-    addMoreItems: {
-      flexDirection: 'row',
-      gap: 4,
-      alignItems: 'center',
-      marginRight: 16,
-    },
-    addMoreItemsLabel: {
-      color: colors.primary,
     },
     closeContainer: {
       flexDirection: 'row',

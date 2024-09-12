@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Modal, Portal, Text, useTheme} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTranslation} from 'react-i18next';
 import Voice from '@react-native-voice/voice';
 import {useSelector} from 'react-redux';
@@ -74,7 +75,7 @@ const SearchModal: React.FC<MicrProps> = ({
           </TouchableOpacity>
           <View style={styles.micWavesContainer}>
             <MicWave />
-            <Icon name="mic" size={60} color="#fff" />
+            <MaterialCommunityIcons name="microphone-outline" size={40} color="#fff" />
           </View>
           <Text variant={'bodyLarge'} style={styles.labelText}>
             {recognizedText?.length > 0

@@ -207,10 +207,7 @@ const AppNavigation = () => {
           <Stack.Screen
             name="SubCart"
             component={SubCart}
-            options={{
-              title: '',
-              headerStatusBarHeight: 0,
-            }}
+            options={{headerShown: false}}
           />
           <Stack.Screen
             name="AddDefaultAddress"

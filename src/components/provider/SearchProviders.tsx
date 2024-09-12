@@ -12,7 +12,7 @@ import {
   GLOBAL_SEARCH_STORES,
   GLOBAL_SEARCH_ITEMS,
 } from '../../utils/apiActions';
-import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
+import {BRAND_PRODUCTS_LIMIT, FB_DOMAIN} from '../../utils/constants';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import {skeletonList} from '../../utils/utils';
 import {useAppTheme} from '../../utils/theme';
@@ -66,48 +66,31 @@ const SearchProviders: React.FC<SearchProviders> = ({
       }
       productSearchSource.current = CancelToken.source();
       const afterString =
-        providerId && !pagination ? `&afterKey=${providerId}` : '';
-      const name = searchQuery.length > 0 ? `&name=${searchQuery}` : '';
+        providerId && !pagination
+          ? `&afterKey=${encodeURIComponent(providerId)}`
+          : '';
+      const name =
+        searchQuery.length > 0
+          ? `&name=${encodeURIComponent(searchQuery)}`
+          : '';
       const subcategory = currentSubCategory
         ? currentSubCategory !== 'F&B'
-          ? `&subcategory=${currentSubCategory}`
-          : `&category=${currentSubCategory}&`
+          ? `&subcategory=${encodeURIComponent(currentSubCategory)}`
+          : `&category=${FB_DOMAIN}`
         : '';
-      const pageNumber = currentSubCategory == 'F&B' ? `pageNumber=${1}` : '';
 
-      let url = `${API_BASE_URL}${
-        currentSubCategory !== 'F&B'
-          ? GLOBAL_SEARCH_STORES
-          : GLOBAL_SEARCH_ITEMS
-      }?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${
-        address?.address?.lat
-      }&longitude=${address.address.lng}&pincode=${
-        address.address.areaCode
-      }${subcategory}${name}${pageNumber}${afterString}`;
+      let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}${subcategory}${name}${afterString}`;
       const {data} = await getDataWithAuth(
         url,
         productSearchSource.current.token,
       );
-      console.log('url : ', url);
-      console.log('data : ', data);
 
-      if (currentSubCategory !== 'F&B') {
-        totalProviders.current = data.response.count;
-        setProviderId(data?.response?.afterKey?.provider_id);
-        if (pagination) {
-          setProviders([...data?.response?.data]);
-        } else {
-          setProviders([...providers, ...data?.response?.data]);
-        }
+      totalProviders.current = data.response.count;
+      setProviderId(data?.response?.afterKey?.provider_id);
+      if (pagination) {
+        setProviders([...data?.response?.data]);
       } else {
-        if (data?.data?.length > 0) {
-          //here is need response to set data for F&B currently set approx data
-          if (pagination) {
-            setProviders([...data?.data]);
-          } else {
-            setProviders([...providers, ...data?.data]);
-          }
-        }
+        setProviders([...providers, ...data?.response?.data]);
       }
     } catch (error) {
       handleApiError(error);
