@@ -272,8 +272,10 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
   };
 
   useEffect(() => {
-    getCartItems(product.id);
+    getCartItems(product.id).then(() => {});
   }, [product]);
+
+  const currency = CURRENCY_SYMBOLS[product?.item_details?.price?.currency];
 
   return (
     <TouchableOpacity
@@ -321,14 +323,21 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
         </Text>
         <View style={styles.priceView}>
           <View style={styles.priceText}>
-            <Text variant={'labelMedium'} style={styles.amountStrike}>
-              {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
-              {formatNumber(
-                product?.item_details?.price?.maximum_value.toFixed(2),
-              )}
-            </Text>
+            {Number(product?.item_details?.price?.maximum_value) !==
+            Number(product?.item_details?.price?.value) ? (
+              <Text variant={'labelMedium'} style={styles.amountStrike}>
+                {currency}
+                {formatNumber(
+                  Number(product?.item_details?.price?.maximum_value).toFixed(
+                    2,
+                  ),
+                )}
+              </Text>
+            ) : (
+              <View style={styles.amountStrikeEmpty} />
+            )}
             <Text variant={'bodyLarge'} style={styles.amount}>
-              {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
+              {currency}
               {formatNumber(product?.item_details?.price?.value.toFixed(2))}
             </Text>
           </View>
@@ -422,6 +431,9 @@ const makeStyles = (colors: any) =>
     amountStrike: {
       color: colors.neutral200,
       textDecorationLine: 'line-through',
+    },
+    amountStrikeEmpty: {
+      height: 18,
     },
     row: {
       flexDirection: 'row',

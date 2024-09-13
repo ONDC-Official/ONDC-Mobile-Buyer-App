@@ -40,11 +40,10 @@ const SearchProviders: React.FC<SearchProviders> = ({
   currentSubCategory,
 }) => {
   const productSearchSource = useRef<any>(null);
-  const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {address} = useSelector((state: any) => state.address);
-  const {getDataWithAuth} = useNetworkHandling();
+  const {getDataWithWithoutEncode} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
 
   const totalProviders = useRef<number>(0);
@@ -90,7 +89,7 @@ const SearchProviders: React.FC<SearchProviders> = ({
         : '';
 
       let url = `${API_BASE_URL}${GLOBAL_SEARCH_STORES}?limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}${subcategory}${name}${afterString}`;
-      const {data} = await getDataWithAuth(
+      const {data} = await getDataWithWithoutEncode(
         url,
         productSearchSource.current.token,
       );
