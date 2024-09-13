@@ -8,7 +8,6 @@ import {
 import {
   ActivityIndicator,
   Button,
-  Card,
   Modal,
   Portal,
   Text,
@@ -530,7 +529,7 @@ const SubCart = ({route: {params}}: any) => {
                   isProductCategoryIsDifferent={isProductCategoryIsDifferent}
                 />
               </View>
-              <Card style={styles.summaryCard}>
+              <View style={styles.summaryCard}>
                 <View style={styles.summaryRow}>
                   <View style={styles.address}>
                     <Text variant={'bodyLarge'} style={styles.addressTitle}>
@@ -558,14 +557,14 @@ const SubCart = ({route: {params}}: any) => {
                     style={styles.changeButton}
                     onPress={() => addressSheet.current.open()}>
                     <Text
-                      variant={'labelMedium'}
+                      variant={'labelLarge'}
                       style={styles.changeButtonLabel}>
                       {t('Cart.Change')}
                     </Text>
                   </TouchableOpacity>
                 </View>
                 <View style={styles.summaryDivider} />
-                <View style={styles.summaryRow}>
+                <View style={styles.deliveryRow}>
                   <View>
                     <Text variant="titleLarge" style={styles.total}>
                       ₹{formatNumber(cartTotal)}
@@ -599,7 +598,7 @@ const SubCart = ({route: {params}}: any) => {
                     </Button>
                   </View>
                 </View>
-              </Card>
+              </View>
             </>
           )}
         </>
@@ -711,18 +710,20 @@ const SubCart = ({route: {params}}: any) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     changeButton: {
-      borderRadius: 40,
+      height:36,
+      width:74,
+      borderRadius: 43,
       justifyContent: 'center',
       borderColor: colors.primary,
       borderWidth: 1,
-      paddingHorizontal: 16,
-      paddingVertical: 11,
+      alignItems:'center'
     },
     changeButtonLabel: {
       color: colors.primary,
     },
     pageContainer: {
       flex: 1,
+      backgroundColor: colors.neutral50,
     },
     loadingContainer: {
       flex: 1,
@@ -734,17 +735,29 @@ const makeStyles = (colors: any) =>
       borderTopRightRadius: 16,
       padding: 16,
       backgroundColor: colors.white,
-      elevation: 10,
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
+      shadowColor: colors.black, // Shadow color
+      shadowOffset: {width: 0, height: -5}, // Shadow only at the top (negative height)
+      shadowOpacity: 0.2, // Shadow opacity
+      shadowRadius: 10, // Blur radius for shadow
+      elevation: 10, // Elevation for Android
+      marginTop: 16, // Add margin to see the shadow effect clearly
     },
     summaryRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      gap:40
+    },
+    deliveryRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      gap:15
     },
     summaryDivider: {
-      marginVertical: 15,
+      marginVertical: 16,
       height: 1,
       backgroundColor: colors.neutral100,
     },
@@ -779,7 +792,10 @@ const makeStyles = (colors: any) =>
       borderTopRightRadius: 16,
     },
     deliveryButton: {
+      height:44,
+      width:234,
       borderRadius: 8,
+      justifyContent:'center',
     },
     closeContainer: {
       flexDirection: 'row',

@@ -623,3 +623,16 @@ export const formatCustomizations = (items: any) => {
     };
   });
 };
+
+export const getAddressString = (address: any) => {
+  return [
+    address?.name,
+    address?.street,
+    address?.locality,
+    address?.city,
+    address?.state && `${address?.state} - ${address?.area_code}`,
+    address?.country,
+  ]
+    .filter(value => value) // Filters out null, undefined, or empty string values
+    .join(', ');
+};

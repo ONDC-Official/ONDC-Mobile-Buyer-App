@@ -48,6 +48,7 @@ import {API_BASE_URL, SERVICEABLE_LOCATIONS} from '../utils/apiActions';
 import Orders from '../modules/main/order/list/Orders';
 import List from '../modules/main/dashboard/components/tabs/List';
 import DashboardCart from '../modules/main/dashboard/components/tabs/Cart';
+import StoreInfo from '../modules/main/provider/StoreInfo'
 
 const Stack = createStackNavigator();
 
@@ -360,6 +361,12 @@ const AppNavigation = () => {
           <Stack.Screen
             name="SellerQRCode"
             component={SellerQRCode}
+            options={{headerShown: false}}
+            initialParams={{handleDeepLink}}
+          />
+          <Stack.Screen
+            name="StoreInfo"
+            component={StoreInfo}
             options={{headerShown: false}}
             initialParams={{handleDeepLink}}
           />

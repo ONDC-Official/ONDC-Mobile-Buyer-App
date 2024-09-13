@@ -5,16 +5,17 @@ import {useTranslation} from 'react-i18next';
 
 import Products from '../../../../components/products/Products';
 import {useAppTheme} from '../../../../utils/theme';
-import OutletDetails from './OutletDetails';
+import OutletDetails from './OutletDetails'
 
 interface OtherBrandDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
+  locationData: any;
 }
 
 const OtherBrandDetails: React.FC<OtherBrandDetails> = React.memo(
-  ({provider, outlet, apiRequested}) => {
+  ({provider, outlet, apiRequested, locationData}) => {
     const {t} = useTranslation();
     const {colors} = useAppTheme();
     const styles = makeStyles(colors);
@@ -25,12 +26,14 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = React.memo(
           <OutletDetails
             provider={provider}
             outlet={outlet}
+            locationData={locationData}
             apiRequested={apiRequested}
           />
           <Products
             providerId={provider.id}
             providerDomain={provider.domain}
             provider={provider}
+            SearchText={''}
             subCategories={[]}
             isOpen={outlet?.isOpen || false}
           />

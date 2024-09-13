@@ -1,5 +1,11 @@
 import React, {useMemo, useRef, useState} from 'react';
-import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {
+  FlatList,
+  Linking,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Divider, Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useTranslation} from 'react-i18next';
@@ -14,11 +20,15 @@ import {useAppTheme} from '../../../../utils/theme';
 import useMinutesToString from '../../../../hooks/useMinutesToString';
 import StoreIcon from '../../../../assets/no_store_icon.svg';
 import {getFulfilmentContact} from '../../../../utils/utils';
+import {useNavigation} from '@react-navigation/native';
+import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
+import StarRating from 'react-native-star-rating-widget';
 
 interface OutletDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
+  locationData: any;
 }
 
 const Closed = require('../../../../assets/closed.png');
@@ -93,14 +103,22 @@ const OutletDetails: React.FC<OutletDetails> = ({
   provider,
   outlet,
   apiRequested,
+  locationData,
 }) => {
   const {address} = useSelector((state: any) => state.address);
   const refDirectionSheet = useRef<any>(null);
+  const refOutletsSheet = useRef<any>(null);
   const {t} = useTranslation();
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
     useMinutesToString();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
+  const navigation = useNavigation<any>();
+  const [rating, setRating] = useState(3);
+
+  const showOutletsSheet = () => refOutletsSheet.current.open();
+
+  const hideOutletsSheet = () => refOutletsSheet.current.close();
 
   const getDirection = async () => {
     refDirectionSheet.current.open();
@@ -156,6 +174,51 @@ const OutletDetails: React.FC<OutletDetails> = ({
     return <BrandSkeleton />;
   }
 
+  const moveOnStoreInfo = () => {
+    navigation.navigate('StoreInfo', {provider, outlet});
+  };
+
+  const navigateToProvider = (item: any) => {
+    const routeParams: any = {
+      brandId: item?.provider,
+      outletId: item?.id,
+    };
+    navigation.replace('BrandDetails', routeParams);
+  };
+
+  const renderItem = ({item}: any) => {
+    return (
+      <TouchableOpacity
+        style={styles.outletItem}
+        onPress={() => navigateToProvider(item)}>
+        <View style={styles.outletTitleView}>
+          <Text variant="bodyLarge">{item?.address?.locality}</Text>
+          <View style={styles.ratingRow}>
+            <StarRating
+              rating={rating}
+              onChange={setRating}
+              enableSwiping={false}
+              starSize={16}
+              animationConfig={{scale: 1}}
+              color={theme.colors.warning600}
+              emptyColor={theme.colors.neutral200}
+              enableHalfStar={true}
+              starStyle={{marginLeft: 0, marginRight: 4}}
+            />
+            <Text variant="labelMedium" style={styles.ratingText}>
+              {rating}
+            </Text>
+          </View>
+        </View>
+        <MaterialCommunityIcon
+          name={'chevron-right'}
+          size={24}
+          color={theme.colors.black}
+        />
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <>
       <View>
@@ -169,13 +232,22 @@ const OutletDetails: React.FC<OutletDetails> = ({
         <View style={styles.brandDetails}>
           <View style={styles.providerDetails}>
             <View style={styles.providerLocalityView}>
-              <Text
-                variant={'headlineSmall'}
-                style={styles.title}
-                ellipsizeMode={'tail'}
-                numberOfLines={1}>
-                {provider?.descriptor?.name}
-              </Text>
+              <View style={styles.titleView}>
+                <Text
+                  variant={'headlineSmall'}
+                  style={styles.title}
+                  ellipsizeMode={'tail'}
+                  numberOfLines={1}>
+                  {provider?.descriptor?.name}
+                </Text>
+                <TouchableOpacity onPress={moveOnStoreInfo}>
+                  <MaterialCommunityIcon
+                    name={'information-outline'}
+                    size={24}
+                    color={theme.colors.neutral400}
+                  />
+                </TouchableOpacity>
+              </View>
               <View style={styles.buttonContainer}>
                 {outletPhone && (
                   <TouchableOpacity
@@ -202,16 +274,25 @@ const OutletDetails: React.FC<OutletDetails> = ({
             </View>
             <View style={styles.providerLocalityView}>
               {!!outlet?.address && (
-                <Text
-                  variant={'labelLarge'}
-                  style={styles.address}
-                  ellipsizeMode={'tail'}
-                  numberOfLines={1}>
-                  {outlet?.address?.locality
-                    ? `${outlet?.address?.locality},`
-                    : ''}{' '}
-                  {outlet?.address?.city}
-                </Text>
+                <View style={styles.localityView}>
+                  <Text
+                    variant={'labelLarge'}
+                    style={styles.address}
+                    ellipsizeMode={'tail'}
+                    numberOfLines={1}>
+                    {outlet?.address?.locality
+                      ? `${outlet?.address?.locality},`
+                      : ''}{' '}
+                    {outlet?.address?.city}
+                  </Text>
+                  <TouchableOpacity onPress={showOutletsSheet}>
+                    <MaterialCommunityIcon
+                      name={'chevron-down'}
+                      size={24}
+                      color={theme.colors.neutral400}
+                    />
+                  </TouchableOpacity>
+                </View>
               )}
             </View>
             <View style={styles.providerLocalityView}>
@@ -240,6 +321,25 @@ const OutletDetails: React.FC<OutletDetails> = ({
         </View>
         <View style={styles.borderBottom} />
       </View>
+      <RBSheet
+        ref={refOutletsSheet}
+        height={480}
+        customStyles={{
+          container: styles.outletrbSheet,
+        }}>
+        <CloseSheetContainer closeSheet={hideOutletsSheet}>
+          <View style={styles.outletContainer}>
+            <View style={styles.headerOutlet}>
+              <Text variant="headlineSmall">Outlets</Text>
+            </View>
+            <FlatList
+              data={locationData}
+              renderItem={renderItem}
+              contentContainerStyle={styles.outletDetails}
+            />
+          </View>
+        </CloseSheetContainer>
+      </RBSheet>
       <RBSheet
         ref={refDirectionSheet}
         height={200}
@@ -291,16 +391,28 @@ const makeStyles = (colors: any) =>
     borderBottom: {
       backgroundColor: colors.neutral100,
       height: 1,
-      marginTop: 24,
+      marginVertical: 20,
+    },
+    titleView: {
+      flex: 1,
+      flexDirection: 'row',
+      marginRight: 24,
+      gap: 8,
+      alignItems: 'center',
     },
     title: {
-      flex: 1,
       color: colors.neutral400,
-      paddingRight: 12,
+    },
+    ratingText: {color: colors.warning600},
+    localityView: {
+      flex: 1,
+      height: 24,
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
     },
     address: {
       color: colors.neutral300,
-      flex: 1,
       marginLeft: 3,
     },
     open: {
@@ -351,6 +463,45 @@ const makeStyles = (colors: any) =>
       borderTopLeftRadius: 15,
       borderTopRightRadius: 15,
       paddingHorizontal: 16,
+    },
+    outletrbSheet: {
+      backgroundColor: 'transparent',
+    },
+    outletContainer: {
+      flex: 1,
+      backgroundColor: colors.neutral50,
+      borderTopLeftRadius: 15,
+      borderTopRightRadius: 15,
+    },
+    headerOutlet: {
+      height: 52,
+      backgroundColor: colors.white,
+      justifyContent: 'center',
+      paddingHorizontal: 16,
+      borderTopLeftRadius: 15,
+      borderTopRightRadius: 15,
+    },
+    outletDetails: {
+      flex: 1,
+      padding: 16,
+      gap: 12,
+    },
+    outletItem: {
+      padding: 12,
+      backgroundColor: colors.white,
+      flexDirection: 'row',
+      borderWidth: 1,
+      borderRadius: 12,
+      borderColor: colors.neutral100,
+      alignItems: 'center',
+    },
+    outletTitleView: {
+      flex: 1,
+      gap: 4,
+    },
+    ratingRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     sheetTitle: {
       color: colors.neutral400,

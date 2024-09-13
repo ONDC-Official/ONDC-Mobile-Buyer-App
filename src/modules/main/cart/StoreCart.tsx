@@ -38,27 +38,17 @@ const StoreCart: React.FC<StoreCart> = ({
 
   useEffect(() => {
     if (item) {
-      let highMin = 0;
       let itemsLocality = '';
       let total = 0;
       let description: any = '';
 
       item?.items.forEach((one: any, ind: number) => {
-        const duration: any = moment.duration(
-          one?.item?.product['@ondc/org/time_to_ship'],
-        );
-
         if (one.item.hasCustomisations) {
           total += getPriceWithCustomisations(one) * one?.item?.quantity?.count;
         } else {
           total += one?.item?.product?.subtotal * one?.item?.quantity?.count;
         }
-
-        let durationInMinutes = duration.format('m').replace(/\,/g, '');
-        if (highMin < durationInMinutes) {
-          highMin = durationInMinutes;
-          itemsLocality = one.item.location_details?.address?.locality;
-        }
+        itemsLocality = one.item.location_details?.address?.locality;
         description = description + one?.item?.product?.descriptor?.name;
 
         if (item?.items.length - 2 !== ind || item?.items.length === 1) {

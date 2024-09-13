@@ -22,7 +22,7 @@ const CloseSheetContainer = ({
     <View style={styles.container}>
       <View style={styles.closeSheet}>
         <TouchableOpacity onPress={closeSheet} style={styles.closeButton}>
-          <Icon name={'clear'} color={theme.colors.white} size={36} />
+          <Icon name={'clear'} color={theme.colors.white} size={24} />
         </TouchableOpacity>
       </View>
       {children}

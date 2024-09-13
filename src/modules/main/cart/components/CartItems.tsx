@@ -508,7 +508,6 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingBottom: 24,
     },
     providerBorderBottom: {
       borderBottomColor: colors.neutral100,
@@ -534,6 +533,7 @@ const makeStyles = (colors: any) =>
     },
     productsContainer: {
       padding: 16,
+      backgroundColor:colors.white,
     },
     providerImage: {
       width: 48,
