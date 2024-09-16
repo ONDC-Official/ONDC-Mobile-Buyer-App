@@ -1,6 +1,13 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import axios from 'axios';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {
+  FlatList,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {
   API_BASE_URL,
@@ -17,6 +24,8 @@ import {getFilterCategory} from '../../../../utils/utils';
 import FBFilter from './FBFilter';
 import FBProduct from './FBProduct';
 import {useAppTheme} from '../../../../utils/theme';
+import Menu from '../../../../assets/menu.svg';
+import {Portal, Text} from 'react-native-paper';
 
 const CancelToken = axios.CancelToken;
 const VegImage = require('../../../../assets/veg.png');
@@ -44,6 +53,8 @@ const FBProducts = ({
   const [selectedFilter, setSelectedFilter] = useState<string>('');
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const [menuItem, setMenuItem] = useState<boolean>(false);
+  const [defaultExpandVal, setDefaultExpandVal] = useState<number>(0);
 
   const getCustomMenu = async () => {
     try {
@@ -149,63 +160,120 @@ const FBProducts = ({
   }
 
   return (
-    <View>
-      <View style={styles.filterContainer}>
-        <FBFilter
-          selectedFilter={selectedFilter}
-          label={t('Cart.Veg')}
-          value={'veg'}
-          setSelectedFilter={setSelectedFilter}
-          imageSource={VegImage}
-        />
-        <FBFilter
-          selectedFilter={selectedFilter}
-          label={t('Cart.Non Veg')}
-          value={'nonveg'}
-          setSelectedFilter={setSelectedFilter}
-          imageSource={NonVegImage}
-        />
-        <FBFilter
-          selectedFilter={selectedFilter}
-          label={t('Cart.Egg')}
-          value={'egg'}
-          setSelectedFilter={setSelectedFilter}
-          imageSource={NonVegImage}
-        />
-      </View>
-      <View style={styles.searchContainer}>
-        <ProductSearch
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
-      </View>
-      {menu.length > 0 ? (
-        filteredSections?.map((section, index) => (
-          <CustomMenuAccordion
-            key={section.id}
-            section={section}
-            provider={provider}
-            isOpen={isOpen}
-            defaultExpand={index === 0}
+    <View style={styles.container}>
+      <ScrollView nestedScrollEnabled>
+        <View style={styles.filterContainer}>
+          <FBFilter
+            selectedFilter={selectedFilter}
+            label={t('Cart.Veg')}
+            value={'veg'}
+            setSelectedFilter={setSelectedFilter}
+            imageSource={VegImage}
           />
-        ))
+          <FBFilter
+            selectedFilter={selectedFilter}
+            label={t('Cart.Non Veg')}
+            value={'nonveg'}
+            setSelectedFilter={setSelectedFilter}
+            imageSource={NonVegImage}
+          />
+          <FBFilter
+            selectedFilter={selectedFilter}
+            label={t('Cart.Egg')}
+            value={'egg'}
+            setSelectedFilter={setSelectedFilter}
+            imageSource={NonVegImage}
+          />
+        </View>
+        <View style={styles.searchContainer}>
+          <ProductSearch
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        </View>
+        {menu.length > 0 ? (
+          filteredSections?.map((section, index) => (
+            <CustomMenuAccordion
+              key={section.id}
+              section={section}
+              provider={provider}
+              isOpen={isOpen}
+              defaultExpand={index === defaultExpandVal}
+            />
+          ))
+        ) : (
+          <FlatList
+            data={filteredProducts}
+            renderItem={({item}) => (
+              <FBProduct product={item} provider={provider} isOpen={isOpen} />
+            )}
+            contentContainerStyle={styles.listContainer}
+            ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
+            keyExtractor={item => item.id}
+          />
+        )}
+      </ScrollView>
+      {!menuItem && filteredSections.length > 0 ? (
+        <TouchableOpacity
+          style={styles.flotingButton}
+          onPress={() => setMenuItem(true)}>
+          <Menu height={24} width={24} />
+          <Text variant="labelMedium" style={styles.menuText}>
+            Menu
+          </Text>
+        </TouchableOpacity>
       ) : (
-        <FlatList
-          data={filteredProducts}
-          renderItem={({item}) => (
-            <FBProduct product={item} provider={provider} isOpen={isOpen} />
-          )}
-          contentContainerStyle={styles.listContainer}
-          ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
-          keyExtractor={item => item.id}
-        />
+        <></>
       )}
+      <Portal>
+        <Modal visible={menuItem} transparent>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={styles.containerModal}
+            onPress={() => setMenuItem(false)}>
+            <View style={styles.subContainerModal}>
+              {filteredSections?.map((section, index) => {
+                let itemLength = section?.items?.length;
+
+                return (
+                  <TouchableOpacity
+                    style={styles.itemModal}
+                    onPress={() => {
+                      setMenuItem(false);
+                      setDefaultExpandVal(index);
+                    }}>
+                    <Text
+                      variant={
+                        index === defaultExpandVal
+                          ? 'headlineSmall'
+                          : 'titleSmall'
+                      }
+                      style={styles.textmodal}>
+                      {section?.descriptor?.name}
+                    </Text>
+                    <Text
+                      variant={
+                        index === defaultExpandVal
+                          ? 'headlineSmall'
+                          : 'titleSmall'
+                      }
+                      style={styles.textmodal}>
+                      {itemLength > 0 ? `${itemLength}` : ''}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </TouchableOpacity>
+        </Modal>
+      </Portal>
     </View>
   );
 };
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({
+    container: {flex: 1},
     filterContainer: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -223,6 +291,43 @@ const makeStyles = (colors: any) =>
     },
     listContainer: {
       paddingTop: 24,
+    },
+    itemModal: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    menuText: {
+      color: colors.white,
+    },
+    containerModal: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      justifyContent: 'flex-end',
+      alignItems: 'flex-end',
+    },
+    subContainerModal: {
+      minHeight: 50,
+      width: 260,
+      backgroundColor: colors.white,
+      borderRadius: 16,
+      marginBottom: 20,
+      marginRight: 20,
+      padding: 16,
+      gap: 16,
+    },
+    flotingButton: {
+      height: 64,
+      width: 64,
+      borderRadius: 64,
+      backgroundColor: colors.black,
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'absolute',
+      bottom: 20,
+      right: 20,
+    },
+    textmodal: {
+      color: colors.neutral400,
     },
   });
 

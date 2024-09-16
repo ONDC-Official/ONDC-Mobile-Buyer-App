@@ -180,6 +180,14 @@
   "Stores Near me": {
     "Stores Near me": "எனக்கு அருகிலுள்ள கடைகள்"
   },
+  "Stores Info": {
+    "Legal Name": "சட்டப் பெயர்",
+    "Seller Network Partner": "விற்பனையாளர் நெட்வொர்க் பார்ட்னர்",
+    "GST Number": "ஜிஎஸ்டி எண்",
+    "FSSAI Lic No": "ஜிஎஸ்டி எண்",
+    "Mappls": "ஜிஎஸ்டி எண்",
+    "Maps": "வரைபடங்கள்"
+  },
   "Empty Cart": {
     "Your Cart is Empty": "உங்கள் வண்டி காலியாக உள்ளது",
     "It seems you haven’t added any products in your cart": "உங்கள் கார்ட்டில் நீங்கள் எந்த தயாரிப்புகளையும் சேர்க்கவில்லை என்று தெரிகிறது"

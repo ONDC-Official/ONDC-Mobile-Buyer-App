@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useState} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useAppTheme} from '../../../utils/theme';
@@ -12,14 +12,13 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import FastImage from 'react-native-fast-image';
 
 interface StoreInfo {
-  navigation: any;
   route: any;
 }
 
 const Mappls = require('../../../assets/maps/mappls.png');
 const Google = require('../../../assets/maps/google_maps.png');
 
-const StoreInfo: React.FC<StoreInfo> = ({navigation, route: {params}}) => {
+const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -134,7 +133,7 @@ const StoreInfo: React.FC<StoreInfo> = ({navigation, route: {params}}) => {
         <View style={styles.detailView}>
           <View style={styles.rowView}>
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
-              Legal Name
+            {t('Stores Info.Legal Name')}
             </Text>
             <Text variant="bodyMedium" style={[styles.colorNeutral300]}>
               --
@@ -142,7 +141,7 @@ const StoreInfo: React.FC<StoreInfo> = ({navigation, route: {params}}) => {
           </View>
           <View style={styles.rowView}>
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
-              Seller Network Partner
+            {t('Stores Info.Seller Network Partner')}
             </Text>
             <Text variant="bodyMedium" style={styles.colorNeutral300}>
               --
@@ -150,7 +149,7 @@ const StoreInfo: React.FC<StoreInfo> = ({navigation, route: {params}}) => {
           </View>
           <View style={styles.rowView}>
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
-              GST Number
+            {t('Stores Info.GST Number')}
             </Text>
             <Text variant="bodyMedium" style={styles.colorNeutral300}>
               --
@@ -158,7 +157,7 @@ const StoreInfo: React.FC<StoreInfo> = ({navigation, route: {params}}) => {
           </View>
           <View style={styles.rowView}>
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
-              FSSAI Lic No
+            {t('Stores Info.FSSAI Lic No')}
             </Text>
             <Text variant="bodyMedium" style={styles.colorNeutral300}>
               --
@@ -184,7 +183,7 @@ const StoreInfo: React.FC<StoreInfo> = ({navigation, route: {params}}) => {
               resizeMode={FastImage.resizeMode.cover}
             />
             <Text variant={'bodyMedium'} style={styles.mapName}>
-              Mappls
+              {t('Stores Info.Mappls')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.mapRow} onPress={navigateToMaps}>
@@ -194,7 +193,7 @@ const StoreInfo: React.FC<StoreInfo> = ({navigation, route: {params}}) => {
               resizeMode={FastImage.resizeMode.cover}
             />
             <Text variant={'bodyMedium'} style={styles.mapName}>
-              Maps
+            {t('Stores Info.Maps')}
             </Text>
           </TouchableOpacity>
         </View>

@@ -28,7 +28,7 @@ interface OutletDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
-  locationData: any;
+  locationData?: any;
 }
 
 const Closed = require('../../../../assets/closed.png');
@@ -358,7 +358,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
               resizeMode={FastImage.resizeMode.cover}
             />
             <Text variant={'bodyMedium'} style={styles.mapName}>
-              Mappls
+            {t('Stores Info.Mappls')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.mapRow} onPress={navigateToMaps}>
@@ -368,7 +368,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
               resizeMode={FastImage.resizeMode.cover}
             />
             <Text variant={'bodyMedium'} style={styles.mapName}>
-              Maps
+            {t('Stores Info.Maps')}
             </Text>
           </TouchableOpacity>
         </View>

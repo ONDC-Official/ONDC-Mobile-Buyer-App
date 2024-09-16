@@ -22,13 +22,13 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
   }
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <OutletDetails
-          provider={provider}
-          outlet={outlet}
-          apiRequested={apiRequested}
-        />
+    <View style={styles.container}>
+      <OutletDetails
+        provider={provider}
+        outlet={outlet}
+        apiRequested={apiRequested}
+      />
+      <View style={{flex: 1}}>
         <FBProducts
           provider={provider}
           domain={provider?.domain}
@@ -36,7 +36,7 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
           isOpen={outlet?.isOpen || false}
         />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

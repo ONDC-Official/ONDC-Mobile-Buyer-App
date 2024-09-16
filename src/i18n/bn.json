@@ -180,6 +180,14 @@
   "Stores Near me": {
     "Stores Near me": "আমার কাছাকাছি দোকান"
   },
+  "Stores Info": {
+    "Legal Name": "আইনি নাম",
+    "Seller Network Partner": "বিক্রেতা নেটওয়ার্ক পার্টনার",
+    "GST Number": "মানচিত্র নম্বর",
+    "FSSAI Lic No": "মানচিত্র নম্বর",
+    "Mappls": "ম্যাপলস",
+    "Maps": "মানচিত্র"
+  },
   "Empty Cart": {
     "Your Cart is Empty": "তোমার থলে তো খালি",
     "It seems you haven’t added any products in your cart": "মনে হচ্ছে আপনি আপনার কার্টে কোনো পণ্য যোগ করেননি"

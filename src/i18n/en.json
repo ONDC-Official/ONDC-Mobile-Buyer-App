@@ -180,6 +180,14 @@
   "Stores Near me": {
     "Stores Near me": "Stores Near me"
   },
+  "Stores Info": {
+    "Legal Name": "Legal Name",
+    "Seller Network Partner": "Seller Network Partner",
+    "GST Number": "GST Number",
+    "FSSAI Lic No": "FSSAI Lic No",
+    "Mappls": "Mappls",
+    "Maps": "Maps"
+  },
   "Empty Cart": {
     "Your Cart is Empty": "Your Cart is Empty",
     "It seems you haven’t added any products in your cart": "It seems you haven’t added any products in your cart"

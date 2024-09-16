@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {List, Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import FBProduct from './FBProduct';
@@ -18,6 +18,14 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
   isOpen,
 }) => {
   const [expanded, setExpanded] = useState<boolean>(defaultExpand);
+
+  useEffect(() => {
+    if (defaultExpand) {
+      setExpanded(defaultExpand);
+    } else {
+      setExpanded(false);
+    }
+  }, [defaultExpand]);
 
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);

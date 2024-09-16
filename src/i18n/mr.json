@@ -180,6 +180,14 @@
   "Stores Near me": {
     "Stores Near me": "माझ्या जवळची दुकाने"
   },
+  "Stores Info": {
+    "Legal Name": "कायदेशीर नाव",
+    "Seller Network Partner": "विक्रेता नेटवर्क भागीदार",
+    "GST Number": "जीएसटी क्रमांक",
+    "FSSAI Lic No": "एफएसएसएआई लाइसेंस संख्या",
+    "Mappls": "मैपल्स",
+    "Maps": "मैप्स"
+  },
   "Empty Cart": {
     "Your Cart is Empty": "तुमची कार्ट रिकामी आहे",
     "It seems you haven’t added any products in your cart": "तुम्ही तुमच्या कार्टमध्ये कोणतीही उत्पादने जोडलेली नाहीत असे दिसते"
