@@ -5,15 +5,10 @@ import {useTranslation} from 'react-i18next';
 import FastImage from 'react-native-fast-image';
 import moment from 'moment';
 import 'moment-duration-format';
-import {useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import {useAppTheme} from '../../../utils/theme';
-import {
-  calculateDistanceBetweenPoints,
-  getPriceWithCustomisations,
-} from '../../../utils/utils';
-import useMinutesToString from '../../../hooks/useMinutesToString';
+import {getPriceWithCustomisations} from '../../../utils/utils';
 import useFormatNumber from '../../../hooks/useFormatNumber';
 
 interface StoreCart {
@@ -32,23 +27,16 @@ const StoreCart: React.FC<StoreCart> = ({
   goToViewCart,
 }) => {
   const {t} = useTranslation();
-  const {formatNumber, formatDistance} = useFormatNumber();
+  const {formatNumber} = useFormatNumber();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
   const [cartTotal, setCartTotal] = useState<number>(0);
-  const [minutes, setMinutes] = useState({type: 'minutes', time: 0});
-  const [distance, setDistance] = useState<string>('');
   const [locality, setLocality] = useState<string>('');
-
-  const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
-    useMinutesToString();
-  const {address} = useSelector((state: any) => state?.address);
 
   useEffect(() => {
     if (item) {
       let highMin = 0;
-      let latLong: any[] = [];
       let itemsLocality = '';
       let total = 0;
       item?.items.forEach((one: any) => {
@@ -65,29 +53,10 @@ const StoreCart: React.FC<StoreCart> = ({
         let durationInMinutes = duration.format('m').replace(/\,/g, '');
         if (highMin < durationInMinutes) {
           highMin = durationInMinutes;
-          latLong = one.item.location_details?.gps
-            ? one.item.location_details?.gps.split(/\s*,\s*/)
-            : [];
           itemsLocality = one.item.location_details?.address?.locality;
         }
       });
-      const newDistance =
-        latLong.length > 0
-          ? calculateDistanceBetweenPoints(
-              {
-                latitude: address.address.lat,
-                longitude: address.address.lng,
-              },
-              {
-                latitude: Number(latLong[0]),
-                longitude: Number(latLong[1]),
-              },
-            )
-          : '1.0';
-      setDistance(newDistance);
       setCartTotal(total);
-      let totalMinutes = Number(highMin) + (Number(newDistance) * 60) / 15;
-      setMinutes(convertMinutesToHumanReadable(totalMinutes));
       setLocality(itemsLocality);
     }
   }, [item]);
@@ -126,18 +95,6 @@ const StoreCart: React.FC<StoreCart> = ({
                 ellipsizeMode={'tail'}>
                 {locality}
               </Text>
-              {/*<View style={styles.dotView} />*/}
-              {/*<Text variant={'labelMedium'} style={styles.distance}>*/}
-              {/*  {t('Store.km', {*/}
-              {/*    distance: formatNumber(formatDistance(distance)),*/}
-              {/*  })}*/}
-              {/*</Text>*/}
-              {/*<View style={styles.providerLocalityView}>*/}
-              {/*  <View style={styles.dotView} />*/}
-              {/*  <Text variant={'labelMedium'} style={styles.distance}>*/}
-              {/*    {translateMinutesToHumanReadable(minutes.type, minutes.time)}*/}
-              {/*  </Text>*/}
-              {/*</View>*/}
             </View>
           </View>
         </View>

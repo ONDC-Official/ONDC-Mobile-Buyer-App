@@ -19,6 +19,20 @@ export default () => {
     return config;
   };
 
+  const getAuthConfigForToken = (accessToken: string, cancelToken = null) => {
+    const config: any = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        targetlanguage: language,
+        appVersion: getVersion(),
+      },
+    };
+    if (cancelToken) {
+      config.cancelToken = cancelToken;
+    }
+    return config;
+  };
+
   const postDataWithAuth = async (
     url: string,
     params: any,
@@ -57,6 +71,20 @@ export default () => {
     }
   };
 
+  const getDataWithToken = async (
+    url: string,
+    accessToken: string,
+    cancelToken: any,
+  ) => {
+    try {
+      const config = getAuthConfigForToken(accessToken, cancelToken);
+      return await axios.get(encodeURI(url), config);
+    } catch (e) {
+      console.log(e, url);
+      throw e;
+    }
+  };
+
   const getDataWithAuth = async (url: string, cancelToken: any) => {
     try {
       const config = getAuthConfig(cancelToken);
@@ -79,6 +107,7 @@ export default () => {
 
   return {
     getDataWithAuth,
+    getDataWithToken,
     postDataWithAuth,
     getDataWithWithoutEncode,
     putDataWithAuth,

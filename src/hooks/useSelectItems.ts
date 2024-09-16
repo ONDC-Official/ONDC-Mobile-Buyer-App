@@ -33,7 +33,6 @@ export default (openFulfillmentSheet: () => void) => {
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [selectedItemsForInit, setSelectedItemsForInit] = useState<any[]>([]);
   const [eventData, setEventData] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<any>([]);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [haveDistinctProviders, setHaveDistinctProviders] =
@@ -294,7 +293,6 @@ export default (openFulfillmentSheet: () => void) => {
   }, []);
 
   return {
-    loading,
     cartItems,
     checkoutLoading,
     onCheckoutFromCart,

@@ -4,11 +4,12 @@ import FastImage from 'react-native-fast-image';
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {Grayscale} from 'react-native-color-matrix-image-filters';
+
 import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
-import {Grayscale} from 'react-native-color-matrix-image-filters';
 
 interface Product {
   product: any;
@@ -63,14 +64,14 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
       <View style={styles.meta}>
         <Text
           variant={'labelLarge'}
-          numberOfLines={1}
+          numberOfLines={2}
           ellipsizeMode={'tail'}
           style={styles.name}>
           {product?.item_details?.descriptor?.name}
         </Text>
         <Text
           variant={'labelSmall'}
-          numberOfLines={1}
+          numberOfLines={4}
           ellipsizeMode={'tail'}
           style={styles.provider}>
           {search
@@ -79,7 +80,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
         </Text>
         <Text variant={'bodyLarge'} style={styles.amount}>
           {CURRENCY_SYMBOLS[product?.item_details?.price?.currency]}
-          {formatNumber(product?.item_details?.price?.value)}
+          {formatNumber(product?.item_details?.price?.value.toFixed(2))}
         </Text>
       </View>
       {disabled ? (

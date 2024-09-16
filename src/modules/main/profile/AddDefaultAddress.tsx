@@ -30,7 +30,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
   route: {params},
 }) => {
   const dispatch = useDispatch();
-  const {} = useRefreshToken();
+  const {getUserToken} = useRefreshToken();
   const {t} = useTranslation();
   const source = useRef<any>(null);
   const {name, emailId} = useSelector(({auth}) => auth);
@@ -98,6 +98,7 @@ const AddDefaultAddress: React.FC<AddDefaultAddress> = ({
     navigation.setOptions({
       title: t('Address Form.Add Address'),
     });
+    getUserToken().then(() => {});
   }, []);
 
   return (

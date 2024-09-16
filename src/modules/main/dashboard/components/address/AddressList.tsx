@@ -57,7 +57,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
   const isFocused = useIsFocused();
   const {address} = useSelector((state: any) => state.address);
   const source = useRef<any>(null);
-  const {} = useRefreshToken();
+  const {getUserToken} = useRefreshToken();
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const [apiInProgress, setApiInProgress] = useState<boolean>(true);
@@ -131,6 +131,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
     navigation.setOptions({
       title: t('Address List.Delivery Address'),
     });
+    getUserToken().then(() => {});
   }, []);
 
   const list = apiInProgress ? skeletonList : addresses;

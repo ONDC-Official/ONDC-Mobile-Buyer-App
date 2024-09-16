@@ -6,6 +6,7 @@ import Categories from '../home/Categories';
 import {useAppTheme} from '../../../../../utils/theme';
 import StoresNearMe from '../../../category/components/StoresNearMe';
 import AddressSheet from '../address/AddressSheet';
+import {appStyles} from '../../../../../styles/styles';
 
 const Home = () => {
   const theme = useAppTheme();
@@ -19,8 +20,8 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <Header onPress={openAddressList} />
-      <Categories />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView style={appStyles.container}>
+        <Categories />
         <StoresNearMe />
       </ScrollView>
       <AddressSheet addressSheet={addressSheet} />

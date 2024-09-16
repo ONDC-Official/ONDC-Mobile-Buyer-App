@@ -7,11 +7,9 @@ import {useTranslation} from 'react-i18next';
 
 import HomeIcon from '../../../../../assets/dashboard/home.svg';
 import CartIcon from '../../../../../assets/dashboard/cart.svg';
-import ListIcon from '../../../../../assets/dashboard/list.svg';
 import ProfileIcon from '../../../../../assets/dashboard/profile.svg';
 import HomeActiveIcon from '../../../../../assets/dashboard/home_a.svg';
 import CartActiveIcon from '../../../../../assets/dashboard/cart_a.svg';
-import ListActiveIcon from '../../../../../assets/dashboard/list_a.svg';
 import ProfileActiveIcon from '../../../../../assets/dashboard/profile_a.svg';
 import {useAppTheme} from '../../../../../utils/theme';
 
@@ -25,8 +23,6 @@ const TabIcon: React.FC<TabIcon> = ({name, isFocused}) => {
     switch (name) {
       case 'Home':
         return <HomeActiveIcon width={20} height={20} color={'#686868'} />;
-      case 'List':
-        return <ListActiveIcon width={20} height={20} color={'#686868'} />;
       case 'Cart':
         return <CartActiveIcon width={20} height={20} color={'#686868'} />;
       default:
@@ -36,8 +32,6 @@ const TabIcon: React.FC<TabIcon> = ({name, isFocused}) => {
     switch (name) {
       case 'Home':
         return <HomeIcon width={20} height={20} color={'#fff'} />;
-      case 'List':
-        return <ListIcon width={20} height={20} color={'#fff'} />;
       case 'Cart':
         return <CartIcon width={20} height={20} color={'#fff'} />;
       default:

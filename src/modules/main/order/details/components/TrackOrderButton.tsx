@@ -55,7 +55,7 @@ const layerStyles: any = {
   },
 };
 
-const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
+const TrackOrderButton: React.FC<TrackOrderButton> = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const appTheme = useAppTheme();
@@ -150,13 +150,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
         data[0],
       ];
       const {message} = data[0];
-      if (message.tracking.status === 'active' && message.tracking.url === '') {
-        dispatch(updateRequestingTracker(false));
-        showToastWithGravity(
-          t('Orders.Tracking information is not provided by the provider'),
-        );
-        return;
-      } else if (
+      if (
         message.tracking.status === 'active' &&
         (message?.tracking?.url !== '' || message?.tracking?.url !== undefined)
       ) {
@@ -290,7 +284,7 @@ const TrackOrderButton: React.FC<TrackOrderButton> = ({}) => {
       MapplsGL.setMapSDKKey(mapResponse.data.access_token);
       MapplsGL.setRestAPIKey(mapResponse.data.access_token);
       MapplsGL.setAtlasClientId(mapResponse.data.client_id);
-      MapplsGL.setAtlasClientSecret(Config.MMI_CLIENT_SECRET);
+      MapplsGL.setAtlasClientSecret(Config.MMI_CLIENT_SECRET ?? '');
     });
   }, []);
 

@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -23,6 +23,8 @@ import useCalculateTimeToShip from '../../../../hooks/useCalculateTimeToShip';
 interface StoresNearMe {
   domain?: string;
 }
+
+const screenWidth = Dimensions.get('screen').width;
 
 const CancelToken = axios.CancelToken;
 
@@ -109,23 +111,17 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       />
 
       <View style={styles.container}>
-        {apiRequested ? (
-          <FlatList
-            contentContainerStyle={styles.listContainer}
-            numColumns={3}
-            data={skeletonList}
-            keyExtractor={item => item.id}
-            renderItem={renderSkeletonItem}
-          />
-        ) : (
-          <FlatList
-            contentContainerStyle={styles.listContainer}
-            numColumns={3}
-            data={locations}
-            keyExtractor={item => item.id}
-            renderItem={renderItem}
-          />
-        )}
+        {apiRequested
+          ? skeletonList.map(item => (
+              <View key={item.id} style={styles.item}>
+                {renderSkeletonItem()}
+              </View>
+            ))
+          : locations.map(item => (
+              <View key={item.id} style={styles.item}>
+                {renderItem({item})}
+              </View>
+            ))}
       </View>
     </View>
   );
@@ -135,6 +131,8 @@ const makeStyles = () =>
   StyleSheet.create({
     container: {
       marginTop: 12,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
     },
     brand: {
       width: 113,
@@ -151,6 +149,9 @@ const makeStyles = () =>
     },
     listContainer: {
       paddingHorizontal: 8,
+    },
+    item: {
+      width: screenWidth / 3,
     },
   });
 

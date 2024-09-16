@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "android:alpha": "react-native run-android --variant=alphadebug",
+    "android:alpha-release": "react-native run-android --variant=alpharelease",
     "android:staging": "react-native run-android --variant=stagingdebug",
     "android:staging-release": "react-native run-android --variant=stagingrelease",
     "android:preprod": "react-native run-android --variant=preproddebug",

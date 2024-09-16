@@ -24,7 +24,7 @@ interface Order {
  * @constructor
  * @returns {JSX.Element}
  */
-const OrderHeader: React.FC<Order> = ({order}) => {
+const Order: React.FC<Order> = ({order}) => {
   const {formatNumber} = useFormatNumber();
   const {formatDate} = useFormatDate();
   const theme = useAppTheme();
@@ -105,7 +105,7 @@ const OrderHeader: React.FC<Order> = ({order}) => {
   );
 };
 
-export default OrderHeader;
+export default Order;
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({

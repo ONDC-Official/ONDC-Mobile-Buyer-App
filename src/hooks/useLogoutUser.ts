@@ -1,6 +1,7 @@
 import {useDispatch} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import auth from '@react-native-firebase/auth';
 import {clearAll} from '../utils/storage';
 import {logoutUser} from '../toolkit/reducer/auth';
 import {clearAddress} from '../toolkit/reducer/address';
@@ -14,6 +15,7 @@ export default () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const clearDataAndLogout = async () => {
+    await auth().signOut();
     await clearAll();
     dispatch(logoutUser());
     dispatch(clearAddress());

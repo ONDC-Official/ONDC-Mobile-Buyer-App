@@ -1,5 +1,3 @@
-import getDistance from 'geolib/es/getDistance';
-
 export default () => {
   const calculateTimeToShip = (
     list: any,

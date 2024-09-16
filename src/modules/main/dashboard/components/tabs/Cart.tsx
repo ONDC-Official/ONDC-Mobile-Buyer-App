@@ -17,7 +17,7 @@ import {keyExtractor} from '../../../../../utils/utils';
 
 const CancelToken = axios.CancelToken;
 
-const DashboardCart = ({navigation}: any) => {
+const Cart = ({navigation}: any) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -49,8 +49,7 @@ const DashboardCart = ({navigation}: any) => {
       dispatch(updateCartItems(response));
     } catch (error: any) {
       if (error.response) {
-        if (error.response.status === 404) {
-        } else {
+        if (error.response.status !== 404) {
           handleApiError(error);
         }
       } else {
@@ -78,8 +77,7 @@ const DashboardCart = ({navigation}: any) => {
       dispatch(updateCartItems(response));
     } catch (error: any) {
       if (error.response) {
-        if (error.response.status === 404) {
-        } else {
+        if (error.response.status !== 404) {
           handleApiError(error);
         }
       } else {
@@ -169,4 +167,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default DashboardCart;
+export default Cart;

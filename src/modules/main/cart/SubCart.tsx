@@ -13,14 +13,13 @@ import {
   Portal,
   Text,
 } from 'react-native-paper';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
-  compareIgnoringSpaces,
   getPriceWithCustomisations,
   isItemCustomization,
   showToastWithGravity,
@@ -34,11 +33,7 @@ import Payment from './components/Payment';
 import useConfirmItems from '../../../hooks/useConfirmItems';
 import CloseSheetContainer from '../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../utils/theme';
-import useReadAudio from '../../../hooks/useReadAudio';
-import {
-  MANUAL_LINK,
-  VIEW_DELIVERY_OPTIONS_COMMAND,
-} from '../../../utils/constants';
+import {MANUAL_LINK} from '../../../utils/constants';
 import useFormatNumber from '../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../toolkit/reducer/cart';
 import ReferenceIcon from '../../../assets/reference.svg';
@@ -47,7 +42,6 @@ const screenHeight: number = Dimensions.get('screen').height;
 
 const SubCart = ({route: {params}}: any) => {
   const {formatNumber} = useFormatNumber();
-  const voiceDetectionStarted = useRef<boolean>(false);
   const navigation = useNavigation<any>();
   const {t} = useTranslation();
   const dispatch = useDispatch();
@@ -99,7 +93,6 @@ const SubCart = ({route: {params}}: any) => {
   };
 
   const {
-    loading,
     checkoutLoading,
     onCheckoutFromCart,
     haveDistinctProviders,
@@ -109,22 +102,16 @@ const SubCart = ({route: {params}}: any) => {
     cartItems,
     setCartItems,
     setSelectedItems,
-    selectedItemsForInit,
     updateSelectedItemsForInit,
   } = useSelectItems(openFulfillmentSheet);
 
-  const {language} = useSelector(({auth}) => auth);
-  const {userInput, stopAndDestroyVoiceListener, setAllowRestarts} =
-    useReadAudio(language);
-
   const {
     confirmOrderLoading,
-    handleConfirmOrder,
     deliveryAddress,
     setDeliveryAddress,
     activePaymentMethod,
     setActivePaymentMethod,
-  } = useConfirmItems(closePaymentSheet, stopAndDestroyVoiceListener);
+  } = useConfirmItems(closePaymentSheet);
 
   const showQuoteError = () => {
     let msg: string = quoteItemProcessing
@@ -137,7 +124,9 @@ const SubCart = ({route: {params}}: any) => {
     fulfillmentSheetShown.current = false;
     updateSelectedItemsForInit();
     fulfillmentSheet.current.close();
-    paymentSheet.current.open();
+    setTimeout(() => {
+      paymentSheet.current.open();
+    }, 200);
   };
 
   const updateDeliveryAddress = (newAddress: any) => {
@@ -146,16 +135,14 @@ const SubCart = ({route: {params}}: any) => {
   };
 
   const navigateToHome = () => {
-    stopAndDestroyVoiceListener().then(() => {
-      if (providerWiseItems?.length > 0) {
-        const routeParams: any = {
-          brandId: providerWiseItems[0]?.items[0]?.item?.provider?.id,
-        };
-        routeParams.outletId =
-          providerWiseItems[0]?.items[0]?.item?.location_details?.id;
-        navigation.navigate('BrandDetails', routeParams);
-      }
-    });
+    if (providerWiseItems?.length > 0) {
+      const routeParams: any = {
+        brandId: providerWiseItems[0]?.items[0]?.item?.provider?.id,
+      };
+      routeParams.outletId =
+        providerWiseItems[0]?.items[0]?.item?.location_details?.id;
+      navigation.navigate('BrandDetails', routeParams);
+    }
   };
 
   const detectAddressNavigation = () => {
@@ -170,31 +157,9 @@ const SubCart = ({route: {params}}: any) => {
     Linking.openURL(MANUAL_LINK).then(() => {});
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      if (voiceDetectionStarted.current) {
-        setAllowRestarts();
-      }
-    }, []),
-  );
-
   useEffect(() => {
     setDeliveryAddress(address);
   }, [address]);
-
-  useEffect(() => {
-    if (userInput.length > 0) {
-      const input = userInput.toLowerCase();
-      if (VIEW_DELIVERY_OPTIONS_COMMAND.includes(input)) {
-        onCheckoutFromCart(deliveryAddress).then(() => {});
-      } else if (
-        fulfillmentSheetShown.current &&
-        compareIgnoringSpaces('proceed to pay', input)
-      ) {
-        showPaymentOption();
-      }
-    }
-  }, [userInput, deliveryAddress]);
 
   useEffect(() => {
     try {
@@ -295,8 +260,6 @@ const SubCart = ({route: {params}}: any) => {
 
               if (error && error.code === '30009') {
                 cartList.splice(cartIndex, 1);
-              }
-              if (error && error.code === '40002') {
               }
               uuid = uuid + 1;
               return {
@@ -559,103 +522,97 @@ const SubCart = ({route: {params}}: any) => {
   return (
     <>
       <View style={styles.pageContainer}>
-        {loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size={'large'} color={theme.colors.primary} />
-          </View>
-        ) : (
-          <>
-            {cartItems.length === 0 ? (
-              <EmptyCart />
-            ) : (
-              <>
-                <View
-                  style={styles.pageContainer}
-                  pointerEvents={checkoutLoading ? 'none' : 'auto'}>
-                  <CartItems
-                    fullCartItems={cartData?.cartItems}
-                    providerWiseItems={providerWiseItems}
-                    cartItems={cartItems}
-                    setCartItems={updateDetailCartItems}
-                    updateSpecificCartItems={updateSpecificCartItems}
-                    haveDistinctProviders={haveDistinctProviders}
-                    isProductCategoryIsDifferent={isProductCategoryIsDifferent}
-                  />
+        <>
+          {cartItems.length === 0 ? (
+            <EmptyCart />
+          ) : (
+            <>
+              <View
+                style={styles.pageContainer}
+                pointerEvents={checkoutLoading ? 'none' : 'auto'}>
+                <CartItems
+                  fullCartItems={cartData?.cartItems}
+                  providerWiseItems={providerWiseItems}
+                  cartItems={cartItems}
+                  setCartItems={updateDetailCartItems}
+                  updateSpecificCartItems={updateSpecificCartItems}
+                  haveDistinctProviders={haveDistinctProviders}
+                  isProductCategoryIsDifferent={isProductCategoryIsDifferent}
+                />
+              </View>
+              <Card style={styles.summaryCard}>
+                <View style={styles.summaryRow}>
+                  <View style={styles.address}>
+                    <Text variant={'bodyLarge'} style={styles.addressTitle}>
+                      {t('Cart.Delivery Address')}
+                    </Text>
+                    <Text variant={'labelMedium'} style={styles.addressLabel}>
+                      {deliveryAddress?.address?.street},{' '}
+                      {deliveryAddress?.address?.landmark
+                        ? `${deliveryAddress?.address?.landmark},`
+                        : ''}{' '}
+                      {deliveryAddress?.address?.city},{' '}
+                      {deliveryAddress?.address?.state},{' '}
+                      {deliveryAddress?.address?.areaCode}{' '}
+                      {deliveryAddress?.descriptor?.name} (
+                      {deliveryAddress?.descriptor?.phone})
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    disabled={
+                      isProductAvailableQuantityIsZero ||
+                      isProductCategoryIsDifferent ||
+                      haveDistinctProviders ||
+                      checkoutLoading
+                    }
+                    style={styles.changeButton}
+                    onPress={() => addressSheet.current.open()}>
+                    <Text
+                      variant={'labelMedium'}
+                      style={styles.changeButtonLabel}>
+                      {t('Cart.Change')}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-                <Card style={styles.summaryCard}>
-                  <View style={styles.summaryRow}>
-                    <View style={styles.address}>
-                      <Text variant={'bodyLarge'} style={styles.addressTitle}>
-                        {t('Cart.Delivery Address')}
-                      </Text>
-                      <Text variant={'labelMedium'} style={styles.addressLabel}>
-                        {deliveryAddress?.address?.street},{' '}
-                        {deliveryAddress?.address?.landmark
-                          ? `${deliveryAddress?.address?.landmark},`
-                          : ''}{' '}
-                        {deliveryAddress?.address?.city},{' '}
-                        {deliveryAddress?.address?.state},{' '}
-                        {deliveryAddress?.address?.areaCode}{' '}
-                        {deliveryAddress?.descriptor?.name} (
-                        {deliveryAddress?.descriptor?.phone})
-                      </Text>
-                    </View>
-                    <TouchableOpacity
+                <View style={styles.summaryDivider} />
+                <View style={styles.summaryRow}>
+                  <View>
+                    <Text variant="titleLarge" style={styles.total}>
+                      ₹{formatNumber(cartTotal)}
+                    </Text>
+                    <Text variant="bodyMedium" style={styles.itemCount}>
+                      {formatNumber(cartItems.length)} {t('Cart.items')}
+                    </Text>
+                  </View>
+                  <View>
+                    <Button
                       disabled={
                         isProductAvailableQuantityIsZero ||
                         isProductCategoryIsDifferent ||
                         haveDistinctProviders ||
                         checkoutLoading
                       }
-                      style={styles.changeButton}
-                      onPress={() => addressSheet.current.open()}>
-                      <Text
-                        variant={'labelMedium'}
-                        style={styles.changeButtonLabel}>
-                        {t('Cart.Change')}
-                      </Text>
-                    </TouchableOpacity>
+                      icon={() =>
+                        checkoutLoading ? (
+                          <ActivityIndicator
+                            size={14}
+                            color={theme.colors.primary}
+                          />
+                        ) : (
+                          <></>
+                        )
+                      }
+                      style={styles.deliveryButton}
+                      mode={'contained'}
+                      onPress={() => onCheckoutFromCart(deliveryAddress)}>
+                      {t('Cart.View Delivery Options')}
+                    </Button>
                   </View>
-                  <View style={styles.summaryDivider} />
-                  <View style={styles.summaryRow}>
-                    <View>
-                      <Text variant="titleLarge" style={styles.total}>
-                        ₹{formatNumber(cartTotal)}
-                      </Text>
-                      <Text variant="bodyMedium" style={styles.itemCount}>
-                        {formatNumber(cartItems.length)} {t('Cart.items')}
-                      </Text>
-                    </View>
-                    <View>
-                      <Button
-                        disabled={
-                          isProductAvailableQuantityIsZero ||
-                          isProductCategoryIsDifferent ||
-                          haveDistinctProviders ||
-                          checkoutLoading
-                        }
-                        icon={() =>
-                          checkoutLoading ? (
-                            <ActivityIndicator
-                              size={14}
-                              color={theme.colors.primary}
-                            />
-                          ) : (
-                            <></>
-                          )
-                        }
-                        style={styles.deliveryButton}
-                        mode={'contained'}
-                        onPress={() => onCheckoutFromCart(deliveryAddress)}>
-                        {t('Cart.View Delivery Options')}
-                      </Button>
-                    </View>
-                  </View>
-                </Card>
-              </>
-            )}
-          </>
-        )}
+                </View>
+              </Card>
+            </>
+          )}
+        </>
       </View>
       <RBSheet
         closeOnPressMask={false}
@@ -701,7 +658,6 @@ const SubCart = ({route: {params}}: any) => {
           container: styles.rbSheet,
         }}>
         <Payment
-          userInput={userInput}
           productsQuote={productsQuote}
           cartItems={cartItems}
           updatedCartItemsData={selectedItems}

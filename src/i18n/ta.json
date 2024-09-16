@@ -57,7 +57,7 @@
     "Delivery Address": "டெலிவரி முகவரி",
     "Change": "மாற்றம்",
     "View Delivery Options": "டெலிவரி விருப்பங்களைப் பார்க்கவும்",
-    "items": "பொருட்களை",
+    "items": "பொருட்கள்",
     "Add to cart": "ஆட் டோ கார்ட்",
     "Product Details": "தயாரிப்பு விவரங்கள்",
     "Select any": "ஏதேனும் ஒன்றைத் தேர்ந்தெடுக்கவும்",
@@ -82,7 +82,7 @@
       "Customizable": "கஸ்டமைசபிள்"
     },
     "Filter List": {
-      "Filters": "வடிப்பான்கள்",
+      "Filters": "வடிகட்டிகள்",
       "Clear all": "அனைத்தையும் அழி",
       "Close": "நெருக்கமான",
       "Apply": "விண்ணப்பிக்கவும்"
@@ -780,7 +780,7 @@
     "Search": "தேடு",
     "Filter": "வடிகட்டி",
     "Filter List": {
-      "Filters": "வடிப்பான்கள்",
+      "Filters": "வடிகட்டிகள்",
       "Clear all": "அனைத்தையும் அழி",
       "Close": "நெருக்கமான",
       "Apply": "விண்ணப்பிக்கவும்",
@@ -808,7 +808,9 @@
     "Some orders are not initialized": "சில ஆர்டர்கள் துவக்கப்படவில்லை.",
     "Available Cities": "கிடைக்கக்கூடிய நகரங்கள்",
     "The app is only for Delhi city": "இந்த செயலி டெல்லி நகரத்திற்கு மட்டுமே பொருந்தும்",
-    "Open with": "உடன் திறக்கவும்"
+    "Open with": "உடன் திறக்கவும்",
+    "Please log in to your account and set your preferences": "உங்கள் கணக்கில் உள்நுழைந்து உங்கள் விருப்பங்களை அமைக்கவும்",
+    "Please set your preferences": "உங்கள் விருப்பங்களை அமைக்கவும்"
   },
   "Seller QR": {
     "ONDC QR se Bharat Khulega": "ஒஎன்டிசி கியூஆர் சே பாரத் குலேகா"

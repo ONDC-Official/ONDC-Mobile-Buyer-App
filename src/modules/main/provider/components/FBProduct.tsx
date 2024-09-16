@@ -531,12 +531,12 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
       return (
         <Text variant={'bodyLarge'} style={styles.price}>
           {currency}
-          {formatNumber(defaultPrice)}
+          {formatNumber(defaultPrice.toFixed(2))}
         </Text>
       );
     } else if (priceRange) {
-      const min = formatNumber(priceRange?.minPrice);
-      const max = formatNumber(priceRange?.maxPrice);
+      const min = formatNumber(priceRange?.minPrice.toFixed(2));
+      const max = formatNumber(priceRange?.maxPrice.toFixed(2));
       return (
         <Text variant={'bodyLarge'} style={styles.price}>
           {currency}{min}- {currency}{max}
@@ -546,7 +546,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
       return (
         <Text variant={'bodyLarge'} style={styles.price}>
           {currency}
-          {formatNumber(product?.item_details?.price?.value)}
+          {formatNumber(product?.item_details?.price?.value.toFixed(2))}
         </Text>
       );
     } else {
@@ -572,7 +572,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
           <Text
             variant={'labelSmall'}
             style={styles.category}
-            numberOfLines={1}
+            numberOfLines={5}
             ellipsizeMode={'tail'}>
             {product?.item_details?.descriptor?.short_desc}
           </Text>

@@ -71,7 +71,7 @@ const Products: React.FC<Products> = ({
         subCategoryIds.length > 0
           ? `&categoryIds=${encodeURIComponent(subCategoryIds.join(','))}`
           : '';
-      Object.keys(attributes).map(key => {
+      Object.keys(attributes).forEach(key => {
         url += `&product_attr_${key}=${attributes[key]
           .map((one: string) => encodeURIComponent(one))
           .join(',')}`;

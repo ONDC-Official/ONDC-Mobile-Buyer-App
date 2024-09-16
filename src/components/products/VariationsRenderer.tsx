@@ -71,8 +71,8 @@ const VariationsRenderer: React.FC<VariationsRenderer> = ({
               groupInfo.add(itemString);
             }
 
-            const uniqueGroupInfo = Array.from(groupInfo).map((item: any) =>
-              JSON.parse(item),
+            const uniqueGroupInfo = Array.from(groupInfo).map((group: any) =>
+              JSON.parse(group),
             );
             setVariationGroups(uniqueGroupInfo);
             getRelatedVariations(uniqueGroupInfo);

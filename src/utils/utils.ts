@@ -138,7 +138,7 @@ export const createCustomizationAndGroupMapping = (customizations: any[]) => {
 
 export const constructQuoteObject = (cartItems: any[]) => {
   const map = new Map();
-  cartItems.map((item: any) => {
+  cartItems.forEach((item: any) => {
     let bpp_uri = item?.product?.context?.bpp_uri;
     if (bpp_uri) {
       item.bpp_uri = bpp_uri;

@@ -34,10 +34,6 @@ const ManageQuantity: React.FC<ManageQuantity> = ({
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
-  const maximumQuantity = Number(
-    cartItem?.item?.product?.quantity?.maximum.count,
-  );
-
   return (
     <View style={styles.quantityContainer}>
       {allowDelete && cartItem?.item?.quantity?.count === 1 ? (

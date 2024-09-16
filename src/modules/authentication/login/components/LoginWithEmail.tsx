@@ -61,7 +61,7 @@ const LoginWithEmail = () => {
           values.email,
           values.password,
         );
-        await Clipboard.setString('');
+        Clipboard.setString('');
         const idTokenResult = await auth()?.currentUser?.getIdTokenResult();
 
         await storeDetails(idTokenResult, response.user);

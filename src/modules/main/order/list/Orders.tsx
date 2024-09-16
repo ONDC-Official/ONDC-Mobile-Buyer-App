@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useRef, useState} from 'react';
+import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Searchbar, Text} from 'react-native-paper';
 import axios from 'axios';
@@ -46,11 +46,14 @@ const Orders: React.FC<any> = () => {
 
   /**
    * function used to request list of orders
-   * @param currentPage: It specifies the number of page
-   * @param filter: selected filter
    * @returns {Promise<void>}
+   * @param currentPage
+   * @param filter
    */
-  const getOrderList = async (currentPage: number, filter: string) => {
+  const getOrderList = async (
+    currentPage: number,
+    filter: string,
+  ): Promise<void> => {
     try {
       source.current = CancelToken.source();
       const {data} = await getDataWithAuth(
@@ -129,14 +132,23 @@ const Orders: React.FC<any> = () => {
    * @constructor
    * @returns {JSX.Element}
    */
-  const renderItem = ({item}: {item: any}) => <Order order={item} />;
+  const renderItem = useCallback(
+    ({item}: {item: any}): JSX.Element => <Order order={item} />,
+    [],
+  );
+
+  const renderSkeletonItem = useCallback(() => <OrderSkeleton />, []);
+
+  const emptyComponent = useCallback(() => {
+    return <Text>{t('Orders.No data found')}</Text>;
+  }, []);
 
   if (apiInProgress) {
     return (
       <View style={styles.pageContainer}>
         <FlatList
           data={skeletonList}
-          renderItem={() => <OrderSkeleton />}
+          renderItem={renderSkeletonItem}
           keyExtractor={(item: any) => item.id}
           contentContainerStyle={styles.contentContainerStyle}
         />
@@ -156,9 +168,7 @@ const Orders: React.FC<any> = () => {
             style={styles.search}
             placeholderTextColor={theme.colors.neutral400}
             placeholder={t('Orders.Search')}
-            // onChangeText={onChangeSearch}
-            // onBlur={onSearchComplete}
-            // value={searchQuery}
+            value={''}
           />
           <TouchableOpacity
             style={styles.filterButton}
@@ -172,7 +182,7 @@ const Orders: React.FC<any> = () => {
         <FlatList
           data={orders}
           renderItem={renderItem}
-          ListEmptyComponent={() => <Text>{t('Orders.No data found')}</Text>}
+          ListEmptyComponent={emptyComponent}
           refreshing={refreshInProgress}
           keyExtractor={keyExtractor}
           onRefresh={onRefreshHandler}

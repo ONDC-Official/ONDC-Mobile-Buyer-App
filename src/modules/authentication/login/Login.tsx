@@ -7,6 +7,7 @@ import FormSwitch from '../common/FormSwitch';
 import PageBackground from '../common/PageBackground';
 import {makeStyles} from '../common/pageStyling';
 import {useAppTheme} from '../../../utils/theme';
+import useKeyboardHelper from '../../../hooks/useKeyboardHelper';
 
 /**
  * Component is used to render login form
@@ -15,6 +16,7 @@ const Login = () => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [formType, setFormType] = useState<string>('email');
+  const {isKeyboardVisible} = useKeyboardHelper();
 
   return (
     <>
@@ -36,16 +38,18 @@ const Login = () => {
             </View>
           </View>
         </ScrollView>
-        <View style={styles.footerContainer}>
-          <Text variant={'labelSmall'} style={styles.textCenter}>
-            By Signing to mobile app. I accept all the
-          </Text>
-          <Text
-            variant={'labelLarge'}
-            style={[styles.textCenter, styles.terms]}>
-            Terms and Conditions
-          </Text>
-        </View>
+        {!isKeyboardVisible && (
+          <View style={styles.footerContainer}>
+            <Text variant={'labelSmall'} style={styles.textCenter}>
+              By Signing to mobile app. I accept all the
+            </Text>
+            <Text
+              variant={'labelLarge'}
+              style={[styles.textCenter, styles.terms]}>
+              Terms and Conditions
+            </Text>
+          </View>
+        )}
       </View>
     </>
   );

@@ -20,7 +20,7 @@ interface SearchProductList {
 
 const CancelToken = axios.CancelToken;
 
-const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
+const SearchProductList: React.FC<SearchProductList> = ({searchQuery}) => {
   const productSearchSource = useRef<any>(null);
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -123,7 +123,7 @@ const SearchProducts: React.FC<SearchProductList> = ({searchQuery}) => {
   );
 };
 
-export default SearchProducts;
+export default SearchProductList;
 
 const makeStyles = (colors: any) =>
   StyleSheet.create({

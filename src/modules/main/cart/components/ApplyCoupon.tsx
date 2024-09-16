@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {useTranslation} from 'react-i18next';
-import {useAppTheme} from '../../../../utils/theme';
 import PagerView from 'react-native-pager-view';
 import {Text} from 'react-native-paper';
+
+import {useAppTheme} from '../../../../utils/theme';
 
 const CouponImg = require('../../../../assets/Coupon.png');
 
@@ -13,8 +13,7 @@ interface Offers {}
 
 const data = false;
 
-const ApplyCoupon: React.FC<Offers> = ({}) => {
-  const {t} = useTranslation();
+const ApplyCoupon: React.FC<Offers> = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const [selectedMediaPosition, setSelectedMediaPosition] = useState(0);
@@ -28,7 +27,8 @@ const ApplyCoupon: React.FC<Offers> = ({}) => {
         onPageSelected={({nativeEvent: {position}}) =>
           setSelectedMediaPosition(position)
         }
-        initialPage={0}>
+        initialPage={0}
+        useNext={false}>
         {[{}, {}, {}].map((item, index) => (
           <View key={index} style={styles.cardView}>
             <View style={styles.leftView}>
