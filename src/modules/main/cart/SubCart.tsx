@@ -69,7 +69,9 @@ const SubCart = ({route: {params}}: any) => {
 
   useEffect(() => {
     if (cartData?.cartItems[params.index]?.items !== undefined) {
-      setCartItems(cartData?.cartItems[params.index]?.items);
+      const cart = cartData?.cartItems[params.index];
+      setCartId(cart?._id);
+      setCartItems(cart?.items);
     }
   }, [cartData]);
 
@@ -106,6 +108,7 @@ const SubCart = ({route: {params}}: any) => {
   } = useSelectItems(openFulfillmentSheet);
 
   const {
+    setCartId,
     confirmOrderLoading,
     handleConfirmOrder,
     deliveryAddress,

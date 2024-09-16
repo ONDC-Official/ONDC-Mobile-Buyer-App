@@ -11,6 +11,7 @@ import {getStoredData, removeData, setStoredData} from '../utils/storage';
 import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../utils/constants';
 import {
   API_BASE_URL,
+  CART,
   CONFIRM_ORDER,
   CREATE_PAYMENT,
   EVENTS,
@@ -22,7 +23,7 @@ import {constructQuoteObject, showToastWithGravity} from '../utils/utils';
 import useNetworkHandling from './useNetworkHandling';
 import useNetworkErrorHandling from './useNetworkErrorHandling';
 import {setTransactionId} from '../toolkit/reducer/auth';
-import {clearCart} from '../toolkit/reducer/cart';
+import {clearSpecificCart} from '../toolkit/reducer/cart';
 
 const CancelToken = axios.CancelToken;
 export default (closePaymentSheet: () => void) => {
@@ -32,11 +33,13 @@ export default (closePaymentSheet: () => void) => {
   const responseRef = useRef<any[]>([]);
   const source = useRef<any>(null);
   const eventTimeOutRef = useRef<any[]>([]);
-  const {token} = useSelector(({auth}) => auth);
-  const {getDataWithAuth, postDataWithAuth} = useNetworkHandling();
+  const {uid, token} = useSelector(({auth}) => auth);
+  const {deleteDataWithAuth, getDataWithAuth, postDataWithAuth} =
+    useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const [deliveryAddress, setDeliveryAddress] = useState<any>(null);
   const [activePaymentMethod, setActivePaymentMethod] = useState<string>('');
+  const [cartId, setCartId] = useState<string>('');
   const [confirmOrderLoading, setConfirmOrderLoading] =
     useState<boolean>(false);
   const [eventData, setEventData] = useState<any[]>([]);
@@ -285,13 +288,32 @@ export default (closePaymentSheet: () => void) => {
         await removeData('checkout_details');
         await removeData('parent_and_transaction_id_map');
         dispatch(setTransactionId(transactionId));
+        await deleteCart();
         closePaymentSheet();
-        dispatch(clearCart());
-        navigation.navigate('OrderDetails', {
+        dispatch(clearSpecificCart(cartId));
+        navigation.replace('OrderDetails', {
           orderId: responseRef.current[0].message?.order?.id,
         });
       }
       setConfirmOrderLoading(false);
+    }
+  };
+
+  const deleteCart = async () => {
+    try {
+      source.current = CancelToken.source();
+      await deleteDataWithAuth(
+        `${API_BASE_URL}${CART}/${uid}/${cartId}/clear`,
+        source.current.token,
+      );
+    } catch (error: any) {
+      if (error.response) {
+        if (error.response.status !== 404) {
+          handleApiError(error);
+        }
+      } else {
+        handleApiError(error);
+      }
     }
   };
 
@@ -300,6 +322,7 @@ export default (closePaymentSheet: () => void) => {
   }, [eventData]);
 
   return {
+    setCartId,
     confirmOrderLoading,
     setConfirmOrderLoading,
     handleConfirmOrder,
