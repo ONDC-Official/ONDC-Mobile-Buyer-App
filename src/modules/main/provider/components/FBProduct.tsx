@@ -531,7 +531,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
       return (
         <Text variant={'bodyLarge'} style={styles.price}>
           {currency}
-          {formatNumber(defaultPrice.toFixed(2))}
+          {formatNumber(Number(defaultPrice).toFixed(2))}
         </Text>
       );
     } else if (priceRange) {

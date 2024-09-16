@@ -107,6 +107,7 @@ const SubCart = ({route: {params}}: any) => {
 
   const {
     confirmOrderLoading,
+    handleConfirmOrder,
     deliveryAddress,
     setDeliveryAddress,
     activePaymentMethod,
@@ -673,9 +674,7 @@ const SubCart = ({route: {params}}: any) => {
           }}
           closePaymentSheet={closePaymentSheet}
           handleConfirmOrder={() => {
-            handleConfirmOrder(selectedItemsForInit, selectedItems).then(
-              () => {},
-            );
+            handleConfirmOrder(cartItems, selectedItems).then(() => {});
           }}
           confirmOrderLoading={confirmOrderLoading}
           setActivePaymentMethod={setActivePaymentMethod}
