@@ -2,6 +2,8 @@ apply plugin: "com.android.application"
 
 // add this block
 project.ext.envConfigFiles = [
+        alphadebug: ".env.alpha",
+        alpharelease: ".env.alpha",
         productiondebug: ".env.production",
         productionrelease: ".env.production",
         preprodrelease: ".env.preprod",
@@ -114,6 +116,12 @@ android {
             targetSdkVersion rootProject.ext.targetSdkVersion
             resValue "string", "build_config_package", "org.ondc.buyer"
         }
+        alpha {
+            minSdkVersion rootProject.ext.minSdkVersion
+            applicationId "org.ondc.buyer.alpha"
+            targetSdkVersion rootProject.ext.targetSdkVersion
+            resValue "string", "build_config_package", "org.ondc.buyer"
+        }
     }
 
     namespace "org.ondc.buyer"
@@ -122,7 +130,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 11
-        versionName "1.0.10"
+        versionName "1.0.11"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
     }

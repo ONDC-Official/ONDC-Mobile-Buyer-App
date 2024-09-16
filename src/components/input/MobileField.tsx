@@ -57,9 +57,12 @@ const makeStyles = (colors: any) =>
     content: {fontFamily: 'Inter-Regular', fontWeight: '400', paddingLeft: 48},
     affixContainer: {
       position: 'absolute',
-      top: 40,
+      top: 26,
       left: 10,
       zIndex: 1,
+      height: 48,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     affix: {
       fontFamily: 'Inter-Regular',
