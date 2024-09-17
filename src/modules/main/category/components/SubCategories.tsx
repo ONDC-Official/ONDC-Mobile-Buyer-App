@@ -72,13 +72,13 @@ const SubCategories: React.FC<SubCategories> = ({
     [navigateToSubCategory, t],
   );
 
-  const headerComponent = () => {
+  const headerComponent = useCallback(() => {
     return (
       <Text variant="titleLarge" style={styles.headerText}>
-        {currentCategory}
+        {t(`Featured Categories.${currentCategory}`)}
       </Text>
     );
-  };
+  }, [currentCategory]);
 
   return (
     <View style={styles.sectionContainer}>

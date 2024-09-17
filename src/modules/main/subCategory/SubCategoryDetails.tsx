@@ -1,5 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
 import Header from '../../../components/header/Header';
@@ -15,6 +16,7 @@ interface SubCategoryDetails {
 const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   route: {params},
 }) => {
+  const {t} = useTranslation();
   const [currentSubCategory, setCurrentSubCategory] = useState(
     params.subCategory,
   );
@@ -32,7 +34,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           styles.container,
           appStyles.backgroundWhite,
         ]}>
-        <Header label={currentSubCategory} search wishlist cart />
+        <Header label={t(`Featured Categories.${params.category}`)} search wishlist cart />
         <AnimationPage
           list={
             <SubCategories
