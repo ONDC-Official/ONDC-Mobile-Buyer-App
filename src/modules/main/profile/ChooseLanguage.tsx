@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,21 +10,35 @@ import i18n from 'i18next';
 import {useAppTheme} from '../../../utils/theme';
 import {setStoredData} from '../../../utils/storage';
 import {updateLanguage} from '../../../toolkit/reducer/auth';
-import SafeAreaPage from '../../../components/header/SafeAreaPage';
-import Header from '../../../components/header/Header';
+import SafeAreaPage from '../../../components/page/SafeAreaPage';
+import Header from '../../../components/header/HeaderWithActions';
+
+interface Menu {
+  title: string;
+  code: string;
+  onPress: () => void;
+}
+
+const ItemSeparatorComponent = () => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
+
+  return <View style={styles.divider} />;
+};
 
 const ChooseLanguage = () => {
   const dispatch = useDispatch();
   const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
   const {address} = useSelector((state: any) => state.address);
   const navigation = useNavigation<any>();
   const {t} = useTranslation();
-  const styles = makeStyles(theme.colors);
+  const {language} = useSelector(({auth}) => auth);
 
-  const handleChangeLanguage = async (language: string) => {
-    await i18n.changeLanguage(language);
-    await setStoredData('language', language);
-    dispatch(updateLanguage(language));
+  const handleChangeLanguage = async (selectedLanguage: string) => {
+    await i18n.changeLanguage(selectedLanguage);
+    await setStoredData('language', selectedLanguage);
+    dispatch(updateLanguage(selectedLanguage));
     // Check if address preselected, if so directly navigate
     // to dashboard
     if (address && address.address) {
@@ -40,63 +54,82 @@ const ChooseLanguage = () => {
     }
   };
 
-  const menu = [
+  const menu: Menu[] = [
     {
       title: t('Choose Language.Hindi'),
+      code: 'hi',
       onPress: () => {
         handleChangeLanguage('hi').then(() => {});
       },
     },
     {
       title: t('Choose Language.English'),
+      code: 'en',
       onPress: () => {
         handleChangeLanguage('en').then(() => {});
       },
     },
-    // {
-    //   title: t('Choose Language.Marathi'),
-    //   onPress: () => {
-    //     handleChangeLanguage('mr').then(() => {});
-    //   },
-    // },
-    // {
-    //   title: t('Choose Language.Tamil'),
-    //   onPress: () => {
-    //     handleChangeLanguage('ta').then(() => {});
-    //   },
-    // },
-    // {
-    //   title: t('Choose Language.Bengali'),
-    //   onPress: () => {
-    //     handleChangeLanguage('bn').then(() => {});
-    //   },
-    // },
+    {
+      title: t('Choose Language.Marathi'),
+      code: 'mr',
+      onPress: () => {
+        handleChangeLanguage('mr').then(() => {});
+      },
+    },
+    {
+      title: t('Choose Language.Tamil'),
+      code: 'ta',
+      onPress: () => {
+        handleChangeLanguage('ta').then(() => {});
+      },
+    },
+    {
+      title: t('Choose Language.Bengali'),
+      code: 'bn',
+      onPress: () => {
+        handleChangeLanguage('bn').then(() => {});
+      },
+    },
   ];
+
+  const renderItem = useCallback(
+    ({item}: {item: Menu}) => {
+      const {title, code, onPress} = item;
+      const selectedLanguage = code === language;
+      return (
+        <TouchableOpacity style={styles.menuOption} onPress={onPress}>
+          {selectedLanguage ? (
+            <Text
+              variant={'titleLarge'}
+              style={[styles.menuName, styles.selected]}>
+              {title}
+            </Text>
+          ) : (
+            <Text variant={'titleMedium'} style={styles.menuName}>
+              {title}
+            </Text>
+          )}
+          <Icon
+            name={'keyboard-arrow-right'}
+            size={24}
+            color={theme.colors.neutral400}
+          />
+        </TouchableOpacity>
+      );
+    },
+    [theme, language, styles],
+  );
 
   return (
     <SafeAreaPage>
       <Header label={t('Choose Language.Choose Language')} />
       <View style={styles.container}>
-        <Text variant={'bodyMedium'} style={styles.inputLabel}>
-          {t('Choose Language.Select a language')}
-        </Text>
         <FlatList
           contentContainerStyle={styles.listContainer}
           keyExtractor={item => item.title}
-          ItemSeparatorComponent={() => <View style={styles.divider} />}
+          ItemSeparatorComponent={ItemSeparatorComponent}
           data={menu}
-          renderItem={({item: {title, onPress}}) => (
-            <TouchableOpacity style={styles.menuOption} onPress={onPress}>
-              <Text variant={'titleMedium'} style={styles.menuName}>
-                {title}
-              </Text>
-              <Icon
-                name={'keyboard-arrow-right'}
-                size={24}
-                color={theme.colors.neutral400}
-              />
-            </TouchableOpacity>
-          )}
+          renderItem={renderItem}
         />
       </View>
     </SafeAreaPage>
@@ -125,6 +158,9 @@ const makeStyles = (colors: any) =>
     },
     menuName: {
       color: colors.neutral400,
+    },
+    selected: {
+      color: colors.primary,
     },
     divider: {
       width: '100%',

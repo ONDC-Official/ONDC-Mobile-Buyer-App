@@ -19,7 +19,6 @@ import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import ProductSkeleton from '../../../../components/skeleton/ProductSkeleton';
 import CustomMenuAccordion from './CustomMenuAccordion';
-import ProductSearch from '../../../../components/products/ProductSearch';
 import {getFilterCategory} from '../../../../utils/utils';
 import FBFilter from './FBFilter';
 import FBProduct from './FBProduct';

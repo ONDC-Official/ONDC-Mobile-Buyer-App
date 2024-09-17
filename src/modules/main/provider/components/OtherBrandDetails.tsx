@@ -5,7 +5,7 @@ import {useTranslation} from 'react-i18next';
 
 import Products from '../../../../components/products/Products';
 import {useAppTheme} from '../../../../utils/theme';
-import OutletDetails from './OutletDetails'
+import OutletDetails from './OutletDetails';
 
 interface OtherBrandDetails {
   provider: any;

@@ -6,16 +6,16 @@ import {ActivityIndicator} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import axios from 'axios';
 
-import {useAppTheme} from '../../../../../utils/theme';
-import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
-import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
-import {API_BASE_URL, CART} from '../../../../../utils/apiActions';
-import {updateCartItems} from '../../../../../toolkit/reducer/cart';
-import StoreCart from '../../../cart/StoreCart';
-import EmptyCart from '../../../cart/components/EmptyCart';
-import {keyExtractor} from '../../../../../utils/utils';
-import SafeAreaPage from '../../../../../components/header/SafeAreaPage';
-import Header from '../../../../../components/header/Header';
+import {useAppTheme} from '../../../../utils/theme';
+import useNetworkHandling from '../../../../hooks/useNetworkHandling';
+import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+import {API_BASE_URL, CART} from '../../../../utils/apiActions';
+import {updateCartItems} from '../../../../toolkit/reducer/cart';
+import StoreCart from './components/StoreCart';
+import EmptyCart from '../provider/components/EmptyCart';
+import {keyExtractor} from '../../../../utils/utils';
+import SafeAreaPage from '../../../../components/page/SafeAreaPage';
+import Header from '../../../../components/header/HeaderWithActions';
 
 const CancelToken = axios.CancelToken;
 
@@ -101,7 +101,7 @@ const Cart = ({navigation}: any) => {
   }, [isFocused]);
 
   const goToViewCart = (index: number) => {
-    navigation.navigate('SubCart', {index: index});
+    navigation.navigate('ProviderCart', {index: index});
   };
 
   const renderItems = ({item, index}: any) => {

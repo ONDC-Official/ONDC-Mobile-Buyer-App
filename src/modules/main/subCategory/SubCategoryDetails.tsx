@@ -3,9 +3,9 @@ import {StyleSheet, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
-import Header from '../../../components/header/Header';
+import Header from '../../../components/header/HeaderWithActions';
 import ListingPage from '../../../components/categoryTab/ListingPage';
-import SafeAreaPage from '../../../components/header/SafeAreaPage';
+import SafeAreaPage from '../../../components/page/SafeAreaPage';
 import AnimationPage from '../../../components/category/AnimationPage';
 
 interface SubCategoryDetails {
@@ -34,7 +34,12 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           styles.container,
           appStyles.backgroundWhite,
         ]}>
-        <Header label={t(`Featured Categories.${params.category}`)} search wishlist cart />
+        <Header
+          label={t(`Featured Categories.${params.category}`)}
+          search
+          wishlist
+          cart
+        />
         <AnimationPage
           list={
             <SubCategories

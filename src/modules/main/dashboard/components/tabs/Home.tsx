@@ -5,7 +5,6 @@ import Categories from '../home/Categories';
 import {useAppTheme} from '../../../../../utils/theme';
 import StoresNearMe from '../../../category/components/StoresNearMe';
 import AddressSheet from '../address/AddressSheet';
-
 import CategoryMenu from '../home/CategoryMenu';
 
 const Home = () => {

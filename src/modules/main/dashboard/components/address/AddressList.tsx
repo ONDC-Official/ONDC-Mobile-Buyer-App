@@ -15,7 +15,7 @@ import useRefreshToken from '../../../../../hooks/useRefreshToken';
 import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
 import {useAppTheme} from '../../../../../utils/theme';
-import SafeAreaPage from '../../../../../components/header/SafeAreaPage';
+import SafeAreaPage from '../../../../../components/page/SafeAreaPage';
 
 interface Address {
   _id: string;
@@ -130,7 +130,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: t('Address List.Delivery Address'),
+      title: t('Address WishList.Delivery Address'),
     });
     getUserToken().then(() => {});
   }, []);
@@ -148,7 +148,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
           ListEmptyComponent={() => (
             <View style={[appStyles.container, appStyles.centerContainer]}>
               <Text variant={'bodyMedium'}>
-                {t('Address List.No address available')}
+                {t('Address WishList.No address available')}
               </Text>
             </View>
           )}
@@ -158,7 +158,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
         />
         <TouchableOpacity style={styles.addButton} onPress={addAddress}>
           <Text style={styles.addButtonText} variant={'bodyMedium'}>
-            {t('Address List.Add Address')}
+            {t('Address WishList.Add Address')}
           </Text>
         </TouchableOpacity>
       </View>

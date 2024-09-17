@@ -15,11 +15,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';
 import 'moment-duration-format';
 
-import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
-import {useAppTheme} from '../../../../utils/theme';
-import {makeGlobalStyles} from '../../../../styles/styles';
-import useFormatDate from '../../../../hooks/useFormatDate';
-import useFormatNumber from '../../../../hooks/useFormatNumber';
+import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
+import {useAppTheme} from '../../../../../utils/theme';
+import {makeGlobalStyles} from '../../../../../styles/styles';
+import useFormatDate from '../../../../../hooks/useFormatDate';
+import useFormatNumber from '../../../../../hooks/useFormatNumber';
 
 const screenHeight = Dimensions.get('screen').height;
 
@@ -35,7 +35,7 @@ interface Fulfillment {
   updateCartItems: (value: any) => void;
 }
 
-const NoImageAvailable = require('../../../../assets/noImage.png');
+const NoImageAvailable = require('../../../../../assets/noImage.png');
 
 const Fulfillment: React.FC<Fulfillment> = ({
   selectedFulfillmentList = [],

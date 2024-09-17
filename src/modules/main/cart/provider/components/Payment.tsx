@@ -7,25 +7,25 @@ import axios from 'axios';
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
-import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../../../../utils/constants';
+import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../../../../../utils/constants';
 import {
   constructQuoteObject,
   removeNullValues,
   showToastWithGravity,
-} from '../../../../utils/utils';
-import useNetworkHandling from '../../../../hooks/useNetworkHandling';
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+} from '../../../../../utils/utils';
+import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {
   API_BASE_URL,
   EVENTS,
   INITIALIZE_ORDER,
   ON_INITIALIZE,
-} from '../../../../utils/apiActions';
-import {getStoredData, setStoredData} from '../../../../utils/storage';
-import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
-import {useAppTheme} from '../../../../utils/theme';
-import CashOnDeliveryIcon from '../../../../assets/payment/cod.svg';
-import PrepaidIcon from '../../../../assets/payment/prepaid.svg';
+} from '../../../../../utils/apiActions';
+import {getStoredData, setStoredData} from '../../../../../utils/storage';
+import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
+import {useAppTheme} from '../../../../../utils/theme';
+import CashOnDeliveryIcon from '../../../../../assets/payment/cod.svg';
+import PrepaidIcon from '../../../../../assets/payment/prepaid.svg';
 
 interface Payment {
   productsQuote: any;

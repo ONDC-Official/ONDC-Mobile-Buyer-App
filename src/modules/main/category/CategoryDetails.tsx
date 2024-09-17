@@ -4,9 +4,9 @@ import {useTranslation} from 'react-i18next';
 import Categories from './components/Categories';
 import SubCategories from './components/SubCategories';
 import {appStyles} from '../../../styles/styles';
-import Header from '../../../components/header/Header';
+import Header from '../../../components/header/HeaderWithActions';
 import ListingPage from '../../../components/categoryTab/ListingPage';
-import SafeAreaPage from '../../../components/header/SafeAreaPage';
+import SafeAreaPage from '../../../components/page/SafeAreaPage';
 import AnimationPage from '../../../components/category/AnimationPage';
 
 interface CategoryDetails {

@@ -1,6 +1,6 @@
 import {Text} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-import {useAppTheme} from '../../../../utils/theme';
+import {useAppTheme} from '../../../../../utils/theme';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';

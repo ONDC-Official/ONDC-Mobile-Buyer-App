@@ -58,7 +58,7 @@ const makeStyles = (colors: any) =>
     listContainer: {
       borderRightWidth: 1,
       borderRightColor: colors.neutral100,
-        width: 80,
+      width: 80,
     },
     collapsibleButton: {
       position: 'absolute',

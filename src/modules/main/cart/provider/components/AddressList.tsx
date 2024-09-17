@@ -6,16 +6,16 @@ import {useDispatch} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import Address from '../../dashboard/components/address/Address';
-import useNetworkHandling from '../../../../hooks/useNetworkHandling';
-import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../utils/apiActions';
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {skeletonList} from '../../../../utils/utils';
-import {appStyles} from '../../../../styles/styles';
-import AddressSkeleton from '../../dashboard/components/address/AddressSkeleton';
-import {useAppTheme} from '../../../../utils/theme';
-import {setStoredData} from '../../../../utils/storage';
-import {setAddress} from '../../../../toolkit/reducer/address';
+import Address from '../../../dashboard/components/address/Address';
+import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
+import {API_BASE_URL, DELIVERY_ADDRESS} from '../../../../../utils/apiActions';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
+import {skeletonList} from '../../../../../utils/utils';
+import {appStyles} from '../../../../../styles/styles';
+import AddressSkeleton from '../../../dashboard/components/address/AddressSkeleton';
+import {useAppTheme} from '../../../../../utils/theme';
+import {setStoredData} from '../../../../../utils/storage';
+import {setAddress} from '../../../../../toolkit/reducer/address';
 
 interface AddressList {
   detectAddressNavigation: () => void;
@@ -91,11 +91,11 @@ const AddressList: React.FC<AddressList> = ({
     <View style={styles.addressFormContainer}>
       <View style={styles.header}>
         <Text variant={'headlineSmall'}>
-          {t('Address List.Select a Delivery Address')}
+          {t('Address WishList.Select a Delivery Address')}
         </Text>
       </View>
       <Text variant={'labelLarge'} style={styles.shippingAddress}>
-        {t('Address List.Saved Addresses')}
+        {t('Address WishList.Saved Addresses')}
       </Text>
       {apiInProgress ? (
         <FlatList
@@ -127,7 +127,7 @@ const AddressList: React.FC<AddressList> = ({
                   contentStyle={appStyles.containedButtonContainer}
                   mode="outlined"
                   onPress={navigateToAddAddress}>
-                  {t('Address List.Add new address')}
+                  {t('Address WishList.Add new address')}
                 </Button>
               </View>
             )}
@@ -141,7 +141,7 @@ const AddressList: React.FC<AddressList> = ({
             style={styles.button}
             onPress={navigateToAddAddress}>
             <Text variant={'bodyLarge'} style={styles.buttonLabel}>
-              {t('Address List.Add new address')}
+              {t('Address WishList.Add new address')}
             </Text>
           </TouchableOpacity>
         </>

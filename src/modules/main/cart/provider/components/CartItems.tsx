@@ -16,25 +16,25 @@ import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
+import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../../utils/apiActions';
 import {
   getCustomizations,
   getPriceWithCustomisations,
-} from '../../../../utils/utils';
-import useNetworkHandling from '../../../../hooks/useNetworkHandling';
-import FBProductCustomization from '../../provider/components/FBProductCustomization';
-import Customizations from '../../../../components/customization/Customizations';
-import ManageQuantity from '../../../../components/customization/ManageQuantity';
-import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
-import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
-import CustomizationFooterButtons from '../../provider/components/CustomizationFooterButtons';
-import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
-import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
-import {useAppTheme} from '../../../../utils/theme';
-import DeleteIcon from '../../../../assets/delete.svg';
-import useFormatNumber from '../../../../hooks/useFormatNumber';
-import {updateCartItems} from '../../../../toolkit/reducer/cart';
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
+} from '../../../../../utils/utils';
+import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
+import FBProductCustomization from '../../../provider/components/FBProductCustomization';
+import Customizations from '../../../../../components/customization/Customizations';
+import ManageQuantity from '../../../../../components/customization/ManageQuantity';
+import useUpdateSpecificItemCount from '../../../../../hooks/useUpdateSpecificItemCount';
+import useCustomizationStateHelper from '../../../../../hooks/useCustomizationStateHelper';
+import CustomizationFooterButtons from '../../../provider/components/CustomizationFooterButtons';
+import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../../utils/constants';
+import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
+import {useAppTheme} from '../../../../../utils/theme';
+import DeleteIcon from '../../../../../assets/delete.svg';
+import useFormatNumber from '../../../../../hooks/useFormatNumber';
+import {updateCartItems} from '../../../../../toolkit/reducer/cart';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 
 interface CartItems {
   fullCartItems: any[];
@@ -49,7 +49,7 @@ interface CartItems {
 
 const CancelToken = axios.CancelToken;
 const screenHeight: number = Dimensions.get('screen').height;
-const NoImageAvailable = require('../../../../assets/noImage.png');
+const NoImageAvailable = require('../../../../../assets/noImage.png');
 
 const CartItems: React.FC<CartItems> = ({
   fullCartItems,
@@ -230,9 +230,7 @@ const CartItems: React.FC<CartItems> = ({
                     {provider?.provider?.descriptor?.name}
                   </Text>
                   {provider?.provider?.locations?.length > 0 && (
-                    <Text
-                      variant={'labelSmall'}
-                      style={styles.providerAddress}>
+                    <Text variant={'labelSmall'} style={styles.providerAddress}>
                       {provider.items[0]?.item?.location_details?.address
                         ?.locality || 'NA'}
                     </Text>
@@ -533,7 +531,7 @@ const makeStyles = (colors: any) =>
     },
     productsContainer: {
       padding: 16,
-      backgroundColor:colors.white,
+      backgroundColor: colors.white,
     },
     providerImage: {
       width: 48,

@@ -12,17 +12,17 @@ import {useTranslation} from 'react-i18next';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {appStyles} from '../../../../styles/styles';
-import {keyExtractor, skeletonList} from '../../../../utils/utils';
-import ListFooter from '../components/ListFooter';
-import OrderSkeleton from '../components/OrderSkeleton';
-import Order from '../components/Order';
-import useNetworkHandling from '../../../../hooks/useNetworkHandling';
-import {API_BASE_URL, ORDERS} from '../../../../utils/apiActions';
-import {useAppTheme} from '../../../../utils/theme';
-import FiltersIcon from '../../../../assets/filter.svg';
-import FilterList from '../components/FilterList';
+import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
+import {appStyles} from '../../../../../styles/styles';
+import {keyExtractor, skeletonList} from '../../../../../utils/utils';
+import ListFooter from '../../../order/components/ListFooter';
+import OrderSkeleton from '../../../order/components/OrderSkeleton';
+import Order from '../../../order/components/Order';
+import useNetworkHandling from '../../../../../hooks/useNetworkHandling';
+import {API_BASE_URL, ORDERS} from '../../../../../utils/apiActions';
+import {useAppTheme} from '../../../../../utils/theme';
+import FiltersIcon from '../../../../../assets/filter.svg';
+import FilterList from '../../../order/components/FilterList';
 
 const CancelToken = axios.CancelToken;
 

@@ -207,9 +207,7 @@ const Products: React.FC<Products> = ({
   }, [products, searchQuery]);
 
   const renderFlatListItem = useCallback(
-    ({item}: {item: any}) => (
-      <Product product={item} isOpen={isOpen} />
-    ),
+    ({item}: {item: any}) => <Product product={item} isOpen={isOpen} />,
     [provider],
   );
 
@@ -314,7 +312,7 @@ const Products: React.FC<Products> = ({
           ) : (
             <View style={styles.emptyContainer}>
               <Text variant={'bodyMedium'}>
-                {t('Home.Search Product List.No products available')}
+                {t('Home.Search Product WishList.No products available')}
               </Text>
             </View>
           )

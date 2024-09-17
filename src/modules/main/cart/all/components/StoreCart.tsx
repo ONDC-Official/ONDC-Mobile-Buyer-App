@@ -3,14 +3,13 @@ import {ScrollView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import FastImage from 'react-native-fast-image';
-import moment from 'moment';
 import 'moment-duration-format';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {useAppTheme} from '../../../utils/theme';
-import {getPriceWithCustomisations} from '../../../utils/utils';
-import useFormatNumber from '../../../hooks/useFormatNumber';
+import {useAppTheme} from '../../../../../utils/theme';
+import {getPriceWithCustomisations} from '../../../../../utils/utils';
+import useFormatNumber from '../../../../../hooks/useFormatNumber';
 
 interface StoreCart {
   item: any;
@@ -19,7 +18,7 @@ interface StoreCart {
   goToViewCart: (values: any) => void;
 }
 
-const NoImageAvailable = require('../../../assets/noImage.png');
+const NoImageAvailable = require('../../../../../assets/noImage.png');
 
 const StoreCart: React.FC<StoreCart> = ({
   item,

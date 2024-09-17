@@ -1,3 +1,4 @@
+import React, {useCallback} from 'react';
 import {Text} from 'react-native-paper';
 import {
   FlatList,
@@ -9,10 +10,17 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
 import useLogoutUser from '../../../../../hooks/useLogoutUser';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
 import {useAppTheme} from '../../../../../utils/theme';
-import {useTranslation} from 'react-i18next';
+
+const ItemSeparatorComponent = () => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
+
+  return <View style={styles.divider} />;
+};
 
 const Profile = () => {
   const {t} = useTranslation();
@@ -21,7 +29,7 @@ const Profile = () => {
   const {clearDataAndLogout} = useLogoutUser();
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const confirmLogout = () => {
+  const confirmLogout = useCallback(() => {
     alertWithTwoButtons(
       t('Profile.Logout'),
       t('Profile.Are you sure you want to logout?'),
@@ -30,15 +38,22 @@ const Profile = () => {
       t('Profile.Logout'),
       () => clearDataAndLogout(),
     );
-  };
+  }, [clearDataAndLogout, t]);
 
-  const navigateToProfile = () => navigation.navigate('MyProfile');
+  const navigateToProfile = useCallback(
+    () => navigation.navigate('MyProfile'),
+    [navigation],
+  );
 
-  const navigateToOrders = () => navigation.navigate('Orders');
+  const navigateToComplaints = useCallback(
+    () => navigation.navigate('Complaints'),
+    [navigation],
+  );
 
-  const navigateToComplaints = () => navigation.navigate('Complaints');
-
-  const navigateToChooseLanguage = () => navigation.navigate('ChooseLanguage');
+  const navigateToChooseLanguage = useCallback(
+    () => navigation.navigate('ChooseLanguage'),
+    [navigation],
+  );
 
   const menu = [
     {
@@ -50,7 +65,7 @@ const Profile = () => {
       action: navigateToComplaints,
     },
     {
-      title: t('Profile.Choose Language'),
+      title: t('Profile.Language'),
       action: navigateToChooseLanguage,
     },
     {
@@ -73,7 +88,7 @@ const Profile = () => {
       <FlatList
         contentContainerStyle={styles.listContainer}
         keyExtractor={item => item.title}
-        ItemSeparatorComponent={() => <View style={styles.divider} />}
+        ItemSeparatorComponent={ItemSeparatorComponent}
         data={menu}
         renderItem={({item: {title, action}}) => (
           <TouchableOpacity style={styles.menuOption} onPress={action}>

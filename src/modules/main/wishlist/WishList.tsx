@@ -2,12 +2,12 @@ import {Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import {useTranslation} from 'react-i18next';
 
-const List = () => {
+const WishList = () => {
   const {t} = useTranslation();
   const styles = makeStyles();
   return (
     <View style={styles.container}>
-      <Text>{t('List.Coming soon')}</Text>
+      <Text>{t('WishList.Coming soon')}</Text>
     </View>
   );
 };
@@ -21,4 +21,4 @@ const makeStyles = () =>
     },
   });
 
-export default List;
+export default WishList;

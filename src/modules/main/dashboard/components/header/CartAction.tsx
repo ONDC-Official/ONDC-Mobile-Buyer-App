@@ -8,7 +8,7 @@ const CartAction = ({color = '#fff'}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const showCart = useCallback(() => {
-    navigation.navigate('DashboardCart');
+    navigation.navigate('Cart');
   }, [navigation]);
 
   return (

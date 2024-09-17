@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import FBProducts from './FBProducts';
 import OutletDetails from './OutletDetails';

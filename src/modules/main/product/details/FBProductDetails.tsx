@@ -3,7 +3,6 @@ import {StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import ProductImages from './components/ProductImages';
 import {FASHION_DOMAIN} from '../../../../utils/constants';
-import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import VariationsRenderer from '../../../../components/products/VariationsRenderer';
 import AboutProduct from './components/AboutProduct';
 import {useAppTheme} from '../../../../utils/theme';

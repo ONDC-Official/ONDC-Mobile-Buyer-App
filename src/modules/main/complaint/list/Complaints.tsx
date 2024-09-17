@@ -13,7 +13,7 @@ import ComplaintSkeleton from '../components/ComplaintSkeleton';
 import ListFooter from '../../order/components/ListFooter';
 import Complaint from '../components/Complaint';
 import {useAppTheme} from '../../../../utils/theme';
-import SafeAreaPage from '../../../../components/header/SafeAreaPage';
+import SafeAreaPage from '../../../../components/page/SafeAreaPage';
 
 const CancelToken = axios.CancelToken;
 

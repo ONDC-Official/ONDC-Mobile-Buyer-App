@@ -22,26 +22,26 @@ import {
   getPriceWithCustomisations,
   isItemCustomization,
   showToastWithGravity,
-} from '../../../utils/utils';
+} from '../../../../utils/utils';
 import CartItems from './components/CartItems';
-import useSelectItems from '../../../hooks/useSelectItems';
+import useSelectItems from '../../../../hooks/useSelectItems';
 import EmptyCart from './components/EmptyCart';
 import Fulfillment from './components/Fulfillment';
 import AddressList from './components/AddressList';
 import Payment from './components/Payment';
-import useConfirmItems from '../../../hooks/useConfirmItems';
-import CloseSheetContainer from '../../../components/bottomSheet/CloseSheetContainer';
-import {useAppTheme} from '../../../utils/theme';
-import {MANUAL_LINK} from '../../../utils/constants';
-import useFormatNumber from '../../../hooks/useFormatNumber';
-import {updateCartItems} from '../../../toolkit/reducer/cart';
-import ReferenceIcon from '../../../assets/reference.svg';
-import SafeAreaPage from '../../../components/header/SafeAreaPage';
+import useConfirmItems from '../../../../hooks/useConfirmItems';
+import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
+import {useAppTheme} from '../../../../utils/theme';
+import {MANUAL_LINK} from '../../../../utils/constants';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
+import {updateCartItems} from '../../../../toolkit/reducer/cart';
+import ReferenceIcon from '../../../../assets/reference.svg';
+import SafeAreaPage from '../../../../components/page/SafeAreaPage';
 import Header from './components/Header';
 
 const screenHeight: number = Dimensions.get('screen').height;
 
-const SubCart = ({route: {params}}: any) => {
+const ProviderCart = ({route: {params}}: any) => {
   const {formatNumber} = useFormatNumber();
   const navigation = useNavigation<any>();
   const {t} = useTranslation();
@@ -508,7 +508,7 @@ const SubCart = ({route: {params}}: any) => {
       <View style={styles.pageContainer}>
         <Header
           label={t('Cart.My Cart')}
-          cart={cartData?.cartItems.length > 0 ? true : false}
+          cart={cartData?.cartItems.length > 0}
           navigateToHome={navigateToHome}
         />
         <>
@@ -710,13 +710,13 @@ const SubCart = ({route: {params}}: any) => {
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     changeButton: {
-      height:36,
-      width:74,
+      height: 36,
+      width: 74,
       borderRadius: 43,
       justifyContent: 'center',
       borderColor: colors.primary,
       borderWidth: 1,
-      alignItems:'center'
+      alignItems: 'center',
     },
     changeButtonLabel: {
       color: colors.primary,
@@ -748,13 +748,13 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      gap:40
+      gap: 40,
     },
     deliveryRow: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-      gap:15
+      gap: 15,
     },
     summaryDivider: {
       marginVertical: 16,
@@ -792,10 +792,10 @@ const makeStyles = (colors: any) =>
       borderTopRightRadius: 16,
     },
     deliveryButton: {
-      height:44,
-      width:234,
+      height: 44,
+      width: 234,
       borderRadius: 8,
-      justifyContent:'center',
+      justifyContent: 'center',
     },
     closeContainer: {
       flexDirection: 'row',
@@ -833,4 +833,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default SubCart;
+export default ProviderCart;

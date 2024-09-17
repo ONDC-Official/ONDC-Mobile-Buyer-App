@@ -29,7 +29,7 @@ const ListEmptyComponent = () => {
   return (
     <View style={styles.emptyContainer}>
       <Text variant={'bodyMedium'}>
-        {t('Home.Search Provider List.No providers available')}
+        {t('Home.Search Provider WishList.No providers available')}
       </Text>
     </View>
   );

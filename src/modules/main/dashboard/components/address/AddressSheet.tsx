@@ -2,7 +2,7 @@ import {Dimensions, StyleSheet, View} from 'react-native';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import React from 'react';
 import {useSelector} from 'react-redux';
-import AddressList from '../../../cart/components/AddressList';
+import AddressList from '../../../cart/provider/components/AddressList';
 import CloseSheetContainer from '../../../../../components/bottomSheet/CloseSheetContainer';
 import {useAppTheme} from '../../../../../utils/theme';
 

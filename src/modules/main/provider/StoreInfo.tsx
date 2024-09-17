@@ -2,8 +2,8 @@ import React, {useMemo, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useAppTheme} from '../../../utils/theme';
-import SafeAreaPage from '../../../components/header/SafeAreaPage';
-import Header from '../cart/components/Header';
+import SafeAreaPage from '../../../components/page/SafeAreaPage';
+import Header from '../cart/provider/components/Header';
 import {Divider, Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {getAddressString, getFulfilmentContact} from '../../../utils/utils';
@@ -133,7 +133,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
         <View style={styles.detailView}>
           <View style={styles.rowView}>
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
-            {t('Stores Info.Legal Name')}
+              {t('Stores Info.Legal Name')}
             </Text>
             <Text variant="labelSmall" style={[styles.colorNeutral300]}>
               --
@@ -141,7 +141,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
           </View>
           <View style={styles.rowView}>
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
-            {t('Stores Info.Seller Network Partner')}
+              {t('Stores Info.Seller Network Partner')}
             </Text>
             <Text variant="labelSmall" style={styles.colorNeutral300}>
               --
@@ -149,7 +149,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
           </View>
           <View style={styles.rowView}>
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
-            {t('Stores Info.GST Number')}
+              {t('Stores Info.GST Number')}
             </Text>
             <Text variant="labelSmall" style={styles.colorNeutral300}>
               --
@@ -157,7 +157,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
           </View>
           <View style={styles.rowView}>
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
-            {t('Stores Info.FSSAI Lic No')}
+              {t('Stores Info.FSSAI Lic No')}
             </Text>
             <Text variant="labelSmall" style={styles.colorNeutral300}>
               --
@@ -193,7 +193,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
               resizeMode={FastImage.resizeMode.cover}
             />
             <Text variant={'bodyMedium'} style={styles.mapName}>
-            {t('Stores Info.Maps')}
+              {t('Stores Info.Maps')}
             </Text>
           </TouchableOpacity>
         </View>

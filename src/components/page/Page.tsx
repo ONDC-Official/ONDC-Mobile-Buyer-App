@@ -8,14 +8,14 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../utils/theme';
 import useFormatNumber from '../../hooks/useFormatNumber';
-import SafeAreaPage from '../header/SafeAreaPage';
+import SafeAreaPage from './SafeAreaPage';
 import Header from '../header/Header';
 
 interface Page {
   children: React.ReactNode;
   outletId?: string;
-  label?:string;
-  searchbar?:boolean;
+  label?: string;
+  searchbar?: boolean;
   searchQuery?: string;
   setSearchQuery?: (values: any) => void;
 }
@@ -66,7 +66,7 @@ const Page: React.FC<Page> = ({
           <View style={styles.container}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('SubCart', {index: index})}>
+              onPress={() => navigation.navigate('ProviderCart', {index: index})}>
               <Text variant={'bodyLarge'} style={styles.text}>
                 {formatNumber(count)}{' '}
                 {count > 1 ? t('Page.Items Added') : t('Page.Item Added')}

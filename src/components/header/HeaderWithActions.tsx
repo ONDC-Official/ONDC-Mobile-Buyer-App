@@ -1,39 +1,26 @@
 import React, {useCallback} from 'react';
-import {Text, TextInput} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../utils/theme';
 
 interface Page {
-  label?: string;
+  label: string;
   search?: boolean;
   wishlist?: boolean;
   cart?: boolean;
-  searchbar?: boolean;
-  searchQuery?: string;
-  setSearchQuery?: (values: any) => void;
 }
 
-const Header: React.FC<Page> = ({
-  label,
-  search,
-  wishlist,
-  cart,
-  searchbar,
-  searchQuery,
-  setSearchQuery,
-}) => {
+const HeaderWithActions: React.FC<Page> = ({label, search, wishlist, cart}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation: any = useNavigation();
-  const {t} = useTranslation();
 
-  const goBack = () => {
+  const goBack = useCallback(() => {
     navigation.goBack();
-  };
+  }, [navigation]);
 
   const openSearch = useCallback(() => {
     navigation.navigate('SearchProducts');
@@ -62,36 +49,12 @@ const Header: React.FC<Page> = ({
               color={theme.colors.neutral400}
             />
           </TouchableOpacity>
-          {!searchbar ? (
-            <Text
-              variant={'titleLarge'}
-              style={styles.pageTitle}
-              numberOfLines={1}>
-              {label}
-            </Text>
-          ) : (
-            <View style={styles.searchbarView}>
-              <MaterialIcons
-                name={'search'}
-                size={24}
-                color={theme.colors.primary}
-              />
-              <TextInput
-                dense
-                mode={'outlined'}
-                contentStyle={styles.input}
-                style={styles.inputContainer}
-                placeholder={t('Product SubCategories.Search')}
-                placeholderTextColor={theme.colors.neutral300}
-                onChangeText={setSearchQuery}
-                value={searchQuery}
-                textColor={theme.colors.neutral400}
-                outlineColor={theme.colors.neutral100}
-                activeUnderlineColor={theme.colors.neutral100}
-                underlineColor={theme.colors.neutral100}
-              />
-            </View>
-          )}
+          <Text
+            variant={'titleLarge'}
+            style={styles.pageTitle}
+            numberOfLines={1}>
+            {label}
+          </Text>
         </View>
 
         <View style={styles.actionContainer}>
@@ -155,27 +118,6 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       justifyContent: 'flex-end',
     },
-    searchbarView: {
-      height: 44,
-      flex: 1,
-      flexDirection: 'row',
-      borderWidth: 1,
-      borderRadius: 58,
-      marginHorizontal: -8,
-      borderColor: colors.primary50,
-      alignItems: 'center',
-      paddingHorizontal: 16,
-    },
-    inputContainer: {
-      flex: 1,
-      fontSize: 14,
-      textDecorationLine: 'none',
-      fontWeight: '500',
-      height: 42,
-    },
-    input: {
-      backgroundColor: colors.white,
-    },
   });
 
-export default Header;
+export default HeaderWithActions;

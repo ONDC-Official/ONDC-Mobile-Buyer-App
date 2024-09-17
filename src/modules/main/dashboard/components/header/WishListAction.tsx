@@ -8,7 +8,7 @@ const WishListAction = ({color = '#fff'}) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const showWishList = useCallback(() => {
-    navigation.navigate('List');
+    navigation.navigate('WishList');
   }, [navigation]);
 
   return (

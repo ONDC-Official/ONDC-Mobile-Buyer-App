@@ -1,8 +1,8 @@
 import {Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
-import {useAppTheme} from '../../../../utils/theme';
-import CartIcon from '../../../../assets/cart.svg';
+import {useAppTheme} from '../../../../../utils/theme';
+import CartIcon from '../../../../../assets/cart.svg';
 
 const EmptyCart = () => {
   const {t} = useTranslation();

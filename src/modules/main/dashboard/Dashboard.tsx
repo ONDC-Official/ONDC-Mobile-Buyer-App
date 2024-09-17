@@ -3,7 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import CustomTabBar from './components/customTabBar/CustomTabBar';
 import Home from './components/tabs/Home';
-import Orders from './../../main/order/list/Orders';
+import Orders from './components/tabs/Orders';
 import Profile from './components/tabs/Profile';
 import useCartItems from '../../../hooks/useCartItems';
 import useRefreshToken from '../../../hooks/useRefreshToken';

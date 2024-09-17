@@ -10,7 +10,7 @@ import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import {API_BASE_URL, SERVICEABLE_LOCATIONS} from '../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import useCalculateTimeToShip from '../../../hooks/useCalculateTimeToShip';
-import Header from '../../../components/header/Header';
+import Header from '../../../components/header/HeaderWithActions';
 
 interface StoresNearMe {
   domain?: string;

@@ -14,7 +14,7 @@ import Splash from '../modules/authentication/splash/Splash';
 import AddDefaultAddress from '../modules/main/profile/AddDefaultAddress';
 import Dashboard from '../modules/main/dashboard/Dashboard';
 import AddressList from '../modules/main/dashboard/components/address/AddressList';
-import SubCart from '../modules/main/cart/SubCart';
+import ProviderCart from '../modules/main/cart/provider/ProviderCart';
 import ProductDetails from '../modules/main/product/details/ProductDetails';
 import Profile from '../modules/main/profile/Profile';
 import OrderDetails from '../modules/main/order/details/OrderDetails';
@@ -45,30 +45,19 @@ import {SUPPORT_EMAIL} from '../utils/constants';
 import InvalidBarcode from '../assets/invalid_barcode.svg';
 import useNetworkHandling from '../hooks/useNetworkHandling';
 import {API_BASE_URL, SERVICEABLE_LOCATIONS} from '../utils/apiActions';
-import Orders from '../modules/main/order/list/Orders';
-import List from '../modules/main/dashboard/components/tabs/List';
-import DashboardCart from '../modules/main/dashboard/components/tabs/Cart';
-import StoreInfo from '../modules/main/provider/StoreInfo'
+import Orders from '../modules/main/dashboard/components/tabs/Orders';
+import WishList from '../modules/main/wishlist/WishList';
+import Cart from '../modules/main/cart/all/Cart';
+import StoreInfo from '../modules/main/provider/StoreInfo';
 
 const Stack = createStackNavigator();
-
-const headerStyle = {
-  shadowOffset: {
-    width: 0,
-    height: 3,
-  },
-  shadowColor: 'black',
-  shadowOpacity: 1,
-  shadowRadius: 3.84,
-  elevation: 15,
-};
 
 /**
  * Component for stack navigation
  * @returns {JSX.Element}
  * @constructor
  */
-const AppNavigation = () => {
+const AppNavigation = (): JSX.Element => {
   const navigationRef = useRef<any>(null);
   const {token} = useSelector(({auth}) => auth);
   const source = useRef<any>(null);
@@ -206,8 +195,8 @@ const AppNavigation = () => {
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="SubCart"
-            component={SubCart}
+            name="ProviderCart"
+            component={ProviderCart}
             options={{headerShown: false}}
           />
           <Stack.Screen
@@ -264,14 +253,14 @@ const AppNavigation = () => {
           />
 
           <Stack.Screen
-            name="List"
-            component={List}
+            name="WishList"
+            component={WishList}
             options={{headerShown: false}}
           />
 
           <Stack.Screen
-            name="DashboardCart"
-            component={DashboardCart}
+            name="Cart"
+            component={Cart}
             options={{headerShown: false}}
           />
 

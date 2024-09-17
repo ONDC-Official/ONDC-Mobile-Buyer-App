@@ -8,8 +8,8 @@ import auth from '@react-native-firebase/auth';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import {useAppTheme} from '../../../utils/theme';
-import SafeAreaPage from '../../../components/header/SafeAreaPage';
-import Header from '../../../components/header/Header';
+import SafeAreaPage from '../../../components/page/SafeAreaPage';
+import Header from '../../../components/header/HeaderWithActions';
 
 /**
  * Component to render profile screen which shows user profile

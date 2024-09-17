@@ -5,7 +5,7 @@ import {StyleSheet, View} from 'react-native';
 import SearchHeader from './components/header/SearchHeader';
 import {useAppTheme} from '../../../utils/theme';
 import ListingPage from '../../../components/categoryTab/ListingPage';
-import SafeAreaPage from '../../../components/header/SafeAreaPage';
+import SafeAreaPage from '../../../components/page/SafeAreaPage';
 
 interface SearchProductsProps {
   route: any;
