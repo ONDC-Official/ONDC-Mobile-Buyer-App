@@ -11,15 +11,15 @@ const AnimationPage = ({
   list: ReactNode;
 }) => {
   const theme = useAppTheme();
-  const widthAnim = useRef(new Animated.Value(80)).current;
+  const widthAnim = useRef(new Animated.Value(0)).current;
   const [expanded, setExpanded] = useState<boolean>(true);
 
   const styles = useMemo(() => makeStyles(theme.colors), [theme.colors]);
 
   const toggleWidth = useCallback(() => {
     Animated.timing(widthAnim, {
-      toValue: expanded ? 0 : 80,
-      duration: 200,
+      toValue: expanded ? -80 : 0,
+      duration: 100,
       useNativeDriver: false, // Cannot use native driver for width animation
     }).start();
     setExpanded(prev => !prev);
@@ -27,7 +27,7 @@ const AnimationPage = ({
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.listContainer, {width: widthAnim}]}>
+      <Animated.View style={[styles.listContainer, {marginLeft: widthAnim}]}>
         {list}
       </Animated.View>
       <View style={styles.contentContainer}>
@@ -58,6 +58,7 @@ const makeStyles = (colors: any) =>
     listContainer: {
       borderRightWidth: 1,
       borderRightColor: colors.neutral100,
+        width: 80,
     },
     collapsibleButton: {
       position: 'absolute',
