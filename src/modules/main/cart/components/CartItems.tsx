@@ -231,7 +231,7 @@ const CartItems: React.FC<CartItems> = ({
                   </Text>
                   {provider?.provider?.locations?.length > 0 && (
                     <Text
-                      variant={'labelMedium'}
+                      variant={'labelSmall'}
                       style={styles.providerAddress}>
                       {provider.items[0]?.item?.location_details?.address
                         ?.locality || 'NA'}
@@ -287,7 +287,7 @@ const CartItems: React.FC<CartItems> = ({
                               ).map(one => (
                                 <Text
                                   style={styles.providerAddress}
-                                  variant={'labelMedium'}
+                                  variant={'labelSmall'}
                                   key={
                                     cartItem.item.product?.quantity?.unitized[
                                       one

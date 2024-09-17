@@ -46,7 +46,7 @@ const FBProductDetails: React.FC<FBProductDetails> = ({
         </Text>
         <View style={styles.priceContainer}>
           <Text
-            variant="labelLarge"
+            variant="bodyLarge"
             style={[styles.price, inStock ? {} : styles.disabledText]}>
             ₹{formatNumber(product?.item_details?.price?.value)}
           </Text>
@@ -86,7 +86,7 @@ const makeStyles = (colors: any) =>
       marginBottom: 4,
     },
     price: {
-      color: colors.primary,
+      color: colors.neutral400,
     },
     disabledText: {
       color: colors.neutral300,

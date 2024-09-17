@@ -93,7 +93,7 @@ const StoreCart: React.FC<StoreCart> = ({
             </View>
             <View style={styles.providerLocalityView}>
               <Text
-                variant={'labelMedium'}
+                variant={'labelSmall'}
                 style={styles.providerLocality}
                 numberOfLines={1}
                 ellipsizeMode={'tail'}>

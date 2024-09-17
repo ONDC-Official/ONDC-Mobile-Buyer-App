@@ -135,7 +135,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
             {t('Stores Info.Legal Name')}
             </Text>
-            <Text variant="bodyMedium" style={[styles.colorNeutral300]}>
+            <Text variant="labelSmall" style={[styles.colorNeutral300]}>
               --
             </Text>
           </View>
@@ -143,7 +143,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
             {t('Stores Info.Seller Network Partner')}
             </Text>
-            <Text variant="bodyMedium" style={styles.colorNeutral300}>
+            <Text variant="labelSmall" style={styles.colorNeutral300}>
               --
             </Text>
           </View>
@@ -151,7 +151,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
             {t('Stores Info.GST Number')}
             </Text>
-            <Text variant="bodyMedium" style={styles.colorNeutral300}>
+            <Text variant="labelSmall" style={styles.colorNeutral300}>
               --
             </Text>
           </View>
@@ -159,7 +159,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
             <Text variant="bodyLarge" style={styles.colorNeutral300}>
             {t('Stores Info.FSSAI Lic No')}
             </Text>
-            <Text variant="bodyMedium" style={styles.colorNeutral300}>
+            <Text variant="labelSmall" style={styles.colorNeutral300}>
               --
             </Text>
           </View>
