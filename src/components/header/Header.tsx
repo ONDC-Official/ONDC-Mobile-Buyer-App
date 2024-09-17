@@ -40,7 +40,10 @@ const Header = ({label, search, wishlist, cart}: any) => {
               color={theme.colors.neutral400}
             />
           </TouchableOpacity>
-          <Text variant={'titleLarge'} style={styles.pageTitle}>
+          <Text
+            variant={'titleLarge'}
+            style={styles.pageTitle}
+            numberOfLines={1}>
             {label}
           </Text>
         </View>
@@ -92,9 +95,11 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       gap: 20,
+      flex: 1,
     },
     pageTitle: {
       color: colors.neutral400,
+      flex: 1,
     },
     actionContainer: {
       flexDirection: 'row',
