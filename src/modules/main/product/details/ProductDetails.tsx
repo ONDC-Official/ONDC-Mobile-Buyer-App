@@ -386,7 +386,9 @@ const ProductDetails: React.FC<ProductDetails> = ({
     addToCartLoading;
 
   return (
-    <Page outletId={product?.location_details?.id}>
+    <Page
+      outletId={product?.location_details?.id}
+      label={product?.item_details?.descriptor?.name}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <ProductImages
           images={[product?.item_details?.descriptor?.symbol].concat(

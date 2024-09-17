@@ -68,6 +68,7 @@ const AboutProduct = ({product, inStock}: {product: any; inStock: boolean}) => {
   return (
     <View>
       <List.Accordion
+        style={styles.listHeader}
         title={
           <Text
             variant={'titleLarge'}
@@ -126,7 +127,9 @@ const makeStyles = (colors: any) =>
     },
     details: {
       paddingTop: 12,
+      paddingHorizontal: 16,
     },
+    listHeader: {backgroundColor: colors.white},
   });
 
 export default AboutProduct;

@@ -24,7 +24,6 @@ const ListingPage: React.FC<ListingPage> = ({searchQuery, subCategories}) => {
           providerId={null}
           subCategories={[subCategories]}
           SearchText={searchQuery}
-          search
           provider={null}
           isOpen={true}
         />

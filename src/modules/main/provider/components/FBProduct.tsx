@@ -529,7 +529,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
   const renderPrice = () => {
     if (defaultPrice) {
       return (
-        <Text variant={'bodyLarge'} style={styles.price}>
+        <Text variant={'labelLarge'} style={styles.price}>
           {currency}
           {formatNumber(defaultPrice.toFixed(2))}
         </Text>
@@ -538,7 +538,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
       const min = formatNumber(priceRange?.minPrice.toFixed(2));
       const max = formatNumber(priceRange?.maxPrice.toFixed(2));
       return (
-        <Text variant={'bodyLarge'} style={styles.price}>
+        <Text variant={'labelLarge'} style={styles.price}>
           {currency}
           {min}- {currency}
           {max}
@@ -546,7 +546,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
       );
     } else if (product?.item_details?.price?.value) {
       return (
-        <Text variant={'bodyLarge'} style={styles.price}>
+        <Text variant={'labelLarge'} style={styles.price}>
           {currency}
           {formatNumber(product?.item_details?.price?.value.toFixed(2))}
         </Text>
@@ -657,7 +657,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
                   ]}>
                   {t('Cart.FBProduct.Add')}
                 </Text>
-                {apiInProgress || productLoading ? (
+                {/* {apiInProgress || productLoading ? (
                   <ActivityIndicator size={18} />
                 ) : (
                   <Icon
@@ -667,7 +667,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
                     }
                     size={18}
                   />
-                )}
+                )} */}
               </TouchableOpacity>
               {customizable && (
                 <Text variant={'labelSmall'} style={styles.customise}>
@@ -885,7 +885,7 @@ const makeStyles = (colors: any) =>
     image: {
       width: 126,
       height: 126,
-      borderRadius: 15,
+      borderRadius: 16,
     },
     outOfStockButtonContainer: {
       position: 'absolute',
@@ -898,7 +898,7 @@ const makeStyles = (colors: any) =>
       marginTop: 50,
     },
     buttonContainer: {
-      marginTop: -32,
+      marginTop: -28,
     },
     field: {
       marginBottom: 12,
@@ -919,10 +919,10 @@ const makeStyles = (colors: any) =>
       marginBottom: 4,
     },
     actionButton: {
-      width: 88,
+      width: 72,
+      height: 28,
       borderRadius: 8,
       borderWidth: 1,
-      paddingVertical: 7,
       backgroundColor: colors.white,
     },
     quantityContainer: {
@@ -959,8 +959,8 @@ const makeStyles = (colors: any) =>
       backgroundColor: 'rgba(47, 47, 47, 0.75)',
     },
     sheetContainer: {
-      borderTopLeftRadius: 15,
-      borderTopRightRadius: 15,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
       backgroundColor: colors.neutral50,
       flex: 1,
     },

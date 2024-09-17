@@ -8,12 +8,14 @@ interface FBBrandDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
+  searchQuery: string;
 }
 
 const FBBrandDetails: React.FC<FBBrandDetails> = ({
   provider,
   outlet,
   apiRequested,
+  searchQuery,
 }) => {
   const styles = makeStyles();
 
@@ -28,14 +30,13 @@ const FBBrandDetails: React.FC<FBBrandDetails> = ({
         outlet={outlet}
         apiRequested={apiRequested}
       />
-      <View style={{flex: 1}}>
-        <FBProducts
-          provider={provider}
-          domain={provider?.domain}
-          location={outlet?.id}
-          isOpen={outlet?.isOpen || false}
-        />
-      </View>
+      <FBProducts
+        provider={provider}
+        domain={provider?.domain}
+        location={outlet?.id}
+        isOpen={outlet?.isOpen || false}
+        searchQuery={searchQuery}
+      />
     </View>
   );
 };

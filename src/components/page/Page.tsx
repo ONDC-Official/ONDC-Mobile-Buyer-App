@@ -14,9 +14,20 @@ import Header from '../header/Header';
 interface Page {
   children: React.ReactNode;
   outletId?: string;
+  label?:string;
+  searchbar?:boolean;
+  searchQuery?: string;
+  setSearchQuery?: (values: any) => void;
 }
 
-const Page: React.FC<Page> = ({children, outletId = ''}) => {
+const Page: React.FC<Page> = ({
+  children,
+  outletId = '',
+  label,
+  searchbar,
+  searchQuery,
+  setSearchQuery,
+}) => {
   const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -41,7 +52,14 @@ const Page: React.FC<Page> = ({children, outletId = ''}) => {
 
   return (
     <SafeAreaPage>
-      <Header wishlist={true} cart={true} />
+      <Header
+        wishlist={true}
+        cart={true}
+        label={label}
+        searchbar={searchbar}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
       <View style={styles.pageContainer}>
         {children}
         {index > -1 && (

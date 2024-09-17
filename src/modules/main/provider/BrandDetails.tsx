@@ -55,6 +55,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
     useState<boolean>(true);
   const {getDataWithAuth} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const getOutletDetails = async (tags: any[]) => {
     try {
@@ -143,13 +144,18 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   }
 
   return (
-    <Page outletId={outlet?.id}>
+    <Page
+      outletId={outlet?.id}
+      searchQuery={searchQuery}
+      searchbar={true}
+      setSearchQuery={setSearchQuery}>
       <View style={styles.container}>
         {provider?.domain === FB_DOMAIN ? (
           <FBBrandDetails
             provider={provider}
             outlet={outlet}
             apiRequested={apiRequested || outletDetailsRequested}
+            searchQuery={searchQuery}
           />
         ) : (
           <OtherBrandDetails

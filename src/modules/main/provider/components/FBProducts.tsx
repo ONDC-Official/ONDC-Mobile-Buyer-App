@@ -36,17 +36,18 @@ const FBProducts = ({
   domain,
   location,
   isOpen,
+  searchQuery,
 }: {
   provider: any;
   domain: string;
   location: string;
   isOpen: boolean;
+  searchQuery: string;
 }) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const customMenuSource = useRef<any>(null);
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const [menu, setMenu] = useState<any[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [menuRequested, setMenuRequested] = useState<boolean>(true);
@@ -185,12 +186,6 @@ const FBProducts = ({
             imageSource={NonVegImage}
           />
         </View>
-        <View style={styles.searchContainer}>
-          <ProductSearch
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
-        </View>
         {menu.length > 0 ? (
           filteredSections?.map((section, index) => (
             <CustomMenuAccordion
@@ -234,6 +229,7 @@ const FBProducts = ({
             <View style={styles.subContainerModal}>
               {filteredSections?.map((section, index) => {
                 let itemLength = section?.items?.length;
+                let selected = index === defaultExpandVal;
 
                 return (
                   <TouchableOpacity
@@ -243,20 +239,12 @@ const FBProducts = ({
                       setDefaultExpandVal(index);
                     }}>
                     <Text
-                      variant={
-                        index === defaultExpandVal
-                          ? 'headlineSmall'
-                          : 'titleSmall'
-                      }
+                      variant={selected ? 'headlineSmall' : 'titleSmall'}
                       style={styles.textmodal}>
                       {section?.descriptor?.name}
                     </Text>
                     <Text
-                      variant={
-                        index === defaultExpandVal
-                          ? 'headlineSmall'
-                          : 'titleSmall'
-                      }
+                      variant={selected ? 'headlineSmall' : 'titleSmall'}
                       style={styles.textmodal}>
                       {itemLength > 0 ? `${itemLength}` : ''}
                     </Text>
@@ -278,7 +266,7 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       alignItems: 'center',
       marginStart: 16,
-      marginTop: 24,
+      gap: 8,
     },
     searchContainer: {
       marginTop: 24,

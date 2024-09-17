@@ -22,7 +22,6 @@ interface Products {
   providerId: any;
   subCategories: any[];
   SearchText: string;
-  search?: boolean;
   provider: any;
   providerDomain?: string;
   isOpen: boolean;
@@ -34,7 +33,6 @@ const Products: React.FC<Products> = ({
   providerId = null,
   subCategories = [],
   SearchText,
-  search = false,
   provider,
   providerDomain,
   isOpen,
@@ -210,9 +208,9 @@ const Products: React.FC<Products> = ({
 
   const renderFlatListItem = useCallback(
     ({item}: {item: any}) => (
-      <Product product={item} search={search} isOpen={isOpen} />
+      <Product product={item} isOpen={isOpen} />
     ),
-    [search, provider],
+    [provider],
   );
 
   const renderItem = useCallback(

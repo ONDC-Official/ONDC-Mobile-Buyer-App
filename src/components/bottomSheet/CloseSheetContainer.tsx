@@ -36,13 +36,13 @@ const makeStyles = (colors: any) =>
     container: {
       justifyContent: 'flex-end',
       height: Dimensions.get('screen').height,
-      paddingBottom: isIOS ? 16 : 70,
+      paddingBottom: isIOS ? 16 : 45,
       paddingTop: isIOS ? 32 : 0,
     },
     closeSheet: {
       alignItems: 'center',
       paddingBottom: 8,
-      paddingTop: 20,
+      paddingTop: 88,
     },
     closeButton: {
       width: 36,

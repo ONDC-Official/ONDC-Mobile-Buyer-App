@@ -10,7 +10,6 @@ import {Divider, Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useTranslation} from 'react-i18next';
 import {Grayscale} from 'react-native-color-matrix-image-filters';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useSelector} from 'react-redux';
@@ -53,10 +52,8 @@ const OutletImage = ({source, isOpen}: {source: any; isOpen: boolean}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const [imageSource, setImageSource] = useState(source);
-  const [imageLoadFailed, setImageLoadFailed] = useState<boolean>(false);
 
   const onError = () => {
-    setImageLoadFailed(true);
     setImageSource(NoImageAvailable);
   };
 
@@ -66,11 +63,7 @@ const OutletImage = ({source, isOpen}: {source: any; isOpen: boolean}) => {
         <FastImage
           style={styles.headerImage}
           source={imageSource}
-          resizeMode={
-            imageLoadFailed
-              ? FastImage.resizeMode.cover
-              : FastImage.resizeMode.contain
-          }
+          resizeMode={FastImage.resizeMode.cover}
           onError={onError}
         />
       );
@@ -80,11 +73,7 @@ const OutletImage = ({source, isOpen}: {source: any; isOpen: boolean}) => {
           <FastImage
             style={styles.headerImage}
             source={imageSource}
-            resizeMode={
-              imageLoadFailed
-                ? FastImage.resizeMode.cover
-                : FastImage.resizeMode.contain
-            }
+            resizeMode={FastImage.resizeMode.cover}
             onError={onError}
           />
         </Grayscale>
@@ -238,36 +227,13 @@ const OutletDetails: React.FC<OutletDetails> = ({
                   style={styles.title}
                   ellipsizeMode={'tail'}
                   numberOfLines={1}>
-                  {provider?.descriptor?.name}
+                  {provider?.descriptor?.name} asdasd adsdas asdasd
                 </Text>
                 <TouchableOpacity onPress={moveOnStoreInfo}>
                   <MaterialCommunityIcon
                     name={'information-outline'}
                     size={24}
                     color={theme.colors.neutral400}
-                  />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.buttonContainer}>
-                {outletPhone && (
-                  <TouchableOpacity
-                    onPress={() => Linking.openURL(`tel: ${outletPhone}`)}
-                    style={styles.actionButton}>
-                    <Icon
-                      name={'phone'}
-                      color={theme.colors.primary}
-                      size={18}
-                    />
-                  </TouchableOpacity>
-                )}
-                <View style={styles.separator} />
-                <TouchableOpacity
-                  style={styles.actionButton}
-                  onPress={getDirection}>
-                  <Icon
-                    name={'directions'}
-                    color={theme.colors.primary}
-                    size={18}
                   />
                 </TouchableOpacity>
               </View>
@@ -358,7 +324,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
               resizeMode={FastImage.resizeMode.cover}
             />
             <Text variant={'bodyMedium'} style={styles.mapName}>
-            {t('Stores Info.Mappls')}
+              {t('Stores Info.Mappls')}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.mapRow} onPress={navigateToMaps}>
@@ -368,7 +334,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
               resizeMode={FastImage.resizeMode.cover}
             />
             <Text variant={'bodyMedium'} style={styles.mapName}>
-            {t('Stores Info.Maps')}
+              {t('Stores Info.Maps')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -387,6 +353,7 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 16,
       paddingTop: 20,
       flexDirection: 'row',
+      gap: 24,
     },
     borderBottom: {
       backgroundColor: colors.neutral100,
@@ -424,7 +391,7 @@ const makeStyles = (colors: any) =>
     providerLocalityView: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginBottom: 6,
+      gap: 4,
     },
     dotView: {
       height: 4,
@@ -455,7 +422,7 @@ const makeStyles = (colors: any) =>
     getDirection: {
       borderColor: colors.error400,
     },
-    providerDetails: {flex: 1, paddingRight: 24},
+    providerDetails: {flex: 1, gap: 8},
     brandImageEmpty: {
       backgroundColor: colors.neutral200,
     },

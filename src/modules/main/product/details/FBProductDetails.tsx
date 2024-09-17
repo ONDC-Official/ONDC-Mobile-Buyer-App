@@ -39,7 +39,7 @@ const FBProductDetails: React.FC<FBProductDetails> = ({
             )}
           />
         </View>
-        <VegNonVegTag tags={product?.item_details?.tags} />
+        {/* <VegNonVegTag tags={product?.item_details?.tags} /> */}
         {!inStock && <View style={styles.disableTags} />}
         <Text variant="titleLarge" style={styles.title}>
           {product?.item_details?.descriptor?.name}
@@ -67,9 +67,7 @@ const FBProductDetails: React.FC<FBProductDetails> = ({
           isFashion={product?.context?.domain === FASHION_DOMAIN}
         />
         <View style={styles.customizationContainer}>{children}</View>
-        <View style={styles.aboutContainer}>
-          <AboutProduct product={product} inStock={inStock} />
-        </View>
+        <AboutProduct product={product} inStock={inStock} />
       </View>
     </>
   );
@@ -111,8 +109,8 @@ const makeStyles = (colors: any) =>
       paddingTop: 14,
       paddingBottom: 8,
       paddingHorizontal: 16,
-      borderTopLeftRadius: 15,
-      borderTopRightRadius: 15,
+      borderTopLeftRadius: 12,
+      borderTopRightRadius: 12,
       backgroundColor: colors.white,
     },
     imagesContainer: {
@@ -141,11 +139,8 @@ const makeStyles = (colors: any) =>
       marginTop: 8,
     },
     customizationContainer: {
-      padding: 16,
-      backgroundColor: colors.neutral50,
-    },
-    aboutContainer: {
       paddingHorizontal: 16,
+      backgroundColor: colors.neutral50,
     },
   });
 

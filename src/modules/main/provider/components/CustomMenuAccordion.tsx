@@ -41,7 +41,7 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
       id={section.id}
       style={styles.accordion}
       title={
-        <Text variant={'headlineSmall'} style={styles.heading}>
+        <Text variant={'titleLarge'} style={styles.heading}>
           {section?.descriptor?.name} {itemLength > 0 ? `(${itemLength})` : ''}
         </Text>
       }>

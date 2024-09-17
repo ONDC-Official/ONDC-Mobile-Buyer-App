@@ -33,7 +33,7 @@ const FBFilter = ({
           : setSelectedFilter(value)
       }>
       <FastImage source={imageSource} style={styles.filterIcon} />
-      <Text variant={'bodyMedium'} style={styles.filterLabel}>
+      <Text variant={'labelLarge'} style={styles.filterLabel}>
         {label}
       </Text>
       {selectedFilter === value ? (
@@ -53,23 +53,22 @@ const FBFilter = ({
 const makeStyles = (colors: any) =>
   StyleSheet.create({
     filter: {
-      borderRadius: 60,
-      backgroundColor: colors.neutral100,
+      borderRadius: 8,
       borderWidth: 1,
       borderColor: colors.neutral100,
-      paddingVertical: 10,
-      paddingHorizontal: 16,
+      paddingVertical: 6,
+      paddingHorizontal: 12,
       flexDirection: 'row',
       alignItems: 'center',
-      marginRight: 7,
+      gap: 4,
     },
     selectedFilter: {
       backgroundColor: colors.primary50,
       borderColor: colors.primary,
     },
     filterIcon: {
-      width: 18,
-      height: 18,
+      width: 20,
+      height: 20,
     },
     filterLabel: {
       color: colors.neutral400,

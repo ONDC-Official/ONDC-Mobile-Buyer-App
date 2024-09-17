@@ -31,13 +31,12 @@ import {useTranslation} from 'react-i18next';
 
 interface Product {
   product: any;
-  search?: boolean;
   isOpen: boolean;
 }
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
 
-const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
+const Product: React.FC<Product> = ({product, isOpen}) => {
   const CancelToken = axios.CancelToken;
   const {formatNumber} = useFormatNumber();
   const isFBDomain = product.context.domain === FB_DOMAIN;
@@ -56,18 +55,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
   const {t} = useTranslation();
 
   const navigateToProductDetails = () => {
-    if (search) {
-      const routeParams: any = {
-        brandId: product.provider_details.id,
-      };
-
-      if (product.location_details) {
-        routeParams.outletId = product.location_details.id;
-      }
-      navigation.navigate('BrandDetails', routeParams);
-    } else {
-      navigation.navigate('ProductDetails', {productId: product.id});
-    }
+    navigation.navigate('ProductDetails', {productId: product.id});
   };
 
   const inStock =
@@ -317,9 +305,7 @@ const Product: React.FC<Product> = ({product, search = false, isOpen}) => {
           numberOfLines={1}
           ellipsizeMode={'tail'}
           style={styles.provider}>
-          {search
-            ? product?.provider_details?.descriptor?.name
-            : product?.item_details?.descriptor?.short_desc}
+          {product?.item_details?.descriptor?.short_desc}
         </Text>
         <View style={styles.priceView}>
           <View style={styles.priceText}>
