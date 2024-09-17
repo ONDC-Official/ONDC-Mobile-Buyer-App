@@ -19,8 +19,8 @@ const AddressTag: React.FC<AddressTag> = ({onPress}) => {
   const {address} = useSelector((state: any) => state.address);
 
   const addressText = useMemo(() => {
-    const {tag = t('Home.Deliver to'), areaCode, city} = address?.address || {};
-    return `${tag} - ${areaCode || city}`;
+    const {tag, areaCode, city} = address?.address || {};
+    return `${tag && tag.length > 0 ? tag : 'Other'} - ${areaCode || city}`;
   }, [address, t]);
 
   if (address) {
