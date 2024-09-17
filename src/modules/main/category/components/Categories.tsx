@@ -110,7 +110,7 @@ const makeStyles = (colors: any) =>
     },
     categoryBorder: {
       height: '100%',
-      width: 4,
+      width: 6,
       borderRadius: 10,
       backgroundColor: colors.white,
     },

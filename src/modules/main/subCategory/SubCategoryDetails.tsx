@@ -1,12 +1,11 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Animated, StyleSheet, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useMemo, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import {appStyles} from '../../../styles/styles';
 import SubCategories from './components/SubCategories';
-import {useAppTheme} from '../../../utils/theme';
 import Header from '../../../components/header/Header';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import ListingPage from '../../../components/categoryTab/ListingPage';
 import SafeAreaPage from '../../../components/header/SafeAreaPage';
+import AnimationPage from '../../../components/category/AnimationPage';
 
 interface SubCategoryDetails {
   route: any;
@@ -19,20 +18,7 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
   const [currentSubCategory, setCurrentSubCategory] = useState(
     params.subCategory,
   );
-  const theme = useAppTheme();
-  const widthAnim = useRef(new Animated.Value(80)).current;
-  const [expanded, setExpanded] = useState<boolean>(false);
-
-  const styles = useMemo(() => makeStyles(theme.colors), [theme.colors]);
-
-  const toggleWidth = useCallback(() => {
-    Animated.timing(widthAnim, {
-      toValue: expanded ? 0 : 80,
-      duration: 500,
-      useNativeDriver: false, // Cannot use native driver for width animation
-    }).start();
-    setExpanded(prev => !prev);
-  }, [expanded, widthAnim]);
+  const styles = useMemo(() => makeStyles(), []);
 
   useEffect(() => {
     setCurrentSubCategory(params.subCategory);
@@ -47,84 +33,26 @@ const SubCategoryDetails: React.FC<SubCategoryDetails> = ({
           appStyles.backgroundWhite,
         ]}>
         <Header label={currentSubCategory} search wishlist cart />
-        <View style={styles.subContainer}>
-          <Animated.View style={[styles.categoryView, {width: widthAnim}]}>
+        <AnimationPage
+          list={
             <SubCategories
               currentCategory={params.category}
               currentSubCategory={currentSubCategory}
               categoryDomain={params.categoryDomain}
               setCurrentSubCategory={setCurrentSubCategory}
             />
-          </Animated.View>
-          <View style={styles.pageContainer}>
-            <ListingPage searchQuery={''} subCategories={currentSubCategory} />
-            <TouchableOpacity
-              style={styles.collapsibleButton}
-              onPress={toggleWidth}>
-              <Icon
-                name={'keyboard-arrow-left'}
-                size={20}
-                color={theme.colors.white}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
+          }>
+          <ListingPage searchQuery={''} subCategories={currentSubCategory} />
+        </AnimationPage>
       </View>
     </SafeAreaPage>
   );
 };
 
-const makeStyles = (colors: any) =>
+const makeStyles = () =>
   StyleSheet.create({
     container: {
       paddingBottom: 16,
-    },
-    pageContainer: {
-      flex: 1,
-    },
-    subContainer: {flex: 1, flexDirection: 'row'},
-    categoryView: {
-      borderRightWidth: 1,
-      borderRightColor: colors.neutral100,
-    },
-    collapsibleButton: {
-      position: 'absolute',
-      height: 32,
-      width: 24,
-      backgroundColor: colors.neutral400,
-      bottom: 50,
-      borderTopRightRadius: 27,
-      borderBottomRightRadius: 27,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    switchRow: {
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    switchContainer: {
-      height: 28,
-      width: 168,
-      borderRadius: 39,
-      backgroundColor: colors.primary50,
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    button: {
-      width: 84,
-      height: 28,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    activeButton: {
-      backgroundColor: colors.primary,
-      borderRadius: 39,
-    },
-    activeButtonText: {
-      color: colors.white,
-    },
-    buttonText: {
-      color: colors.neutral400,
     },
   });
 
