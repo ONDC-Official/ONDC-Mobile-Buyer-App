@@ -77,7 +77,7 @@ const StoreCart: React.FC<StoreCart> = ({
           />
           <View style={styles.headerText}>
             <View style={styles.titleView}>
-              <Text variant="titleLarge" style={styles.title}>
+              <Text variant="titleLarge" style={styles.title} numberOfLines={1}>
                 {item?.location?.provider_descriptor?.name}
               </Text>
               <TouchableOpacity
@@ -196,6 +196,7 @@ const makeStyles = (colors: any) =>
     line: {height: 1, backgroundColor: colors.neutral100},
     titleView: {
       flexDirection: 'row',
+      gap: 16,
     },
     title: {
       flex: 1,

@@ -227,7 +227,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
                   style={styles.title}
                   ellipsizeMode={'tail'}
                   numberOfLines={1}>
-                  {provider?.descriptor?.name} asdasd adsdas asdasd
+                  {provider?.descriptor?.name}
                 </Text>
                 <TouchableOpacity onPress={moveOnStoreInfo}>
                   <MaterialCommunityIcon

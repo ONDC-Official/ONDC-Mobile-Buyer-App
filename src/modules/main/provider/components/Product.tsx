@@ -21,7 +21,7 @@ import {useAppTheme} from '../../../../utils/theme';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
-import {API_BASE_URL, CART} from '../../../../utils/apiActions';
+import {API_BASE_URL, CART, WISHLIST} from '../../../../utils/apiActions';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {
   areCustomisationsSame,
@@ -101,6 +101,20 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
       console.log('Error fetching cart items:', error);
       return [];
     }
+  };
+
+  const addWishlist = async () => {
+    try {
+      source.current = CancelToken.source();
+      const url = `${API_BASE_URL}${WISHLIST}/${uid}`;
+
+      const payload: any = {
+        id: product.id,
+        locationId: product.location_details.id,
+      };
+
+      await postDataWithAuth(url, payload, source.current.token);
+    } catch (error) {}
   };
 
   const addToCart = async (isIncrement = true) => {
@@ -383,7 +397,7 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
           )}
         </View>
       </View>
-      <TouchableOpacity style={styles.wishlist}>
+      <TouchableOpacity style={styles.wishlist} onPress={addWishlist}>
         <Wishlist
           name="cards-heart-outline"
           size={20}
