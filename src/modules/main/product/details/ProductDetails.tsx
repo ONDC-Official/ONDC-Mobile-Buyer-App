@@ -38,6 +38,7 @@ import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
 import SizeChart from './components/SizeChart';
 import Page from '../../../../components/page/Page';
+import HeaderWithActions from '../../../../components/header/HeaderWithActions';
 
 interface ProductDetails {
   route: any;
@@ -386,9 +387,12 @@ const ProductDetails: React.FC<ProductDetails> = ({
     addToCartLoading;
 
   return (
-    <Page
-      outletId={product?.location_details?.id}
-      label={product?.item_details?.descriptor?.name}>
+    <Page outletId={product?.location_details?.id}>
+      <HeaderWithActions
+        label={product?.item_details?.descriptor?.name}
+        wishlist
+        cart
+      />
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <ProductImages
           images={[product?.item_details?.descriptor?.symbol].concat(

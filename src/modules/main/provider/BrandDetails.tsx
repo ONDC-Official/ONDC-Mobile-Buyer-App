@@ -22,6 +22,7 @@ import Page from '../../../components/page/Page';
 import {useAppTheme} from '../../../utils/theme';
 import useFormatDate from '../../../hooks/useFormatDate';
 import {getStoreTiming} from '../../../utils/utils';
+import Header from './components/Header';
 
 const CancelToken = axios.CancelToken;
 
@@ -144,11 +145,8 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   }
 
   return (
-    <Page
-      outletId={outlet?.id}
-      searchQuery={searchQuery}
-      searchbar={true}
-      setSearchQuery={setSearchQuery}>
+    <Page outletId={outlet?.id}>
+      <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <View style={styles.container}>
         {provider?.domain === FB_DOMAIN ? (
           <FBBrandDetails
