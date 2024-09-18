@@ -1,5 +1,5 @@
 import React from 'react';
-import {StatusBar, StyleSheet} from 'react-native';
+import {StatusBar} from 'react-native';
 import Toast, {ErrorToast} from 'react-native-toast-message';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Provider as StoreProvider} from 'react-redux';
@@ -24,7 +24,5 @@ const App = () => {
     </StoreProvider>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default App;

@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import CustomTabBar from './components/customTabBar/CustomTabBar';
@@ -8,14 +9,15 @@ import Profile from './components/tabs/Profile';
 import useCartItems from '../../../hooks/useCartItems';
 import useRefreshToken from '../../../hooks/useRefreshToken';
 import useCategoryDetails from '../../../hooks/useCategoryDetails';
-import {SafeAreaView, StyleSheet, View} from 'react-native';
-import {theme} from '../../../../src/utils/theme';
+import {useAppTheme} from '../../../utils/theme';
 
 interface Dashboard {}
 
 const Tab = createBottomTabNavigator();
 
 const Dashboard: React.FC<Dashboard> = () => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
   const {getCartItems} = useCartItems();
   const {getUserToken} = useRefreshToken();
   const {getCategoryDetails} = useCategoryDetails();
@@ -45,16 +47,17 @@ const Dashboard: React.FC<Dashboard> = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {flex: 1},
-  topSafeArea: {
-    flex: 0,
-    backgroundColor: theme.colors.primary,
-  },
-  bottomSafeArea: {
-    flex: 1,
-    backgroundColor: theme.colors.white,
-  },
-});
+const makeStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {flex: 1},
+    topSafeArea: {
+      flex: 0,
+      backgroundColor: colors.primary,
+    },
+    bottomSafeArea: {
+      flex: 1,
+      backgroundColor: colors.white,
+    },
+  });
 
 export default Dashboard;
