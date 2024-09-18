@@ -336,10 +336,17 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     group: {
       marginTop: 20,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: colors.neutral100,
+      padding: 12,
     },
     groupHeader: {
       flexDirection: 'row',
       alignItems: 'center',
+      borderBottomColor: colors.neutral100,
+      borderBottomWidth: 1,
+      paddingBottom: 8,
     },
     groupTitle: {
       textTransform: 'capitalize',
@@ -359,8 +366,7 @@ const makeStyles = (colors: any) =>
     },
     customization: {
       textTransform: 'capitalize',
-      borderRadius: 8,
-      borderWidth: 1,
+      borderRadius: 9,
       marginRight: 20,
       padding: 10,
       textAlign: 'center',

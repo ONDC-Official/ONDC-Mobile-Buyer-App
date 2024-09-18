@@ -340,20 +340,24 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
                   } else {
                     addToCart(false).then(() => {});
                   }
-                }}>
+                }}
+                style={styles.iconButton}>
                 <Icon name={'minus'} color={theme.colors.primary} size={20} />
               </TouchableOpacity>
-              <Text variant={'bodyLarge'} style={styles.quantity}>
+              <View style={styles.quantityContainer}>
                 {addToCartLoading ? (
-                  <ActivityIndicator size={16} color={theme.colors.primary} />
+                  <ActivityIndicator size={14} color={theme.colors.primary} />
                 ) : (
-                  formatNumber(itemAvailableInCart.item.quantity.count)
+                  <Text variant={'bodyLarge'} style={styles.quantity}>
+                    {formatNumber(itemAvailableInCart.item.quantity.count)}
+                  </Text>
                 )}
-              </Text>
+              </View>
               <TouchableOpacity
                 onPress={() => {
-                  addToCart(true);
-                }}>
+                  addToCart(true).then(() => {});
+                }}
+                style={styles.iconButton}>
                 <Icon name={'plus'} color={theme.colors.primary} size={20} />
               </TouchableOpacity>
             </View>
@@ -361,7 +365,7 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
             <TouchableOpacity
               style={styles.quantityView}
               onPress={() => {
-                addToCart(true);
+                addToCart(true).then(() => {});
               }}>
               <Text variant={'bodyLarge'} style={styles.quantityText}>
                 {t('Cart.FBProduct.Add')}
@@ -453,7 +457,17 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
-      gap: 8,
+    },
+    iconButton: {
+      width: 24,
+      height: 24,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    quantityContainer: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     quantityText: {
       color: colors.primary,

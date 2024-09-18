@@ -402,12 +402,15 @@ const ProductDetails: React.FC<ProductDetails> = ({
               <VegNonVegTag tags={product?.item_details?.tags} showLabel />
             </View>
           )}
+          <Text variant="titleLarge" style={styles.brandName}>
+            {product?.provider_details?.descriptor?.name}
+          </Text>
           <Text variant="headlineSmall" style={styles.title}>
             {product?.item_details?.descriptor?.name}
           </Text>
           {priceRange ? (
             <View style={styles.priceContainer}>
-              <Text variant="headlineSmall" style={styles.price}>
+              <Text variant="titleLarge" style={styles.price}>
                 {`₹${formatNumber(priceRange?.minPrice)} - ₹${formatNumber(
                   priceRange?.maxPrice,
                 )}`}
@@ -415,7 +418,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
             </View>
           ) : (
             <View style={styles.priceContainer}>
-              <Text variant="headlineSmall" style={styles.price}>
+              <Text variant="titleLarge" style={styles.price}>
                 ₹{formatNumber(product?.item_details?.price?.value)}
               </Text>
               {Number(product?.item_details?.price?.maximum_value) !==
@@ -544,9 +547,13 @@ const makeStyles = (colors: any) =>
     details: {
       padding: 16,
     },
+    brandName: {
+      color: colors.primary,
+      marginBottom: 12,
+    },
     title: {
       color: colors.neutral400,
-      marginBottom: 12,
+      marginBottom: 8,
     },
     price: {
       color: colors.neutral400,

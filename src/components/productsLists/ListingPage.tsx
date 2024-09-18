@@ -23,7 +23,7 @@ const ListingPage: React.FC<ListingPage> = ({searchQuery, subCategories}) => {
         <Products
           providerId={null}
           subCategories={[subCategories]}
-          SearchText={searchQuery}
+          searchText={searchQuery}
           provider={null}
           isOpen={true}
         />

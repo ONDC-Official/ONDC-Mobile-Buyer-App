@@ -33,7 +33,7 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = React.memo(
             providerId={provider.id}
             providerDomain={provider.domain}
             provider={provider}
-            SearchText={''}
+            searchText={''}
             subCategories={[]}
             isOpen={outlet?.isOpen || false}
           />
