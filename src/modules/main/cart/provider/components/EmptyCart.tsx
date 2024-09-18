@@ -32,8 +32,7 @@ const makeStyles = (colors: any) =>
     },
     emptyCartDetails: {
       alignItems: 'center',
-      paddingHorizontal: 25,
-      width: 250,
+      width: 260,
     },
     title: {
       color: colors.neutral400,
