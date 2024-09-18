@@ -95,9 +95,7 @@ const WishList = () => {
   }, [isFocused]);
 
   const renderItems = ({item, index}: any) => {
-    return (
-      <WishlistItem item={item} index={index} deleteWishlist={deleteWishlist} />
-    );
+    return <WishlistItem item={item} deleteWishlist={deleteWishlist} />;
   };
 
   return (
