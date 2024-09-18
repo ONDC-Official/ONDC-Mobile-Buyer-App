@@ -24,7 +24,6 @@ import CouponList from '../modules/main/category/CouponList';
 import BrandDetails from '../modules/main/provider/BrandDetails';
 import InvalidBrandDetails from '../modules/main/provider/InvalidBrandDetails';
 import SubCategoryDetails from '../modules/main/subCategory/SubCategoryDetails';
-import Outlets from '../modules/main/provider/Outlets';
 import ChooseLanguage from '../modules/main/profile/ChooseLanguage';
 import CancelOrder from '../modules/main/order/details/CancelOrder';
 import SearchProducts from '../modules/main/dashboard/SearchProducts';
@@ -320,11 +319,6 @@ const AppNavigation = (): JSX.Element => {
           <Stack.Screen
             name="InvalidBrandDetails"
             component={InvalidBrandDetails}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="Outlets"
-            component={Outlets}
             options={{headerShown: false}}
           />
           <Stack.Screen

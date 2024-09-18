@@ -14,6 +14,7 @@ import Wishlist from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import {useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
 
 import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
@@ -27,7 +28,6 @@ import {
   showInfoToast,
   showToastWithGravity,
 } from '../../../../utils/utils';
-import {useTranslation} from 'react-i18next';
 
 interface Product {
   product: any;
@@ -314,9 +314,7 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
               <Text variant={'labelSmall'} style={styles.amountStrike}>
                 {currency}
                 {formatNumber(
-                  Number(product?.item_details?.price?.maximum_value).toFixed(
-                    2,
-                  ),
+                  Number(product?.item_details?.price?.maximum_value),
                 )}
               </Text>
             ) : (
@@ -324,16 +322,17 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
             )}
             <Text variant={'labelLarge'} style={styles.amount}>
               {currency}
-              {formatNumber(
-                product?.item_details?.price?.value > 1000
-                  ? product?.item_details?.price?.value.toFixed(0)
-                  : product?.item_details?.price?.value.toFixed(2),
-              )}
+              {formatNumber(product?.item_details?.price?.value)}
             </Text>
           </View>
           {itemAvailableInCart ? (
-            <View style={styles.quantityView}>
+            <View
+              style={[
+                styles.quantityView,
+                disabled ? styles.disabledButton : {},
+              ]}>
               <TouchableOpacity
+                disabled={disabled}
                 onPress={() => {
                   if (itemAvailableInCart.item.quantity.count === 1) {
                     deleteCartItem(itemAvailableInCart._id).then(() => {});
@@ -354,6 +353,7 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
                 )}
               </View>
               <TouchableOpacity
+                disabled={disabled}
                 onPress={() => {
                   addToCart(true).then(() => {});
                 }}
@@ -363,11 +363,20 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
             </View>
           ) : (
             <TouchableOpacity
-              style={styles.quantityView}
+              disabled={disabled}
+              style={[
+                styles.quantityView,
+                disabled ? styles.disabledButton : {},
+              ]}
               onPress={() => {
                 addToCart(true).then(() => {});
               }}>
-              <Text variant={'bodyLarge'} style={styles.quantityText}>
+              <Text
+                variant={'bodyLarge'}
+                style={[
+                  styles.quantityText,
+                  disabled ? styles.disabledText : {},
+                ]}>
                 {t('Cart.FBProduct.Add')}
               </Text>
             </TouchableOpacity>
@@ -458,6 +467,9 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
       flexDirection: 'row',
     },
+    disabledButton: {
+      borderColor: colors.neutral200,
+    },
     iconButton: {
       width: 24,
       height: 24,
@@ -471,6 +483,9 @@ const makeStyles = (colors: any) =>
     },
     quantityText: {
       color: colors.primary,
+    },
+    disabledText: {
+      color: colors.neutral200,
     },
     quantity: {
       color: colors.primary,

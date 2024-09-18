@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import ListingTab from './ListingTab';
 import Products from '../products/Products';
@@ -13,24 +13,25 @@ const ListingPage: React.FC<ListingPage> = ({searchQuery, subCategories}) => {
   const styles = makeStyles();
   const [searchType, setSearchType] = useState<string>('Stores');
 
+  const isStore = useMemo(() => {
+    return searchType === 'Stores';
+  }, [searchType]);
+
   return (
     <View style={styles.pageContainer}>
-      <ListingTab
-        isStore={searchType === 'Stores'}
-        setSearchType={setSearchType}
-      />
-      {searchType === 'Products' ? (
+      <ListingTab isStore={isStore} setSearchType={setSearchType} />
+      {isStore ? (
+        <SearchProviders
+          searchQuery={searchQuery}
+          currentSubCategory={subCategories}
+        />
+      ) : (
         <Products
           providerId={null}
           subCategories={[subCategories]}
           searchText={searchQuery}
           provider={null}
           isOpen={true}
-        />
-      ) : (
-        <SearchProviders
-          searchQuery={searchQuery}
-          currentSubCategory={subCategories}
         />
       )}
     </View>
