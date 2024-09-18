@@ -39,9 +39,10 @@
       "No providers available": "No providers available"
     }
   },
-  "List": {
-    "List": "List",
-    "Coming soon": "Coming soon"
+  "WishList": {
+    "Wishlist": "Wishlist",
+    "Your Wishlist is empty": "Your Wishlist is empty",
+    "Save your favorites in your wishlist. Review them anytime and easily add them to your cart.": "Save your favorites in your wishlist. Review them anytime and easily add them to your cart."
   },
   "Cart": {
     "Cart": "Cart",

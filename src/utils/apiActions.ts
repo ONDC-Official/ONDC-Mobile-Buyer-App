@@ -24,6 +24,7 @@ export const ORDERS: string = '/clientApis/v2/orders';
 export const ORDER_STATUS: string = '/clientApis/v2/order_status';
 export const TRACK_ORDER: string = '/clientApis/v2/track';
 export const CART: string = '/clientApis/v2/cart';
+export const WISHLIST: string = '/clientApis/v2/wishlist';
 export const OFFERS: string = '/clientApis/v2/offers';
 export const GET_ISSUES: string = '/issueApis/v1/getIssues';
 export const ON_SELECT: string = '/clientApis/v2/on_select?messageIds=';
