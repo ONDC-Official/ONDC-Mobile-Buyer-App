@@ -29,7 +29,6 @@ const CategoryMenu = () => {
       x={screenWidth - 56}
       y={screenHeight * 0.7}
       imageSource={require('../../../../../assets/dashboard/categories.png')}
-      isCircle
       onShortPressRelease={navigateToCategoryDetails}
     />
   );

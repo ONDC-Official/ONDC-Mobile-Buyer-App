@@ -7,6 +7,7 @@ import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../../../../utils/theme';
 import AudioRecorder from './AudioRecorder';
 import QRButton from './QRButton';
+import useKeyboardHelper from '../../../../../hooks/useKeyboardHelper';
 
 type SearchHeaderProps = {
   onSearch: (query: string) => void;
@@ -24,6 +25,7 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
   defaultQuery,
   backIconPress,
 }) => {
+  const {keyboardShown} = useKeyboardHelper();
   const [searchQuery, setSearchQuery] = React.useState<string>(defaultQuery);
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -65,12 +67,16 @@ const SearchHeader: React.FC<SearchHeaderProps> = ({
         icon={BackIcon}
         onIconPress={backIconPress}
       />
-      <AudioRecorder
-        color={theme.colors.primary}
-        setSearchQuery={setSearchQuery}
-        onSearchComplete={onAudioSearchComplete}
-      />
-      <QRButton color={theme.colors.primary} />
+      {!keyboardShown && (
+        <View style={styles.actionContainer}>
+          <AudioRecorder
+            color={theme.colors.primary}
+            setSearchQuery={setSearchQuery}
+            onSearchComplete={onAudioSearchComplete}
+          />
+          <QRButton color={theme.colors.primary} />
+        </View>
+      )}
     </View>
   );
 };
@@ -84,6 +90,11 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       backgroundColor: colors.white,
       paddingHorizontal: 16,
+      gap: 20,
+    },
+    actionContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
       gap: 20,
     },
     searchInput: {
