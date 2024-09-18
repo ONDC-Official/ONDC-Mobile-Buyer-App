@@ -21,13 +21,13 @@ const PaymentMethods = ({navigation}: {navigation: any}) => {
           <Icon name={'arrow-back'} size={20} color={theme.colors.neutral400} />
         </TouchableOpacity>
         <Text variant={'titleLarge'} style={styles.pageTitle}>
-          {t('Address WishList.Delivery Address')}
+          {t('Address List.Delivery Address')}
         </Text>
       </View>
       <View style={styles.pageContent}>
         <View style={styles.container}>
           <Text variant={'titleLarge'} style={styles.title}>
-            {t('Address WishList.Delivery Address')}
+            {t('Address List.Delivery Address')}
           </Text>
           {!!location?.address?.name && (
             <Text variant={'bodyLarge'} style={styles.name}>

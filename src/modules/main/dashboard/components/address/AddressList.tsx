@@ -130,7 +130,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: t('Address WishList.Delivery Address'),
+      title: t('Address List.Delivery Address'),
     });
     getUserToken().then(() => {});
   }, []);
@@ -148,7 +148,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
           ListEmptyComponent={() => (
             <View style={[appStyles.container, appStyles.centerContainer]}>
               <Text variant={'bodyMedium'}>
-                {t('Address WishList.No address available')}
+                {t('Address List.No address available')}
               </Text>
             </View>
           )}
@@ -158,7 +158,7 @@ const AddressList: React.FC<AddressList> = ({navigation, route: {params}}) => {
         />
         <TouchableOpacity style={styles.addButton} onPress={addAddress}>
           <Text style={styles.addButtonText} variant={'bodyMedium'}>
-            {t('Address WishList.Add Address')}
+            {t('Address List.Add Address')}
           </Text>
         </TouchableOpacity>
       </View>

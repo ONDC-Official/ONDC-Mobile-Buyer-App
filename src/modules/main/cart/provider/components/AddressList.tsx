@@ -91,11 +91,11 @@ const AddressList: React.FC<AddressList> = ({
     <View style={styles.addressFormContainer}>
       <View style={styles.header}>
         <Text variant={'headlineSmall'}>
-          {t('Address WishList.Select a Delivery Address')}
+          {t('Address List.Select a Delivery Address')}
         </Text>
       </View>
       <Text variant={'labelLarge'} style={styles.shippingAddress}>
-        {t('Address WishList.Saved Addresses')}
+        {t('Address List.Saved Addresses')}
       </Text>
       {apiInProgress ? (
         <FlatList
@@ -127,7 +127,7 @@ const AddressList: React.FC<AddressList> = ({
                   contentStyle={appStyles.containedButtonContainer}
                   mode="outlined"
                   onPress={navigateToAddAddress}>
-                  {t('Address WishList.Add new address')}
+                  {t('Address List.Add new address')}
                 </Button>
               </View>
             )}
@@ -141,7 +141,7 @@ const AddressList: React.FC<AddressList> = ({
             style={styles.button}
             onPress={navigateToAddAddress}>
             <Text variant={'bodyLarge'} style={styles.buttonLabel}>
-              {t('Address WishList.Add new address')}
+              {t('Address List.Add new address')}
             </Text>
           </TouchableOpacity>
         </>
