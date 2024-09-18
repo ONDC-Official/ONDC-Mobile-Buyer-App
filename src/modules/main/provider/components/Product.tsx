@@ -311,7 +311,7 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
           <View style={styles.priceText}>
             {Number(product?.item_details?.price?.maximum_value) !==
             Number(product?.item_details?.price?.value) ? (
-              <Text variant={'labelMedium'} style={styles.amountStrike}>
+              <Text variant={'labelSmall'} style={styles.amountStrike}>
                 {currency}
                 {formatNumber(
                   Number(product?.item_details?.price?.maximum_value).toFixed(
@@ -322,9 +322,13 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
             ) : (
               <View style={styles.amountStrikeEmpty} />
             )}
-            <Text variant={'bodyLarge'} style={styles.amount}>
+            <Text variant={'labelLarge'} style={styles.amount}>
               {currency}
-              {formatNumber(product?.item_details?.price?.value.toFixed(2))}
+              {formatNumber(
+                product?.item_details?.price?.value > 1000
+                  ? product?.item_details?.price?.value.toFixed(0)
+                  : product?.item_details?.price?.value.toFixed(2),
+              )}
             </Text>
           </View>
           {itemAvailableInCart ? (

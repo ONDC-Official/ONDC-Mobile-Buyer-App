@@ -1,10 +1,12 @@
 import React, {useCallback} from 'react';
 import {Text} from 'react-native-paper';
-import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useAppTheme} from '../../utils/theme';
+import useStatusBarColor from '../../hooks/useStatusBarColor';
+import useBackHandler from '../../hooks/useBackHandler';
 
 interface Page {
   label: string;
@@ -17,10 +19,8 @@ const HeaderWithActions: React.FC<Page> = ({label, search, wishlist, cart}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation: any = useNavigation();
-
-  const goBack = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
+  const {goBack} = useBackHandler();
+  useStatusBarColor('dark-content', theme.colors.white);
 
   const openSearch = useCallback(() => {
     navigation.navigate('SearchProducts');
@@ -35,57 +35,48 @@ const HeaderWithActions: React.FC<Page> = ({label, search, wishlist, cart}) => {
   }, [navigation]);
 
   return (
-    <View>
-      <StatusBar
-        backgroundColor={theme.colors.white}
-        barStyle={'dark-content'}
-      />
-      <View style={styles.header}>
-        <View style={styles.headerTitle}>
-          <TouchableOpacity onPress={goBack}>
+    <View style={styles.header}>
+      <View style={styles.headerTitle}>
+        <TouchableOpacity onPress={goBack}>
+          <MaterialIcons
+            name={'arrow-back'}
+            size={24}
+            color={theme.colors.neutral400}
+          />
+        </TouchableOpacity>
+        <Text variant={'titleLarge'} style={styles.pageTitle} numberOfLines={1}>
+          {label}
+        </Text>
+      </View>
+
+      <View style={styles.actionContainer}>
+        {search && (
+          <TouchableOpacity onPress={openSearch}>
             <MaterialIcons
-              name={'arrow-back'}
+              name={'search'}
               size={24}
               color={theme.colors.neutral400}
             />
           </TouchableOpacity>
-          <Text
-            variant={'titleLarge'}
-            style={styles.pageTitle}
-            numberOfLines={1}>
-            {label}
-          </Text>
-        </View>
-
-        <View style={styles.actionContainer}>
-          {search && (
-            <TouchableOpacity onPress={openSearch}>
-              <MaterialIcons
-                name={'search'}
-                size={24}
-                color={theme.colors.neutral400}
-              />
-            </TouchableOpacity>
-          )}
-          {wishlist && (
-            <TouchableOpacity onPress={openWishlist}>
-              <MaterialCommunityIcons
-                name={'heart-outline'}
-                size={24}
-                color={theme.colors.neutral400}
-              />
-            </TouchableOpacity>
-          )}
-          {cart && (
-            <TouchableOpacity onPress={openCart}>
-              <MaterialCommunityIcons
-                name={'cart-outline'}
-                size={24}
-                color={theme.colors.neutral400}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
+        )}
+        {wishlist && (
+          <TouchableOpacity onPress={openWishlist}>
+            <MaterialCommunityIcons
+              name={'heart-outline'}
+              size={24}
+              color={theme.colors.neutral400}
+            />
+          </TouchableOpacity>
+        )}
+        {cart && (
+          <TouchableOpacity onPress={openCart}>
+            <MaterialCommunityIcons
+              name={'cart-outline'}
+              size={24}
+              color={theme.colors.neutral400}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

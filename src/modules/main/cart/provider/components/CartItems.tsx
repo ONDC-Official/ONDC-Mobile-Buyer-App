@@ -16,7 +16,11 @@ import {useTranslation} from 'react-i18next';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../../utils/apiActions';
+import {
+  API_BASE_URL,
+  CART,
+  ITEM_DETAILS,
+} from '../../../../../utils/apiActions';
 import {
   getCustomizations,
   getPriceWithCustomisations,

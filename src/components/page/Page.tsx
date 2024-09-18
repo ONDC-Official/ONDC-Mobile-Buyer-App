@@ -66,7 +66,9 @@ const Page: React.FC<Page> = ({
           <View style={styles.container}>
             <TouchableOpacity
               style={styles.button}
-              onPress={() => navigation.navigate('ProviderCart', {index: index})}>
+              onPress={() =>
+                navigation.navigate('ProviderCart', {index: index})
+              }>
               <Text variant={'bodyLarge'} style={styles.text}>
                 {formatNumber(count)}{' '}
                 {count > 1 ? t('Page.Items Added') : t('Page.Item Added')}

@@ -7,7 +7,10 @@ import axios from 'axios';
 import RNEventSource from 'react-native-event-source';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
-import {ORDER_PAYMENT_METHODS, SSE_TIMEOUT} from '../../../../../utils/constants';
+import {
+  ORDER_PAYMENT_METHODS,
+  SSE_TIMEOUT,
+} from '../../../../../utils/constants';
 import {
   constructQuoteObject,
   removeNullValues,

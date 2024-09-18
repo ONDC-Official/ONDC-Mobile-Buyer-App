@@ -2,7 +2,6 @@ import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import {useTranslation} from 'react-i18next';
 import {useSelector} from 'react-redux';
 
 import {useAppTheme} from '../../../../utils/theme';
@@ -16,14 +15,12 @@ interface SubCategories {
 }
 
 const SubCategories: React.FC<SubCategories> = ({
-  currentCategory,
   currentSubCategory,
   categoryDomain,
   setCurrentSubCategory,
 }) => {
   const {getSubcategoryName} = useSubCategoryName();
   const {categories} = useSelector((state: any) => state.categories);
-  const {t} = useTranslation();
   const flatListRef = useRef<any>(null);
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
@@ -38,30 +35,28 @@ const SubCategories: React.FC<SubCategories> = ({
   const renderItem = useCallback(
     ({item}: {item: any}) => {
       const name = getSubcategoryName(item.code, item.label);
+      const isSelected = item?.code === currentSubCategory;
       return (
         <TouchableOpacity
           style={styles.category}
           onPress={() => updateSubCategory(item)}>
-          {item?.code === currentSubCategory ? (
-            <View style={styles.activeCat} />
-          ) : (
-            <></>
-          )}
+          <View
+            style={[
+              styles.categoryBorder,
+              isSelected ? styles.activeCategory : {},
+            ]}
+          />
 
           <View style={styles.categoriesView}>
             <View
               style={[
                 styles.imageContainer,
-                item?.code === currentSubCategory
-                  ? styles.selected
-                  : styles.normal,
+                isSelected ? styles.selected : styles.normal,
               ]}>
               <FastImage source={{uri: item.url}} style={styles.image} />
             </View>
             <Text
-              variant={
-                item?.code === currentSubCategory ? 'labelLarge' : 'labelMedium'
-              }
+              variant={isSelected ? 'labelLarge' : 'labelMedium'}
               style={styles.categoryText}>
               {name}
             </Text>
@@ -120,12 +115,14 @@ const makeStyles = (colors: any) =>
       lineHeight: 14,
       paddingHorizontal: 4,
     },
-    activeCat: {
+    categoryBorder: {
       height: '100%',
       width: 4,
-      marginRight: -4,
-      backgroundColor: colors.primary,
       borderRadius: 10,
+      backgroundColor: colors.white,
+    },
+    activeCategory: {
+      backgroundColor: colors.primary,
     },
     category: {
       flexDirection: 'row',
@@ -135,10 +132,6 @@ const makeStyles = (colors: any) =>
       alignItems: 'center',
       paddingVertical: 8,
       marginLeft: 4,
-    },
-    first: {
-      paddingLeft: 16,
-      width: 75,
     },
     imageContainer: {
       height: 52,

@@ -1,11 +1,13 @@
 import React, {useCallback} from 'react';
 import {Text, TextInput} from 'react-native-paper';
-import {StatusBar, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTranslation} from 'react-i18next';
 import {useAppTheme} from '../../utils/theme';
+import useStatusBarColor from '../../hooks/useStatusBarColor';
+import useBackHandler from '../../hooks/useBackHandler';
 
 interface Page {
   label?: string;
@@ -30,10 +32,8 @@ const Header: React.FC<Page> = ({
   const styles = makeStyles(theme.colors);
   const navigation: any = useNavigation();
   const {t} = useTranslation();
-
-  const goBack = () => {
-    navigation.goBack();
-  };
+  const {goBack} = useBackHandler();
+  useStatusBarColor('dark-content', theme.colors.white);
 
   const openSearch = useCallback(() => {
     navigation.navigate('SearchProducts');
@@ -48,81 +48,75 @@ const Header: React.FC<Page> = ({
   }, [navigation]);
 
   return (
-    <View>
-      <StatusBar
-        backgroundColor={theme.colors.white}
-        barStyle={'dark-content'}
-      />
-      <View style={styles.header}>
-        <View style={styles.headerTitle}>
-          <TouchableOpacity onPress={goBack}>
+    <View style={styles.header}>
+      <View style={styles.headerTitle}>
+        <TouchableOpacity onPress={goBack}>
+          <MaterialIcons
+            name={'arrow-back'}
+            size={24}
+            color={theme.colors.neutral400}
+          />
+        </TouchableOpacity>
+        {!searchbar ? (
+          <Text
+            variant={'titleLarge'}
+            style={styles.pageTitle}
+            numberOfLines={1}>
+            {label}
+          </Text>
+        ) : (
+          <View style={styles.searchbarView}>
             <MaterialIcons
-              name={'arrow-back'}
+              name={'search'}
+              size={24}
+              color={theme.colors.primary}
+            />
+            <TextInput
+              dense
+              mode={'outlined'}
+              contentStyle={styles.input}
+              style={styles.inputContainer}
+              placeholder={t('Product SubCategories.Search')}
+              placeholderTextColor={theme.colors.neutral300}
+              onChangeText={setSearchQuery}
+              value={searchQuery}
+              textColor={theme.colors.neutral400}
+              outlineColor={theme.colors.neutral100}
+              activeUnderlineColor={theme.colors.neutral100}
+              underlineColor={theme.colors.neutral100}
+            />
+          </View>
+        )}
+      </View>
+
+      <View style={styles.actionContainer}>
+        {search && (
+          <TouchableOpacity onPress={openSearch}>
+            <MaterialIcons
+              name={'search'}
               size={24}
               color={theme.colors.neutral400}
             />
           </TouchableOpacity>
-          {!searchbar ? (
-            <Text
-              variant={'titleLarge'}
-              style={styles.pageTitle}
-              numberOfLines={1}>
-              {label}
-            </Text>
-          ) : (
-            <View style={styles.searchbarView}>
-              <MaterialIcons
-                name={'search'}
-                size={24}
-                color={theme.colors.primary}
-              />
-              <TextInput
-                dense
-                mode={'outlined'}
-                contentStyle={styles.input}
-                style={styles.inputContainer}
-                placeholder={t('Product SubCategories.Search')}
-                placeholderTextColor={theme.colors.neutral300}
-                onChangeText={setSearchQuery}
-                value={searchQuery}
-                textColor={theme.colors.neutral400}
-                outlineColor={theme.colors.neutral100}
-                activeUnderlineColor={theme.colors.neutral100}
-                underlineColor={theme.colors.neutral100}
-              />
-            </View>
-          )}
-        </View>
-
-        <View style={styles.actionContainer}>
-          {search && (
-            <TouchableOpacity onPress={openSearch}>
-              <MaterialIcons
-                name={'search'}
-                size={24}
-                color={theme.colors.neutral400}
-              />
-            </TouchableOpacity>
-          )}
-          {wishlist && (
-            <TouchableOpacity onPress={openWishlist}>
-              <MaterialCommunityIcons
-                name={'heart-outline'}
-                size={24}
-                color={theme.colors.neutral400}
-              />
-            </TouchableOpacity>
-          )}
-          {cart && (
-            <TouchableOpacity onPress={openCart}>
-              <MaterialCommunityIcons
-                name={'cart-outline'}
-                size={24}
-                color={theme.colors.neutral400}
-              />
-            </TouchableOpacity>
-          )}
-        </View>
+        )}
+        {wishlist && (
+          <TouchableOpacity onPress={openWishlist}>
+            <MaterialCommunityIcons
+              name={'heart-outline'}
+              size={24}
+              color={theme.colors.neutral400}
+            />
+          </TouchableOpacity>
+        )}
+        {cart && (
+          <TouchableOpacity onPress={openCart}>
+            <MaterialCommunityIcons
+              name={'cart-outline'}
+              size={24}
+              color={theme.colors.neutral400}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

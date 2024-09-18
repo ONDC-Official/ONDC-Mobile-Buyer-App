@@ -1,12 +1,6 @@
 import React, {useCallback} from 'react';
 import {Text} from 'react-native-paper';
-import {
-  FlatList,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -14,6 +8,7 @@ import {useTranslation} from 'react-i18next';
 import useLogoutUser from '../../../../../hooks/useLogoutUser';
 import {alertWithTwoButtons} from '../../../../../utils/alerts';
 import {useAppTheme} from '../../../../../utils/theme';
+import useStatusBarColor from '../../../../../hooks/useStatusBarColor';
 
 const ItemSeparatorComponent = () => {
   const theme = useAppTheme();
@@ -28,6 +23,7 @@ const Profile = () => {
   const styles = makeStyles(theme.colors);
   const {clearDataAndLogout} = useLogoutUser();
   const navigation = useNavigation<StackNavigationProp<any>>();
+  useStatusBarColor('dark-content', theme.colors.white);
 
   const confirmLogout = useCallback(() => {
     alertWithTwoButtons(
@@ -76,10 +72,6 @@ const Profile = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar
-        backgroundColor={theme.colors.white}
-        barStyle={'dark-content'}
-      />
       <View style={styles.header}>
         <Text variant={'titleLarge'} style={styles.pageTitle}>
           {t('Profile.Profile')}

@@ -1,17 +1,10 @@
 import React, {memo, useCallback, useEffect, useRef, useState} from 'react';
-import {
-  FlatList,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {Searchbar, Text} from 'react-native-paper';
 import axios from 'axios';
 import {useTranslation} from 'react-i18next';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import useNetworkErrorHandling from '../../../../../hooks/useNetworkErrorHandling';
 import {appStyles} from '../../../../../styles/styles';
 import {keyExtractor, skeletonList} from '../../../../../utils/utils';
@@ -23,6 +16,7 @@ import {API_BASE_URL, ORDERS} from '../../../../../utils/apiActions';
 import {useAppTheme} from '../../../../../utils/theme';
 import FiltersIcon from '../../../../../assets/filter.svg';
 import FilterList from '../../../order/components/FilterList';
+import useStatusBarColor from '../../../../../hooks/useStatusBarColor';
 
 const CancelToken = axios.CancelToken;
 
@@ -50,6 +44,8 @@ const Orders: React.FC<any> = () => {
   const [moreListRequested, setMoreListRequested] = useState<boolean>(false);
   const [refreshInProgress, setRefreshInProgress] = useState<boolean>(false);
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
+
+  useStatusBarColor('dark-content', theme.colors.white);
 
   /**
    * function used to request list of orders
@@ -163,25 +159,10 @@ const Orders: React.FC<any> = () => {
     );
   }
 
-  const goBack = () => {
-    navigation.goBack();
-  };
-
   return (
     <>
       <View style={styles.pageContainer}>
-        <StatusBar
-          backgroundColor={theme.colors.white}
-          barStyle={'dark-content'}
-        />
         <View style={styles.header}>
-          <TouchableOpacity onPress={goBack}>
-            <MaterialIcons
-              name={'arrow-back'}
-              size={24}
-              color={theme.colors.neutral400}
-            />
-          </TouchableOpacity>
           <Text variant={'titleLarge'} style={styles.pageTitle}>
             {t('Profile.Order History')}
           </Text>
@@ -266,10 +247,6 @@ const makeStyles = (colors: any) =>
       width: '100%',
       marginBottom: 16,
     },
-    backArrow: {
-      height: 16,
-      width: 16,
-    },
     filterButton: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -280,11 +257,6 @@ const makeStyles = (colors: any) =>
     },
     contentContainerStyle: {paddingVertical: 10},
     emptyContainer: {justifyContent: 'center', alignItems: 'center'},
-    divider: {
-      backgroundColor: colors.neutral100,
-      height: 1,
-      marginVertical: 24,
-    },
     searchInput: {
       paddingVertical: 10,
       paddingHorizontal: 16,
