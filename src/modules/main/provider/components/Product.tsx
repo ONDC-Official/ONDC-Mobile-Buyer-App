@@ -10,17 +10,17 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {Grayscale} from 'react-native-color-matrix-image-filters';
+import Wishlist from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from 'axios';
+import {useSelector} from 'react-redux';
 
 import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import {useAppTheme} from '../../../../utils/theme';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
-import Wishlist from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import axios from 'axios';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, CART} from '../../../../utils/apiActions';
-import {useSelector} from 'react-redux';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import {
   areCustomisationsSame,

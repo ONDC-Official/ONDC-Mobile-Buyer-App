@@ -5,7 +5,7 @@ import Categories from './components/Categories';
 import SubCategories from './components/SubCategories';
 import {appStyles} from '../../../styles/styles';
 import Header from '../../../components/header/HeaderWithActions';
-import ListingPage from '../../../components/categoryTab/ListingPage';
+import ListingPage from '../../../components/productsLists/ListingPage';
 import SafeAreaPage from '../../../components/page/SafeAreaPage';
 import AnimationPage from '../../../components/category/AnimationPage';
 
