@@ -1,3 +1,4 @@
+import React from 'react';
 import {FlatList, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
@@ -5,12 +6,13 @@ import {memo, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import Store from './components/Store';
 import {useAppTheme} from '../../../utils/theme';
-import ProductSkeleton from '../../../components/skeleton/ProductSkeleton';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import {API_BASE_URL, SERVICEABLE_LOCATIONS} from '../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import useCalculateTimeToShip from '../../../hooks/useCalculateTimeToShip';
 import Header from '../../../components/header/HeaderWithActions';
+import {skeletonList} from '../../../utils/utils';
+import StoreSkeleton from './components/StoreSkeleton';
 
 interface StoresNearMe {
   domain?: string;
@@ -26,7 +28,22 @@ const ListFooterComponent = ({
   moreListRequested,
 }: {
   moreListRequested: boolean;
-}) => (moreListRequested ? <ProductSkeleton /> : <></>);
+}) => {
+  const theme = useAppTheme();
+  const styles = makeStyles(theme.colors);
+
+  if (moreListRequested) {
+    return (
+      <View style={styles.skeletonContainer}>
+        {skeletonList.map(one => (
+          <StoreSkeleton key={one.id} />
+        ))}
+      </View>
+    );
+  }
+
+  return <></>;
+};
 
 const renderItem = ({item}: {item: any}) => <MemoizedStore store={item} />;
 
@@ -68,10 +85,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
         route?.params?.domain ? `&domain=${route?.params?.domain}` : ''
       }`;
       const {data} = await getDataWithAuth(url, source.current.token);
-      const distanceData = calculateTimeToShip(data.data, {
-        latitude: address.address.lat,
-        longitude: address.address.lng,
-      });
+      const distanceData = calculateTimeToShip(data.data);
       setPage(pageNumber + 1);
       const list =
         pageNumber === 0 ? distanceData : [...locations, ...distanceData];
@@ -93,6 +107,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({route}: any) => {
         renderItem={renderItem}
         numColumns={3}
         contentContainerStyle={styles.subContainer}
+        columnWrapperStyle={styles.columnWrapper}
         initialNumToRender={21}
         maxToRenderPerBatch={24}
         onEndReached={loadMoreList}
@@ -111,7 +126,16 @@ const makeStyles = (colors: any) =>
       backgroundColor: colors.white,
       flex: 1,
     },
-    subContainer: {paddingHorizontal: 11},
+    subContainer: {paddingHorizontal: 16, marginTop: 20},
+    columnWrapper: {
+      gap: 11,
+    },
+    skeletonContainer: {
+      marginTop: 12,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 11,
+    },
   });
 
 export default StoresNearMe;

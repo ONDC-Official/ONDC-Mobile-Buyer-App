@@ -7,6 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useAppTheme} from '../../../../utils/theme';
 import useMinutesToString from '../../../../hooks/useMinutesToString';
 import StoreIcon from '../../../../assets/no_store_icon.svg';
+import {screenWidth} from '../../../../utils/constants';
 
 interface StoreImage {
   source: any;
@@ -87,13 +88,11 @@ const Store = ({store}: {store: any}) => {
         ellipsizeMode={'tail'}>
         {store?.provider_descriptor?.name}
       </Text>
-      <View style={styles.addressContainer}>
-        {!!timeToShip && (
-          <Text style={styles.details} variant={'labelSmall'}>
-            {translateMinutesToHumanReadable(timeToShip.type, timeToShip.time)}
-          </Text>
-        )}
-      </View>
+      {!!timeToShip && (
+        <Text style={styles.details} variant={'labelSmall'}>
+          {translateMinutesToHumanReadable(timeToShip.type, timeToShip.time)}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
@@ -102,8 +101,7 @@ const makeStyles = (colors: any) =>
   StyleSheet.create({
     brand: {
       marginBottom: 15,
-      flex: 1 / 3,
-      marginHorizontal: 5,
+      width: (screenWidth - 54) / 3,
     },
     brandImage: {
       borderRadius: 8,
@@ -124,21 +122,6 @@ const makeStyles = (colors: any) =>
     details: {
       fontWeight: '400',
       color: colors.neutral300,
-    },
-    distance: {
-      color: colors.neutral300,
-      flexShrink: 1,
-    },
-    addressContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    dot: {
-      width: 4,
-      height: 4,
-      borderRadius: 2,
-      backgroundColor: colors.neutral300,
-      marginHorizontal: 4,
     },
   });
 

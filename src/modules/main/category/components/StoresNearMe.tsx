@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import {FlatList, StyleSheet, View} from 'react-native';
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import {StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -19,23 +18,13 @@ import SectionHeaderWithViewAll from '../../../../components/sectionHeaderWithVi
 import {FB_DOMAIN} from '../../../../utils/constants';
 import {saveStoresList} from '../../../../toolkit/reducer/stores';
 import useCalculateTimeToShip from '../../../../hooks/useCalculateTimeToShip';
+import StoreSkeleton from '../../stores/components/StoreSkeleton';
 
 interface StoresNearMe {
   domain?: string;
 }
 
 const CancelToken = axios.CancelToken;
-
-const BrandSkeleton = () => {
-  const styles = makeStyles();
-  return (
-    <View style={styles.brand}>
-      <SkeletonPlaceholder>
-        <View style={styles.brandSkeleton} />
-      </SkeletonPlaceholder>
-    </View>
-  );
-};
 
 const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
   const {t} = useTranslation();
@@ -64,12 +53,7 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
         address.address.areaCode
       }&radius=100${domain ? `&domain=${domain}` : ''}&limit=${limit}`;
       const {data} = await getDataWithAuth(url, source.current.token);
-      setLocations(
-        calculateTimeToShip(data.data, {
-          latitude: address.address.lat,
-          longitude: address.address.lng,
-        }),
-      );
+      setLocations(calculateTimeToShip(data.data));
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -82,10 +66,8 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
     navigation.navigate('StoresNearMe', {domain});
   };
 
-  const renderSkeletonItem = useCallback(() => <BrandSkeleton />, []);
-
   const renderItem = useCallback(
-    ({item}: {item: any}) => <Store store={item} />,
+    (store: any) => <Store key={store.id} store={store} />,
     [],
   );
 
@@ -109,23 +91,9 @@ const StoresNearMe: React.FC<StoresNearMe> = ({domain}) => {
       />
 
       <View style={styles.container}>
-        {apiRequested ? (
-          <FlatList
-            contentContainerStyle={styles.listContainer}
-            numColumns={3}
-            data={skeletonList}
-            keyExtractor={item => item.id}
-            renderItem={renderSkeletonItem}
-          />
-        ) : (
-          <FlatList
-            contentContainerStyle={styles.listContainer}
-            numColumns={3}
-            data={locations}
-            keyExtractor={item => item.id}
-            renderItem={renderItem}
-          />
-        )}
+        {apiRequested
+          ? skeletonList.map(one => <StoreSkeleton key={one.id} />)
+          : locations.map(renderItem)}
       </View>
     </View>
   );
@@ -135,22 +103,13 @@ const makeStyles = () =>
   StyleSheet.create({
     container: {
       marginTop: 12,
-    },
-    brand: {
-      width: 113,
-      marginRight: 11,
-      marginBottom: 15,
-    },
-    brandSkeleton: {
-      width: 113,
-      height: 108,
-      marginRight: 11,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 11,
+      paddingHorizontal: 16,
     },
     sectionContainer: {
       paddingTop: 28,
-    },
-    listContainer: {
-      paddingHorizontal: 8,
     },
   });
 
