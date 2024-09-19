@@ -129,7 +129,7 @@ const makeStyles = (colors: any) =>
       paddingTop: 12,
       paddingHorizontal: 16,
     },
-    listHeader: {backgroundColor: colors.white},
+    listHeader: {backgroundColor: colors.neutral50},
   });
 
 export default AboutProduct;
