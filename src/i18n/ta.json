@@ -630,7 +630,8 @@
     "hours": "{{time}} hrs",
     "minute": "{{time}} min",
     "minutes": "{{time}} mins",
-    "Opens at": "Opens at {{time}}"
+    "Opens at": "Opens at {{time}}",
+    "Outlets": "விற்பனை நிலையங்கள்"
   },
   "Network Banner": {
     "You are offline, please verify your internet connection": "நீங்கள் ஆஃப்லைனில் உள்ளீர்கள், உங்கள் இணைய இணைப்பைச் சரிபார்க்கவும்"

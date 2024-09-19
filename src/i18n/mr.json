@@ -630,7 +630,8 @@
     "hours": "{{time}} hrs",
     "minute": "{{time}} min",
     "minutes": "{{time}} mins",
-    "Opens at": "Opens at {{time}}"
+    "Opens at": "Opens at {{time}}",
+    "Outlets": "आउटलेट्स"
   },
   "Network Banner": {
     "You are offline, please verify your internet connection": "तुम्ही ऑफलाइन आहात, कृपया तुमचे इंटरनेट कनेक्शन सत्यापित करा"

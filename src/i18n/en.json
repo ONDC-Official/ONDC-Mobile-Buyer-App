@@ -631,7 +631,8 @@
     "hours": "{{time}} hrs",
     "minute": "{{time}} min",
     "minutes": "{{time}} mins",
-    "Opens at": "Opens at {{time}}"
+    "Opens at": "Opens at {{time}}",
+    "Outlets": "Outlets"
   },
   "Network Banner": {
     "You are offline, please verify your internet connection": "You are offline, please verify your internet connection"

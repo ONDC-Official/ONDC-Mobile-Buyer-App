@@ -11,11 +11,10 @@ interface OtherBrandDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
-  locationData: any;
 }
 
 const OtherBrandDetails: React.FC<OtherBrandDetails> = React.memo(
-  ({provider, outlet, apiRequested, locationData}) => {
+  ({provider, outlet, apiRequested}) => {
     const {t} = useTranslation();
     const {colors} = useAppTheme();
     const styles = makeStyles(colors);
@@ -26,7 +25,6 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = React.memo(
           <OutletDetails
             provider={provider}
             outlet={outlet}
-            locationData={locationData}
             apiRequested={apiRequested}
           />
           <Products

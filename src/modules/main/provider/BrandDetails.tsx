@@ -50,7 +50,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
   const styles = makeStyles(theme.colors);
   const [provider, setProvider] = useState<any>(null);
   const [outlet, setOutlet] = useState<any>(null);
-  const [locationData, setLocationData] = useState<any>(null);
   const [apiRequested, setApiRequested] = useState<boolean>(true);
   const [outletDetailsRequested, setOutletDetailsRequested] =
     useState<boolean>(true);
@@ -68,7 +67,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
         `${API_BASE_URL}${SERVICEABLE_LOCATIONS}?providerId=${params.brandId}&latitude=${address.address.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}`,
         source.current.token,
       );
-      setLocationData(locationDetails?.data?.data);
       if (!params.outletId) {
         if (locationDetails.data.data.length > 0) {
           locationId = locationDetails.data.data[0].id;
@@ -93,6 +91,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
               isOpen,
               time_from: formatDate(startTime, 'hh:mm a'),
               time_to: formatDate(endTime, 'hh:mm a'),
+              locations: locationDetails?.data?.data,
             },
           });
         }
@@ -159,7 +158,6 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
           <OtherBrandDetails
             provider={provider}
             outlet={outlet}
-            locationData={locationData}
             apiRequested={apiRequested || outletDetailsRequested}
           />
         )}

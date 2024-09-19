@@ -1,52 +1,28 @@
 import React, {useMemo, useRef, useState} from 'react';
-import {
-  FlatList,
-  Linking,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {Divider, Text} from 'react-native-paper';
+import {FlatList, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {useTranslation} from 'react-i18next';
 import {Grayscale} from 'react-native-color-matrix-image-filters';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 
 import BrandSkeleton from '../../../../components/skeleton/BrandSkeleton';
 import {useAppTheme} from '../../../../utils/theme';
 import useMinutesToString from '../../../../hooks/useMinutesToString';
 import StoreIcon from '../../../../assets/no_store_icon.svg';
-import {getFulfilmentContact} from '../../../../utils/utils';
-import {useNavigation} from '@react-navigation/native';
 import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetContainer';
-import StarRating from 'react-native-star-rating-widget';
 
 interface OutletDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
-  locationData?: any;
 }
 
 const Closed = require('../../../../assets/closed.png');
 const NoImageAvailable = require('../../../../assets/no_store.png');
-const Mappls = require('../../../../assets/maps/mappls.png');
-const Google = require('../../../../assets/maps/google_maps.png');
-
-const getAddressString = (address: any) => {
-  return [
-    address?.name,
-    address?.street,
-    address?.locality,
-    address?.city,
-    address?.state && `${address?.state} - ${address?.area_code}`,
-    address?.country,
-  ]
-    .filter(value => value) // Filters out null, undefined, or empty string values
-    .join(', ');
-};
 
 const OutletImage = ({source, isOpen}: {source: any; isOpen: boolean}) => {
   const theme = useAppTheme();
@@ -92,10 +68,7 @@ const OutletDetails: React.FC<OutletDetails> = ({
   provider,
   outlet,
   apiRequested,
-  locationData,
 }) => {
-  const {address} = useSelector((state: any) => state.address);
-  const refDirectionSheet = useRef<any>(null);
   const refOutletsSheet = useRef<any>(null);
   const {t} = useTranslation();
   const {convertMinutesToHumanReadable, translateMinutesToHumanReadable} =
@@ -103,20 +76,14 @@ const OutletDetails: React.FC<OutletDetails> = ({
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<any>();
-  const [rating, setRating] = useState(3);
 
   const showOutletsSheet = () => refOutletsSheet.current.open();
 
   const hideOutletsSheet = () => refOutletsSheet.current.close();
 
-  const getDirection = async () => {
-    refDirectionSheet.current.open();
-  };
-
-  const {timeToShip, imageSource, outletPhone} = useMemo(() => {
+  const {timeToShip, imageSource} = useMemo(() => {
     let source = null;
     let time = {type: 'minutes', time: 0};
-    let phone = '';
 
     if (outlet) {
       if (outlet?.provider_descriptor?.symbol) {
@@ -129,39 +96,9 @@ const OutletDetails: React.FC<OutletDetails> = ({
           Number(outlet?.minDaysWithTTS / 60),
         );
       }
-      if (outlet?.fulfillment) {
-        phone = getFulfilmentContact(outlet?.fulfillment, 'Delivery');
-        if (!phone) {
-          phone = getFulfilmentContact(outlet?.fulfillment, 'Self-Pickup');
-          if (!phone) {
-            phone = getFulfilmentContact(
-              outlet?.fulfillment,
-              'Delivery and Self-Pickup',
-            );
-          }
-        }
-      }
     }
-    return {timeToShip: time, imageSource: source, outletPhone: phone};
+    return {timeToShip: time, imageSource: source};
   }, [outlet]);
-
-  const navigateToMappls = () => {
-    const destinationAddress = getAddressString(outlet?.address);
-    Linking.openURL(
-      `https://www.mappls.com/direction?places=${address.address.lat},${address.address.lng};${outlet?.gps},${destinationAddress}`,
-    );
-  };
-
-  const navigateToMaps = () => {
-    const destinationAddress = getAddressString(outlet?.address);
-    Linking.openURL(
-      `https://www.google.com/maps/dir/?api=1&origin=${address.address.lat},${address.address.lng}&destination=${outlet?.gps}&destination_place_id=${destinationAddress}`,
-    );
-  };
-
-  if (apiRequested) {
-    return <BrandSkeleton />;
-  }
 
   const moveOnStoreInfo = () => {
     navigation.navigate('StoreInfo', {provider, outlet});
@@ -182,22 +119,6 @@ const OutletDetails: React.FC<OutletDetails> = ({
         onPress={() => navigateToProvider(item)}>
         <View style={styles.outletTitleView}>
           <Text variant="bodyLarge">{item?.address?.locality}</Text>
-          <View style={styles.ratingRow}>
-            <StarRating
-              rating={rating}
-              onChange={setRating}
-              enableSwiping={false}
-              starSize={16}
-              animationConfig={{scale: 1}}
-              color={theme.colors.warning600}
-              emptyColor={theme.colors.neutral200}
-              enableHalfStar={true}
-              starStyle={{marginLeft: 0, marginRight: 4}}
-            />
-            <Text variant="labelMedium" style={styles.ratingText}>
-              {rating}
-            </Text>
-          </View>
         </View>
         <MaterialCommunityIcon
           name={'chevron-right'}
@@ -207,6 +128,10 @@ const OutletDetails: React.FC<OutletDetails> = ({
       </TouchableOpacity>
     );
   };
+
+  if (apiRequested) {
+    return <BrandSkeleton />;
+  }
 
   return (
     <>
@@ -251,13 +176,15 @@ const OutletDetails: React.FC<OutletDetails> = ({
                       : ''}{' '}
                     {outlet?.address?.city}
                   </Text>
-                  <TouchableOpacity onPress={showOutletsSheet}>
-                    <MaterialCommunityIcon
-                      name={'chevron-down'}
-                      size={24}
-                      color={theme.colors.neutral400}
-                    />
-                  </TouchableOpacity>
+                  {outlet?.locations?.length > 1 && (
+                    <TouchableOpacity onPress={showOutletsSheet}>
+                      <MaterialCommunityIcon
+                        name={'chevron-down'}
+                        size={24}
+                        color={theme.colors.neutral400}
+                      />
+                    </TouchableOpacity>
+                  )}
                 </View>
               )}
             </View>
@@ -291,53 +218,20 @@ const OutletDetails: React.FC<OutletDetails> = ({
         ref={refOutletsSheet}
         height={480}
         customStyles={{
-          container: styles.outletrbSheet,
+          container: styles.outletSheet,
         }}>
         <CloseSheetContainer closeSheet={hideOutletsSheet}>
           <View style={styles.outletContainer}>
             <View style={styles.headerOutlet}>
-              <Text variant="headlineSmall">Outlets</Text>
+              <Text variant="headlineSmall">{t('StoreOutlets')}</Text>
             </View>
             <FlatList
-              data={locationData}
+              data={outlet?.locations}
               renderItem={renderItem}
               contentContainerStyle={styles.outletDetails}
             />
           </View>
         </CloseSheetContainer>
-      </RBSheet>
-      <RBSheet
-        ref={refDirectionSheet}
-        height={200}
-        customStyles={{
-          container: styles.rbSheet,
-        }}>
-        <Text variant={'titleMedium'} style={styles.sheetTitle}>
-          {t('Global.Open with')}
-        </Text>
-        <Divider />
-        <View style={styles.mapsContainer}>
-          <TouchableOpacity style={styles.mapRow} onPress={navigateToMappls}>
-            <FastImage
-              style={styles.mapImage}
-              source={Mappls}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-            <Text variant={'bodyMedium'} style={styles.mapName}>
-              {t('Stores Info.Mappls')}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.mapRow} onPress={navigateToMaps}>
-            <FastImage
-              style={styles.mapImage}
-              source={Google}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-            <Text variant={'bodyMedium'} style={styles.mapName}>
-              {t('Stores Info.Maps')}
-            </Text>
-          </TouchableOpacity>
-        </View>
       </RBSheet>
     </>
   );
@@ -370,7 +264,6 @@ const makeStyles = (colors: any) =>
     title: {
       color: colors.neutral400,
     },
-    ratingText: {color: colors.warning600},
     localityView: {
       flex: 1,
       height: 24,
@@ -385,9 +278,6 @@ const makeStyles = (colors: any) =>
     open: {
       color: colors.success600,
     },
-    timing: {
-      color: colors.neutral300,
-    },
     providerLocalityView: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -401,37 +291,11 @@ const makeStyles = (colors: any) =>
       marginHorizontal: 5,
     },
     headerImage: {height: 80, width: 80, borderRadius: 15},
-    buttonContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-    },
-    separator: {
-      width: 8,
-    },
-    actionButton: {
-      height: 28,
-      width: 28,
-      borderRadius: 28,
-      borderWidth: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderColor: colors.primary,
-      backgroundColor: 'rgba(236, 243, 248, 1)',
-    },
-    getDirection: {
-      borderColor: colors.error400,
-    },
     providerDetails: {flex: 1, gap: 8},
     brandImageEmpty: {
       backgroundColor: colors.neutral200,
     },
-    rbSheet: {
-      borderTopLeftRadius: 15,
-      borderTopRightRadius: 15,
-      paddingHorizontal: 16,
-    },
-    outletrbSheet: {
+    outletSheet: {
       backgroundColor: 'transparent',
     },
     outletContainer: {
@@ -465,33 +329,6 @@ const makeStyles = (colors: any) =>
     outletTitleView: {
       flex: 1,
       gap: 4,
-    },
-    ratingRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    sheetTitle: {
-      color: colors.neutral400,
-      paddingVertical: 16,
-    },
-    mapsContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    mapRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: 8,
-      flex: 1,
-    },
-    mapImage: {
-      width: 36,
-      height: 36,
-      marginRight: 4,
-      borderRadius: 8,
-    },
-    mapName: {
-      color: colors.neutral400,
     },
   });
 
