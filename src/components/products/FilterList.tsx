@@ -194,11 +194,11 @@ const FilterList: React.FC<FilterList> = ({
     <View style={styles.container}>
       <View style={styles.sheetHeader}>
         <Text variant={'titleLarge'} style={styles.title}>
-          {t('Cart.Filter WishList.Filters')}
+          {t('Cart.Filter List.Filters')}
         </Text>
         <TouchableOpacity onPress={clearAll}>
           <Text variant={'bodyMedium'} style={styles.clearButton}>
-            {t('Cart.Filter WishList.Clear all')}
+            {t('Cart.Filter List.Clear all')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -235,7 +235,7 @@ const FilterList: React.FC<FilterList> = ({
             <Text
               variant={'bodyLarge'}
               style={[styles.buttonLabel, styles.closeLabel]}>
-              {t('Cart.Filter WishList.Close')}
+              {t('Cart.Filter List.Close')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -247,7 +247,7 @@ const FilterList: React.FC<FilterList> = ({
             <Text
               variant={'bodyLarge'}
               style={[styles.buttonLabel, styles.applyLabel]}>
-              {t('Cart.Filter WishList.Apply')}
+              {t('Cart.Filter List.Apply')}
             </Text>
           </TouchableOpacity>
         </View>
