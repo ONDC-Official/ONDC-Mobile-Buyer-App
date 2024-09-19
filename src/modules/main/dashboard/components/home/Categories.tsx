@@ -8,6 +8,7 @@ import {useTranslation} from 'react-i18next';
 
 import {CATEGORIES} from '../../../../../utils/categories';
 import {useAppTheme} from '../../../../../utils/theme';
+import {FB_DOMAIN} from '../../../../../utils/constants';
 
 interface Category {
   id: string;
@@ -28,15 +29,19 @@ const Categories = () => {
     const name = t(`Featured Categories.${item.name}`);
     const numberOfLines = name.split(' ')[0].length > 8 ? 1 : 2;
 
+    const navigateToCategory = () => {
+      if (item.domain === FB_DOMAIN) {
+        navigation.navigate('FBCategoryDetails');
+      } else {
+        navigation.navigate('CategoryDetails', {
+          category: item.shortName,
+          domain: item.domain,
+        });
+      }
+    };
+
     return (
-      <TouchableOpacity
-        style={styles.category}
-        onPress={() =>
-          navigation.navigate('CategoryDetails', {
-            category: item.shortName,
-            domain: item.domain,
-          })
-        }>
+      <TouchableOpacity style={styles.category} onPress={navigateToCategory}>
         <View style={styles.imageContainer}>
           <FastImage source={{uri: item.Icon}} style={styles.image} />
         </View>

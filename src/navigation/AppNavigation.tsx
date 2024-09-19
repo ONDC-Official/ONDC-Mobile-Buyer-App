@@ -20,6 +20,7 @@ import Profile from '../modules/main/profile/Profile';
 import OrderDetails from '../modules/main/order/details/OrderDetails';
 import UpdateAddress from '../modules/main/dashboard/components/address/UpdateAddress';
 import CategoryDetails from '../modules/main/category/CategoryDetails';
+import FBCategoryDetails from '../modules/main/category/FBCategoryDetails';
 import CouponList from '../modules/main/category/CouponList';
 import BrandDetails from '../modules/main/provider/BrandDetails';
 import InvalidBrandDetails from '../modules/main/provider/InvalidBrandDetails';
@@ -284,6 +285,12 @@ const AppNavigation = (): JSX.Element => {
           <Stack.Screen
             name="CategoryDetails"
             component={CategoryDetails}
+            options={{headerShown: false}}
+          />
+
+          <Stack.Screen
+            name="FBCategoryDetails"
+            component={FBCategoryDetails}
             options={{headerShown: false}}
           />
           <Stack.Screen

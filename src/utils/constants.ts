@@ -8,6 +8,7 @@ export const CURRENCY_SYMBOLS: any = {
   INR: '₹',
 };
 
+export const FB_SHORT_NAME: string = 'F&B';
 export const FB_DOMAIN: string = 'ONDC:RET11';
 export const GROCERY_DOMAIN: string = 'ONDC:RET10';
 export const FASHION_DOMAIN: string = 'ONDC:RET12';

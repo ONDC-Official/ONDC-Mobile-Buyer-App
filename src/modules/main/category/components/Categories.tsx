@@ -8,6 +8,7 @@ import {useTranslation} from 'react-i18next';
 
 import {CATEGORIES} from '../../../../utils/categories';
 import {useAppTheme} from '../../../../utils/theme';
+import {FB_DOMAIN} from '../../../../utils/constants';
 
 interface Categories {
   currentCategory: string;
@@ -20,24 +21,24 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
 
-  const navigateToCategory = (category: any) => {
-    if (category.shortName !== currentCategory) {
-      navigation.navigate('CategoryDetails', {
-        category: category.shortName,
-        domain: category.domain,
-      });
-    }
-  };
-
   const renderItem = useCallback(
     ({item}: {item: any}) => {
       const name = t(`Featured Categories.${item.name}`);
       const isSelected = item.shortName === currentCategory;
 
+      const navigateToCategory = () => {
+        if (item.domain === FB_DOMAIN) {
+          navigation.navigate('FBCategoryDetails');
+        } else if (item.shortName !== currentCategory) {
+          navigation.navigate('CategoryDetails', {
+            category: item.shortName,
+            domain: item.domain,
+          });
+        }
+      };
+
       return (
-        <TouchableOpacity
-          style={styles.category}
-          onPress={() => navigateToCategory(item)}>
+        <TouchableOpacity style={styles.category} onPress={navigateToCategory}>
           <View
             style={[
               styles.categoryBorder,
@@ -62,7 +63,7 @@ const Categories: React.FC<Categories> = ({currentCategory}) => {
         </TouchableOpacity>
       );
     },
-    [navigateToCategory, currentCategory, t],
+    [currentCategory, t],
   );
 
   useEffect(() => {

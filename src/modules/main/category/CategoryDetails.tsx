@@ -5,7 +5,6 @@ import Categories from './components/Categories';
 import SubCategories from './components/SubCategories';
 import {appStyles} from '../../../styles/styles';
 import Header from '../../../components/header/HeaderWithActions';
-import ListingPage from '../../../components/productsLists/ListingPage';
 import SafeAreaPage from '../../../components/page/SafeAreaPage';
 import AnimationPage from '../../../components/category/AnimationPage';
 
@@ -28,14 +27,10 @@ const CategoryDetails: React.FC<CategoryDetails> = ({route: {params}}) => {
         ]}>
         <Header label={t('Featured Categories.Categories')} />
         <AnimationPage list={<Categories currentCategory={params.category} />}>
-          {params.category !== 'F&B' ? (
-            <SubCategories
-              currentCategory={params.category}
-              categoryDomain={params.domain}
-            />
-          ) : (
-            <ListingPage searchQuery={''} subCategories={params.category} />
-          )}
+          <SubCategories
+            currentCategory={params.category}
+            categoryDomain={params.domain}
+          />
         </AnimationPage>
       </View>
     </SafeAreaPage>
