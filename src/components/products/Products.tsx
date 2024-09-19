@@ -17,6 +17,8 @@ import Filters from './Filters';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import Product from '../../modules/main/provider/components/Product';
 import {useAppTheme} from '../../utils/theme';
+import { useIsFocused } from '@react-navigation/native';
+import useWishlistItems from '../../hooks/useWishlistItems';
 
 interface Products {
   providerId: any;
@@ -44,7 +46,9 @@ const Products: React.FC<Products> = ({
   const styles = makeStyles(theme.colors);
   const [moreListRequested, setMoreListRequested] = useState<boolean>(true);
   const [searchQuery] = useState<string>('');
+  const isFocused = useIsFocused();
   const [page, setPage] = useState<number>(1);
+  const {getWishlistItems} = useWishlistItems();
   const [products, setProducts] = useState<any[]>([]);
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [selectedAttributes, setSelectedAttributes] = useState<any>({});
@@ -157,6 +161,10 @@ const Products: React.FC<Products> = ({
       setMoreListRequested(false);
     }
   };
+
+  useEffect(() => {
+    getWishlistItems().then(() => {});
+  },[isFocused])
 
   const loadMoreList = () => {
     if (products?.length > 0) {

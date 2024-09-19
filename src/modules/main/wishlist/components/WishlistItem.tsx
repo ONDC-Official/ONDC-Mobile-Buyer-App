@@ -19,7 +19,7 @@ import FBProductDetails from '../../product/details/FBProductDetails';
 import FBProductCustomization from '../../provider/components/FBProductCustomization';
 import useCustomizationStateHelper from '../../../../hooks/useCustomizationStateHelper';
 import CustomizationFooterButtons from '../../provider/components/CustomizationFooterButtons';
-import {API_BASE_URL, CART} from '../../../../utils/apiActions';
+import {API_BASE_URL, CART, WISHLIST} from '../../../../utils/apiActions';
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
@@ -47,7 +47,7 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
   const {cartItems} = useSelector(({cart}) => cart);
   const customizationSheet = useRef<any>(null);
   const source = useRef<any>(null);
-  const {postDataWithAuth} = useNetworkHandling();
+  const {deleteDataWithAuth, postDataWithAuth} = useNetworkHandling();
   const {updateCartItem} = userUpdateCartItem();
 
   const [locality, setLocality] = useState<string>('');
@@ -56,6 +56,7 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
   const [itemQty, setItemQty] = useState<number>(1);
   const [productLoading, setProductLoading] = useState<boolean>(false);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
+  const [itemsData, setItemsData] = useState<any>(item?.items);
 
   const productDetailsSheet = useRef<any>(null);
   const {customizationState, setCustomizationState, customizationPrices} =
@@ -67,6 +68,26 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
     setProductDetails(item);
     setInStock(Number(item?.item_details?.quantity?.available?.count) >= 1);
     productDetailsSheet.current.open();
+  };
+
+  const deleteWishlistItem = async (itemData: any) => {
+    try {
+      source.current = CancelToken.source();
+      console.log(`${API_BASE_URL}${WISHLIST}/${uid}/${itemData?._id}`);
+      await deleteDataWithAuth(
+        `${API_BASE_URL}${WISHLIST}/${uid}/${itemData?._id}`,
+        source.current.token,
+      );
+      const list = itemsData.filter((item: any) => item._id !== itemData?._id);
+
+      if (list.length > 0) {
+        setItemsData(list);
+      } else {
+        deleteWishlist(item?._id);
+      }
+    } catch (error) {
+    } finally {
+    }
   };
 
   useEffect(() => {
@@ -276,7 +297,7 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
         <ScrollView
           contentContainerStyle={styles.itemMainView}
           showsHorizontalScrollIndicator={false}>
-          {item?.items.map((one: any, index: number) => {
+          {itemsData.map((one: any, index: number) => {
             let imageSource = NoImageAvailable;
             if (one?.item_details?.descriptor?.symbol) {
               imageSource = {uri: one?.item_details?.descriptor?.symbol};
@@ -300,11 +321,13 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
                   </View>
                 </View>
                 <View style={styles.iconView}>
-                  <DeleteWishlist
-                    height={18}
-                    width={16}
-                    color={theme.colors.error600}
-                  />
+                  <TouchableOpacity onPress={() => deleteWishlistItem(one)}>
+                    <DeleteWishlist
+                      height={18}
+                      width={16}
+                      color={theme.colors.error600}
+                    />
+                  </TouchableOpacity>
                   <TouchableOpacity onPress={() => showProductDetails(one)}>
                     <MaterialCommunityIcons
                       name={'cart-plus'}

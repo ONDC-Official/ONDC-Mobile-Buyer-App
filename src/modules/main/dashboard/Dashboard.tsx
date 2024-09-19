@@ -7,6 +7,7 @@ import Home from './components/tabs/Home';
 import Orders from './components/tabs/Orders';
 import Profile from './components/tabs/Profile';
 import useCartItems from '../../../hooks/useCartItems';
+import useWishlistItems from '../../../hooks/useWishlistItems';
 import useRefreshToken from '../../../hooks/useRefreshToken';
 import useCategoryDetails from '../../../hooks/useCategoryDetails';
 import {useAppTheme} from '../../../utils/theme';
@@ -19,6 +20,7 @@ const Dashboard: React.FC<Dashboard> = () => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const {getCartItems} = useCartItems();
+  const {getWishlistItems} = useWishlistItems();
   const {getUserToken} = useRefreshToken();
   const {getCategoryDetails} = useCategoryDetails();
 
@@ -26,6 +28,7 @@ const Dashboard: React.FC<Dashboard> = () => {
     getCategoryDetails().then(() => {});
     getCartItems().then(() => {});
     getUserToken().then(() => {});
+    getWishlistItems().then(() => {});
   }, []);
 
   return (

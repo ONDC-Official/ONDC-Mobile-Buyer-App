@@ -12,8 +12,9 @@ import {API_BASE_URL, WISHLIST} from '../../../utils/apiActions';
 import useNetworkErrorHandling from '../../../hooks/useNetworkErrorHandling';
 import useNetworkHandling from '../../../hooks/useNetworkHandling';
 import axios from 'axios';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import EmptyCart from './components/EmptyCart';
+import {updateWishlistItems} from '../../../toolkit/reducer/wishlist';
 
 const CancelToken = axios.CancelToken;
 
@@ -26,6 +27,7 @@ const WishList = () => {
   const {handleApiError} = useNetworkErrorHandling();
   const {getDataWithAuth, deleteDataWithAuth} = useNetworkHandling();
   const {uid} = useSelector(({auth}) => auth);
+  const dispatch = useDispatch();
 
   const [wishlistData, setWishlistData] = useState<any>([]);
   const [apiInProgress, setApiInProgress] = useState<boolean>(true);
@@ -71,6 +73,7 @@ const WishList = () => {
         }
       });
       setWishlistData(response);
+      dispatch(updateWishlistItems(response));
     } catch (error: any) {
       if (error.response) {
         if (error.response.status !== 404) {
