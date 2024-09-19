@@ -23,6 +23,7 @@ import useFormatNumber from '../../../../hooks/useFormatNumber';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import {API_BASE_URL, CART, WISHLIST} from '../../../../utils/apiActions';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
+import useWishlistItems from '../../../../hooks/useWishlistItems';
 import {
   areCustomisationsSame,
   showInfoToast,
@@ -41,16 +42,19 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
   const {formatNumber} = useFormatNumber();
   const isFBDomain = product.context.domain === FB_DOMAIN;
   const theme = useAppTheme();
+  const {getWishlistItems} = useWishlistItems();
   const styles = makeStyles(theme.colors);
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [itemAvailableInCart, setItemAvailableInCart] = useState<any>(null);
   const [addToCartLoading, setAddToCartLoading] = useState<boolean>(false);
   const [customizationState, setCustomizationState] = useState<any>({});
   const [customizationPrices, setCustomizationPrices] = useState<number>(0);
+  const [wishlistStatus, setWishlistStatus] = useState<boolean>(false);
   const source = useRef<any>(null);
   const {deleteDataWithAuth, getDataWithAuth, postDataWithAuth} =
     useNetworkHandling();
   const {uid} = useSelector(({auth}) => auth);
+  const {wishlistItems} = useSelector(({wishlist}) => wishlist);
   const {updateCartItem} = userUpdateCartItem();
   const {t} = useTranslation();
 
@@ -72,6 +76,24 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
       uri: product?.item_details?.descriptor?.images[0],
     };
   }
+
+  const getWishlistStatus = () => {
+    let findWishlistStatus = false;
+    wishlistItems?.forEach((element: any) => {
+      element?.items?.forEach((item: any) => {
+        if (item.id === product.id) {
+          findWishlistStatus = true;
+        }
+      });
+    });
+    setWishlistStatus(findWishlistStatus);
+  };
+
+  useEffect(() => {
+    if (product && wishlistItems) {
+      getWishlistStatus();
+    }
+  }, [product, wishlistItems]);
 
   const getCartItems = async (pId = null) => {
     try {
@@ -113,7 +135,10 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
         locationId: product.location_details.id,
       };
 
-      await postDataWithAuth(url, payload, source.current.token);
+      const data = await postDataWithAuth(url, payload, source.current.token);
+      if (data.status === 200) {
+        getWishlistItems().then(() => {});
+      }
     } catch (error) {}
   };
 
@@ -398,11 +423,19 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
         </View>
       </View>
       <TouchableOpacity style={styles.wishlist} onPress={addWishlist}>
-        <Wishlist
-          name="cards-heart-outline"
-          size={20}
-          color={theme.colors.error600}
-        />
+        {wishlistStatus ? (
+          <Wishlist
+            name="cards-heart"
+            size={20}
+            color={theme.colors.error600}
+          />
+        ) : (
+          <Wishlist
+            name="cards-heart-outline"
+            size={20}
+            color={theme.colors.error600}
+          />
+        )}
       </TouchableOpacity>
     </TouchableOpacity>
   );
