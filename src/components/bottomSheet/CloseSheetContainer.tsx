@@ -4,6 +4,7 @@ import React from 'react';
 import Toast, {ErrorToast} from 'react-native-toast-message';
 import {useAppTheme} from '../../utils/theme';
 import {isIOS} from '../../utils/constants';
+import {hasNotch} from 'react-native-device-info';
 
 const CloseSheetContainer = ({
   closeSheet,

@@ -43,7 +43,7 @@ const CustomizationFooterButtons = ({
       <View style={styles.quantityContainer}>
         <TouchableOpacity
           disabled={productLoading}
-          style={styles.decrementButton}
+          style={styles.iconButton}
           onPress={() => {
             if (itemQty > 1) {
               setItemQty(itemQty - 1);
@@ -59,7 +59,7 @@ const CustomizationFooterButtons = ({
         </Text>
         <TouchableOpacity
           disabled={productLoading || itemOutOfStock}
-          style={styles.incrementButton}
+          style={styles.iconButton}
           onPress={() => setItemQty(itemQty + 1)}>
           <Icon
             name={'plus'}
@@ -126,8 +126,10 @@ const makeStyles = (colors: any) =>
       justifyContent: 'space-between',
       paddingHorizontal: 16,
       backgroundColor: colors.neutral50,
+      gap: 15,
     },
     quantityContainer: {
+      paddingHorizontal: 4,
       borderRadius: 8,
       borderColor: colors.primary,
       borderWidth: 1,
@@ -136,28 +138,18 @@ const makeStyles = (colors: any) =>
       height: 44,
       width: 108,
       alignItems: 'center',
-      marginRight: 15,
-      padding: 12,
     },
     quantity: {
       alignItems: 'center',
       textAlign: 'center',
-      minWidth: 36,
+      flex: 1,
       color: colors.primary,
     },
-    decrementButton: {
-      marginRight: 4,
+    iconButton: {
       height: '100%',
       alignItems: 'center',
       justifyContent: 'center',
-      width: 20,
-    },
-    incrementButton: {
-      marginLeft: 4,
-      height: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 20,
+      width: 24,
     },
     addToCardButton: {
       flex: 1,

@@ -321,7 +321,7 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
           style={styles.provider}>
           {product?.item_details?.descriptor?.short_desc}
         </Text>
-        <View style={styles.priceView}>
+        <View style={styles.footerContainer}>
           <View style={styles.priceText}>
             {Number(product?.item_details?.price?.maximum_value) !==
             Number(product?.item_details?.price?.value) ? (
@@ -387,10 +387,7 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
               }}>
               <Text
                 variant={'bodyLarge'}
-                style={[
-                  styles.quantityText,
-                  disabled ? styles.disabledText : {},
-                ]}>
+                style={[styles.quantity, disabled ? styles.disabledText : {}]}>
                 {t('Cart.FBProduct.Add')}
               </Text>
             </TouchableOpacity>
@@ -436,7 +433,6 @@ const makeStyles = (colors: any) =>
     },
     name: {
       color: colors.neutral400,
-      marginBottom: 2,
     },
     provider: {
       color: colors.neutral300,
@@ -452,10 +448,6 @@ const makeStyles = (colors: any) =>
     amountStrikeEmpty: {
       height: 18,
     },
-    row: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
     vegNonVegContainer: {
       flexDirection: 'row',
       justifyContent: 'flex-end',
@@ -464,7 +456,7 @@ const makeStyles = (colors: any) =>
       paddingTop: 12,
       paddingRight: 12,
     },
-    priceView: {
+    footerContainer: {
       flexDirection: 'row',
     },
     priceText: {
@@ -494,9 +486,6 @@ const makeStyles = (colors: any) =>
       flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
-    },
-    quantityText: {
-      color: colors.primary,
     },
     disabledText: {
       color: colors.neutral200,

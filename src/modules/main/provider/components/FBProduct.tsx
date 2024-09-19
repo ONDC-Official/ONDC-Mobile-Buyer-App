@@ -15,6 +15,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 import {Grayscale} from 'react-native-color-matrix-image-filters';
+import {hasNotch} from 'react-native-device-info';
+
 import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
 import {
   areCustomisationsSame,
@@ -114,7 +116,15 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
   };
 
   const showProductDetails = async () => {
-    setItemQty(1);
+    if (customizable) {
+      setItemQty(1);
+    } else {
+      setItemQty(
+        cartItemDetails?.productQuantity !== 0
+          ? cartItemDetails?.productQuantity
+          : 1,
+      );
+    }
     hideQuantitySheet();
     if (!productDetails) {
       await getProductDetails(true);
@@ -657,17 +667,6 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
                   ]}>
                   {t('Cart.FBProduct.Add')}
                 </Text>
-                {/* {apiInProgress || productLoading ? (
-                  <ActivityIndicator size={18} />
-                ) : (
-                  <Icon
-                    name={'plus'}
-                    color={
-                      disabled ? theme.colors.disabled : theme.colors.primary
-                    }
-                    size={18}
-                  />
-                )} */}
               </TouchableOpacity>
               {customizable && (
                 <Text variant={'labelSmall'} style={styles.customise}>
@@ -963,6 +962,7 @@ const makeStyles = (colors: any) =>
       borderTopRightRadius: 12,
       backgroundColor: colors.neutral50,
       flex: 1,
+      marginBottom: hasNotch() ? 16 : 24,
     },
     header: {
       borderTopLeftRadius: 15,
