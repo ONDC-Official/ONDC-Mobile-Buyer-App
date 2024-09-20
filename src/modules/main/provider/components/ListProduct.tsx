@@ -77,6 +77,7 @@ const ListProduct: React.FC<ListProduct> = ({
   const {uid} = useSelector(({auth}) => auth);
   const {cartItems} = useSelector(({cart}) => cart);
   const {wishlistItems} = useSelector(({wishlist}) => wishlist);
+  const [wishlistLoader, setWishlistLoader] = useState(true);
   const {getCartItems} = useCartItems();
   const {updateCartItem} = userUpdateCartItem();
   const {updatingCartItem, updateSpecificCartItem} =
@@ -213,6 +214,7 @@ const ListProduct: React.FC<ListProduct> = ({
   };
 
   const deleteItemFromWishlist = async () => {
+    setWishlistLoader(true);
     try {
       source.current = CancelToken.source();
       await deleteDataWithAuth(
@@ -220,12 +222,14 @@ const ListProduct: React.FC<ListProduct> = ({
         source.current.token,
       );
       setAddedToWishlist(false);
+      setWishlistLoader(false);
     } catch (error) {
     } finally {
     }
   };
 
   const addItemToWishlist = async () => {
+    setWishlistLoader(true);
     try {
       source.current = CancelToken.source();
       await postDataWithAuth(
@@ -529,6 +533,7 @@ const ListProduct: React.FC<ListProduct> = ({
   useEffect(() => {
     if (product && wishlistItems) {
       getWishlistStatus();
+      setWishlistLoader(false);
     }
   }, [product, wishlistItems]);
 
@@ -652,6 +657,7 @@ const ListProduct: React.FC<ListProduct> = ({
           navigateToProductDetails={navigateToProductDetails}
           isFBDomain={isFBDomain}
           addedToWishlist={addedToWishlist}
+          wishlistLoader={wishlistLoader}
         />
       )}
       {/*@ts-ignore*/}

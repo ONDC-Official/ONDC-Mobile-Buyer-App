@@ -1,12 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Dimensions,
+  Modal,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Text} from 'react-native-paper';
+import {Portal, Text} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 import FastImage from 'react-native-fast-image';
 import 'moment-duration-format';
@@ -30,6 +31,7 @@ import {
 } from '../../../../utils/utils';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
 import useCartItems from '../../../../hooks/useCartItems';
+import DeleteWishlistIcon from '../../../../assets/check-circle.svg';
 
 interface WishlistItem {
   item: any;
@@ -52,10 +54,15 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
 
   const [locality, setLocality] = useState<string>('');
   const [productDetails, setProductDetails] = useState<any>(null);
+  const [wishlistId, setWishlistId] = useState<any>(null);
   const [inStock, setInStock] = useState<any>(null);
   const [itemQty, setItemQty] = useState<number>(1);
   const [productLoading, setProductLoading] = useState<boolean>(false);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
+  const [deleteWishlistItemModal, setDeleteWishlistItemModal] =
+    useState<boolean>(false);
+  const [deleteWishlistModal, setDeleteWishlistModal] =
+    useState<boolean>(false);
   const [itemsData, setItemsData] = useState<any>(item?.items);
 
   const productDetailsSheet = useRef<any>(null);
@@ -70,14 +77,32 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
     productDetailsSheet.current.open();
   };
 
-  const deleteWishlistItem = async (itemData: any) => {
+  const closeDelWishlistItemModal = () => {
+    setDeleteWishlistItemModal(false);
+  };
+  const openDelWishlistItemModal = (item: any) => {
+    setProductDetails(item);
+    setDeleteWishlistItemModal(true);
+  };
+
+  const closeDelWishlistModal = () => {
+    setDeleteWishlistModal(false);
+  };
+  const openDelWishlistModal = (id: string) => {
+    setWishlistId(id);
+    setDeleteWishlistModal(true);
+  };
+
+  const deleteWishlistItem = async () => {
     try {
       source.current = CancelToken.source();
       await deleteDataWithAuth(
-        `${API_BASE_URL}${WISHLIST}/${uid}/${itemData?._id}`,
+        `${API_BASE_URL}${WISHLIST}/${uid}/${productDetails?._id}`,
         source.current.token,
       );
-      const list = itemsData.filter((item: any) => item._id !== itemData?._id);
+      const list = itemsData.filter(
+        (item: any) => item._id !== productDetails?._id,
+      );
 
       if (list.length > 0) {
         setItemsData(list);
@@ -86,6 +111,7 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
       }
     } catch (error) {
     } finally {
+      closeDelWishlistItemModal();
     }
   };
 
@@ -244,7 +270,7 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
         hideCustomization();
       }
       await getCartItems();
-      await deleteWishlistItem(productDetails);
+      await deleteWishlistItem();
       hideProductDetails();
     } catch (error) {
       console.log(error);
@@ -271,7 +297,7 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
               </Text>
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={() => deleteWishlist(item?._id)}>
+                onPress={() => openDelWishlistModal(item?._id)}>
                 <MaterialCommunityIcons
                   name={'close-circle-outline'}
                   size={24}
@@ -322,7 +348,7 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
                   </View>
                 </View>
                 <View style={styles.iconView}>
-                  <TouchableOpacity onPress={() => deleteWishlistItem(one)}>
+                  <TouchableOpacity onPress={() => openDelWishlistItemModal(one)}>
                     <DeleteWishlist
                       height={18}
                       width={16}
@@ -443,6 +469,94 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
           </View>
         </CloseSheetContainer>
       </RBSheet>
+      <Portal>
+        <Modal
+          visible={deleteWishlistModal}
+          onDismiss={closeDelWishlistModal}
+          transparent>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalSubContainer}>
+              <View style={styles.headerView}>
+                <MaterialCommunityIcons
+                  name={'close'}
+                  color={theme.colors.neutral400}
+                  size={24}
+                />
+              </View>
+              <View style={styles.mainModalView}>
+                <DeleteWishlistIcon height={100} width={100} />
+                <View style={styles.textView}>
+                  <Text variant="headlineMedium" style={styles.titleText}>
+                    Remove Wishlist
+                  </Text>
+                  <Text variant="bodySmall" style={styles.titleText}>
+                    Are you sure you would like to remove the store from
+                    wishlist?
+                  </Text>
+                </View>
+                <View style={styles.bottomView}>
+                  <TouchableOpacity
+                    style={styles.noButtonView}
+                    onPress={closeDelWishlistModal}>
+                    <Text variant="bodyLarge" style={styles.noText}>
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.yesButtonView}
+                    onPress={() => deleteWishlist(wishlistId)}>
+                    <Text variant="bodyLarge" style={styles.yesText}>
+                      Yes
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </Portal>
+      <Portal>
+        <Modal
+          visible={deleteWishlistItemModal}
+          onDismiss={closeDelWishlistItemModal}
+          transparent>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalSubContainerItem}>
+              <View style={styles.headerViewItem}>
+                <Text variant="headlineSmall" style={styles.neutral400}>
+                  Delete Item
+                </Text>
+                <MaterialCommunityIcons
+                  name={'close'}
+                  color={theme.colors.neutral400}
+                  size={24}
+                />
+              </View>
+
+              <Text variant="bodySmall" style={styles.descriptionText}>
+                Are you sure you would like to remove the store from wishlist?
+              </Text>
+
+              <View style={styles.bottomViewItem}>
+                <TouchableOpacity
+                  style={styles.noButtonView}
+                  onPress={closeDelWishlistItemModal}>
+                  <Text variant="bodyLarge" style={styles.noText}>
+                    No
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.yesButtonView}
+                  onPress={deleteWishlistItem}>
+                  <Text variant="bodyLarge" style={styles.yesText}>
+                    Yes
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </Portal>
     </View>
   );
 };
@@ -545,6 +659,86 @@ const makeStyles = (colors: any) =>
     },
     outOfStockSheetButtonText: {
       color: colors.white,
+    },
+    modalContainer: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: 16,
+    },
+    modalSubContainer: {
+      width: '100%',
+      backgroundColor: colors.white,
+      borderRadius: 16,
+      paddingHorizontal: 16,
+    },
+    modalSubContainerItem: {
+      width: '100%',
+      backgroundColor: colors.white,
+      borderRadius: 16,
+      paddingHorizontal: 16,
+      paddingVertical: 20,
+    },
+    headerView: {
+      height: 54,
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+    },
+    headerViewItem: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    mainModalView: {
+      alignItems: 'center',
+      gap: 20,
+    },
+    textView: {
+      gap: 6,
+      alignItems: 'center',
+    },
+    titleText: {
+      textAlign: 'center',
+      color: colors.neutral400,
+    },
+    bottomView: {
+      flexDirection: 'row',
+      gap: 15,
+      marginTop: 8,
+      marginBottom: 16,
+    },
+    bottomViewItem: {
+      flexDirection: 'row',
+      gap: 15,
+      marginTop: 28,
+    },
+    noButtonView: {
+      height: 44,
+      flex: 1,
+      borderWidth: 1,
+      borderRadius: 8,
+      borderColor: colors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    noText: {
+      color: colors.primary,
+    },
+    yesButtonView: {
+      height: 44,
+      flex: 1,
+      borderRadius: 8,
+      backgroundColor: colors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    yesText: {
+      color: colors.white,
+    },
+    descriptionText: {
+      marginTop: 8,
+      color: colors.neutral400,
     },
   });
 

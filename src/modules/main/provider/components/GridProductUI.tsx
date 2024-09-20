@@ -31,6 +31,7 @@ interface GridProductUI {
   addToCart: () => void;
   deleteItemFromWishlist: () => void;
   addedToWishlist: boolean;
+  wishlistLoader: boolean;
 }
 
 const GridProductUI: React.FC<GridProductUI> = ({
@@ -48,6 +49,7 @@ const GridProductUI: React.FC<GridProductUI> = ({
   addToCart,
   deleteItemFromWishlist,
   addedToWishlist,
+  wishlistLoader,
 }) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
@@ -160,7 +162,11 @@ const GridProductUI: React.FC<GridProductUI> = ({
           )}
         </View>
       </TouchableOpacity>
-      {addedToWishlist ? (
+      {wishlistLoader ? (
+        <View style={styles.wishlist}>
+          <ActivityIndicator color={theme.colors.primary} size={14}/>
+        </View>
+      ) : addedToWishlist ? (
         <TouchableOpacity
           style={styles.wishlist}
           onPress={deleteItemFromWishlist}>
