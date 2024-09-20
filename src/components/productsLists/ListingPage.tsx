@@ -7,9 +7,14 @@ import SearchProviders from '../provider/SearchProviders';
 interface ListingPage {
   searchQuery: string;
   subCategories: string;
+  isSearch?: boolean;
 }
 
-const ListingPage: React.FC<ListingPage> = ({searchQuery, subCategories}) => {
+const ListingPage: React.FC<ListingPage> = ({
+  searchQuery,
+  subCategories,
+  isSearch = false,
+}) => {
   const styles = makeStyles();
   const [searchType, setSearchType] = useState<string>('Stores');
 
@@ -31,7 +36,8 @@ const ListingPage: React.FC<ListingPage> = ({searchQuery, subCategories}) => {
           subCategories={[subCategories]}
           searchText={searchQuery}
           provider={null}
-          isOpen={true}
+          isOpen
+          isSearch={isSearch}
         />
       )}
     </View>

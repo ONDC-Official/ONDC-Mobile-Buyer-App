@@ -32,7 +32,7 @@ const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
           backIconPress={() => navigation.goBack()}
         />
         {searchQuery.length > 0 && (
-          <ListingPage searchQuery={searchQuery} subCategories={''} />
+          <ListingPage searchQuery={searchQuery} subCategories={''} isSearch />
         )}
       </View>
     </SafeAreaPage>

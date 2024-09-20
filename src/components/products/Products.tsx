@@ -4,12 +4,15 @@ import {FlatList, SectionList, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTranslation} from 'react-i18next';
+import {useIsFocused} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 
 import useNetworkHandling from '../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../hooks/useNetworkErrorHandling';
 import {
   API_BASE_URL,
   CUSTOM_MENU,
+  GLOBAL_SEARCH_ITEMS,
   PRODUCT_SEARCH,
 } from '../../utils/apiActions';
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
@@ -17,7 +20,6 @@ import Filters from './Filters';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
 import Product from '../../modules/main/provider/components/Product';
 import {useAppTheme} from '../../utils/theme';
-import { useIsFocused } from '@react-navigation/native';
 import useWishlistItems from '../../hooks/useWishlistItems';
 
 interface Products {
@@ -27,6 +29,7 @@ interface Products {
   provider: any;
   providerDomain?: string;
   isOpen: boolean;
+  isSearch: boolean;
 }
 
 const CancelToken = axios.CancelToken;
@@ -37,7 +40,8 @@ const Products: React.FC<Products> = ({
   searchText,
   provider,
   providerDomain,
-  isOpen,
+  isOpen = false,
+  isSearch,
 }) => {
   const {t} = useTranslation();
   const sectionListRef = useRef<any>(null);
@@ -55,6 +59,7 @@ const Products: React.FC<Products> = ({
   const [customData, setCustomData] = useState<any>(null);
   const {getDataWithAuth, getDataWithWithoutEncode} = useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
+  const {address} = useSelector((state: any) => state.address);
 
   const searchProducts = async (
     pageNumber: number,
@@ -66,33 +71,48 @@ const Products: React.FC<Products> = ({
     setMoreListRequested(true);
     try {
       productSearchSource.current = CancelToken.source();
-      let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}`;
-      url += selectedProvider
-        ? `&providerIds=${encodeURIComponent(selectedProvider)}`
-        : '';
-      url +=
-        subCategoryIds.length > 0
-          ? `&categoryIds=${encodeURIComponent(subCategoryIds.join(','))}`
+      let responseData: any[] = [];
+      let total = totalProducts;
+      if (isSearch) {
+        let url = `${API_BASE_URL}${GLOBAL_SEARCH_ITEMS}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}`;
+        url += searchText.length > 0 ? `&name=${searchText}` : '';
+        const {data} = await getDataWithWithoutEncode(
+          url,
+          productSearchSource.current.token,
+        );
+        responseData = data.data;
+        total = data.count;
+      } else {
+        let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}`;
+        url += selectedProvider
+          ? `&providerIds=${encodeURIComponent(selectedProvider)}`
           : '';
+        url +=
+          !isSearch && subCategoryIds.length > 0
+            ? `&categoryIds=${encodeURIComponent(subCategoryIds.join(','))}`
+            : '';
 
-      Object.keys(attributes).forEach(key => {
-        url += `&product_attr_${key}=${attributes[key]
-          .map((one: string) => encodeURIComponent(one))
-          .join(',')}`;
-      });
-      url += searchText.length > 0 ? `&name=${searchText}` : '';
-      const {data} = await getDataWithWithoutEncode(
-        url,
-        productSearchSource.current.token,
-      );
-      if (data.response.data.length > 0) {
+        Object.keys(attributes).forEach(key => {
+          url += `&product_attr_${key}=${attributes[key]
+            .map((one: string) => encodeURIComponent(one))
+            .join(',')}`;
+        });
+        url += searchText.length > 0 ? `&name=${searchText}` : '';
+        const {data} = await getDataWithWithoutEncode(
+          url,
+          productSearchSource.current.token,
+        );
+        responseData = data.response.data;
+        total = data.response.count;
+      }
+      if (responseData.length > 0) {
         let listData = [];
         if (pageNumber === 1) {
           listData =
             customMenu?.data?.data?.length > 0
               ? customMenu?.data?.data?.map((element: any) => {
                   let makeList: any = [];
-                  data.response.data.forEach((item: any) => {
+                  responseData.forEach((item: any) => {
                     if (element?.id === item.customisation_menus[0]?.id) {
                       makeList.push(item);
                     }
@@ -102,13 +122,13 @@ const Products: React.FC<Products> = ({
                     data: [{list: makeList}],
                   };
                 })
-              : [{title: null, data: [{list: data.response.data}]}];
+              : [{title: null, data: [{list: responseData}]}];
         } else {
           listData =
             customMenu?.data?.data?.length > 0
               ? customMenu?.data?.data?.map((element: any, index: number) => {
                   let makeList: any = [];
-                  data.response.data.forEach((item: any) => {
+                  responseData.forEach((item: any) => {
                     if (element?.id === item.customisation_menus[0]?.id) {
                       makeList.push(item);
                     }
@@ -136,18 +156,15 @@ const Products: React.FC<Products> = ({
                     title: null,
                     data: [
                       {
-                        list: [
-                          ...products[0].data[0].list,
-                          ...data.response.data,
-                        ],
+                        list: [...products[0].data[0].list, ...responseData],
                       },
                     ],
                   },
                 ]
-              : [{title: null, data: [{list: data.response.data}]}];
+              : [{title: null, data: [{list: responseData}]}];
         }
         setPage(pageNumber + 1);
-        setTotalProducts(data.response.count);
+        setTotalProducts(total);
         setProducts([...listData]);
       } else {
         if (pageNumber === 1) {
@@ -164,7 +181,7 @@ const Products: React.FC<Products> = ({
 
   useEffect(() => {
     getWishlistItems().then(() => {});
-  },[isFocused])
+  }, [isFocused]);
 
   const loadMoreList = () => {
     if (products?.length > 0) {
