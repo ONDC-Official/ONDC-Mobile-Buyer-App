@@ -398,6 +398,7 @@ const ListProduct: React.FC<ListProduct> = ({
         hideCustomization();
       }
       await getCartItems();
+      await deleteItemFromWishlist();
     } catch (error) {
       console.log(error);
     } finally {
