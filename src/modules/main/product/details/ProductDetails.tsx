@@ -11,6 +11,7 @@ import {Text} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
+import Wishlist from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {
   API_BASE_URL,
@@ -44,9 +45,7 @@ import {updateCartItems} from '../../../../toolkit/reducer/cart';
 import SizeChart from './components/SizeChart';
 import Page from '../../../../components/page/Page';
 import HeaderWithActions from '../../../../components/header/HeaderWithActions';
-import Wishlist from 'react-native-vector-icons/MaterialCommunityIcons';
 import useWishlistItems from '../../../../hooks/useWishlistItems';
-import {useIsFocused} from '@react-navigation/native';
 
 interface ProductDetails {
   route: any;
@@ -70,7 +69,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
   const currentCartItem = useRef<any>(null);
-  const isFocused = useIsFocused();
 
   const [showSizeChart, setShowSizeChart] = useState<boolean>(false);
   const [product, setProduct] = useState<any>(null);
@@ -428,10 +426,6 @@ const ProductDetails: React.FC<ProductDetails> = ({
     }
   }, [product, wishlistItems]);
 
-  useEffect(() => {
-    getWishlistItems().then(() => {});
-  }, [isFocused]);
-
   const openSizeChart = () => setShowSizeChart(true);
 
   const closeSizeChart = () => setShowSizeChart(false);
@@ -661,9 +655,6 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 16,
       paddingVertical: 12,
     },
-    backButton: {
-      marginRight: 10,
-    },
     stockRow: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -691,10 +682,6 @@ const makeStyles = (colors: any) =>
       color: colors.neutral300,
       marginLeft: 12,
       textDecorationLine: 'line-through',
-    },
-    buttonContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
     },
     addToCartContainer: {
       marginTop: 28,
