@@ -348,7 +348,8 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
                   </View>
                 </View>
                 <View style={styles.iconView}>
-                  <TouchableOpacity onPress={() => openDelWishlistItemModal(one)}>
+                  <TouchableOpacity
+                    onPress={() => openDelWishlistItemModal(one)}>
                     <DeleteWishlist
                       height={18}
                       width={16}
@@ -481,17 +482,19 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
                   name={'close'}
                   color={theme.colors.neutral400}
                   size={24}
+                  onPress={closeDelWishlistModal}
                 />
               </View>
               <View style={styles.mainModalView}>
                 <DeleteWishlistIcon height={100} width={100} />
                 <View style={styles.textView}>
                   <Text variant="headlineMedium" style={styles.titleText}>
-                    Remove Wishlist
+                    {t('WishList.Remove Wishlist')}
                   </Text>
                   <Text variant="bodySmall" style={styles.titleText}>
-                    Are you sure you would like to remove the store from
-                    wishlist?
+                    {t(
+                      'WishList.Are you sure you would like to remove the store from wishlist?',
+                    )}
                   </Text>
                 </View>
                 <View style={styles.bottomView}>
@@ -499,14 +502,14 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
                     style={styles.noButtonView}
                     onPress={closeDelWishlistModal}>
                     <Text variant="bodyLarge" style={styles.noText}>
-                      No
+                      {t('WishList.No')}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.yesButtonView}
                     onPress={() => deleteWishlist(wishlistId)}>
                     <Text variant="bodyLarge" style={styles.yesText}>
-                      Yes
+                      {t('WishList.Yes')}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -524,17 +527,20 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
             <View style={styles.modalSubContainerItem}>
               <View style={styles.headerViewItem}>
                 <Text variant="headlineSmall" style={styles.neutral400}>
-                  Delete Item
+                  {t('WishList.Delete Item')}
                 </Text>
                 <MaterialCommunityIcons
                   name={'close'}
                   color={theme.colors.neutral400}
                   size={24}
+                  onPress={closeDelWishlistItemModal}
                 />
               </View>
 
               <Text variant="bodySmall" style={styles.descriptionText}>
-                Are you sure you would like to remove the store from wishlist?
+                {t(
+                  'WishList.Are you sure you want to remove this item from wishlist?',
+                )}
               </Text>
 
               <View style={styles.bottomViewItem}>
@@ -542,13 +548,14 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
                   style={styles.noButtonView}
                   onPress={closeDelWishlistItemModal}>
                   <Text variant="bodyLarge" style={styles.noText}>
-                    No
+                    {t('WishList.No')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.yesButtonView}
                   onPress={deleteWishlistItem}>
                   <Text variant="bodyLarge" style={styles.yesText}>
+                    {t('WishList.Yes')}
                     Yes
                   </Text>
                 </TouchableOpacity>

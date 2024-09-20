@@ -42,7 +42,12 @@
   "WishList": {
     "Wishlist": "विशलिस्ट",
     "Your Wishlist is empty": "तुमची विशलिस्ट रिकामी आहे",
-    "Save your favorites in your wishlist. Review them anytime and easily add them to your cart.": "तुमच्या विशलिस्टमध्ये तुमचे आवडते सेव्ह करा. त्यांचे कधीही पुनरावलोकन करा आणि त्यांना तुमच्या कार्टमध्ये सहज जोडा."
+    "Save your favorites in your wishlist. Review them anytime and easily add them to your cart.": "तुमच्या विशलिस्टमध्ये तुमचे आवडते सेव्ह करा. त्यांचे कधीही पुनरावलोकन करा आणि त्यांना तुमच्या कार्टमध्ये सहज जोडा.",
+    "Remove Wishlist": "विशलिस्ट काढा",
+    "Are you sure you would like to remove the store from wishlist?": "तुम्हाला खात्री आहे की तुम्ही विशलिस्टमधून स्टोअर काढू इच्छिता?",
+    "No": "नाही",
+    "Yes": "होय",
+    "Are you sure you want to remove this item from wishlist?": "तुमची खात्री आहे की तुम्ही हा आयटम विशलिस्टमधून काढू इच्छिता?"
   },
   "Cart": {
     "Cart": "कार्ट",
