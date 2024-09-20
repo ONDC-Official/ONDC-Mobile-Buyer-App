@@ -18,9 +18,9 @@ import {
 import {BRAND_PRODUCTS_LIMIT} from '../../utils/constants';
 import Filters from './Filters';
 import ProductSkeleton from '../skeleton/ProductSkeleton';
-import Product from '../../modules/main/provider/components/Product';
 import {useAppTheme} from '../../utils/theme';
 import useWishlistItems from '../../hooks/useWishlistItems';
+import ListProduct from '../../modules/main/provider/components/ListProduct';
 
 interface Products {
   providerId: any;
@@ -232,7 +232,14 @@ const Products: React.FC<Products> = ({
   }, [products, searchQuery]);
 
   const renderFlatListItem = useCallback(
-    ({item}: {item: any}) => <Product product={item} isOpen={isOpen} />,
+    ({item}: {item: any}) => (
+      <ListProduct
+        product={item}
+        isOpen={isOpen}
+        listView={false}
+        provider={provider}
+      />
+    ),
     [provider],
   );
 

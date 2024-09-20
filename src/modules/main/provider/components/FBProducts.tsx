@@ -9,6 +9,8 @@ import {
   View,
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
+import {Portal, Text} from 'react-native-paper';
+
 import {
   API_BASE_URL,
   CUSTOM_MENU,
@@ -21,10 +23,9 @@ import ProductSkeleton from '../../../../components/skeleton/ProductSkeleton';
 import CustomMenuAccordion from './CustomMenuAccordion';
 import {getFilterCategory} from '../../../../utils/utils';
 import FBFilter from './FBFilter';
-import FBProduct from './FBProduct';
 import {useAppTheme} from '../../../../utils/theme';
 import Menu from '../../../../assets/menu.svg';
-import {Portal, Text} from 'react-native-paper';
+import ListProduct from './ListProduct';
 
 const CancelToken = axios.CancelToken;
 const VegImage = require('../../../../assets/veg.png');
@@ -199,7 +200,7 @@ const FBProducts = ({
           <FlatList
             data={filteredProducts}
             renderItem={({item}) => (
-              <FBProduct product={item} provider={provider} isOpen={isOpen} />
+              <ListProduct product={item} provider={provider} isOpen={isOpen} listView />
             )}
             contentContainerStyle={styles.listContainer}
             ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}

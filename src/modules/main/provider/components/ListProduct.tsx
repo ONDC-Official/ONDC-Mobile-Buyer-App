@@ -1,6 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
-  ActivityIndicator,
   Dimensions,
   ScrollView,
   StyleSheet,
@@ -11,13 +10,11 @@ import axios from 'axios';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import {Text} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
-import {Grayscale} from 'react-native-color-matrix-image-filters';
 import {hasNotch} from 'react-native-device-info';
 
-import {CURRENCY_SYMBOLS} from '../../../../utils/constants';
+import {CURRENCY_SYMBOLS, FB_DOMAIN} from '../../../../utils/constants';
 import {
   areCustomisationsSame,
   getCustomizations,
@@ -26,12 +23,16 @@ import {
 } from '../../../../utils/utils';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
-import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
+import {
+  API_BASE_URL,
+  CART,
+  ITEM_DETAILS,
+  WISHLIST,
+} from '../../../../utils/apiActions';
 import FBProductCustomization from './FBProductCustomization';
 import VegNonVegTag from '../../../../components/products/VegNonVegTag';
 import useCartItems from '../../../../hooks/useCartItems';
 import userUpdateCartItem from '../../../../hooks/userUpdateCartItem';
-import {makeGlobalStyles} from '../../../../styles/styles';
 import Customizations from '../../../../components/customization/Customizations';
 import ManageQuantity from '../../../../components/customization/ManageQuantity';
 import useUpdateSpecificItemCount from '../../../../hooks/useUpdateSpecificItemCount';
@@ -42,28 +43,40 @@ import CloseSheetContainer from '../../../../components/bottomSheet/CloseSheetCo
 import {useAppTheme} from '../../../../utils/theme';
 import useFormatNumber from '../../../../hooks/useFormatNumber';
 import {updateCartItems} from '../../../../toolkit/reducer/cart';
+import ListProductUI from './ListProductUI';
+import GridProductUI from './GridProductUI';
+import useWishlistItems from '../../../../hooks/useWishlistItems';
+import {useNavigation} from '@react-navigation/native';
+import {StackNavigationProp} from '@react-navigation/stack';
 
-interface FBProduct {
+interface ListProduct {
   product: any;
   provider: any;
   isOpen: boolean;
+  listView: boolean;
 }
 
 const NoImageAvailable = require('../../../../assets/noImage.png');
 const screenHeight: number = Dimensions.get('screen').height;
 
 const CancelToken = axios.CancelToken;
-const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
+const ListProduct: React.FC<ListProduct> = ({
+  product,
+  isOpen,
+  listView = false,
+}) => {
   const {formatNumber} = useFormatNumber();
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const globalStyles = makeGlobalStyles(theme.colors);
   const {deleteDataWithAuth, getDataWithAuth, postDataWithAuth} =
     useNetworkHandling();
+  const {getWishlistItems} = useWishlistItems();
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const {handleApiError} = useNetworkErrorHandling();
   const {uid} = useSelector(({auth}) => auth);
   const {cartItems} = useSelector(({cart}) => cart);
+  const {wishlistItems} = useSelector(({wishlist}) => wishlist);
   const {getCartItems} = useCartItems();
   const {updateCartItem} = userUpdateCartItem();
   const {updatingCartItem, updateSpecificCartItem} =
@@ -80,6 +93,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
   const [apiInProgress, setApiInProgress] = useState<boolean>(false);
   const [itemOutOfStock, setItemOutOfStock] = useState<boolean>(false);
   const [productLoading, setProductLoading] = useState<boolean>(false);
+  const [addedToWishlist, setAddedToWishlist] = useState<boolean>(false);
   const [cartItemDetails, setCartItemDetails] = useState<any>({
     items: [],
     productQuantity: 0,
@@ -93,6 +107,10 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
     return !!product?.item_details?.tags?.find(
       (item: any) => item.code === 'custom_group',
     );
+  }, [product]);
+
+  const variationsAvailable = useMemo(() => {
+    return !!product?.related_items;
   }, [product]);
 
   const showCustomization = () => {
@@ -189,6 +207,27 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
     }
   };
 
+  const navigateToProductDetails = () => {
+    navigation.navigate('ProductDetails', {productId: product.id});
+  };
+
+  const addWishlist = async () => {
+    try {
+      source.current = CancelToken.source();
+      const url = `${API_BASE_URL}${WISHLIST}/${uid}`;
+
+      const payload: any = {
+        id: product.id,
+        locationId: product.location_details.id,
+      };
+
+      const data = await postDataWithAuth(url, payload, source.current.token);
+      if (data.status === 200) {
+        getWishlistItems().then(() => {});
+      }
+    } catch (error) {}
+  };
+
   const addToCart = async () => {
     if (customizable) {
       if (productDetails) {
@@ -196,6 +235,8 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
       } else {
         await getProductDetails();
       }
+    } else if (variationsAvailable) {
+      await showProductDetails();
     } else {
       await addNonCustomizableProduct();
     }
@@ -268,6 +309,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
             t('Product Summary.Item added to cart successfully'),
           );
           hideCustomization();
+          hideProductDetails();
         } else {
           const currentCount = Number(items[0].item.quantity.count);
           const maxCount = Number(items[0].item.product.quantity.maximum.count);
@@ -281,6 +323,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
               setCustomizationState({});
               setProductLoading(false);
               hideCustomization();
+              hideProductDetails();
             } else {
               const currentIds = customisations.map(item => item.id);
               let matchingCustomisation = null;
@@ -307,6 +350,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
                 setCustomizationState({});
                 setProductLoading(false);
                 hideCustomization();
+                hideProductDetails();
               } else {
                 source.current = CancelToken.source();
                 await postDataWithAuth(url, payload, source.current.token);
@@ -316,6 +360,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
                   t('Product Summary.Item added to cart successfully'),
                 );
                 hideCustomization();
+                hideProductDetails();
               }
             }
           } else {
@@ -456,6 +501,24 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
     }
   };
 
+  const getWishlistStatus = () => {
+    let findWishlistStatus = false;
+    wishlistItems?.forEach((element: any) => {
+      element?.items?.forEach((item: any) => {
+        if (item.id === product.id) {
+          findWishlistStatus = true;
+        }
+      });
+    });
+    setAddedToWishlist(findWishlistStatus);
+  };
+
+  useEffect(() => {
+    if (product && wishlistItems) {
+      getWishlistStatus();
+    }
+  }, [product, wishlistItems]);
+
   useEffect(() => {
     if (product && cartItems.length > 0) {
       let providerCart: any = cartItems?.find(
@@ -526,6 +589,10 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
     [product, CURRENCY_SYMBOLS],
   );
 
+  const isFBDomain = useMemo(() => {
+    return product.context.domain === FB_DOMAIN;
+  }, [product]);
+
   const productImageSource = useMemo(() => {
     if (product?.item_details?.descriptor.symbol) {
       return {uri: product?.item_details?.descriptor.symbol};
@@ -536,153 +603,43 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
     }
   }, [product?.item_details?.descriptor]);
 
-  const renderPrice = () => {
-    if (defaultPrice) {
-      return (
-        <Text variant={'labelLarge'} style={styles.price}>
-          {currency}
-          {formatNumber(defaultPrice.toFixed(2))}
-        </Text>
-      );
-    } else if (priceRange) {
-      const min = formatNumber(priceRange?.minPrice.toFixed(2));
-      const max = formatNumber(priceRange?.maxPrice.toFixed(2));
-      return (
-        <Text variant={'labelLarge'} style={styles.price}>
-          {currency}
-          {min}- {currency}
-          {max}
-        </Text>
-      );
-    } else if (product?.item_details?.price?.value) {
-      return (
-        <Text variant={'labelLarge'} style={styles.price}>
-          {currency}
-          {formatNumber(product?.item_details?.price?.value.toFixed(2))}
-        </Text>
-      );
-    } else {
-      return <></>;
-    }
-  };
-
   // @ts-ignore
   return (
     <>
-      <View style={styles.product}>
-        <TouchableOpacity
-          style={styles.meta}
+      {listView ? (
+        <ListProductUI
+          product={product}
+          currency={currency}
           disabled={disabled}
-          onPress={showProductDetails}>
-          <Text
-            variant={'labelLarge'}
-            style={styles.name}
-            numberOfLines={2}
-            ellipsizeMode={'tail'}>
-            {product?.item_details?.descriptor?.name}
-          </Text>
-          <Text
-            variant={'labelSmall'}
-            style={styles.category}
-            numberOfLines={5}
-            ellipsizeMode={'tail'}>
-            {product?.item_details?.descriptor?.short_desc}
-          </Text>
-          {renderPrice()}
-        </TouchableOpacity>
-        <View style={styles.actionContainer}>
-          <TouchableOpacity
-            style={styles.imageContainer}
-            disabled={disabled}
-            onPress={showProductDetails}>
-            {disabled ? (
-              <Grayscale>
-                <FastImage style={styles.image} source={productImageSource} />
-              </Grayscale>
-            ) : (
-              <FastImage style={styles.image} source={productImageSource} />
-            )}
-            <View style={styles.productTag}>
-              <VegNonVegTag tags={product?.item_details?.tags} />
-            </View>
-          </TouchableOpacity>
-          {cartItemDetails?.productQuantity > 0 ? (
-            <View style={styles.buttonContainer}>
-              <View
-                style={[
-                  disabled
-                    ? globalStyles.disabledOutlineButton
-                    : globalStyles.outlineButton,
-                  styles.quantityContainer,
-                  styles.actionButton,
-                ]}>
-                <TouchableOpacity
-                  onPress={removeQuantityClick}
-                  disabled={disabled}>
-                  <Icon name={'minus'} color={theme.colors.primary} size={18} />
-                </TouchableOpacity>
-                <Text
-                  variant={'bodyLarge'}
-                  style={[
-                    disabled
-                      ? globalStyles.disabledOutlineButtonText
-                      : globalStyles.outlineButtonText,
-                  ]}>
-                  {productLoading ? (
-                    <ActivityIndicator size={18} />
-                  ) : (
-                    formatNumber(cartItemDetails?.productQuantity)
-                  )}
-                </Text>
-                <TouchableOpacity
-                  disabled={disabled}
-                  onPress={incrementProductQuantity}>
-                  <Icon name={'plus'} color={theme.colors.primary} size={18} />
-                </TouchableOpacity>
-              </View>
-              {customizable && (
-                <Text variant={'labelSmall'} style={styles.customise}>
-                  {t('Cart.FBProduct.Customizable')}
-                </Text>
-              )}
-            </View>
-          ) : inStock ? (
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[
-                  disabled
-                    ? globalStyles.disabledOutlineButton
-                    : globalStyles.outlineButton,
-                  styles.addButton,
-                  styles.actionButton,
-                ]}
-                onPress={addToCart}
-                disabled={disabled}>
-                <Text
-                  variant={'bodyLarge'}
-                  style={[
-                    disabled
-                      ? globalStyles.disabledOutlineButtonText
-                      : globalStyles.outlineButtonText,
-                  ]}>
-                  {t('Cart.FBProduct.Add')}
-                </Text>
-              </TouchableOpacity>
-              {customizable && (
-                <Text variant={'labelSmall'} style={styles.customise}>
-                  {t('Cart.FBProduct.Customizable')}
-                </Text>
-              )}
-            </View>
-          ) : (
-            <View style={styles.outOfStockButtonContainer}>
-              <Text variant={'bodyLarge'} style={[styles.outOfStock]}>
-                {t('Cart.FBProduct.Out of stock')}
-              </Text>
-            </View>
-          )}
-        </View>
-      </View>
+          productLoading={productLoading}
+          cartItemDetails={cartItemDetails}
+          addToCart={addToCart}
+          customizable={customizable}
+          defaultPrice={defaultPrice}
+          incrementProductQuantity={incrementProductQuantity}
+          inStock={inStock}
+          priceRange={priceRange}
+          productImageSource={productImageSource}
+          removeQuantityClick={removeQuantityClick}
+          showProductDetails={showProductDetails}
+        />
+      ) : (
+        <GridProductUI
+          product={product}
+          incrementProductQuantity={incrementProductQuantity}
+          removeQuantityClick={removeQuantityClick}
+          productLoading={productLoading}
+          cartItemDetails={cartItemDetails}
+          addToCart={addToCart}
+          disabled={disabled}
+          currency={currency}
+          imageSource={productImageSource}
+          addWishlist={addWishlist}
+          navigateToProductDetails={navigateToProductDetails}
+          isFBDomain={isFBDomain}
+          addedToWishlist={addedToWishlist}
+        />
+      )}
       {/*@ts-ignore*/}
       <RBSheet
         ref={customizationSheet}
@@ -721,7 +678,6 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
                 setItemOutOfStock={setItemOutOfStock}
               />
             </ScrollView>
-
             <CustomizationFooterButtons
               productLoading={productLoading}
               itemQty={itemQty}
@@ -851,7 +807,7 @@ const FBProduct: React.FC<FBProduct> = ({product, isOpen}) => {
                   <Text
                     variant={'labelSmall'}
                     style={[styles.outOfStockSheetButtonText]}>
-                    {t('Cart.FBProduct.Out of stock')}
+                    {t('Cart.List.Out of stock')}
                   </Text>
                 </View>
               </View>
@@ -869,91 +825,18 @@ const makeStyles = (colors: any) =>
       paddingHorizontal: 16,
       flexDirection: 'row',
     },
-    meta: {
-      flex: 1,
-      paddingRight: 20,
-    },
-    actionContainer: {
-      width: 126,
-      alignItems: 'center',
-    },
-    imageContainer: {
-      marginBottom: 12,
-      height: 126,
-    },
-    image: {
-      width: 126,
-      height: 126,
-      borderRadius: 16,
-    },
-    outOfStockButtonContainer: {
-      position: 'absolute',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: colors.white,
-      opacity: 0.9,
-      width: 126,
-      paddingVertical: 10,
-      marginTop: 50,
-    },
-    buttonContainer: {
-      marginTop: -28,
-    },
-    field: {
-      marginBottom: 12,
-    },
     customizationName: {
       color: colors.neutral400,
       marginTop: 8,
       marginBottom: 4,
     },
-    name: {
-      color: colors.neutral400,
-    },
-    price: {
-      color: colors.neutral400,
-    },
-    category: {
-      color: colors.neutral300,
-      marginBottom: 4,
-    },
-    actionButton: {
-      width: 72,
-      height: 28,
-      borderRadius: 8,
-      borderWidth: 1,
-      backgroundColor: colors.white,
-    },
-    quantityContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: 8,
-    },
-    addButton: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      paddingHorizontal: 17,
-    },
+
     outOfStockContainer: {
       flexDirection: 'row',
       justifyContent: 'center',
       paddingBottom: 10,
     },
-    outOfStockButton: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    outOfStock: {
-      textAlign: 'center',
-      color: colors.neutral300,
-    },
-    customise: {
-      textAlign: 'center',
-      color: colors.neutral300,
-      marginTop: 4,
-    },
+
     rbSheet: {
       backgroundColor: 'rgba(47, 47, 47, 0.75)',
     },
@@ -1008,10 +891,6 @@ const makeStyles = (colors: any) =>
       textAlign: 'center',
       minWidth: 50,
     },
-    productTag: {
-      marginTop: -118,
-      marginLeft: 98,
-    },
     cartItem: {
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -1055,4 +934,4 @@ const makeStyles = (colors: any) =>
     },
   });
 
-export default FBProduct;
+export default ListProduct;

@@ -1,8 +1,8 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {List, Text} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
-import FBProduct from './FBProduct';
 import {useAppTheme} from '../../../../utils/theme';
+import ListProduct from './ListProduct';
 
 interface CustomMenuAccordion {
   section: any;
@@ -47,7 +47,12 @@ const CustomMenuAccordion: React.FC<CustomMenuAccordion> = ({
       }>
       {section?.items?.map((item: any, index: number) => (
         <View key={item.id}>
-          <FBProduct product={item} provider={provider} isOpen={isOpen} />
+          <ListProduct
+            product={item}
+            provider={provider}
+            isOpen={isOpen}
+            listView
+          />
           {itemLength === index + 1 ? (
             <View style={styles.lastItem} />
           ) : (
