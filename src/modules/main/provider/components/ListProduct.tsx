@@ -209,8 +209,12 @@ const ListProduct: React.FC<ListProduct> = ({
     }
   };
 
-  const navigateToProductDetails = () => {
-    navigation.navigate('ProductDetails', {productId: product.id});
+  const navigateToProductDetails = async () => {
+    if (isFBDomain) {
+      await showProductDetails();
+    } else {
+      navigation.navigate('ProductDetails', {productId: product.id});
+    }
   };
 
   const deleteItemFromWishlist = async () => {
@@ -398,7 +402,6 @@ const ListProduct: React.FC<ListProduct> = ({
         hideCustomization();
       }
       await getCartItems();
-      await deleteItemFromWishlist();
     } catch (error) {
       console.log(error);
     } finally {
@@ -453,7 +456,6 @@ const ListProduct: React.FC<ListProduct> = ({
         t('Product Summary.Item added to cart successfully'),
       );
       await getCartItems();
-      await deleteItemFromWishlist();
       setProductLoading(false);
     } catch (error) {
       handleApiError(error);
