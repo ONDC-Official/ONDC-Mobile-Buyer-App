@@ -41,8 +41,15 @@
   },
   "WishList": {
     "Wishlist": "விருப்பப்பட்டியல்",
+    "Wishlisted": "விருப்பப்பட்டியல்",
+    "Delete Item": "உருப்படியை நீக்கு",
     "Your Wishlist is empty": "உங்கள் விருப்பப்பட்டியல் காலியாக உள்ளது",
-    "Save your favorites in your wishlist. Review them anytime and easily add them to your cart.": "உங்களுக்கு பிடித்தவற்றை உங்கள் விருப்பப்பட்டியலில் சேமிக்கவும். அவற்றை எப்போது வேண்டுமானாலும் மதிப்பாய்வு செய்து, அவற்றை உங்கள் கார்ட்டில் எளிதாகச் சேர்க்கவும்."
+    "Save your favorites in your wishlist. Review them anytime and easily add them to your cart.": "உங்களுக்கு பிடித்தவற்றை உங்கள் விருப்பப்பட்டியலில் சேமிக்கவும். அவற்றை எப்போது வேண்டுமானாலும் மதிப்பாய்வு செய்து, அவற்றை உங்கள் கார்ட்டில் எளிதாகச் சேர்க்கவும்.",
+    "Remove Wishlist": "விருப்பப்பட்டியலை அகற்று",
+    "Are you sure you would like to remove the store from wishlist?": "விருப்பப்பட்டியலில் இருந்து கடையை நிச்சயமாக அகற்ற விரும்புகிறீர்களா?",
+    "No": "இல்லை",
+    "Yes": "ஆம்",
+    "Are you sure you want to remove this item from wishlist?": "விருப்பப்பட்டியலில் இருந்து இந்த உருப்படியை நிச்சயமாக அகற்ற விரும்புகிறீர்களா?"
   },
   "Cart": {
     "Cart": "கார்ட்",
@@ -104,12 +111,7 @@
   "Cart Items": {
     "Only Available Of Total": "{{total}}க்கு பதிலாக {{quantity}} மட்டுமே உள்ளது. அளவைப் புதுப்பிக்கவும் அல்லது மற்றொரு வழங்குநருக்கு மாறவும்.",
     "You are ordering from different store. Please check your order again": "நீங்கள் வேறு கடையில் ஆர்டர் செய்கிறீர்கள். உங்கள் ஆர்டரை மீண்டும் சரிபார்க்கவும்.",
-    "You are ordering from different category. Please check your order again": "நீங்கள் வெவ்வேறு வகையிலிருந்து ஆர்டர் செய்கிறீர்கள். உங்கள் ஆர்டரைச் சரிபார்க்கவும்",
-    "Remove Wishlist": "விருப்பப்பட்டியலை அகற்று",
-    "Are you sure you would like to remove the store from wishlist?": "விருப்பப்பட்டியலில் இருந்து கடையை நிச்சயமாக அகற்ற விரும்புகிறீர்களா?",
-    "No": "இல்லை",
-    "Yes": "ஆம்",
-    "Are you sure you want to remove this item from wishlist?": "விருப்பப்பட்டியலில் இருந்து இந்த உருப்படியை நிச்சயமாக அகற்ற விரும்புகிறீர்களா?"
+    "You are ordering from different category. Please check your order again": "நீங்கள் வெவ்வேறு வகையிலிருந்து ஆர்டர் செய்கிறீர்கள். உங்கள் ஆர்டரைச் சரிபார்க்கவும்"
   },
   "Profile": {
     "Profile": "சுயவிவரம்",

@@ -41,6 +41,8 @@
   },
   "WishList": {
     "Wishlist": "ইচ্ছা তালিকা",
+    "Wishlisted": "ইচ্ছা তালিকাভুক্ত",
+    "Delete Item": "আইটেম মুছুন",
     "Your Wishlist is empty": "আপনার ইচ্ছা তালিকা খালি আছে",
     "Save your favorites in your wishlist. Review them anytime and easily add them to your cart.": "আপনার পছন্দের তালিকায় সংরক্ষণ করুন। যেকোন সময় সেগুলি পর্যালোচনা করুন এবং সহজেই আপনার কার্টে যোগ করুন।",
     "Remove Wishlist": "ইচ্ছা তালিকা সরান",

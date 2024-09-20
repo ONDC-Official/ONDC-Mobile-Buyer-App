@@ -41,6 +41,8 @@
   },
   "WishList": {
     "Wishlist": "इच्छा-सूची",
+    "Wishlisted": "इच्छा सूची में",
+    "Delete Item": "आइटम हटाएं",
     "Your Wishlist is empty": "अपकि इच्छा सूची खाली है",
     "Save your favorites in your wishlist. Review them anytime and easily add them to your cart.": "अपनी पसंदीदा चीज़ों को अपनी इच्छा सूची में सहेजें। उन्हें कभी भी देखें और आसानी से अपने कार्ट में जोड़ें।",
     "Remove Wishlist": "इच्छा सूची हटाएँ",

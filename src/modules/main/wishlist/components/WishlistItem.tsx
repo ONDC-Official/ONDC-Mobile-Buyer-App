@@ -556,7 +556,6 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
                   onPress={deleteWishlistItem}>
                   <Text variant="bodyLarge" style={styles.yesText}>
                     {t('WishList.Yes')}
-                    Yes
                   </Text>
                 </TouchableOpacity>
               </View>

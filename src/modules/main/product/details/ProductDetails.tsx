@@ -12,7 +12,12 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
-import {API_BASE_URL, CART, ITEM_DETAILS} from '../../../../utils/apiActions';
+import {
+  API_BASE_URL,
+  CART,
+  ITEM_DETAILS,
+  WISHLIST,
+} from '../../../../utils/apiActions';
 import useNetworkHandling from '../../../../hooks/useNetworkHandling';
 import useNetworkErrorHandling from '../../../../hooks/useNetworkErrorHandling';
 import ProductSkeleton from './components/ProductSkeleton';
@@ -39,6 +44,9 @@ import {updateCartItems} from '../../../../toolkit/reducer/cart';
 import SizeChart from './components/SizeChart';
 import Page from '../../../../components/page/Page';
 import HeaderWithActions from '../../../../components/header/HeaderWithActions';
+import Wishlist from 'react-native-vector-icons/MaterialCommunityIcons';
+import useWishlistItems from '../../../../hooks/useWishlistItems';
+import {useIsFocused} from '@react-navigation/native';
 
 interface ProductDetails {
   route: any;
@@ -62,6 +70,7 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const styles = makeStyles(theme.colors);
   const globalStyles = makeGlobalStyles(theme.colors);
   const currentCartItem = useRef<any>(null);
+  const isFocused = useIsFocused();
 
   const [showSizeChart, setShowSizeChart] = useState<boolean>(false);
   const [product, setProduct] = useState<any>(null);
@@ -73,6 +82,9 @@ const ProductDetails: React.FC<ProductDetails> = ({
   const [isItemAvailableInCart, setIsItemAvailableInCart] =
     useState<boolean>(false);
   const [priceRange, setPriceRange] = useState<any>(null);
+  const [addedToWishlist, setAddedToWishlist] = useState<boolean>(false);
+  const {wishlistItems} = useSelector(({wishlist}) => wishlist);
+  const [wishlistLoader, setWishlistLoader] = useState(true);
 
   const [variationState, setVariationState] = useState<any[]>([]);
   const [customizationState, setCustomizationState] = useState<any>({});
@@ -80,6 +92,8 @@ const ProductDetails: React.FC<ProductDetails> = ({
     useNetworkHandling();
   const {handleApiError} = useNetworkErrorHandling();
   const {updateCartItem} = userUpdateCartItem();
+  const {getWishlistItems} = useWishlistItems();
+  const productWishlistId = useRef<any>(null);
 
   const getProductDetails = async () => {
     try {
@@ -363,6 +377,61 @@ const ProductDetails: React.FC<ProductDetails> = ({
     }
   };
 
+  const deleteItemFromWishlist = async () => {
+    setWishlistLoader(true);
+    try {
+      source.current = CancelToken.source();
+      await deleteDataWithAuth(
+        `${API_BASE_URL}${WISHLIST}/${uid}/${productWishlistId.current}`,
+        source.current.token,
+      );
+      setAddedToWishlist(false);
+      setWishlistLoader(false);
+    } catch (error) {
+    } finally {
+    }
+  };
+
+  const addItemToWishlist = async () => {
+    setWishlistLoader(true);
+    try {
+      source.current = CancelToken.source();
+      await postDataWithAuth(
+        `${API_BASE_URL}${WISHLIST}/${uid}`,
+        {
+          id: product.id,
+          locationId: product.location_details.id,
+        },
+        source.current.token,
+      );
+      getWishlistItems().then(() => {});
+    } catch (error) {}
+  };
+
+  const getWishlistStatus = () => {
+    let findWishlistStatus = false;
+    wishlistItems?.forEach((element: any) => {
+      element?.items?.forEach((item: any) => {
+        if (item.id === product.id) {
+          productWishlistId.current = item._id;
+          findWishlistStatus = true;
+        }
+      });
+    });
+    setAddedToWishlist(findWishlistStatus);
+  };
+
+  useEffect(() => {
+    if (product && wishlistItems) {
+      getWishlistStatus();
+      setWishlistLoader(false);
+    }
+  }, [product, wishlistItems]);
+
+  useEffect(() => {
+    getWishlistItems().then(() => {});
+  }, [isFocused]);
+
   const openSizeChart = () => setShowSizeChart(true);
 
   const closeSizeChart = () => setShowSizeChart(false);
@@ -457,65 +526,117 @@ const ProductDetails: React.FC<ProductDetails> = ({
               setItemOutOfStock={setItemOutOfStock}
             />
           )}
+
           <View style={styles.addToCartContainer}>
-            {product?.context.domain !== FB_DOMAIN &&
-            isItemAvailableInCart &&
-            itemAvailableInCart ? (
-              <View style={styles.buttonGroup}>
-                <TouchableOpacity
-                  style={styles.incrementButton}
-                  onPress={() => {
-                    if (itemAvailableInCart.item.quantity.count === 1) {
-                      deleteCartItem(itemAvailableInCart._id).then(() => {});
-                    } else {
-                      addToCart(false).then(() => {});
-                    }
-                  }}>
-                  <Icon name={'minus'} color={theme.colors.primary} size={18} />
-                </TouchableOpacity>
-                <Text variant={'bodyLarge'} style={styles.quantity}>
-                  {addToCartLoading ? (
-                    <ActivityIndicator size={16} color={theme.colors.primary} />
-                  ) : (
-                    formatNumber(itemAvailableInCart.item.quantity.count)
-                  )}
-                </Text>
-                <TouchableOpacity
-                  style={styles.incrementButton}
-                  onPress={() => addToCart(true)}>
-                  <Icon name={'plus'} color={theme.colors.primary} size={18} />
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <TouchableOpacity
-                style={[
-                  styles.addToCartButton,
-                  disableActionButtons
-                    ? globalStyles.disabledContainedButton
-                    : globalStyles.outlineButton,
-                ]}
-                onPress={() => addToCart(true)}
-                disabled={disableActionButtons}>
-                {addToCartLoading ? (
+            <View style={styles.buttonRow}>
+              <View style={[styles.addToWishlistButton]}>
+                {wishlistLoader ? (
                   <ActivityIndicator
                     size={'small'}
                     color={theme.colors.primary}
                   />
+                ) : addedToWishlist ? (
+                  <TouchableOpacity
+                    style={styles.wishlistView}
+                    onPress={deleteItemFromWishlist}>
+                    <Wishlist
+                      name="cards-heart"
+                      size={20}
+                      color={theme.colors.error600}
+                    />
+                    <Text
+                      variant={'bodyLarge'}
+                      style={styles.addToWishlistLabel}>
+                      {t('WishList.Wishlisted')}
+                    </Text>
+                  </TouchableOpacity>
                 ) : (
-                  <Text
-                    variant={'bodyLarge'}
-                    style={
-                      disableActionButtons
-                        ? globalStyles.disabledOutlineButtonText
-                        : styles.addToCartLabel
-                    }>
-                    {t('Cart.Add to cart')}
-                  </Text>
+                  <TouchableOpacity
+                    style={styles.wishlistView}
+                    onPress={addItemToWishlist}>
+                    <Wishlist
+                      name="cards-heart-outline"
+                      size={20}
+                      color={theme.colors.error600}
+                    />
+                    <Text
+                      variant={'bodyLarge'}
+                      style={styles.addToWishlistLabel}>
+                      {t('WishList.Wishlist')}
+                    </Text>
+                  </TouchableOpacity>
                 )}
-              </TouchableOpacity>
-            )}
+              </View>
+              {product?.context.domain !== FB_DOMAIN &&
+              isItemAvailableInCart &&
+              itemAvailableInCart ? (
+                <View style={styles.buttonGroup}>
+                  <TouchableOpacity
+                    style={styles.incrementButton}
+                    onPress={() => {
+                      if (itemAvailableInCart.item.quantity.count === 1) {
+                        deleteCartItem(itemAvailableInCart._id).then(() => {});
+                      } else {
+                        addToCart(false).then(() => {});
+                      }
+                    }}>
+                    <Icon
+                      name={'minus'}
+                      color={theme.colors.primary}
+                      size={18}
+                    />
+                  </TouchableOpacity>
+                  <Text variant={'bodyLarge'} style={styles.quantity}>
+                    {addToCartLoading ? (
+                      <ActivityIndicator
+                        size={16}
+                        color={theme.colors.primary}
+                      />
+                    ) : (
+                      formatNumber(itemAvailableInCart.item.quantity.count)
+                    )}
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.incrementButton}
+                    onPress={() => addToCart(true)}>
+                    <Icon
+                      name={'plus'}
+                      color={theme.colors.primary}
+                      size={18}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity
+                  style={[
+                    styles.addToCartButton,
+                    disableActionButtons
+                      ? globalStyles.disabledContainedButton
+                      : globalStyles.outlineButton,
+                  ]}
+                  onPress={() => addToCart(true)}
+                  disabled={disableActionButtons}>
+                  {addToCartLoading ? (
+                    <ActivityIndicator
+                      size={'small'}
+                      color={theme.colors.primary}
+                    />
+                  ) : (
+                    <Text
+                      variant={'bodyLarge'}
+                      style={
+                        disableActionButtons
+                          ? globalStyles.disabledOutlineButtonText
+                          : styles.addToCartLabel
+                      }>
+                      {t('Cart.Add to cart')}
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              )}
+            </View>
+            <AboutProduct product={product} inStock />
           </View>
-          <AboutProduct product={product} inStock />
         </View>
       </ScrollView>
       {showSizeChart && (
@@ -587,8 +708,26 @@ const makeStyles = (colors: any) =>
       height: 44,
       backgroundColor: colors.primary,
     },
+    addToWishlistButton: {
+      flex: 1,
+      borderRadius: 8,
+      borderWidth: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: 44,
+      borderColor: colors.neutral300,
+    },
     addToCartLabel: {
       color: colors.white,
+    },
+    addToWishlistLabel: {
+      color: colors.neutral400,
+    },
+    wishlistView: {
+      flexDirection: 'row',
+      gap: 12,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     buttonGroup: {
       backgroundColor: colors.primary50,
@@ -607,6 +746,10 @@ const makeStyles = (colors: any) =>
     quantity: {
       color: colors.primary,
       marginHorizontal: 20,
+    },
+    buttonRow: {
+      flexDirection: 'row',
+      gap: 15,
     },
   });
 
