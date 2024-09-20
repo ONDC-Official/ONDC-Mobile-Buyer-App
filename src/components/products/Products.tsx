@@ -72,7 +72,7 @@ const Products: React.FC<Products> = ({
     try {
       productSearchSource.current = CancelToken.source();
       let responseData: any[] = [];
-      let total = totalProducts;
+      let total: number;
       if (isSearch) {
         let url = `${API_BASE_URL}${GLOBAL_SEARCH_ITEMS}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}&latitude=${address?.address?.lat}&longitude=${address.address.lng}&pincode=${address.address.areaCode}`;
         url += searchText.length > 0 ? `&name=${searchText}` : '';
