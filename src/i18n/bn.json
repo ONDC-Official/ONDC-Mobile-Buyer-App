@@ -39,9 +39,10 @@
       "No providers available": "কোনও সরবরাহকারী উপলব্ধ নেই"
     }
   },
-  "List": {
-    "List": "লিস্ট",
-    "Coming soon": "শীঘ্রই আসছে"
+  "WishList": {
+    "Wishlist": "ইচ্ছা তালিকা",
+    "Your Wishlist is empty": "আপনার ইচ্ছা তালিকা খালি আছে",
+    "Save your favorites in your wishlist. Review them anytime and easily add them to your cart.": "আপনার পছন্দের তালিকায় সংরক্ষণ করুন। যেকোন সময় সেগুলি পর্যালোচনা করুন এবং সহজেই আপনার কার্টে যোগ করুন।"
   },
   "Cart": {
     "Cart": "কার্ট",

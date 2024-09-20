@@ -57,6 +57,7 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
   const {wishlistItems} = useSelector(({wishlist}) => wishlist);
   const {updateCartItem} = userUpdateCartItem();
   const {t} = useTranslation();
+  const saveWishlistID = useRef<any>(null);
 
   const navigateToProductDetails = () => {
     navigation.navigate('ProductDetails', {productId: product.id});
@@ -82,6 +83,7 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
     wishlistItems?.forEach((element: any) => {
       element?.items?.forEach((item: any) => {
         if (item.id === product.id) {
+          saveWishlistID.current = item._id;
           findWishlistStatus = true;
         }
       });
@@ -125,7 +127,23 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
     }
   };
 
-  const addWishlist = async () => {
+  const deleteWishlistItem = async (val: boolean) => {
+    try {
+      source.current = CancelToken.source();
+      await deleteDataWithAuth(
+        `${API_BASE_URL}${WISHLIST}/${uid}/${saveWishlistID.current}`,
+        source.current.token,
+      );
+      setWishlistStatus(false);
+      if (val) {
+        addToCart(true).then(() => {});
+      }
+    } catch (error) {
+    } finally {
+    }
+  };
+
+  const addWishlistItem = async () => {
     try {
       source.current = CancelToken.source();
       const url = `${API_BASE_URL}${WISHLIST}/${uid}`;
@@ -408,7 +426,9 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
                 disabled ? styles.disabledButton : {},
               ]}
               onPress={() => {
-                addToCart(true).then(() => {});
+                wishlistStatus
+                  ? deleteWishlistItem(true)
+                  : addToCart(true).then(() => {});
               }}>
               <Text
                 variant={'bodyLarge'}
@@ -419,21 +439,26 @@ const Product: React.FC<Product> = ({product, isOpen}) => {
           )}
         </View>
       </View>
-      <TouchableOpacity style={styles.wishlist} onPress={addWishlist}>
-        {wishlistStatus ? (
+
+      {wishlistStatus ? (
+        <TouchableOpacity
+          style={styles.wishlist}
+          onPress={() => deleteWishlistItem(false)}>
           <Wishlist
             name="cards-heart"
             size={20}
             color={theme.colors.error600}
           />
-        ) : (
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity style={styles.wishlist} onPress={addWishlistItem}>
           <Wishlist
             name="cards-heart-outline"
             size={20}
             color={theme.colors.error600}
           />
-        )}
-      </TouchableOpacity>
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 };

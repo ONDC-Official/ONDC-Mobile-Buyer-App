@@ -63,7 +63,6 @@ const Products: React.FC<Products> = ({
     subCategoryIds: any,
     attributes: any,
   ) => {
-    setMoreListRequested(true);
     try {
       productSearchSource.current = CancelToken.source();
       let url = `${API_BASE_URL}${PRODUCT_SEARCH}?pageNumber=${pageNumber}&limit=${BRAND_PRODUCTS_LIMIT}`;
@@ -173,6 +172,7 @@ const Products: React.FC<Products> = ({
         getCount = getCount + JSON.parse(item.data[0]?.list?.length);
       });
       if (totalProducts !== getCount) {
+        setMoreListRequested(true);
         searchProducts(
           page,
           providerId,
@@ -255,7 +255,6 @@ const Products: React.FC<Products> = ({
   }, [moreListRequested]);
 
   useEffect(() => {
-    setProducts([]);
     if (sectionListRef?.current) {
       try {
         sectionListRef?.current?.scrollToLocation({
@@ -293,7 +292,7 @@ const Products: React.FC<Products> = ({
         selectedAttributes,
       ).then(() => {});
     }
-  }, [providerId, selectedAttributes, subCategories]);
+  }, [providerId, selectedAttributes, subCategories, isFocused]);
 
   return (
     <View style={styles.container}>

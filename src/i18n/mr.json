@@ -39,9 +39,10 @@
       "No providers available": "पुरवठादार उपलब्ध नाहीत"
     }
   },
-  "List": {
-    "List": "लिस्ट",
-    "Coming soon": "लवकरच येत आहे"
+  "WishList": {
+    "Wishlist": "विशलिस्ट",
+    "Your Wishlist is empty": "तुमची विशलिस्ट रिकामी आहे",
+    "Save your favorites in your wishlist. Review them anytime and easily add them to your cart.": "तुमच्या विशलिस्टमध्ये तुमचे आवडते सेव्ह करा. त्यांचे कधीही पुनरावलोकन करा आणि त्यांना तुमच्या कार्टमध्ये सहज जोडा."
   },
   "Cart": {
     "Cart": "कार्ट",

@@ -73,7 +73,6 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
   const deleteWishlistItem = async (itemData: any) => {
     try {
       source.current = CancelToken.source();
-      console.log(`${API_BASE_URL}${WISHLIST}/${uid}/${itemData?._id}`);
       await deleteDataWithAuth(
         `${API_BASE_URL}${WISHLIST}/${uid}/${itemData?._id}`,
         source.current.token,
@@ -245,6 +244,8 @@ const WishlistItem: React.FC<WishlistItem> = ({item, deleteWishlist}) => {
         hideCustomization();
       }
       await getCartItems();
+      await deleteWishlistItem(productDetails);
+      hideProductDetails();
     } catch (error) {
       console.log(error);
     } finally {
