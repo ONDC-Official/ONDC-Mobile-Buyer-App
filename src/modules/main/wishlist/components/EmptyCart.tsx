@@ -12,7 +12,7 @@ const EmptyCart = () => {
   const navigation: any = useNavigation();
 
   const goBack = () => {
-    navigation.goBack();
+    navigation.navigate('Dashboard');
   };
 
   return (

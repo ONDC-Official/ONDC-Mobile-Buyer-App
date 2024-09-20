@@ -39,9 +39,10 @@
       "No providers available": "வழங்குநர்கள் இல்லை"
     }
   },
-  "List": {
-    "List": "லிஸ்ட்",
-    "Coming soon": "விரைவில் வரும்"
+  "WishList": {
+    "Wishlist": "விருப்பப்பட்டியல்",
+    "Your Wishlist is empty": "உங்கள் விருப்பப்பட்டியல் காலியாக உள்ளது",
+    "Save your favorites in your wishlist. Review them anytime and easily add them to your cart.": "உங்களுக்கு பிடித்தவற்றை உங்கள் விருப்பப்பட்டியலில் சேமிக்கவும். அவற்றை எப்போது வேண்டுமானாலும் மதிப்பாய்வு செய்து, அவற்றை உங்கள் கார்ட்டில் எளிதாகச் சேர்க்கவும்."
   },
   "Cart": {
     "Cart": "கார்ட்",
