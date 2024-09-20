@@ -28,7 +28,7 @@ interface Products {
   searchText: string;
   provider: any;
   providerDomain?: string;
-  isOpen: boolean;
+  isOpen?: boolean;
   isSearch: boolean;
 }
 
@@ -97,6 +97,7 @@ const Products: React.FC<Products> = ({
             .join(',')}`;
         });
         url += searchText.length > 0 ? `&name=${searchText}` : '';
+        console.log('Url', url);
         const {data} = await getDataWithWithoutEncode(
           url,
           productSearchSource.current.token,
@@ -343,7 +344,7 @@ const Products: React.FC<Products> = ({
           ) : (
             <View style={styles.emptyContainer}>
               <Text variant={'bodyMedium'}>
-                {t('Home.Search Product WishList.No products available')}
+                {t('Home.Search Product List.No products available')}
               </Text>
             </View>
           )

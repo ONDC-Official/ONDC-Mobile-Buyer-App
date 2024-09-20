@@ -11,10 +11,11 @@ interface OtherBrandDetails {
   provider: any;
   outlet: any;
   apiRequested: boolean;
+  searchQuery: string;
 }
 
 const OtherBrandDetails: React.FC<OtherBrandDetails> = React.memo(
-  ({provider, outlet, apiRequested}) => {
+  ({provider, outlet, apiRequested, searchQuery}) => {
     const {t} = useTranslation();
     const {colors} = useAppTheme();
     const styles = makeStyles(colors);
@@ -31,9 +32,10 @@ const OtherBrandDetails: React.FC<OtherBrandDetails> = React.memo(
             providerId={provider.id}
             providerDomain={provider.domain}
             provider={provider}
-            searchText={''}
+            searchText={searchQuery}
             subCategories={[]}
             isOpen={outlet?.isOpen || false}
+            isSearch={false}
           />
         </View>
       );

@@ -1,11 +1,10 @@
-import {useNavigation} from '@react-navigation/native';
-import {StackNavigationProp} from '@react-navigation/stack';
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import SearchHeader from './components/header/SearchHeader';
 import {useAppTheme} from '../../../utils/theme';
 import ListingPage from '../../../components/productsLists/ListingPage';
 import SafeAreaPage from '../../../components/page/SafeAreaPage';
+import useBackHandler from '../../../hooks/useBackHandler';
 
 interface SearchProductsProps {
   route: any;
@@ -14,7 +13,7 @@ interface SearchProductsProps {
 const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const navigation = useNavigation<StackNavigationProp<any>>();
+  const {goBack} = useBackHandler();
   const [searchQuery, setSearchQuery] = useState<string | ''>(
     params?.query ?? '',
   );
@@ -29,7 +28,7 @@ const SearchProducts: React.FC<SearchProductsProps> = ({route: {params}}) => {
         <SearchHeader
           onSearch={onSearch}
           defaultQuery={params?.query ?? ''}
-          backIconPress={() => navigation.goBack()}
+          backIconPress={goBack}
         />
         {searchQuery.length > 0 && (
           <ListingPage searchQuery={searchQuery} subCategories={''} isSearch />

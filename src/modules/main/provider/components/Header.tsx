@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react';
-import {TextInput} from 'react-native-paper';
+import {Searchbar} from 'react-native-paper';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -9,12 +9,12 @@ import {useAppTheme} from '../../../../utils/theme';
 import useStatusBarColor from '../../../../hooks/useStatusBarColor';
 import useBackHandler from '../../../../hooks/useBackHandler';
 
-interface Page {
-  searchQuery?: string;
-  setSearchQuery?: (values: any) => void;
+interface Header {
+  searchQuery: string;
+  setSearchQuery: (values: any) => void;
 }
 
-const Header: React.FC<Page> = ({searchQuery, setSearchQuery}) => {
+const Header: React.FC<Header> = ({searchQuery, setSearchQuery}) => {
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
   const navigation: any = useNavigation();
@@ -30,6 +30,10 @@ const Header: React.FC<Page> = ({searchQuery, setSearchQuery}) => {
     navigation.navigate('Cart');
   }, [navigation]);
 
+  const onClearIconPress = () => {
+    setSearchQuery('');
+  };
+
   return (
     <View style={styles.header}>
       <View style={styles.headerTitle}>
@@ -40,27 +44,18 @@ const Header: React.FC<Page> = ({searchQuery, setSearchQuery}) => {
             color={theme.colors.neutral400}
           />
         </TouchableOpacity>
-        <View style={styles.searchbarView}>
-          <MaterialIcons
-            name={'search'}
-            size={24}
-            color={theme.colors.primary}
-          />
-          <TextInput
-            dense
-            mode={'outlined'}
-            contentStyle={styles.input}
-            style={styles.inputContainer}
-            placeholder={t('Product SubCategories.Search')}
-            placeholderTextColor={theme.colors.neutral300}
-            onChangeText={setSearchQuery}
-            value={searchQuery}
-            textColor={theme.colors.neutral400}
-            outlineColor={theme.colors.neutral100}
-            activeUnderlineColor={theme.colors.neutral100}
-            underlineColor={theme.colors.neutral100}
-          />
-        </View>
+        <Searchbar
+          editable
+          iconColor={theme.colors.primary}
+          rippleColor={theme.colors.primary50}
+          inputStyle={styles.searchInput}
+          style={styles.search}
+          placeholderTextColor={theme.colors.neutral300}
+          placeholder={t('Home.Search')}
+          onChangeText={setSearchQuery}
+          onClearIconPress={onClearIconPress}
+          value={searchQuery}
+        />
       </View>
 
       <View style={styles.actionContainer}>
@@ -116,7 +111,6 @@ const makeStyles = (colors: any) =>
       flexDirection: 'row',
       borderWidth: 1,
       borderRadius: 58,
-      marginHorizontal: -8,
       borderColor: colors.primary50,
       alignItems: 'center',
       paddingHorizontal: 16,
@@ -130,6 +124,20 @@ const makeStyles = (colors: any) =>
     },
     input: {
       backgroundColor: colors.white,
+    },
+    searchInput: {
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      minHeight: 44,
+      fontFamily: 'Inter-Regular',
+      fontWeight: '400',
+    },
+    search: {
+      flex: 1,
+      height: 44,
+      backgroundColor: colors.white,
+      borderWidth: 1,
+      borderColor: colors.primary50,
     },
   });
 

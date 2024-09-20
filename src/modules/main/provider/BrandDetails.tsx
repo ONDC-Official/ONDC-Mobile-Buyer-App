@@ -159,6 +159,7 @@ const BrandDetails = ({route: {params}}: {route: any}) => {
             provider={provider}
             outlet={outlet}
             apiRequested={apiRequested || outletDetailsRequested}
+            searchQuery={searchQuery}
           />
         )}
       </View>

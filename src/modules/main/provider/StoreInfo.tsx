@@ -1,50 +1,35 @@
-import React, {useMemo, useRef} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Linking, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Text} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import FastImage from 'react-native-fast-image';
+import {useSelector} from 'react-redux';
+
 import {useAppTheme} from '../../../utils/theme';
 import SafeAreaPage from '../../../components/page/SafeAreaPage';
 import Header from '../cart/provider/components/Header';
-import {Divider, Text} from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import {getAddressString, getFulfilmentContact} from '../../../utils/utils';
-import useMinutesToString from '../../../hooks/useMinutesToString';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import FastImage from 'react-native-fast-image';
 
 interface StoreInfo {
   route: any;
 }
 
-const Mappls = require('../../../assets/maps/mappls.png');
-const Google = require('../../../assets/maps/google_maps.png');
-
 const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
   const {t} = useTranslation();
   const theme = useAppTheme();
   const styles = makeStyles(theme.colors);
-  const {convertMinutesToHumanReadable} = useMinutesToString();
-  const refDirectionSheet = useRef<any>(null);
+  const {address} = useSelector((state: any) => state.address);
 
-  console.log('provider : ', JSON.stringify(params?.provider));
-  console.log('outlet : ', JSON.stringify(params?.outlet));
-
-  const navigateToMappls = () => {
+  const navigateToMappls = useCallback(() => {
     const destinationAddress = getAddressString(params?.outlet?.address);
     Linking.openURL(
-      `https://www.mappls.com/direction?places=${address.address.lat},${address.address.lng};${outlet?.gps},${destinationAddress}`,
+      `https://www.mappls.com/direction?places=${address.address.lat},${address.address.lng};${params?.outlet?.gps},${destinationAddress}`,
     );
-  };
+  }, [params]);
 
-  const navigateToMaps = () => {
-    const destinationAddress = getAddressString(params?.outlet?.address);
-    Linking.openURL(
-      `https://www.google.com/maps/dir/?api=1&origin=${address.address.lat},${address.address.lng}&destination=${outlet?.gps}&destination_place_id=${destinationAddress}`,
-    );
-  };
-
-  const {timeToShip, imageSource, outletPhone}: any = useMemo(() => {
+  const {imageSource, outletPhone}: any = useMemo(() => {
     let source = null;
-    let time = {type: 'minutes', time: 0};
     let phone = '';
 
     if (params?.outlet) {
@@ -52,11 +37,6 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
         source = {uri: params?.outlet?.provider_descriptor?.symbol};
       } else if (params?.outlet?.provider_descriptor?.images?.length > 0) {
         source = {uri: params?.outlet?.provider_descriptor?.images[0]};
-      }
-      if (params?.outlet?.minDaysWithTTS) {
-        time = convertMinutesToHumanReadable(
-          Number(params?.outlet?.minDaysWithTTS / 60),
-        );
       }
       if (params?.outlet?.fulfillment) {
         phone = getFulfilmentContact(params?.outlet?.fulfillment, 'Delivery');
@@ -74,12 +54,8 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
         }
       }
     }
-    return {timeToShip: time, imageSource: source, outletPhone: phone};
+    return {imageSource: source, outletPhone: phone};
   }, [params?.outlet]);
-
-  const getDirection = async () => {
-    refDirectionSheet.current.open();
-  };
 
   return (
     <SafeAreaPage>
@@ -111,7 +87,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
             )}
             <TouchableOpacity
               style={styles.actionButton}
-              onPress={getDirection}>
+              onPress={navigateToMappls}>
               <Icon
                 name={'directions'}
                 color={theme.colors.primary}
@@ -122,7 +98,7 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
         </View>
         <View style={styles.line} />
         {/* Imgae View */}
-        <View style={styles.imgaeView}>
+        <View style={styles.imageView}>
           <Text variant="titleLarge" style={styles.colorNeutral400}>
             Photo
           </Text>
@@ -165,39 +141,6 @@ const StoreInfo: React.FC<StoreInfo> = ({route: {params}}) => {
           </View>
         </View>
       </View>
-      <RBSheet
-        ref={refDirectionSheet}
-        height={200}
-        customStyles={{
-          container: styles.rbSheet,
-        }}>
-        <Text variant={'titleMedium'} style={styles.sheetTitle}>
-          {t('Global.Open with')}
-        </Text>
-        <Divider />
-        <View style={styles.mapsContainer}>
-          <TouchableOpacity style={styles.mapRow} onPress={navigateToMappls}>
-            <FastImage
-              style={styles.mapImage}
-              source={Mappls}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-            <Text variant={'bodyMedium'} style={styles.mapName}>
-              {t('Stores Info.Mappls')}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.mapRow} onPress={navigateToMaps}>
-            <FastImage
-              style={styles.mapImage}
-              source={Google}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-            <Text variant={'bodyMedium'} style={styles.mapName}>
-              {t('Stores Info.Maps')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </RBSheet>
     </SafeAreaPage>
   );
 };
@@ -220,7 +163,7 @@ const makeStyles = (colors: any) =>
     },
     topHeader: {gap: 16},
     icons: {flexDirection: 'row', gap: 12},
-    imgaeView: {gap: 12},
+    imageView: {gap: 12},
     image: {height: 120, width: 120, borderRadius: 16},
     detailView: {
       gap: 16,
@@ -236,34 +179,6 @@ const makeStyles = (colors: any) =>
       justifyContent: 'center',
       borderColor: colors.primary,
       backgroundColor: 'rgba(236, 243, 248, 1)',
-    },
-    rbSheet: {
-      borderTopLeftRadius: 15,
-      borderTopRightRadius: 15,
-      paddingHorizontal: 16,
-    },
-    sheetTitle: {
-      color: colors.neutral400,
-      paddingVertical: 16,
-    },
-    mapsContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    mapRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: 8,
-      flex: 1,
-    },
-    mapImage: {
-      width: 36,
-      height: 36,
-      marginRight: 4,
-      borderRadius: 8,
-    },
-    mapName: {
-      color: colors.neutral400,
     },
   });
 
