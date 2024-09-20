@@ -23,12 +23,13 @@ interface GridProductUI {
   isFBDomain: boolean;
   product: any;
   currency: any;
-  addWishlist: () => void;
+  addItemToWishlist: () => void;
   cartItemDetails: any;
   removeQuantityClick: () => void;
   productLoading: boolean;
   incrementProductQuantity: () => void;
   addToCart: () => void;
+  deleteItemFromWishlist: () => void;
   addedToWishlist: boolean;
 }
 
@@ -39,12 +40,13 @@ const GridProductUI: React.FC<GridProductUI> = ({
   isFBDomain,
   product,
   currency,
-  addWishlist,
+  addItemToWishlist,
   cartItemDetails,
   removeQuantityClick,
   productLoading,
   incrementProductQuantity,
   addToCart,
+  deleteItemFromWishlist,
   addedToWishlist,
 }) => {
   const {t} = useTranslation();
@@ -158,21 +160,25 @@ const GridProductUI: React.FC<GridProductUI> = ({
           )}
         </View>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.wishlist} onPress={addWishlist}>
-        {addedToWishlist ? (
+      {addedToWishlist ? (
+        <TouchableOpacity
+          style={styles.wishlist}
+          onPress={deleteItemFromWishlist}>
           <Wishlist
             name="cards-heart"
             size={20}
             color={theme.colors.error600}
           />
-        ) : (
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity style={styles.wishlist} onPress={addItemToWishlist}>
           <Wishlist
             name="cards-heart-outline"
             size={20}
             color={theme.colors.error600}
           />
-        )}
-      </TouchableOpacity>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

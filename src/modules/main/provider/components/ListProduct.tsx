@@ -102,6 +102,7 @@ const ListProduct: React.FC<ListProduct> = ({
   const [itemQty, setItemQty] = useState<number>(1);
   const [priceRange, setPriceRange] = useState<any>(null);
   const [defaultPrice, setDefaultPrice] = useState<any>(0);
+  const productWishlistId = useRef<any>(null);
 
   const customizable = useMemo(() => {
     return !!product?.item_details?.tags?.find(
@@ -211,20 +212,31 @@ const ListProduct: React.FC<ListProduct> = ({
     navigation.navigate('ProductDetails', {productId: product.id});
   };
 
-  const addWishlist = async () => {
+  const deleteItemFromWishlist = async () => {
     try {
       source.current = CancelToken.source();
-      const url = `${API_BASE_URL}${WISHLIST}/${uid}`;
+      await deleteDataWithAuth(
+        `${API_BASE_URL}${WISHLIST}/${uid}/${productWishlistId.current}`,
+        source.current.token,
+      );
+      setAddedToWishlist(false);
+    } catch (error) {
+    } finally {
+    }
+  };
 
-      const payload: any = {
-        id: product.id,
-        locationId: product.location_details.id,
-      };
-
-      const data = await postDataWithAuth(url, payload, source.current.token);
-      if (data.status === 200) {
-        getWishlistItems().then(() => {});
-      }
+  const addItemToWishlist = async () => {
+    try {
+      source.current = CancelToken.source();
+      await postDataWithAuth(
+        `${API_BASE_URL}${WISHLIST}/${uid}`,
+        {
+          id: product.id,
+          locationId: product.location_details.id,
+        },
+        source.current.token,
+      );
+      getWishlistItems().then(() => {});
     } catch (error) {}
   };
 
@@ -506,6 +518,7 @@ const ListProduct: React.FC<ListProduct> = ({
     wishlistItems?.forEach((element: any) => {
       element?.items?.forEach((item: any) => {
         if (item.id === product.id) {
+          productWishlistId.current = item._id;
           findWishlistStatus = true;
         }
       });
@@ -634,7 +647,8 @@ const ListProduct: React.FC<ListProduct> = ({
           disabled={disabled}
           currency={currency}
           imageSource={productImageSource}
-          addWishlist={addWishlist}
+          addItemToWishlist={addItemToWishlist}
+          deleteItemFromWishlist={deleteItemFromWishlist}
           navigateToProductDetails={navigateToProductDetails}
           isFBDomain={isFBDomain}
           addedToWishlist={addedToWishlist}
