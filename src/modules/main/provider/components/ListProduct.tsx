@@ -453,6 +453,7 @@ const ListProduct: React.FC<ListProduct> = ({
         t('Product Summary.Item added to cart successfully'),
       );
       await getCartItems();
+      await deleteItemFromWishlist();
       setProductLoading(false);
     } catch (error) {
       handleApiError(error);
