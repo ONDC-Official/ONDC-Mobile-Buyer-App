@@ -3,6 +3,18 @@
 
 This project aims to be a reference applications for the buyers registered on the ONDC platform
 
+# User Manual
+
+ A detailed user manual for the ONDC Saarthi app is available [here](https://docs.google.com/document/d/1ICRM0BwlyBUPlH2WOT4WcochudtFGiGZKCUk_n4XtvQ/edit?tab=t.0)
+
+ # App Features
+
+Have a look at the features enabled on Saarthi
+
+[Saarthi Teaser](https://drive.google.com/file/d/1CUex5gD-OsHZ50CgcOT7N84pYslXKAX5/view?usp=drive_link)
+
+[Saarthi Demo](https://drive.google.com/file/d/19sjiNVOYrdHKGIDutUn7-vWy4rYuZ4Yi/view?usp=drive_link)
+
 ## Prerequisites
 
 - [Node.js > 12](https://nodejs.org) and npm (Recommended: Use [nvm](https://github.com/nvm-sh/nvm))
